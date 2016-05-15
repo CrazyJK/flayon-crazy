@@ -3,24 +3,40 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-  	<groupId>jk.crazy</groupId>
-  	<artifactId>flayon-home</artifactId>
+  	<groupId>jk.kamoru</groupId>
+  	<artifactId>flayon-crazy</artifactId>
   	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
   
-  	<name>flayon home</name>
+  	<name>flayon crazy</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<commons-io-version>2.4</commons-io-version>
+		<commons-lang3-version>3.1</commons-lang3-version>
 	</properties>
 
   	<dependencies>
   		<dependency>
-  			<groupId>jk.crazy</groupId>
+  			<groupId>jk.kamoru</groupId>
   			<artifactId>flayon-boot</artifactId>
-  			<version>1.0.1</version>
+  			<version>1.0.2</version>
   		</dependency>
+
+		<!-- commons io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io-version}</version>
+		</dependency>
+		<!-- commons lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3-version}</version>
+		</dependency>
+  		
   	</dependencies>
 
 	<build>
@@ -29,6 +45,15 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>3.5.1</version>
+        		<configuration>
+          			<source>${java.version}</source>
+          			<target>${java.version}</target>
+        		</configuration>
+      		</plugin>
 		</plugins>
 	</build>
   	
