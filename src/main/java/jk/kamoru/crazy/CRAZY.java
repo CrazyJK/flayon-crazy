@@ -17,5 +17,7 @@ public interface CRAZY {
 	public static final String ARCHIVE = "Archive";
 
 	public static final long SERIAL_VERSION_UID = 588697484;
-	
+
+	public static final String FILE_ENCODING = "UTF-8";
+
 }

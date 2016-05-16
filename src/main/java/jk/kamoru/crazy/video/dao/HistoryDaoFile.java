@@ -15,10 +15,10 @@ import jk.kamoru.crazy.video.VideoNotFoundException;
 import jk.kamoru.crazy.video.domain.Action;
 import jk.kamoru.crazy.video.domain.History;
 import jk.kamoru.crazy.video.domain.Video;
-import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

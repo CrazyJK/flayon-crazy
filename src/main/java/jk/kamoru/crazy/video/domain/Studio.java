@@ -14,13 +14,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import jk.kamoru.crazy.CrazyProperties;
+import jk.kamoru.crazy.Utils;
 import jk.kamoru.crazy.video.VIDEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +60,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	@Override
 	public String toString() {
 		return String.format("%s Score %s %s %s",
-				name, getScore(), StringUtils.trimToEmpty(homepage), StringUtils.trimToEmpty(company));
+				name, getScore(), Utils.trimToEmpty(homepage), Utils.trimToEmpty(company));
 	}
 
 	public void addVideo(Video video) {
@@ -94,26 +93,26 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	public int compareTo(Studio comp) {
 		switch (sort) {
 		case NAME:
-			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
 		case HOMEPAGE:
-			return StringUtils.compareTo(this.getHomepage(), comp.getHomepage());
+			return Utils.compareTo(this.getHomepage(), comp.getHomepage());
 		case COMPANY:
-			return StringUtils.compareToIgnoreCase(this.getCompany(), comp.getCompany());
+			return Utils.compareToIgnoreCase(this.getCompany(), comp.getCompany());
 		case VIDEO:
 			return this.getVideoList().size() - comp.getVideoList().size();
 		case SCORE:
 			return this.getScore() - comp.getScore();
 		default:
-			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
 		}
 	}
 
 	private void loadInfo() {
 		if (!loaded) {
-			File file = new File(new File(STORAGE_PATHS[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
+			File file = new File(new File(STORAGE_PATHS[0], "_info"), name + "." + VIDEO.EXT_STUDIO);
 			if (file.isFile())
 				try {
-					Map<String, String> info = FileUtils.readFileToMap(file);
+					Map<String, String> info = Utils.readFileToMap(file);
 					this.company = info.get("COMPANY");
 					this.homepage = new URL(info.get("HOMEPAGE"));
 				} catch (MalformedURLException e) {

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import jk.kamoru.crazy.image.domain.ImageType;
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
-import jk.kamoru.util.GoogleImageProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,12 +121,6 @@ public class ImageController extends AbstractController {
 	public void delete(@PathVariable int idx) {
 		log.info("Delete image {}", idx);
 		imageService.delete(idx);
-	}
-
-	@RequestMapping(value = "/google")
-	public String viewSearchGoogle(Model model, @RequestParam(value = "q", required = false, defaultValue = "") String query) {
-		model.addAttribute(GoogleImageProvider.search(query));
-		return "image/google";
 	}
 
 	private HttpEntity<byte[]> getImageEntity(byte[] imageBytes, MediaType type) {

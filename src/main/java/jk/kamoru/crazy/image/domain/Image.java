@@ -7,15 +7,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import jk.kamoru.crazy.CrazyException;
-import jk.kamoru.crazy.image.ImageException;
-import jk.kamoru.util.FileUtils;
-import lombok.Cleanup;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
+import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
+
+import jk.kamoru.crazy.CrazyException;
+import jk.kamoru.crazy.Utils;
+import jk.kamoru.crazy.image.ImageException;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Image Domain
@@ -45,7 +45,7 @@ public class Image {
 
 	private void init() {
 		this.name = file.getName();
-		this.suffix = FileUtils.getExtension(file);
+		this.suffix = Utils.getExtension(file);
 		this.size = file.length();
 		this.lastModified = file.lastModified();
 	}
@@ -82,12 +82,19 @@ public class Image {
 		}
 	}
 
-	private byte[] readBufferedImageToByteArray(BufferedImage bi) throws IOException {
-		@Cleanup
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		ImageIO.setUseCache(false);
-		ImageIO.write(bi, "gif", outputStream);
-		return outputStream.toByteArray();
+	/**
+	 * {@link BufferedImage}를 읽어 byte[]로 반환 
+	 * @param bi
+	 * @return
+	 */
+	private byte[] readBufferedImageToByteArray(BufferedImage bi) {
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+			ImageIO.setUseCache(false);
+			ImageIO.write(bi, "gif", outputStream);
+			return outputStream.toByteArray();
+		} catch (IOException e) {
+			throw new CrazyException("read bufferedImage error", e);
+		}
 	}
 
 	/**

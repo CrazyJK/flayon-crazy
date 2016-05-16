@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import jk.kamoru.crazy.Utils;
 import jk.kamoru.crazy.video.domain.Video;
-import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.StringUtils;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * Video에서 이용되는 utility method 모음
@@ -22,17 +22,6 @@ import net.sf.json.JSONObject;
  *
  */
 public class VideoUtils {
-
-//	/**
-//	 * 배열을 컴마(,)로 구분한 문자열로 반환. a, b<br>
-//	 * ArrayUtils.toString() 이용
-//	 * 
-//	 * @param array
-//	 * @return string of a, b style
-//	 */
-//	public static String arrayToString(Object array) {
-//		return StringUtils.replaceEach(ArrayUtils.toString(array, "{}"), new String[] {"{", "}"}, new String[] {"", ""});
-//	}
 
 	/**
 	 * 같은 배우 이름인지 확인
@@ -235,7 +224,7 @@ public class VideoUtils {
 
 			@Override
 			public int compare(File arg0, File arg1) {
-				return StringUtils.compareTo(arg0.getName(), arg1.getName());
+				return Utils.compareTo(arg0.getName(), arg1.getName());
 			}
 
 		});
@@ -255,8 +244,8 @@ public class VideoUtils {
 		int classified = -1;
 		for (File file : found) {
 			String name = file.getName();
-			String filename = FileUtils.getNameExceptExtension(file);
-			String extname = FileUtils.getExtension(file);
+			String filename = Utils.getNameExceptExtension(file);
+			String extname = Utils.getExtension(file);
 
 			// if(ctrl.listBGImageName.equals(name) ||
 			// ctrl.historyName.equals(name))
@@ -340,73 +329,6 @@ public class VideoUtils {
 			return subDir.getAbsolutePath();
 		}
 		return video.getDelegatePath();
-	}
-	
-	public static void main(String[] args) throws Exception {
-		// VideoUtils.changeOldNameStyle("E:\\AV_JAP",
-		// "E:\\AV_JAP\\unclassified");
-		// System.out.println(ArrayUtils.toString(VideoUtils.getGoogleImage("Abigaile")));
-
-		// File dir = new File("E:\\aaa");
-		// File[] fs = dir.listFiles();
-		// for(File f : fs) {
-		// System.out.format("%s -> %s%n", f.getName(),
-		// removeSpecialCharacters(f.getName()));
-		// }
-
-		// ObjectOutputStream 이용한 내용 저장
-		/*
-		 * File infoFile = new File("/home/kamoru/ETC/info.sample");
-		 * List<String> logList = new ArrayList<String>();
-		 * logList.add("play 1"); logList.add("play 2"); Map<String, Object>
-		 * data = new HashMap<String, Object>(); data.put("text",
-		 * "overview text 코멘트"); data.put("rank", new Integer(3));
-		 * data.put("log", logList); ObjectOutputStream os = new
-		 * ObjectOutputStream(new FileOutputStream(infoFile));
-		 * os.writeObject(data); os.flush(); os.close();
-		 * 
-		 * // ObjectInputStream 이용한 내용 읽기 ObjectInputStream is = new
-		 * ObjectInputStream(new FileInputStream(infoFile)); Map<String, Object>
-		 * dataR = (HashMap<String, Object>) is.readObject(); is.close();
-		 * System.out.println(dataR.get("text"));
-		 * System.out.println(dataR.get("rank")); System.out.println(
-		 * ArrayUtils.toString( ((ArrayList<String>)dataR.get("log")) ) );
-		 */
-
-		JSONObject json = JSONObject.fromObject(FileUtils.readFileToString(new File("/home/kamoru/ETC/info.json.sample")));
-		JSONObject infoData = json.getJSONObject("info");
-
-		System.out.println("opus : " + infoData.getString("opus"));
-		System.out.println("rank : " + infoData.getString("rank"));
-		System.out.println("txt  : " + infoData.getString("txt"));
-
-		JSONArray hisArray = infoData.getJSONArray("history");
-
-		for (int i = 0, e = hisArray.size(); i < e; i++) {
-			String str = hisArray.getString(i); // results.getJSONObject(i).getString("url");
-			System.out.println("his  : " + str);
-		}
-
-		JSONObject root = new JSONObject();
-
-		JSONObject info = new JSONObject();
-
-		info.put("opus", "IPZ-011");
-
-		info.put("rank", "3");
-
-		info.put("txt", "텍스트\nasvfd");
-
-		JSONArray his = new JSONArray();
-		his.add("PLAY-1");
-		his.add("PLAY-2");
-
-		info.put("history", his);
-
-		root.put("info", info);
-
-		System.out.println("---" + root.toString());
-
 	}
 
 }

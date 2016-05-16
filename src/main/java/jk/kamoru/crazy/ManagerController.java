@@ -13,10 +13,9 @@ import jk.kamoru.crazy.image.ImageException;
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.service.VideoService;
-import jk.kamoru.spring.ReloadableResourceBundleMessageSource;
-import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -32,13 +31,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Slf4j
 @RequestMapping("/manager")
 public class ManagerController extends AbstractController {
-
-	@RequestMapping("/hitMessageCodeList")
-	public String hitMessageCodeList(Model model) {
-		log.trace("hit Message Code List");
-		model.addAttribute("hitMessageCodeMap", ReloadableResourceBundleMessageSource.hitMessageCodeMap);
-		return "manager/hitMessageCodeList";
-	}
 
 	@RequestMapping(value = "/requestMappingList")
 	public String requestMapping(HttpServletRequest request, Model model, @RequestParam(value="sort", required=false, defaultValue="P") final String sort) {
@@ -65,18 +57,18 @@ public class ManagerController extends AbstractController {
 			@Override
 			public int compare(Map<String, String> o1, Map<String, String> o2) {
 				if (sort.equals("P")) {
-					return StringUtils.compareTo(o1.get("reqPattern"), o2.get("reqPattern"));
+					return Utils.compareTo(o1.get("reqPattern"), o2.get("reqPattern"));
 				}
 				else if (sort.equals("M")) {
-					return StringUtils.compareTo(o1.get("reqMethod"), o2.get("reqMethod"));
+					return Utils.compareTo(o1.get("reqMethod"), o2.get("reqMethod"));
 				}
 				else if (sort.equals("C")) {
-					int firstCompare = StringUtils.compareTo(o1.get("beanType"), o2.get("beanType"));
-					int secondCompare = StringUtils.compareTo(o1.get("beanMethod"), o2.get("beanMethod"));
+					int firstCompare = Utils.compareTo(o1.get("beanType"), o2.get("beanType"));
+					int secondCompare = Utils.compareTo(o1.get("beanMethod"), o2.get("beanMethod"));
 					return firstCompare == 0 ? secondCompare : firstCompare;
 				}
 				else {
-					return StringUtils.compareTo(o1.get("reqPattern"), o2.get("reqPattern"));
+					return Utils.compareTo(o1.get("reqPattern"), o2.get("reqPattern"));
 				}
 			}
 		});

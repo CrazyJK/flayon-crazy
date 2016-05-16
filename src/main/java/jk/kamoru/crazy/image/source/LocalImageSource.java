@@ -10,10 +10,9 @@ import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.image.IMAGE;
 import jk.kamoru.crazy.image.ImageNotFoundException;
 import jk.kamoru.crazy.image.domain.Image;
-import jk.kamoru.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -52,7 +51,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 		Collections.sort(imageList, new Comparator<Image>() {
 			@Override
 			public int compare(Image o1, Image o2) {
-				return NumberUtils.compare(o1.getLastModified(), o2.getLastModified());
+				return Long.valueOf(o1.getLastModified() - o2.getLastModified()).intValue();
 			}
 		});
 		loading = false;

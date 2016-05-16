@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.CrazyProperties;
+import jk.kamoru.crazy.Utils;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.dao.VideoDao;
@@ -31,13 +32,11 @@ import jk.kamoru.crazy.video.domain.TitlePart;
 import jk.kamoru.crazy.video.domain.Video;
 import jk.kamoru.crazy.video.domain.VideoSearch;
 import jk.kamoru.crazy.video.util.VideoUtils;
-import jk.kamoru.util.ArrayUtils;
-import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.JKUtilException;
-import jk.kamoru.util.RuntimeUtils;
-import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -97,7 +96,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		if(argumentsArray == null)
 			throw new VideoException(video, "No arguments for " + action);
 		
-		RuntimeUtils.exec(ArrayUtils.addAll(new String[]{command}, argumentsArray));
+		Utils.exec(ArrayUtils.addAll(new String[]{command}, argumentsArray));
 	}
 
 	@Override
@@ -388,7 +387,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void saveActressInfo(String name, Map<String, String> params) {
 		log.trace("name={}, params={}", name, params);
-		FileUtils.saveFileFromMap(new File(getInfoDir(), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS), params);
+		Utils.saveFileFromMap(new File(getInfoDir(), name + "." + VIDEO.EXT_ACTRESS), params);
 		videoDao.getActress(name).reloadInfo();
 	}
 
@@ -464,7 +463,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void saveStudioInfo(String studio, Map<String, String> params) {
 		log.trace("name={}, params={}", studio, params);
-		FileUtils.saveFileFromMap(new File(getInfoDir(), studio + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO), params);
+		Utils.saveFileFromMap(new File(getInfoDir(), studio + "." + VIDEO.EXT_STUDIO), params);
 		videoDao.getStudio(studio).reloadInfo();
 	}
 	
@@ -608,7 +607,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			@Override
 			public int compare(Video o1, Video o2) {
 				return o2.getScore() == o1.getScore() 
-						? StringUtils.compareTo(o2.getReleaseDate(), o1.getReleaseDate()) 
+						? Utils.compareTo(o2.getReleaseDate(), o1.getReleaseDate()) 
 								: o2.getScore() - o1.getScore();
 			}});
 		return list;
@@ -738,13 +737,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 			// get downloaded torrent file
 			File torrentDirectory = new File(candidatePath);
-			try {
-				FileUtils.validateDirectory(torrentDirectory, "torrent path " + candidatePath);
-			}
-			catch (JKUtilException e) {
-				log.error(e.getMessage());
+			if (!torrentDirectory.exists() || !torrentDirectory.isFile())
 				continue;
-			}
 		
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			log.trace("extensions - {}", Arrays.toString(extensions));
@@ -780,7 +774,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 		File destinationPath = null;
 		for (String extraPath : STAGE_PATHS) {
-			if (FileUtils.compareDrive(path, extraPath)) {
+			if (Utils.equalsRoot(path, extraPath)) {
 				destinationPath = new File(extraPath);
 				break;
 			}
@@ -795,7 +789,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				String.format("%s%s.%s", 
 						video.getFullname(), 
 						videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", 
-						FileUtils.getExtension(candidatedVideofile)));
+						Utils.getExtension(candidatedVideofile)));
 		try {
 			FileUtils.moveFile(candidatedVideofile, videoFile);
 			log.info("move to {}", videoFile.getAbsoluteFile());
@@ -921,7 +915,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 						if (NO_PARSE_OPUS_PREFIX.contains(opusPrefix)) {
 							titlePart.setStudio("");
 						}
-						else if (StringUtils.contains(ArrayUtils.toStringComma(REPLACE_OPUS_INFO), opusPrefix)) {
+						else if (StringUtils.contains(Utils.toStringComma(REPLACE_OPUS_INFO), opusPrefix)) {
 							for (String reOpus : REPLACE_OPUS_INFO) {
 								String[] opus = StringUtils.split(reOpus, "-");
 								if (StringUtils.equals(opus[0], opusPrefix)) {
@@ -1145,7 +1139,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			log.info("  scan {} - {}", path, dirs);
 			for (File dir : dirs) {
 				log.info("    check {}", dir);
-				if (FileUtils.isEmptyDirectory(dir)) {
+				if (Utils.isEmptyDirectory(dir)) {
 					log.info("      attempt to delete {}", dir);
 					dir.delete();
 				}

@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -14,17 +16,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import jk.kamoru.crazy.CRAZY;
-import jk.kamoru.crazy.CrazyProperties;
-import jk.kamoru.crazy.video.VIDEO;
-import jk.kamoru.crazy.video.VideoException;
-import jk.kamoru.crazy.video.service.HistoryService;
-import jk.kamoru.crazy.video.source.FileBaseVideoSource;
-import jk.kamoru.crazy.video.util.VideoUtils;
-
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -32,6 +25,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jk.kamoru.crazy.CRAZY;
+import jk.kamoru.crazy.CrazyProperties;
+import jk.kamoru.crazy.Utils;
+import jk.kamoru.crazy.video.VIDEO;
+import jk.kamoru.crazy.video.VideoException;
+import jk.kamoru.crazy.video.service.HistoryService;
+import jk.kamoru.crazy.video.source.FileBaseVideoSource;
+import jk.kamoru.crazy.video.util.VideoUtils;
 
 /**
  * AV Bean class<br>
@@ -138,15 +143,15 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public int compareTo(Video comp) {
 		switch(sortMethod) {
 		case S:
-			return StringUtils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
+			return Utils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
 		case O:
-			return StringUtils.compareToIgnoreCase(this.getOpus(), comp.getOpus());
+			return Utils.compareToIgnoreCase(this.getOpus(), comp.getOpus());
 		case T:
-			return StringUtils.compareToIgnoreCase(this.getTitle(), comp.getTitle());
+			return Utils.compareToIgnoreCase(this.getTitle(), comp.getTitle());
 		case A:
-			return StringUtils.compareToIgnoreCase(this.getActressName(), comp.getActressName());
+			return Utils.compareToIgnoreCase(this.getActressName(), comp.getActressName());
 		case D:
-			return StringUtils.compareToIgnoreCase(this.getReleaseDate(), comp.getReleaseDate());
+			return Utils.compareToIgnoreCase(this.getReleaseDate(), comp.getReleaseDate());
 		case M:
 			return this.getDelegateFile().lastModified() > comp.getDelegateFile().lastModified() ? 1 : -1;
 		case P:
@@ -168,9 +173,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					return 1;
 				}
 			}
-			return StringUtils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
+			return Utils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
 		default:
-			return StringUtils.compareTo(this, comp);
+			return Utils.compareTo(this, comp);
 		}
 	}
 	
@@ -241,33 +246,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		return "";
 	}
 	
-//	/**
-//	 * webp형식의 cover file의 byte[] 반환
-//	 * @return 없거나 에러이면 null 반환
-//	 */
-//	@JsonIgnore
-//	public byte[] getCoverWebpByteArray() {
-//		return VideoUtils.readFileToByteArray(coverWebpFile);
-//	}
-
-//	/**
-//	 * WebP cover 파일 반환
-//	 * @return 커버 파일 WebP
-//	 */
-//	public File getCoverWebpFile() {
-//		return coverWebpFile;
-//	}
-	
-//	/**
-//	 * WebP cover 파일 절대 경로
-//	 * @return 없으면 공백
-//	 */
-//	public String getCoverWebpFilePath() {
-//		if (this.isExistCoverWebpFile())
-//			return this.getCoverWebpFile().getAbsolutePath();
-//		return "";
-//	}
-	
 	/**
 	 * video 대표 파일
 	 * @return 대표 파일
@@ -294,7 +272,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return 대표 이름
 	 */
 	private String getDelegateFilenameWithoutSuffix() {
-		return FileUtils.getNameExceptExtension(getDelegateFile());
+		return Utils.getNameExceptExtension(getDelegateFile());
 	}
 	
 	/**
@@ -327,7 +305,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getEtcFileListPath() {
 		if(isExistEtcFileList())
-			return ArrayUtils.toStringComma(getEtcFileList());
+			return Utils.toStringComma(getEtcFileList());
 		return "";
 	}
 	
@@ -369,7 +347,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public File getInfoFile() {
 		if(this.infoFile == null) {
-			this.infoFile = new File(this.getDelegatePath(), this.getDelegateFilenameWithoutSuffix() + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_INFO);
+			this.infoFile = new File(this.getDelegatePath(), this.getDelegateFilenameWithoutSuffix() + "." + VIDEO.EXT_INFO);
 			try {
 				this.infoFile.createNewFile();
 			} catch (IOException e) {
@@ -440,7 +418,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getSubtitlesFileListPath() {
 		if(isExistSubtitlesFileList())
-			return ArrayUtils.toStringComma(getSubtitlesFileList());
+			return Utils.toStringComma(getSubtitlesFileList());
 		return "";
 	}
 
@@ -488,7 +466,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getVideoFileListPath() {
 		if(isExistVideoFileList()) 
-			return ArrayUtils.toStringComma(getVideoFileList()); 
+			return Utils.toStringComma(getVideoFileList()); 
 		return "";
 	}
 	
@@ -596,7 +574,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public synchronized void move(File destFile) {
 		for (File file : getFileAll()) {
 			if (file != null && file.exists() && !file.getParent().equals(destFile.getAbsolutePath())) {
-				if (!FileUtils.getRootDirectory(file).equals(FileUtils.getRootDirectory(destFile)) &&
+				if (!Utils.getRootDirectory(file).equals(Utils.getRootDirectory(destFile)) &&
 						destFile.getFreeSpace() < file.length()) {
 					logger.warn("{} -> {} is small. {}mb > {}mb",file, destFile, file.length() / FileUtils.ONE_MB, destFile.getFreeSpace() / FileUtils.ONE_MB);
 					break;
@@ -670,19 +648,21 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * info 내용 저장
 	 */
 	private void saveInfo() {
-		JSONObject root = new JSONObject();
-		JSONObject info = new JSONObject();
-
-		info.put("opus", opus);
-		info.put("rank", rank);
-		info.put("playCount", playCount);
-		info.put("overview", overview);
-		info.put("lastAccess", DateFormatUtils.format(System.currentTimeMillis(), VIDEO.DATE_PATTERN));
-		root.put("info", info);
-
+		
+		Map<String, Map<String, String>> rootMap = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
+		map.put("opus", opus);
+		map.put("rank", String.valueOf(rank));
+		map.put("playCount", String.valueOf(playCount));
+		map.put("overview", overview);
+		map.put("lastAccess", DateFormatUtils.format(System.currentTimeMillis(), VIDEO.DATE_PATTERN));
+		rootMap.put("info", map);
+		
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			FileUtils.writeStringToFile(getInfoFile(), root.toString(), VIDEO.FILE_ENCODING);
-			logger.info("{} {}", opus, root.toString());
+			String jsonString = mapper.writeValueAsString(rootMap);
+			FileUtils.writeStringToFile(getInfoFile(), jsonString, VIDEO.FILE_ENCODING);
+			logger.info("{} {}", opus, jsonString);
 		} catch (IOException e) {
 			logger.error("info save error", e);
 		}
@@ -753,41 +733,22 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public void setInfoFile(File file) {
 		this.infoFile = file;
 		
-		JSONObject json = null;
+		Map<String, Map<String, String>> rootMap = new HashMap<>();
 		try {
-			String infoText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
-			if (infoText != null && infoText.trim().length() > 0)
-				json = JSONObject.fromObject(infoText);
-			else 
-				return;
-		} catch (Exception e1) {
-			logger.error("info read error : {} - {}", this.opus, e1);
-			return;
+			String jsonText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
+			ObjectMapper mapper = new ObjectMapper();
+			rootMap = mapper.readValue(jsonText, new TypeReference<Map<String, Map<String, String>>>() {});
+		} catch (IOException e) {
+			throw new VideoException(this, "Info file read fail", e);
 		}
-		JSONObject infoData = json.getJSONObject("info");
-
-		String opus = infoData.getString("opus");
+		
+		Map<String, String> map = rootMap.get("info");
+		String opus = map.get("opus");
 		if (!this.opus.equalsIgnoreCase(opus)) 
 			throw new VideoException(this, "invalid info file. " + this.opus + " != " + opus);
-		
-		this.rank 		= infoData.getInt("rank");
-		try {
-			this.playCount 	= infoData.getInt("playCount");
-		}
-		catch (Exception e) {
-//			int play = 0;
-//			for(History history : historyService.findByOpus(this.opus)) {
-//				if (history.getAction() == Action.PLAY)
-//					play++;
-//			}
-//			if (playCount != play) {
-//				logger.info("infoFile.playCount[{}] != history.play[{}]", this.playCount, play);
-//				if (playCount < play)
-//					playCount = play;
-//			}
-		} 
-		this.overview 	= infoData.getString("overview");
-
+		rank = Integer.parseInt(map.get("rank"));
+		playCount = Integer.parseInt(map.get("playCount"));
+		overview = map.get("overview");
 	}
 
 	/**
@@ -1017,31 +978,30 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		int videoCount = getVideoFileList().size();
 		for (File file : VideoUtils.sortFile(getVideoFileList())) {
 			if (videoCount == 1) {
-				FileUtils.rename(file, newName);
+				Utils.renameFile(file, newName);
 			}
 			else {
-				FileUtils.rename(file, newName + count++);
+				Utils.renameFile(file, newName + count++);
 			}
 		}
 		// cover
-		FileUtils.rename(coverFile, newName);
-//		FileUtils.rename(coverWebpFile, newName);
+		Utils.renameFile(coverFile, newName);
 		// subtitles, if exist
 		count = 1;
 		int subtitlesCount = getSubtitlesFileList().size();
 		for (File file : VideoUtils.sortFile(getSubtitlesFileList())) {
 			if (subtitlesCount == 1) {
-				FileUtils.rename(file, newName);
+				Utils.renameFile(file, newName);
 			}
 			else {
-				FileUtils.rename(file, newName + count++);
+				Utils.renameFile(file, newName + count++);
 			}
 		}
 		// info file
-		FileUtils.rename(infoFile, newName);
+		Utils.renameFile(infoFile, newName);
 		// etc file
 		for (File file : this.getEtcFileList()) {
-			FileUtils.rename(file, newName);
+			Utils.renameFile(file, newName);
 		}
 	}
 
@@ -1064,7 +1024,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return
 	 */
 	public String getExt() {
-		return FileUtils.getExtension(getDelegateFile());
+		return Utils.getExtension(getDelegateFile());
 	}
 
 	@Override
@@ -1110,7 +1070,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public void moveOutside() {
 		if (this.isExistVideoFileList()) {
-			File root = FileUtils.getRootDirectory(this.getDelegateFile());
+			File root = Utils.getRootDirectory(this.getDelegateFile());
 			for (File file : this.getVideoFileList()) {
 				try {
 					FileUtils.moveFileToDirectory(file, root, false);

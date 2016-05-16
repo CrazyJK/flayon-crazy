@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import jk.kamoru.crazy.CRAZY;
+import jk.kamoru.crazy.Utils;
 import jk.kamoru.crazy.video.ActressNotFoundException;
 import jk.kamoru.crazy.video.StudioNotFoundException;
 import jk.kamoru.crazy.video.VIDEO;
@@ -19,10 +17,9 @@ import jk.kamoru.crazy.video.domain.Actress;
 import jk.kamoru.crazy.video.domain.Studio;
 import jk.kamoru.crazy.video.domain.Video;
 import jk.kamoru.crazy.video.util.VideoUtils;
-import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.StringUtils;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 	
@@ -42,11 +39,6 @@ public class FileBaseVideoSource implements VideoSource {
 	private Map<String, Studio>   studioMap	= new HashMap<String, Studio>();
 	private Map<String, Actress> actressMap = new HashMap<String, Actress>();
 	
-	// Domain provider
-	@Inject Provider<Video>     videoProvider;
-	@Inject Provider<Studio>   studioProvider;
-	@Inject Provider<Actress> actressProvider;
-
 	// logic variables
 	private static boolean firstLoad = false;
 	private static boolean loading = false;
@@ -96,21 +88,7 @@ public class FileBaseVideoSource implements VideoSource {
 		loading = true;
 		
 		// find files
-		Collection<File> files = FileUtils.listFiles(paths, null, true);
-		/*
-		Collection<File> files = new ArrayList<File>();
-		for (String path : paths) {
-			File directory = new File(path);
-			logger.debug("directory scanning : {}", directory.getAbsolutePath());
-			if (directory.isDirectory()) {
-				Collection<File> found = FileUtils.listFiles(directory, null, true);
-				logger.debug("\tfound file size is {}", found.size());
-				files.addAll(found);
-			}
-			else {
-				logger.warn("\tIt is not directory. Pass!!!");
-			}
-		}*/
+		Collection<File> files = Utils.listFiles(paths, null, true);
 		logger.info("    total found file {}", files.size());
 
 		videoMap.clear();
@@ -122,8 +100,8 @@ public class FileBaseVideoSource implements VideoSource {
 		for (File file : files) {
 			try {
 				String filename = file.getName();
-				String     name = FileUtils.getNameExceptExtension(file);
-				String      ext = FileUtils.getExtension(file).toLowerCase();
+				String     name = Utils.getNameExceptExtension(file);
+				String      ext = Utils.getExtension(file).toLowerCase();
 				
 				// 연속 스페이스 제거
 				name = StringUtils.normalizeSpace(name);
@@ -177,7 +155,7 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				Video video = videoMap.get(opus.toLowerCase());
 				if (video == null) {
-					video = this.videoProvider.get();
+					video = new Video();
 					video.setOpus(opus.toUpperCase());
 					video.setTitle(title);
 					video.setReleaseDate(releaseDate);
@@ -200,7 +178,7 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				Studio studio = studioMap.get(studioName.toLowerCase());
 				if (studio == null) {
-					studio = this.studioProvider.get();
+					studio = new Studio();
 					studio.setName(studioName);
 					studioMap.put(studioName.toLowerCase(), studio);
 					logger.trace("add studio - {}", studio);
@@ -214,7 +192,7 @@ public class FileBaseVideoSource implements VideoSource {
 					String forwardActressName = VideoUtils.sortForwardName(actressName);
 					Actress actress = actressMap.get(forwardActressName);
 					if (actress == null) {
-						actress = actressProvider.get();
+						actress = new Actress();
 						actress.setName(actressName.trim());
 						actressMap.put(forwardActressName, actress);
 						logger.trace("add actress - {}", actress);

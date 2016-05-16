@@ -14,9 +14,9 @@ import jk.kamoru.crazy.video.domain.Actress;
 import jk.kamoru.crazy.video.domain.History;
 import jk.kamoru.crazy.video.domain.Studio;
 import jk.kamoru.crazy.video.domain.Video;
-import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

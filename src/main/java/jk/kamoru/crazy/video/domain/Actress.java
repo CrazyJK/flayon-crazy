@@ -1,12 +1,9 @@
 package jk.kamoru.crazy.video.domain;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,18 +12,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import jk.kamoru.crazy.CrazyProperties;
-import jk.kamoru.crazy.video.VIDEO;
-import jk.kamoru.crazy.video.util.VideoUtils;
-import jk.kamoru.util.GoogleImageProvider;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import jk.kamoru.crazy.CrazyProperties;
+import jk.kamoru.crazy.Utils;
+import jk.kamoru.crazy.video.VIDEO;
+import jk.kamoru.crazy.video.util.VideoUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope("prototype")
@@ -87,23 +83,23 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public int compareTo(Actress comp) {
 		switch (sort) {
 		case NAME:
-			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
 		case BIRTH:
-			return StringUtils.compareToIgnoreCase(comp.getBirth(), this.getBirth());
+			return Utils.compareToIgnoreCase(comp.getBirth(), this.getBirth());
 		case BODY:
-			return StringUtils.compareToIgnoreCase(comp.getBodySize(), this.getBodySize());
+			return Utils.compareToIgnoreCase(comp.getBodySize(), this.getBodySize());
 		case HEIGHT:
-			return StringUtils.compareToIgnoreCase(comp.getHeight(), this.getHeight());
+			return Utils.compareToIgnoreCase(comp.getHeight(), this.getHeight());
 		case DEBUT:
-			return StringUtils.compareToIgnoreCase(comp.getDebut(), this.getDebut());
+			return Utils.compareToIgnoreCase(comp.getDebut(), this.getDebut());
 		case VIDEO:
 			return comp.getVideoList().size() - this.getVideoList().size();
 		case SCORE:
 			return comp.getScore() - this.getScore();
 		case FAVORITE:
-			return StringUtils.compareTo(comp.getFavorite(), this.getFavorite());
+			return Utils.compareTo(comp.getFavorite(), this.getFavorite());
 		default:
-			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
 		}
 	}
 	
@@ -147,20 +143,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		loadInfo();
 		return favorite;
 	}
-	
-	public List<URL> getWebImage() {
-		return GoogleImageProvider.search(name);
-	}
 
 	public Map<String, String> getInfoMap() {
-		try {
-			return FileUtils.readFileToMap(getInfoFile());
-		} 
-		catch (IOException e) {
-			log.debug("info load error : {} - {}", name, e.getMessage());
-			return new HashMap<String, String>();
-		}
+		return Utils.readFileToMap(getInfoFile());
 	}
+	
 	private void loadInfo() {
 		if (!loaded) {
 			Map<String, String> info = getInfoMap();
@@ -176,7 +163,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		}
 	}
 	private File getInfoFile() {
-		return new File(new File(STORAGE_PATHS[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+		return new File(new File(STORAGE_PATHS[0], "_info"), name + "." + VIDEO.EXT_ACTRESS);
 	}
 	public void reloadInfo() {
 		loaded = false;
@@ -221,10 +208,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		}
 		return name;
 	}
+	
 	public void renameInfo(String newName) {
 		File infoFile = getInfoFile();
 		if (infoFile.exists())
-			FileUtils.rename(getInfoFile(), newName + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+			Utils.renameFile(getInfoFile(), newName + "." + VIDEO.EXT_ACTRESS);
 		reloadInfo();
 	}
 }

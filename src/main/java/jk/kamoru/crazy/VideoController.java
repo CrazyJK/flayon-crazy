@@ -6,6 +6,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoBatch;
@@ -22,25 +39,6 @@ import jk.kamoru.crazy.video.service.HistoryService;
 import jk.kamoru.crazy.video.service.VideoService;
 import jk.kamoru.crazy.video.util.CoverUtils;
 import jk.kamoru.crazy.video.util.VideoUtils;
-import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.StringUtils;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Video controller<br>
@@ -261,7 +259,7 @@ public class VideoController extends AbstractController {
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), FileUtils.getExtension(imageFile));
+		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile));
 	}
 	
 	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
@@ -271,7 +269,7 @@ public class VideoController extends AbstractController {
 		File imageFile = video.getCoverFile();
 		if(imageFile == null)
 			return null;
-		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), FileUtils.getExtension(imageFile));
+		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), Utils.getExtension(imageFile));
 	}
 	
 	/**display video overview view

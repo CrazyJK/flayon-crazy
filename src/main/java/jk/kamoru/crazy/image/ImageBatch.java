@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.Collection;
 
 import jk.kamoru.crazy.CrazyProperties;
-import jk.kamoru.util.FileUtils;
+import jk.kamoru.crazy.Utils;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ public class ImageBatch extends CrazyProperties {
 					continue;
 				}
 				else {
-					String suffix = FileUtils.getExtension(file);
+					String suffix = Utils.getExtension(file);
 					File dest = new File(directory, folderName + "_" + file.lastModified() + "." + suffix);
 
 					file.renameTo(dest);

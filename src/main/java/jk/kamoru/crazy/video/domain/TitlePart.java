@@ -2,10 +2,10 @@ package jk.kamoru.crazy.video.domain;
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.crazy.CrazyException;
+import jk.kamoru.crazy.Utils;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import lombok.Data;
 
@@ -92,7 +92,7 @@ public class TitlePart implements Comparable<TitlePart> {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = FileUtils.removeInvalidFilename(title);
+		this.title = Utils.removeInvalidFilename(title);
 		// 값이 없으면
 		if (StringUtils.isBlank(title)) {
 			this.check = true;
@@ -156,7 +156,7 @@ public class TitlePart implements Comparable<TitlePart> {
 
 	@Override
 	public int compareTo(TitlePart o) {
-		return StringUtils.compareTo(this.toString(), o.toString());
+		return Utils.compareTo(this.toString(), o.toString());
 	}
 
 	public void setSeen() {
