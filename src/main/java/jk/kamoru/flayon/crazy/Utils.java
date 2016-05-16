@@ -27,6 +27,10 @@ public class Utils {
 			throw new CrazyException(message);
 	}
 
+	public static int compareTo(int long1, int long2) {
+		return long1 - long2;
+	}
+	
 	/**
 	 * 문자열 비교<br> 
 	 * null일 경우 ""으로 변환. trim처리 후<br>
@@ -201,6 +205,13 @@ public class Utils {
 			else
 				throw new CrazyException(String.format("%s is not directory", dir.getAbsolutePath()));
 		return list;
+	}
+
+	public static String[] merge(String[] arr1, String[] arr2) {
+		String[] dst = new String[arr1.length + arr2.length];
+		System.arraycopy(arr1, 0, dst, 0, arr1.length);
+		System.arraycopy(arr2, 0, dst, arr1.length, arr2.length);
+		return dst;
 	}
 
 }

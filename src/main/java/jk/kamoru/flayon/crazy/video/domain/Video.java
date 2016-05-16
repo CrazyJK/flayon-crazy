@@ -736,6 +736,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		Map<String, Map<String, String>> rootMap = new HashMap<>();
 		try {
 			String jsonText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
+			if (StringUtils.isEmpty(jsonText))
+				return;
 			ObjectMapper mapper = new ObjectMapper();
 			rootMap = mapper.readValue(jsonText, new TypeReference<Map<String, Map<String, String>>>() {});
 		} catch (IOException e) {

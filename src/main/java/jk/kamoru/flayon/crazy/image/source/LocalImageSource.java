@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.FileUtils;
@@ -13,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.IMAGE;
 import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.domain.Image;
@@ -52,7 +55,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 		Collections.sort(imageList, new Comparator<Image>() {
 			@Override
 			public int compare(Image o1, Image o2) {
-				return Long.valueOf(o1.getLastModified() - o2.getLastModified()).intValue();
+				return Utils.compareTo(o1.getLastModified(), o2.getLastModified());
 			}
 		});
 		loading = false;
@@ -101,6 +104,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 	}
 
 	@Override
+	@PostConstruct
 	@Scheduled(cron = "0 */17 * * * *")
 	public void reload() {
 		load();
