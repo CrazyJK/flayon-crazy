@@ -2,6 +2,8 @@ package jk.kamoru.flayon.crazy;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import lombok.EqualsAndHashCode;
+
 public class CrazyProperties {
 
 	/*

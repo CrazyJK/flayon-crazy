@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +43,11 @@ public class FileBaseVideoSource implements VideoSource {
 	private Map<String, Studio>   studioMap	= new HashMap<String, Studio>();
 	private Map<String, Actress> actressMap = new HashMap<String, Actress>();
 	
+	// Domain provider
+	@Inject Provider<Video>     videoProvider;
+	@Inject Provider<Studio>   studioProvider;
+	@Inject Provider<Actress> actressProvider;
+
 	// logic variables
 	private static boolean firstLoad = false;
 	private static boolean loading = false;
@@ -157,7 +164,7 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				Video video = videoMap.get(opus.toLowerCase());
 				if (video == null) {
-					video = new Video();
+					video = this.videoProvider.get();
 					video.setOpus(opus.toUpperCase());
 					video.setTitle(title);
 					video.setReleaseDate(releaseDate);
@@ -180,7 +187,7 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				Studio studio = studioMap.get(studioName.toLowerCase());
 				if (studio == null) {
-					studio = new Studio();
+					studio = this.studioProvider.get();
 					studio.setName(studioName);
 					studioMap.put(studioName.toLowerCase(), studio);
 					logger.trace("add studio - {}", studio);
@@ -194,7 +201,7 @@ public class FileBaseVideoSource implements VideoSource {
 					String forwardActressName = VideoUtils.sortForwardName(actressName);
 					Actress actress = actressMap.get(forwardActressName);
 					if (actress == null) {
-						actress = new Actress();
+						actress = actressProvider.get();
 						actress.setName(actressName.trim());
 						actressMap.put(forwardActressName, actress);
 						logger.trace("add actress - {}", actress);

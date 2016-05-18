@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope("prototype")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(exclude={"studioList", "videoList"}, callSuper=false)
 @Data
 @Slf4j
 @XmlRootElement(name = "actress", namespace = "http://www.w3.org/2001/XMLSchema-instance")
@@ -145,7 +145,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	}
 
 	public Map<String, String> getInfoMap() {
-		return Utils.readFileToMap(getInfoFile());
+		File file = getInfoFile();
+		if (file.exists() && file.isFile())
+			return Utils.readFileToMap(file);
+		else
+			return null;
 	}
 	
 	private void loadInfo() {
@@ -215,4 +219,5 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 			Utils.renameFile(getInfoFile(), newName + "." + VIDEO.EXT_ACTRESS);
 		reloadInfo();
 	}
+	
 }

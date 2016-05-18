@@ -49,7 +49,14 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>${imgscalr-lib-version}</version>
 		</dependency>
-  		
+
+		<!-- @Inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+		  		
   	</dependencies>
 
 	<build>

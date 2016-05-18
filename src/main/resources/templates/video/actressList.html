@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:inline="text">[[#{video.actress}]] [[#{video.list}]]</title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	
+	$("input[type=radio]").bind("click", function(){
+		var selectedSort = $(this).val();
+		var reverseOrder = [[${sort.name()}]] == selectedSort ? [[!${reverse}]] : false;
+		location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
+	}).css("display","none");
+
+});
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container" role="main" data-layout-fragment="content">
+
+<div id="header_div" class="div-box">
+	<ul class="menu-item-ul">
+		<li class="label-large" th:text="|#{video.total} #{video.actress} ${#lists.size(actressList)}|">
+			video.total video.actress actressList
+		</li>
+		<li class="label-large">
+			<input type="search" name="search" id="search" style="width:200px;" 
+				class="searchInput" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
+		</li>
+		<li class="label-large">
+			<label class="item sort-item" th:each="_sort : ${sorts}">
+				<input type="radio" name="sort" th:value="${_sort}" th:checked="${_sort eq sort}"/>
+				<span th:text="#{|actress.sort.${_sort}|}">sort</span>
+			</label>
+		</li>
+	</ul>
+</div>
+
+<div id="content_div" class="div-box">
+	<table class="video-table">
+		<tr class="nowrap" th:each="actress, status : ${actressList}">
+			<td class="number" th:text="${status.count}">count</td>
+			<td th:class="${sort} eq 'NAME'? 'sorted-column'" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</td>
+			<td th:class="${sort} eq 'FAVORITE' ? 'sorted-column'" th:text="${actress.favorite}? '★'">★</td>
+			<td th:text="${actress.age}">actress.age</td>
+			<td th:class="${sort} eq 'BIRTH' ? 'sorted-column'" th:text="${actress.birth}">actress.birth</td>
+			<td th:class="${sort} eq 'BODY' ? 'sorted-column'" th:text="${actress.bodySize}">actress.bodySize</td>
+			<td class="number" th:classappend="${sort} eq 'HEIGHT' ? 'sorted-column'" th:text="${actress.height}">actress.height</td>
+			<td class="number" th:classappend="${sort} eq 'DEBUT' ? 'sorted-column'" th:text="${actress.debut}">actress.debut</td>
+			<td class="number" th:classappend="${sort} eq 'VIDEO' ? 'sorted-column'" th:text="${#lists.size(actress.videoList)}">length(actress.videoList)</td> 
+			<td class="number" th:classappend="${sort} eq 'SCORE' ? 'sorted-column'" th:text="${actress.score}">actress.score</td>
+			<td>
+				<span th:each="video : ${actress.videoList}" class="label" th:title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</div>
+</body>
+</html>

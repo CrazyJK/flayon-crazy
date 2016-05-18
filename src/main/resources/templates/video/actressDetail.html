@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">>
+<head>
+<meta charset="UTF-8"></meta>
+<title th:text="${actress.name}">actress.name</title>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	
+	var queryUrl = context + 'image/google.json?q=[[${actress.name}]]'; 
+	$.getJSON(queryUrl ,function(data) {
+		$('#foundList').empty();
+		
+		var videoRow = data['URLList'];
+		$.each(videoRow, function(entryIndex, entry) {
+			var url = entry;
+			var li  = $("<li>");
+			li.css("display", "inline-block");
+			var img = $("<img>");
+			img.attr("src", url);
+			img.attr("width", "200px;");
+			img.bind("click", function() {
+				popupImage(url);
+			});
+			li.append(img);
+			$('#foundList').append(li);
+		});
+	});
+	
+});
+
+/**
+ * @deprecated
+ */
+function fnRenameTo() {
+	var actressForm = document.forms['actressForm'];
+	actressForm.action = [[@{/video/actress/{actress.name}/renameTo/}]] + $("#newName").val();
+	actressForm.submit();
+}
+
+function fnSaveActressInfo() {
+	loading(true, "Saving...");
+	var actressForm = document.forms['actressForm'];
+	actressForm.action = [[@{/video/actress/{actress.name}}]];
+	actressForm.submit();
+	if (opener) {
+		if (opener.location.href.indexOf("video/actress") > -1) 
+			opener.location.reload();
+	}
+}
+function toogleFavorite(dom) {
+	var favorite = $("#favorite").val() == 'true';
+	$("#favoriteTEXT").html(favorite ? '☆' : '★');
+	$("#favorite").val(!favorite);
+	if (opener) {
+		// TODO 메인의 배우 정보 업데이트 해야함
+	}
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container" role="main" data-layout-fragment="content">
+
+<form id="actressForm" method="post">
+<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
+<input type="hidden" name="name" th:value="${actress.name}"/>
+<input type="hidden" name="favorite" id="favorite" th:value="${actress.favorite}"/>
+<dl class="dl-detail">
+	<dt class="label-large center">
+		<span id="favoriteTEXT" onclick="toogleFavorite()" th:text="${actress.favorite} ? '★' : '☆'"></span>
+		<input class="actressInfo" type="text" name="newname"   th:value="${actress.name}"      id="newName" />
+		<input class="actressInfo" type="text" name="localname" th:value="${actress.localName}" />
+		<img th:src="@{/img/magnify1.png}" width="12px" th:title="#{video.find-info.actress}" />
+			<!-- th:onclick="|popup('${@environment.getProperty('url.search.actress')}${actress.reverseName}', 'infoActress', 800, 600)|" -->
+			
+		<span th:text="|Score ${actress.score}|">Score actress.score</span>
+	</dt>
+	<dd style="text-align:center;">
+		<div id="actressImageContainer">
+			<ul id="foundList" class="items"></ul>
+		</div>
+	</dd>
+	<dd>
+		<span class="label-title">Birth : <input class="actressInfo" type="text" name="birth"    th:value="${actress.birth}"    /></span>
+		<span class="label-title">Size :  <input class="actressInfo" type="text" name="bodySize" th:value="${actress.bodySize}" /></span>
+		<span class="label-title">Height :<input class="actressInfo" type="text" name="height"   th:value="${actress.height}"   /></span>
+		<span class="label-title">Debut : <input class="actressInfo" type="text" name="debut"    th:value="${actress.debut}"    /></span>
+		<span class="button" style="/*float:right*/" onclick="fnSaveActressInfo()">Save</span>
+	</dd>
+	<dd>
+		<span class="label-title" th:text="|Studio ${#lists.size(actress.studioList)}|">Studio(actress.studioList)</span>
+	</dd>
+	<dd>
+		<div style="padding-left:60px;">
+			<span th:each="studio : ${actress.studioList}" class="label" th:onclick="|fnViewStudioDetail('${studio.name}')|"
+				th:text="|${studio.name}(${#lists.size(studio.videoList)}), Score ${studio.score}|">
+				studio.name(length(studio.videoList), Score studio.score </span>
+		</div>
+	</dd>
+	<dd>
+		<span class="label-title" th:text="|Video (${#lists.size(actress.videoList)})|">Video(length(actress.videoList)</span>
+	</dd>
+	<dd>
+		<div style="padding-left:60px;">
+		<ul><!-- 
+			<c:forEach items="${actress.videoList}" var="video">
+			<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+			</c:forEach> -->
+		</ul>
+		</div>
+	</dd>
+</dl>
+</form>
+
+<div style="padding-left:60px;">
+</div>
+
+</div>
+</body>
+</html>

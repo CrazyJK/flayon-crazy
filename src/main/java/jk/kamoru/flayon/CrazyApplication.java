@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 
 @SpringBootApplication
@@ -15,17 +14,13 @@ public class CrazyApplication {
 		SpringApplication.run(CrazyApplication.class, args);
 	}
 
-	@Value("${path.video.storage}") 	String[] storage;
-	@Value("${path.video.stage}")		String[] stage;
-	@Value("${path.video.archive}")		String archive;
-
-	@Value("${path.video.storage},${path.video.stage}") 	String[] paths;
+	@Value("${path.video.storage},${path.video.stage}") String[] paths;
+	@Value("${path.video.archive}") String archive;
 
 	@Bean
 	public FileBaseVideoSource instanceVideoSource() {
 		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
 		videoSouece.setPaths(paths);
-//		videoSouece.setPaths(Utils.merge(storage, stage));
 		return videoSouece;
 	}
 	
