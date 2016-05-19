@@ -83,9 +83,9 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 				catch (VideoNotFoundException e) {
 					log.trace("{}", e.getMessage());
 				}
-				catch (Exception e) {
-					log.warn("{} - {}", e.getMessage(), line);
-				}
+//				catch (Exception e) {
+//					log.warn("{} - {}", e.getMessage(), line);
+//				}
 				historyList.add(history);
 			}
 		}

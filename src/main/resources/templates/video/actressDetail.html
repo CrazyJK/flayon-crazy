@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
 <head>
 <meta charset="UTF-8"></meta>
 <title th:text="${actress.name}">actress.name</title>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function(){
-	
-	var queryUrl = context + 'image/google.json?q=[[${actress.name}]]'; 
+	/* 
+	var queryUrl = context + 'image/google.json?q=' + [[${actress.name}]]; 
 	$.getJSON(queryUrl ,function(data) {
 		$('#foundList').empty();
 		
@@ -26,7 +26,7 @@ $(document).ready(function(){
 			$('#foundList').append(li);
 		});
 	});
-	
+	 */
 });
 
 /**
@@ -71,9 +71,8 @@ function toogleFavorite(dom) {
 		<span id="favoriteTEXT" onclick="toogleFavorite()" th:text="${actress.favorite} ? '★' : '☆'"></span>
 		<input class="actressInfo" type="text" name="newname"   th:value="${actress.name}"      id="newName" />
 		<input class="actressInfo" type="text" name="localname" th:value="${actress.localName}" />
-		<img th:src="@{/img/magnify1.png}" width="12px" th:title="#{video.find-info.actress}" />
-			<!-- th:onclick="|popup('${@environment.getProperty('url.search.actress')}${actress.reverseName}', 'infoActress', 800, 600)|" -->
-			
+		<img th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.actress}" 
+			th:onclick="|popup('${@environment.getProperty('url.search.actress') + actress.reverseName}', 'infoActress', 800, 600)|" />
 		<span th:text="|Score ${actress.score}|">Score actress.score</span>
 	</dt>
 	<dd style="text-align:center;">
@@ -103,10 +102,10 @@ function toogleFavorite(dom) {
 	</dd>
 	<dd>
 		<div style="padding-left:60px;">
-		<ul><!-- 
-			<c:forEach items="${actress.videoList}" var="video">
-			<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
-			</c:forEach> -->
+		<ul>
+			<li th:each="video : ${actress.videoList}" class="li-box" th:id="|opus-${video.opus}|">
+				<div th:replace="video/videoCard :: card (${video})"></div>
+			</li>
 		</ul>
 		</div>
 	</dd>

@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.image.service.ImageService;
@@ -194,18 +196,30 @@ public class VideoController extends AbstractController {
 		return "video/torrent";
 	}
 	
-	/**display video search view by query
-	 * @param model
-	 * @param query
+	/**
+	 * display video search view
 	 * @return view name
 	 */
-	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public String search(Model model, @RequestParam(value="q", required=false, defaultValue="") String query) {
-		logger.trace("query={}", query);
-		model.addAttribute("videoList", videoService.findVideoList(query));
-		model.addAttribute("historyList", videoService.findHistory(query));
-
+	@RequestMapping("/search")
+	public String search() {
+		logger.trace("search");
         return "video/search";		
+	}
+
+	/**
+	 * result of search query
+	 * @param query
+	 * @return
+	 */
+	@RequestMapping("/searchJson")
+	@ResponseBody
+	public Map<String, List<?>> searchJson(@RequestParam(value="q", required=false, defaultValue="") String query) {
+		logger.trace("query={}", query);
+		Map<String, List<?>> result = new HashMap<>(); 
+		result.put("videoList", videoService.findVideoList(query));
+		result.put("historyList", videoService.findHistory(query));
+
+        return result;		
 	}
 
 	/**display studio detail view
@@ -528,6 +542,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/{opus}/rename", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void rename(@PathVariable("opus") String opus, @RequestParam("newname") String newName) {
+		logger.info("rename {} -> {}", opus, newName);
 		videoService.rename(opus, newName);
 	}
 	

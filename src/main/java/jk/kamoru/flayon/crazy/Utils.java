@@ -15,6 +15,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Utils {
 
 	public static String getExtension(File file) {
@@ -90,9 +93,14 @@ public class Utils {
 
 	public static void renameFile(File srcFile, String newName) {
 		try {
-			Path target = Paths.get(srcFile.getPath(), newName);
+			String suffix = getExtension(srcFile);
+			if (StringUtils.isNotEmpty(suffix))
+				newName = newName + "." + suffix;
+			Path target = Paths.get(srcFile.getParent(), newName);
+			log.info("rename from {} to {}", srcFile, target);
 			Files.move(srcFile.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
+			log.error("rename fail", e);
 			throw new CrazyException("file rename fail", e);
 		}
 	}

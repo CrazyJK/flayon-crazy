@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+
+	<div class="video-card" style="width:195px;" th:fragment="card (video)">
+		<table style="width:100%;">
+			<tr>
+				<td colspan="2" style="text-align:center;"><div style="height:17px; text-align:center;" class="label" th:onclick="|fnVideoDetail('${video.opus}')|" th:alt-title="${video.title}" th:text="${video.title}">video.title</div></td>
+			</tr>
+			<tr valign="top" height="120px">
+				<td width="70px" class="video-card-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
+					&nbsp;
+				</td>
+				<td>
+					<dl>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'actress',   's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    's', '')"></span></dd> 
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',      's', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'score',     's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'video',     's', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'cover',     's', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'subtitles', 's', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'overview',  's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'rank',      's', '')"></span></dd>
+					</dl>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

@@ -52,7 +52,7 @@ $(document).ready(function(){
 			<td class="number" th:classappend="${sort} eq 'VIDEO' ? 'sorted-column'" th:text="${#lists.size(actress.videoList)}">length(actress.videoList)</td> 
 			<td class="number" th:classappend="${sort} eq 'SCORE' ? 'sorted-column'" th:text="${actress.score}">actress.score</td>
 			<td>
-				<span th:each="video : ${actress.videoList}" class="label" th:title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
+				<span th:each="video : ${actress.videoList}" class="label" th:alt-title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
 			</td>
 		</tr>
 	</table>

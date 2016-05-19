@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:text="|[${video.opus}] ${video.title}|">[video.opus] video.title</title>
+<style type="text/css">
+dl {
+	background-color: rgba( 255, 255, 255, 0.5 );
+}
+</style>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	$("body").css("background-image","url([[@{'/video/' + ${video.opus} + '/cover'}]])");
+//	$("body").css("background-size", "cover");
+//	$("#renameForm").hide();
+});
+function fnToggleRenameForm() {
+	$("#renameForm").toggle();
+}
+function fnToggleFileinfo() {
+	$("#fileinfoDiv").toggle();
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container" role="main" data-layout-fragment="content">
+
+
+<dl class="dl-detail">
+	<dt><span th:replace="video/videoTag :: tag (${video}, 'title',   'l', '')"></span>
+		<span th:replace="video/videoTag :: tag (${video}, 'score',   'l', '')"></span>
+		<br/>
+		<span th:replace="video/videoTag :: tag (${video}, 'rank',    'l', '')"></span>
+	</dt>
+
+	<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',  'l', '')"></span></dd>
+	<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',    'l', '')"></span></dd>
+	<dd><span th:replace="video/videoTag :: tag (${video}, 'release', 'l', '')"></span></dd>
+	<dd><span th:replace="video/videoTag :: tag (${video}, 'download','l', '')"></span></dd>
+
+	<dd th:if="${video.etcInfo} ne ''"><span class="label-large" th:text="|ETC info : ${video.etcInfo}|">ETC info : video.etcInfo</span></dd>
+
+	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files <em><span th:replace="video/videoTag :: tag (${video}, 'length','l', '')"></span></em></span>
+		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
+			<ul>
+				<li><span class="label" title="VIDEO" th:onclick="|opener.fnPlay('${video.opus}')|" th:text="${video.videoFileListPath}">video.videoFileListPath</span></li>
+				<li><span class="label" title="COVER" th:onclick="|opener.fnImageView('${video.opus}')|" th:text="${video.coverFilePath}">video.coverFilePath</span></li>
+				<li><span class="label" title="INFO" th:text="${video.infoFilePath}">video.infoFilePath</span></li>
+				
+				<li th:if="${video.subtitlesFileListPath} ne ''">
+					<span class="label" title="SMI" th:onclick="|opener.fnEditSubtitles('${video.opus}')|" th:text="${video.subtitlesFileListPath}">video.subtitlesFileListPath</span></li>
+	
+				<li th:if="${video.etcFileListPath} ne ''"><div class="label" title="ETC" th:text="| : ${video.etcFileListPath}|"> : video.etcFileListPath</div></li>
+
+				<li><form id="renameForm" method="post" th:action="@{'/video/'+${video.opus}+'/rename'}" target="ifrm" style="padding:0 0 3px 5px;">
+					<input type="text" name="newname" th:value="${video.fullname}" style="width:750px; background-color:rgba(255,255,255);" class="text"/>
+					<input type="submit" value="rename" class="text"/>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</dd>
+	
+	<dd th:if="${video.overviewText} ne ''"><pre  class="label-large" th:onclick="|opener.fnEditOverview('${video.opus}')|" th:text="${video.overviewText}">video.overviewText</pre></dd>
+	
+	<dd>
+		<div th:each="actress : ${video.actressList}">
+			<span class="label-large actressSpan" th:onclick="|fnViewActressDetail('${actress.name}')|" th:inline="text">
+			[[${actress.name}]] <em>[[${actress.age}]]</em> ([[${#lists.size(actress.videoList)}]]), Score [[${actress.score}]]
+			</span>
+			<div style="padding-left:60px;">
+				<ul>
+					<li th:each="_video : ${actress.videoList}" class="li-box" th:id="|opus-${_video.opus}|">
+						<div th:if="${_video.opus ne video.opus}" th:replace="video/videoCard :: card (${_video})"></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</dd>
+</dl>
+
+</div>
+</body>
+</html>
