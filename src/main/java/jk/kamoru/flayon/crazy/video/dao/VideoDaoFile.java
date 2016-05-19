@@ -71,7 +71,7 @@ public class VideoDaoFile implements VideoDao {
 	@Override
 //	@Cacheable("actressCache")
 	public Actress getActress(String name) {
-		logger.trace(name);
+		logger.debug(name);
 		return instanceVideoSource.getActress(name);
 	}
 

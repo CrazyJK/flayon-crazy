@@ -121,7 +121,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/actress/{actressName}/favorite/{favorite}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void putActressFavorite(@PathVariable String actressName, @PathVariable Boolean favorite) {
-		logger.trace("{}, {}", actressName, favorite);
+		logger.debug("{}, {}", actressName, favorite);
 		
 		Actress actress = videoService.getActress(actressName);
 		Map<String, String> params = actress.getInfoMap();

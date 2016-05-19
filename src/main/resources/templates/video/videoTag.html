@@ -1,5 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8"></meta>
+</head>
 <body>
 
 <span th:fragment="tag (video, view, mode, tooltip)" th:with="ONE_GB=${1024*1024*1024},cssClass=${mode} eq 'l' ? 'label-large' : 'label'" >
@@ -41,12 +44,11 @@
 <span th:if="${view} eq 'actress'" 
 		th:each="actress : ${video.actressList}"
 		th:class="${cssClass}"
-		th:onclick="|fnViewActressDetail('${actress.name}')|"
 		th:alt-title="${actress}">
-	<span th:text="${actress.name}">name</span>
+	<span th:text="${actress.name}" th:onclick="|fnViewActressDetail('${actress.name}')|">name</span>
 	<span th:if="${mode} eq 'l'">
 		<em th:text="${actress.age}">age</em>
-		<span th:class="${cssClass}" th:onclick="|fnFavorite(this, '${actress.name}')|" th:text="${actress.favorite} ? '★' : '☆'">favorite</span>
+		<span th:onclick="|fnFavorite(this, '${actress.name}')|" th:text="${#bools.isTrue(actress.favorite)} ? '★' : '☆'">favorite</span>
 		<img th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.actress}" 
 			th:onclick="|popup('${@environment.getProperty('url.search.actress') + actress.reverseName}', 'info_${actress.name}', 800, 600)|"/>
 	</span> 		
@@ -73,13 +75,11 @@
 <span th:if="${view} eq 'title'"
 		th:class="${cssClass}"
 		th:onclick="|fnVideoDetail('${video.opus}')|"
-		th:alt-title="${video.title}"
-		th:text="${mode} neq 's' ? ${video.title} : ${#strings.substring(video.title, 0, 22)}"></span>
+		th:alt-title="${video.title}" th:with="leng=${#strings.length(video.title)}"
+		th:text="${mode} neq 's' or ${leng} lt 22 ? ${video.title} : ${#strings.substring(video.title, 0, 22)}"></span>
 
-<span th:if="${view} eq 'score'"
-		th:class="${cssClass} + ' rangeLabel'"
-		th:alt-title="${video.scoreDesc}">
-	<span th:text="${video.score}"></span>		
+<span th:if="${view} eq 'score'">
+	<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="${video.scoreDesc}" th:text="${video.score}"></span>		
 	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoReset('${video.opus}')|">Reset</span>
 	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoWrong('${video.opus}')|">Wrong</span>
 </span>

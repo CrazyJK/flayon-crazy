@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
@@ -66,6 +68,14 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private ActressSort sort = ActressSort.NAME;
 
 	public Actress() {
+		name = "";
+		localName = "";
+		birth = "";
+		bodySize = "";
+		debut = "";
+		height = "";
+		age = "";
+		favorite = new Boolean(false);
 		studioList = new ArrayList<Studio>();
 		videoList = new ArrayList<Video>();
 	}
@@ -145,11 +155,13 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	}
 
 	public Map<String, String> getInfoMap() {
-		File file = getInfoFile();
-		if (file.exists() && file.isFile())
-			return Utils.readFileToMap(file);
-		else
-			return null;
+		try {
+			return Utils.readFileToMap(getInfoFile());
+		} 
+		catch (CrazyException e) {
+			log.debug("info load error : {} - {}", name, e.getMessage());
+			return new HashMap<String, String>();
+		}
 	}
 	
 	private void loadInfo() {
@@ -157,11 +169,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 			Map<String, String> info = getInfoMap();
 			if (info == null)
 				return;
-			this.localName = info.get(LOCALNAME);
-			this.birth     = info.get(BIRTH);
-			this.height    = info.get(HEIGHT);
-			this.bodySize  = info.get(BODYSIZE);
-			this.debut     = info.get(DEBUT);
+			this.localName = StringUtils.trimToEmpty(info.get(LOCALNAME));
+			this.birth     = StringUtils.trimToEmpty(info.get(BIRTH));
+			this.height    = StringUtils.trimToEmpty(info.get(HEIGHT));
+			this.bodySize  = StringUtils.trimToEmpty(info.get(BODYSIZE));
+			this.debut     = StringUtils.trimToEmpty(info.get(DEBUT));
 			this.favorite  = Boolean.valueOf(info.get(FAVORITE));
 			loaded = true;
 		}

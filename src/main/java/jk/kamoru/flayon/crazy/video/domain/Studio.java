@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +50,12 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	private StudioSort sort = StudioSort.NAME;
 	
 	public Studio() {
+		name = "";
+		try {
+			homepage = new URL("");
+		} catch (MalformedURLException e) {
+		}
+		company = "";
 		videoList = new ArrayList<Video>();
 		actressList = new ArrayList<Actress>();
 	}
@@ -114,8 +121,8 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 			if (file.isFile())
 				try {
 					Map<String, String> info = Utils.readFileToMap(file);
-					this.company = info.get("COMPANY");
-					this.homepage = new URL(info.get("HOMEPAGE"));
+					this.company = StringUtils.trimToEmpty(info.get("COMPANY"));
+					this.homepage = new URL(StringUtils.trimToEmpty(info.get("HOMEPAGE")));
 				} catch (MalformedURLException e) {
 					log.warn("malformed url error : {}", e.getMessage());
 				}

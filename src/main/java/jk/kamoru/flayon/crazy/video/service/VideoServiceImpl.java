@@ -179,7 +179,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public Actress getActress(String actressName) {
-		log.trace(actressName);
+		log.debug(actressName);
 		return videoDao.getActress(actressName);
 	}
 
