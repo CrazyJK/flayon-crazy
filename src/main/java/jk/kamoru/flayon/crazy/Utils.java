@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -222,4 +223,11 @@ public class Utils {
 		return dst;
 	}
 
+	public static long sumOfVideoList(List<Video> videoList) {
+		long sum = 0;
+		for (Video video : videoList) {
+			sum += video.getLength();
+		}
+		return sum;
+	}
 }

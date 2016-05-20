@@ -14,7 +14,7 @@
 		th:onclick="|fnPlay('${video.opus}')|">
 	<span th:text="${mode} eq 's' ? 'V' : 'Video'"></span>
 	<em th:if="${mode} eq 'l'" th:text="${video.size}"></em>
-	<em th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'"></em>
+	<em th:if="${mode} eq 'l'" th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'"></em>
 </span>
 
 <span th:if="${view} eq 'cover'"
@@ -30,10 +30,11 @@
 		th:text="${mode} eq 's' ? 's' : 'smi'">smi</span>
 
 <span th:if="${view} eq 'overview'"
-		th:class="${cssClass}" 
+		th:class="${cssClass}"
+		th:id="|overview-${video.opus}|"
 		th:onclick="|fnEditOverview('${video.opus}')|"
 		th:alt-title="${video.overviewText}"
-		th:text="${mode} eq 's' ? 'O' : ${video.overviewText}">Overview</span>
+		th:text="${mode} eq 's' or ${#strings.isEmpty(video.overviewText)} ? 'O' : ${video.overviewText}">Overview</span>
 
 <span th:if="${view} eq 'download'"
 		th:class="${cssClass}" title="download date" th:text="${video.videoDate}">download date</span>
