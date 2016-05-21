@@ -10,11 +10,11 @@
 <span th:if="${view} eq 'video'"
 		th:class="${cssClass}" 
 		th:classappend="${video.existVideoFileList} ? 'exist' : 'nonExist'" 
-		th:alt-title="${video.playCount} + 'played'"
+		th:alt-title="${video.playCount} + ' played'"
 		th:onclick="|fnPlay('${video.opus}')|">
 	<span th:text="${mode} eq 's' ? 'V' : 'Video'"></span>
-	<em th:if="${mode} eq 'l'" th:text="${video.size}"></em>
-	<em th:if="${mode} eq 'l'" th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'"></em>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${video.size}"></em>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}"></em>
 </span>
 
 <span th:if="${view} eq 'cover'"
@@ -76,9 +76,9 @@
 <span th:if="${view} eq 'title'"
 		th:class="${cssClass}"
 		th:onclick="|fnVideoDetail('${video.opus}')|"
-		th:alt-title="${video.title}" th:with="leng=${#strings.length(video.title)}"
-		th:text="${mode} neq 's' or ${leng} lt 22 ? ${video.title} : ${#strings.substring(video.title, 0, 22)}"></span>
-
+		th:alt-title="${video.title}"
+		th:text="${mode} neq 's' ? ${video.title} : ${#strings.abbreviate(video.title,22)}"></span>
+ 
 <span th:if="${view} eq 'score'">
 	<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="${video.scoreDesc}" th:text="${video.score}"></span>		
 	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoReset('${video.opus}')|">Reset</span>
@@ -97,7 +97,7 @@
 		th:onclick="|fnVideoDetail('${video.opus}')|" 
 		th:alt-title="|${video.fullname} ${tooltip}|" 
 		th:data-opus="${video.opus}"
-		th:text="${mode} eq 'simple' ? 'O' : video.opus">video.opus</span>
+		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
 
 </span>
 </body>

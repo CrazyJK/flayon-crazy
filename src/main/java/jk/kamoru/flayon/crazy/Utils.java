@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -229,5 +230,31 @@ public class Utils {
 			sum += video.getLength();
 		}
 		return sum;
+	}
+	
+	static DecimalFormat df = new DecimalFormat("#,###.# GB");
+
+	public static String toGBSize(long length) {
+		return df.format((double)length / FileUtils.ONE_GB);
+	}
+
+	public static String getCssClassNameByItemCount(String itemCssClass, int size) {
+		if (size >= 100)
+			itemCssClass += "100";
+		else if (size >= 50)
+			itemCssClass += "50";
+		else if (size >= 30)
+			itemCssClass += "30";
+		else if (size >= 10)
+			itemCssClass += "10";
+		else if (size >= 5)
+			itemCssClass += "5";
+		else
+			itemCssClass += "1";
+		return itemCssClass;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(toGBSize(FileUtils.ONE_GB * 0  + FileUtils.ONE_MB * 100));
 	}
 }

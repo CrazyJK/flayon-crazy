@@ -128,7 +128,7 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 	</div>
 </div>
 
-<div id="content_div" class="div-box" style="overflow:auto; text-align:left;" th:with="ONE_GB=${1024*1024*1024}">
+<div id="content_div" class="div-box" style="overflow:auto; text-align:left;">
 
 	<section>
 		<h3 th:text="#{video.video-by-folder}">video.video-by-folder</h3>
@@ -143,13 +143,13 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 				<tr th:each="path, status : ${pathMap}" th:if="${path.key} ne 'Total'">
 					<td th:text="${path.key}">path.key</td>
 					<td><span class="videoCount" th:text="${path.value[0]}">path.value[0]</span></td>
-					<td><span class="videoSize"  th:text="${#numbers.formatDecimal(path.value[1] / ONE_GB, 0, 1)} + 'GB'">path.value[1]</span></td>
+					<td><span class="videoSize"  th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(path.value[1])}">path.value[1]</span></td>
 				</tr>
 
 				<tr th:each="path, status : ${pathMap}" th:if="${path.key} eq 'Total'">
 					<td style="border-top:1px double blue;" th:text="#{video.total}">video.total</td>
 					<td style="border-top:1px double blue;"><span class="videoCount" th:text="${path.value[0]}">path.value[0]</span></td>
-					<td style="border-top:1px double blue;"><span class="videoSize"  th:text="${#numbers.formatDecimal(path.value[1] / ONE_GB, 0, 1)} + 'GB'">path.value[1]</span></td>
+					<td style="border-top:1px double blue;"><span class="videoSize"  th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(path.value[1])}">path.value[1]</span></td>
 				</tr>
 			</table>
 		</article>
@@ -243,7 +243,7 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 				<tr th:each="rank,status : ${rankMap}">
 					<td class="nowrap"><span th:text="${rank.key}"></span> <span class="videoCount" th:text="${#lists.size(rank.value)}">length(rank.value)</span></td>
 					<td class="nowrap right" th:with="totalLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(rank.value)}">
-						<span class="videoSize" th:text="${#numbers.formatDecimal(totalLength / ONE_GB, 0, 1)} + 'GB'"></span>
+						<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(totalLength)}"></span>
 					</td>
 					<td class="nowrap">
 						<th:block th:each="video : ${rank.value}">
@@ -258,37 +258,103 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 	<section>
 		<h3 th:text="#{video.video-by-score}">video.video-by-score</h3>
 		<article>
-			<table class="video-table" style="background-color:lightgray">
+			<table class="video-table" style="background-color:lightgray" th:with="totalLength=0">
 				<tr>
 					<th class="nowrap width80" th:text="#{video.score}">video.score</th>
 					<th class="nowrap width60" th:text="#{video.length}">video.length</th>
 					<th class="nowrap width60" th:text="#{video.length.sum}">video.length.sum</th>
 					<th class="nowrap" th:text="#{video.video}">video.video</th>
 				</tr>
-				<c:set var="totalLength" value="0"/>
-				<c:forEach items="${scoreMap}" var="score" varStatus="status">
-					<c:set var="stepLength" value="0"/>
-					<c:forEach items="${score.value}" var="video" varStatus="status">
-						<c:set var="stepLength"  value="${stepLength + video.length}"/>
-						<c:set var="totalLength" value="${totalLength + video.length}"/>
-					</c:forEach>
-				<tr th:each="score,status : ${scoreMap}">
+				<tr th:each="score,status : ${scoreMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(score.value)}">
 					<td class="nowrap"><span th:text="${score.key}"></span> <span class="videoCount" th:text="${#lists.size(score.value)}">length(score.value)</span></td>
-					<td class="nowrap right" th:with="">
-						<span class="videoSize"><fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/></span>
-					</td>
 					<td class="nowrap right">
-						<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
+						<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
+					</td>
+					<td class="nowrap right" th:with="totalLength=${totalLength} + ${stepLength}">
+						<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(totalLength)}" th:title="${totalLength}"></span>
 					</td>
 					<td class="nowrap">
-						<c:forEach items="${score.value}" var="video" varStatus="status">
-							<jk:video video="${video}" view="label" tooltip="
-${video.scoreDesc}"/>
-						</c:forEach>
+						<th:block th:each="video : ${score.value}">
+							<span th:replace="video/videoTag :: tag (${video}, 'label',     's', ${video.scoreDesc})"></span>
+						</th:block>
 					</td>
 				</tr>
-				</c:forEach>		
 			</table>
+		</article>
+	</section>
+
+	<section>
+		<h3 th:text="#{video.video-by-length}">video.video-by-length</h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray" th:with="totalLength=0">
+				<tr>
+					<th class="nowrap width80" th:text="#{video.length}">video.length</th>
+					<th class="nowrap width50" th:text="#{video.length.sum}">video.length.sum</th>
+					<th class="nowrap" th:text="#{video.video}">video.video</th>
+				</tr>
+				<tr th:each="length,status : ${lengthMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(length.value)}">
+					<td class="nowrap"><span th:text="|${length.key} GB↓ |"></span><span class="videoCount" th:text="${#lists.size(length.value)}">length(length.value)</span></td>
+					<td class="nowrap right">
+						<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
+					</td>
+					<td class="nowrap">
+						<th:block th:each="video : ${length.value}">
+							<span th:replace="video/videoTag :: tag (${video}, 'label',     's', ${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)})"></span>
+						</th:block>
+					</td>
+				</tr>
+			</table>
+		</article>
+	</section>
+
+	<section>
+		<h3 th:text="#{video.video-by-extension}">video.video-by-extension</h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width80" th:text="#{video.extension}">video.extension</th>
+					<th class="nowrap width50" th:text="#{video.length}">video.length</th>
+					<th class="nowrap" th:text="#{video.video}">video.video</th>
+				</tr>
+				<tr th:each="extension : ${extensionMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(extension.value)}">
+					<td class="nowrap"><span th:text="${extension.key}"></span> <span class="videoCount" th:text="${#lists.size(extension.value)}">length(extension.value)</span></td>
+					<td class="nowrap right">
+						<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
+					</td>
+					<td class="nowrap">
+						<th:block th:each="video : ${extension.value}">
+							<span th:replace="video/videoTag :: tag (${video}, 'label',     's', '')"></span>
+						</th:block>
+					</td>
+				</tr>
+			</table>
+		</article>
+	</section>
+
+	<section>
+		<h3 th:inline="text">[[#{video.total}]] [[#{video.video}]] : [[${#lists.size(videoList)}]]</h3>
+		<article id="videoDiv" class="div-box">
+			<th:block th:each="video : ${videoList}">
+				<span th:replace="video/videoTag :: tag (${video}, 'label',     's', '')"></span>
+			</th:block>
+		</article>
+	</section>
+
+	<section>
+		<h3 th:inline="text">[[#{video.total}]] [[#{video.studio}]] : [[${#lists.size(studioList)}]]</h3>
+		<article id="studioDiv" class="div-box">
+			<th:block th:each="studio : ${studioList}">
+				<span th:replace="video/studioTag :: tag (${studio}, 'span')"></span>
+			</th:block>
+		</article>
+	</section>
+
+	<section>
+		<h3 th:inline="text">[[#{video.total}]] [[#{video.actress}]] : [[${#lists.size(actressList)}]]</h3>
+		<article id="actressDiv" class="div-box">
+			<th:block th:each="actress : ${actressList}">
+				<span th:replace="video/actressTag :: tag (${actress}, 'span')"></span>
+			</th:block>
 		</article>
 	</section>
 	

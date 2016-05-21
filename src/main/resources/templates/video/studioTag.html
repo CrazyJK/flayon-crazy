@@ -9,16 +9,16 @@
 
 
 <label th:if="${view} eq 'label'"
-	th:class="|item item${size}|" 
+	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
 	th:title="|${#objects.nullSafe(studio.homepage, '')} ${studio.company} Actress:${#lists.size(studio.actressList)}|">
 	<input type="checkbox" th:field="*{selectedStudio}" th:value="${studio.name}" class="item-checkbox"/>
 	<span th:text="|${studio.name}(${#lists.size(studio.videoList)})|">name length(actress.videoList)</span>
 </label>
 
 <span th:if="${view} eq 'span'"
-	th:class="|item${size}|" 
+	th:class="${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}" 
 	th:onclick="|fnViewStudioDetail('${studio.name}')|" 
-	th:title="|${studio.homepage} ${studio.company} Actress:${#lists.size(studio.actressList)}|"
+	th:title="|${#objects.nullSafe(studio.homepage, '')} ${studio.company} Actress:${#lists.size(studio.actressList)}|"
 	th:text="|${studio.name}(${#lists.size(studio.videoList)})|">
 	studio.name length(studio.videoList)
 </span>
