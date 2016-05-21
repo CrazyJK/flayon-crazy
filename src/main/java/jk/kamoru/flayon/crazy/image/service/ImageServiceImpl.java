@@ -1,9 +1,14 @@
 package jk.kamoru.flayon.crazy.image.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
@@ -46,15 +51,28 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public String getImageNameJSON() {
-		StringBuilder sb = new StringBuilder("{");
+		Map<Integer, String> nameMap = new HashMap<>();
 		int index = 0;
 		for (Image image : imageSource.getImageList()) {
-			if (index > 0)
-				sb.append(",");
-			sb.append(String.format("\"%s\":\"%s\"", index++, image.getName()));
+			nameMap.put(index++, image.getName());
 		}
-		sb.append("}");
-		return sb.toString();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			return mapper.writeValueAsString(nameMap);
+		} catch (JsonProcessingException e) {
+			return "";
+		}
+	}
+
+	@Override
+	public Map<Integer, String> getImageNameMap() {
+		Map<Integer, String> map = new HashMap<>();
+		int index = 0;
+		for (Image image : imageSource.getImageList()) {
+			map.put(index++, image.getName());
+		}
+		return map;
 	}
 
 	@Override

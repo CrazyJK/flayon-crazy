@@ -2,11 +2,11 @@ package jk.kamoru.flayon.crazy;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -14,17 +14,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.image.domain.ImageType;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/image")
@@ -39,34 +40,19 @@ public class ImageController extends AbstractController {
 	private ImageService imageService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String viewSlide(Model model, 
-			@RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
-		int count = imageService.getImageSourceSize();
-		model.addAttribute("imageCount", count);
-		model.addAttribute("selectedNumber", n > count ? count - 1 : n);
-		model.addAttribute("imageNameJSON", imageService.getImageNameJSON());
+	public String viewSlide() {
 		return "image/slide";
 	}
-
-	@RequestMapping(value = "/slides", method = RequestMethod.GET)
-	public String viewSlidesjs(Model model, 
-			@RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
-		int count = imageService.getImageSourceSize();
-		model.addAttribute("imageCount", count);
-		model.addAttribute("selectedNumber", n > count ? count - 1 : n);
-		return "image/slidesjs";
-	}
-
-	@RequestMapping(value = "/canvas", method = RequestMethod.GET)
-	public String viewCanvas(Model model, HttpServletResponse response, 
+	
+	@RequestMapping("/data")
+	@ResponseBody
+	public Map<String, Object> getData(HttpServletResponse response, 
 			@RequestParam(value = "n", required = false, defaultValue = "-1") int firstImageIndex,
 			@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex,
 			@CookieValue(value = Cookie_LAST_IMAGE_INDEX, defaultValue = "-1") int lastViewImageIndex) {
+		Map<String, Object> data = new HashMap<>();
 		int count = imageService.getImageSourceSize();
-
-		if (deleteImageIndex > -1) 
-			imageService.delete(deleteImageIndex);
-
+		
 		if (firstImageIndex > -1)
 			firstImageIndex = firstImageIndex > count ? count - 1 : firstImageIndex;
 		else
@@ -78,10 +64,24 @@ public class ImageController extends AbstractController {
 				firstImageIndex = imageService.getRandomImageNo();
 
 		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(firstImageIndex)));
+		
+		data.put("imageCount", count);
+		data.put("selectedNumber", firstImageIndex);
+		data.put("imageNameMap", imageService.getImageNameMap());
+		return data;
+	}
 
-		model.addAttribute("imageCount", count);
-		model.addAttribute("selectedNumber", firstImageIndex);
-		model.addAttribute("imageNameJSON", imageService.getImageNameJSON());
+	@RequestMapping(value = "/slides", method = RequestMethod.GET)
+	public String viewSlidesjs() {
+		return "image/slidesjs";
+	}
+
+	@RequestMapping(value = "/canvas", method = RequestMethod.GET)
+	public String viewCanvas(@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex) {
+
+		if (deleteImageIndex > -1) 
+			imageService.delete(deleteImageIndex);
+
 		return "image/canvas";
 	}
 

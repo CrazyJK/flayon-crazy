@@ -1,12 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html> 
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
 <head>
-<meta charset="UTF-8">
-<link rel="shortcut icon" type="image/x-icon" href="<c:url value="/res/img/video-favicon.ico" />">
-<title><s:message code="image.image-viewer"/></title>
+<meta charset="UTF-8"></meta>
+<title th:text="#{image.image-viewer}">image.image-viewer</title>
 <style type="text/css">
 #imageThumbnailUL li {
 	display:inline-block;
@@ -29,6 +25,7 @@
 }
 #imageDiv {
 	text-align:center;
+	margin-top: 30px;
 }
 .thumbDiv {
 	width:150px; 
@@ -60,23 +57,33 @@
 	-webkit-border-radius:5px;
 }
 </style>
-<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="<c:url value="/res/js/common.js" />"></script>
-<script type="text/javascript">
-var imagepath = '<s:url value="/image/" />';
-var selectedNumber = ${selectedNumber};
+<script th:inline="javascript">
+/*<![CDATA[*/
+var imagepath = [[@{/image/}]];
+var selectedNumber;
 var selectedImgUrl;
-var imageCount = <c:out value="${imageCount}" />;
+var imageCount;
 var windowWidth  = $(window).width();
 var windowHeight = $(window).height();
-var imageMap = ${imageNameJSON};
-/*{
-		<c:forEach items="${imageList}" var="image" varStatus="status">
-			"${status.index}":"${image.name}",
-		</c:forEach>
-};*/
+var imageMap;
+
 $(document).ready(function(){
+	
+	$.getJSON([[@{/image/data}]] ,function(data) {
+		selectedNumber = data['selectedNumber'];
+		imageCount = data['imageCount'];
+		imageMap = data['imageNameMap'];
+		
+		resizeImage();
+		if (selectedNumber > -1)
+			fnViewImage(selectedNumber);
+		else
+			fnRandomImageView();
+		$("#firstNo").html(0);
+		$("#endNo").html(imageCount-1);
+
+	});
+	
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
 		var delta = 0;
 		var event = window.event || e;
@@ -123,19 +130,12 @@ $(document).ready(function(){
 		} 
 	});
 	$(window).bind("resize", resizeImage);
-	resizeImage();
-	if (selectedNumber > -1)
-		fnViewImage(selectedNumber);
-	else
-		fnRandomImageView();
-	$("#firstNo").html(0);
-	$("#endNo").html(imageCount-1);
 	
 });
 
 function resizeImage() {
 	windowHeight = $(window).height();
-	$("#imageDiv").height(windowHeight - 105);
+	$("#imageDiv").height(windowHeight - 135);
 	fnDisplayThumbnail();
 }
 
@@ -193,9 +193,12 @@ function fnDisplayThumbnail() {
 		$("#imageThumbnailUL").append(li);
 	}
 }
+/*]]>*/
 </script>
 </head>
 <body>
+<div class="container" role="main" data-layout-fragment="content">
+
 <span id="debug" style="display:none;"></span>
 <div id="navDiv">
 	<span class="label" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
@@ -208,5 +211,7 @@ function fnDisplayThumbnail() {
 </div>
 <div id="imageThumbnailDiv"><ul id="imageThumbnailUL"></ul></div>
 <div id="imageDiv" class="centerBG"></div>
+
+</div>
 </body>
 </html>

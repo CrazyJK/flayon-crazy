@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<span th:fragment="tag (studio, view)" th:with="size=${#lists.size(studio.videoList)}">
+<th:block th:fragment="tag (studio, view)" th:with="size=${#lists.size(studio.videoList)}">
 
 
 <label th:if="${view} eq 'label'"
@@ -23,6 +23,6 @@
 	studio.name length(studio.videoList)
 </span>
 
-</span>
+</th:block>
 </body>
 </html>

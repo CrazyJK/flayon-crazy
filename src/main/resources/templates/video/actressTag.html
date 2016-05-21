@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<span th:fragment="tag (actress, view)" th:with="size=${#lists.size(actress.videoList)}">
+<th:block th:fragment="tag (actress, view)" th:with="size=${#lists.size(actress.videoList)}">
 
 <label th:if="${view} eq 'label'"
 	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
@@ -23,6 +23,6 @@
 	actress.name length(actress.videoList)
 </span>
 
-</span>
+</th:block>
 </body>
 </html>

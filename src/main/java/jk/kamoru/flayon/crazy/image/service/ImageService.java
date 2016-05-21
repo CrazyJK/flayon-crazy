@@ -1,6 +1,7 @@
 package jk.kamoru.flayon.crazy.image.service;
 
 import java.util.List;
+import java.util.Map;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
 
@@ -58,4 +59,6 @@ public interface ImageService {
 	 * @return
 	 */
 	int getRandomImageNo();
+
+	Map<Integer, String> getImageNameMap();
 }

@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<span th:fragment="tag (video, view, mode, tooltip)" th:with="ONE_GB=${1024*1024*1024},cssClass=${mode} eq 'l' ? 'label-large' : 'label'" >
+<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass=${mode} eq 'l' ? 'label-large' : 'label'" >
 
 <span th:if="${view} eq 'video'"
 		th:class="${cssClass}" 
@@ -67,7 +67,7 @@
 		th:onclick="|popup('${@environment.getProperty('url.search.torrent') + video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';|"/>
 
 <span th:if="${view} eq 'length'" 
-		th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'">size</span>
+		th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}">size</span>
 
 <span th:if="${view} eq 'studio'"
 		th:class="${cssClass}"
@@ -99,6 +99,6 @@
 		th:data-opus="${video.opus}"
 		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
 
-</span>
+</th:block>
 </body>
 </html>

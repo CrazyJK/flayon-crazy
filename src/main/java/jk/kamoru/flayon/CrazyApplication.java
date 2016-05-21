@@ -28,6 +28,7 @@ public class CrazyApplication {
 	public FileBaseVideoSource archiveVideoSource() {
 		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
 		videoSouece.setPaths(archive);
+		videoSouece.setArchive(true);
 		return videoSouece;
 	}
 	
