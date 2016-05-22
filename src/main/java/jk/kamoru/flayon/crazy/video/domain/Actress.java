@@ -93,15 +93,15 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public int compareTo(Actress comp) {
 		switch (sort) {
 		case NAME:
-			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareTo(this.getName(), comp.getName());
 		case BIRTH:
-			return Utils.compareToIgnoreCase(comp.getBirth(), this.getBirth());
+			return Utils.compareTo(comp.getBirth(), this.getBirth());
 		case BODY:
-			return Utils.compareToIgnoreCase(comp.getBodySize(), this.getBodySize());
+			return Utils.compareTo(comp.getBodySize(), this.getBodySize());
 		case HEIGHT:
-			return Utils.compareToIgnoreCase(comp.getHeight(), this.getHeight());
+			return Utils.compareTo(comp.getHeight(), this.getHeight());
 		case DEBUT:
-			return Utils.compareToIgnoreCase(comp.getDebut(), this.getDebut());
+			return Utils.compareTo(comp.getDebut(), this.getDebut());
 		case VIDEO:
 			return comp.getVideoList().size() - this.getVideoList().size();
 		case SCORE:
@@ -109,7 +109,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		case FAVORITE:
 			return Utils.compareTo(comp.getFavorite(), this.getFavorite());
 		default:
-			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareTo(this.getName(), comp.getName());
 		}
 	}
 	

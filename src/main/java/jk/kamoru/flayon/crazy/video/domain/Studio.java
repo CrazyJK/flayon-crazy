@@ -101,17 +101,17 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	public int compareTo(Studio comp) {
 		switch (sort) {
 		case NAME:
-			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareTo(this.getName(), comp.getName());
 		case HOMEPAGE:
 			return Utils.compareTo(this.getHomepage(), comp.getHomepage());
 		case COMPANY:
-			return Utils.compareToIgnoreCase(this.getCompany(), comp.getCompany());
+			return Utils.compareTo(this.getCompany(), comp.getCompany());
 		case VIDEO:
 			return this.getVideoList().size() - comp.getVideoList().size();
 		case SCORE:
 			return this.getScore() - comp.getScore();
 		default:
-			return Utils.compareToIgnoreCase(this.getName(), comp.getName());
+			return Utils.compareTo(this.getName(), comp.getName());
 		}
 	}
 

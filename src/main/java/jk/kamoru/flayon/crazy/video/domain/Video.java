@@ -143,15 +143,15 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public int compareTo(Video comp) {
 		switch(sortMethod) {
 		case S:
-			return Utils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
+			return Utils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
 		case O:
-			return Utils.compareToIgnoreCase(this.getOpus(), comp.getOpus());
+			return Utils.compareTo(this.getOpus(), comp.getOpus());
 		case T:
-			return Utils.compareToIgnoreCase(this.getTitle(), comp.getTitle());
+			return Utils.compareTo(this.getTitle(), comp.getTitle());
 		case A:
-			return Utils.compareToIgnoreCase(this.getActressName(), comp.getActressName());
+			return Utils.compareTo(this.getActressName(), comp.getActressName());
 		case D:
-			return Utils.compareToIgnoreCase(this.getReleaseDate(), comp.getReleaseDate());
+			return Utils.compareTo(this.getReleaseDate(), comp.getReleaseDate());
 		case M:
 			return this.getDelegateFile().lastModified() > comp.getDelegateFile().lastModified() ? 1 : -1;
 		case P:
@@ -173,7 +173,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					return 1;
 				}
 			}
-			return Utils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
+			return Utils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
 		default:
 			return Utils.compareTo(this, comp);
 		}
