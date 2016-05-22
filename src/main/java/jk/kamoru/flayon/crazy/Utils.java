@@ -254,7 +254,4 @@ public class Utils {
 		return itemCssClass;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(toGBSize(FileUtils.ONE_GB * 0  + FileUtils.ONE_MB * 100));
-	}
 }
