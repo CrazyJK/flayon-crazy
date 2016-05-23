@@ -205,7 +205,7 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean isEmptyDirectory(File dir) {
-		isTrue(dir == null || !dir.exists() || !dir.isDirectory(), "In is not directory. " + dir);
+		isTrue(dir != null && dir.isDirectory(), "It is not a directory. " + dir);
 		return FileUtils.listFiles(dir, null, false).isEmpty();
 	}
 
