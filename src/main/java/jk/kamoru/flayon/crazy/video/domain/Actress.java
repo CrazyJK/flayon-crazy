@@ -155,13 +155,14 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	}
 
 	public Map<String, String> getInfoMap() {
-		try {
-			return Utils.readFileToMap(getInfoFile());
-		} 
-		catch (CrazyException e) {
-			log.debug("info load error : {} - {}", name, e.getMessage());
-			return new HashMap<String, String>();
-		}
+		if (getInfoFile().isFile())
+			try {
+				return Utils.readFileToMap(getInfoFile());
+			} 
+			catch (CrazyException e) {
+				log.error("info load error : {} - {}", name, e.getMessage());
+			}
+		return new HashMap<String, String>();
 	}
 	
 	private void loadInfo() {

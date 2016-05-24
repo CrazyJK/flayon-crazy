@@ -74,7 +74,7 @@ public class Utils {
 			}
 		} 
 		catch (IOException e) {
-			log.error("read file error", e);
+			throw new CrazyException("file read error", e);
 		}
 		return map;
 	}
