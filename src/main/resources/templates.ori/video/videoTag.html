@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8"></meta>
+</head>
+<body>
+
+<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass=${mode} eq 'l' ? 'label-large' : 'label'" >
+
+<span th:if="${view} eq 'video'"
+		th:class="${cssClass}" 
+		th:classappend="${video.existVideoFileList} ? 'exist' : 'nonExist'" 
+		th:alt-title="${video.playCount} + ' played'"
+		th:onclick="|fnPlay('${video.opus}')|">
+	<span th:text="${mode} eq 's' ? 'V' : 'Video'"></span>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${video.size}"></em>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}"></em>
+</span>
+
+<span th:if="${view} eq 'cover'"
+		th:class="${cssClass}" 
+		th:classappend="${video.existCoverFile} ? 'exist' : 'nonExist'"
+		th:onclick="|fnImageView('${video.opus}')|"
+		th:text="${mode} eq 's' ? 'C' : 'Cover'">Cover</span>		
+
+<span th:if="${view} eq 'subtitles'"
+		th:class="${cssClass}" 
+		th:classappend="${video.existSubtitlesFileList} ? 'exist' : 'nonExist'"
+		th:onclick="|fnEditSubtitles('${video.opus}')|"
+		th:text="${mode} eq 's' ? 's' : 'smi'">smi</span>
+
+<span th:if="${view} eq 'overview'"
+		th:class="${cssClass}"
+		th:id="|overview-${video.opus}|"
+		th:onclick="|fnEditOverview('${video.opus}')|"
+		th:alt-title="${video.overviewText}"
+		th:text="${mode} eq 's' or ${#strings.isEmpty(video.overviewText)} ? 'O' : ${video.overviewText}">Overview</span>
+
+<span th:if="${view} eq 'download'"
+		th:class="${cssClass}" title="download date" th:text="${video.videoDate}">download date</span>
+	
+<span th:if="${view} eq 'release'"
+		th:class="${cssClass}" title="release date" th:text="${video.releaseDate}">release Date</span>
+
+<span th:if="${view} eq 'actress'" 
+		th:each="actress : ${video.actressList}"
+		th:class="${cssClass}"
+		th:alt-title="${actress}">
+	<span th:text="${actress.name}" th:onclick="|fnViewActressDetail('${actress.name}')|">name</span>
+	<span th:if="${mode} eq 'l'">
+		<em th:text="${actress.age}">age</em>
+		<span th:onclick="|fnFavorite(this, '${actress.name}')|" th:text="${#bools.isTrue(actress.favorite)} ? '★' : '☆'">favorite</span>
+		<img th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.actress}" 
+			th:onclick="|popup('${@environment.getProperty('url.search.actress') + actress.reverseName}', 'info_${actress.name}', 800, 600)|"/>
+	</span> 		
+</span>
+
+<span th:if="${view} eq 'opus'"
+		th:class="${cssClass}">
+	<span th:text="${video.opus}">opus</span>
+	<img th:if="${mode} eq 'l'" th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.opus}"
+			th:onclick="|popup('${@environment.getProperty('url.search.video') + video.opus}', 'info_${video.opus}', 800, 600)|"/>
+</span>
+
+<img th:if="${view} eq 'torrent'" 
+		th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.torrent}"
+		th:onclick="|popup('${@environment.getProperty('url.search.torrent') + video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';|"/>
+
+<span th:if="${view} eq 'length'" 
+		th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}">size</span>
+
+<span th:if="${view} eq 'studio'"
+		th:class="${cssClass}"
+		th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:alt-title="${video.studio}" th:text="${video.studio.name}">video.studio.name</span>
+
+<span th:if="${view} eq 'title'"
+		th:class="${cssClass}"
+		th:onclick="|fnVideoDetail('${video.opus}')|"
+		th:alt-title="${video.title}"
+		th:text="${mode} neq 's' ? ${video.title} : ${#strings.abbreviate(video.title,22)}"></span>
+ 
+<span th:if="${view} eq 'score'">
+	<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="${video.scoreDesc}" th:text="${video.score}"></span>		
+	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoReset('${video.opus}')|">Reset</span>
+	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoWrong('${video.opus}')|">Wrong</span>
+</span>
+		
+<span th:if="${view} eq 'rank'">
+	<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" 
+			th:min="${minRank}" th:max="${maxRank}" th:value="${video.rank}" 
+			th:onmouseup="|fnRank('${video.opus}')|" th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
+	<em th:id="|Rank-${video.opus}-label|" th:class="${cssClass} + ' rangeLabel'" th:text="${video.rank}">video.rank</em>
+</span>
+
+<span th:if="${view} eq 'label'"
+		th:class="${cssClass}" 
+		th:onclick="|fnVideoDetail('${video.opus}')|" 
+		th:alt-title="|${video.fullname} ${tooltip}|" 
+		th:data-opus="${video.opus}"
+		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
+
+</th:block>
+</body>
+</html>

@@ -16,7 +16,9 @@ public enum View {
 	/** large type */
 	L("Large"), 
 	/** video type */
-	V("Video");
+	V("Video"),
+	/** Modal */
+	M("Modal");
 	
 	private String desc;
 	

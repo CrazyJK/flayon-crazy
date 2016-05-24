@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:text="#{video.video}">video.video</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/video-slides.css" th:href="@{/css/video-slides.css}"/>
+<script type="text/javascript" th:src="@{/js/videoMain.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var opusArray = [[${opusArray}]];
+var bgImageCount = [[${bgImageCount}]];
+var totalVideoSize = parseInt([[${#lists.size(videoList)}]]);
+var currentVideoIndex = getRandomInteger(1, totalVideoSize);
+var listViewType = [[${videoSearch.listViewType.name()}]];
+var currBGImageUrl;
+
+/** 바탕화면 보기 */
+function fnViewBGImage() {
+	$("#contentContainer").toggle();
+	$("#bgActionGroup").toggle();
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container" role="main" data-layout-fragment="content">
+
+<div id="header_div">
+	<form method="POST" th:object="${videoSearch}">
+	<div id="searchDiv" class="div-box">
+		<span class="group">
+			<!-- Search : Text -->
+			<label for="searchText" th:alt-title="#{video.search}">S</label>
+			<input th:field="*{searchText}" class="searchInput" placeHolder="Search"/>
+			
+			<!-- Search : Additional condition. video, subtitles -->
+			<span class="checkbox" id="checkbox-addCond" th:alt-title="#{video.addCondition}" th:text="#{video.addCondition-short}"></span>
+			<input type="hidden" th:field="*{addCond}"/>
+			<span class="checkbox" id="checkbox-existVideo" th:title="#{video.existVideo}">V</span>
+			<input type="hidden" th:field="*{existVideo}"/>
+			<span class="checkbox" id="checkbox-existSubtitles" th:title="#{video.existSubtitles}">S</span>			
+			<input type="hidden" th:field="*{existSubtitles}"/>
+
+			<span class="separator">|</span>
+
+			<!-- Search : rank -->
+			<label th:each="_rank : ${rankRange}">
+				<input type="checkbox" th:field="*{rankRange}" th:value="${_rank}" class="item-checkbox"/>
+				<span th:title="#{video.rank}" th:text="${_rank}">rank</span>
+			</label>
+
+			<!-- Search : play count -->
+			<select th:field="*{playCount}" class="item-selectBox" title="Play Count">
+				<option th:each="_range : ${playRange}" th:text="${_range}" th:value="${_range}"></option>
+			</select>
+
+			<span class="separator">|</span>
+
+			<!-- Search submit -->			
+			<span class="button" onclick="fnSearch()" th:text="|#{video.search} [${#lists.size(videoList)}]|"></span>
+		</span>
+		<span class="group">
+			<select th:field="*{listViewType}" class="item-selectBox" title="View type">
+				<option th:each="_view : ${views}" th:value="${_view.name()}" th:text="${_view.desc}"></option>			
+			</select>
+		</span>
+		<span class="group">
+			<span class="checkbox" id="checkbox-sortReverse" th:title="#{video.reverseSort}">R</span>
+			<input type="hidden" th:field="*{sortReverse}"/>
+			<select th:field="*{sortMethod}" class="item-selectBox" title="Sort method">
+				<option th:each="_sort : ${sorts}" th:value="${_sort.name()}" th:text="${_sort.desc}"></option>
+			</select>
+		</span>
+		<span class="group">
+			<span class="checkbox" id="checkbox-viewStudioDiv"  th:title="#{video.viewStudioPanel}"  onclick="fnStudioDivToggle()">S</span>
+			<input type="hidden" th:field="*{viewStudioDiv}"/> 
+			<span class="checkbox" id="checkbox-viewActressDiv" th:title="#{video.viewActressPanel}" onclick="fnActressDivToggle()">A</span>
+			<input type="hidden" th:field="*{viewActressDiv}"/>
+		</span>
+		<span class="group">
+			<span class="button" onclick="fnRandomPlay()" th:title="#{video.random-play.title}" th:text="#{video.random-play}"></span>
+		</span>
+		<span class="group">
+			<span class="button" onclick="fnViewBGImage();" th:title="#{video.bgimage.title}" th:text="#{video.bgimage}"></span>
+		</span>
+		<span class="group">
+			<span class="button" onclick="fnReloadVideoSource();" th:title="#{video.reload.title}" th:text="#{video.reload}"></span>
+		</span>
+		<span id="debug" style="display:none;"></span>
+	</div>
+	<div id="studioDiv" class="div-box">
+		<span onclick="fnUnchecked(this)" th:text="|[${#lists.size(studioList)}]|"></span>
+		<span th:each="studio : ${studioList}">
+			<span th:replace="video/studioTag :: tag (${studio}, 'label')"></span>
+		</span>
+	</div>
+	<div id="actressDiv" class="div-box">
+		<span onclick="fnUnchecked(this)" th:text="|[${#lists.size(actressList)}]|"></span>
+		<span th:each="actress : ${actressList}">
+			<span th:replace="video/actressTag :: tag (${actress}, 'label')"></span>
+		</span>
+	</div>
+	</form>
+</div>
+
+<div id="content_div" class="div-box">
+
+	<div id="contentContainer">
+
+		<ul th:if="${videoSearch.listViewType.name()} eq 'C'">
+			<li th:each="_video : ${videoList}" class="li-box" th:id="|opus-${_video.opus}|">
+				<div th:replace="video/videoCard :: card (${_video})"></div>
+			</li>
+		</ul>
+
+		<ul th:if="${videoSearch.listViewType.name()} eq 'B'">
+			<li th:each="video : ${videoList}" id="opus-${video.opus}" class="li-box">
+				<div class="video-box">             
+					<dl class="video-box-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
+						<dt><span th:replace="video/videoTag :: tag (${video}, 'title',     's', '')"></span></dt>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'video',     's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'subtitles', 's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'rank',      's', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'score',     's', '')"></span></dd>
+					</dl>
+				</div>
+			</li>
+		</ul>
+
+		<table class="video-table" th:if="${videoSearch.listViewType.name()} eq 'T'">
+			<tr th:each="video : ${videoList}" id="opus-${video.opus}">
+				<td style="max-width:70px;" class="oneline">
+					<span th:replace="video/videoTag :: tag (${video}, 'studio',    's', '')"></span></td>
+				<td style="width:15px;">
+					<span th:replace="video/videoTag :: tag (${video}, 'torrent',   's', '')"></span></td>
+				<td style="width:35px;" class="right">
+					<span th:replace="video/videoTag :: tag (${video}, 'length',    's', '')"></span></td>
+				<td style="max-width:100px;" class="oneline">
+					<span th:replace="video/videoTag :: tag (${video}, 'opus',      's', '')"></span></td>
+				<td style="max-width:220px;" class="oneline">
+					<span th:replace="video/videoTag :: tag (${video}, 'title',     's', '')"></span></td>
+				<td style="max-width:100px;" class="oneline">
+					<span th:replace="video/videoTag :: tag (${video}, 'actress',   's', '')"></span></td>
+				<td style="width:80px;">
+					<span th:replace="video/videoTag :: tag (${video}, 'release',   's', '')"></span></td>
+				<td style="width:70px;">
+					<span th:replace="video/videoTag :: tag (${video}, 'video',     's', '')"></span>
+					<span th:replace="video/videoTag :: tag (${video}, 'cover',     's', '')"></span>
+					<span th:replace="video/videoTag :: tag (${video}, 'subtitles', 's', '')"></span></td>
+				<td style="width:180px;">
+					<span th:replace="video/videoTag :: tag (${video}, 'rank',      's', '')"></span>
+					<span th:replace="video/videoTag :: tag (${video}, 'score',     's', '')"></span></td>
+			</tr>
+		</table>
+
+		<div id="video-slide-wrapper" th:if="${videoSearch.listViewType.name()} eq 'S'">
+			<div id="slides" class="slides">
+				<div th:each="video,status : ${videoList}" id="opus-${video.opus}" th:tabindex="${status.count}" class="video-slide" style="display:none;">
+					<dl class="video-slide-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
+						<dt>
+							<span th:replace="video/videoTag :: tag (${video}, 'title',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span><br/>
+							<span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span>
+						</dt>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',      'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'actress',   'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'release',   'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'download',  'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'video',     'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'cover',     'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'subtitles', 'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span></dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+
+		<div id="video-slide-wrapper" th:if="${videoSearch.listViewType.name()} eq 'L'">
+			<div id="slides" class="slides">
+				<div th:each="video,status : ${videoList}" th:id="|opus-${video.opus}|" th:tabindex="${status.count}" class="video-slide" style="display:none;">             
+					<dl class="video-slide-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
+						<dt>
+							<span th:replace="video/videoTag :: tag (${video}, 'title',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span>
+						</dt>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',      'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'actress',   'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'release',   'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'download',  'l', '')"></span></dd>
+						<dd><span th:replace="video/videoTag :: tag (${video}, 'video',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'cover',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'subtitles', 'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span></dd>
+					</dl>
+				</div>
+			</div>
+			<div><span id="slideNumber" class="label-large"></span></div>
+			<div id="video_slide_bar" style=""></div>
+		</div>
+
+		<div id="video-slide-wrapper" th:if="${videoSearch.listViewType.name()} eq 'V'">
+			<div id="slides" class="slides">
+				<div th:each="video,status : ${videoList}" th:id="|opus-${video.opus}|" th:tabindex="${status.count}" class="video-slide" style="display:none;">    
+					<dl class="video-slide-bg">
+						<dt style="height:40px;padding-top:3px;">
+							<span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'opus',      'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'title',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'actress',   'l', '')"></span>
+							<br/>
+							<span th:replace="video/videoTag :: tag (${video}, 'video',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'cover',     'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'subtitles', 'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span>
+						</dt>
+						<dd>
+							<video th:poster="@{'/video/' + ${video.opus} + '/cover'}" 
+								preload="none" width="800" height="480" 
+								controls="controls" class="video-js vjs-default-skin" data-setup="{}"
+								th:src="${video.videoURL}"></video>
+						</dd>
+						<dd><a th:href="@{${video.videoURL}}"><span class="label" th:text="${video.videoURL}">videoURL</span></a></dd>
+					</dl>				         
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id="bgActionGroup" style="display:none;">
+		<span onclick="setBackgroundImage();">NEXT</span>
+		<span onclick="fnBGImageView();">VIEW</span>
+		<span onclick="fnBGImageDELETE();">DELETE</span>
+	</div>
+
+</div>
+
+</div>
+</body>
+</html>

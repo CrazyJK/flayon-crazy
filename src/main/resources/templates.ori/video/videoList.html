@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:inline="text">[[#{video.video}]] [[#{video.list}]]</title>
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function(){
+	
+	$("input[type=radio]").bind("click", function(){
+		var selectedSort = $(this).val();
+		var reverseOrder = [[${sort.name()}]] == selectedSort ? [[!${reverse}]] : true;
+		location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
+	}).css("display","none");
+
+});
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container" role="main" data-layout-fragment="content">
+
+<div id="header_div" class="div-box">
+	<ul class="menu-item-ul">
+		<li class="label-large" th:text="|#{video.total} #{video.video} ${#lists.size(videoList)}|">
+			video.total video.video length(videoList)
+		</li>
+		<li class="label-large">
+			<input type="search" name="search" id="search" style="width:100px;" 
+				class="searchInput" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
+		</li>
+		<li class="label-large">
+			<label class="item sort-item" th:each="_sort : ${sorts}">
+				<input type="radio" name="sort" th:value="${_sort.name()}" th:checked="${_sort eq sort}" style="display:none;"/>
+				<span th:text="#{|video.sort.${_sort.desc}|}">video.sort.s.desc</span></label>
+		</li>
+		<li class="label">
+			<span th:title="|Rank[${@environment.getProperty('score.ratio.rank')}] 
+Play[${@environment.getProperty('score.ratio.play')}]
+Actress[${@environment.getProperty('score.ratio.actress')}]
+Subtitles[${@environment.getProperty('score.ratio.subtitles')}]
+Unseen[${@environment.getProperty('score.ratio.unseen')}]|">Ratio</span>
+		
+		</li>
+	</ul>
+</div>
+
+<div id="content_div" class="div-box">
+	<table class="video-table" th:with="ONE_GB=${1024*1024*1024}">
+		<tr th:each="video, status : ${videoList}" class="nowrap">
+			<td class="number" th:text="${status.count}">
+				status.count
+			</td>
+			<td th:class="${sort} eq 'S' ? 'sorted-column'">
+				<div class="overflow-hidden width100"><span th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:text="${video.studio.name}">video.studio.name</span></div>
+			</td>
+			<td th:class="${sort} eq 'O' ? 'sorted-column'">
+				<span th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
+			</td>
+			<td th:class="${sort} eq 'T' ? 'sorted-column'">
+				<div class="overflow-hidden width400" th:title="${video.title}" th:text="${video.title}">video.title</div>
+			</td>
+			<td th:class="${sort} eq 'A' ? 'sorted-column'">
+				<div class="overflow-hidden width100">
+					<span th:each="actress : ${video.actressList}" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</span>
+				</div>
+			</td>
+			<td th:class="${sort} eq 'M' ? 'sorted-column'" th:text="${video.videoDate}">video.videoDate</td>
+			<td th:class="${sort} eq 'P' ? 'sorted-column'" th:text="${video.playCount}">video.playCount</td>
+			<td th:class="${sort} eq 'R' ? 'sorted-column'" th:text="${video.rank}">video.rank</td>
+			<td th:class="'number ' + ${sort} eq 'L' ? 'sorted-column'" th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'"></td>
+			<td th:class="'number ' + ${sort} eq 'SC' ? 'sorted-column'">
+				<span th:title="${video.scoreDesc}" th:text="${video.score}">video.score</span>
+			</td>
+		</tr>
+	</table>
+</div>
+  
+</div>
+</body>
+</html>

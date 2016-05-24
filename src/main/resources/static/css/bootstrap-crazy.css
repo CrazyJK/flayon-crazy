@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+
+.container-fluid {
+	padding: 0;
+}
+
+label {
+	margin-bottom: 0;
+}
+
+.box {
+	position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    margin: 10px;
+    padding: 10px;
+}
+
+.label-plain {
+	background-color: #fff;
+	color: #337ab7;
+	padding: .2em .3em .3em;
+	font-size: 90%;
+}

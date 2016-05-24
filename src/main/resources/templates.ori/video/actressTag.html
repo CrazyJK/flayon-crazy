@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8"></meta>
+</head>
+<body>
+
+<th:block th:fragment="tag (actress, view)" th:with="size=${#lists.size(actress.videoList)}">
+
+<label th:if="${view} eq 'label'"
+	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
+	th:title="|${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}|">
+	<input type="checkbox" th:field="*{selectedActress}" th:value="${actress.name}" class="item-checkbox"/>
+	<span th:text="|${actress.name}(${#lists.size(actress.videoList)})|">name length(actress.videoList)</span>
+</label>
+
+
+<span th:if="${view} eq 'span'"
+	th:class="${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}" 
+	th:onclick="|fnViewActressDetail('${actress.name}')|" 
+	th:title="|${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}|"
+	th:text="|${actress.name}(${#lists.size(actress.videoList)})|">
+	actress.name length(actress.videoList)
+</span>
+
+</th:block>
+</body>
+</html>

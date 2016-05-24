@@ -56,13 +56,13 @@ $(document).ready(function(){
 				var li  = $("<li>");
 				var div = $("<div>");
 
-				var studioDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
-				var opusDom 		  = $("<span>").addClass("label label-plain").html(opus);
-				var titleDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(title);
-				var actressDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
-				var existVideoDom 	  = $("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V");
-				var existCoverDom 	  = $("<span>").addClass("label").addClass((existCover == "true" ? "label-success" : "label-default" )).html("C");
-				var existSubtitlesDom = $("<span>").addClass("label").addClass((existSubtitles == "true" ? "label-success" : "label-default" )).html("S");
+				var studioDom 		  = $("<span>").addClass("search-item").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
+				var opusDom 		  = $("<span>").addClass("search-item").html(opus);
+				var titleDom 		  = $("<span>").addClass("search-item").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(title);
+				var actressDom 		  = $("<span>").addClass("search-item").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
+				var existVideoDom 	  = $("<span>").addClass("search-item").addClass((existVideo == "true" ? "exist" : "nonexist" )).html("V");
+				var existCoverDom 	  = $("<span>").addClass("search-item").addClass((existCover == "true" ? "exist" : "nonexist" )).html("C");
+				var existSubtitlesDom = $("<span>").addClass("search-item").addClass((existSubtitles == "true" ? "exist" : "nonexist" )).html("S");
 
 				div.append(studioDom);
 				div.append(opusDom);
@@ -87,10 +87,10 @@ $(document).ready(function(){
 				var li  = $("<li>");
 				var div = $("<div>");
 
-				var dateDom 		  = $("<span>").addClass("label label-plain").html(date);
-				var opusDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
-				var actDom	 		  = $("<span>").addClass("label label-plain").html(act);
-				var descDom 		  = $("<span>").addClass("label label-plain").html(desc);
+				var dateDom 		  = $("<span>").addClass("history-item").html(date);
+				var opusDom 		  = $("<span>").addClass("history-item").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var actDom	 		  = $("<span>").addClass("history-item").html(act);
+				var descDom 		  = $("<span>").addClass("history-item").html(desc);
 
 				div.append(dateDom);
 				div.append(opusDom);
@@ -102,7 +102,7 @@ $(document).ready(function(){
 
  		    var rexp = eval('/' + keyword + "/gi");
  		    $("div > ol > li > div > span").each(function() {
- 				$(this).html($(this).html().replace(rexp,"<mark>"+keyword+"</mark>"));
+ 				$(this).html($(this).html().replace(rexp,"<em>"+keyword+"</em>"));
  			});
 
  		    $('#foundVideoList').slideDown();
@@ -137,30 +137,37 @@ function fnSearchTorrent() {
 <body>
 <div class="container" role="main" data-layout-fragment="content">
 
-	<div id="header_div" class="box form-inline">
-		<label for="query" th:text="|#{video.video} #{video.search}|">video.video video.search</label>
-		<input type="search" id="query" style="width:200px;" class="form-control input-sm" th:placeHolder="#{video.search}"/>
-		<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:title="#{video.find-info.opus}"    th:text="#{video.opus}">video.opus</a>
-		<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
-		<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
-		<span id="url"></span>
-		<span id="debug"></span>
-	</div>
+<div id="header_div" class="div-box">
+	<ul class="menu-item-ul">
+		<li class="label-large">
+			<span th:text="|#{video.video} #{video.search}|">video.video video.search</span>
+			<input type="search" id="query" style="width:200px;" class="searchInput" th:placeHolder="#{video.search}"/>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchOpus()"    th:title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchActress()" th:title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchTorrent()" th:title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+		</li>
+		<li class="label"><span id="url"></span></li>
+		<li class="label"><span id="debug"></span></li>
+	</ul>
+</div>
 
-	<div id="content_div" class="row">
-		<div class="col-lg-6">
-			<div id="resultVideoDiv" class="box" style="overflow:auto">
-				<h4><span th:text="#{video.video}"></span> <span class="video-count"></span></h4>
-				<ol id="foundVideoList" class="items"></ol>
-			</div>
-		</div>
-		<div class="col-lg-6">
-			<div id="resultHistoryDiv" class="box" style="overflow:auto">
-				<h4><span th:text="#{video.history}"></span> <span class="history-count"></span></h4>
-				<ol id="foundHistoryList" class="items"></ol>
-			</div>
-		</div>
+<div id="content_div">
+	<div id="resultVideoDiv" class="div-box" style="overflow:auto">
+		<h4 class="item-header"><span th:text="#{video.video}"></span> <span class="video-count"></span></h4>
+		<ol id="foundVideoList" class="items"></ol>
 	</div>
+	
+	<div id="resultHistoryDiv" class="div-box" style="overflow:auto">
+		<h4 class="item-header"><span th:text="#{video.history}"></span> <span class="history-count"></span></h4>
+		<ol id="foundHistoryList" class="items"></ol>
+	</div>
+</div>
 
 </div>
 </body>
