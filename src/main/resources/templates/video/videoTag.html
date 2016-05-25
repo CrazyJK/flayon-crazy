@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass=${mode} eq 'l' ? 'label-large' : 'label'" >
+<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass=${mode} eq 'l' ? 'label-large' : 'label label-plain'" >
 
 <span th:if="${view} eq 'video'"
 		th:class="${cssClass}" 
@@ -57,7 +57,7 @@
 
 <span th:if="${view} eq 'opus'"
 		th:class="${cssClass}">
-	<span th:text="${video.opus}">opus</span>
+	<span th:text="${video.opus}" th:title="${video.title}" th:attr="data-opus=${video.opus}">opus</span>
 	<img th:if="${mode} eq 'l'" th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.opus}"
 			th:onclick="|popup('${@environment.getProperty('url.search.video') + video.opus}', 'info_${video.opus}', 800, 600)|"/>
 </span>
@@ -93,7 +93,7 @@
 </span>
 
 <span th:if="${view} eq 'label'"
-		th:class="${cssClass}" 
+		th:class="${cssClass} + ' ' + (${mode} eq 's'? 'label-info')" 
 		th:onclick="|fnVideoDetail('${video.opus}')|" 
 		th:alt-title="|${video.fullname} ${tooltip}|" 
 		th:data-opus="${video.opus}"

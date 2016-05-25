@@ -11,8 +11,8 @@
 	opacity: 0.75;
 }
 code {
-	margin: 0 5px;
-	color: red;
+/* 	margin: 0 5px;
+	color: red; */
 }
 </style>
 <script type="text/javascript" th:src="@{/js/zeroclipboard/ZeroClipboard.js}"></script>
@@ -51,61 +51,58 @@ function fnSearchTorrent() {
 
 <form method="post" onsubmit="loading(true, 'Parsing...')">
 
-<div id="header_div" class="div-box">
-	<ul class="menu-item-ul">
-		<li class="label-large">
-			<a onclick="toggleInputDiv()" id="hideBtn">hide</a>
+<div id="header_div" class="box">
+	<ul class="list-inline">
+		<li>
+			<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
 		</li>
-		<li class="label-large">
-			<a onclick="document.forms[0].submit();" th:text="|Parse(${titleList.size()})|">Parse(length(titleList))</a>	
+		<li>
+			<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();" th:text="|Parse(${titleList.size()})|">Parse(length(titleList))</a>	
 		</li>
-		<li class="label-large">
-			<input type="search" id="query" style="width:180px;" class="searchInput" th:placeholder="|#{video.opus} #{video.actress} #{video.torrent}|"/>
+		<li>
+			<input type="search" id="query" class="form-control input-sm" th:placeholder="|#{video.opus} #{video.actress} #{video.torrent}|"/>
 		</li>
-		<li class="label-large">
-			<a onclick="fnSearchOpus()"    th:alt-title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
-		</li>
-		<li class="label-large">
-			<a onclick="fnSearchActress()" th:alt-title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
-		</li>
-		<li class="label-large">
-			<a onclick="fnSearchTorrent()" th:alt-title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+		<li>
+			<div class="btn-group">
+				<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:alt-title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
+				<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:alt-title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
+				<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:alt-title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+			</div>
 		</li>
 	</ul>
 </div>
 
-<div id="content_div" class="div-box" style="overflow:auto;">
+<div id="content_div" class="box" style="overflow:auto;">
 	<table id="resultList" style="width:100%;">
 		<tr>
-			<td id="inputTd" style="width:300px;">
-				<div id="inputDiv" style="position:absolute; top:80px; left:20px; width:300px;">
+			<td id="inputTd" style="width:200px;">
+				<div id="inputDiv" style="position:absolute; top:10px; left:10px; width:200px;">
 					<textarea id="titleData" name="titleData" class="titleArea" placeholder="input title data" th:text="${titleData}">titleData</textarea>
 				</div>
 			</td>
 			<td>
-				<table class="video-table">
+				<table class="table table-condensed table-hover table-bordered">
 					<tr th:if="${titleList.size()} == 0">
 						<td>
 							No Video
 						</td>
 					</tr>
 					<tr th:each="title : ${titleList}" id="check-${title.opus}" style="font-size:11px; color:blue;">
-						<td class="number" width="10px" th:text="${titleStat.count}">
+						<td class="text-right" width="10px" th:text="${titleStat.count}">
 							status.count
 						</td>
 						<td width="80px">
-							<span class="label">
-							<a th:id="|copyBtn_${title.opus}|" th:attr="data-clipboard-target=|dataTitle_${title.opus}|" th:onclick="|fnFindVideo('${title.opus}'); document.title='${title}'|">Get Info </a>
-							<code th:if="${title.check}" th:text="${title.checkDescShort}">title.checkDescShort</code>
-							</span>
+							<a class="btn btn-xs btn-default" th:id="|copyBtn_${title.opus}|" th:attr="data-clipboard-target=|dataTitle_${title.opus}|" th:onclick="|fnFindVideo('${title.opus}'); document.title='${title}'|">Get Info 
+								<code th:if="${title.check}" th:text="${title.checkDescShort}">title.checkDescShort</code>
+							</a>
 							<script th:inline="javascript">
 							/*<![CDATA[*/
-							           new ZeroClipboard(document.getElementById([[|copyBtn_${title.opus}|]]));
+								new ZeroClipboard(document.getElementById([[|copyBtn_${title.opus}|]]));
 							/*]]>*/
 							</script>
 						</td>
 						<td>
-							<input th:id="|dataTitle_${title.opus}|" class="text" style="width:100%;" th:value="${title}"/>
+							<input th:id="|dataTitle_${title.opus}|" style="width:100%;" th:value="${title}"/>
 						</td>
 					</tr>
 				</table>

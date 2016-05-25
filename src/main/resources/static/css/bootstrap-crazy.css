@@ -30,3 +30,19 @@ label {
 	font-size: 80%;
 	font-weight: normal;
 }
+
+.list-inline {
+	margin-bottom: 0;
+}
+
+.nowrap {
+	width: inherit;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.float-right {
+	float: right;
+}

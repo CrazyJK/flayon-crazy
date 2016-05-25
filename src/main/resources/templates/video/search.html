@@ -42,7 +42,7 @@ $(document).ready(function(){
 			$("#url").html(queryUrl);
 
 			var videoRow = data['videoList'];
-			$(".video-count").html(videoRow.length);
+			$("#video-count").html(videoRow.length);
 			$.each(videoRow, function(entryIndex, entry) {
 				
 				var studio 		   = entry['studio'];
@@ -76,7 +76,7 @@ $(document).ready(function(){
 			});
 
 			var historyRow = data['historyList'];
-			$(".history-count").html(historyRow.length);
+			$("#history-count").html(historyRow.length);
  			$.each(historyRow, function(entryIndex, entry) {
 				
 				var date = entry['date'];
@@ -140,9 +140,11 @@ function fnSearchTorrent() {
 	<div id="header_div" class="box form-inline">
 		<label for="query" th:text="|#{video.video} #{video.search}|">video.video video.search</label>
 		<input type="search" id="query" style="width:200px;" class="form-control input-sm" th:placeHolder="#{video.search}"/>
-		<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:title="#{video.find-info.opus}"    th:text="#{video.opus}">video.opus</a>
-		<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
-		<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+		<div class="btn-group">
+			<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:title="#{video.find-info.opus}"    th:text="#{video.opus}">video.opus</a>
+			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
+			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+		</div>
 		<span id="url"></span>
 		<span id="debug"></span>
 	</div>
@@ -150,13 +152,13 @@ function fnSearchTorrent() {
 	<div id="content_div" class="row">
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
-				<h4><span th:text="#{video.video}"></span> <span class="video-count"></span></h4>
+				<h4><span th:text="#{video.video}"></span> <span id="video-count" class="badge"></span></h4>
 				<ol id="foundVideoList" class="items"></ol>
 			</div>
 		</div>
 		<div class="col-lg-6">
 			<div id="resultHistoryDiv" class="box" style="overflow:auto">
-				<h4><span th:text="#{video.history}"></span> <span class="history-count"></span></h4>
+				<h4><span th:text="#{video.history}"></span> <span id="history-count" class="badge"></span></h4>
 				<ol id="foundHistoryList" class="items"></ol>
 			</div>
 		</div>

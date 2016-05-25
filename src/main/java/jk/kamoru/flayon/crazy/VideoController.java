@@ -531,7 +531,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/{opus}/confirmCandidate", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void confirmCandidate(Model model, @PathVariable("opus") String opus, @RequestParam("path") String path) {
-		logger.trace("confirm candidate video file");
+		logger.info("confirm candidate video file. {} {}", opus, path);
 		videoService.confirmCandidate(opus, path);
 	}
 	

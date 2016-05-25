@@ -5,51 +5,63 @@
 <title th:text="|#{video.studio} #{video.list}|"></title>
 <script th:inline="javascript">
 /*<![CDATA[*/
-$(document).ready(function(){
-	
-	$("input[type=radio]").bind("click", function(){
-		var selectedSort = $(this).val();
-		var reverseOrder = [[${sort.name()}]] == selectedSort ? [[!${reverse}]] : false;
-		location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
-	}).css("display","none");
-
+$(document).ready(function() {
+	$('[data-toggle="tooltip"]').tooltip();   
 });
+function sort(selectedSort) {
+	var reverseOrder = [[${sort.name()}]] == selectedSort ? [[!${reverse}]] : true;
+	location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
+}
 /*]]>*/
 </script>
 </head>
 <body>
 <div class="container" role="main" data-layout-fragment="content">
 
-<div id="header_div" class="div-box">
-	<ul class="menu-item-ul">
-		<li class="label-large" th:text="|#{video.total} #{video.studio} ${#lists.size(studioList)}|">
-			video.total video.studio length(studioList)
+<div id="header_div" class="box">
+	<ul class="list-inline">
+		<li>
+			<label for="search">
+				<span th:text="|#{video.total} #{video.studio}|">Total Studio</span>
+				<span class="badge" th:text="${#lists.size(studioList)}">length(studioList)</span>
+			</label> 
 		</li>
-		<li class="label-large">
-			<input type="search" name="search" id="search" style="width:200px;" 
-				class="searchInput" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
-		</li>
-		<li class="label-large">
-			<label class="item sort-item" th:each="_sort : ${sorts}">
-				<input type="radio" name="sort" th:value="${_sort}" th:checked="${_sort eq sort}"/>
-				<span th:text="#{|studio.sort.${_sort}|}">studio.sort</span></label>
+		<li>
+			<input type="search" name="search" id="search" class="form-control input-sm" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
 		</li>
 	</ul>
 </div>
 
-<div id="content_div" class="div-box">
-	<table class="video-table">
-		<tr class="nowrap" th:each="studio, status : ${studioList}">
-			<td class="number" th:text="${status.count}">count</td>
-			<td th:class="${sort} eq 'NAME' ? 'sorted-column'" th:onclick="|fnViewStudioDetail('${studio.name}')|" th:text="${studio.name}">studio.name</td>
-			<td th:class="${sort} eq 'HOMEPAGE' ? 'sorted-column'"><a th:href="${studio.homepage}" target="_blank" th:text="${studio.homepage}">studio.homepage</a></td>
-			<td th:class="${sort} eq 'COMPANY' ? 'sorted-column'" th:text="${studio.company}">studio.company</td>
-			<td th:class="'number ' + ${sort} eq 'VIDEO' ? 'sorted-column'" th:text="${#lists.size(studio.videoList)}">length(studio.videoList)</td>
-			<td th:class="'number ' + ${sort} eq 'SCORE' ? 'sorted-column'" th:text="${studio.score}">studio.score</td>
-			<td>
-				<span th:each="video : ${studio.videoList}" class="label" th:title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
-			</td>
-		</tr>
+<div id="content_div" class="box">
+	<table class="table table-condensed table-hover table-bordered">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th th:each="_sort : ${sorts}" th:class="${_sort eq sort}? 'success'">
+					<span th:text="#{|studio.sort.${_sort}|}" th:onclick="|sort('${_sort.name()}')|">sort.s.desc</span>
+					<th:block th:if="${_sort eq sort}">
+						<span th:if="!${reverse}" class="glyphicon glyphicon-chevron-up"></span>
+						<span th:if="${reverse}" class="glyphicon glyphicon-chevron-down"></span>
+					</th:block>
+				</th>
+				<th>Video</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="nowrap" th:each="studio, status : ${studioList}">
+				<td class="text-right" th:text="${status.count}">count</td>
+				<td><a th:onclick="|fnViewStudioDetail('${studio.name}')|" th:text="${studio.name}">studio.name</a></td>
+				<td><a th:href="${studio.homepage}" target="_blank" th:text="${studio.homepage}">studio.homepage</a></td>
+				<td th:text="${studio.company}">studio.company</td>
+				<td class="text-right" th:text="${#lists.size(studio.videoList)}">length(studio.videoList)</td>
+				<td class="text-right" th:text="${studio.score}">studio.score</td>
+				<td style="width:150px;">
+					<div class="nowrap">
+						<span class="label label-info" data-toggle="tooltip" data-placement="left" th:each="video : ${studio.videoList}" th:title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
 

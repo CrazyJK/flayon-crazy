@@ -733,13 +733,16 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		log.debug("  need torrent videos - {}", list.size());
 		
 		List<File> foundFiles = new ArrayList<File>();
-		
+
+		log.info("Candidate Scan... {}", Arrays.toString(CANDIDATE_PATHS));
 		for (String candidatePath : CANDIDATE_PATHS) {
 		
 			// get downloaded torrent file
 			File torrentDirectory = new File(candidatePath);
-			if (!torrentDirectory.exists() || !torrentDirectory.isFile())
+			if (!torrentDirectory.exists() || !torrentDirectory.isDirectory()) {
+				log.warn("{} is not valid", candidatePath);
 				continue;
+			}
 		
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			log.trace("extensions - {}", Arrays.toString(extensions));

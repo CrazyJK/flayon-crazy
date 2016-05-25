@@ -4,9 +4,6 @@
 <meta charset="UTF-8"></meta>
 <title th:text="#{video.torrent}">video.torrent</title>
 <style type="text/css">
-#searchInput {
-	width:200px;
-}
 #currentVideo {
 	margin: 5px;
 	padding: 0; 
@@ -24,6 +21,9 @@
 .clicked {
 	background-color: lightgreen;
 }
+input[type=radio] {
+	display: none;
+}
 </style>
 <script th:inline="javascript">
 /*<![CDATA[*/
@@ -37,11 +37,11 @@ $(document).ready(function(){
 	
 	$("#searchInput").bind("keyup", function() {
 		var keyword = $(this).val();
-		$("div#content_div input:text").each(function() {
-			if ($(this).val().toLowerCase().indexOf(keyword.toLowerCase()) > -1)
-				$(this).parent().parent().show();
+		$(".fullname").each(function() {
+			if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) > -1)
+				$(this).parent().parent().parent().show();
 			else
-				$(this).parent().parent().hide();
+				$(this).parent().parent().parent().hide();
 		});
 	});
 });
@@ -49,7 +49,7 @@ $(document).ready(function(){
 /*
  * 선택된 토렌트 찾기
  */
-function fnGoSearch(opus) {
+function goTorrentSearch(opus) {
 	popup([[@{/video/}]] + opus + '/cover/title', 'SearchTorrentCover');
 	popup([[@{/video/torrent/search/}]] + opus, 'torrentSearch', 900, 950);
 
@@ -99,51 +99,52 @@ function fnChangeMode(mode) {
 <body>
 <div class="container" role="main" data-layout-fragment="content">
 
-<div id="header_div" class="div-box">
-	<ul class="menu-item-ul">
-		<li class="label-large">
-			<span th:text="#{video.torrent-summary(${videoList.size()})}"></span><code id="totalCandidatedVideo"></code>
+<div id="header_div" class="box">
+	<ul class="list-inline">
+		<li>
+			<span th:text="|#{video.total} #{video.video}|">Total Video</span> <span class="badge" th:text="${videoList.size()}"></span> 
+			Candidate <span class="badge" id="totalCandidatedVideo"></span>
 		</li>
-		<li class="label-large">Mode
-			<label><input type="radio" name="mode" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
-			<label><input type="radio" name="mode" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
+		<li>
+			<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
+			<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
 		</li>
-		<li class="label-large">
-			<input type="search" id="searchInput" class="searchInput" th:placeHolder="#{video.search}" />
+		<li>
+			<input type="search" id="searchInput" class="form-control input-sm" th:placeHolder="#{video.search}" />
 		</li>
-		<li class="label-large">
+		<li>
 			<a onclick="confirmAll()">Confirm all!!!</a>
 		</li>
 	</ul>
 </div>
 
-<div id="content_div" class="div-box" style="overflow:auto;">
+<div id="content_div" class="box" style="overflow:auto;">
 	<div id="forCandidate">
-		<table class="video-table">
+		<table class="table table-condensed table-hover table-bordered">
 			<tr th:if="${videoList.size()} == 0">
 				<td>
 					No Video
 				</td>
 			</tr>
-			<tr th:each="video : ${videoList}" id="check-${video.opus}" class="nowrap">
-				<td class="number" th:text="${videoStat.count}">
+			<tr th:each="video : ${videoList}" th:id="|check-${video.opus}|" class="nowrap">
+				<td class="text-right" style="width: 30px;" th:text="${videoStat.count}">
 					status.count
 				</td>
-				<td class="label torrentButton" th:onclick="|fnGoSearch('${video.opus}');|">
-					Torrent
+				<td style="width: 70px;">
+					<button class="btn btn-xs btn-default" th:onclick="|goTorrentSearch('${video.opus}');|">Torrent</button>
 				</td>
-				<td>
-					<input id="fullname-${video.opus}" th:value="${video.fullname}" class="text" style="width:600px;" th:onclick="|fnViewVideoDetail('${video.opus}')|" />
+				<td style="min-width:450px; width:500px; max-width:600px;">
+					<div class="nowrap">
+						<span id="fullname-${video.opus}" class="fullname" th:text="${video.fullname}" th:onclick="|fnViewVideoDetail('${video.opus}')|"></span>
+					</div>
 				</td>
 				<td>
 					<th:block th:each="candidate : ${video.videoCandidates}">
-					<form method="post" target="ifrm" th:action="@{'/video/' + video.opus + '/confirmCandidate'}">
+					<form method="post" target="ifrm" th:action="@{'/video/' + ${video.opus} + '/confirmCandidate'}">
 						<input type="hidden" name="path" th:value="${candidate.absolutePath}"/>
-						<input type="submit" th:value="${candidate.name}" th:onclick="|fnSelectCandidateVideo('${video.opus}');|"/>
+						<button type="submit" class="btn btn-xs btn-default" th:text="${candidate.name}" th:onclick="|fnSelectCandidateVideo('${video.opus}');|"></button>
 					</form>
-					<script type="text/javascript">
-						totalCandidatedVideo += 1;	
-					</script>
+					<script>totalCandidatedVideo++;</script>
 					</th:block>
 				</td>
 			</tr>
@@ -152,9 +153,9 @@ function fnChangeMode(mode) {
 	
 	<div id="forTorrent" style="display:none;">
 		<p id="currentVideo" class="div-box"></p>
-		<ul>
-			<li th:each="video : ${videoList}" id="check-${video.opus}-t" style="display:inline;">
-				<div class="label torrentButton" style="width:75px;" th:onclick="|fnGoSearch('${video.opus}');|" th:inline="text">
+		<ul class="list-inline">
+			<li th:each="video : ${videoList}" th:id="|check-${video.opus}-t|">
+				<div class="box" style="width:75px;" th:onclick="|goTorrentSearch('${video.opus}');|" th:inline="text">
 					[[${video.opus}]]<br/>Torrent
 				</div>
 			</li>

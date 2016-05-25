@@ -9,30 +9,24 @@ function sort(selectedSort) {
 	var reverseOrder = [[${sort.name()}]] == selectedSort ? [[!${reverse}]] : true;
 	location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
 }
-
 /*]]>*/
 </script>
 </head>
 <body>
 <div class="container-fluid" role="main" data-layout-fragment="content">
 
-	<div id="header_div" class="box form-inline">
-		<label for="search" th:text="|#{video.total} #{video.video} ${#lists.size(videoList)}|">video.total video.video length(videoList)</label>
-		<input type="search" name="search" id="search" style="width:200px;" class="form-control input-sm" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
-		<span class="label label-info" th:title="|Rank[${@environment.getProperty('score.ratio.rank')}] 
-Play[${@environment.getProperty('score.ratio.play')}]
-Actress[${@environment.getProperty('score.ratio.actress')}]
-Subtitles[${@environment.getProperty('score.ratio.subtitles')}]
-Unseen[${@environment.getProperty('score.ratio.unseen')}]|">Ratio</span>
-		
+<div id="header_div" class="box form-inline">
+	<label for="search"><span th:text="|#{video.total} #{video.video}|">Total Video</span> <span class="badge" th:text="${#lists.size(videoList)}">length(videoList)</span></label>
+	<input type="search" name="search" id="search" class="form-control input-sm" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
+	<span class="label label-info" th:text="|Rank[${@environment.getProperty('score.ratio.rank')}] Play[${@environment.getProperty('score.ratio.play')}] Actress[${@environment.getProperty('score.ratio.actress')}] Subtitles[${@environment.getProperty('score.ratio.subtitles')}]|">Ratio</span>
 </div>
 
 <div id="content_div" class="box">
-	<table class="table table-condensed table-hover" th:with="ONE_GB=${1024*1024*1024}">
+	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>
 				<th>#</th>
-				<th th:each="_sort : ${sorts}">
+				<th th:each="_sort : ${sorts}" th:class="${_sort eq sort}? 'success'">
 					<span th:text="#{|video.sort.${_sort.desc}|}" th:onclick="|sort('${_sort.name()}')|">video.sort.s.desc</span>
 					<th:block th:if="${_sort eq sort}">
 						<span th:if="!${reverse}" class="glyphicon glyphicon-chevron-up"></span>
@@ -41,34 +35,34 @@ Unseen[${@environment.getProperty('score.ratio.unseen')}]|">Ratio</span>
 				</th>
 			</tr>
 		</thead>
-		<tr th:each="video, status : ${videoList}" class="nowrap">
-			<td class="text-right" th:text="${status.count}">
-				status.count
-			</td>
-			<td th:class="${sort} eq 'S' ? 'label label-info'">
-				<div class="overflow-hidden width100"><span th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:text="${video.studio.name}">video.studio.name</span></div>
-			</td>
-			<td th:class="${sort} eq 'O' ? 'label label-info'">
-				<span th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
-			</td>
-			<td th:class="${sort} eq 'T' ? 'label label-info'">
-				<div class="overflow-hidden width400" th:title="${video.title}" th:text="${video.title}">video.title</div>
-			</td>
-			<td th:class="${sort} eq 'A' ? 'label label-info'">
-				<div class="overflow-hidden width100">
-					<span th:each="actress : ${video.actressList}" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</span>
-				</div>
-			</td>
-			<td th:class="${sort} eq 'D' ? 'label label-info'" th:text="${video.releaseDate}">releaseDate</td>
-			<td th:class="${sort} eq 'M' ? 'label label-info'" th:text="${video.videoDate}">video.videoDate</td>
-			<td th:class="${sort} eq 'P' ? 'label label-info'" th:text="${video.playCount}">video.playCount</td>
-			<td th:class="${sort} eq 'R' ? 'label label-info'" th:text="${video.rank}">video.rank</td>
-			<td th:class="'text-right ' + ${sort} eq 'L' ? 'label label-info'" th:text="${#numbers.formatDecimal(video.length / ONE_GB, 0, 1)} + 'GB'"></td>
-			<td th:class="'text-right ' + ${sort} eq 'SC' ? 'label label-info'">
-				<span th:title="${video.scoreDesc}" th:text="${video.score}">video.score</span>
-			</td>
-			<td th:class="${sort} eq 'R' ? 'label label-info'" th:text="${video.videoCandidates.size()}">videoCandidates.size</td>
-		</tr>
+		<tbody>
+			<tr th:each="video, status : ${videoList}">
+				<td class="text-right" th:text="${status.count}">
+					status.count
+				</td>
+				<td>
+					<a th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:text="${video.studio.name}">video.studio.name</a>
+				</td>
+				<td>
+					<a th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</a>
+				</td>
+				<td>
+					<span th:title="${video.title}" th:text="${video.title}">video.title</span>
+				</td>
+				<td>
+					<a th:each="actress : ${video.actressList}" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</a>
+				</td>
+				<td th:text="${video.releaseDate}">releaseDate</td>
+				<td th:text="${video.videoDate}">video.videoDate</td>
+				<td class="text-right" th:text="${video.playCount}">video.playCount</td>
+				<td class="text-right" th:text="${video.rank}">video.rank</td>
+				<td class="text-right" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}"></td>
+				<td class="text-right">
+					<span th:title="${video.scoreDesc}" th:text="${video.score}">video.score</span>
+				</td>
+				<td class="text-right" th:text="${video.videoCandidates.size()}">videoCandidates.size</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
   
