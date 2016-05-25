@@ -4,20 +4,26 @@ $(document).ready(function(){
 	$('span[id^="checkbox"]')
 		.bind("click", function(){
 			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-			if(hiddenCheckbox.val() == "true") {
-				hiddenCheckbox.val("false");
-				$(this).removeClass("checkbox-on");
+//			alert(hiddenCheckbox.is(":checked"));
+			if(hiddenCheckbox.is(":checked")) {
+				//hiddenCheckbox.val("false");
+				$(this).addClass("label-default");
+				$(this).removeClass("label-success");
 			} else {
-				hiddenCheckbox.val("true");
-				$(this).addClass("checkbox-on");
+				//hiddenCheckbox.val("true");
+				$(this).addClass("label-success");
+				$(this).removeClass("label-default");
 			}
 		})
 		.each(function(){
 			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-			if(hiddenCheckbox.val() == "true") {
-				$(this).addClass("checkbox-on");
+			//$("#debug2").html($(this).attr("id").split("-")[1] + " : " + hiddenCheckbox.val());
+			if(hiddenCheckbox.is(":checked")) {
+				$(this).addClass("label-success");
+				$(this).removeClass("label-default");
 			} else {
-				$(this).removeClass("checkbox-on");
+				$(this).addClass("label-default");
+				$(this).removeClass("label-success");
 			}
 		});
 	
@@ -61,9 +67,9 @@ $(document).ready(function(){
 	
 	// Add listener : addCond click if its child clicked
  	$('span[id^="checkbox-exist"]').bind("click", function(){
- 		if($("#addCond").val() == "false") {
+ 		if(!$("#addCond1").is(":checked")) {
  			$("#debug").html("addCond click");
- 			$("#checkbox-addCond").click();
+ 			$("#checkbox-addCond1").click();
  		}
 	});
 
@@ -75,17 +81,17 @@ $(document).ready(function(){
  	});
  	
  	// init visible studioDiv 
- 	if($("#viewStudioDiv").val() != "on" && $("#viewStudioDiv").val() != "true") {
- 		$("#studioDiv").css("display", "none");
- 	} else {
+ 	if($("#viewStudioDiv1").is(":checked")) {
  		$("#studioDiv").css("display", "block");
+ 	} else {
+ 		$("#studioDiv").css("display", "none");
  	}
 
  	// init visible actressDiv 
- 	if($("#viewActressDiv").val() != "on" && $("#viewActressDiv").val() != "true") {
- 		$("#actressDiv").css("display", "none");
- 	} else {
+ 	if($("#viewActressDiv1").is(":checked")) {
  		$("#actressDiv").css("display", "block");
+ 	} else {
+ 		$("#actressDiv").css("display", "none");
  	}
  	
 	// set background image
