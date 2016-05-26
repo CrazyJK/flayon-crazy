@@ -81,18 +81,18 @@ $(document).ready(function(){
  	});
  	
  	// init visible studioDiv 
- 	if($("#viewStudioDiv1").is(":checked")) {
- 		$("#studioDiv").css("display", "block");
- 	} else {
- 		$("#studioDiv").css("display", "none");
- 	}
+// 	if($("#viewStudioDiv1").is(":checked")) {
+// 		$("#studioDiv").css("display", "block");
+// 	} else {
+// 		$("#studioDiv").css("display", "none");
+// 	}
 
  	// init visible actressDiv 
- 	if($("#viewActressDiv1").is(":checked")) {
- 		$("#actressDiv").css("display", "block");
- 	} else {
- 		$("#actressDiv").css("display", "none");
- 	}
+// 	if($("#viewActressDiv1").is(":checked")) {
+// 		$("#actressDiv").css("display", "block");
+// 	} else {
+// 		$("#actressDiv").css("display", "none");
+// 	}
  	
 	// set background image
 	/*
@@ -164,6 +164,7 @@ $(document).ready(function(){
 				break;
 			}
 		});
+
 	}
 	if(listViewType == 'L') {
 		
@@ -206,4 +207,6 @@ $(document).ready(function(){
 	}
 
 	$(".nonExist").attr("onclick", "");
+	// bootstrap tooltip initialize
+	$('[data-toggle="tooltip"]').tooltip(); 
 });

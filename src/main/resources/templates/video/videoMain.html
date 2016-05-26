@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title th:text="#{video.video}">video.video</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/video-slides.css" th:href="@{/css/video-slides.css}"/>
+<script type="text/javascript" th:src="@{http://slidesjs.com/examples/standard/js/jquery.slides.min.js}"></script>
+<script type="text/javascript" th:src="@{http://vjs.zencdn.net/c/video.js}"></script>
 <script type="text/javascript" th:src="@{/js/videoMain.js}"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
@@ -89,21 +92,18 @@ function fnViewBGImage() {
 
 		<button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" th:title="#{video.reload.title}" th:text="#{video.reload}"></button>
 
-		<span id="debug" style="display:none;"></span>
-		<span id="debug2" style="display:;"></span>
-
-		<div id="studioDiv" class="box">
-			<span onclick="fnUnchecked(this)" th:text="|[${#lists.size(studioList)}]|"></span>
-			<span th:each="studio : ${studioList}">
+		<ul id="studioDiv" class="box list-inline" th:style="'display:' + (*{viewStudioDiv} ? '' : 'none')">
+			<li><span onclick="fnUnchecked(this)" th:text="|[${#lists.size(studioList)}]|"></span></li>
+			<li th:each="studio : ${studioList}">
 				<span th:replace="video/studioTag :: tag (${studio}, 'label')"></span>
-			</span>
-		</div>
-		<div id="actressDiv" class="box">
-			<span onclick="fnUnchecked(this)" th:text="|[${#lists.size(actressList)}]|"></span>
-			<span th:each="actress : ${actressList}">
+			</li>
+		</ul>
+		<ul id="actressDiv" class="box list-inline" th:style="'display:' + (*{viewActressDiv} ? '' : 'none')">
+			<li><span onclick="fnUnchecked(this)" th:text="|[${#lists.size(actressList)}]|"></span></li>
+			<li th:each="actress : ${actressList}">
 				<span th:replace="video/actressTag :: tag (${actress}, 'label')"></span>
-			</span>
-		</div>
+			</li>
+		</ul>
 	</div>
 	</form>
 </div>
@@ -112,16 +112,16 @@ function fnViewBGImage() {
 
 	<div id="contentContainer">
 
-		<ul th:if="${videoSearch.listViewType.name()} eq 'C'">
-			<li th:each="_video : ${videoList}" class="li-box" th:id="|opus-${_video.opus}|">
+		<ul th:if="${videoSearch.listViewType.name()} eq 'C'" class="list-inline">
+			<li th:each="_video : ${videoList}" th:id="|opus-${_video.opus}|">
 				<div th:replace="video/videoCard :: card (${_video})"></div>
 			</li>
 		</ul>
 
-		<ul th:if="${videoSearch.listViewType.name()} eq 'B'">
-			<li th:each="video : ${videoList}" id="opus-${video.opus}" class="li-box">
+		<ul th:if="${videoSearch.listViewType.name()} eq 'B'" class="list-inline">
+			<li th:each="video : ${videoList}" th:id="|opus-${video.opus}|">
 				<div class="video-box">             
-					<dl class="video-box-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
+					<dl th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
 						<dt><span th:replace="video/videoTag :: tag (${video}, 'title',     's', '')"></span></dt>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'video',     's', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'subtitles', 's', '')"></span></dd>
@@ -133,7 +133,7 @@ function fnViewBGImage() {
 		</ul>
 
 		<table class="table table-condensed table-hover table-bordered" th:if="${videoSearch.listViewType.name()} eq 'T'">
-			<tr th:each="video : ${videoList}" id="opus-${video.opus}">
+			<tr th:each="video : ${videoList}" th:id="|opus-${video.opus}|">
 				<td style="max-width:70px;">
 					<span th:replace="video/videoTag :: tag (${video}, 'studio',    's', '')"></span></td>
 				<td style="max-width:100px;" class="oneline">
@@ -158,13 +158,13 @@ function fnViewBGImage() {
 
 		<div id="video-slide-wrapper" th:if="${videoSearch.listViewType.name()} eq 'S'">
 			<div id="slides" class="slides">
-				<div th:each="video,status : ${videoList}" id="opus-${video.opus}" th:tabindex="${status.count}" class="video-slide" style="display:none;">
+				<div th:each="video,status : ${videoList}" th:id="|opus-${video.opus}|" th:tabindex="${status.count}" class="video-slide" style="display:none;">
 					<dl class="video-slide-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
 						<dt>
-							<span th:replace="video/videoTag :: tag (${video}, 'title',     'l', '')"></span>
-							<span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span><br/>
-							<span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'title', 'l', '')">Title</span>
+							<span th:replace="video/videoTag :: tag (${video}, 'score', 'l', '')">Score</span>
 						</dt>
+						<dd style="text-align:center"><span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',      'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'actress',   'l', '')"></span></dd>
@@ -242,6 +242,7 @@ function fnViewBGImage() {
 	</div>
 
 </div>
+
 
 </div>
 </body>

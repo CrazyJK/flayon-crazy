@@ -12,6 +12,7 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="/css/video-deco.css"   th:href="@{/css/video-deco.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap-crazy.css"   th:href="@{/css/bootstrap-crazy.css}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/scrollbar.css"   th:href="@{/css/scrollbar.css}"/>
 <!--
 <link rel="stylesheet" type="text/css" media="screen" href="http://vjs.zencdn.net/c/video-js.css"       th:href="@{http://vjs.zencdn.net/c/video-js.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/common.css"       th:href="@{/css/common.css}"/>
@@ -25,8 +26,6 @@
 <![endif]-->
 <script type="text/javascript" th:src="@{/webjars/jQuery/2.2.3/dist/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{http://slidesjs.com/examples/standard/js/jquery.slides.min.js}"></script>
-<script type="text/javascript" th:src="@{http://vjs.zencdn.net/c/video.js}"></script>
 <script type="text/javascript" th:src="@{/js/common.js}"></script>
 <script type="text/javascript" th:src="@{/js/video.js}"></script>
 <script type="text/javascript" th:inline="javascript">
@@ -155,6 +154,9 @@ function loading(show, msg, interval) {
 		<p th:text="${'Hello ' + name + '!'}"></p>
 		<p>This is default main content with default layout</p>
 	</section>
+
+	<span id="debug" class="alert alert-info" style="display:none;"></span>
+	<span id="debug2" class="alert alert-danger" style="display:none;"></span>
 
 	<form id="actionFrm" name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 	<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>

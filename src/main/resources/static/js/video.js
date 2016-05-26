@@ -6,7 +6,8 @@ var calculatedDivHeight = 0;
 function resizeDivHeight() {
 	var windowHeight = $(window).height();
 	var header = $("#header_div").outerHeight();
-	calculatedDivHeight = windowHeight - header - 20 * 2; 
+	calculatedDivHeight = windowHeight - header - 20 * 2;
+	debug2(calculatedDivHeight + "=" + windowHeight + " - " + header);
 	$("#content_div").outerHeight(calculatedDivHeight);	
 	try {
 		resizeSecondDiv();
@@ -156,7 +157,7 @@ function fnRank(opus) {
 }
 function fnRankColor(rank) {
 	if(rank.val() == 0) {
-		rank.css("background-color", "cyan");
+		rank.css("background-color", "white");
 	}
 	else if(rank.val() > 0) {
 		rank.css("background-color", "red");
@@ -188,6 +189,9 @@ function fnFavorite(dom, name) {
 
 function debug(msg) {
 	$("#debug").html(msg);
+}
+function debug2(msg) {
+	$("#debug2").html(msg);
 }
 
 // for large view

@@ -5,36 +5,39 @@
 </head>
 <body>
 
-<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass=${mode} eq 'l' ? 'label-large' : 'label label-plain'" >
+<th:block th:fragment="tag (video, view, mode, tooltip)" th:with="cssClass='label label-plain'">
 
-<span th:if="${view} eq 'video'"
+<th:block th:if="${view} eq 'video'" >
+	<span th:text="${mode} eq 's' ? 'V' : 'Video'" data-toggle="tooltip" data-placement="right"
 		th:class="${cssClass}" 
 		th:classappend="${video.existVideoFileList} ? 'exist' : 'nonExist'" 
-		th:alt-title="${video.playCount} + ' played'"
-		th:onclick="|fnPlay('${video.opus}')|">
-	<span th:text="${mode} eq 's' ? 'V' : 'Video'"></span>
-	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${video.size}"></em>
-	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}"></em>
-</span>
+		th:alt-title="${video.existVideoFileList} ? ${video.playCount} + ' played' : 'nonExist'"
+		th:onclick="|fnPlay('${video.opus}')|"></span>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:class="${cssClass}" th:text="${video.size}"></em>
+	<em th:if="${mode} eq 'l' and ${video.existVideoFileList}" th:class="${cssClass}" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}"></em>
+</th:block>
 
-<span th:if="${view} eq 'cover'"
+<span th:if="${view} eq 'cover'" data-toggle="tooltip" data-placement="right"
 		th:class="${cssClass}" 
 		th:classappend="${video.existCoverFile} ? 'exist' : 'nonExist'"
 		th:onclick="|fnImageView('${video.opus}')|"
+		th:alt-title="'Cover ' + (${video.existCoverFile} ? 'exist' : 'nonExist')"
 		th:text="${mode} eq 's' ? 'C' : 'Cover'">Cover</span>		
 
-<span th:if="${view} eq 'subtitles'"
+<span th:if="${view} eq 'subtitles'" data-toggle="tooltip" data-placement="right"
 		th:class="${cssClass}" 
 		th:classappend="${video.existSubtitlesFileList} ? 'exist' : 'nonExist'"
 		th:onclick="|fnEditSubtitles('${video.opus}')|"
+		th:alt-title="'Subtitles ' + (${video.existSubtitlesFileList} ? 'exist' : 'nonExist')"
 		th:text="${mode} eq 's' ? 's' : 'smi'">smi</span>
 
-<span th:if="${view} eq 'overview'"
-		th:class="${cssClass}"
+<span th:if="${view} eq 'overview'" 
+		th:class="${cssClass}" data-toggle="tooltip" data-placement="bottom"
+		th:classappend="!${#strings.isEmpty(video.overviewText)} ? 'exist' : 'nonExist'"
 		th:id="|overview-${video.opus}|"
 		th:onclick="|fnEditOverview('${video.opus}')|"
 		th:alt-title="${video.overviewText}"
-		th:text="${mode} eq 's' or ${#strings.isEmpty(video.overviewText)} ? 'O' : ${video.overviewText}">Overview</span>
+		th:text="${mode} eq 's' ? 'O' : (${#strings.isEmpty(video.overviewText)} ? 'Overview' : ${video.overviewText})">Overview</span>
 
 <span th:if="${view} eq 'download'"
 		th:class="${cssClass}" title="download date" th:text="${video.videoDate}">download date</span>
@@ -67,30 +70,31 @@
 		th:onclick="|popup('${@environment.getProperty('url.search.torrent') + video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';|"/>
 
 <span th:if="${view} eq 'length'" 
+		th:class="${cssClass}"
 		th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)}">size</span>
 
 <span th:if="${view} eq 'studio'"
 		th:class="${cssClass}"
 		th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:alt-title="${video.studio}" th:text="${video.studio.name}">video.studio.name</span>
 
-<span th:if="${view} eq 'title'"
+<span th:if="${view} eq 'title'" data-toggle="tooltip"
 		th:class="${cssClass}"
 		th:onclick="|fnVideoDetail('${video.opus}')|"
 		th:alt-title="${video.title}"
 		th:text="${mode} neq 's' ? ${video.title} : ${#strings.abbreviate(video.title,22)}"></span>
  
-<span th:if="${view} eq 'score'">
-	<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="${video.scoreDesc}" th:text="${video.score}"></span>		
-	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoReset('${video.opus}')|">Reset</span>
-	<span th:if="${mode} eq 'l'" class="label" th:onclick="|fnVideoWrong('${video.opus}')|">Wrong</span>
-</span>
+<th:block th:if="${view} eq 'score'">
+	<span th:class="${cssClass}" class="label label-plain" th:alt-title="${video.scoreDesc}" th:text="${video.score}"></span>		
+	<span th:if="${mode} eq 'l'" th:class="${cssClass}" th:onclick="|fnVideoReset('${video.opus}')|">Reset</span>
+	<span th:if="${mode} eq 'l'" th:class="${cssClass}" th:onclick="|fnVideoWrong('${video.opus}')|">Wrong</span>
+</th:block>
 		
-<span th:if="${view} eq 'rank'">
-	<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" 
-			th:min="${minRank}" th:max="${maxRank}" th:value="${video.rank}" 
-			th:onmouseup="|fnRank('${video.opus}')|" th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
-	<em th:id="|Rank-${video.opus}-label|" th:class="${cssClass} + ' rangeLabel'" th:text="${video.rank}">video.rank</em>
-</span>
+<th:block th:if="${view} eq 'rank'">
+	<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" th:min="${minRank}" th:max="${maxRank}"  
+		th:value="${video.rank}" th:onmouseup="|fnRank('${video.opus}')|" 
+		th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
+	<em th:id="|Rank-${video.opus}-label|" th:class="${cssClass} + ' rangeLabel'" th:alt-title="'Rank ' + ${video.rank}" th:text="${video.rank}" data-toggle="tooltip" data-placement="right">video.rank</em>
+</th:block>
 
 <span th:if="${view} eq 'label'"
 		th:class="${cssClass} + ' ' + (${mode} eq 's'? 'label-info')" 

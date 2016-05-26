@@ -5,7 +5,9 @@
 	<div class="video-card" style="width:195px;" th:fragment="card (video)">
 		<table style="width:100%;">
 			<tr>
-				<td colspan="2" style="text-align:center;"><div style="height:17px; text-align:center;" class="label" th:onclick="|fnVideoDetail('${video.opus}')|" th:alt-title="${video.title}" th:text="${video.title}">video.title</div></td>
+				<th colspan="2" style="text-align:center;">
+					<span th:replace="video/videoTag :: tag (${video}, 'title',     's', '')"></span>
+				</th>
 			</tr>
 			<tr valign="top" height="120px">
 				<td width="70px" class="video-card-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
