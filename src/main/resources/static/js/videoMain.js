@@ -207,6 +207,4 @@ $(document).ready(function(){
 	}
 
 	$(".nonExist").attr("onclick", "");
-	// bootstrap tooltip initialize
-	$('[data-toggle="tooltip"]').tooltip(); 
 });

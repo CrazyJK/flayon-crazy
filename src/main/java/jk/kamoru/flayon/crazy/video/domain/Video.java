@@ -81,6 +81,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	private List<Actress> actressList;
 	private Integer playCount;
 	private int rank;
+	private String infoText;
 	
 	private boolean isArchive;
 
@@ -735,11 +736,11 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		
 		Map<String, Map<String, String>> rootMap = new HashMap<>();
 		try {
-			String jsonText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
-			if (StringUtils.isEmpty(jsonText))
+			infoText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
+			if (StringUtils.isEmpty(infoText))
 				return;
 			ObjectMapper mapper = new ObjectMapper();
-			rootMap = mapper.readValue(jsonText, new TypeReference<Map<String, Map<String, String>>>() {});
+			rootMap = mapper.readValue(infoText, new TypeReference<Map<String, Map<String, String>>>() {});
 		} catch (IOException e) {
 			throw new VideoException(this, "Info file read fail", e);
 		}
@@ -753,6 +754,10 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		overview = map.get("overview");
 	}
 
+	public String getInfoText() {
+		return infoText;
+	}
+	
 	/**
 	 * opus
 	 * @param opus

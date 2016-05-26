@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 
-	<div class="video-card" style="width:195px;" th:fragment="card (video)">
+	<th:block th:fragment="card (video)">
+	<div class="video-card" style="width:195px;">
 		<table style="width:100%;">
 			<tr>
 				<th colspan="2" style="text-align:center;">
@@ -29,6 +30,7 @@
 			</tr>
 		</table>
 	</div>
-
+	</th:block>
+	
 </body>
 </html>

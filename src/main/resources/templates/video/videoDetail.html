@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title th:text="|[${video.opus}] ${video.title}|">[video.opus] video.title</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
 <style type="text/css">
 dl {
 	background-color: rgba( 255, 255, 255, 0.5 );
@@ -42,24 +43,29 @@ function fnToggleFileinfo() {
 
 	<dd th:if="${video.etcInfo} ne ''"><span class="label-large" th:text="|ETC info : ${video.etcInfo}|">ETC info : video.etcInfo</span></dd>
 
-	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files <em><span th:replace="video/videoTag :: tag (${video}, 'length','l', '')"></span></em></span>
-		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
-			<ul>
-				<li><span class="label" title="VIDEO" th:onclick="|opener.fnPlay('${video.opus}')|" th:text="${video.videoFileListPath}">video.videoFileListPath</span></li>
-				<li><span class="label" title="COVER" th:onclick="|opener.fnImageView('${video.opus}')|" th:text="${video.coverFilePath}">video.coverFilePath</span></li>
-				<li><span class="label" title="INFO" th:text="${video.infoFilePath}">video.infoFilePath</span></li>
-				
-				<li th:if="${video.subtitlesFileListPath} ne ''">
-					<span class="label" title="SMI" th:onclick="|opener.fnEditSubtitles('${video.opus}')|" th:text="${video.subtitlesFileListPath}">video.subtitlesFileListPath</span></li>
-	
-				<li th:if="${video.etcFileListPath} ne ''"><div class="label" title="ETC" th:text="| : ${video.etcFileListPath}|"> : video.etcFileListPath</div></li>
-
-				<li><form id="renameForm" method="post" th:action="@{'/video/'+${video.opus}+'/rename'}" target="ifrm" style="padding:0 0 3px 5px;">
-					<input type="text" name="newname" th:value="${video.fullname}" style="width:750px; background-color:rgba(255,255,255);" class="text"/>
-					<input type="submit" value="rename" class="text"/>
-					</form>
-				</li>
-			</ul>
+	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files <em><span th:replace="video/videoTag :: tag (${video}, 'length','l', '')"></span></em></span>
+		<div id="fileinfoDiv" style="display:none; background-color:rgba(255, 255, 255, 0.75); border-radius: 10px;" class="box">
+			<p th:each="file : ${video.videoFileList}">
+				<span class="label label-info" title="VIDEO" th:onclick="|opener.fnPlay('${video.opus}')|" th:text="${file}">video.videoFileListPath</span>
+			</p>
+			<p th:each="file : ${video.subtitlesFileList}">
+				<span class="label label-danger" title="SMI" th:onclick="|opener.fnEditSubtitles('${video.opus}')|" th:text="${file}">video.subtitlesFileListPath</span>
+			</p>
+			<p><span class="label label-success" title="COVER" th:onclick="|opener.fnImageView('${video.opus}')|" th:text="${video.coverFilePath}">video.coverFilePath</span></p>
+			<p><span class="label label-warning" title="INFO" th:title="${video.infoText}" data-toggle="tooltip" th:text="${video.infoFilePath}">video.infoFilePath</span></p>
+			<p th:each="file : ${video.etcFileList}">
+				<span class="label label-primary" title="ETC" th:text="${file}"> : video.etcFileListPath</span>
+			</p>
+			<form id="renameForm" method="post" th:action="@{'/video/'+${video.opus}+'/rename'}" target="ifrm" role="form" class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<input type="text" name="newname" th:value="${video.fullname}" class="form-control input-sm"/>
+					</div>
+					<div class="col-sm-2">
+						<input type="submit" value="rename" class="btn btn-default btn-sm"/>
+					</div>
+				</div>
+			</form>
 		</div>
 	</dd>
 	
@@ -67,13 +73,15 @@ function fnToggleFileinfo() {
 	
 	<dd>
 		<div th:each="actress : ${video.actressList}">
-			<span class="label-large actressSpan" th:onclick="|fnViewActressDetail('${actress.name}')|" th:inline="text">
+			<span class="label label-plain" th:onclick="|fnViewActressDetail('${actress.name}')|" th:inline="text">
 			[[${actress.name}]] <em>[[${actress.age}]]</em> ([[${#lists.size(actress.videoList)}]]), Score [[${actress.score}]]
 			</span>
 			<div style="padding-left:60px;">
-				<ul>
-					<li th:each="_video : ${actress.videoList}" class="li-box" th:id="|opus-${_video.opus}|">
-						<div th:if="${_video.opus ne video.opus}" th:replace="video/videoCard :: card (${_video})"></div>
+				<ul class="list-inline">
+					<li th:each="_video : ${actress.videoList}" th:id="|opus-${_video.opus}|">
+						<th:block th:if="${_video.opus ne video.opus}">
+							<div th:replace="video/videoCard :: card (${_video})"></div>
+						</th:block>
 					</li>
 				</ul>
 			</div>

@@ -5,13 +5,14 @@
 }
 
 .video-card {
+	border: 1px solid rgba(0, 0, 0, 0.2);
 	border-radius:10px; 
 	-moz-border-radius:10px; 
 	-webkit-border-radius:10px;
 	padding:5px; 
 	margin:5px; 
 	width:190px;
-	background-color: rgba(66, 66, 51, 0.25);
+	background-color: rgba(255, 255, 255, 0.5);
 }
 .video-card th {
 	padding-bottom: 3px;
@@ -26,17 +27,18 @@
 }
 
 .video-box {
-	width:266px; 
+	width:266px;
 }
 .video-box dl {
 	height:177px; 
 	background-repeat: no-repeat; 
 	background-position: center center; 
 	background-size: cover;
+    /* border: 1px solid rgba(0,0,0,.2); */
 	border-radius:10px; 
 	-moz-border-radius:10px; 
 	-webkit-border-radius:10px;
-	
+	box-shadow: 0 3px 9px rgba(0,0,0,.5);
 }
 .video-box dt {
 	text-align: center;
