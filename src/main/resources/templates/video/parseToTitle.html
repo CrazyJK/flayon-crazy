@@ -51,25 +51,15 @@ function fnSearchTorrent() {
 
 <form method="post" onsubmit="loading(true, 'Parsing...')">
 
-<div id="header_div" class="box">
-	<ul class="list-inline">
-		<li>
-			<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
-		</li>
-		<li>
-			<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();" th:text="|Parse(${titleList.size()})|">Parse(length(titleList))</a>	
-		</li>
-		<li>
-			<input type="search" id="query" class="form-control input-sm" th:placeholder="|#{video.opus} #{video.actress} #{video.torrent}|"/>
-		</li>
-		<li>
-			<div class="btn-group">
-				<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:alt-title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
-				<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:alt-title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
-				<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:alt-title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
-			</div>
-		</li>
-	</ul>
+<div id="header_div" class="box form-inline">
+	<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
+	<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();" th:text="|Parse(${titleList.size()})|">Parse(length(titleList))</a>	
+	<input type="search" id="query" class="form-control input-sm" th:placeholder="|#{video.opus} #{video.actress} #{video.torrent}|"/>
+	<div class="btn-group">
+		<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:alt-title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
+		<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:alt-title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
+		<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:alt-title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+	</div>
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">

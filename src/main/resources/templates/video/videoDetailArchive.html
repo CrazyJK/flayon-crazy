@@ -3,12 +3,16 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title th:inline="text">Archive [ [[${video.opus}]] ] [[${video.title}]]</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
 <script th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
 	$("body").css("background-image","url([[@{'/video/' + ${video.opus} + '/cover'}]])");
 	$("body").css("background-size", "cover");
 });
+function fnToggleFileinfo() {
+	$("#fileinfoDiv").toggle();
+}
 /*]]>*/
 </script>
 </head>
@@ -23,6 +27,25 @@ $(document).ready(function() {
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'release',   'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'subtitles', 'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span></dd>
+
+	<dd th:if="${video.etcInfo} ne ''"><span class="label label-plain" th:text="|ETC info : ${video.etcInfo}|">ETC info : video.etcInfo</span></dd>
+
+	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files</span>
+		<div id="fileinfoDiv" style="display:none; background-color:rgba(255, 255, 255, 0.75); border-radius: 10px;" class="box">
+			<p th:each="file : ${video.videoFileList}">
+				<span class="label label-info" title="VIDEO" th:onclick="|opener.fnPlay('${video.opus}')|" th:text="${file}">video.videoFileListPath</span>
+			</p>
+			<p th:each="file : ${video.subtitlesFileList}">
+				<span class="label label-danger" title="SMI" th:onclick="|opener.fnEditSubtitles('${video.opus}')|" th:text="${file}">video.subtitlesFileListPath</span>
+			</p>
+			<p><span class="label label-success" title="COVER" th:onclick="|opener.fnImageView('${video.opus}')|" th:text="${video.coverFilePath}">video.coverFilePath</span></p>
+			<p><span class="label label-warning" title="INFO" th:title="${video.infoText}" data-toggle="tooltip" th:text="${video.infoFilePath}">video.infoFilePath</span></p>
+			<p th:each="file : ${video.etcFileList}">
+				<span class="label label-primary" title="ETC" th:text="${file}"> : video.etcFileListPath</span>
+			</p>
+		</div>
+	</dd>
+
 </dl>
 
 </div>

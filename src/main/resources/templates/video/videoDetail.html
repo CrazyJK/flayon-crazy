@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
 <style type="text/css">
 dl {
-	background-color: rgba( 255, 255, 255, 0.5 );
+	/* background-color: rgba( 255, 255, 255, 0.5 ); */
 }
 </style>
 <script type="text/javascript" th:inline="javascript">
@@ -40,8 +40,9 @@ function fnToggleFileinfo() {
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',    'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'release', 'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'download','l', '')"></span></dd>
+	<dd><span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span></dd>
 
-	<dd th:if="${video.etcInfo} ne ''"><span class="label-large" th:text="|ETC info : ${video.etcInfo}|">ETC info : video.etcInfo</span></dd>
+	<dd th:if="${video.etcInfo} ne ''"><span class="label label-plain" th:text="|ETC info : ${video.etcInfo}|">ETC info : video.etcInfo</span></dd>
 
 	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files <em><span th:replace="video/videoTag :: tag (${video}, 'length','l', '')"></span></em></span>
 		<div id="fileinfoDiv" style="display:none; background-color:rgba(255, 255, 255, 0.75); border-radius: 10px;" class="box">
@@ -68,8 +69,6 @@ function fnToggleFileinfo() {
 			</form>
 		</div>
 	</dd>
-	
-	<dd th:if="${video.overviewText} ne ''"><pre  class="label-large" th:onclick="|opener.fnEditOverview('${video.opus}')|" th:text="${video.overviewText}">video.overviewText</pre></dd>
 	
 	<dd>
 		<div th:each="actress : ${video.actressList}">

@@ -14,7 +14,6 @@
 <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap-crazy.css"   th:href="@{/css/bootstrap-crazy.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/scrollbar.css"   th:href="@{/css/scrollbar.css}"/>
 <!--
-<link rel="stylesheet" type="text/css" media="screen" href="http://vjs.zencdn.net/c/video-js.css"       th:href="@{http://vjs.zencdn.net/c/video-js.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/common.css"       th:href="@{/css/common.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/scrollbar.css"    th:href="@{/css/scrollbar.css}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="/css/video-main.css"   th:href="@{/css/video-main.css}"/>
@@ -139,7 +138,7 @@ function loading(show, msg, interval) {
 	</script> 
 
 	<nav id="deco_nav">
-		<ul>
+		<ul class="nav nav-pills">
 			<li><a th:href="@{/video}" 				th:text="#{video.main}">video.main</a></li>
 			<li><a th:href="@{/video/search}" 		th:text="#{video.search}">video.search</a></li>
 			<li><a th:href="@{/video/list}" 		th:text="#{video.video}">video.video</a></li>

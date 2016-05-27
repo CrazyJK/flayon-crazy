@@ -99,23 +99,13 @@ function fnChangeMode(mode) {
 <body>
 <div class="container" role="main" data-layout-fragment="content">
 
-<div id="header_div" class="box">
-	<ul class="list-inline">
-		<li>
-			<span th:text="|#{video.total} #{video.video}|">Total Video</span> <span class="badge" th:text="${videoList.size()}"></span> 
-			Candidate <span class="badge" id="totalCandidatedVideo"></span>
-		</li>
-		<li>
-			<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
-			<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
-		</li>
-		<li>
-			<input type="search" id="searchInput" class="form-control input-sm" th:placeHolder="#{video.search}" />
-		</li>
-		<li>
-			<a onclick="confirmAll()">Confirm all!!!</a>
-		</li>
-	</ul>
+<div id="header_div" class="box form-inline">
+	<span th:text="|#{video.total} #{video.video}|">Total Video</span> <span class="badge" th:text="${videoList.size()}"></span> 
+	Candidate <span class="badge" id="totalCandidatedVideo"></span>
+	<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
+	<label class="btn btn-xs btn-default"><input type="radio" name="mode" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
+	<input type="search" id="searchInput" class="form-control input-sm" th:placeHolder="#{video.search}" />
+	<a onclick="confirmAll()">Confirm all!!!</a>
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">

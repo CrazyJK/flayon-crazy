@@ -11,8 +11,8 @@
 <label th:if="${view} eq 'label'"
 	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
 	th:title="|${#objects.nullSafe(studio.homepage, '')} ${studio.company} Actress:${#lists.size(studio.actressList)}|">
-	<input type="checkbox" th:field="*{selectedStudio}" th:value="${studio.name}" class="item-checkbox"/>
-	<span th:text="|${studio.name}(${#lists.size(studio.videoList)})|">name length(actress.videoList)</span>
+	<input type="checkbox" th:field="*{selectedStudio}" th:value="${studio.name}" class="sr-only"/>
+	<span class="label label-default" th:id="'checkbox-' + ${#ids.prev('selectedStudio')}" th:text="|${studio.name}(${#lists.size(studio.videoList)})|">name</span>
 </label>
 
 <span th:if="${view} eq 'span'"

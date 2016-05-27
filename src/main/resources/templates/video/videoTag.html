@@ -32,12 +32,12 @@
 		th:text="${mode} eq 's' ? 's' : 'smi'">smi</span>
 
 <span th:if="${view} eq 'overview'" 
-		th:class="${cssClass}" data-toggle="tooltip" data-placement="bottom"
+		th:class="${cssClass}"
 		th:classappend="!${#strings.isEmpty(video.overviewText)} ? 'exist' : 'nonExist'"
 		th:id="|overview-${video.opus}|"
 		th:onclick="|fnEditOverview('${video.opus}')|"
 		th:alt-title="${video.overviewText}"
-		th:text="${mode} eq 's' ? 'O' : (${#strings.isEmpty(video.overviewText)} ? 'Overview' : ${video.overviewText})">Overview</span>
+		th:utext="${mode} eq 's' ? 'O' : (${#strings.isEmpty(video.overviewText)} ? 'Overview' : ${video.overviewText})">Overview</span>
 
 <span th:if="${view} eq 'download'"
 		th:class="${cssClass}" title="download date" th:text="${video.videoDate}">download date</span>
@@ -90,10 +90,12 @@
 </th:block>
 		
 <th:block th:if="${view} eq 'rank'">
-	<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" th:min="${minRank}" th:max="${maxRank}"  
-		th:value="${video.rank}" th:onmouseup="|fnRank('${video.opus}')|" 
-		th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
-	<em th:id="|Rank-${video.opus}-label|" th:class="${cssClass} + ' rangeLabel'" th:alt-title="'Rank ' + ${video.rank}" th:text="${video.rank}" data-toggle="tooltip" data-placement="right">video.rank</em>
+	<label>
+		<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" th:min="${minRank}" th:max="${maxRank}"  
+			th:value="${video.rank}" th:onmouseup="|fnRank('${video.opus}')|" class="form-control" 
+			th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
+		<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="'Rank ' + ${video.rank}" th:text="${video.rank}" data-toggle="tooltip" data-placement="right">video.rank</span>
+	</label>
 </th:block>
 
 <span th:if="${view} eq 'label'"

@@ -79,10 +79,12 @@ function toogleFavorite(dom) {
 		<div class="col-sm-4">
 			<input class="form-control" type="text" name="localname" th:value="${actress.localName}" />
 		</div>
-		<div class="col-sm-2">
+		<div class="col-sm-1">
 			<img th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.actress}" 
 				th:onclick="|popup('${@environment.getProperty('url.search.actress') + actress.reverseName}', 'infoActress', 800, 600)|" />
-			<span th:text="|Score ${actress.score}|">Score actress.score</span>
+		</div>
+		<div class="col-sm-1">
+			<span class="label label-info" th:text="|Score ${actress.score}|">Score actress.score</span>
 		</div>
 	</div>
 
@@ -104,7 +106,7 @@ function toogleFavorite(dom) {
 			<input class="form-control input-sm" type="text" name="debut"    th:value="${actress.debut}"    placeholder="debut"/>
 		</div>
 		<div class="col-sm-2">
-			<button class="btn btn-default" style="/*float:right*/" onclick="fnSaveActressInfo()">Save</button>
+			<button class="btn btn-default btn-sm" style="/*float:right*/" onclick="fnSaveActressInfo()">Save</button>
 		</div>
 	</div>
 	

@@ -18,18 +18,12 @@ function sort(selectedSort) {
 <body>
 <div class="container-fluid" role="main" data-layout-fragment="content">
 
-<div id="header_div" class="box">
-	<ul class="list-inline">
-		<li>
-			<label for="search">
-				<span th:text="|#{video.total} #{video.actress}|">Total Actress</span>
-				<span class="badge" th:text="${#lists.size(actressList)}">actressList size</span>
-			</label>
-		</li>
-		<li>
-			<input type="search" name="search" id="search" class="form-control input-sm" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
-		</li>
-	</ul>
+<div id="header_div" class="box form-inline">
+	<label for="search">
+		<span th:text="|#{video.total} #{video.actress}|">Total Actress</span>
+		<span class="badge" th:text="${#lists.size(actressList)}">actressList size</span>
+	</label>
+	<input type="search" name="search" id="search" class="form-control input-sm" th:placeHolder="#{video.search}" onkeyup="searchContent(this.value)"/>
 </div>
 
 <div id="content_div" class="box">

@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title th:text="${studio.name}">studio.name</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 function fnRenameTo() {
 	var actressForm = document.forms['studioForm'];
-	actressForm.action = [[@{/video/studio/{studio.name}/renameTo/}]] + $("#newName").val();
+	actressForm.action = [[@{'/video/studio/' + ${studio.name} + '/renameTo/'}]] + $("#newName").val();
 	actressForm.submit();
 }
 
 function fnPutStudioInfo() {
 	var actressForm = document.forms['studioForm'];
-	actressForm.action = [[@{/video/studio/{studio.name}}]];
+	actressForm.action = [[@{'/video/studio/' + ${studio.name}}]];
 	actressForm.submit();
 }
 /*]]>*/
@@ -22,40 +23,55 @@ function fnPutStudioInfo() {
 <body>
 <div class="container" role="main" data-layout-fragment="content">
 
-<form id="studioForm" method="post">
+<form id="studioForm" method="post" role="form" class="form-horizontal">
 	<input type="hidden" name="_method" id="hiddenHttpMethod" value="put"/>
-	<dl class="dl-detail">
-		<dt class="label-large center">
-			<input class="studioInfo" type="text" name="newname" th:value="${studio.name}" id="newName" />
-			<span th:text="|Score ${studio.score}|">Score studio.score</span>
-			<span  class="button" style="float:right" onclick="fnRenameTo()">Rename</span>
-		</dt>
-		<dd>
-			<span class="label-title">Homepage : <input class="studioInfo" type="text" name="homepage" th:value="${studio.homepage}" /></span>
-			<span class="label-title">Company : <input class="studioInfo" type="text" name="company" th:value="${studio.company}" /></span>
-			<span class="button" style="float:right" onclick="fnPutStudioInfo()">Save</span>
-		</dd>
-		<dd>
-			<span class="label-title" th:text="|Actress(${#lists.size(studio.actressList)})|"> length(studio.actressList)</span>
-		</dd>
-		<dd>
-			<div style="padding-left:60px;">
-			<span th:each="actress : ${studio.actressList}" class="label" th:onclick="|fnViewActressDetail('${actress.name}')|"
-					th:text="|${actress.name}(${#lists.size(actress.videoList)}), Score ${actress.score}|">
-					actress.name(length(actress.videoList)), Score actress.score</span>
-			</div>
-		</dd>
-		<dd><span class="label-title" th:text="|Video(${#lists.size(studio.videoList)})|">Video(length(studio.videoList))</span></dd>
-	</dl>
-</form>
 
-<div style="padding-left:60px;">
-	<ul>
-		<li th:each="video : ${studio.videoList}" class="li-box" th:id="|opus-${video.opus}|">
-			<div th:replace="video/videoCard :: card (${video})"></div>
-		</li>
-	</ul>
-</div>
+	<div class="form-group">
+		<div class="col-sm-5">
+			<input class="form-control" type="text" name="newname" th:value="${studio.name}" id="newName" />
+		</div>
+		<div class="col-sm-6">
+			<span class="btn btn-default" onclick="fnRenameTo()">Rename</span>
+		</div>
+		<div class="col-sm-1">
+			<span class="label label-info" th:text="|Score ${studio.score}|">Score studio.score</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-5">
+			<input class="form-control input-sm" id="homepage" name="homepage" th:value="${studio.homepage}" placeholder="Homepage"/>
+		</div>
+		<div class="col-sm-5">
+			<input class="form-control input-sm" id="company" name="company" th:value="${studio.company}" placeholder="Company"/>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-default btn-sm" onclick="fnPutStudioInfo()">Save</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<span class="label label-info">
+		Actress <i class="badge" th:text="${#lists.size(studio.actressList)}">size</i>
+		</span>
+	</div>
+	<div class="form-group" style="padding-left:60px;">
+		<span th:each="actress : ${studio.actressList}" class="label label-primary" th:onclick="|fnViewActressDetail('${actress.name}')|"
+				th:text="|${actress.name}(${#lists.size(actress.videoList)}), Score ${actress.score}|">
+				actress.name(length(actress.videoList)), Score actress.score</span>
+	</div>
+	<div class="form-group">
+		<span class="label label-info">
+			Video <i class="badge" th:text="${#lists.size(studio.videoList)}">size</i>
+		</span>
+	</div>	
+	<div class="form-group box" style="padding-left:60px;">
+		<ul class="list-inline">
+			<li th:each="video : ${studio.videoList}" th:id="|opus-${video.opus}|">
+				<div th:replace="video/videoCard :: card (${video})"></div>
+			</li>
+		</ul>
+	</div>
+</form>
 
 </div>
 </body>

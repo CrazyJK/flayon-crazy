@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
@@ -65,14 +67,22 @@ public class VideoDaoFile implements VideoDao {
 //	@Cacheable("studioCache")
 	public Studio getStudio(String name) {
 		logger.trace(name);
-		return instanceVideoSource.getStudio(name);
+		try {
+			return instanceVideoSource.getStudio(name);
+		} catch (StudioNotFoundException e) {
+			return archiveVideoSource.getStudio(name);
+		}
 	}
 
 	@Override
 //	@Cacheable("actressCache")
 	public Actress getActress(String name) {
 		logger.debug(name);
-		return instanceVideoSource.getActress(name);
+		try {
+			return instanceVideoSource.getActress(name);
+		} catch (ActressNotFoundException e) {
+			return archiveVideoSource.getActress(name);
+		}
 	}
 
 	@Override

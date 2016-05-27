@@ -28,6 +28,7 @@
 
 .video-box {
 	width:266px;
+	margin:5px; 
 }
 .video-box dl {
 	height:177px; 
@@ -73,3 +74,27 @@ input[type="range"]::-webkit-slider-thumb {
     -webkit-border-radius: 5px;
 }
 
+.item100 {
+	font-size:35px;
+	text-shadow:0px 0px 2px black;
+}
+.item50 {
+	font-size:30px;
+	text-shadow:0px 0px 2px red;
+}
+.item30 {
+	font-size:25px;
+	text-shadow:0px 0px 2px green;
+}
+.item10 {
+	font-size:20px;
+	text-shadow:0px 0px 2px cyan;
+}
+.item5 {
+	font-size:15px;
+	text-shadow:0px 0px 2px yellow;
+}
+.item1 {
+	font-size:12px;
+	text-shadow:0px 0px 2px white;
+}

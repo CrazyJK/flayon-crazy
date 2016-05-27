@@ -26,7 +26,13 @@ label {
 	font-size: 80%;
 	font-weight: normal;
 }
-
+.label-pre {
+	text-align: left;
+	display: inline-block;
+	white-space: pre;
+	border: 0;
+	margin: 2px 0; 
+}
 
 .nowrap {
 	width: inherit;
@@ -46,6 +52,10 @@ label {
 }
 .list-inline {
 	margin-bottom: 0;
+}
+.list-inline>li {
+    padding-right: 0;
+    padding-left: 0;
 }
 .container-fluid {
 	padding: 0;

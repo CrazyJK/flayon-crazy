@@ -15,7 +15,6 @@ body {
 	z-index: 99;
 }
 #deco_nav li {
-	font-size: 11px;
 	display: inline-block;
 	padding: 0px 3px 0px 3px;
 	margin: 5px 5px 0px 0px;
@@ -34,6 +33,7 @@ body {
 	color: #7d8ee2;
 	text-decoration: none;
 	text-shadow: 1px 1px 1px navy;
+	background-color: white;
 }
 #deco_nav li.menu-selected {
 	font-weight:bold;
