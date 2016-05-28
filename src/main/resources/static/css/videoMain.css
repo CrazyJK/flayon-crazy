@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-.nonExist {
+.nonExist, .nonExist2 {
 	color: gray;
 }
 

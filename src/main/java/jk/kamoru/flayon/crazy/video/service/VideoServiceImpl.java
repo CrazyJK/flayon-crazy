@@ -306,7 +306,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<Video> searchVideo(VideoSearch search) {
-		log.trace("{}", search);
+		log.info("searchVideo START : {}", search);
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		
@@ -336,7 +336,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		else
 			Collections.sort(foundList);
 
-		log.debug("found video list size {}", foundList.size());
+		log.info("found video list size {}", foundList.size());
 		return foundList;
 	}
 	

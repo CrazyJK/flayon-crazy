@@ -32,10 +32,8 @@ function fnToggleFileinfo() {
 <dl class="dl-detail">
 	<dt><span th:replace="video/videoTag :: tag (${video}, 'title',   'l', '')"></span>
 		<span th:replace="video/videoTag :: tag (${video}, 'score',   'l', '')"></span>
-		<br/>
-		<span th:replace="video/videoTag :: tag (${video}, 'rank',    'l', '')"></span>
 	</dt>
-
+	<dd class="form-inline"><span th:replace="video/videoTag :: tag (${video}, 'rank',    'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',  'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'opus',    'l', '')"></span></dd>
 	<dd><span th:replace="video/videoTag :: tag (${video}, 'release', 'l', '')"></span></dd>

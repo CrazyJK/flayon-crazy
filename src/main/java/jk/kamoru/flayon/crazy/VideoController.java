@@ -412,8 +412,9 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping
 	public String videoMain(Model model, @ModelAttribute VideoSearch videoSearch) {
-		logger.trace("{}", videoSearch);
+		logger.info("videoMain START : {}", videoSearch);
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
+		logger.info("/video search end");
 
 		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
 		if (videoList.size() == 1)
@@ -431,6 +432,8 @@ public class VideoController extends AbstractController {
 //		model.addAttribute("actressList", 	videoService.getActressList());
 //		model.addAttribute("studioList", 	videoService.getStudioList());
 		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
+		logger.info("videoMain END");
+
 		return "video/videoMain";
 	}
 

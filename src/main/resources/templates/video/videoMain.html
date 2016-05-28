@@ -11,7 +11,8 @@
 <script type="text/javascript" th:src="@{/js/videoMain.js}"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
-var opusArray = [[${opusArray}]];
+var opusArray = eval([[${opusArray}]]);
+
 var bgImageCount = [[${bgImageCount}]];
 var totalVideoSize = parseInt([[${#lists.size(videoList)}]]);
 var currentVideoIndex = getRandomInteger(1, totalVideoSize);
@@ -30,7 +31,7 @@ function fnViewBGImage() {
 <div class="container-fluid" role="main" data-layout-fragment="content">
 
 <div id="header_div">
-	<form method="POST" th:object="${videoSearch}" role="form" class="form-inline">
+	<form method="POST" th:object="${videoSearch}" role="form" class="form-inline" onsubmit="return false;">
 	<div id="searchDiv" class="box">
 		<!-- Search : Text -->
 		<input th:field="*{searchText}" class="form-control input-sm" placeHolder="Search"/>
@@ -163,7 +164,7 @@ function fnViewBGImage() {
 					<dl class="video-slide-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
 						<dt>
 							<span th:replace="video/videoTag :: tag (${video}, 'title', 'l', '')">Title</span>
-							<small style="float:right;"><span th:replace="video/videoTag :: tag (${video}, 'score', 'l', '')">Score</span></small>
+							<small style="position: fixed; /* float: right; */ right: 80px;"><span th:replace="video/videoTag :: tag (${video}, 'score', 'l', '')">Score</span></small>
 						</dt>
 						<dd style="text-align:center" class="form-inline"><span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span></dd>
@@ -184,9 +185,9 @@ function fnViewBGImage() {
 			<div id="slides" class="slides">
 				<div th:each="video,status : ${videoList}" th:id="|opus-${video.opus}|" th:tabindex="${status.count}" class="video-slide" style="display:none;">             
 					<dl class="video-slide-bg" th:style="'background-image:url(' + @{'/video/' + ${video.opus} + '/cover'} + ');'">
-						<dt>
+						<dt class="form-inline">
+							<small style="float:right;"><span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span></small>
 							<span th:replace="video/videoTag :: tag (${video}, 'title',     'l', '')"></span>
-							<span th:replace="video/videoTag :: tag (${video}, 'score',     'l', '')"></span>
 							<span th:replace="video/videoTag :: tag (${video}, 'rank',      'l', '')"></span>
 						</dt>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'studio',    'l', '')"></span></dd>

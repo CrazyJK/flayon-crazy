@@ -68,7 +68,7 @@ public class FileBaseVideoSource implements VideoSource {
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
 	private final void videoSource() {
-//		logger.info("firstLoad = {}", firstLoad);
+//		logger.info("videoSource START firstLoad = {}", firstLoad);
 		if (firstLoad) {
 //			logger.info("loading = {}", loading);
 			if (loading) {
@@ -86,13 +86,14 @@ public class FileBaseVideoSource implements VideoSource {
 		else {
 			load();
 		}
-			
+//		logger.info("videoSource END");			
 	}
 	
 	/**
 	 * video데이터를 로드한다.
 	 */
 	private synchronized void load() {
+		logger.info("load START");
 		firstLoad = true;
 		loading = true;
 		
@@ -278,8 +279,13 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 	@Override
 	public List<Video> getVideoList() {
+		logger.info("START");
 		videoSource();
+		try {
 		return new ArrayList<Video>(videoMap.values());
+		} finally {
+			logger.info("END");
+		}
 	}
 	@Override
 	public List<Studio> getStudioList() {

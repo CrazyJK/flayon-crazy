@@ -33,7 +33,7 @@
 
 <span th:if="${view} eq 'overview'" 
 		th:class="${cssClass}"
-		th:classappend="!${#strings.isEmpty(video.overviewText)} ? 'exist' : 'nonExist'"
+		th:classappend="!${#strings.isEmpty(video.overviewText)} ? 'exist' : 'nonExist2'"
 		th:id="|overview-${video.opus}|"
 		th:onclick="|fnEditOverview('${video.opus}')|"
 		th:alt-title="${video.overviewText}"
@@ -77,8 +77,8 @@
 		th:class="${cssClass}"
 		th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:alt-title="${video.studio}" th:text="${video.studio.name}">video.studio.name</span>
 
-<span th:if="${view} eq 'title'" data-toggle="tooltip"
-		th:class="${cssClass}"
+<span th:if="${view} eq 'title'"
+		th:class="${cssClass}" data-toggle="tooltip" data-placement="bottom"
 		th:onclick="|fnVideoDetail('${video.opus}')|"
 		th:alt-title="${video.title}"
 		th:text="${mode} neq 's' ? ${video.title} : ${#strings.abbreviate(video.title,22)}"></span>

@@ -28,8 +28,12 @@ public class VideoDaoFile implements VideoDao {
 	@Override
 //	@Cacheable(value="videoCache")
 	public List<Video> getVideoList() {
-		logger.trace("getVideoList");
-		return instanceVideoSource.getVideoList();
+		logger.info("getVideoList START");
+		try {
+			return instanceVideoSource.getVideoList();
+		} finally {
+			logger.info("getVideoList END");
+		}
 	}
 	
 	@Override
