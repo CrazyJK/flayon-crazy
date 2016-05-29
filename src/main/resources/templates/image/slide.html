@@ -4,57 +4,43 @@
 <meta charset="UTF-8"></meta>
 <title th:text="#{image.image-viewer}">image.image-viewer</title>
 <style type="text/css">
-#imageThumbnailUL li {
-	display:inline-block;
-}
 #navDiv {
 	position:absolute; 
 	left:0px; 
 	top:0px; 
 	margin:5px 5px 0px 5px; 
-	cursor:pointer;
+	text-align: center;
 }
-#imageThumbnailDiv {
+#imageDiv {
+	text-align:center;
+	margin-top: 30px;
+	background-size:contain; 
+	background-repeat:no-repeat; 
+	background-position:center center;
+}
+#thumbnailDiv {
 	position:absolute; 
 	bottom:0px; 
-	height:100px; 
+	height:110px; 
 	width:100%; 
 	margin:10px 5px 0px 0px; 
 	text-align:center; 
 	overflow:hidden;
 }
-#imageDiv {
-	text-align:center;
-	margin-top: 30px;
-}
-.thumbDiv {
-	width:150px; 
+.img-thumbnail {
+	width:120px; 
 	height:100px;
-}
-.centerBG {
-	background-size:contain; 
+	margin: 3px;
+	background-size: cover; 
 	background-repeat:no-repeat; 
 	background-position:center center;
 }
-.opacity10 {
+.active {
 	opacity:1;
-}
-.opacity05 {
-	opacity:0.5;
-}
-.label {
-	display:inline-block; 
-	text-overflow:ellipsis;
-	font-size: 12px;
-	overflow:hidden; 
-	background-color:rgba(255, 255, 255, 0.5); 
-	color:black; 
-	text-shadow:1px 1px 1px white; 
-	padding:0px 5px 0px 5px;
-	border:1px solid orange; 
-	border-radius:5px; 
-	-moz-border-radius:5px; 
-	-webkit-border-radius:5px;
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);	
 }
 </style>
 <script th:inline="javascript">
@@ -135,7 +121,7 @@ $(document).ready(function(){
 
 function resizeImage() {
 	windowHeight = $(window).height();
-	$("#imageDiv").height(windowHeight - 135);
+	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
 	fnDisplayThumbnail();
 }
 
@@ -179,7 +165,7 @@ function fnRandomImageView() {
 }
 function fnDisplayThumbnail() {
 	var thumbnailRange = parseInt(parseInt($(window).width() / 200) / 2);
-	$("#imageThumbnailUL").empty();
+	$("#thumbnailUL").empty();
 	for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
 		var thumbNo = current;
 		if (thumbNo < 0 )
@@ -187,10 +173,10 @@ function fnDisplayThumbnail() {
 		if (thumbNo >= imageCount)
 			thumbNo = thumbNo - imageCount;
 		var li = $("<li>");
-		var div = $("<div class='thumbDiv centerBG " + (thumbNo == selectedNumber ? "opacity10" : "opacity05") + "' onclick='fnViewImage("+thumbNo+")'>");
-		div.css("background-image", "url('" + imagepath + thumbNo + "/thumbnail" + "')");
+		var div = $("<div class='img-thumbnail " + (thumbNo == selectedNumber ? "active" : "") + "' onclick='fnViewImage("+thumbNo+")'>");
+		div.css("background-image", "url('" + imagepath + thumbNo + "" + "')");
 		li.append(div);
-		$("#imageThumbnailUL").append(li);
+		$("#thumbnailUL").append(li);
 	}
 }
 /*]]>*/
@@ -199,18 +185,17 @@ function fnDisplayThumbnail() {
 <body>
 <div class="container-fluid" role="main" data-layout-fragment="content">
 
-<span id="debug" style="display:none;"></span>
 <div id="navDiv">
-	<span class="label" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
-	<span class="label" onclick="fnPrevImageView();">&lt;&nbsp;<span id="leftNo"></span></span>
-	<span class="label"><span id="currNo"></span></span>
-	<span class="label" onclick="fnNextImageView();"><span id="rightNo"></span>&nbsp;&gt;</span>
-	<span class="label" onclick="fnEndImageView();"><span id="endNo"></span></span>
+	<span class="label label-info" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
+	<span class="label label-info" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
+	<span class="label label-info"><span id="currNo"></span></span>
+	<span class="label label-info" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
+	<span class="label label-info" onclick="fnEndImageView();"><span id="endNo"></span></span>
 	<br/>
-	<span class="label" id="imageTitle" onclick="fnFullyImageView();"></span>
+	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
 </div>
-<div id="imageThumbnailDiv"><ul id="imageThumbnailUL"></ul></div>
-<div id="imageDiv" class="centerBG"></div>
+<div id="imageDiv"></div>
+<div id="thumbnailDiv"><ul id="thumbnailUL" class="list-inline"></ul></div>
 
 </div>
 </body>
