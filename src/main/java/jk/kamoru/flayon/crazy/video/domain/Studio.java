@@ -8,30 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope("prototype")
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Slf4j
-@XmlRootElement(name = "studio", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Studio extends CrazyProperties implements Serializable, Comparable<Studio> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
@@ -40,9 +34,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	private URL    homepage;
 	private String company;
 
-	@XmlTransient
+	@JsonIgnore
 	private List<Video> videoList;
-	@XmlTransient
+	@JsonIgnore
 	private List<Actress> actressList;
 
 	private boolean loaded;

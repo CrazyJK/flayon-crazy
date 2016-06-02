@@ -11,11 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,8 +43,6 @@ import jk.kamoru.flayon.crazy.video.util.VideoUtils;
  */
 @Component
 @Scope("prototype")
-@XmlRootElement(name = "video", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Video extends CrazyProperties implements Comparable<Video>, Serializable, CRAZY {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
@@ -57,7 +51,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	
 	private static Sort sortMethod = VIDEO.DEFAULT_SORTMETHOD;
 	
-	@XmlTransient
+	@JsonIgnore
 	@Autowired HistoryService historyService;
 	
 	// files
@@ -70,14 +64,12 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	private List<File> videoCandidates;
 
 	// info
-	@XmlTransient
 	private Studio studio;
 	private String opus;
 	private String title;
 	private String overview; // overview text
 	private String etcInfo;
 	private String releaseDate;
-	@XmlTransient
 	private List<Actress> actressList;
 	private Integer playCount;
 	private int rank;
@@ -218,6 +210,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * cover file의 byte[] 반환
 	 * @return 없거나 에러이면 null 반환
 	 */
+	@JsonIgnore
 	public byte[] getCoverByteArray() {
 		if (coverFile == null)
 			return null;

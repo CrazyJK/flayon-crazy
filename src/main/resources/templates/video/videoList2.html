@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:inline="text">[[#{video.video}]] [[#{video.list}]]</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js" th:src="@{/webjars/angular/1.5.6/angular.min.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+var app = angular.module("videoListApp", []);
+app.controller("videoListCtrl", function($scope, $http) {
+	$http.get("/video/list.json")
+	.then(
+			function(response) {
+				$scope.videoList = response.data.videoList;
+				$scope.sorts = response.data.sorts;
+			}
+	);
+	$scope.orderByMe = function(sort) {
+		$scope.myOrderBy = sort;
+		console.log(sort);
+	}
+	$scope.viewStudioDetail = function(studioName) {
+		fnViewStudioDetail(studioName);
+	}
+	$scope.viewVideoDetail = function(opus) {
+		fnViewVideoDetail(opus);
+	}
+	$scope.viewActressDetail = function(actressName) {
+		fnViewActressDetail(actressName);
+	}
+});
+/*]]>*/
+</script>
+</head>
+<body>
+
+<div class="container-fluid" role="main" data-layout-fragment="content" ng-app="videoListApp" ng-controller="videoListCtrl">
+
+<div id="header_div" class="box form-inline">
+	<label for="search"><span th:text="|#{video.total} #{video.video}|">Total Video</span> <span class="badge">{{ videoList.length }}</span></label>
+	<input type="search" name="search" id="search" class="form-control input-sm" th:placeHolder="#{video.search}" ng-model="search"/>
+	<span class="label label-info" th:text="|Rank[${@environment.getProperty('score.ratio.rank')}] Play[${@environment.getProperty('score.ratio.play')}] Actress[${@environment.getProperty('score.ratio.actress')}] Subtitles[${@environment.getProperty('score.ratio.subtitles')}]|">Ratio</span>
+</div>
+
+<div id="content_div" class="box">
+	<table class="table table-condensed table-hover table-bordered">
+		<thead>
+			<tr>
+				<th ng-click="orderByMe('title')">#</th>
+				<th ng-click="orderByMe('studio')">Studio</th>
+				<th ng-click="orderByMe('opus')">Opus</th>
+				<th ng-click="orderByMe('title')">Title</th>
+				<th ng-click="orderByMe('ACTRESS')">Actress</th>
+				<th ng-click="orderByMe('releaseDate')">Release</th>
+				<th ng-click="orderByMe('videoDate')">Download</th>
+				<th ng-click="orderByMe('playCount')">Play</th>
+				<th ng-click="orderByMe('rank')">Rank</th>
+				<th ng-click="orderByMe('length')">Size</th>
+				<th ng-click="orderByMe('score')">Score</th>
+				<th ng-click="orderByMe('videoCandidates')">Cand.</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="video in videoList | filter:search | orderBy : myOrderBy track by $index">
+				<td class="text-right">
+					{{ $index + 1 }}
+				</td>
+				<td>
+					<a ng-click="viewStudioDetail(video.studio.name)">{{ video.studio.name }}</a>
+				</td>
+				<td>
+					<a ng-click="viewVideoDetail(video.opus)">{{ video.opus }}</a>
+				</td>
+				<td>
+					<span title="{{video.title}}" onclick="alert('111')">{{ video.title }}</span>
+				</td>
+				<td>
+					<a ng-repeat="actress in video.actressList" ng-click="viewActressDetail(actress.name)">
+						{{ actress.name }}
+					</a>
+				</td>
+				<td>{{video.releaseDate}}</td>
+				<td>{{video.videoDate}}</td>
+				<td class="text-right">{{ video.playCount }}</td>
+				<td class="text-right">{{ video.rank }}</td>
+				<td class="text-right"></td>
+				<td class="text-right">
+					<span title="{{video.scoreDesc}}">{{ video.score }}</span>
+				</td>
+				<td class="text-right">{{ video.videoCandidates.length }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+</div>
+
+</body>
+</html>

@@ -362,7 +362,7 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public String videoDetail(Model model, @PathVariable String opus) {
-		logger.trace(opus);
+		logger.info(opus);
 		Video video = videoService.getVideo(opus);
 		model.addAttribute(video);
 		if (video.isArchive())
@@ -651,4 +651,10 @@ public class VideoController extends AbstractController {
 		videoBatch.setDELETE_LOWER_SCORE_VIDEO(setValue);
 	}
 
+	@RequestMapping("/list2")
+	public String list2() {
+		return "video/videoList2";
+	}
+
+	
 }

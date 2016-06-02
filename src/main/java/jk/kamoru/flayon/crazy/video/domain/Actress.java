@@ -8,14 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
@@ -31,8 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(exclude={"studioList", "videoList"}, callSuper=false)
 @Data
 @Slf4j
-@XmlRootElement(name = "actress", namespace = "http://www.w3.org/2001/XMLSchema-instance")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Actress extends CrazyProperties implements Serializable, Comparable<Actress> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
@@ -55,9 +50,9 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private String age;
 	private Boolean favorite;
 	
-	@XmlTransient
+	@JsonIgnore
 	private List<Studio> studioList;
-	@XmlTransient
+	@JsonIgnore
 	private List<Video>   videoList;
 
 	/**
@@ -154,6 +149,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		return favorite;
 	}
 
+	@JsonIgnore
 	public Map<String, String> getInfoMap() {
 		if (getInfoFile().isFile())
 			try {
