@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
 <head>
-<meta charset="UTF-8"></meta>
+<meta charset="UTF-8"/>
 <title th:inline="text">[[#{video.video}]] [[#{video.list}]]</title>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js" th:src="@{/webjars/angular/1.5.6/angular.min.js}"></script>
+<style type="text/css">
+.sortorder:after {
+  content: '\25b2';
+}
+.sortorder.reverse:after {
+  content: '\25bc';
+}
+
+/* animate */
+.ng-enter,
+.ng-leave,
+.ng-move {
+	-webkit-transition: 0.5s linear all;
+	transition: 0.5s linear all;
+}
+.ng-enter,
+.ng-move {
+	opacity: 0;
+}
+.ng-enter-active,
+.ng-move-active {
+	opacity: 1;
+}
+.ng-leave {
+	opacity: 1;
+}
+.ng-leave-active {
+	opacity: 0;
+}
+</style>
+<script src="http://code.angularjs.org/1.2.2/angular.js" th:src="@{/webjars/angular/1.5.6/angular.min.js}"></script>
+<script src="http://code.angularjs.org/1.2.2/angular-animate.min.js" th:src="@{/webjars/angular-animate/1.5.6/angular-animate.min.js}"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
 
-var app = angular.module("videoListApp", []);
+var app = angular.module("videoListApp", ['ngAnimate']);
 app.controller("videoListCtrl", function($scope, $http) {
-	$http.get("/video/list.json")
-	.then(
+	$http.get([[@{/video/list.json}]])
+		.then(
 			function(response) {
 				$scope.videoList = response.data.videoList;
 				$scope.sorts = response.data.sorts;
 			}
 	);
-	$scope.orderByMe = function(sort) {
-		$scope.myOrderBy = sort;
-		console.log(sort);
-	}
+	$scope.predicate = '';
+	$scope.reverse = true;
+	$scope.order = function(predicate) {
+	    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+	    $scope.predicate = predicate;
+	};
 	$scope.viewStudioDetail = function(studioName) {
 		fnViewStudioDetail(studioName);
 	}
@@ -47,22 +80,44 @@ app.controller("videoListCtrl", function($scope, $http) {
 	<table class="table table-condensed table-hover table-bordered">
 		<thead>
 			<tr>
-				<th ng-click="orderByMe('title')">#</th>
-				<th ng-click="orderByMe('studio')">Studio</th>
-				<th ng-click="orderByMe('opus')">Opus</th>
-				<th ng-click="orderByMe('title')">Title</th>
-				<th ng-click="orderByMe('ACTRESS')">Actress</th>
-				<th ng-click="orderByMe('releaseDate')">Release</th>
-				<th ng-click="orderByMe('videoDate')">Download</th>
-				<th ng-click="orderByMe('playCount')">Play</th>
-				<th ng-click="orderByMe('rank')">Rank</th>
-				<th ng-click="orderByMe('length')">Size</th>
-				<th ng-click="orderByMe('score')">Score</th>
-				<th ng-click="orderByMe('videoCandidates')">Cand.</th>
+				<th ng-click="order('')">#</th>
+				<th ng-click="order('studio')">Studio
+					<span class="sortorder" ng-show="predicate === 'studio'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('opus')">Opus
+					<span class="sortorder" ng-show="predicate === 'opus'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('title')">Title
+					<span class="sortorder" ng-show="predicate === 'title'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('actress')">Actress
+					<span class="sortorder" ng-show="predicate === 'actress'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('releaseDate')">Release
+					<span class="sortorder" ng-show="predicate === 'releaseDate'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('videoDate')">Download
+					<span class="sortorder" ng-show="predicate === 'videoDate'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('playCount')">Play
+					<span class="sortorder" ng-show="predicate === 'playCount'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('rank')">Rank
+					<span class="sortorder" ng-show="predicate === 'rank'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('length')">Size
+					<span class="sortorder" ng-show="predicate === 'length'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('score')">Score
+					<span class="sortorder" ng-show="predicate === 'score'" ng-class="{reverse:reverse}"></span>
+				</th>
+				<th ng-click="order('videoCandidates')">Cand.
+					<span class="sortorder" ng-show="predicate === 'videoCandidates'" ng-class="{reverse:reverse}"></span>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="video in videoList | filter:search | orderBy : myOrderBy track by $index">
+			<tr ng-repeat="video in videoList | filter:search | orderBy:predicate:reverse track by $index" class="nowrap">
 				<td class="text-right">
 					{{ $index + 1 }}
 				</td>
@@ -73,7 +128,7 @@ app.controller("videoListCtrl", function($scope, $http) {
 					<a ng-click="viewVideoDetail(video.opus)">{{ video.opus }}</a>
 				</td>
 				<td>
-					<span title="{{video.title}}" onclick="alert('111')">{{ video.title }}</span>
+					<span title="{{video.title}}">{{ video.title }}</span>
 				</td>
 				<td>
 					<a ng-repeat="actress in video.actressList" ng-click="viewActressDetail(actress.name)">
@@ -84,7 +139,7 @@ app.controller("videoListCtrl", function($scope, $http) {
 				<td>{{video.videoDate}}</td>
 				<td class="text-right">{{ video.playCount }}</td>
 				<td class="text-right">{{ video.rank }}</td>
-				<td class="text-right"></td>
+				<td class="text-right">{{ video.length / 1024 / 1024 | number : 1 }} MB</td>
 				<td class="text-right">
 					<span title="{{video.scoreDesc}}">{{ video.score }}</span>
 				</td>
