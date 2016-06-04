@@ -117,7 +117,7 @@ app.controller("videoListCtrl", function($scope, $http) {
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="video in videoList | filter:search | orderBy:predicate:reverse track by $index" class="nowrap">
+			<tr class="nowrap" ng-repeat="video in videoList | filter:search | orderBy:predicate:reverse track by video.opus">
 				<td class="text-right">
 					{{ $index + 1 }}
 				</td>
@@ -127,8 +127,8 @@ app.controller("videoListCtrl", function($scope, $http) {
 				<td>
 					<a ng-click="viewVideoDetail(video.opus)">{{ video.opus }}</a>
 				</td>
-				<td>
-					<span title="{{video.title}}">{{ video.title }}</span>
+				<td style="max-width: 180px;">
+					<div class="nowrap" title="{{video.title}}">{{ video.title }}</div>
 				</td>
 				<td>
 					<a ng-repeat="actress in video.actressList" ng-click="viewActressDetail(actress.name)">
@@ -139,7 +139,7 @@ app.controller("videoListCtrl", function($scope, $http) {
 				<td>{{video.videoDate}}</td>
 				<td class="text-right">{{ video.playCount }}</td>
 				<td class="text-right">{{ video.rank }}</td>
-				<td class="text-right">{{ video.length / 1024 / 1024 | number : 1 }} MB</td>
+				<td class="text-right">{{ video.length / 1024 / 1024 / 1024 | number : 1 }} GB</td>
 				<td class="text-right">
 					<span title="{{video.scoreDesc}}">{{ video.score }}</span>
 				</td>

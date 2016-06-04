@@ -49,7 +49,7 @@ function sort(selectedSort) {
 				<td th:text="${studio.company}">studio.company</td>
 				<td class="text-right" th:text="${#lists.size(studio.videoList)}">length(studio.videoList)</td>
 				<td class="text-right" th:text="${studio.score}">studio.score</td>
-				<td style="width:150px;">
+				<td style="max-width:150px;">
 					<div class="nowrap">
 						<span class="label label-info" data-toggle="tooltip" data-placement="left" th:each="video : ${studio.videoList}" th:title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</span>
 					</div>

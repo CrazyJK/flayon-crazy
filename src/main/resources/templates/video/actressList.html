@@ -46,7 +46,7 @@ function sort(selectedSort) {
 			<tr th:each="actress, status : ${actressList}">
 				<td class="text-align" th:text="${status.count}">count</td>
 				<td><a th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</a></td>
-				<td th:text="${actress.favorite}? '★'">★</td>
+				<td class="text-center" th:text="${actress.favorite}? '★'">★</td>
 				<td th:text="${actress.birth}">actress.birth</td>
 				<td th:text="${actress.bodySize}">actress.bodySize</td>
 				<td class="text-right" th:text="${actress.height}">actress.height</td>
@@ -54,7 +54,7 @@ function sort(selectedSort) {
 				<td class="text-right" th:text="${#lists.size(actress.videoList)}">length(actress.videoList)</td> 
 				<td class="text-right" th:text="${actress.score}">actress.score</td>
 				<td th:text="${actress.age}">actress.age</td>
-				<td style="width:150px;">
+				<td style="max-width:150px;">
 					<div class="nowrap">
 						<a class="label label-info" data-toggle="tooltip" data-placement="left" th:each="video : ${actress.videoList}" th:alt-title="${video.title}" th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</a>
 					</div>

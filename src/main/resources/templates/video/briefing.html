@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title th:text="#{video.briefing}">video.briefing</title>
+<link rel="stylesheet" type="text/css" media="screen" href="/css/videoMain.css" th:href="@{/css/videoMain.css}"/>
+<style type="text/css">
+.item:hover {
+	z-index: 3;
+}
+</style>
 <script th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function(){
@@ -138,14 +144,28 @@ function reloadVideo() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="date,status : ${dateMap}">
-						<td><span th:text="${date.key}">key</span> <span class="badge float-right" th:text="${#lists.size(date.value)}">length(date.value)</span></td>
-						<td th:id="|rank0-${date.key}|"></td>
-						<td th:id="|rank1-${date.key}|"></td>
-						<td th:id="|rank2-${date.key}|"></td>
-						<td th:id="|rank3-${date.key}|"></td>
-						<td th:id="|rank4-${date.key}|"></td>
-						<td th:id="|rank5-${date.key}|"></td>
+					<tr th:each="date,status : ${dateMap}" class="nowrap">
+						<td style="max-width:100px;">
+							<span th:text="${date.key}">key</span> <span class="badge float-right" th:text="${#lists.size(date.value)}">length(date.value)</span>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank0-${date.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank1-${date.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank2-${date.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank3-${date.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank4-${date.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank5-${date.key}|" class="nowrap"></div>
+						</td>
 						<th:block th:each="video,status : ${date.value}">
 						<script type="text/javascript" th:inline="javascript">
 						/*<![CDATA[*/
@@ -177,14 +197,28 @@ function reloadVideo() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="play, status : ${playMap}">
-						<td><span th:text="${play.key}">play.key</span> <span class="badge float-right" th:text="${#lists.size(play.value)}">play.value</span></td>
-						<td th:id="|rank0-${play.key}|"></td>
-						<td th:id="|rank1-${play.key}|"></td>
-						<td th:id="|rank2-${play.key}|"></td>
-						<td th:id="|rank3-${play.key}|"></td>
-						<td th:id="|rank4-${play.key}|"></td>
-						<td th:id="|rank5-${play.key}|"></td>
+					<tr th:each="play, status : ${playMap}" class="nowrap">
+						<td style="max-width:100px;">
+							<span th:text="${play.key}">play.key</span> <span class="badge float-right" th:text="${#lists.size(play.value)}">play.value</span>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank0-${play.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank1-${play.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank2-${play.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank3-${play.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank4-${play.key}|" class="nowrap"></div>
+						</td>
+						<td style="max-width:130px;">
+							<div th:id="|rank5-${play.key}|" class="nowrap"></div>
+						</td>
 						<th:block th:each="video,status : ${play.value}"> 
 						<script type="text/javascript" th:inline="javascript">
 						/*<![CDATA[*/
@@ -212,15 +246,19 @@ function reloadVideo() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="rank,status : ${rankMap}">
-						<td><span th:text="${rank.key}"></span> <span class="badge float-right" th:text="${#lists.size(rank.value)}">length(rank.value)</span></td>
-						<td th:with="totalLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(rank.value)}">
+					<tr th:each="rank,status : ${rankMap}" class="nowrap">
+						<td style="width: 60px;">
+							<span th:text="${rank.key}"></span> <span class="badge float-right" th:text="${#lists.size(rank.value)}">length(rank.value)</span>
+						</td>
+						<td style="width: 80px;" class="text-right" th:with="totalLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(rank.value)}">
 							<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(totalLength)}"></span>
 						</td>
-						<td>
-							<th:block th:each="video : ${rank.value}">
-								<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', '')"></span>
-							</th:block>
+						<td style="max-width: 760px;">
+							<div class="nowrap">
+								<th:block th:each="video : ${rank.value}">
+									<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', '')"></span>
+								</th:block>
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -239,17 +277,21 @@ function reloadVideo() {
 				</thead>
 				<tbody>
 					<tr th:each="score,status : ${scoreMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(score.value)}">
-						<td><span th:text="${score.key}"></span> <span class="badge float-right" th:text="${#lists.size(score.value)}">length(score.value)</span></td>
-						<td>
+						<td style="width: 80px;">
+							<span th:text="${score.key}"></span> <span class="badge float-right" th:text="${#lists.size(score.value)}">length(score.value)</span>
+						</td>
+						<td style="width: 80px;" class="text-right">
 							<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
 						</td>
-						<td th:with="totalLength=${totalLength} + ${stepLength}">
+						<td style="width: 80px;" class="text-right" th:with="totalLength=${totalLength} + ${stepLength}">
 							<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(totalLength)}" th:title="${totalLength}"></span>
 						</td>
-						<td>
-							<th:block th:each="video : ${score.value}">
-								<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', ${video.scoreDesc})"></span>
-							</th:block>
+						<td style="max-width: 660px;">
+							<div class="nowrap">
+								<th:block th:each="video : ${score.value}">
+									<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', ${video.scoreDesc})"></span>
+								</th:block>
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -267,14 +309,18 @@ function reloadVideo() {
 				</thead>
 				<tbody>
 					<tr th:each="length,status : ${lengthMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(length.value)}">
-						<td><span th:text="|${length.key} GB↓ |"></span><span class="badge float-right" th:text="${#lists.size(length.value)}">length(length.value)</span></td>
-						<td>
+						<td style="width: 100px;">
+							<span th:text="|${length.key} GB↓ |"></span><span class="badge float-right" th:text="${#lists.size(length.value)}">length(length.value)</span>
+						</td>
+						<td style="width: 80px;" class="text-right">
 							<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
 						</td>
-						<td>
-							<th:block th:each="video : ${length.value}">
-								<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', ${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)})"></span>
-							</th:block>
+						<td style="max-width: 720px;">
+							<div class="nowrap">
+								<th:block th:each="video : ${length.value}">
+									<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', ${T(jk.kamoru.flayon.crazy.Utils).toGBSize(video.length)})"></span>
+								</th:block>
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -292,14 +338,18 @@ function reloadVideo() {
 				</thead>
 				<tbody>
 					<tr th:each="extension : ${extensionMap}" th:with="stepLength=${T(jk.kamoru.flayon.crazy.Utils).sumOfVideoList(extension.value)}">
-						<td><span th:text="${extension.key}"></span> <span class="badge float-right" th:text="${#lists.size(extension.value)}">length(extension.value)</span></td>
-						<td>
+						<td style="width: 100px;">
+							<span th:text="${extension.key}"></span> <span class="badge float-right" th:text="${#lists.size(extension.value)}">length(extension.value)</span>
+						</td>
+						<td style="width: 100px;" class="text-right">
 							<span class="videoSize" th:text="${T(jk.kamoru.flayon.crazy.Utils).toGBSize(stepLength)}" th:title="${stepLength}"></span>
 						</td>
-						<td>
-							<th:block th:each="video : ${extension.value}">
-								<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', '')"></span>
-							</th:block>
+						<td style="max-width: 700px;">
+							<div class="nowrap">
+								<th:block th:each="video : ${extension.value}">
+									<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', '')"></span>
+								</th:block>
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -307,11 +357,11 @@ function reloadVideo() {
 		</section>
 
 		<section id="video" class="tab-pane fade">
-			<table class="table table-condensed table-hover table-bordered">
+			<table class="table table-condensed table-bordered">
 				<tr>
 					<td>
 						<th:block th:each="video : ${videoList}">
-							<span th:replace="video/videoTag :: tag (${video}, 'opus',     's', '')"></span>
+							<span th:replace="video/videoTag :: tag (${video}, 'span', '', '')"></span>
 						</th:block>
 					</td>
 				</tr>
@@ -319,7 +369,7 @@ function reloadVideo() {
 		</section>
 
 		<section id="studio" class="tab-pane fade">
-			<table class="table table-condensed table-hover table-bordered">
+			<table class="table table-condensed table-bordered">
 				<tr>
 					<td>
 						<th:block th:each="studio : ${studioList}">
@@ -331,7 +381,7 @@ function reloadVideo() {
 		</section>
 
 		<section id="actress" class="tab-pane fade">
-			<table class="table table-condensed table-hover table-bordered">
+			<table class="table table-condensed table-bordered">
 				<tr>
 					<td>
 						<th:block th:each="actress : ${actressList}">

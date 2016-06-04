@@ -60,7 +60,7 @@
 
 <span th:if="${view} eq 'opus'"
 		th:class="${cssClass}">
-	<span th:text="${video.opus}" th:title="${video.title}" th:attr="data-opus=${video.opus}">opus</span>
+	<span th:text="${video.opus}" th:title="|${video.title} ${tooltip}|" th:attr="data-opus=${video.opus}" th:onclick="|fnVideoDetail('${video.opus}')|">opus</span>
 	<img th:if="${mode} eq 'l'" th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.opus}"
 			th:onclick="|popup('${@environment.getProperty('url.search.video') + video.opus}', 'info_${video.opus}', 800, 600)|"/>
 </span>
@@ -103,6 +103,13 @@
 		th:onclick="|fnVideoDetail('${video.opus}')|" 
 		th:alt-title="|${video.fullname} ${tooltip}|" 
 		th:data-opus="${video.opus}"
+		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
+
+<span th:if="${view} eq 'span'" th:with="size=${video.score} / 5"
+		style="padding: 5px; margin: 5px;"
+		th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap'" 
+		th:onclick="|fnVideoDetail('${video.opus}')|" 
+		th:alt-title="|${video.fullname} ${tooltip} ${video.score}|" 
 		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
 
 </th:block>

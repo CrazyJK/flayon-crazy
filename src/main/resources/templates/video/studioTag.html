@@ -7,7 +7,6 @@
 
 <th:block th:fragment="tag (studio, view)" th:with="size=${#lists.size(studio.videoList)}">
 
-
 <label th:if="${view} eq 'label'"
 	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
 	th:title="|${#objects.nullSafe(studio.homepage, '')} ${studio.company} Actress:${#lists.size(studio.actressList)}|">
@@ -16,7 +15,8 @@
 </label>
 
 <span th:if="${view} eq 'span'"
-	th:class="${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}" 
+	style="padding: 5px; margin: 5px;"
+	th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap'" 
 	th:onclick="|fnViewStudioDetail('${studio.name}')|" 
 	th:title="|${#objects.nullSafe(studio.homepage, '')} ${studio.company} Actress:${#lists.size(studio.actressList)}|"
 	th:text="|${studio.name}(${#lists.size(studio.videoList)})|">

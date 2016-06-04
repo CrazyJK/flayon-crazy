@@ -16,7 +16,8 @@
 
 
 <span th:if="${view} eq 'span'"
-	th:class="${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}" 
+	style="padding: 5px; margin: 5px;"
+	th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap'" 
 	th:onclick="|fnViewActressDetail('${actress.name}')|" 
 	th:title="|${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}|"
 	th:text="|${actress.name}(${#lists.size(actress.videoList)})|">

@@ -27,30 +27,36 @@ function sort(selectedSort) {
 			<tr>
 				<th>#</th>
 				<th th:each="_sort : ${sorts}" th:class="${_sort eq sort}? 'success'">
-					<span th:text="#{|video.sort.${_sort.desc}|}" th:onclick="|sort('${_sort.name()}')|">video.sort.s.desc</span>
-					<th:block th:if="${_sort eq sort}">
-						<span th:if="!${reverse}" class="glyphicon glyphicon-chevron-up"></span>
-						<span th:if="${reverse}" class="glyphicon glyphicon-chevron-down"></span>
+					<th:block th:if="${_sort.name()} neq 'VC'">
+						<span th:text="#{|video.sort.${_sort.desc}|}" th:onclick="|sort('${_sort.name()}')|">video.sort.s.desc</span>
+						<th:block th:if="${_sort eq sort}">
+							<span th:if="!${reverse}" class="glyphicon glyphicon-chevron-up"></span>
+							<span th:if="${reverse}" class="glyphicon glyphicon-chevron-down"></span>
+						</th:block>
 					</th:block>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="video, status : ${videoList}">
+			<tr th:each="video, status : ${videoList}" class="nowrap">
 				<td class="text-right" th:text="${status.count}">
 					status.count
 				</td>
-				<td>
-					<a th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:text="${video.studio.name}">video.studio.name</a>
+				<td style="max-width: 90px;">
+					<div class="nowrap">
+						<a th:onclick="|fnViewStudioDetail('${video.studio.name}')|" th:text="${video.studio.name}" th:alt-title="${video.studio.name}">video.studio.name</a>
+					</div>
 				</td>
 				<td>
 					<a th:onclick="|fnViewVideoDetail('${video.opus}')|" th:text="${video.opus}">video.opus</a>
 				</td>
-				<td>
-					<span th:title="${video.title}" th:text="${video.title}">video.title</span>
+				<td style="max-width: 180px;">
+					<div class="nowrap" th:alt-title="${video.title}" th:text="${video.title}">video.title</div>
 				</td>
-				<td>
-					<a th:each="actress : ${video.actressList}" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</a>
+				<td style="max-width: 120px;">
+					<div class="nowrap">
+						<a th:each="actress : ${video.actressList}" th:onclick="|fnViewActressDetail('${actress.name}')|" th:text="${actress.name}">actress.name</a>
+					</div>
 				</td>
 				<td th:text="${video.releaseDate}">releaseDate</td>
 				<td th:text="${video.videoDate}">video.videoDate</td>
@@ -60,7 +66,7 @@ function sort(selectedSort) {
 				<td class="text-right">
 					<span th:title="${video.scoreDesc}" th:text="${video.score}">video.score</span>
 				</td>
-				<td class="text-right" th:text="${video.videoCandidates.size()}">videoCandidates.size</td>
+				<!-- <td class="text-right" th:text="${video.videoCandidates.size()}">videoCandidates.size</td> -->
 			</tr>
 		</tbody>
 	</table>
