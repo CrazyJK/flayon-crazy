@@ -59,11 +59,10 @@
 </span>
 
 <span th:if="${view} eq 'opus'"
-		th:class="${cssClass}">
-	<span th:text="${video.opus}" th:title="|${video.title} ${tooltip}|" th:attr="data-opus=${video.opus}" th:onclick="|fnVideoDetail('${video.opus}')|">opus</span>
-	<img th:if="${mode} eq 'l'" th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.opus}"
+		th:class="${cssClass}" th:attr="data-opus=${video.opus}"
+	 	th:text="${video.opus}" th:title="|${video.title} ${tooltip}|" th:onclick="|fnVideoDetail('${video.opus}')|">opus</span>
+<img th:if="(${view} eq 'opus') and (${mode} eq 'l')" th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.opus}"
 			th:onclick="|popup('${@environment.getProperty('url.search.video') + video.opus}', 'info_${video.opus}', 800, 600)|"/>
-</span>
 
 <img th:if="${view} eq 'torrent'" 
 		th:src="@{/img/magnify1.png}" width="12px" th:alt-title="#{video.find-info.torrent}"
@@ -92,9 +91,9 @@
 <th:block th:if="${view} eq 'rank'">
 	<label>
 		<input th:if="${mode} neq 's'" type="range" th:id="|Rank-${video.opus}|" name="points" th:min="${minRank}" th:max="${maxRank}"  
-			th:value="${video.rank}" th:onmouseup="|fnRank('${video.opus}')|" class="form-control" 
+			th:value="${video.rank}" th:onmouseup="|fnRank('${video.opus}')|" class="form-control" style="padding: 0;"
 			th:onchange="|document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;|" />
-		<span th:class="${cssClass} + ' rangeLabel'" th:alt-title="'Rank ' + ${video.rank}" th:text="${video.rank}" data-toggle="tooltip" data-placement="right">video.rank</span>
+		<span th:id="|Rank-${video.opus}-label|" th:class="${cssClass} + ' rangeLabel'" th:alt-title="'Rank ' + ${video.rank}" th:text="${video.rank}" data-toggle="tooltip" data-placement="right">video.rank</span>
 	</label>
 </th:block>
 

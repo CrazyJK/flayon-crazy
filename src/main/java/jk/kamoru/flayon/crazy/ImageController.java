@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.image.domain.ImageType;
@@ -45,7 +44,6 @@ public class ImageController extends AbstractController {
 	}
 	
 	@RequestMapping("/data")
-	@ResponseBody
 	public Map<String, Object> getData(HttpServletResponse response, 
 			@RequestParam(value = "n", required = false, defaultValue = "-1") int firstImageIndex,
 			@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex,

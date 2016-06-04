@@ -55,7 +55,7 @@ var imageMap;
 
 $(document).ready(function(){
 	
-	$.getJSON([[@{/image/data}]] ,function(data) {
+	$.getJSON([[@{/image/data.json}]] ,function(data) {
 		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
@@ -111,8 +111,8 @@ $(document).ready(function(){
 		event.stopImmediatePropagation();
 		event.preventDefault();
 		event.stopPropagation();
-		if(event.button == 0) {
-			fnRandomImageView();
+		if (event.button == 0) {
+			fnNextImageView();
 		} 
 	});
 	$(window).bind("resize", resizeImage);
@@ -126,12 +126,26 @@ function resizeImage() {
 }
 
 function fnViewImage(current) {
+	var prevNumber = selectedNumber;
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 
-	$("#imageDiv").hide();
-	$("#imageDiv").css("background-image", "url('" + selectedImgUrl + "')");
-	$("#imageDiv").fadeIn();
+	if (prevNumber - selectedNumber < 0) { // move forward
+		$("#imageDiv").hide("slow", function() {
+			$(this).css("background-image", "url('" + selectedImgUrl + "')");
+		});
+//		$("#imageDiv").slideUp("slow", function() {
+//			$(this).css("background-image", "url('" + selectedImgUrl + "')");
+//		});
+//		$("#imageDiv").slideDown("slow");
+		$("#imageDiv").fadeIn("slow");
+	}
+	else { // move backward
+		$("#imageDiv").fadeOut("slow", function() {
+			$(this).css("background-image", "url('" + selectedImgUrl + "')");
+		});
+		$("#imageDiv").show("slow");
+	}
 
 	$("#leftNo").html(getPrevNumber());
 	$("#currNo").html(selectedNumber);

@@ -111,7 +111,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 
 	private void loadInfo() {
 		if (!loaded) {
-			File file = new File(new File(STORAGE_PATHS[0], "_info"), name + "." + VIDEO.EXT_STUDIO);
+			File file = getInfoFile();
 			if (file.isFile())
 				try {
 					Map<String, String> info = Utils.readFileToMap(file);
@@ -140,6 +140,18 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 		for (Video video : getVideoList())
 			score += video.getScore();
 		return score;
+	}
+
+	private File getInfoFile() {
+		return new File(new File(STORAGE_PATHS[0], "_info"), name + "." + VIDEO.EXT_STUDIO);
+	}
+
+	public void renameInfo(String newName) {
+		log.debug("studio rename {} -> {}", name, newName);
+		File infoFile = getInfoFile();
+		if (infoFile.exists())
+			Utils.renameFile(getInfoFile(), newName);
+		reloadInfo();
 	}
 	
 	

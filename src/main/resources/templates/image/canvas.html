@@ -110,7 +110,7 @@ var playSlide = false;
 
 $(document).ready(function() {
 
-	$.getJSON([[@{/image/data}]] ,function(data) {
+	$.getJSON([[@{/image/data.json}]] ,function(data) {
 		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];

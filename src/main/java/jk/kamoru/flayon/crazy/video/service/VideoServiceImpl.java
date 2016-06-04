@@ -388,7 +388,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void saveActressInfo(String name, Map<String, String> params) {
 		log.trace("name={}, params={}", name, params);
-		Utils.saveFileFromMap(new File(getInfoDir(), name + "." + VIDEO.EXT_ACTRESS), params);
+		String newname = params.get("newname");
+		if (!StringUtils.equals(name, newname)) {
+			Utils.renameFile(new File(getInfoDir(), name), newname);
+		}
+
+		Utils.saveFileFromMap(new File(getInfoDir(), newname + "." + VIDEO.EXT_ACTRESS), params);
 		videoDao.getActress(name).reloadInfo();
 	}
 
@@ -464,8 +469,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void saveStudioInfo(String studio, Map<String, String> params) {
 		log.trace("name={}, params={}", studio, params);
-		Utils.saveFileFromMap(new File(getInfoDir(), studio + "." + VIDEO.EXT_STUDIO), params);
-		videoDao.getStudio(studio).reloadInfo();
+		String newname = params.get("newname");
+		if (!StringUtils.equals(studio, newname)) {
+			Utils.renameFile(new File(getInfoDir(), studio), newname);
+		}
+		Utils.saveFileFromMap(new File(getInfoDir(), newname + "." + VIDEO.EXT_STUDIO), params);
+		videoDao.getStudio(newname).reloadInfo();
 	}
 	
 	@Override
@@ -842,8 +851,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void renameOfStudio(String name, String newName) {
-		for (Video video : videoDao.getStudio(name).getVideoList())
+		Studio studio = videoDao.getStudio(name);
+		for (Video video : studio.getVideoList())
 			video.renameOfStudio(newName);
+		studio.renameInfo(newName);
 		videoDao.reload();
 	}
 

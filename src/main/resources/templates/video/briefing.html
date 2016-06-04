@@ -145,7 +145,7 @@ function reloadVideo() {
 				</thead>
 				<tbody>
 					<tr th:each="date,status : ${dateMap}" class="nowrap">
-						<td style="max-width:100px;">
+						<td style="width:100px;">
 							<span th:text="${date.key}">key</span> <span class="badge float-right" th:text="${#lists.size(date.value)}">length(date.value)</span>
 						</td>
 						<td style="max-width:130px;">
@@ -198,7 +198,7 @@ function reloadVideo() {
 				</thead>
 				<tbody>
 					<tr th:each="play, status : ${playMap}" class="nowrap">
-						<td style="max-width:100px;">
+						<td style="width:100px;">
 							<span th:text="${play.key}">play.key</span> <span class="badge float-right" th:text="${#lists.size(play.value)}">play.value</span>
 						</td>
 						<td style="max-width:130px;">

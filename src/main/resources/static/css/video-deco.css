@@ -3,7 +3,7 @@ body {
 	margin: 5px 0 0;
 	background-color: #fff;
 }
-[onclick] {
+[onclick], [ng-click] {
 	cursor: pointer;
 }
 #deco_nav {

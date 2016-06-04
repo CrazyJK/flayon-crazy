@@ -21,9 +21,7 @@ function setBackgroundImage(imgIdx) {
 		currBGImageNo = getRandomInteger(0, bgImageCount);
 	
 	currBGImageUrl = context + "image/" + currBGImageNo;
-//	$("#content_div").hide();
 	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
-//	$("#content_div").fadeIn();
 }
 
 function fnVideoDivToggle() {

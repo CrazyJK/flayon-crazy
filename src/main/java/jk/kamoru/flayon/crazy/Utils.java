@@ -80,9 +80,10 @@ public class Utils {
 	}
 
 	/**
-	 * 파일명 바꾸기
+	 * 파일명 바꾸기.<br>
+	 * 원 파일의 확장자를 구해 자동으로 붙여 준다
 	 * @param srcFile
-	 * @param newName
+	 * @param newName   확장자 제외 이름만 
 	 * @throws 실패시 에러
 	 */
 	public static void renameFile(File srcFile, String newName) {
@@ -90,6 +91,7 @@ public class Utils {
 			String suffix = getExtension(srcFile);
 			if (StringUtils.isNotEmpty(suffix))
 				newName = newName + "." + suffix;
+			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
 			Files.move(srcFile.toPath(), Paths.get(srcFile.getParent(), newName), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			log.error("rename fail", e);
@@ -183,6 +185,7 @@ public class Utils {
 		try {
 			Files.write(file.toPath(), sb.toString().getBytes(), CREATE, WRITE);
 		} catch (IOException e) {
+			log.error("write file error", e);
 			throw new CrazyException("write file error", e);
 		}
 	}

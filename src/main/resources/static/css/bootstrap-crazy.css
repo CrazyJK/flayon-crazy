@@ -24,6 +24,7 @@ label {
 	color: #337ab7;
 	padding: .2em .3em .3em;
 	font-weight: normal;
+	margin-right: 3px;
 }
 .label-pre {
 	text-align: left;

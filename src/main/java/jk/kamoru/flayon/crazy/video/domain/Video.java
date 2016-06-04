@@ -973,6 +973,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	public void rename(String newName) {
+		logger.debug("rename {} -> {}", getFullname(), newName);
 		int count = 1;
 		// video
 		int videoCount = getVideoFileList().size();
@@ -985,7 +986,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			}
 		}
 		// cover
-		Utils.renameFile(coverFile, newName);
+		if (coverFile != null && coverFile.exists())
+			Utils.renameFile(coverFile, newName);
 		// subtitles, if exist
 		count = 1;
 		int subtitlesCount = getSubtitlesFileList().size();
@@ -998,7 +1000,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			}
 		}
 		// info file
-		Utils.renameFile(infoFile, newName);
+		if (infoFile != null && infoFile.exists())
+			Utils.renameFile(infoFile, newName);
 		// etc file
 		for (File file : this.getEtcFileList()) {
 			Utils.renameFile(file, newName);

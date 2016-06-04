@@ -16,11 +16,11 @@
 
 
 <span th:if="${view} eq 'span'"
-	style="padding: 5px; margin: 5px;"
+	style="padding: 5px; margin: 5px;" data-toggle="tooltip"
 	th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap'" 
 	th:onclick="|fnViewActressDetail('${actress.name}')|" 
-	th:title="|${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}|"
-	th:text="|${actress.name}(${#lists.size(actress.videoList)})|">
+	th:title="${#strings.trim(actress.localName + ' ' + actress.birth + ' ' + actress.bodySize + ' ' + actress.height + ' ' + actress.debut)}"
+	th:text="|${actress.name}(${size})|">
 	actress.name length(actress.videoList)
 </span>
 

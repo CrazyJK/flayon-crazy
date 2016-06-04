@@ -35,14 +35,14 @@ $(document).ready(function(){
  */
 function fnRenameTo() {
 	var actressForm = document.forms['actressForm'];
-	actressForm.action = [[@{/video/actress/{actress.name}/renameTo/}]] + $("#newName").val();
+	actressForm.action = [[@{'/video/actress/' + ${actress.name} + '/renameTo/'}]] + $("#newName").val();
 	actressForm.submit();
 }
 
 function fnSaveActressInfo() {
 	loading(true, "Saving...");
 	var actressForm = document.forms['actressForm'];
-	actressForm.action = [[@{/video/actress/{actress.name}}]];
+	actressForm.action = [[@{'/video/actress/' + ${actress.name}}]];
 	actressForm.submit();
 	if (opener) {
 		if (opener.location.href.indexOf("video/actress") > -1) 

@@ -234,15 +234,22 @@ public class VideoController extends AbstractController {
 		return "video/studioDetail";
 	}
 
-	/**save studio info
+	/**put studio info
 	 * @param studio
 	 * @param params map of info
 	 */
 	@RequestMapping(value="/studio/{studio}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void putStudioInfo(@PathVariable String studio, @RequestParam Map<String, String> params) {
-		logger.trace("{}", params);
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public String putStudioInfo(@PathVariable String studio, @RequestParam Map<String, String> params) {
+		logger.debug("{}", params);
+		String newname = params.get("newname");
+		if (!StringUtils.equals(studio, newname)) {
+			logger.info("studio rename from [{}] to [{}]", studio, newname);
+			videoService.renameOfStudio(studio, newname);
+		}
 		videoService.saveStudioInfo(studio, params);
+
+		return "redirect:/video/studio/" + newname;
 	}
 
 	/**display studio list view
