@@ -304,4 +304,10 @@ public class Utils {
 		return itemCssClass;
 	}
 	
+	public static String trimToDefault(String str, String def) {
+		if (StringUtils.trimToNull(str) == null)
+			return def;
+		return str.trim();
+	}
+	
 }

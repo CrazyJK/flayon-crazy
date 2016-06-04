@@ -179,7 +179,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public Actress getActress(String actressName) {
-		log.debug(actressName);
 		return videoDao.getActress(actressName);
 	}
 
@@ -306,7 +305,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<Video> searchVideo(VideoSearch search) {
-		log.info("searchVideo START : {}", search);
+		log.debug("searchVideo START : {}", search);
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		
@@ -336,7 +335,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		else
 			Collections.sort(foundList);
 
-		log.info("found video list size {}", foundList.size());
+		log.debug("found video list size {}", foundList.size());
 		return foundList;
 	}
 	
@@ -386,15 +385,14 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void saveActressInfo(String name, Map<String, String> params) {
+	public String saveActressInfo(String name, Map<String, String> params) {
 		log.trace("name={}, params={}", name, params);
-		String newname = params.get("newname");
-		if (!StringUtils.equals(name, newname)) {
-			Utils.renameFile(new File(getInfoDir(), name), newname);
+		Actress actress = videoDao.getActress(name); 
+		try {
+			return actress.saveInfo(params);
+		} finally {
+			videoDao.reload();
 		}
-
-		Utils.saveFileFromMap(new File(getInfoDir(), newname + "." + VIDEO.EXT_ACTRESS), params);
-		videoDao.getActress(name).reloadInfo();
 	}
 
 	@Override
@@ -467,14 +465,14 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void saveStudioInfo(String studio, Map<String, String> params) {
-		log.trace("name={}, params={}", studio, params);
-		String newname = params.get("newname");
-		if (!StringUtils.equals(studio, newname)) {
-			Utils.renameFile(new File(getInfoDir(), studio), newname);
+	public String saveStudioInfo(String studioName, Map<String, String> params) {
+		log.trace("name={}, params={}", studioName, params);
+		Studio studio = videoDao.getStudio(studioName);
+		try {
+			return studio.saveInfo(params);
+		} finally {
+			videoDao.reload();
 		}
-		Utils.saveFileFromMap(new File(getInfoDir(), newname + "." + VIDEO.EXT_STUDIO), params);
-		videoDao.getStudio(newname).reloadInfo();
 	}
 	
 	@Override
@@ -840,25 +838,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void renameOfActress(String name, String newName) {
-		Actress actress = videoDao.getActress(name);
-		for (Video video : actress.getVideoList()) {
-			video.renameOfActress(name, newName);
-		}
-		actress.renameInfo(newName);
-		videoDao.reload();
-	}
-
-	@Override
-	public void renameOfStudio(String name, String newName) {
-		Studio studio = videoDao.getStudio(name);
-		for (Video video : studio.getVideoList())
-			video.renameOfStudio(newName);
-		studio.renameInfo(newName);
-		videoDao.reload();
-	}
-
-	@Override
 	public List<TitlePart> parseToTitleData(String titleData) {
 		List<TitlePart> titlePartList = new ArrayList<TitlePart>();
 		
@@ -1070,10 +1049,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		return map;
 	}
 
-	private File getInfoDir() {
-		return new File(STORAGE_PATHS[0], "_info");
-	}
-
 	@Override
 	public void resetVideoScore(String opus) {
 		log.trace("resetVideoScore - {}", opus);
@@ -1135,7 +1110,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void arrangeSubFolder() {
-		log.info("arrangeSubFolder START");
+		log.debug("arrangeSubFolder START");
 		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
 		List<File> folders = new ArrayList<File>();
 		folders.add(new File(ARCHIVE_PATHS));
@@ -1151,16 +1126,22 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				public boolean accept(File file) {
 					return file.isDirectory();
 				}});
-			log.info("  scan {} - {}", path, dirs);
+			log.debug("  scan {} - {}", path, dirs);
 			for (File dir : dirs) {
-				log.info("    check {}", dir);
+				log.debug("    check {}", dir);
 				if (Utils.isEmptyDirectory(dir)) {
-					log.info("      attempt to delete {}", dir);
+					log.debug("      attempt to delete {}", dir);
 					dir.delete();
 				}
 			}
 		}
-		log.info("arrangeSubFolder END");
+		log.debug("arrangeSubFolder END");
+	}
+
+	@Override
+	public void setFavoriteOfActress(String actressName, Boolean favorite) {
+		Actress actress = videoDao.getActress(actressName);
+		actress.setFavorite(favorite);
 	}
 
 }

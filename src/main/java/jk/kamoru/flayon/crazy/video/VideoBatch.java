@@ -86,7 +86,7 @@ public class VideoBatch extends CrazyProperties {
 	
 	@Scheduled(fixedDelay = 1000 * 60)
 	public synchronized void moveFile() {
-		logger.debug("BATCH File move START {}", Arrays.toString(PATH_MOVE_FILE));
+		logger.trace("BATCH File move START {}", Arrays.toString(PATH_MOVE_FILE));
 
 		// 설정이 안됬거나
 		if (PATH_MOVE_FILE == null) {
@@ -127,7 +127,7 @@ public class VideoBatch extends CrazyProperties {
 			}
 		}
 		
-		logger.debug("BATCH File move END");
+		logger.trace("BATCH File move END");
 	}
 	
 	@Scheduled(fixedRate = 1000 * 60 * 60)

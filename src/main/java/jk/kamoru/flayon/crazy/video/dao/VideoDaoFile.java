@@ -28,12 +28,7 @@ public class VideoDaoFile implements VideoDao {
 	@Override
 //	@Cacheable(value="videoCache")
 	public List<Video> getVideoList() {
-		logger.info("getVideoList START");
-		try {
-			return instanceVideoSource.getVideoList();
-		} finally {
-			logger.info("getVideoList END");
-		}
+		return instanceVideoSource.getVideoList();
 	}
 	
 	@Override
@@ -81,7 +76,7 @@ public class VideoDaoFile implements VideoDao {
 	@Override
 //	@Cacheable("actressCache")
 	public Actress getActress(String name) {
-		logger.debug(name);
+		logger.trace(name);
 		try {
 			return instanceVideoSource.getActress(name);
 		} catch (ActressNotFoundException e) {

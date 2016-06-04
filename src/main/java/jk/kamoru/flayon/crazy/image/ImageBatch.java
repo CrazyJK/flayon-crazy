@@ -21,7 +21,7 @@ public class ImageBatch extends CrazyProperties {
 	
 	@Scheduled(cron="*/10 * * * * *")
 	public synchronized void renameSoraPicture() {
-		log.debug("Rename Sora picture Start");
+		log.trace("Rename Sora picture Start");
 
 		if (PATH_SORA_PICTURES == null) {
 			log.warn("PATH_SORA_PICTURES is not set");
@@ -37,7 +37,7 @@ public class ImageBatch extends CrazyProperties {
 			}
 			
 			Collection<File> found = FileUtils.listFiles(directory, extensions, false);
-			log.debug("{} found : {}", soraPath, found.size());
+			log.trace("{} found : {}", soraPath, found.size());
 			
 			String folderName = directory.getName();
 			for (File file : found) {
@@ -53,7 +53,7 @@ public class ImageBatch extends CrazyProperties {
 				}
 			}
 		}
-		log.debug("Rename Sora picture End");
+		log.trace("Rename Sora picture End");
 	}
 	
 }

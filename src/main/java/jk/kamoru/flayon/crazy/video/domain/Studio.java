@@ -112,14 +112,16 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	private void loadInfo() {
 		if (!loaded) {
 			File file = getInfoFile();
-			if (file.isFile())
+			if (file.isFile()) 
 				try {
 					Map<String, String> info = Utils.readFileToMap(file);
-					this.company = StringUtils.trimToEmpty(info.get("COMPANY"));
-					this.homepage = new URL(StringUtils.trimToEmpty(info.get("HOMEPAGE")));
+					name 	 = Utils.trimToDefault(info.get("NEWNAME"), name);
+					company  = Utils.trimToDefault(info.get("COMPANY"), company);
+					homepage = new URL(StringUtils.trimToEmpty(info.get("HOMEPAGE")));
 				} catch (MalformedURLException e) {
 					log.warn("malformed url error : {}", e.getMessage());
 				}
+			log.trace("{} : {} : {}", name, company, homepage);
 			loaded = true;
 		}
 	}
@@ -146,12 +148,22 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 		return new File(new File(STORAGE_PATHS[0], "_info"), name + "." + VIDEO.EXT_STUDIO);
 	}
 
-	public void renameInfo(String newName) {
-		log.debug("studio rename {} -> {}", name, newName);
-		File infoFile = getInfoFile();
-		if (infoFile.exists())
-			Utils.renameFile(getInfoFile(), newName);
+	public String saveInfo(Map<String, String> params) {
+		String newname = params.get("newname");
+		// studio 이름이 변했고, 파일이 있으면 info 파일이름 변경
+		if (!StringUtils.equals(name, newname) && getInfoFile().exists()) {
+			Utils.renameFile(getInfoFile(), newname);
+		}
+		// info 파일에 내용 저장
+		Utils.saveFileFromMap(new File(getInfoFile().getParent(), newname + "." + VIDEO.EXT_STUDIO), params);
+		// studio의 비디오 파일 이름 변경
+		for (Video video : getVideoList()) {
+			video.renameOfStudio(newname);
+		}
+		// 저장된 info내용 갱신 
+		name = newname;
 		reloadInfo();
+		return name;
 	}
 	
 	

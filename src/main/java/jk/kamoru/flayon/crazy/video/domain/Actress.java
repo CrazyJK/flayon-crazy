@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
@@ -33,6 +31,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
 	public static String NAME = "NAME";
+	public static String NEWNAME = "NEWNAME";
 	public static String FAVORITE = "FAVORITE";
 	public static String LOCALNAME = "LOCALNAME";
 	public static String BIRTH = "BIRTH";
@@ -54,7 +53,8 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private List<Studio> studioList;
 	@JsonIgnore
 	private List<Video>   videoList;
-
+	@JsonIgnore
+	private Map<String, String> info;
 	/**
 	 * is loaded actress infomation
 	 */
@@ -140,7 +140,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 				int CurrYear = cal.get(Calendar.YEAR);
 				int birthYear = Integer.parseInt(birth.substring(0, 4));
 				age = String.valueOf(CurrYear - birthYear + 1);
-				log.debug("{} - {} + 1 = {}", CurrYear, birthYear, age);
+				log.trace("{} - {} + 1 = {}", CurrYear, birthYear, age);
 			} catch(Exception e) {}
 		return age;
 	}
@@ -148,30 +148,24 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		loadInfo();
 		return favorite;
 	}
-
-	@JsonIgnore
-	public Map<String, String> getInfoMap() {
-		if (getInfoFile().isFile())
-			try {
-				return Utils.readFileToMap(getInfoFile());
-			} 
-			catch (CrazyException e) {
-				log.error("info load error : {} - {}", name, e.getMessage());
-			}
-		return new HashMap<String, String>();
-	}
 	
 	private void loadInfo() {
 		if (!loaded) {
-			Map<String, String> info = getInfoMap();
-			if (info == null)
-				return;
-			this.localName = StringUtils.trimToEmpty(info.get(LOCALNAME));
-			this.birth     = StringUtils.trimToEmpty(info.get(BIRTH));
-			this.height    = StringUtils.trimToEmpty(info.get(HEIGHT));
-			this.bodySize  = StringUtils.trimToEmpty(info.get(BODYSIZE));
-			this.debut     = StringUtils.trimToEmpty(info.get(DEBUT));
-			this.favorite  = Boolean.valueOf(info.get(FAVORITE));
+			File file = getInfoFile();
+			log.trace("loadInfo() name={} file={}", name, file);
+			if (file.isFile()) {
+				info = Utils.readFileToMap(file);
+				if (info == null)
+					return;
+				this.name      = Utils.trimToDefault(info.get(NEWNAME), name);
+				this.localName = Utils.trimToDefault(info.get(LOCALNAME), localName);
+				this.birth     = Utils.trimToDefault(info.get(BIRTH), birth);
+				this.height    = Utils.trimToDefault(info.get(HEIGHT), height);
+				this.bodySize  = Utils.trimToDefault(info.get(BODYSIZE), bodySize);
+				this.debut     = Utils.trimToDefault(info.get(DEBUT), debut);
+				this.favorite  = Boolean.valueOf(info.get(FAVORITE));
+				log.trace("loadInfo() {} : {} : {} : {} : {} : {} : {}", name, localName, birth, height, bodySize, debut, favorite);
+			}
 			loaded = true;
 		}
 	}
@@ -222,11 +216,27 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		return name;
 	}
 	
-	public void renameInfo(String newName) {
-		File infoFile = getInfoFile();
-		if (infoFile.exists())
-			Utils.renameFile(getInfoFile(), newName + "." + VIDEO.EXT_ACTRESS);
+	public String saveInfo(Map<String, String> params) {
+		String newname = params.get("newname");
+		// actress 이름이 변했고, 파일이 있으면 info 파일이름 변경
+		if (!StringUtils.equals(name, newname) && getInfoFile().exists()) {
+			Utils.renameFile(getInfoFile(), newname);
+		}
+		// info 파일에 내용 저장
+		Utils.saveFileFromMap(new File(getInfoFile().getParent(), newname + "." + VIDEO.EXT_ACTRESS), params);
+		// actress의 비디오 파일 이름 변경
+		for (Video video : getVideoList()) {
+			video.renameOfActress(name, newname);
+		}
+		// 저장된 info내용 갱신
+		name = newname;
 		reloadInfo();
+		return name;
 	}
 	
+	public void setFavorite(Boolean favorite) {
+		this.favorite = favorite;
+		info.put(FAVORITE, favorite.toString());
+		saveInfo(info);
+	}
 }

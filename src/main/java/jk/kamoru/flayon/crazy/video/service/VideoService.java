@@ -133,8 +133,9 @@ public interface VideoService {
 	/**save actress info
 	 * @param name actress name
 	 * @param params map of actress info
+	 * @return 
 	 */
-	void saveActressInfo(String name, Map<String, String> params);
+	String saveActressInfo(String name, Map<String, String> params);
 
 	/**get info group by date
 	 * @return map of date, video list
@@ -165,8 +166,9 @@ public interface VideoService {
 	/**save studio info
 	 * @param studio
 	 * @param params map of studio info
+	 * @return 
 	 */
-	void saveStudioInfo(String studio, Map<String, String> params);
+	String saveStudioInfo(String studio, Map<String, String> params);
 
 	/**get all sorted actress list
 	 * @param sort
@@ -251,10 +253,6 @@ public interface VideoService {
 
 	void rename(String opus, String newName);
 
-	void renameOfActress(String name, String newName);
-	
-	void renameOfStudio(String name, String newName);
-
 	List<TitlePart> parseToTitleData(String titleData);
 
 	List<TitlePart> parseToTitleData2(String titleData);
@@ -284,5 +282,7 @@ public interface VideoService {
 	List<Video> searchVideoInArchive(VideoSearch videoSearch);
 
 	void arrangeSubFolder();
+
+	void setFavoriteOfActress(String actressName, Boolean favorite);
 	
 }

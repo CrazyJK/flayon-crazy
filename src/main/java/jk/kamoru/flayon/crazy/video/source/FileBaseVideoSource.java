@@ -93,13 +93,13 @@ public class FileBaseVideoSource implements VideoSource {
 	 * video데이터를 로드한다.
 	 */
 	private synchronized void load() {
-		logger.info("load START");
+		logger.debug("load START");
 		firstLoad = true;
 		loading = true;
 		
 		// find files
 		Collection<File> files = Utils.listFiles(paths, null, true);
-		logger.info("    total found file {}", files.size());
+		logger.debug("    total found file {}", files.size());
 
 		videoMap.clear();
 		studioMap.clear();
@@ -219,7 +219,7 @@ public class FileBaseVideoSource implements VideoSource {
 				logger.error("Error", e);
 			}
 		}
-		logger.info("    total loaded video {}", videoMap.size());
+		logger.debug("    total loaded video {}", videoMap.size());
 		loading = false;
 	}
 
@@ -279,13 +279,8 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 	@Override
 	public List<Video> getVideoList() {
-		logger.info("START");
 		videoSource();
-		try {
 		return new ArrayList<Video>(videoMap.values());
-		} finally {
-			logger.info("END");
-		}
 	}
 	@Override
 	public List<Studio> getStudioList() {

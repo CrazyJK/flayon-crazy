@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoBatch;
 import jk.kamoru.flayon.crazy.video.domain.Action;
-import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
@@ -106,27 +104,17 @@ public class VideoController extends AbstractController {
 	 * @param params map of info
 	 */
 	@RequestMapping(value="/actress/{actressName}", method=RequestMethod.POST)
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public String saveActressInfo(@PathVariable String actressName, @RequestParam Map<String, String> params) {
 		logger.trace("{}", params);
-		String oriname = params.get("name");
-		String newname = params.get("newname");
-		if (!StringUtils.equals(oriname, newname)) {
-			videoService.renameOfActress(oriname, newname);
-		}
-		videoService.saveActressInfo(newname, params);
-		return "redirect:/video/actress/" + newname;
+		String currentActressName = videoService.saveActressInfo(actressName, params);
+		return "redirect:/video/actress/" + currentActressName;
 	}
 
 	@RequestMapping(value="/actress/{actressName}/favorite/{favorite}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void putActressFavorite(@PathVariable String actressName, @PathVariable Boolean favorite) {
 		logger.debug("{}, {}", actressName, favorite);
-		
-		Actress actress = videoService.getActress(actressName);
-		Map<String, String> params = actress.getInfoMap();
-		params.put(Actress.FAVORITE, favorite.toString());
-		videoService.saveActressInfo(actressName, params);
+		videoService.setFavoriteOfActress(actressName, favorite);
 	}
 	
 	/**display status briefing view
@@ -239,17 +227,11 @@ public class VideoController extends AbstractController {
 	 * @param params map of info
 	 */
 	@RequestMapping(value="/studio/{studio}", method=RequestMethod.PUT)
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public String putStudioInfo(@PathVariable String studio, @RequestParam Map<String, String> params) {
 		logger.debug("{}", params);
-		String newname = params.get("newname");
-		if (!StringUtils.equals(studio, newname)) {
-			logger.info("studio rename from [{}] to [{}]", studio, newname);
-			videoService.renameOfStudio(studio, newname);
-		}
-		videoService.saveStudioInfo(studio, params);
+		String studioName = videoService.saveStudioInfo(studio, params);
 
-		return "redirect:/video/studio/" + newname;
+		return "redirect:/video/studio/" + studioName;
 	}
 
 	/**display studio list view
@@ -260,7 +242,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/studio", method=RequestMethod.GET)
 	public String studioList(Model model, @RequestParam(value="sort", required=false, defaultValue="NAME") StudioSort sort,
 			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse) {
-		logger.info("studioList sort={} reverse={}", sort, reverse);
+		logger.trace("studioList sort={} reverse={}", sort, reverse);
 		model.addAttribute(videoService.getStudioList(sort, reverse));
 		model.addAttribute("sorts", StudioSort.values());
 		model.addAttribute("sort", sort);
@@ -419,9 +401,9 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping
 	public String videoMain(Model model, @ModelAttribute VideoSearch videoSearch) {
-		logger.info("videoMain START : {}", videoSearch);
+		logger.debug("videoMain START : {}", videoSearch);
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
-		logger.info("/video search end");
+		logger.debug("/video search end");
 
 		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
 		if (videoList.size() == 1)
@@ -439,7 +421,7 @@ public class VideoController extends AbstractController {
 //		model.addAttribute("actressList", 	videoService.getActressList());
 //		model.addAttribute("studioList", 	videoService.getStudioList());
 		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
-		logger.info("videoMain END");
+		logger.debug("videoMain END");
 
 		return "video/videoMain";
 	}
@@ -571,37 +553,6 @@ public class VideoController extends AbstractController {
 			}
 			video.setPlayCount(playCount);
 		}
-	}
-	
-	/**rename actress
-	 * @param oriname
-	 * @param newname
-	 * @deprecated {@link #putActressInfo(String, Map)}으로 통합
-	 */
-	@RequestMapping(value="/actress/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void actressRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
-		if (StringUtils.isBlank(oriname) || StringUtils.isBlank(newname)) {
-			logger.warn("name is empty. [{}] to [{}]", oriname, newname);
-			return;
-		}
-		logger.info("rename to [{}] from [{}]", newname, oriname);
-		videoService.renameOfActress(oriname, newname);
-	}
-
-	/**rename studio name
-	 * @param oriname
-	 * @param newname
-	 */
-	@RequestMapping(value="/studio/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void studioRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
-		if (StringUtils.isBlank(oriname) || StringUtils.isBlank(newname)) {
-			logger.warn("name is empty. [{}] to [{}]", oriname, newname);
-			return;
-		}
-		logger.info("rename to [{}] from [{}]", newname, oriname);
-		videoService.renameOfStudio(oriname, newname);
 	}
 
 	/**parsing title
