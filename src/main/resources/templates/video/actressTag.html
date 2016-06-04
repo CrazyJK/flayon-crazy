@@ -11,13 +11,14 @@
 	th:class="|item ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)}|" 
 	th:title="|${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}|">
 	<input type="checkbox" th:field="*{selectedActress}" th:value="${actress.name}" class="sr-only"/>
-	<span class="label label-default" th:id="'checkbox-' + ${#ids.prev('selectedActress')}" th:text="|${actress.name}(${#lists.size(actress.videoList)})|">name</span>
+	<span th:class="'label label-default ' + (${actress.favorite}? 'favorite')" 
+		th:id="'checkbox-' + ${#ids.prev('selectedActress')}" th:text="|${actress.name}(${#lists.size(actress.videoList)})|">name</span>
 </label>
 
 
 <span th:if="${view} eq 'span'"
 	style="padding: 5px; margin: 5px;" data-toggle="tooltip"
-	th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap'" 
+	th:class="'item ' + ${T(jk.kamoru.flayon.crazy.Utils).getCssClassNameByItemCount('item', size)} + ' box nowrap ' + (${actress.favorite}? 'favorite')" 
 	th:onclick="|fnViewActressDetail('${actress.name}')|" 
 	th:title="${#strings.trim(actress.localName + ' ' + actress.birth + ' ' + actress.bodySize + ' ' + actress.height + ' ' + actress.debut)}"
 	th:text="|${actress.name}(${size})|">

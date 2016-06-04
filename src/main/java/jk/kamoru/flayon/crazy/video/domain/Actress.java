@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +167,9 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 				this.favorite  = Boolean.valueOf(info.get(FAVORITE));
 				log.trace("loadInfo() {} : {} : {} : {} : {} : {} : {}", name, localName, birth, height, bodySize, debut, favorite);
 			}
+			else {
+				info = new HashMap<>();
+			}
 			loaded = true;
 		}
 	}
@@ -218,25 +222,28 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	
 	public String saveInfo(Map<String, String> params) {
 		String newname = params.get("newname");
-		// actress 이름이 변했고, 파일이 있으면 info 파일이름 변경
+		// actress 이름이 변했고, 파일이 있으면
 		if (!StringUtils.equals(name, newname) && getInfoFile().exists()) {
+			// info 파일이름 변경
 			Utils.renameFile(getInfoFile(), newname);
+			// actress의 비디오 파일 이름 변경
+			for (Video video : getVideoList()) {
+				video.renameOfActress(name, newname);
+			}
+			// 저장된 info내용 갱신
+			name = newname;
 		}
 		// info 파일에 내용 저장
 		Utils.saveFileFromMap(new File(getInfoFile().getParent(), newname + "." + VIDEO.EXT_ACTRESS), params);
-		// actress의 비디오 파일 이름 변경
-		for (Video video : getVideoList()) {
-			video.renameOfActress(name, newname);
-		}
-		// 저장된 info내용 갱신
-		name = newname;
 		reloadInfo();
 		return name;
 	}
 	
 	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
-		info.put(FAVORITE, favorite.toString());
+		loadInfo();
+		info.put("favorite", favorite.toString());
+		info.put("newname", name);
 		saveInfo(info);
 	}
 }

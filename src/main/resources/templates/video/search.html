@@ -32,7 +32,7 @@ $(document).ready(function(){
 		loading(true, 'Searching');
 		 
 		var keyword = $(this).val();
-		var queryUrl = context + 'video/searchJson?q=' + keyword; 
+		var queryUrl = context + 'video/search.json?q=' + keyword; 
 		
 		$.getJSON(queryUrl ,function(data) {
 			$('#foundVideoList').empty();

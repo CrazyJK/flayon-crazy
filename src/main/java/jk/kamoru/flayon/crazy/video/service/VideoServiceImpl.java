@@ -1142,6 +1142,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	public void setFavoriteOfActress(String actressName, Boolean favorite) {
 		Actress actress = videoDao.getActress(actressName);
 		actress.setFavorite(favorite);
+		videoDao.reload();
 	}
 
 }

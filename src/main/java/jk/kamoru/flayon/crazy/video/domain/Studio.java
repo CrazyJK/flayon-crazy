@@ -150,18 +150,19 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 
 	public String saveInfo(Map<String, String> params) {
 		String newname = params.get("newname");
-		// studio 이름이 변했고, 파일이 있으면 info 파일이름 변경
+		// studio 이름이 변했고, 파일이 있으면
 		if (!StringUtils.equals(name, newname) && getInfoFile().exists()) {
+			// info 파일이름 변경
 			Utils.renameFile(getInfoFile(), newname);
+			// studio의 비디오 파일 이름 변경
+			for (Video video : getVideoList()) {
+				video.renameOfStudio(newname);
+			}
+			// 저장된 info내용 갱신 
+			name = newname;
 		}
 		// info 파일에 내용 저장
 		Utils.saveFileFromMap(new File(getInfoFile().getParent(), newname + "." + VIDEO.EXT_STUDIO), params);
-		// studio의 비디오 파일 이름 변경
-		for (Video video : getVideoList()) {
-			video.renameOfStudio(newname);
-		}
-		// 저장된 info내용 갱신 
-		name = newname;
 		reloadInfo();
 		return name;
 	}
