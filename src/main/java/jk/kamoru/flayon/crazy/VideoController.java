@@ -615,28 +615,27 @@ public class VideoController extends AbstractController {
 	}
 
 	@RequestMapping("/history/{pattern}")
-	public String historyMonthly(Model model, @PathVariable String pattern) {
-		SimpleDateFormat sdf = null;
+	public String historyMonthly(Model model, @PathVariable String pattern, @RequestParam(value="f", required=false, defaultValue="yyyy-MM-dd") String format) {
 		try {
-			sdf = new SimpleDateFormat(pattern);
-		} catch(Exception e) {
-			return "video/historyGraph";
-		}
-		
-		Map<String, HistoryData> data = new TreeMap<>(); 
-		for (History history : historyService.getAll()) {
-			String month = sdf.format(history.getDate());
-			if (data.containsKey(month)) {
-				HistoryData historyDate = data.get(month);
-				historyDate.add(history);
+			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+			Map<String, HistoryData> data = new TreeMap<>(); 
+			for (History history : historyService.getAll()) {
+				String month = sdf.format(history.getDate());
+				if (data.containsKey(month)) {
+					HistoryData historyDate = data.get(month);
+					historyDate.add(history);
+				}
+				else {
+					HistoryData historyData = new HistoryData(month);
+					historyData.add(history);
+					data.put(month, historyData);
+				}
 			}
-			else {
-				HistoryData historyData = new HistoryData(month);
-				historyData.add(history);
-				data.put(month, historyData);
-			}
+			model.addAttribute("data", data.values());
+		} catch (Exception onlyShowForm) {
+		} finally {
+			model.addAttribute("format", format);
 		}
-		model.addAttribute("data", data.values());
 		return "video/historyGraph";
 	}
 	
