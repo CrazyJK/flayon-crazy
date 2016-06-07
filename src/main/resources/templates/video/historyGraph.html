@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:inline="text">[[#{video.video}]] [[#{video.history}]]</title>
+<style type="text/css">
+@import url(http://fonts.googleapis.com/css?family=Covered+By+Your+Grace);
+#chartdiv {
+	width	: 100%;
+	height	: 500px;
+	/* background-color: gray; */
+	width:100%; 
+	height:100%; 
+	margin:0 auto; 
+	background: #282828 url('http://www.amcharts.com/lib/3/patterns/chalk/bg.jpg');
+	color: #fff;
+}
+</style>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/amcharts.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/serial.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/black.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/chalk.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/dark.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/light.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/patterns.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var chart;
+var chartData;
+var pathToImages = [[@{/webjars/amcharts/3.14.5/dist/amcharts/images/}]];
+/*]]>*/
+</script>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+
+	$.getJSON("/video/history/yyyy-MM-dd.json" ,function(data) {
+
+		var row = data['data'];
+		chartData = row;
+
+		// https://www.amcharts.com/demos/date-based-data/#theme-chalk
+		chart = AmCharts.makeChart("chartdiv", {
+		    "type": "serial",
+		    "theme": "chalk",
+		    "marginRight": 40,
+		    "marginLeft": 40,
+		    "autoMarginOffset": 20,
+		    "mouseWheelZoomEnabled":true,
+		    "dataDateFormat": "YYYY-MM-DD",
+		    "valueAxes": [{
+		        "id": "v1",
+		        "axisAlpha": 0,
+		        "position": "left",
+		        "ignoreAxisWidth":true
+		    }],
+		    "balloon": {
+		        "borderThickness": 1,
+		        "shadowAlpha": 0
+		    },
+		    "graphs": [{
+		        "id": "g1",
+		        "balloon":{
+		          "drop":true,
+		          "adjustBorderColor":false,
+		          "color":"#ffffff"
+		        },
+		        "type" : "column",
+		        "bullet": "round",
+		        "bulletBorderAlpha": 1,
+		        "bulletColor": "#F00",
+		        "bulletSize": 5,
+		        "hideBulletsCount": 50,
+		        "lineThickness": 2,
+		        "title": "play line",
+		        "useLineColorForBulletBorder": true,
+		        "valueField": "play",
+		        "balloonText": "<span style='font-size:18px;'>Play : [[value]]</span>"
+		    },{
+		        "id": "g2",
+		        "balloon":{
+		          "drop":true,
+		          "adjustBorderColor":false,
+		          "color":"#ffffff"
+		        },
+		        "type" : "column",
+		        "bullet": "round",
+		        "bulletBorderAlpha": 1,
+		        "bulletColor": "#FFFFFF",
+		        "bulletSize": 5,
+		        "hideBulletsCount": 50,
+		        "lineThickness": 2,
+		        "title": "del line",
+		        "useLineColorForBulletBorder": true,
+		        "valueField": "delete",
+		        "balloonText": "<span style='font-size:18px;'>Delete : [[value]]</span>"
+		    }],
+		    "chartScrollbar": {
+		        "graph": "g1",
+		        "oppositeAxis":false,
+		        "offset":30,
+		        "scrollbarHeight": 50,
+		        "backgroundAlpha": 0,
+		        "selectedBackgroundAlpha": 0.1,
+		        "selectedBackgroundColor": "#888888",
+		        "graphFillAlpha": 0,
+		        "graphLineAlpha": 0.5,
+		        "selectedGraphFillAlpha": 0,
+		        "selectedGraphLineAlpha": 1,
+		        "autoGridCount":true,
+		        "color":"#AAAAAA"
+		    },
+		    "chartCursor": {
+		        "pan": true,
+		        "valueLineEnabled": true,
+		        "valueLineBalloonEnabled": true,
+		        "cursorAlpha":1,
+		        "cursorColor":"#258cbb",
+		        "limitToGraph":"g1",
+		        "valueLineAlpha":0.2,
+		        "valueZoomable":true
+		    },
+		    "valueScrollbar":{
+		      "oppositeAxis":false,
+		      "offset":50,
+		      "scrollbarHeight":10
+		    },
+		    "categoryField": "date",
+		    "categoryAxis": {
+		        "parseDates": true,
+		        "dashLength": 1,
+		        "minorGridEnabled": true
+		    },
+		    "export": {
+		        "enabled": true
+		    },
+		    "dataProvider": chartData
+		});
+
+		chart.addListener("rendered", zoomChart);
+
+		zoomChart();
+
+	});
+});
+
+function zoomChart() {
+    // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+    var toDay = new Date();
+    var fromDay = new Date();
+    fromDay.setFullYear(toDay.getFullYear() -1);
+//    alert(fromDay + " : " + today);
+	chart.zoomToDates(fromDay, toDay);
+//	chart.zoomToIndexes(chartData.length - 10, chartData.length - 1);
+}
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container-fluid" role="main" data-layout-fragment="content">
+
+<div id="header_div" class="box form-inline">
+	<label for="search">History Graph</label>
+</div>
+
+<div id="content_div" class="box">
+	<div id="chartdiv"></div>
+</div>
+  
+</div>
+</body>
+</html>

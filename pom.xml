@@ -69,7 +69,13 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-		  		
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>amcharts</artifactId>
+			<version>3.14.5</version>
+		</dependency>
+
   	</dependencies>
 
 	<build>
