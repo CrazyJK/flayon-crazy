@@ -121,25 +121,37 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/briefing", method=RequestMethod.GET)
 	public String briefing(Model model) {
-		logger.trace("briefing");
+		logger.info("briefing START");
 
 		videoService.reload();
+		logger.info("briefing reload");
 		model.addAttribute("pathMap", 		videoService.groupByPath());
+		logger.info("briefing path");
 		model.addAttribute("dateMap", 		videoService.groupByDate());
+		logger.info("briefing date");
 		model.addAttribute("rankMap", 		videoService.groupByRank());
+		logger.info("briefing rank");
 		model.addAttribute("playMap", 		videoService.groupByPlay());
+		logger.info("briefing play");
 		model.addAttribute("scoreMap", 		videoService.groupByScore());
+		logger.info("briefing score");
 		model.addAttribute("lengthMap", 	videoService.groupByLength());
+		logger.info("briefing length");
 		model.addAttribute("extensionMap", 	videoService.groupByExtension());
+		logger.info("briefing ext");
 		
 		model.addAttribute(videoService.getStudioList());
+		logger.info("briefing studiolist");
 		model.addAttribute(videoService.getActressList());
+		logger.info("briefing actresslist");
 		model.addAttribute(videoService.getVideoList());
+		logger.info("briefing videolist");
 		
 		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
 		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
 		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
 		
+		logger.info("briefing rndering view...");
 		return "video/briefing";
 	}
 

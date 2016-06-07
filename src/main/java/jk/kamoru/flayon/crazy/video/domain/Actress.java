@@ -91,19 +91,19 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		case NAME:
 			return Utils.compareTo(this.getName(), comp.getName());
 		case BIRTH:
-			return Utils.compareTo(comp.getBirth(), this.getBirth());
+			return Utils.compareTo(this.getBirth(), comp.getBirth());
 		case BODY:
-			return Utils.compareTo(comp.getBodySize(), this.getBodySize());
+			return Utils.compareTo(this.getBodySize(), comp.getBodySize());
 		case HEIGHT:
-			return Utils.compareTo(comp.getHeight(), this.getHeight());
+			return Utils.compareTo(this.getHeight(), comp.getHeight());
 		case DEBUT:
-			return Utils.compareTo(comp.getDebut(), this.getDebut());
+			return Utils.compareTo(this.getDebut(), comp.getDebut());
 		case VIDEO:
-			return comp.getVideoList().size() - this.getVideoList().size();
+			return this.getVideoList().size() - comp.getVideoList().size();
 		case SCORE:
-			return comp.getScore() - this.getScore();
+			return this.getScore() - comp.getScore();
 		case FAVORITE:
-			return Utils.compareTo(comp.getFavorite(), this.getFavorite());
+			return Utils.compareTo(this.getFavorite(), comp.getFavorite());
 		default:
 			return Utils.compareTo(this.getName(), comp.getName());
 		}
