@@ -1,11 +1,13 @@
 package jk.kamoru.flayon.crazy.video.service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.History;
+import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
@@ -73,5 +75,7 @@ public interface HistoryService {
 	 * @return
 	 */
 	List<History> getDeduplicatedList();
+
+	Collection<HistoryData> getGraphData(String pattern);
 	
 }

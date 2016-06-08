@@ -2,11 +2,9 @@ package jk.kamoru.flayon.crazy;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +37,6 @@ import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
-import lombok.Data;
 
 /**
  * Video controller<br>
@@ -615,57 +612,9 @@ public class VideoController extends AbstractController {
 	}
 
 	@RequestMapping("/history/{pattern}")
-	public String historyMonthly(Model model, @PathVariable String pattern, @RequestParam(value="f", required=false, defaultValue="yyyy-MM-dd") String format) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-			Map<String, HistoryData> data = new TreeMap<>(); 
-			for (History history : historyService.getAll()) {
-				String month = sdf.format(history.getDate());
-				if (data.containsKey(month)) {
-					HistoryData historyDate = data.get(month);
-					historyDate.add(history);
-				}
-				else {
-					HistoryData historyData = new HistoryData(month);
-					historyData.add(history);
-					data.put(month, historyData);
-				}
-			}
-			model.addAttribute("data", data.values());
-		} catch (Exception onlyShowForm) {
-		} finally {
-			model.addAttribute("format", format);
-		}
+	public String historyMonthly(Model model, @PathVariable String pattern) {
+		model.addAttribute("data", historyService.getGraphData(pattern));
 		return "video/historyGraph";
 	}
 	
-	@Data
-	class HistoryData {
-		String date;
-		int play;
-		int overview;
-		int cover;
-		int subtitles;
-		int remove;
-		int delete;
-		int rank;
-
-		public HistoryData(String date) {
-			this.date = date;
-		}
-
-		public void add(History history) {
-			switch (history.getAction()) {
-				case PLAY: 		play++; 		break;
-				case OVERVIEW: 	overview++; 	break;
-				case COVER: 	cover++; 		break;
-				case SUBTITLES: subtitles++; 	break;
-				case REMOVE: 	remove++; 		break;
-				case DELETE: 	delete++; 		break;
-				case RANK: 		rank++; 		break;
-			}
-			
-		}
-		
-	}
 }

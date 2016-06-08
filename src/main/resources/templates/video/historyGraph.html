@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
 <head>
-<meta charset="UTF-8"></meta>
+<meta charset="UTF-8"/>
 <title th:inline="text">[[#{video.video}]] [[#{video.history}]]</title>
 <style type="text/css">
 @import url(http://fonts.googleapis.com/css?family=Covered+By+Your+Grace);
-#chartdiv {
+#chartDiv {
 	width:100%; 
 	height:100%; 
 	margin:0 auto; 
-/* 	background: #282828 url('http://www.amcharts.com/lib/3/patterns/chalk/bg.jpg'); */
-	background-color: rgba(0, 0, 0, 0.3);
+ 	/* background: rgba(0, 0, 0, 0.3) url('http://www.amcharts.com/lib/3/patterns/chalk/bg.jpg'); */ 
+	background-color: rgba(0, 0, 0, 0);
 	color: #fff;
+	border-radius: 10px;
 }
 </style>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/amcharts.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/serial.js}"></script>
-<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/black.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/chalk.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/black.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/dark.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/light.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/amcharts/3.14.5/dist/amcharts/themes/patterns.js}"></script>
@@ -26,28 +27,50 @@
 var chart;
 var chartData;
 var pathToImages = [[@{/webjars/amcharts/3.14.5/dist/amcharts/images/}]];
-var format = [[${format}]];
-var chartFormat = [[${format}]].toUpperCase();
+var historyFormat = 'yyyy-MM-dd';
+var chartFormat = historyFormat.toUpperCase();
+var currentStartIndex = 3;
+var theme = "chalk";
+
+function toggleBG() {
+	if ($("#chartDiv").css("background-image") == 'none')
+		$("#chartDiv").css("background-image", "url(" + [[@{/img/chalk-bg.png}]] + ")");
+	else
+		$("#chartDiv").css("background-image", "");
+}
 /*]]>*/
 </script>
 <script type="text/javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
+	$("#zoom" + currentStartIndex).addClass("active");
+	renderChart();
+});
+
+function renderChart() {
 	loading(true, "Loading...");
-	$.getJSON("/video/history/" + format + ".json" ,function(data) {
+	$.getJSON("/video/history/" + historyFormat + ".json" ,function(data) {
 
 		var row = data['data'];
 		chartData = row;
 
-		// https://www.amcharts.com/demos/date-based-data/#theme-chalk
-		chart = AmCharts.makeChart("chartdiv", {
+		chart = AmCharts.makeChart("chartDiv", {
 		    "type": "serial",
-		    "theme": "chalk",
+		    "theme": theme,
 		    "marginRight": 40,
 		    "marginLeft": 40,
 		    "autoMarginOffset": 20,
 		    "mouseWheelZoomEnabled":true,
 		    "dataDateFormat": chartFormat,
+		    
+		    startDuration: 2,
+		    
+		    "legend": {
+		        "equalWidths": false,
+		        "useGraphSettings": true,
+		        "valueAlign": "left",
+		        "valueWidth": 120
+		    },
 		    "valueAxes": [{
 		        "id": "v1",
 		        "axisAlpha": 0,
@@ -60,67 +83,52 @@ $(document).ready(function() {
 		    },
 		    "graphs": [{
 		        "id": "g1",
-		        "balloon":{
-		          "drop":true,
-		          "adjustBorderColor":false,
-		          "color":"#ffffff"
-		        },
 		        "type" : "column",
-//		        "bullet": "round",
-//		        "bulletBorderAlpha": 1,
-//		        "bulletColor": "#F00",
-//		        "bulletSize": 5,
-//		        "hideBulletsCount": 50,
 		        "lineThickness": 2,
-		        "title": "play line",
+		        "title": "Play video",
 		        "useLineColorForBulletBorder": true,
+		        "legendPeriodValueText": "total: [[value.sum]] played",
+		        "legendValueText": "[[value]] played",
 		        "valueField": "play",
 		        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
 		    },{
 		        "id": "g2",
-//		        "balloon":{
-//		          "drop":true,
-//		          "adjustBorderColor":false,
-//		          "color":"#ffffff"
-//		        },
 //				"lineColor" : "#2F4F4F",
-				"lineColor" : "#ffffff",
+//				"lineColor" : "#ffffff",
 		        "type" : "column",
 		        "clustered":false,
 		        "columnWidth":0.5,
 		        "fillAlphas": 0.8,
 		        "lineAlpha": 0,
-//		        "bullet": "round",
-		        "bulletBorderAlpha": 0,
-//		        "bulletColor": "#FFFFFF",
-//		        "bulletSize": 5,
-//		        "hideBulletsCount": 50,
-//		        "lineThickness": 2,
-		        "title": "remove line",
-//		        "useLineColorForBulletBorder": true,
+		        "title": "Remove video",
+		        "useLineColorForBulletBorder": true,
+		        "legendPeriodValueText": "total: [[value.sum]] removed",
+		        "legendValueText": "[[value]] removed",
 		        "valueField": "remove",
 		        "balloonText": "<span style='font-size:15px;'>Remove : [[value]]</span>"
 		    }],
 		    "chartScrollbar": {
+		    	updateOnReleaseOnly : true,
 		        "graph": "g1",
-		        "oppositeAxis":false,
+		        "oppositeAxis": true,
 		        "offset":30,
 		        "scrollbarHeight": 50,
-		        "backgroundAlpha": 0,
+ 		                "backgroundAlpha": 0,
 		        "selectedBackgroundAlpha": 0.1,
 		        "selectedBackgroundColor": "#888888",
-		        "graphFillAlpha": 0,
-		        "graphLineAlpha": 0.5,
+		                "graphFillAlpha": 0,
 		        "selectedGraphFillAlpha": 0,
+		                "graphLineAlpha": 0.5,
 		        "selectedGraphLineAlpha": 1,
 		        "autoGridCount":true,
 		        "color":"#AAAAAA"
 		    },
 		    "chartCursor": {
 		        "pan": true,
-		        "valueLineEnabled": true,
-		        "valueLineBalloonEnabled": true,
-		        "cursorAlpha":1,
+		        "fullWidth" : true,
+		        "valueLineEnabled": false,
+		        "valueLineBalloonEnabled": false,
+		        "cursorAlpha": 0.1,
 		        "cursorColor":"#258cbb",
 		        "limitToGraph":"g1",
 		        "valueLineAlpha":0.2,
@@ -129,10 +137,23 @@ $(document).ready(function() {
 		    "valueScrollbar":{
 		      "oppositeAxis":false,
 		      "offset":50,
-		      "scrollbarHeight":10
+		      "scrollbarHeight":5
 		    },
 		    "categoryField": "date",
 		    "categoryAxis": {
+		    	"dateFormats": [{
+		            "period": "DD",
+		            "format": "DD"
+		        }, {
+		            "period": "WW",
+		            "format": "MMM DD"
+		        }, {
+		            "period": "MM",
+		            "format": "MMM"
+		        }, {
+		            "period": "YYYY",
+		            "format": "YYYY"
+		        }],
 		        "parseDates": true,
 		        "dashLength": 1,
 		        "minorGridEnabled": true
@@ -145,35 +166,59 @@ $(document).ready(function() {
 
 		chart.addListener("rendered", zoomChart);
 
-		zoomChart(1);
+		zoomChart();
 
 		loading(false);
-
 	});
-
-});
+	
+}
 
 function zoomChart(month) {
+	// hide amcharts. sorry!
+	$("div.amcharts-chart-div > a").html("History chart by amCharts");
+	
+	
     // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
 	//	chart.zoomToIndexes(chartData.length - 10, chartData.length - 1);
-    if (typeof month === 'object') {
-    	if (chartFormat == 'YYYY-MM-DD')
-	    	month = 1;
-    	else if (chartFormat == 'YYYY-MM')
-    		month = 12;
-    	else
-    		month = 4 * 12;
+    console.log("zoomChart : month = " + month);
+    if (month) {
+    	if (typeof month === 'object') {
+        	if (chartFormat == 'YYYY-MM-DD')
+        		currentStartIndex = 1;
+        	else if (chartFormat == 'YYYY-MM')
+        		currentStartIndex = 12;
+        	else
+        		currentStartIndex = 4 * 12;
+            console.log("zoomChart : object -> currentStartIndex = " + currentStartIndex);
+    	}
+    	else {
+	    	currentStartIndex = month;
+	        console.log("zoomChart : month => currentStartIndex = " + currentStartIndex);
+    	}
     }
-    console.log("zoomChart :month = " + month);
+    console.log("zoomChart : final currentStartIndex = " + currentStartIndex);
+
     var toDay = new Date();
     var fromDay = new Date();
-    fromDay.setMonth(toDay.getMonth() - month);
+    fromDay.setMonth(toDay.getMonth() - currentStartIndex);
 	chart.zoomToDates(fromDay, toDay);
+	$("[id^=zoom]").removeClass("active");
+	$("#zoom" + currentStartIndex).addClass("active");
 }
 
 function changeFormat(format) {
-	location.href = "?f=" + format;
+	historyFormat = format;
+	chartFormat = format.toUpperCase();
+	renderChart();
+	console.log("changeFormat : historyFormat=" + historyFormat + ", chartFormat=" + chartFormat);
 }
+
+function changeTheme(_theme) {
+	theme = _theme;
+	renderChart();
+	console.log("changeTheme : theme=" + theme);
+}
+
 /*]]>*/
 </script>
 </head>
@@ -182,23 +227,39 @@ function changeFormat(format) {
 
 <div id="header_div" class="box form-inline">
 	<label for="search">History Graph</label>
-	<div class="btn-group">
-		<a class="btn btn-xs btn-default" onclick="zoomChart(1)">-1 Month</a>
-		&nbsp;
-		<a class="btn btn-xs btn-default" onclick="zoomChart(2)">-2 Month</a>
-		<a class="btn btn-xs btn-default" onclick="zoomChart(3)">-3 Month</a>
-		<a class="btn btn-xs btn-default" onclick="zoomChart(6)">-6 Month</a>
-		<a class="btn btn-xs btn-default" onclick="zoomChart(12)">-1 Year</a>
-	</div>	
-	<div class="btn-group">
-		<a class="btn btn-xs btn-default" onclick="changeFormat('yyyy')">YYYY</a>
-		<a class="btn btn-xs btn-default" onclick="changeFormat('yyyy-MM')">YYYY-MM</a>
-		<a class="btn btn-xs btn-default" onclick="changeFormat('yyyy-MM-dd')">YYYY-MM-DD</a>
+	&nbsp;
+	<div class="btn-group" data-toggle="buttons">
+		<a id="zoom1"  class="btn btn-xs btn-default" onclick="zoomChart(1)"><input type="radio"/>M-1</a>
+		<a id="zoom2"  class="btn btn-xs btn-default" onclick="zoomChart(2)"><input type="radio"/>M-2</a>
+		<a id="zoom3"  class="btn btn-xs btn-default" onclick="zoomChart(3)"><input type="radio"/>M-3</a>
+		<a id="zoom6"  class="btn btn-xs btn-default" onclick="zoomChart(6)"><input type="radio"/>M-6</a>
+		<a id="zoom12" class="btn btn-xs btn-default" onclick="zoomChart(12)"><input type="radio"/>Y-1</a>
+		<a id="zoom48" class="btn btn-xs btn-default" onclick="zoomChart(48)"><input type="radio"/>Y-4</a>
 	</div>
+	&nbsp;
+	<div class="btn-group" data-toggle="buttons">
+		<a class="btn btn-xs btn-default" onclick="changeFormat('yyyy')"><input type="radio"/>Year</a>
+		<a class="btn btn-xs btn-default" onclick="changeFormat('yyyy-MM')"><input type="radio"/>Month</a>
+		<a class="btn btn-xs btn-default active" onclick="changeFormat('yyyy-MM-dd')"><input type="radio"/>Day</a>
+	</div>
+	&nbsp;
+	<div class="btn-group" data-toggle="buttons">
+		<a class="btn btn-xs btn-default" onclick="changeTheme('light')"><input type="radio"/>Light</a>
+		<a class="btn btn-xs btn-default" onclick="changeTheme('dark')"><input type="radio"/>Dark</a>
+		<a class="btn btn-xs btn-default active" onclick="changeTheme('chalk')"><input type="radio"/>Chalk</a>
+		<a class="btn btn-xs btn-default" onclick="changeTheme('black')"><input type="radio"/>Black</a>
+		<a class="btn btn-xs btn-default" onclick="changeTheme('patterns')"><input type="radio"/>Patterns</a>
+		<a class="btn btn-xs btn-default" onclick="changeTheme('none')"><input type="radio"/>default</a>
+	</div>
+	&nbsp;
+	<div class="btn-group" data-toggle="buttons">
+		<button type="button" class="btn btn-xs btn-default" onclick="toggleBG()">BG</button>
+	</div>
+
 </div>
 
 <div id="content_div" class="box">
-	<div id="chartdiv"></div>
+	<div id="chartDiv"></div>
 </div>
   
 </div>
