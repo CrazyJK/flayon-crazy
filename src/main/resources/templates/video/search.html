@@ -6,6 +6,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 bgContinue = false;
+var BOOTSTRAP_COL_LG_6 = 970;
 
 $(document).ready(function(){
 	
@@ -116,8 +117,15 @@ $(document).ready(function(){
  
 function resizeSecondDiv() {
 	var contentDivHeight = $("#content_div").outerHeight();
-	var calculatedDivHeight = (contentDivHeight) / 2 - 15; 
-
+	var contentDivWidth  = $("#content_div").width();
+	var calculatedDivHeight = 0;
+	if (contentDivWidth > BOOTSTRAP_COL_LG_6) {
+		calculatedDivHeight = (contentDivHeight) - 20;	
+	}
+	else {
+		calculatedDivHeight = (contentDivHeight) / 2 - 15;
+	}
+//	console.log(contentDivWidth + " : " + calculatedDivHeight);
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
 }

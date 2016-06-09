@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.image.service.ImageService;
@@ -28,6 +30,7 @@ import jk.kamoru.flayon.crazy.video.VideoBatch;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.History;
+import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.Video;
@@ -616,5 +619,24 @@ public class VideoController extends AbstractController {
 		model.addAttribute("data", historyService.getGraphData(pattern));
 		return "video/historyGraph";
 	}
-	
+
+	@RequestMapping("/history/forGoogleChart")
+	public @ResponseBody String historyForGoogleChart() {
+		StringBuilder sb = new StringBuilder("{");
+		sb.append("\"cols\":[{\"label\":\"Date\", \"type\":\"date\"},{\"label\":\"Play\", \"type\":\"number\"}],");
+		sb.append("\"rows\":[");
+		String pattern = "yyyy-MM-dd";
+		Collection<HistoryData> graphData = historyService.getGraphData(pattern);
+		for (HistoryData data : graphData) {
+			String[] datePart = data.getDate().split("-");
+			int year  = Integer.parseInt(datePart[0]);
+			int month = Integer.parseInt(datePart[1]) -1;
+			int day   = Integer.parseInt(datePart[2]);
+			sb.append(String.format("{\"c\":[{\"v\": \"Date(%s, %s, %s)\"},{\"v\":%s}]},", 
+					year, month, day, data.getPlay()));
+		}
+		
+		sb.append("]}");
+		return sb.toString();
+	}
 }
