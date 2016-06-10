@@ -120,7 +120,8 @@ public class FileBaseVideoSource implements VideoSource {
 						|| filename.equals(VIDEO.MAC_NETWORKSTORES)
 						|| filename.equals(VIDEO.WINDOW_DESKTOPINI)
 						|| ext.equals(VIDEO.EXT_ACTRESS) 
-						|| ext.equals(VIDEO.EXT_STUDIO))
+						|| ext.equals(VIDEO.EXT_STUDIO) 
+						|| ext.equals(VIDEO.TAG_DATA_FILENAME))
 					continue;
 				
 				// 1       2     3      4        5     6

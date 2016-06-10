@@ -36,6 +36,7 @@ import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
+import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
@@ -149,7 +150,10 @@ public class VideoController extends AbstractController {
 		logger.info("briefing actresslist");
 		model.addAttribute(videoService.getVideoList());
 		logger.info("briefing videolist");
-		
+
+		model.addAttribute(videoService.getTagList());
+		logger.info("briefing taglist");
+
 		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
 		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
 		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
@@ -639,4 +643,21 @@ public class VideoController extends AbstractController {
 		sb.append("]}");
 		return sb.toString();
 	}
+	
+	@RequestMapping(value="/tag", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void updateTag(@ModelAttribute Tag tag) {
+		videoService.updateTag(tag);
+	}
+	@RequestMapping(value="/tag", method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteTag(@ModelAttribute Tag tag) {
+		videoService.deleteTag(tag);
+	}
+	@RequestMapping(value="/tag", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void saveTag(@ModelAttribute Tag tag) {
+		videoService.createTag(tag);
+	}
+	
 }

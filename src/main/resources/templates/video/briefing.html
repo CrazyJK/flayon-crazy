@@ -102,6 +102,7 @@ function reloadVideo() {
 		<li><a data-toggle="tab" href="#video"><span th:text="#{video.video}"></span> <span class="badge" th:text="${#lists.size(videoList)}"></span></a></li>
 		<li><a data-toggle="tab" href="#studio"><span th:text="#{video.studio}"></span> <span class="badge" th:text="${#lists.size(studioList)}"></span></a></li>
 		<li><a data-toggle="tab" href="#actress"><span th:text="#{video.actress}"></span> <span class="badge" th:text="${#lists.size(actressList)}"></span></a></li>
+		<li><a data-toggle="tab" href="#tags"><span th:text="#{video.tags}"></span> <span class="badge" th:text="${#lists.size(tagList)}"></span></a></li>
   	</ul>
 
 	<div class="tab-content">
@@ -387,6 +388,22 @@ function reloadVideo() {
 						<th:block th:each="actress : ${actressList}">
 							<span th:replace="video/actressTag :: tag (${actress}, 'span')"></span>
 						</th:block>
+					</td>
+				</tr>
+			</table>
+		</section>
+
+		<section id="tags" class="tab-pane fade">
+			<table class="table table-condensed table-bordered">
+				<tr>
+					<td>
+						<th:block th:each="tag : ${tagList}">
+							<span class="label label-plain" th:text="${tag.name}" th:title="${tag.description}"></span>
+						</th:block>
+						<form action="/video/tag" method="post">
+							<input name="name" placeholder="name"/><input name="description" placeholder="Description"/>
+							<button type="submit">Regist</button>
+						</form>
 					</td>
 				</tr>
 			</table>

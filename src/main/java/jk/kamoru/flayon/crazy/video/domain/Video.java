@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileExistsException;
@@ -22,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.CRAZY;
@@ -30,9 +28,14 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.domain.video.Info;
+import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * AV Bean class<br>
@@ -73,7 +76,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	private List<Actress> actressList;
 	private Integer playCount;
 	private int rank;
-	private String infoText;
+	private Info info;
 	
 	private boolean isArchive;
 
@@ -90,6 +93,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		playCount 	= 0;
 		rank 		= 0;
 		overview 	= "";
+		
+		info = new Info();
 	}
 	
 	/** 파일 위치 정렬<br>
@@ -638,30 +643,66 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					logger.error("delete fail : {}", file.getAbsolutePath());
 	}
 	
-	/**
+	/**TODO
 	 * info 내용 저장
 	 */
 	private void saveInfo() {
 		
-		Map<String, Map<String, String>> rootMap = new HashMap<>();
-		Map<String, String> map = new HashMap<>();
-		map.put("opus", opus);
-		map.put("rank", String.valueOf(rank));
-		map.put("playCount", String.valueOf(playCount));
-		map.put("overview", overview);
-		map.put("lastAccess", DateFormatUtils.format(System.currentTimeMillis(), VIDEO.DATE_PATTERN));
-		rootMap.put("info", map);
-		
 		ObjectMapper mapper = new ObjectMapper();
+
+		info.setOpus(opus);
+		info.setPlayCount(playCount);
+		info.setRank(rank);
+		info.setOverview(overview);
+		info.setLastAccess(new Date());
+
 		try {
-			String jsonString = mapper.writeValueAsString(rootMap);
-			FileUtils.writeStringToFile(getInfoFile(), jsonString, VIDEO.FILE_ENCODING);
-			logger.info("{} {}", opus, jsonString);
+			mapper.writeValue(infoFile, info);
 		} catch (IOException e) {
-			logger.error("info save error", e);
+			throw new VideoException(this, "fail to write info", e);
 		}
+		
 	}
 
+	/** TODO
+	 * info file 읽어서 필요 데이터(rank, overview, history, playcount) 설정
+	 * @param file info file
+	 */
+	public void setInfoFile(File file) {
+		this.infoFile = file;
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			info = mapper.readValue(infoFile, Info.class);
+			rank = info.getRank();
+			playCount = info.getPlayCount();
+			overview = info.getOverview();
+
+			if (!this.opus.equalsIgnoreCase(info.getOpus())) 
+				throw new VideoException(this, "invalid info file. " + this.opus + " != " + opus);
+
+		} catch (IOException e) {
+			info = new Info(opus);
+			rank = 0;
+			playCount = 0;
+			overview = "";
+		}
+		
+	}
+
+	public void setTags(List<Tag> newTags) {
+		info.setTags(newTags);
+		saveInfo();
+	}
+	
+	public List<Tag> getTags() {
+		return info.getTags();
+	}
+	
+	public Info getInfo() {
+		return info;
+	}
 	/**
 	 * overview 내용 저장
 	 * @param overViewText
@@ -718,37 +759,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public void setEtcInfo(String etcInfo) {
 		this.etcInfo = etcInfo;
-	}
-
-	/**
-	 * info file. 파일 분석해서 필요 데이터(rank, overview, history, playcount) 설정
-	 * @param file info file
-	 */
-	public void setInfoFile(File file) {
-		this.infoFile = file;
-		
-		Map<String, Map<String, String>> rootMap = new HashMap<>();
-		try {
-			infoText = FileUtils.readFileToString(infoFile, VIDEO.FILE_ENCODING);
-			if (StringUtils.isEmpty(infoText))
-				return;
-			ObjectMapper mapper = new ObjectMapper();
-			rootMap = mapper.readValue(infoText, new TypeReference<Map<String, Map<String, String>>>() {});
-		} catch (IOException e) {
-			throw new VideoException(this, "Info file read fail", e);
-		}
-		
-		Map<String, String> map = rootMap.get("info");
-		String opus = map.get("opus");
-		if (!this.opus.equalsIgnoreCase(opus)) 
-			throw new VideoException(this, "invalid info file. " + this.opus + " != " + opus);
-		rank = Integer.parseInt(map.get("rank"));
-		playCount = Integer.parseInt(map.get("playCount"));
-		overview = map.get("overview");
-	}
-
-	public String getInfoText() {
-		return infoText;
 	}
 	
 	/**

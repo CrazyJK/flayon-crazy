@@ -29,6 +29,7 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.dao.VideoDao;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
@@ -40,6 +41,7 @@ import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
@@ -59,6 +61,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	/** video dao */
 	@Autowired VideoDao videoDao;
 	@Autowired HistoryService historyService;
+	@Autowired TagDao tagDao;
 
 	@Override
 	public void removeVideo(String opus) {
@@ -410,7 +413,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(yyyyMM, videoList);
 			}
 		}
-		log.debug("video group by date - {}", map);
+//		log.debug("video group by date - {}", map);
 		return map;
 	}
 
@@ -1143,6 +1146,26 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		Actress actress = videoDao.getActress(actressName);
 		actress.setFavorite(favorite);
 		videoDao.reload();
+	}
+
+	@Override
+	public List<Tag> getTagList() {
+		return tagDao.findAll();
+	}
+
+	@Override
+	public void updateTag(Tag tag) {
+		tagDao.merge(tag);
+	}
+
+	@Override
+	public void deleteTag(Tag tag) {
+		tagDao.remove(tag);
+	}
+
+	@Override
+	public void createTag(Tag tag) {
+		tagDao.persist(tag);
 	}
 
 }

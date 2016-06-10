@@ -12,6 +12,7 @@ import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 
 /**
  * Video Service Interface
@@ -284,5 +285,13 @@ public interface VideoService {
 	void arrangeSubFolder();
 
 	void setFavoriteOfActress(String actressName, Boolean favorite);
+
+	List<Tag> getTagList();
+
+	void updateTag(Tag tag);
+
+	void deleteTag(Tag tag);
+
+	void createTag(Tag tag);
 	
 }

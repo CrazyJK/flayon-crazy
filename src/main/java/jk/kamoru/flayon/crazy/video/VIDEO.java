@@ -31,4 +31,6 @@ public interface VIDEO extends CRAZY {
 
 	public static final String DATE_TIME_PATTERN = DATE_PATTERN + " " + TIME_PATTERN;
 
+	public static final String TAG_DATA_FILENAME = "tag.data";
+
 }
