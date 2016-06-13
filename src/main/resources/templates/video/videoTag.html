@@ -111,11 +111,11 @@
 		th:alt-title="|${video.fullname} ${tooltip} ${video.score}|" 
 		th:text="${mode} eq 's' ? 'O' : ${video.opus}">video.opus</span>
 
-<span th:if="${view} eq 'tags'">
+<th:block th:if="${view} eq 'tags'">
 	<span th:each="tag : ${video.tags}" 
 		th:class="${cssClass} + ' ' + (${mode} eq 's'? 'label-info')"
 		th:text="${tag.name}"></span>
-</span>
+</th:block>
 
 </th:block>
 </body>

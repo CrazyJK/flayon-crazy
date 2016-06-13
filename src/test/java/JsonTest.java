@@ -23,14 +23,14 @@ public class JsonTest {
 
 	ObjectMapper mapper = new ObjectMapper();
 
-	File backPath = new File("C:\\_info.back");
+	File backPath = new File("/Users/kamoru/Downloads");
 
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) throws Exception {
 		JsonTest test = new JsonTest();
 
-		Collection<File> listFiles = FileUtils.listFiles(new File("C:\\Crazy"), new String[]{"info"}, true);
+		Collection<File> listFiles = FileUtils.listFiles(new File("/Users/kamoru/Crazy"), new String[]{"info"}, true);
 		for (File file : listFiles) {
 			System.out.println(file);
 			test.transfer(file);

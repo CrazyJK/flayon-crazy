@@ -61,6 +61,10 @@ public class VideoSearch implements Serializable {
 	 * 검색조건 : 선택된 배우
 	 */
 	List<String> selectedActress;
+	/**
+	 * 검색조건 : 선택된 Tag
+	 */
+	List<String> selectedTag;
 
 	/**
 	 * 스튜디오 화면 볼지 여부
@@ -70,6 +74,10 @@ public class VideoSearch implements Serializable {
 	 * 여배우 화면 볼지 여부
 	 */
 	boolean viewActressDiv = false;
+	/**
+	 * Tag 화면 볼지 여부
+	 */
+	boolean viewTagDiv = false;
 
 	/* Not use
 	boolean neverPlay = false;

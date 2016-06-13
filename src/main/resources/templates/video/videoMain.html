@@ -87,6 +87,10 @@ function fnViewBGImage() {
 			<input type="checkbox" th:field="*{viewActressDiv}" class="sr-only"/>
 			<span class="label label-default" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>
 		</label>
+		<label th:title="#{video.viewTagPanel}">
+			<input type="checkbox" th:field="*{viewTagDiv}" class="sr-only"/>
+			<span class="label label-default" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
+		</label>
 		
 		<button class="btn btn-xs btn-default" onclick="fnRandomPlay()" th:title="#{video.random-play.title}" th:text="#{video.random-play}"></button>
 
@@ -104,6 +108,16 @@ function fnViewBGImage() {
 			<li><span class="badge" onclick="fnUnchecked(this)" th:text="${#lists.size(actressList)}"></span></li>
 			<li th:each="actress : ${actressList}">
 				<span th:replace="video/actressTag :: tag (${actress}, 'label')"></span>
+			</li>
+		</ul>
+		<ul id="tagDiv" class="box list-inline" th:style="'display:' + (*{viewTagDiv} ? '' : 'none')">
+			<li><span class="badge" onclick="fnUnchecked(this)" th:text="${#lists.size(tagList)}"></span></li>
+			<li th:each="tag : ${tagList}">
+				<label class="item" th:title="${tag.description}">
+					<input type="checkbox" th:field="*{selectedTag}" th:value="${tag.name}" class="sr-only"/>
+					<span th:class="'label label-default'" 
+						th:id="'checkbox-' + ${#ids.prev('selectedTag')}" th:text="|${tag.name}|">name</span>
+				</label>
 			</li>
 		</ul>
 	</div>

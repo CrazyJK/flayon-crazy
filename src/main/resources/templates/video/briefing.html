@@ -401,7 +401,9 @@ function reloadVideo() {
 							<span class="label label-plain" th:text="${tag.name}" th:title="${tag.description}"></span>
 						</th:block>
 						<form action="/video/tag" method="post">
-							<input name="name" placeholder="name"/><input name="description" placeholder="Description"/>
+							<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
+							<input name="name" placeholder="name"/>
+							<input name="description" placeholder="Description"/>
 							<button type="submit">Regist</button>
 						</form>
 					</td>

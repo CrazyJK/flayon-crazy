@@ -31,7 +31,10 @@
 
 	<ul class="nav nav-tabs">
 	    <li th:each="item : ${tistoryItemList}" th:class="${itemStat.first}? 'active'">
-	    	<a data-toggle="tab" th:href="'#item' + ${itemStat.count}" th:text="${item.title}">title</a>
+	    	<a data-toggle="tab" th:href="'#item' + ${itemStat.count}">
+	    		<span th:text="${item.title}">title</span>
+		    	<i class="badge" th:text="${item.titles.size()}">size</i>
+	    	</a>
 	    </li>
 	</ul>
 

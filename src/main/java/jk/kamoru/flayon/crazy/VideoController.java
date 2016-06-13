@@ -425,6 +425,8 @@ public class VideoController extends AbstractController {
 //		model.addAttribute("actressList", 	videoService.getActressList());
 //		model.addAttribute("studioList", 	videoService.getStudioList());
 		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
+		model.addAttribute(videoService.getTagList());
+
 		logger.debug("videoMain END");
 
 		return "video/videoMain";

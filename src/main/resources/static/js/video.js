@@ -35,6 +35,10 @@ function fnActressDivToggle() {
 	$("#actressDiv").toggle();
 	resizeDivHeight();
 }
+function fnTagDivToggle() {
+	$("#tagDiv").toggle();
+	resizeDivHeight();
+}
 function fnSearch(txt) {
 	if(txt)
 		$("#searchText").val(txt);
