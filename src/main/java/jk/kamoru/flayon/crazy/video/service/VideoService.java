@@ -12,6 +12,7 @@ import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.domain.rss.TistoryItem;
 import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 
 /**
@@ -293,5 +294,7 @@ public interface VideoService {
 	void deleteTag(Tag tag);
 
 	void createTag(Tag tag);
+
+	List<TistoryItem> getTistoryItem();
 	
 }

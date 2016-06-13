@@ -102,7 +102,7 @@ function reloadVideo() {
 		<li><a data-toggle="tab" href="#video"><span th:text="#{video.video}"></span> <span class="badge" th:text="${#lists.size(videoList)}"></span></a></li>
 		<li><a data-toggle="tab" href="#studio"><span th:text="#{video.studio}"></span> <span class="badge" th:text="${#lists.size(studioList)}"></span></a></li>
 		<li><a data-toggle="tab" href="#actress"><span th:text="#{video.actress}"></span> <span class="badge" th:text="${#lists.size(actressList)}"></span></a></li>
-		<li><a data-toggle="tab" href="#tags"><span th:text="#{video.tags}"></span> <span class="badge" th:text="${#lists.size(tagList)}"></span></a></li>
+		<li><a data-toggle="tab" href="#tags"><span th:text="#{video.tags}"></span> <span class="badge" th:text="${tagList.size()}"></span></a></li>
   	</ul>
 
 	<div class="tab-content">

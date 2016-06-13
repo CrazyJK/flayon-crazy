@@ -660,4 +660,9 @@ public class VideoController extends AbstractController {
 		videoService.createTag(tag);
 	}
 	
+	@RequestMapping("/gravia")
+	public String graviainterview(Model model) {
+		model.addAttribute(videoService.getTistoryItem());
+		return "video/graviainterview";
+	}
 }

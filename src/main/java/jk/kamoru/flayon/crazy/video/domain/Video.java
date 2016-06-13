@@ -33,9 +33,6 @@ import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * AV Bean class<br>

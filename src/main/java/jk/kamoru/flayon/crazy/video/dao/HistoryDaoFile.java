@@ -62,7 +62,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	private synchronized void loadHistory() throws IOException, ParseException {
 		historyList = new ArrayList<History>();
 
-		List<String> lines = FileUtils.readLines(getHistoryFile(), VIDEO.FILE_ENCODING);
+		List<String> lines = FileUtils.readLines(getHistoryFile(), VIDEO.ENCODING);
 		log.debug("reading file size = {}", lines.size());
 
 		for (String line : lines) {
@@ -94,7 +94,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	}
 	
 	private void saveHistory(History history) throws IOException {
-		FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VIDEO.FILE_ENCODING, true);
+		FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VIDEO.ENCODING, true);
 		isHistoryChanged = true;
 	}
 

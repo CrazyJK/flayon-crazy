@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout/crazy">
+<head>
+<meta charset="UTF-8"></meta>
+<title>Source RSS</title>
+<style type="text/css">
+</style>
+<script type="text/javascript" th:src="@{/js/zeroclipboard/ZeroClipboard.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+/*]]>*/
+</script>
+</head>
+<body>
+<div class="container-fluid" role="main" data-layout-fragment="content">
+
+<form method="post" onsubmit="loading(true, 'Parsing...')">
+
+<div id="header_div" class="box form-inline">
+	<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
+	<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();" th:text="|Parse(${tistoryItemList.size()})|">Parse(length(titleList))</a>	
+	<input type="search" id="query" class="form-control input-sm" th:placeholder="|#{video.opus} #{video.actress} #{video.torrent}|"/>
+	<div class="btn-group">
+		<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    th:alt-title="#{video.find-info.opus}" th:text="#{video.opus}">video.opus</a>
+		<a class="btn btn-xs btn-default" onclick="fnSearchActress()" th:alt-title="#{video.find-info.actress}" th:text="#{video.actress}">video.actress</a>
+		<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" th:alt-title="#{video.find-info.torrent}" th:text="#{video.torrent}">video.torrent</a>
+	</div>
+</div>
+
+<div id="content_div" class="box" style="overflow:auto;">
+
+	<ul class="nav nav-tabs">
+	    <li th:each="item : ${tistoryItemList}" th:class="${itemStat.first}? 'active'">
+	    	<a data-toggle="tab" th:href="'#item' + ${itemStat.count}" th:text="${item.title}">title</a>
+	    </li>
+	</ul>
+
+	<div class="tab-content">
+		<section th:each="item : ${tistoryItemList}" th:id="'item' + ${itemStat.count}" class="tab-pane fade" th:classappend="${itemStat.first}? 'in active'">
+			<table class="table table-condensed table-hover table-bordered">
+				<tr th:each="title : ${item.titles}" th:title="${title.rowData}">
+					<td class="text-right" width="10px">
+						<span th:text="${titleStat.count}">count</span>
+						<code th:if="${title.check}" th:text="${title.checkDescShort}">title.checkDescShort</code>
+					</td>
+					<td>
+						<textarea class="form-control input-sm" th:utext="${title.rowData}"></textarea>
+						<input class="form-control input-sm" th:value="${title}"/>
+					</td>
+				</tr>
+			</table>
+		</section>
+	</div>
+	
+</div>
+
+</form>
+
+</div>
+</body>
+</html>

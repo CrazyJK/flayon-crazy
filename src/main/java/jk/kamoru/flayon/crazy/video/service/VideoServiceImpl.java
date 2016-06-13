@@ -41,7 +41,9 @@ import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.domain.rss.TistoryItem;
 import jk.kamoru.flayon.crazy.video.domain.video.Tag;
+import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
@@ -1166,6 +1168,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void createTag(Tag tag) {
 		tagDao.persist(tag);
+	}
+
+	@Override
+	public List<TistoryItem> getTistoryItem() {
+		return TistoryRSSReader.get(rssUrl);
 	}
 
 }

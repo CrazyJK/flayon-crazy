@@ -23,14 +23,14 @@ public class JsonTest {
 
 	ObjectMapper mapper = new ObjectMapper();
 
-	File backPath = new File("/home/kamoru/utilities/sts-bundle/info.back/");
+	File backPath = new File("C:\\_info.back");
 
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) throws Exception {
 		JsonTest test = new JsonTest();
 
-		Collection<File> listFiles = FileUtils.listFiles(new File("/home/kamoru/utilities/sts-bundle/crazy"), new String[]{"info"}, true);
+		Collection<File> listFiles = FileUtils.listFiles(new File("C:\\Crazy"), new String[]{"info"}, true);
 		for (File file : listFiles) {
 			System.out.println(file);
 			test.transfer(file);
@@ -39,7 +39,7 @@ public class JsonTest {
 
 	void transfer(File file) throws Exception {
 		// read / check original
-		String infoText = FileUtils.readFileToString(file, VIDEO.FILE_ENCODING);
+		String infoText = FileUtils.readFileToString(file, VIDEO.ENCODING);
 		if (StringUtils.isEmpty(infoText))
 			return;
 
