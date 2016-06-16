@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.domain.video;
+package jk.kamoru.flayon.crazy.video.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +17,9 @@ public class Info {
 	Integer rank;
 	String overview;
 	Date lastAccess;
-	List<Tag> tags;
+	List<VTag> tags;
 	
 	public Info(String opus) {
-		this(opus, 0, 0, "", new Date(), new ArrayList<Tag>());
+		this(opus, 0, 0, "", new Date(), new ArrayList<VTag>());
 	}
 }

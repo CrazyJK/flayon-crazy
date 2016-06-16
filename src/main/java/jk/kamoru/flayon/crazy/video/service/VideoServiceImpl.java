@@ -38,11 +38,11 @@ import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
+import jk.kamoru.flayon.crazy.video.domain.TistoryItem;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
-import jk.kamoru.flayon.crazy.video.domain.rss.TistoryItem;
-import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
@@ -405,7 +405,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		log.trace("groupByDate");
 		Map<String, List<Video>> map = new TreeMap<String, List<Video>>();
 		for (Video video : videoDao.getVideoList()) {
-			String yyyyMM = StringUtils.substringBeforeLast(video.getVideoDate(), "-");
+			String yyyyMM = StringUtils.substringBeforeLast(video.getReleaseDate(), ".").replace(".", "-");
 			if (map.containsKey(yyyyMM)) {
 				map.get(yyyyMM).add(video);
 			}
@@ -434,7 +434,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(rank, videoList);
 			}
 		}
-		log.debug("video group by rank - {}", map);
+//		log.debug("video group by rank - {}", map);
 		return map;
 	}
 
@@ -453,7 +453,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(play, videoList);
 			}
 		}
-		log.debug("video group by play - {}", map);
+//		log.debug("video group by play - {}", map);
 		return map;
 	}
 
@@ -831,7 +831,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(score, videoList);
 			}
 		}
-		log.debug("video group by score - {}", map);
+//		log.debug("video group by score - {}", map);
 		return map;
 	}
 
@@ -1030,7 +1030,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(length, videoList);
 			}
 		}
-		log.debug("video group by length - {}", map);
+//		log.debug("video group by length - {}", map);
 		return map;
 	}
 
@@ -1050,7 +1050,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(ext, videoList);
 			}
 		}
-		log.debug("video group by extension - {}", map);
+//		log.debug("video group by extension - {}", map);
 		return map;
 	}
 
@@ -1151,22 +1151,22 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public List<Tag> getTagList() {
+	public List<VTag> getTagList() {
 		return tagDao.findAll();
 	}
 
 	@Override
-	public void updateTag(Tag tag) {
+	public void updateTag(VTag tag) {
 		tagDao.merge(tag);
 	}
 
 	@Override
-	public void deleteTag(Tag tag) {
+	public void deleteTag(VTag tag) {
 		tagDao.remove(tag);
 	}
 
 	@Override
-	public void createTag(Tag tag) {
+	public void createTag(VTag tag) {
 		tagDao.persist(tag);
 	}
 

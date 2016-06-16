@@ -33,10 +33,10 @@ import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
-import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
@@ -660,17 +660,17 @@ public class VideoController extends AbstractController {
 	
 	@RequestMapping(value="/tag", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateTag(@ModelAttribute Tag tag) {
+	public void updateTag(@ModelAttribute VTag tag) {
 		videoService.updateTag(tag);
 	}
 	@RequestMapping(value="/tag", method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteTag(@ModelAttribute Tag tag) {
+	public void deleteTag(@ModelAttribute VTag tag) {
 		videoService.deleteTag(tag);
 	}
 	@RequestMapping(value="/tag", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveTag(@ModelAttribute Tag tag) {
+	public void saveTag(@ModelAttribute VTag tag) {
 		videoService.createTag(tag);
 	}
 	

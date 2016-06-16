@@ -28,8 +28,6 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
-import jk.kamoru.flayon.crazy.video.domain.video.Info;
-import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
@@ -688,12 +686,12 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		
 	}
 
-	public void setTags(List<Tag> newTags) {
+	public void setTags(List<VTag> newTags) {
 		info.setTags(newTags);
 		saveInfo();
 	}
 	
-	public List<Tag> getTags() {
+	public List<VTag> getTags() {
 		return info.getTags();
 	}
 	

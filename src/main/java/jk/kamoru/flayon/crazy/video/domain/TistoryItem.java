@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.domain.rss;
+package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -29,7 +29,7 @@ public class TistoryItem implements Serializable {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	private static final String TITLE_SEPARATOR = "  ";
+//	private static final String TITLE_SEPARATOR = "  ";
 	
 	public static final SimpleDateFormat tistoryDateFormat = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
@@ -199,7 +199,7 @@ public class TistoryItem implements Serializable {
 		}
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String text = "eyon-065 &nbsp;Natsuko Mishima&nbsp;&nbsp;2016.06.13";
 		System.out.println(StringUtils.containsIgnoreCase(text, TITLE_SEPARATOR));
 		String[] strings = StringUtils.splitByWholeSeparator(text, TITLE_SEPARATOR);
@@ -212,5 +212,5 @@ public class TistoryItem implements Serializable {
 		for (String str : strings) {
 			System.out.println(str);
 		}
-	}
+	}*/
 }

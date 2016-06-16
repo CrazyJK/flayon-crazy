@@ -153,7 +153,6 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private void loadInfo() {
 		if (!loaded) {
 			File file = getInfoFile();
-			log.trace("loadInfo() name={} file={}", name, file);
 			if (file.isFile()) {
 				info = Utils.readFileToMap(file);
 				if (info == null)

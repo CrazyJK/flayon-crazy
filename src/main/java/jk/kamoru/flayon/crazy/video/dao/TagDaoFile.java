@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.crazy.video.domain.video.Tag;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import lombok.extern.slf4j.Slf4j;
 
 // TODO file dao implementation
@@ -29,7 +29,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	
 	private Path tagDataPath;
 	
-	private List<Tag> tags;
+	private List<VTag> tags;
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -44,7 +44,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 				log.info("file is not exist. just make it");
 			}
 			else {
-				tags = mapper.readValue(tagDataPath.toFile(), new TypeReference<List<Tag>>() {});
+				tags = mapper.readValue(tagDataPath.toFile(), new TypeReference<List<VTag>>() {});
 				log.info("found tags {}", tags.size());
 			}
 		} catch (IOException e) {
@@ -56,14 +56,14 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	private Integer findMaxId() {
 		int[] array = new int[tags.size()];
 		int i = 0;
-		for (Tag tag : tags) {
+		for (VTag tag : tags) {
 			array[i++] = tag.getId();
 		}
 		return (int)NumberUtils.max(array);
 	}
 	
 	@Override
-	public Tag persist(Tag tag) {
+	public VTag persist(VTag tag) {
 		tag.setId(findMaxId() + 1);
 		tags.add(tag);
 		try {
@@ -75,8 +75,8 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	}
 
 	@Override
-	public Tag findById(Integer id) throws CrazyException {
-		for (Tag tag : tags) {
+	public VTag findById(Integer id) throws CrazyException {
+		for (VTag tag : tags) {
 			if (tag.getId() == id)
 				return tag;
 		}
@@ -84,8 +84,8 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	}
 
 	@Override
-	public Tag findByName(String name) throws CrazyException {
-		for (Tag tag : tags) {
+	public VTag findByName(String name) throws CrazyException {
+		for (VTag tag : tags) {
 			if (StringUtils.equals(tag.getName(), name))
 				return tag;
 		}
@@ -93,9 +93,9 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	}
 
 	@Override
-	public List<Tag> findByDesc(String desc) {
-		List<Tag> found = new ArrayList<>();
-		for (Tag tag : tags) {
+	public List<VTag> findByDesc(String desc) {
+		List<VTag> found = new ArrayList<>();
+		for (VTag tag : tags) {
 			if (StringUtils.containsIgnoreCase(tag.getDescription(), desc))
 				found.add(tag);
 		}
@@ -103,13 +103,13 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	}
 
 	@Override
-	public List<Tag> findAll() {
+	public List<VTag> findAll() {
 		return tags;
 	}
 
 	@Override
-	public void merge(Tag updateTag) {
-		for (Tag tag : tags) {
+	public void merge(VTag updateTag) {
+		for (VTag tag : tags) {
 			if (tag.getId() == updateTag.getId()) {
 				
 // TODO				tag.update(updateTag);
@@ -119,7 +119,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	}
 
 	@Override
-	public void remove(Tag tag) {
+	public void remove(VTag tag) {
 		// TODO
 		
 		

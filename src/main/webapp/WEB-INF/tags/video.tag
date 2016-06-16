@@ -81,9 +81,9 @@
 	} else if (view.equalsIgnoreCase("title")) {
 %>
 	<%	if (!"s".equals(mode)) { %>		
-	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
+	<span class="${cssClass} nowrap" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 	<%	} else { %>
-	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${fn:substring(video.title, 0, 22)}</span>	
+	<span class="${cssClass} nowrap" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${fn:substring(video.title, 0, 22)}</span>	
 	<%	} %>	
 <%
 	} else if (view.equalsIgnoreCase("score")) {

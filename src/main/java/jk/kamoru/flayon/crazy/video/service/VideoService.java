@@ -9,11 +9,11 @@ import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
+import jk.kamoru.flayon.crazy.video.domain.TistoryItem;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
-import jk.kamoru.flayon.crazy.video.domain.rss.TistoryItem;
-import jk.kamoru.flayon.crazy.video.domain.video.Tag;
 
 /**
  * Video Service Interface
@@ -287,13 +287,13 @@ public interface VideoService {
 
 	void setFavoriteOfActress(String actressName, Boolean favorite);
 
-	List<Tag> getTagList();
+	List<VTag> getTagList();
 
-	void updateTag(Tag tag);
+	void updateTag(VTag tag);
 
-	void deleteTag(Tag tag);
+	void deleteTag(VTag tag);
 
-	void createTag(Tag tag);
+	void createTag(VTag tag);
 
 	List<TistoryItem> getTistoryItem();
 	

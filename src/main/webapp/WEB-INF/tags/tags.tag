@@ -4,7 +4,7 @@
 <%@ taglib prefix="s"    uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri='http://www.springframework.org/tags/form'%>
 
-<%@ attribute name="tag" required="true" type="jk.kamoru.flayon.crazy.video.domain.video.Tag"%>
+<%@ attribute name="tag"    required="true" type="jk.kamoru.flayon.crazy.video.domain.VTag"%>
 <%@ attribute name="view"   required="true"%>
 <%@ attribute name="count"  required="false"%>
 
