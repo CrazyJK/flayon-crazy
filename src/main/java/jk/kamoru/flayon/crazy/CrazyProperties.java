@@ -43,4 +43,9 @@ public class CrazyProperties {
 	/** 자막 배점 */ 							@Value("${score.ratio.subtitles}")		protected int 		SUBTITLES_RATIO;
 	
 	/** 새 비디오 구독 RSS url */ @Value("${url.rss}") protected URL rssUrl;
+	
+	@Value("${url.search.video}") 	protected String urlSearchVideo;
+	@Value("${url.search.actress}") protected String urlSearchActress;
+	@Value("${url.search.torrent}") protected String urlSearchTorrent;
+
 }

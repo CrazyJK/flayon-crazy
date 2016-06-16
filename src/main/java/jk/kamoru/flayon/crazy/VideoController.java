@@ -73,6 +73,18 @@ public class VideoController extends AbstractController {
 		return videoService.maxRank();
 	}
 
+	@ModelAttribute("playRatio")		public int playRatio() { return PLAY_RATIO; }
+	@ModelAttribute("rankRatio")		public int rankRatio() { return RANK_RATIO; }
+	@ModelAttribute("actressRatio")		public int actressRatio() { return ACTRESS_RATIO; }
+	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return SUBTITLES_RATIO; }
+
+	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return urlSearchVideo; }
+	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return urlSearchActress; }
+	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return urlSearchTorrent; }
+	
+	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return MAX_ENTIRE_VIDEO; }
+	
+	
 	/**display actress list view
 	 * @param model
 	 * @param sort default NAME if {@code null}

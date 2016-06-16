@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+
+<footer class="footer">
+	<div class="container">
+  		<span class="text-muted">kAmOrU. All rights reserved. <a target="_blank" href="http://ko.wikipedia.org/wiki/%ED%95%9C%EB%9F%89"><s:message code="home.i.want"/></a></span>
+  		
+ 		<section style="float:right; font-size:10px; margin-top: 7px;">
+			<form name="langChange">
+				<span><%=lang%></span>
+				<select name="lang" onchange="document.forms['langChange'].submit();">
+					<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="default.korean"/></option>
+					<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="default.english"/></option>
+					<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="default.japanese"/></option>
+				</select>
+			</form>
+		</section>
+ 		
+	</div>
+</footer>

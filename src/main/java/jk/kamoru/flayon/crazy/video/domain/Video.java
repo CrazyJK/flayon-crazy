@@ -342,10 +342,10 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return info
 	 */
 	public File getInfoFile() {
-		if(this.infoFile == null) {
-			this.infoFile = new File(this.getDelegatePath(), this.getDelegateFilenameWithoutSuffix() + "." + VIDEO.EXT_INFO);
+		if(infoFile == null) {
+			infoFile = new File(this.getDelegatePath(), this.getDelegateFilenameWithoutSuffix() + "." + VIDEO.EXT_INFO);
 			try {
-				this.infoFile.createNewFile();
+				infoFile.createNewFile();
 			} catch (IOException e) {
 				logger.error("fail to create info file", e);
 			}
@@ -654,7 +654,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		info.setLastAccess(new Date());
 
 		try {
-			mapper.writeValue(infoFile, info);
+			mapper.writeValue(getInfoFile(), info);
 		} catch (IOException e) {
 			throw new VideoException(this, "fail to write info", e);
 		}

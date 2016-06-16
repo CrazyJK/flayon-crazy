@@ -1,7 +1,6 @@
 @CHARSET "UTF-8";
 body {
-	margin: 5px 0 0;
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0);
 }
 [onclick], [ng-click] {
 	cursor: pointer;

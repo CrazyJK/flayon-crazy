@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jk.kamoru.flayon.crazy.image.service.ImageService;
 
-public abstract class AbstractController {
+public abstract class AbstractController extends CrazyProperties {
 
 	@Autowired private ImageService imageService;
 

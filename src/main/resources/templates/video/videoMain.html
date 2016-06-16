@@ -191,6 +191,13 @@ function fnViewBGImage() {
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'subtitles', 'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'overview',  'l', '')"></span></dd>
 						<dd><span th:replace="video/videoTag :: tag (${video}, 'tags',      'l', '')"></span></dd>
+						<dd>
+							<label th:each="tag : ${tagList}" class="item" th:title="${tag.description}">
+								<input type="checkbox" th:value="${tag.name}" class="sr-only"/>
+								<span th:class="'label label-default'" 
+									th:text="${tag.name}">name</span>
+							</label>
+						</dd>
 					</dl>
 				</div>
 			</div>
