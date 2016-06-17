@@ -18,6 +18,10 @@ function fnPutStudioInfo() {
 	var actressForm = document.forms['studioForm'];
 	actressForm.action = "<s:url value="/video/studio/${studio.name}"/>";
 	actressForm.submit();
+	if (opener) {
+		if (opener.location.href.indexOf("video/studio") > -1) 
+			opener.location.reload();
+	}
 }
 </script>
 </head>

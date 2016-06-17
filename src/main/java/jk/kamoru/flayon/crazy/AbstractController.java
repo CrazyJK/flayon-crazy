@@ -7,7 +7,7 @@ import jk.kamoru.flayon.crazy.image.service.ImageService;
 
 public abstract class AbstractController extends CrazyProperties {
 
-	@Autowired private ImageService imageService;
+	@Autowired protected ImageService imageService;
 
 	@ModelAttribute("bgImageCount")
 	public Integer bgImageCount() {

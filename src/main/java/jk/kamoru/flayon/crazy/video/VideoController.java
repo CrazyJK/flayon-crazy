@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.crazy.image.service.ImageService;
-import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.crazy.video.VideoBatch;
+import jk.kamoru.flayon.crazy.AbstractController;
+import jk.kamoru.flayon.crazy.CrazyException;
+import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.History;
@@ -52,7 +52,6 @@ public class VideoController extends AbstractController {
 
 	protected static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	
-	@Autowired private ImageService imageService;
 	@Autowired private VideoService videoService;
 	@Autowired private HistoryService historyService;
 	@Autowired private VideoBatch videoBatch;

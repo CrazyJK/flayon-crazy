@@ -145,7 +145,7 @@ function fnViewBGImage() {
 			<li id="opus-${video.opus}">
 				<div class="video-box">
 					<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt><jk:video video="${video}" view="title" mode="s"/></dt>
+						<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 						<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="s"/></dd>
 						<%-- <dd><jk:video video="${video}" view="actress" mode="s"/></dd> --%>
@@ -187,11 +187,9 @@ function fnViewBGImage() {
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">             
 					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt>
-							<jk:video video="${video}" view="title" mode="l"/>
-							<jk:video video="${video}" view="score" mode="l"/><br/>
-							<jk:video video="${video}" view="rank" mode="l"/>
-						</dt>
+						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
+						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
@@ -213,16 +211,14 @@ function fnViewBGImage() {
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">             
 					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt>
-							<jk:video video="${video}" view="title" mode="l"/>
-							<jk:video video="${video}" view="score" mode="l"/><br/>
-							<jk:video video="${video}" view="rank" mode="l"/>
-						</dt>
+						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
+						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="download" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="release" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="download" mode="l"/>
+						    <jk:video video="${video}" view="release" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="video" mode="l"/>
 							<jk:video video="${video}" view="cover" mode="l"/>
 							<jk:video video="${video}" view="subtitles" mode="l"/>

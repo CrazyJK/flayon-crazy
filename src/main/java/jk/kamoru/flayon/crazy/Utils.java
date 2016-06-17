@@ -304,10 +304,15 @@ public class Utils {
 		return itemCssClass;
 	}
 	
+	/**
+	 * trim한 문자 반환. 
+	 * @param str
+	 * @param def null이나 공백이면, default 문자 반환
+	 * @return
+	 */
 	public static String trimToDefault(String str, String def) {
-		if (StringUtils.trimToNull(str) == null)
-			return def;
-		return str.trim();
+		String _str = StringUtils.trimToNull(str);
+		return _str == null ? def : _str;
 	}
 	
 }

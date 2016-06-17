@@ -51,13 +51,13 @@ function toogleFavorite(dom) {
 
 	<div class="form-group">
 		<div class="col-sm-2 text-right">
-			<span id="favoriteTEXT" onclick="toogleFavorite()" class="label label-danger">${actress.favorite ? '★' : '☆'}</span>
+			<span id="favoriteTEXT" onclick="toogleFavorite()" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
 		</div>
 		<div class="col-sm-4">
 			<input class="form-control" type="text" name="newname"   value="${actress.name}"      id="newName" />
 		</div>
 		<div class="col-sm-4">
-			<input class="form-control" type="text" name="localname" value="${actress.localName}" />
+			<input class="form-control" type="text" name="localname" value="${actress.localName}" placeholder="local name"/>
 		</div>
 		<div class="col-sm-1">
 			<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
@@ -69,16 +69,16 @@ function toogleFavorite(dom) {
 	</div>
 	<div class="form-group">
 		<div class="col-sm-3">
-			<input class="form-control input-sm" type="text" name="birth"    value="${actress.birth}"    />
+			<input class="form-control input-sm" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
 		</div>
 		<div class="col-sm-3">
-			<input class="form-control input-sm" type="text" name="bodySize" value="${actress.bodySize}" />
+			<input class="form-control input-sm" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control input-sm" type="text" name="height"   value="${actress.height}"   />
+			<input class="form-control input-sm" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control input-sm" type="text" name="debut"    value="${actress.debut}"    />
+			<input class="form-control input-sm" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
 		</div>
 		<div class="col-sm-2">
 			<button class="btn btn-default btn-sm" onclick="fnSaveActressInfo()">Save</button>

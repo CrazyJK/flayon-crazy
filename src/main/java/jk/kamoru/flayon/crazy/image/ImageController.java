@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.crazy.image;
 
 import java.io.IOException;
 import java.util.Date;
@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import jk.kamoru.flayon.crazy.AbstractController;
 import jk.kamoru.flayon.crazy.image.domain.ImageType;
-import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +33,6 @@ public class ImageController extends AbstractController {
 	private static final String Cookie_LAST_IMAGE_INDEX = "lastImageNo";
 
 	private static final String Cookie_LAST_RANDOM_IMAGE_INDEX = "lastRandomImageNo";;
-
-	@Autowired
-	private ImageService imageService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewSlide() {

@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
@@ -36,7 +35,7 @@ public class FileBaseVideoSource implements VideoSource {
 
 	private final String UNKNOWN 			 = "_Unknown";
 	private final String unclassifiedStudio  = UNKNOWN;
-	private final String unclassifiedOpus 	 = UNKNOWN;
+//	private final String unclassifiedOpus 	 = UNKNOWN;
 
 	// data source
 	private Map<String, Video>     videoMap	= new HashMap<String, Video>();
@@ -106,7 +105,6 @@ public class FileBaseVideoSource implements VideoSource {
 		actressMap.clear();
 
 		// 3. domain create & data source   
-		int unclassifiedNo = 1;
 		for (File file : files) {
 			try {
 				String filename = file.getName();
@@ -115,72 +113,50 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				// 연속 스페이스 제거
 				name = StringUtils.normalizeSpace(name);
+				
 				// Unnecessary file exclusion
 				if (filename.equals(VIDEO.HISTORY_LOG) 
 						|| filename.equals(VIDEO.MAC_NETWORKSTORES)
 						|| filename.equals(VIDEO.WINDOW_DESKTOPINI)
 						|| ext.equals(VIDEO.EXT_ACTRESS) 
 						|| ext.equals(VIDEO.EXT_STUDIO) 
-						|| filename.equals(VIDEO.TAG_DATA_FILENAME))
+						|| filename.equals(VIDEO.TAG_DATA_FILENAME)) {
 					continue;
+				}
 				
 				// 1       2     3      4        5     6
 				// [studio][opus][title][actress][date]etc...
-				String[] names 		= StringUtils.split(name, "]");
-				String studioName  	= UNKNOWN;
-				String opus    		= UNKNOWN;
-				String title   		= filename;
-				String actressNames = UNKNOWN;
-				String releaseDate 	= "";
-				String etcInfo 		= "";
-				
-				switch (names.length) {
-				case 6:
-					etcInfo 	 = VideoUtils.removeUnnecessaryCharacter(names[5]);
-				case 5:
-					releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
-				case 4:
-					actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
-				case 3:
-					title 		 = VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
-				case 2:
-					opus 		 = VideoUtils.removeUnnecessaryCharacter(names[1], unclassifiedOpus);
-					studioName 	 = VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
-					break;
-				case 1:
-					studioName 	 = unclassifiedStudio;
-					opus 		 = unclassifiedOpus + unclassifiedNo++;
-					title 		 = filename;
-					actressNames = unclassifiedActress;
-					break;
-				default: // if names length is over 6
-					logger.debug("File [{}] [{}] [{}]", filename, names.length, ArrayUtils.toString(names));
-					studioName 	 = VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
-					opus 		 = VideoUtils.removeUnnecessaryCharacter(names[1], unclassifiedOpus);
-					title 		 = VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
-					actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
-					releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
-					for (int i=5, iEnd=names.length; i<iEnd; i++)
-						etcInfo = etcInfo + " " + VideoUtils.removeUnnecessaryCharacter(names[i]);
+				String[] names 		= StringUtils.split(name, "]", 6);
+				if (names == null || names.length < 5) {
+					logger.warn("Unclassified file {}", file.getAbsolutePath());
+					continue;
 				}
+
+				String studioName  	= VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
+				String opus    		= VideoUtils.removeUnnecessaryCharacter(names[1]);
+				String title   		= VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
+				String actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
+				String releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
+				String etcInfo 		= "";
+				if (names.length > 5)
+					etcInfo 	    = VideoUtils.removeUnnecessaryCharacter(names[5]);
 				
 				Video video = videoMap.get(opus.toLowerCase());
 				if (video == null) {
-					video = this.videoProvider.get();
+					video = videoProvider.get();
 					video.setOpus(opus.toUpperCase());
 					video.setTitle(title);
 					video.setReleaseDate(releaseDate);
 					video.setEtcInfo(etcInfo);
 					video.setArchive(isArchive);
 					videoMap.put(opus.toLowerCase(), video);
-					logger.trace("add video - {}", video);
 				}
 				// set video File
-				if (CRAZY.SUFFIX_VIDEO.contains(ext))
+				if (VIDEO.SUFFIX_VIDEO.contains(ext))
 					video.addVideoFile(file);
-				else if (CRAZY.SUFFIX_IMAGE.contains(ext))
+				else if (VIDEO.SUFFIX_IMAGE.contains(ext))
 					video.setCoverFile(file);
-				else if (CRAZY.SUFFIX_SUBTITLES.contains(ext))
+				else if (VIDEO.SUFFIX_SUBTITLES.contains(ext))
 					video.addSubtitlesFile(file);
 				else if (VIDEO.EXT_INFO.equalsIgnoreCase(ext))
 					video.setInfoFile(file);
@@ -189,12 +165,10 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				Studio studio = studioMap.get(studioName.toLowerCase());
 				if (studio == null) {
-					studio = this.studioProvider.get();
+					studio = studioProvider.get();
 					studio.setName(studioName);
 					studioMap.put(studioName.toLowerCase(), studio);
-					logger.trace("add studio - {}", studio);
 				}
-
 				// inject reference
 				studio.addVideo(video);
 				video.setStudio(studio);
@@ -206,7 +180,6 @@ public class FileBaseVideoSource implements VideoSource {
 						actress = actressProvider.get();
 						actress.setName(actressName.trim());
 						actressMap.put(forwardActressName, actress);
-						logger.trace("add actress - {}", actress);
 					}
 					// inject reference
 					actress.addVideo(video);
@@ -217,7 +190,7 @@ public class FileBaseVideoSource implements VideoSource {
 				}
 			}
 			catch (Exception e) {
-				logger.error("Error", e);
+				logger.error("File loading error", e);
 			}
 		}
 		logger.debug("    total loaded video {}", videoMap.size());
