@@ -123,7 +123,8 @@ public class VideoUtils {
 
 		str = str.trim();
 		str = str.startsWith("[") ? str.substring(1) : str;
-		return str.trim().length() == 0 ? defaultString : str.trim();
+		str = StringUtils.removeEnd(str, ".");
+		return str.length() == 0 ? defaultString : str;
 	}
 
 	/**

@@ -282,9 +282,11 @@ function searchContent(keyword) {
 }
 
 function fnUnchecked(obj) {
-	$(obj).parent().children().each(function() {
-		if ($(this).is("label")) {
-			$(this).children(':checked').parent().click();
+	$(obj).parent().children().children().children("input[type=checkbox]").each(function() {
+		console.log(this);
+		if ($(this).is(":checked")) {
+			$("#checkbox-" + $(this).attr("id")).click();
+//			$(this).children(':checked').parent().click();
 		}
 	});
 }
@@ -300,6 +302,20 @@ function fnReloadVideoSource() {
  */
 function fnMarkChoice(opus) {
 	$("#check-" + opus).addClass("mark");
+}
+
+function fnSetTag(dom, opus, tagname) {
+	if ($(dom).hasClass("label-default")) {
+		$(dom).removeClass("label-default");
+		$(dom).addClass("label-plain");
+	}
+	else {
+		$(dom).removeClass("label-plain");
+		$(dom).addClass("label-default");
+	}
+	var frm = document.forms["actionFrm"];
+	frm.action = context + "video/" + opus + "/tag/" + tagname;
+	frm.submit();
 }
 
 /**

@@ -79,6 +79,11 @@ public class VideoSearch implements Serializable {
 	 */
 	boolean viewTagDiv = false;
 
+	/**
+	 * 전체 배우,스튜디오 목록을 볼지 여부 
+	 */
+	boolean wholeActressStudioView = true;
+	
 	/* Not use
 	boolean neverPlay = false;
 	boolean oldVideo = false;

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,14 +24,15 @@ public class JsonTest {
 
 	ObjectMapper mapper = new ObjectMapper();
 
-	File backPath = new File("/Users/kamoru/Downloads");
+	File backPath = new File("C:\\_info.back");
 
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) throws Exception {
 		JsonTest test = new JsonTest();
+		String[] paths = {"D:\\Crazy", "E:\\Crazy"};
 
-		Collection<File> listFiles = FileUtils.listFiles(new File("/Users/kamoru/Crazy"), new String[]{"info"}, true);
+		Collection<File> listFiles = Utils.listFiles(paths, new String[]{"info"}, true);
 		for (File file : listFiles) {
 			System.out.println(file);
 			test.transfer(file);

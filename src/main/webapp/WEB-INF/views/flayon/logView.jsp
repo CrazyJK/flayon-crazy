@@ -32,7 +32,7 @@ input, textarea {
 </style>
 </head>
 <body>
-<div class="container" role="main" data-layout-fragment="content">
+<div class="container-fluid" role="main" data-layout-fragment="content">
 
 	<div class="page-header">
 		<h1>Log Viewer</h1>

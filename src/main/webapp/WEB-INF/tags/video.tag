@@ -8,6 +8,7 @@
 <%@ attribute name="view"    required="true"%>
 <%@ attribute name="mode"    required="false"%><%-- mode : s(Small), l(Large) --%>
 <%@ attribute name="tooltip" required="false"%><%-- tooltip test --%>
+<%@ attribute name="tagList" required="false" type="java.util.List<jk.kamoru.flayon.crazy.video.domain.VTag>" %>
 
 <c:set var="cssClass" value="label label-plain"/>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
@@ -117,11 +118,47 @@
 </span>
 <%
 	} else if (view.equalsIgnoreCase("tags")) {
+
+		if ("l".equals(mode)) {
+
+			for (jk.kamoru.flayon.crazy.video.domain.VTag tag : tagList) {
+				
+				if (video.getTags() == null || !video.getTags().contains(tag)) {
+					%>
+					<span class="label label-default" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getName()%>')"><%=tag.getName()%></span>
+					<%				
+				}
+				else {
+					%>
+					<span class="${cssClass}" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getName()%>')"><%=tag.getName()%></span>
+					<%				
+				}
+			}
+%>
+	<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle();">NEW</span>
+	<form action="/video/tag" method="post" role="form" class="form-inline" id="newTag-${video.opus}" style="margin-top: 5px; display:none;">
+		<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
+		<input type="hidden" name="opus" value="${video.opus}"/>
+		<input name="name" placeholder="name" class="form-control input-sm" required="required"/>
+		<input name="description" placeholder="Description" class="form-control input-sm" required="required"/>
+		<button class="btn btn-primary btn-sm" type="submit">Regist</button>
+	</form>
+<%
+		}
+		else {
+	
+
 %>
 <c:forEach items="${video.tags}" var="tag">
 	<span class="${cssClass}" title="${tag.description}" onclick="fnViewTagDetail('${tag.name}')">${tag.name}</span>
 </c:forEach>
+<%-- 
+<c:forEach items="${tagList}" var="tag">
+	<span class="${cssClass}" title="${tag.description}" onclick="fnViewTagDetail('${tag.name}')">${tag.name}</span>
+</c:forEach>
+ --%>
 <%
+		}
 	} else {
 %>
 ${view} is invalid argement

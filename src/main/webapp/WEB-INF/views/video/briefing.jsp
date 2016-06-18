@@ -11,11 +11,6 @@
 <head>
 <title><s:message code="video.briefing"/></title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
-<style type="text/css">
-.item:hover {
-	z-index: 3;
-}
-</style>
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -105,7 +100,7 @@ function reloadVideo() {
 		<li><a data-toggle="tab" href="#score"		><s:message code="video.video-by-score"/></a></li>
 		<li><a data-toggle="tab" href="#length"		><s:message code="video.video-by-length"/></a></li>
 		<li><a data-toggle="tab" href="#extension"	><s:message code="video.video-by-extension"/></a></li>
-		<li><a data-toggle="tab" href="#video"		><s:message code="video.video"/>   <span class="badge">${videoList.size()}</span></a></li>
+		<%-- <li><a data-toggle="tab" href="#video"		><s:message code="video.video"/>   <span class="badge">${videoList.size()}</span></a></li> --%>
 		<li><a data-toggle="tab" href="#studio"		><s:message code="video.studio"/>  <span class="badge">${studioList.size()}</span></a></li>
 		<li><a data-toggle="tab" href="#actress"	><s:message code="video.actress"/> <span class="badge">${actressList.size()}</span></a></li>
 		<li><a data-toggle="tab" href="#tags"		><s:message code="video.tags"/>    <span class="badge">${tagList.size()}</span></a></li>
@@ -387,7 +382,7 @@ function reloadVideo() {
 				</tbody>
 			</table>
 		</section>
-
+<%-- 
 		<section id="video" class="tab-pane fade">
 			<table class="table table-condensed table-bordered">
 				<tr>
@@ -399,7 +394,7 @@ function reloadVideo() {
 				</tr>
 			</table>
 		</section>
-
+ --%>
 		<section id="studio" class="tab-pane fade">
 			<table class="table table-condensed table-bordered">
 				<tr>
@@ -431,11 +426,15 @@ function reloadVideo() {
 						<c:forEach items="${tagList}" var="tag">
 							<jk:tags tag="${tag}" view="span"/>
 						</c:forEach>
-						<form action="/video/tag" method="post">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<form action="/video/tag" method="post" role="form" class="form-inline">
 							<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
-							<input name="name" placeholder="name"/>
-							<input name="description" placeholder="Description"/>
-							<button type="submit">Regist</button>
+							<input name="name" placeholder="name" class="form-control" required="required"/>
+							<input name="description" placeholder="Description" class="form-control" required="required"/>
+							<button class="btn btn-primary" type="submit">Regist</button>
 						</form>
 					</td>
 				</tr>

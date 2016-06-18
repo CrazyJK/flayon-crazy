@@ -192,24 +192,26 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		return getActressList(ActressSort.NAME, false);
 	}
 
+	/* 
+	 * videoList 안에 있는 배우만 추린다.
+	 */
 	@Override
 	public List<Actress> getActressListInVideoList(List<Video> videoList) {
-		log.trace("size : {}", videoList.size());
-		Map<String, Actress> actressMap = new TreeMap<String, Actress>();
+		if (log.isDebugEnabled())
+			log.debug("getActressListInVideoList video size {}", videoList.size());
+		
+		List<Actress> list = new ArrayList<>();
+
 		for(Video video : videoList) {
 			for (Actress actress : video.getActressList()) {
-				Actress actressInMap = actressMap.get(actress.getName());
-				if (actressInMap == null) {
-					actressInMap = videoDao.getActress(actress.getName());
-					actressInMap.emptyVideo();
-				}
-				actressInMap.addVideo(video);
-				actressMap.put(actress.getName(), actressInMap);
+				if (!list.contains(actress))
+					list.add(actress);
 			}
 		}
-		List<Actress> list = new ArrayList<Actress>(actressMap.values());
 		Collections.sort(list);
-		log.debug("found studio list size {}", list.size());
+
+		if (log.isDebugEnabled())
+			log.debug("getActressListInVideoList found studio size {}", list.size());
 		return list;
 	}
 
@@ -229,21 +231,20 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	
 	@Override
 	public List<Studio> getStudioListInVideoList(List<Video> videoList) {
-		log.trace("size : {}", videoList.size());
-		Map<String, Studio> studioMap = new TreeMap<String, Studio>();
+		if (log.isDebugEnabled())
+			log.trace("size : {}", videoList.size());
+		
+		List<Studio> list = new ArrayList<>();
+
 		for(Video video : videoList) {
-			String studioName = video.getStudio().getName();
-			Studio studio = studioMap.get(studioName);
-			if (studio == null) {
-				studio = videoDao.getStudio(studioName);
-				studio.emptyVideo();
-			}
-			studio.addVideo(video);
-			studioMap.put(studioName, studio);
+			Studio studio = video.getStudio();
+			if (!list.contains(studio))
+				list.add(studio);
 		}
-		List<Studio> list = new ArrayList<Studio>(studioMap.values());
 		Collections.sort(list);
-		log.debug("found studio list size {}", list.size());
+		
+		if (log.isDebugEnabled())
+			log.debug("found studio list size {}", list.size());
 		return list;
 	}
 
@@ -329,6 +330,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
 				&& (rankMatch(video.getRank(), search.getRankRange()))
 				&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
+				&& tagMatch(video, search.getSelectedTag())
 				) 
 			{
 				video.setSortMethod(search.getSortMethod());
@@ -344,6 +346,20 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		return foundList;
 	}
 	
+	private boolean tagMatch(Video video, List<String> selectedTag) {
+		if (log.isDebugEnabled() && video.getOpus().equals("CJOD-023"))
+			log.debug("tagMatch {} {}", video.getTags(), selectedTag);
+		if (selectedTag == null)
+			return true;
+		if (video.getTags() == null)
+			return false;
+		for (VTag tag : video.getTags()) {
+			if (selectedTag.contains(tag.getId().toString()))
+				return true;
+		}
+		return false;
+	}
+
 	/**compare play count. {@code true} if playCount2 is {@code null} or {@code -1}
 	 * @param playCount
 	 * @param playCount2
@@ -1115,9 +1131,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void arrangeSubFolder() {
-		log.debug("arrangeSubFolder START");
+		if (log.isDebugEnabled())
+			log.debug("arrangeSubFolder START");
 		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
-		List<File> folders = new ArrayList<File>();
+		
+		List<File> folders = new ArrayList<>();
 		folders.add(new File(ARCHIVE_PATHS));
 		for (String storage : STORAGE_PATHS)
 			folders.add(new File(storage));
@@ -1126,16 +1144,17 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			
 		for (File path : folders) {
 			File[] dirs = path.listFiles(new FileFilter() {
-
 				@Override
 				public boolean accept(File file) {
 					return file.isDirectory();
 				}});
-			log.debug("  scan {} - {}", path, dirs);
+			if (log.isDebugEnabled())
+				log.debug("arrangeSubFolder scan {} - {}", path, dirs);
+
 			for (File dir : dirs) {
-				log.debug("    check {}", dir);
 				if (Utils.isEmptyDirectory(dir)) {
-					log.debug("      attempt to delete {}", dir);
+					if (log.isDebugEnabled())
+						log.debug("arrangeSubFolder   attempt to delete {}", dir);
 					dir.delete();
 				}
 			}
@@ -1173,6 +1192,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public List<TistoryItem> getTistoryItem() {
 		return TistoryRSSReader.get(rssUrl);
+	}
+
+	@Override
+	public void toggleTag(String opus, String tagname) {
+		videoDao.getVideo(opus).toggleTag(tagname);
 	}
 
 }

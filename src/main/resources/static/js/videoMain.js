@@ -25,6 +25,7 @@ $(document).ready(function(){
 				$(this).addClass("label-default");
 				$(this).removeClass("label-success");
 			}
+			$(this).css("cursor", "pointer");
 		});
 	
 	// Add listener : implement radio element
@@ -79,30 +80,6 @@ $(document).ready(function(){
  			fnSearch();
  		}
  	});
- 	
- 	// init visible studioDiv 
-// 	if($("#viewStudioDiv1").is(":checked")) {
-// 		$("#studioDiv").css("display", "block");
-// 	} else {
-// 		$("#studioDiv").css("display", "none");
-// 	}
-
- 	// init visible actressDiv 
-// 	if($("#viewActressDiv1").is(":checked")) {
-// 		$("#actressDiv").css("display", "block");
-// 	} else {
-// 		$("#actressDiv").css("display", "none");
-// 	}
- 	
-	// set background image
-	/*
- 	setBackgroundImage();
-	setInterval(
-			function() {
-				setBackgroundImage();
-			}, 
-			60*1000);
-	 */
 	
 	// for slide view
 	if(listViewType == 'S' || listViewType == 'V') {
@@ -116,15 +93,15 @@ $(document).ready(function(){
 		        play: {active: true, interval:5000, auto: false},
 		        callback: {
 		        	loaded: function(number) {
-		        		debug("loaded callback : " + number);	 
+//		        		console.log("loaded callback : " + number);	 
 		        		rePagination();
 		        	},
 		        	start: function(number) {
-		        		debug("start callback : " + number);	        
+//		        		console.log("start callback : " + number);	        
 //		        		rePagination();
 		        	},
 		        	complete: function(number) {
-		        		//debug("complete callback : " + number);
+		        		//console.log("complete callback : " + number);
 		        		rePagination();
 		        	}
 		        }
@@ -133,6 +110,7 @@ $(document).ready(function(){
 		$(window).bind("mousewheel DOMMouseScroll", function(e) {
 			var delta = 0;
 			var event = window.event || e;
+//			console.log("mouse event ", event);
 			if (event.wheelDelta) {
 				delta = event.wheelDelta/120;
 				if (window.opera) delta = -delta;
@@ -141,6 +119,7 @@ $(document).ready(function(){
 				delta = -event.detail/3;
 			else
 				delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
+//			console.log("mouse delta ", delta);
 			if (delta) {
 				if (delta > 0) 
 					$(".slidesjs-previous").click(); //alert("마우스 휠 위로~");
@@ -150,7 +129,7 @@ $(document).ready(function(){
 		});
 		$(window).bind("keyup", function(e) {
 			var event = window.event || e;
-			//alert(event.keyCode);
+//			console.log("input key : ", event.keyCode);
 			switch(event.keyCode) {
 			case 37: // left
 			case 40: // down
@@ -158,9 +137,22 @@ $(document).ready(function(){
 			case 39: // right
 			case 38: // up
 				$(".slidesjs-next").click(); break;
-			case 32: // space
+//			case 32: // space
+			case 34: // PageDown key
 				fnRandomVideoView_Slide(); break;
 			case 13: // enter
+				break;
+			}
+		});
+		$(window).on("mousedown", function(event) {
+//			console.log("mousedown event ", event);
+			switch (event.which) {
+			case 1: // left click
+				break;
+			case 2: // middle click
+				fnRandomPlay();
+				break;
+			case 3: // right click
 				break;
 			}
 		});
@@ -198,7 +190,8 @@ $(document).ready(function(){
 			case 39: // right
 			case 38: // up
 				fnNextVideoView(); break;
-			case 32: // space
+//			case 32: // space
+			case 34: // PageDown key
 				fnRandomVideoView(); break;
 			case 13: // enter
 				break;

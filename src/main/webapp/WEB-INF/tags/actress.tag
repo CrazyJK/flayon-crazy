@@ -30,16 +30,17 @@
 	class="item <%=itemCssClass %>" 
 	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
 	<form:checkbox path="selectedActress" id="selectedActress${count}" value="${actress.name}" cssClass="sr-only"/>
-	<span class="label label-default" id="checkbox-selectedActress${count}">${actress.name}(${fn:length(actress.videoList)})</span>
+	<span class="label label-default box item" style="padding: 5px; margin: 5px;" 
+		id="checkbox-selectedActress${count}">${actress.name}(${fn:length(actress.videoList)})</span>
 </label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px;" data-toggle="tooltip"
+<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip"
 	onclick="fnViewActressDetail('${actress.name}')" 
 	class="item <%=itemCssClass %> box nowarp" 
 	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
-	${actress.name}(${fn:length(actress.videoList)})
+		${actress.name}(${fn:length(actress.videoList)})
 </span>
 <%
 	} else {

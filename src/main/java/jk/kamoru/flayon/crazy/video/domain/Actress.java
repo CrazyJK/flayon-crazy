@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
@@ -203,7 +204,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private void loadInfo() {
 		if (!loaded) {
 			if (log.isDebugEnabled())
-				log.debug("loadInfo : start {}", name);
+				log.debug("loadInfo : start [{}]", name);
 			File file = getInfoFile();
 			if (log.isDebugEnabled())
 				log.debug("loadInfo : file {}", file);
@@ -234,7 +235,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	}
 
 	private File getInfoFile() {
-		return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+		try {
+			return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+		} catch (NullPointerException e) {
+			throw new CrazyException("Why name=[" + name + "]", e);
+		}
 	}
 
 	private File getInfoFile(String name) {

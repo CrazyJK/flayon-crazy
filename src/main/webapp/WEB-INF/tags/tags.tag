@@ -26,16 +26,17 @@
 */
 	if (view.equalsIgnoreCase("label")) {
 %>
-<label 
+<label
 	class="item <%=itemCssClass %>" 
 	title="${tag.description}">
-	<form:checkbox path="selectedTag" id="selectedTag${count}" value="${tag.name}" cssClass="sr-only"/>
-	<span class="label label-default" id="checkbox-selectedTag${count}">${tag.name}</span>
+	<form:checkbox path="selectedTag" id="selectedTag${count}" value="${tag.id}" cssClass="sr-only"/>
+	<span style="padding: 5px; margin: 5px;" 
+		class="box label label-default" id="checkbox-selectedTag${count}">${tag.name}</span>
 </label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px;" data-toggle="tooltip"
+<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip"
 	onclick="fnViewTagDetail('${tag.name}')" 
 	class="item <%=itemCssClass %> box nowrap" 
 	title="${tag.description}">

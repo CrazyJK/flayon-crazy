@@ -180,6 +180,10 @@ public class FileBaseVideoSource implements VideoSource {
 						actress = actressProvider.get();
 						actress.setName(actressName.trim());
 						actressMap.put(forwardActressName, actress);
+						
+						if (actressName.trim().length() == 0) {
+							logger.error("Check file {}", file);
+						}
 					}
 					// inject reference
 					actress.addVideo(video);
@@ -195,6 +199,7 @@ public class FileBaseVideoSource implements VideoSource {
 		}
 		logger.debug("    total loaded video {}", videoMap.size());
 		loading = false;
+		logger.debug("load END");
 	}
 
 	@Override

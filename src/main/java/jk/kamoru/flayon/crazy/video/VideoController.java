@@ -162,7 +162,7 @@ public class VideoController extends AbstractController {
 		model.addAttribute(videoService.getVideoList());
 		logger.info("briefing videolist");
 
-		model.addAttribute(videoService.getTagList());
+		model.addAttribute("tagList", videoService.getTagList());
 		logger.info("briefing taglist");
 
 		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
@@ -369,6 +369,7 @@ public class VideoController extends AbstractController {
 		logger.info(opus);
 		Video video = videoService.getVideo(opus);
 		model.addAttribute(video);
+		model.addAttribute("tagList", videoService.getTagList());
 		if (video.isArchive())
 			return "video/videoDetailArchive";
 		else
@@ -416,9 +417,11 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping
 	public String videoMain(Model model, @ModelAttribute VideoSearch videoSearch) {
-		logger.debug("videoMain START : {}", videoSearch);
+		if (logger.isDebugEnabled())
+			logger.debug("videoMain START : {}", videoSearch);
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
-		logger.debug("/video search end");
+		if (logger.isDebugEnabled())
+			logger.debug("videoMain search {}", videoList.size());
 
 		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
 		if (videoList.size() == 1)
@@ -426,34 +429,52 @@ public class VideoController extends AbstractController {
 		
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());
-//		model.addAttribute("rankSign", 		InequalitySign.values());
 		model.addAttribute("rankRange", 	videoService.getRankRange());
 		model.addAttribute("playRange", 	videoService.getPlayRange());
 		model.addAttribute("videoList", 	videoList);
 		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringWithVideofile(videoList));
-		model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
-		model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
-//		model.addAttribute("actressList", 	videoService.getActressList());
-//		model.addAttribute("studioList", 	videoService.getStudioList());
-		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
-		model.addAttribute(videoService.getTagList());
+		if (videoSearch.isWholeActressStudioView()) {
+			model.addAttribute("actressList", 	videoService.getActressList());
+			model.addAttribute("studioList", 	videoService.getStudioList());
+		}
+		else {
+			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
+			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
+		}
+		model.addAttribute("tagList", videoService.getTagList());
 
-		logger.debug("videoMain END");
-
+		if (logger.isDebugEnabled())
+			logger.debug("videoMain END");
 		return "video/videoMain";
 	}
 
 	@RequestMapping("/archive")
 	public String videoArchive(Model model, @ModelAttribute VideoSearch videoSearch) {
-		logger.trace("{}", videoSearch);
+		if (logger.isDebugEnabled())
+			logger.debug("videoArchive START : {}", videoSearch);
 		List<Video> videoList =  videoService.searchVideoInArchive(videoSearch);
+		if (logger.isDebugEnabled())
+			logger.debug("videoArchive search {}", videoList.size());
+
+		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
+		if (videoList.size() == 1)
+			videoSearch.setListViewType(View.L);
 
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());
 		model.addAttribute("videoList", 	videoList);
-		model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
-		model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
-		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
+		if (videoSearch.isWholeActressStudioView()) {
+			model.addAttribute("actressList", 	videoService.getActressList());
+			model.addAttribute("studioList", 	videoService.getStudioList());
+		}
+		else {
+			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
+			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
+		}
+		model.addAttribute("tagList", videoService.getTagList());
+		
+		if (logger.isDebugEnabled())
+			logger.debug("videoArchive END");
 		return "video/videoArchive";
 	}
 	
@@ -669,13 +690,19 @@ public class VideoController extends AbstractController {
 	}
 	@RequestMapping(value="/tag", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveTag(@ModelAttribute VTag tag) {
+	public void saveTag(@ModelAttribute VTag tag, @RequestParam(value="opus", required=false, defaultValue="") String opus) {
 		videoService.createTag(tag);
+		videoService.toggleTag(opus, tag.getName());
 	}
 	
 	@RequestMapping("/gravia")
 	public String graviainterview(Model model) {
 		model.addAttribute(videoService.getTistoryItem());
 		return "video/graviainterview";
+	}
+	
+	@RequestMapping(value="/{opus}/tag/{tagname}", method=RequestMethod.POST)
+	public void toggleTag(@PathVariable String opus, @PathVariable String tagname) {
+		videoService.toggleTag(opus, tagname);
 	}
 }

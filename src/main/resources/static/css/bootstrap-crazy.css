@@ -6,7 +6,7 @@ label {
 
 .box {
 	position: relative;
-    background-color: #fff;
+    /* background-color: #fff; */
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid #999;
@@ -23,8 +23,8 @@ label {
 	background-color: #fff;
 	color: #337ab7;
 	padding: .2em .3em .3em;
-	font-weight: normal;
-	margin-right: 3px;
+	/* font-weight: normal; */
+	/* margin-right: 3px; */
 }
 .label-pre {
 	text-align: left;
@@ -32,6 +32,9 @@ label {
 	white-space: pre;
 	border: 0;
 	margin: 2px 0; 
+}
+.label-active {
+	color: red;
 }
 
 .nowrap {

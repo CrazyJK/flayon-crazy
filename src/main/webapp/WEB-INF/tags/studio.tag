@@ -30,12 +30,13 @@
 	class="item <%=itemCssClass %>" 
 	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">
 	<form:checkbox path="selectedStudio" id="selectedStudio${count}" value="${studio.name}" cssClass="sr-only"/>
-	<span class="label label-default" id="checkbox-selectedStudio${count}">${studio.name}(${fn:length(studio.videoList)})</span>
+	<span class="label label-default box item" style="padding: 5px; margin: 5px;"
+		 id="checkbox-selectedStudio${count}">${studio.name}(${fn:length(studio.videoList)})</span>
 </label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px;" data-toggle="tooltip"
+<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip"
 	onclick="fnViewStudioDetail('${studio.name}')" 
 	class="item <%=itemCssClass %> box nowrap" 
 	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">

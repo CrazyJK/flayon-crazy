@@ -37,7 +37,7 @@ function fnToggleFileinfo() {
 	<dd><jk:video video="${video}" view="release" mode="l"/></dd>
 	<dd><jk:video video="${video}" view="download" mode="l"/></dd>
 	<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
-	<dd><jk:video video="${video}" view="tags" mode="l"/></dd>
+	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 
 	<c:if test="${video.etcInfo ne ''}">
 	<dd><span class="label label-plain">ETC info : ${video.etcInfo}</span></dd>

@@ -28,6 +28,7 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
@@ -51,6 +52,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	
 	@JsonIgnore
 	@Autowired HistoryService historyService;
+
+	@JsonIgnore
+	@Autowired TagDao tagDao;
 	
 	// files
 	private List<File> videoFileList;
@@ -92,9 +96,11 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		info = new Info();
 	}
 	
-	/** 파일 위치 정렬<br>
-	 *  비디오 파일이 있고, {@link #STAGE} 폴더에 위치해 있으면, 월별로 구분해 이동<br>
-	 *  커버 파일만 있고, {@link #COVER} 폴더에 위치해 있으면, 월별로 구분해 이동.
+	/** 
+	 * 파일 위치 정렬<br>
+	 * 비디오 파일이 있고, {@link #STAGE} 폴더에 위치해 있거나<br>
+	 * 커버 파일만 있고, {@link #COVER} 폴더에 위치해 있거나<br>
+	 * 아카이브 비디오면, 월별로 구분해 이동
 	 */
 	public void arrange() {
 		logger.trace(opus);
@@ -638,10 +644,12 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					logger.error("delete fail : {}", file.getAbsolutePath());
 	}
 	
-	/**TODO
+	/**
 	 * info 내용 저장
 	 */
 	private void saveInfo() {
+		if (logger.isDebugEnabled())
+			logger.debug("saveInfo start");
 		
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -653,13 +661,14 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 
 		try {
 			mapper.writeValue(getInfoFile(), info);
+			if (logger.isDebugEnabled())
+				logger.debug("saveInfo {}", info);
 		} catch (IOException e) {
 			throw new VideoException(this, "fail to write info", e);
 		}
-		
 	}
 
-	/** TODO
+	/**
 	 * info file 읽어서 필요 데이터(rank, overview, history, playcount) 설정
 	 * @param file info file
 	 */
@@ -1091,5 +1100,25 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			}
 			this.setVideoFileList(null);
 		}
+	}
+
+	public void toggleTag(String tagname) {
+		if (logger.isDebugEnabled())
+			logger.debug("toggleTag {}", tagname);
+		VTag tag = tagDao.findByName(tagname);
+		if (info.getTags() == null) {
+			info = new Info(opus);
+		}
+		if (info.getTags().contains(tag)) {
+			info.getTags().remove(tag);
+			if (logger.isDebugEnabled())
+				logger.debug("toggleTag remove");
+		}
+		else {
+			info.getTags().add(tag);
+			if (logger.isDebugEnabled())
+				logger.debug("toggleTag add");
+		}
+		saveInfo();
 	}
 }

@@ -35,11 +35,10 @@ function fnViewBGImage() {
 <div id="header_div">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
 	<div id="searchDiv" class="box">
-			<!-- Search : Text -->
-			<form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label>
+		<!-- Search : Text -->
+		<form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label>
 		<form:input path="searchText" cssClass="form-control input-sm" placeHolder="Search"/>
-			
-			<!-- Search : Additional condition. video, subtitles -->
+		<!-- Search : Additional condition. video, subtitles -->
 		<label title="<s:message code="video.addCondition"/>">
 			<form:checkbox path="addCond" cssClass="sr-only"/>
 			<span class="label label-default" id="checkbox-addCond1"><s:message code="video.addCondition-short"/></span>
@@ -53,36 +52,49 @@ function fnViewBGImage() {
 			<span class="label label-default" id="checkbox-existSubtitles1">S</span>			
 		</label>
 
-		<span class="separator">|</span>
 
 
-			<!-- Search submit -->			
+
+
+
+
+
+
+		<!-- Search submit -->			
 		<button class="btn btn-xs btn-default" onclick="fnSearch()">
 			<s:message code="video.search"/> <span class="badge">${fn:length(videoList)}</span>
 		</button>
-
+		<!-- view type -->
 		<form:select path="listViewType" items="${views}" itemLabel="desc" cssClass="form-control input-sm" title="View type"/> 
-
+		<!-- sort -->
 		<label title="<s:message code="video.reverseSort"/>">
 			<form:checkbox path="sortReverse" cssClass="sr-only"/>
 			<span class="label label-default" id="checkbox-sortReverse1">R</span>
 		</label>
 		<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method"/>
-
+		<!-- wholeActressStudioView -->
+		<label title="<s:message code="video.wholeActressStudioView"/>">
+			<form:checkbox path="wholeActressStudioView" cssClass="sr-only"/>
+			<span class="label label-default" id="checkbox-wholeActressStudioView1">A</span>
+		</label>
+		<!-- viewStudioPanel -->
 		<label title="<s:message code="video.viewStudioPanel"/>">
 			<form:checkbox path="viewStudioDiv" cssClass="sr-only"/>
 			<span class="label label-default" id="checkbox-viewStudioDiv1" onclick="fnStudioDivToggle()">S</span>
 		</label>
+		<!-- viewActressDiv -->
 		<label title="<s:message code="video.viewActressPanel"/>">
 			<form:checkbox path="viewActressDiv" cssClass="sr-only"/>
 			<span class="label label-default" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>	
 		</label>
+		<!-- viewTagDiv -->
 		<label title="<s:message code="video.viewTagPanel"/>">
 			<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
 			<span class="label label-default" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
 		</label>
-
 		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
+
+
 
 		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(studioList)}</span></li>
@@ -90,7 +102,7 @@ function fnViewBGImage() {
 			<li>
 				<jk:studio studio="${studio}" view="label" count="${studioStat.count}"/>
 			</li>
-		</c:forEach>
+			</c:forEach>
 		</ul>
 		<ul id="actressDiv" class="box list-inline" style="display:${videoSearch.viewActressDiv ? '' : 'none'}">
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(actressList)}</span></li>
@@ -98,7 +110,7 @@ function fnViewBGImage() {
 			<li>
 				<jk:actress actress="${actress}" view="label" count="${actressStat.count}"/>
 			</li>
-		</c:forEach>
+			</c:forEach>
 		</ul>
 		<ul id="tagDiv" class="box list-inline" style="display:${videoSearch.viewTagDiv ? '' : 'none'}">
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(tagList)}</span></li>
@@ -172,6 +184,7 @@ function fnViewBGImage() {
 						<dd><jk:video video="${video}" view="download" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="tags" mode="s" tagList="${tagList}"/></dd>
 					</dl>
 				</div>
 			</c:forEach>
@@ -194,6 +207,7 @@ function fnViewBGImage() {
 						<dd><jk:video video="${video}" view="release" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="subtitles" mode="l"/>
 							<jk:video video="${video}" view="overview" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="tags" mode="s" tagList="${tagList}"/></dd>
 					</dl>
 				</div>
 			</c:forEach>
