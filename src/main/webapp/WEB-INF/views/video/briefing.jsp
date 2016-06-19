@@ -184,7 +184,7 @@ function reloadVideo() {
 								vItem.attr("data-opus", "${video.opus}");
 								vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
 								vItem.attr("title", "${video.fullname}");
-								$("#rank${video.rank}-${date.key}").append(vItem);
+								$("#rank${video.rank}-${date.key}").append(vItem).append("&nbsp;");
 							</script>
 						</c:forEach>
 					</c:forEach>		
@@ -235,7 +235,7 @@ function reloadVideo() {
 								vItem.attr("data-opus", "${video.opus}");
 								vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
 								vItem.attr("title", "${video.fullname}");
-								$("#rank${video.rank}-${play.key}").append(vItem);
+								$("#rank${video.rank}-${play.key}").append(vItem).append("&nbsp;");
 							</script>
 						</c:forEach>
 					</c:forEach>
