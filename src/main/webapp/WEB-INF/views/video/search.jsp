@@ -7,8 +7,13 @@
 <html>
 <head>
 <title><s:message code="video.video"/> <s:message code="video.search"/></title>
+<style type="text/css">
+.label {
+	margin-right: 3px;
+}
+</style>
 <script type="text/javascript">
-bgContinue = false;
+//bgContinue = false;
 var BOOTSTRAP_COL_LG_6 = 970;
 
 $(document).ready(function(){
@@ -60,10 +65,10 @@ $(document).ready(function(){
 				var li  = $("<li>");
 				var div = $("<div>");
 
-				var studioDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
-				var opusDom 		  = $("<span>").addClass("label label-plain").html(opus);
-				var titleDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(title);
-				var actressDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
+				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
+				var actressDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
 				var existVideoDom 	  = $("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V");
 				var existCoverDom 	  = $("<span>").addClass("label").addClass((existCover == "true" ? "label-success" : "label-default" )).html("C");
 				var existSubtitlesDom = $("<span>").addClass("label").addClass((existSubtitles == "true" ? "label-success" : "label-default" )).html("S");
@@ -92,7 +97,7 @@ $(document).ready(function(){
 				var div = $("<div>");
 
 				var dateDom 		  = $("<span>").addClass("label label-plain").html(date);
-				var opusDom 		  = $("<span>").addClass("label label-plain btn").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
 				var actDom	 		  = $("<span>").addClass("label label-plain").html(act);
 				var descDom 		  = $("<span>").addClass("label label-plain").html(desc);
 

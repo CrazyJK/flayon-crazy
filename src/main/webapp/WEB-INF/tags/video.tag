@@ -49,13 +49,18 @@
 	} else if (view.equalsIgnoreCase("actress")) {
 %>
 <c:forEach items="${video.actressList}" var="actress" varStatus="status">
-<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name}
-<c:if test="${mode eq 'l'}"><em>${actress.age}</em></c:if></span>
-<c:if test="${mode eq 'l'}">
+<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">
+	${actress.name}
+	<c:if test="${mode eq 'l'}">
+		<em>${actress.age}</em>
+	</c:if>
+</span>
+<c:if test="${mode eq 'l'}">&nbsp;
 	<span class="${cssClass}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 	<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
 			onclick="popup('<s:eval expression="@environment.getProperty('url.search.actress')"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
 </c:if>
+&nbsp;
 </c:forEach>
 <%
 	} else if (view.equalsIgnoreCase("opus")) {
@@ -81,11 +86,7 @@
 <%
 	} else if (view.equalsIgnoreCase("title")) {
 %>
-	<%	if (!"s".equals(mode)) { %>		
-	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
-	<%	} else { %>
-	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span>	
-	<%	} %>	
+	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span>
 <%
 	} else if (view.equalsIgnoreCase("score")) {
 %>
@@ -102,7 +103,7 @@
 	min="${minRank}" max="${maxRank}" value="${video.rank}"
 	onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
 	<%	} %>	
-<span id="Rank-${video.opus}-label" class="${cssClass} rangeLabel">${video.rank}</span>
+<span id="Rank-${video.opus}-label" class="${cssClass} rangeLabel" title="rank">${video.rank}</span>
 <%
 	} else if (view.equalsIgnoreCase("label")) {
 %>
@@ -137,7 +138,7 @@
 %>
 	<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle();">NEW</span>
 	<form action="/video/tag" method="post" role="form" class="form-inline" id="newTag-${video.opus}" style="margin-top: 5px; display:none;">
-		<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
+		<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
 		<input type="hidden" name="opus" value="${video.opus}"/>
 		<input name="name" placeholder="name" class="form-control input-sm" required="required"/>
 		<input name="description" placeholder="Description" class="form-control input-sm" required="required"/>

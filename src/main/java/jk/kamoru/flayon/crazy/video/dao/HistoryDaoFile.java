@@ -76,7 +76,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 				if (parts.length > 2)
 					history.setAction(Action.valueOf(parts[2].toUpperCase().trim()));
 				if (parts.length > 3)
-					history.setDesc(parts[3].trim());
+					history.setDesc(trimDesc(parts[3]));
 				try {
 					history.setVideo(videoDao.getVideo(parts[1].trim()));
 				}
@@ -93,6 +93,12 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 		isHistoryChanged = false;
 	}
 	
+	private String trimDesc(String string) {
+		if (string == null) 
+			return "";
+		return StringUtils.replace(string.trim(), "\"", "");
+	}
+
 	private void saveHistory(History history) throws IOException {
 		FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VIDEO.ENCODING, true);
 		isHistoryChanged = true;

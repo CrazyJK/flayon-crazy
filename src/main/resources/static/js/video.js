@@ -21,7 +21,10 @@ function setBackgroundImage(imgIdx) {
 		currBGImageNo = getRandomInteger(0, bgImageCount);
 	
 	currBGImageUrl = context + "image/" + currBGImageNo;
-	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
+//	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
+	$("body").css("background-image", "url(" + currBGImageUrl + ")")
+		.css("background-position", "center center")
+		.css("background-size", "contain");
 }
 
 function fnVideoDivToggle() {
@@ -122,7 +125,8 @@ function fnOpusFocus(opus) {
 	}
 }
 function fnBGImageView() {
-	popup(currBGImageUrl, currBGImageUrl, 800, 600);
+//	popup(currBGImageUrl, currBGImageUrl, 800, 600);
+	popupImage(currBGImageUrl, "bg-image");
 }
 function fnBGImageDELETE() {
 	$("#hiddenHttpMethod").val("DELETE");

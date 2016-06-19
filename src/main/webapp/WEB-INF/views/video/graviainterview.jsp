@@ -38,12 +38,12 @@
 	
 		<div class="tab-content">
 			<c:forEach items="${tistoryItemList}" var="item" varStatus="itemStat">
-			<section id="item${itemStat.count}" class="tab-pane fade ${itemStat.index == 0 ? 'active' : ''}">
+			<section id="item${itemStat.count}" class="tab-pane fade ${itemStat.index == 0 ? 'in active' : ''}">
 				<ul class="list-inline">
 					<c:forEach items="${item.titles}" var="title" varStatus="titleStat">
 					<li>
-						<div class="box">
-							<p>${title}</p>
+						<div class="box box-small">
+							${title}
 						</div>
 					</li>
 					</c:forEach>

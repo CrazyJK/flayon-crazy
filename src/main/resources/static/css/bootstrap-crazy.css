@@ -6,7 +6,7 @@ label {
 
 .box {
 	position: relative;
-    /* background-color: #fff; */
+    background-color: rgba(255, 255, 255, .5);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid #999;
@@ -18,12 +18,16 @@ label {
     margin: 10px;
     padding: 10px;
 }
+.box-small {
+    margin: 5px;
+    padding: 5px;
+}
 
 .label-plain {
 	background-color: #fff;
 	color: #337ab7;
 	padding: .2em .3em .3em;
-	/* font-weight: normal; */
+	font-weight: normal;
 	/* margin-right: 3px; */
 }
 .label-pre {
@@ -45,6 +49,9 @@ label {
 	text-overflow: ellipsis;
 }
 
+.float-left {
+	float: left;
+}
 .float-right {
 	float: right;
 }

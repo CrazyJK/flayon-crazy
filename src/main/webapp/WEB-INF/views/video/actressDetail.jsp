@@ -85,16 +85,16 @@ function toogleFavorite(dom) {
 		</div>
 	</div>
 	<div class="form-group">
-		<span class="label label-info">Studio <i class="badge">${fn:length(actress.studioList)}</i></span>
+		<span class="label label-info">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
 	</div>
 	<div class="form-group" style="padding-left:60px;">
 		<c:forEach items="${actress.studioList}" var="studio">
 			<span class="label label-primary" onclick="fnViewStudioDetail('${studio.name}')">
-					${studio.name} <i class="badge">${fn:length(studio.videoList)}</i> Score ${studio.score}</span>
+					${studio.name} <small class="badge">${fn:length(studio.videoList)}</small> Score ${studio.score}</span>
 		</c:forEach>
 	</div>
 	<div class="form-group">
-		<span class="label label-info">Video <i class="badge">${fn:length(actress.videoList)}</i></span>
+		<span class="label label-info">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
 	</div>
 	<div class="form-group box" style="padding-left:60px;">
 		<ul class="list-inline">

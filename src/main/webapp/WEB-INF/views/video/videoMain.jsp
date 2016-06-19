@@ -15,6 +15,7 @@
 <script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
 <script type="text/javascript" src="<c:url value="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"/>"></script>
 <script type="text/javascript">
+//bgContinue = false;
 var opusArray = ${opusArray};
 var bgImageCount = ${bgImageCount};
 var totalVideoSize = parseInt('${fn:length(videoList)}');
@@ -159,20 +160,36 @@ function fnViewBGImage() {
 		<c:when test="${videoSearch.listViewType eq 'T'}">
 		<table class="table table-condensed table-hover table-bordered">
 			<c:forEach items="${videoList}" var="video" varStatus="status">
-			<tr id="opus-${video.opus}">
-				<td style="max-width:100px;"><jk:video video="${video}" view="studio"/></td>
-				<td style="max-width:100px;"><jk:video video="${video}" view="opus"/></td>
-				<td style="max-width:400px;"><div class="nowarp"><jk:video video="${video}" view="title"/></div></td>
-				<td style="max-width:200px;"><div class="nowarp"><jk:video video="${video}" view="actress"/></div></td>
-				<td style="max-width:100px;"><jk:video video="${video}" view="release"/></td>
-				<td style="max-width:100px;">
-					<jk:video video="${video}" view="video" mode="s"/>
-					<jk:video video="${video}" view="cover" mode="s"/>
+			<tr id="opus-${video.opus}" class="nowarp">
+				<td style="width:80px;">
+					<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
+				<td style="width:80px;">
+					<jk:video video="${video}" view="opus"/></td>
+				<td style="max-width:300px;">
+					<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
+				</td>
+				<td style="max-width:150px;">
+					<%-- <div class="nowarp"><jk:video video="${video}" view="actress"/></div> --%>
+					<div class="nowrap">
+					<c:forEach items="${video.actressList}" var="actress">
+						<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+					</c:forEach>
+					</div>
+				</td>
+				<td style="width:70px;">
+					<jk:video video="${video}" view="release"/></td>
+				<td style="width:20px;">
+					<jk:video video="${video}" view="video" mode="s"/></td>
+				<td style="width:20px;">
+					<jk:video video="${video}" view="cover" mode="s"/></td>
+				<td style="width:20px;">
 					<jk:video video="${video}" view="subtitles" mode="s"/></td>
-				<td style="max-width:100px;">
-					<jk:video video="${video}" view="rank" mode="s"/>
+				<td style="width:25px;" class="text-right">
+					<jk:video video="${video}" view="rank" mode="s"/></td>
+				<td style="width:25px;" class="text-right">
 					<jk:video video="${video}" view="score" mode="s"/></td>
-				<td style="max-width:100px;" class="text-right"><jk:video video="${video}" view="length"/></td>
+				<td style="width:50px;" class="text-right">
+					<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
 			</tr>
 			</c:forEach>
 		</table>
@@ -271,10 +288,10 @@ function fnViewBGImage() {
 	</c:choose>
 	</div>
 
-	<div id="bgActionGroup" style="display:none;">
-		<span onclick="setBackgroundImage();">NEXT</span>
-		<span onclick="fnBGImageView();">VIEW</span>
-		<span onclick="fnBGImageDELETE();">DELETE</span>
+	<div id="bgActionGroup" class="text-center" style="display:none;">
+		<span class="btn btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
+		<span class="btn btn-info text-center" onclick="fnBGImageView();">VIEW</span>
+		<span class="btn btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
 	</div>
 
 </div>

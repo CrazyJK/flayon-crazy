@@ -37,7 +37,6 @@ function fnToggleFileinfo() {
 	<dd><jk:video video="${video}" view="release" mode="l"/></dd>
 	<dd><jk:video video="${video}" view="download" mode="l"/></dd>
 	<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
-	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 
 	<c:if test="${video.etcInfo ne ''}">
 	<dd><span class="label label-plain">ETC info : ${video.etcInfo}</span></dd>
@@ -68,11 +67,13 @@ function fnToggleFileinfo() {
 			</form>
 		</div>
 	</dd>
+
+	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 	
 	<dd>
 		<c:forEach items="${video.actressList}" var="actress">
 		<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">
-			${actress.name} <em>${actress.age}</em> <i class="badge">${fn:length(actress.videoList)}</i> Score ${actress.score}</span>
+			${actress.name} <em>${actress.age}</em> <small class="badge">${fn:length(actress.videoList)}</small> Score ${actress.score}</span>
 		<div style="padding-left:60px;">
 			<ul class="list-inline">
 			<c:forEach items="${actress.videoList}" var="video">

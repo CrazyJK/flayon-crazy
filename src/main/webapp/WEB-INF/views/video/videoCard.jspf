@@ -18,8 +18,8 @@
 				</td>
 				<td>
 					<dl>
-						<dd><jk:video video="${video}" view="actress"   mode="s"/></dd>
-						<dd><jk:video video="${video}" view="studio"    mode="s"/></dd> 
+						<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="actress"   mode="s"/></div></dd>
+						<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="studio"    mode="s"/></div></dd> 
 						<dd><jk:video video="${video}" view="opus"      mode="s"/>
 							<jk:video video="${video}" view="score"     mode="s"/></dd>
 						<dd><jk:video video="${video}" view="video"     mode="s"/>

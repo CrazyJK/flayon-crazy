@@ -49,14 +49,14 @@ function popup(url, name, width, height, positionMethod, spec) {
 function popupImage(url, name) {
 	if (!name)
 		name = url;
-	var img =  new Image(); 
+	var img = new Image();
 	img.src = url;
-	$(img).ready(function(){ 
-		var imgWidth  = img.width;
-		var imgHeight = img.height;
-//		alert("size method 3 = " + imgWidth + " x " + imgHeight);
+	img.onload = function() {
+		var imgWidth  = this.width;
+		var imgHeight = this.height;
+		console.log("popupImage " + imgWidth + " x " + imgHeight);
 		popup(url, name, imgWidth, imgHeight);
-	});
+	}	
 }
 function fnViewFullImage(image) {
 	var img = $("<img />");
@@ -65,6 +65,7 @@ function fnViewFullImage(image) {
 	img.bind('load', function(){
 		var imgWidth  = $(this).width() + 20;
 		var imgHeight = $(this).height() + 20;
+		console.log("popupImage " + imgWidth + " x " + imgHeight);
 		mw_image_window(image, imgWidth, imgHeight);
 	});
 }

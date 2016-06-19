@@ -12,50 +12,46 @@
 	text-align: center;
 }
 .slidesjs-container {
-	margin-bottom: 10px;
 }
 .slidesjs-control {
 }
 .slidesjs-slide {
-	border-radius: 10px;
 }
 
 .slidesjs-navigation {
-	font-size: 15px;
-	background-color:rgba(255, 255, 255, 0.5); 
-	color:black; 
-	text-shadow:1px 1px 1px white; 
-	padding:0px 5px 0px 5px;
-	border:1px solid orange; 
-	border-radius: 5px;
-	text-decoration:none;
+    display: inline;
+    /* font-size: 75%; */
+    font-weight: 700;
+    line-height: 1;
+    color: #5bc0de;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;	
+	background-color: #fff;
+	border: 1px solid #5bc0de;
 }
 .slidesjs-navigation:hover {
 	text-decoration:none;
+    color: #5bc0de;
 }
-.slidesjs-previous {
+.slidesjs-previous, .slidesjs-next {
 	display: none;
-	float:left;
 }
-.slidesjs-next {
-	display: none;
-	float:right;
-}
-.slidesjs-play,
-.slidesjs-stop {
-	position: absolute;
-	top: 0;
+.slidesjs-play, .slidesjs-stop {
+	position: fixed;
+	top: 10px;
 	left: 0;
+	padding: 5px;
 	margin: 10px;
 	z-index: 18;
 }
 
 ul.slidesjs-pagination {
-	position: fixed;
-	top:0;
-	text-shadow: 1px 1px 1px red;
+/* 	position: fixed;
+	top: 10px;
 	margin: 10px;
-	padding-left: 50px;
+	padding-left: 50px; */
 }
 li.slidesjs-pagination-item {
 	display:inline-block;
@@ -67,39 +63,32 @@ li.slidesjs-pagination-item:last-child {
 	margin-left: 10px;
 }
 li.slidesjs-pagination-item a {
-	background-color:rgba(255, 255, 255, 0.5); 
-	text-shadow:1px 1px 1px white; 
-	padding:0px 5px 0px 5px;
-	border:1px solid orange;
-	border-radius: 5px;
-	text-decoration:none;
-	margin: 3px;
-	color:black;
-	width: 30px;
-	font-size: 12px;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;	
+	background-color: #5bc0de;
 }
 li.slidesjs-pagination-item a.active {
 	padding: 5px;
 	margin: 3px;
 	text-decoration:none;
-	color:#7d8ee2;
 }
 li.slidesjs-pagination-item a:hover {
 	text-shadow:1px 1px 1px #7d8ee2;
+	text-decoration: none;
 }
+
 .bg-image {
-	height: 300px; 
 	background-position: center center; 
 	background-size: contain; 
 	background-repeat: no-repeat;
-}
-#debug {
-position: absolute;
-    top: 0;
-    left: 20px;
-    margin: 0;
-    padding: 0;
-    z-index: 99;
 }
 </style>
 <script src="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"></script>
@@ -234,20 +223,15 @@ function rePagination() {
     });
 }
 function debug(msg) {
-	$("#debug").html(msg);
+	console.log(msg);
 }
-
 </script>
 </head>
 <body>
 <div class="container-fluid">
 
-<div id="slides" class="slides">
-</div>
-
-<div id="slidesNav"></div>
-<div id="debug"></div>
-
+	<div id="slides" class="slides"></div>
+	
 </div>
 </body>
 </html>

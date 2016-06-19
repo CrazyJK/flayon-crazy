@@ -65,7 +65,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	@Override
 	public String toString() {
 		return String.format("%s H:%s C:%s S:%s",
-				name, homepage, company, getScore());
+				name, Utils.trimToEmpty(homepage), company, getScore());
 	}
 
 	public void addVideo(Video video) {

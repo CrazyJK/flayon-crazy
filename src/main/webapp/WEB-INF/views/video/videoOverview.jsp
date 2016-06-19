@@ -6,7 +6,7 @@
 <head>
 <title><s:message code="video.overview"/> [${video.opus}]</title>
 <style type="text/css">
-.overviewTxt {width:100%; height:275px;}
+.overviewTxt {width:100%; height:215px;}
 </style>
 <script type="text/javascript">
 function overviewSave()
@@ -19,10 +19,12 @@ function overviewSave()
 </script>
 </head>
 <body>
-<form method="post" name="overviewFrm" action="<c:url value="/video/${video.opus}/overview" />">
-<input type="hidden" name="opus" value="${video.opus}">
-<textarea class="overviewTxt" name="overViewTxt">${video.overviewText}</textarea>
-</form>
-<div tabindex="1" style="position:absolute; right:0px; top:0px; margin:10px 5px 0px 0px; background-color:lightblue; cursor:pointer;" onclick="overviewSave()"><s:message code="video.save"/></div>
+<div class="container-fluid" role="main">
+	<form method="post" name="overviewFrm" action="<c:url value="/video/${video.opus}/overview"/>" class="box">
+		<input type="hidden" name="opus" value="${video.opus}">
+		<textarea class="overviewTxt" name="overViewTxt">${video.overviewText}</textarea>
+		<button class="btn btn-success btn-block" onclick="overviewSave()">Save</button>
+	</form>
+</div>
 </body>
 </html>

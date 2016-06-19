@@ -3,13 +3,13 @@
 <sitemesh>
 
 	<!-- Map default decorator. This shall be applied to all paths if no other paths match. -->
-  	<mapping decorator="/WEB-INF/sitemesh/decorator-crazy.jsp"/>
+  	<mapping decorator="/WEB-INF/sitemesh/decorator-flayon.jsp"/>
   
 	<!-- Map decorators to path patterns. -->
-  	<mapping path="/video*" 		decorator="/WEB-INF/sitemesh/decorator-video.jsp"/>
-  	<mapping path="/image" 	    	decorator="/WEB-INF/sitemesh/decorator-video.jsp"/>
-  	<mapping path="/image/canvas" 	decorator="/WEB-INF/sitemesh/decorator-video.jsp"/>
-  	<mapping path="/image/slides" 	decorator="/WEB-INF/sitemesh/decorator-video.jsp"/>
+  	<mapping path="/video*" 		decorator="/WEB-INF/sitemesh/decorator-crazy.jsp"/>
+  	<mapping path="/image" 	    	decorator="/WEB-INF/sitemesh/decorator-crazy.jsp"/>
+  	<mapping path="/image/canvas" 	decorator="/WEB-INF/sitemesh/decorator-crazy.jsp"/>
+  	<mapping path="/image/slides" 	decorator="/WEB-INF/sitemesh/decorator-crazy.jsp"/>
   	
  	<!-- Alternative convention. This is more verbose but allows multiple decorators to be applied to a single path. 
   	<mapping>

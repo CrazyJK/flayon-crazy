@@ -492,7 +492,9 @@ function fnDelete() {
 			<col width="320px"/>
 		</colgroup>
 		<tr>
-			<td colspan="3" class="EllipsText" id="imageName" onclick="loadImage()"></td>
+			<td colspan="3" class="EllipsText">
+				<span class="moveBtn label label-default" id="imageName" onclick="loadImage()" title="reload image"></span>
+			</td>
 		</tr>
 		<tr>
 			<td align="left">
