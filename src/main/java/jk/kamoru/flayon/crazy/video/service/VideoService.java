@@ -297,6 +297,10 @@ public interface VideoService {
 
 	List<TistoryItem> getTistoryItem();
 
-	void toggleTag(String opus, String tagname);
+	void toggleTag(String opus, VTag tag);
+
+	List<VTag> getTagListWithVideo();
+
+	VTag getTag(Integer id);
 	
 }

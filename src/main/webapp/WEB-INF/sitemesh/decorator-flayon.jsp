@@ -44,9 +44,7 @@ $(document).ready(function() {
 	
 	<%@ include file="./header.jspf" %>
 
-	<div class="container">
 	<sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
-	</div>
 
 	<%@ include file="./footer.jspf" %>
 	

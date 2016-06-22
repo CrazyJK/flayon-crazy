@@ -13,6 +13,7 @@ p {
 </style>
 </head>
 <body>
+<div class="container-fluid">
 
 	<div class="page-header">
 		<h1>Thread Info ... <span class="badge">${threadInfos.size()}</span></h1>
@@ -48,5 +49,6 @@ p {
 		</div>
 	</section>
 
+</div>
 </body>
 </html>

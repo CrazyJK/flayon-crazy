@@ -65,12 +65,9 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 	@Override
 	public VTag persist(VTag tag) {
 		tag.setId(findMaxId() + 1);
+		tag.validation();
 		tags.add(tag);
-		try {
-			mapper.writeValue(tagDataPath.toFile(), tags);
-		} catch (IOException e) {
-			throw new CrazyException("Fail to write tag.data", e);
-		}
+		saveTagData();
 		return tag;
 	}
 
@@ -109,20 +106,25 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 
 	@Override
 	public void merge(VTag updateTag) {
-		for (VTag tag : tags) {
-			if (tag.getId() == updateTag.getId()) {
-				
-// TODO				tag.update(updateTag);
-				break;
-			}
-		}
+		updateTag.validation();
+		VTag foundTag = findById(updateTag.getId());
+		tags.remove(foundTag);
+		tags.add(updateTag);
+		saveTagData();
 	}
 
 	@Override
 	public void remove(VTag tag) {
-		// TODO
-		
-		
+		tags.remove(tag);
+		saveTagData();
+	}
+
+	private void saveTagData() {
+		try {
+			mapper.writeValue(tagDataPath.toFile(), tags);
+		} catch (IOException e) {
+			throw new CrazyException("Fail to write tag.data", e);
+		}
 	}
 
 }

@@ -8,7 +8,7 @@
 <title>Memory</title>
 </head>
 <body>
-<div class="container" role="main" data-layout-fragment="content">
+<div class="container">
 
 	<div class="page-header">
 		<h1>JVM Memory</h1>

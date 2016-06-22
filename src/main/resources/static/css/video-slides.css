@@ -46,6 +46,9 @@
 
 ul.slidesjs-pagination {
 	padding: 10px 0 0 0;
+	position: fixed;
+    bottom: 0;
+    width: inherit;
 }
 li.slidesjs-pagination-item {
 	display:inline-block;
@@ -69,10 +72,12 @@ li.slidesjs-pagination-item a {
 	position: relative;
 	float: left;
 	padding: 6px 10px;
-	margin-left: -1px;
+	margin-left: 3px;
+	width: 50px;
 	line-height: 1.5;
 	color: #337ab7;
 	text-decoration: none;
+	border-radius: .25em;
 	background-color: #fff;
 	border: 1px solid #ddd;
 }

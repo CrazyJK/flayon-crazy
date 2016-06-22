@@ -162,7 +162,7 @@ public class VideoController extends AbstractController {
 		model.addAttribute(videoService.getVideoList());
 		logger.info("briefing videolist");
 
-		model.addAttribute("tagList", videoService.getTagList());
+		model.addAttribute("tagList", videoService.getTagListWithVideo());
 		logger.info("briefing taglist");
 
 		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
@@ -368,6 +368,8 @@ public class VideoController extends AbstractController {
 	public String videoDetail(Model model, @PathVariable String opus) {
 		logger.info(opus);
 		Video video = videoService.getVideo(opus);
+		if (video == null)
+			throw new VideoNotFoundException(opus);
 		model.addAttribute(video);
 		model.addAttribute("tagList", videoService.getTagList());
 		if (video.isArchive())
@@ -441,7 +443,7 @@ public class VideoController extends AbstractController {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
 			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
 		}
-		model.addAttribute("tagList", videoService.getTagList());
+		model.addAttribute("tagList", videoService.getTagListWithVideo());
 
 		if (logger.isDebugEnabled())
 			logger.debug("videoMain END");
@@ -471,7 +473,7 @@ public class VideoController extends AbstractController {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
 			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
 		}
-		model.addAttribute("tagList", videoService.getTagList());
+		model.addAttribute("tagList", videoService.getTagListWithVideo());
 		
 		if (logger.isDebugEnabled())
 			logger.debug("videoArchive END");
@@ -677,22 +679,33 @@ public class VideoController extends AbstractController {
 		sb.append("]}");
 		return sb.toString();
 	}
-	
-	@RequestMapping(value="/tag", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateTag(@ModelAttribute VTag tag) {
-		videoService.updateTag(tag);
+
+	@RequestMapping(value="/tag/{tagId}", method=RequestMethod.GET)
+	public String viewTag(Model model, @PathVariable Integer tagId) {
+		VTag tag = videoService.getTag(tagId);
+		model.addAttribute("tag", tag);
+		return "video/tagDetail";
 	}
+
+	@RequestMapping(value="/tag/{tagId}", method=RequestMethod.POST)
+	public String updateTag(Model model, @ModelAttribute VTag tag, @PathVariable Integer tagId) {
+		videoService.updateTag(tag);
+		return "redirect:/video/tag/" + tagId;
+	}
+	
 	@RequestMapping(value="/tag", method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTag(@ModelAttribute VTag tag) {
+		logger.info("deleteTag {}", tag);
 		videoService.deleteTag(tag);
 	}
+	
 	@RequestMapping(value="/tag", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void saveTag(@ModelAttribute VTag tag, @RequestParam(value="opus", required=false, defaultValue="") String opus) {
 		videoService.createTag(tag);
-		videoService.toggleTag(opus, tag.getName());
+		if (opus.length() > 0)
+			videoService.toggleTag(opus, tag);
 	}
 	
 	@RequestMapping("/gravia")
@@ -701,8 +714,10 @@ public class VideoController extends AbstractController {
 		return "video/graviainterview";
 	}
 	
-	@RequestMapping(value="/{opus}/tag/{tagname}", method=RequestMethod.POST)
-	public void toggleTag(@PathVariable String opus, @PathVariable String tagname) {
-		videoService.toggleTag(opus, tagname);
+	@RequestMapping(value="/{opus}/tag", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void toggleTag(@ModelAttribute VTag tag, @PathVariable String opus) {
+		videoService.toggleTag(opus, tag);
 	}
+	
 }

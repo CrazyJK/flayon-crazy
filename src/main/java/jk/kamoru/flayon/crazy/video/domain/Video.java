@@ -498,7 +498,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			try {
 				return new URL("/" + pname + "/" + vfile.getName());
 			} catch (MalformedURLException e) {
-				logger.warn("Error: {}", e.getMessage());
+//				logger.warn("Error: {}", e.getMessage());
 			}
 			return null;
 		}
@@ -1102,13 +1102,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		}
 	}
 
-	public void toggleTag(String tagname) {
+	public void toggleTag(VTag tag) {
 		if (logger.isDebugEnabled())
-			logger.debug("toggleTag {}", tagname);
-		VTag tag = tagDao.findByName(tagname);
-		if (info.getTags() == null) {
-			info = new Info(opus);
-		}
+			logger.debug("toggleTag {}", tag);
 		if (info.getTags().contains(tag)) {
 			info.getTags().remove(tag);
 			if (logger.isDebugEnabled())
@@ -1120,5 +1116,13 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				logger.debug("toggleTag add");
 		}
 		saveInfo();
+	}
+
+	public void updateTag(VTag tag) {
+		if (info.getTags().contains(tag)) {
+			info.getTags().remove(tag);
+			info.getTags().add(tag);
+			saveInfo();
+		}		
 	}
 }

@@ -7,8 +7,8 @@
 <title><s:message code="image.image-viewer"/> by SlidesJS</title>
 <style type="text/css">
 .slides {
-	width:100%;
-	margin:50px 0 0 0;
+	/* width:100%; */
+	margin:30px 0 0 0;
 	text-align: center;
 }
 .slidesjs-container {
@@ -20,50 +20,6 @@
 
 .slidesjs-navigation {
     display: inline;
-    /* font-size: 75%; */
-    font-weight: 700;
-    line-height: 1;
-    color: #5bc0de;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;	
-	background-color: #fff;
-	border: 1px solid #5bc0de;
-}
-.slidesjs-navigation:hover {
-	text-decoration:none;
-    color: #5bc0de;
-}
-.slidesjs-previous, .slidesjs-next {
-	display: none;
-}
-.slidesjs-play, .slidesjs-stop {
-	position: fixed;
-	top: 10px;
-	left: 0;
-	padding: 5px;
-	margin: 10px;
-	z-index: 18;
-}
-
-ul.slidesjs-pagination {
-/* 	position: fixed;
-	top: 10px;
-	margin: 10px;
-	padding-left: 50px; */
-}
-li.slidesjs-pagination-item {
-	display:inline-block;
-}
-li.slidesjs-pagination-item:first-child {
-	margin-right: 10px;
-}
-li.slidesjs-pagination-item:last-child {
-	margin-left: 10px;
-}
-li.slidesjs-pagination-item a {
-    display: inline;
     padding: .2em .6em .3em;
     font-size: 75%;
     font-weight: 700;
@@ -74,21 +30,69 @@ li.slidesjs-pagination-item a {
     vertical-align: baseline;
     border-radius: .25em;	
 	background-color: #5bc0de;
+	
 }
-li.slidesjs-pagination-item a.active {
-	padding: 5px;
-	margin: 3px;
+.slidesjs-navigation:hover, li.slidesjs-pagination-item a:hover, #imageTitle:hover {
 	text-decoration:none;
 }
-li.slidesjs-pagination-item a:hover {
-	text-shadow:1px 1px 1px #7d8ee2;
-	text-decoration: none;
+.slidesjs-previous, .slidesjs-next {
+	display: none;
+}
+.slidesjs-play, .slidesjs-stop {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 5px;
+	margin: 7px;
+	z-index: 18;
+}
+ul.slidesjs-pagination {
+	position: absolute; 
+	left:0px; 
+	top:0px; 
+	margin:7px 5px 0px 5px; 
+	text-align: center;
+	/* padding: 0; */
+}
+li.slidesjs-pagination-item {
+	display:inline-block;
+	margin:0 3px;
+}
+li.slidesjs-pagination-item:first-child, li.slidesjs-pagination-item:last-child {
+}
+li.slidesjs-pagination-item a {
+	position: relative;
+	float: left;
+    padding: .2em .6em .3em;
+    font-size: 95%;
+    font-weight: 700;
+    line-height: 1;
+    width: 30px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;	
+	background-color: #5bc0de;
+}
+li.slidesjs-pagination-item a.active {
+    /* padding: .2em 1.2em .3em; */
+	text-decoration:none;
+	color: black;
 }
 
 .bg-image {
 	background-position: center center; 
 	background-size: contain; 
 	background-repeat: no-repeat;
+}
+#imageTitle {
+	position: absolute;
+	top: 0;
+	left: 222px;
+	padding: 5px;
+	margin: 7px;
+	z-index: 18;
 }
 </style>
 <script src="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"></script>
@@ -99,7 +103,9 @@ var selectedImgUrl;
 var imageCount;
 var windowWidth  = $(window).width();
 var windowHeight = $(window).height();
-var navHeight = 80;
+var topOffset = 30;
+var margin = 10;
+var imageMap;
 
 $(document).ready(function(){
 	$(function() {
@@ -107,31 +113,28 @@ $(document).ready(function(){
 		$.getJSON(imagepath + "data.json" ,function(data) {
 			selectedNumber = data['selectedNumber'];
 			imageCount = data['imageCount'];
-			//imageMap = data['imageNameMap'];
+			imageMap = data['imageNameMap'];
 
 			for (var i=0; i<imageCount; i++) {
-				var imageDiv = $("<div>").addClass("bg-image").height(windowHeight - navHeight); //.css({"background-image": "url(" + imagepath + i + ")", "display": "none"});
+				var imageDiv = $("<div>").addClass("bg-image").height(windowHeight - topOffset - margin);
 				$('#slides').append(imageDiv);
 			}
 			
 			$('#slides').slidesjs({
 				start: selectedNumber == -1 ? getRandomInteger(0, imageCount) : selectedNumber,
 				    width: windowWidth,
-				    height: windowHeight - navHeight,
+				    height: windowHeight - topOffset,
 			    navigation: {active: true},
 			    /* pagination: false, */
 			    play: {active: true, interval:5000, auto: false},
 			    callback: {
 			    	loaded: function(number) {
-				    		//debug("loaded callback : " + number);	 
 			    		rePagination();
 			    	},
 			    	start: function(number) {
-				    		//debug("start callback : " + number);	        
 			    		rePagination();
 			    	},
 			    	complete: function(number) {
-				    		//debug("complete callback : " + number);
 			    	}
 			    }
 			});
@@ -189,27 +192,30 @@ $(document).ready(function(){
 });
 function resizeImage() {
 	windowHeight = $(window).height();
-	$(".bg-image").height(windowHeight - navHeight);
-	$('#slides').height(windowHeight - navHeight);
-	$('.slidesjs-container').height(windowHeight - navHeight);
+	$('#slides').height(windowHeight - topOffset);
+	$(".bg-image").height(windowHeight - topOffset - margin);
+	$('.slidesjs-container').height(windowHeight - topOffset);
 	
 	rePagination();
 }
 function fnRandomImageView() {
 	selectedNumber = getRandomInteger(0, imageCount);
+	selectedImgUrl = imagepath + selectedNumber;
 	$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 }
 function rePagination() {
-    var index = parseInt($(".active").attr("data-slidesjs-item"));
-    //debug(index);
-	
+	console.log($(".active"));
+    var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
+	selectedImgUrl = imagepath + index;
+    $("#imageTitle").html(imageMap[index]);
+    
     if (false) {
-    	var img = $("<img>").attr("src", imagepath + index);
+    	var img = $("<img>").attr("src", selectedImgUrl);
         $("div[slidesjs-index='" + index + "']").empty();
         $("div[slidesjs-index='" + index + "']").append(img);
     }
     else {
-	    $("div[slidesjs-index='" + index + "']").css({"background-image": "url(" + imagepath + index + ")"});
+	    $("div[slidesjs-index='" + index + "']").css({"background-image": "url(" + selectedImgUrl + ")"});
     }
     
     $(".slidesjs-pagination-item").each(function() {
@@ -222,8 +228,8 @@ function rePagination() {
     	}
     });
 }
-function debug(msg) {
-	console.log(msg);
+function fnFullyImageView() {
+	popupImage(selectedImgUrl);
 }
 </script>
 </head>
@@ -231,6 +237,8 @@ function debug(msg) {
 <div class="container-fluid">
 
 	<div id="slides" class="slides"></div>
+	
+	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
 	
 </div>
 </body>

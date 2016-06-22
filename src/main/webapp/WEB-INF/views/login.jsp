@@ -29,6 +29,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<div class="container">
 
 	<div class="jumbotron">
 		<h1>
@@ -84,5 +85,6 @@ $(document).ready(function(){
 	});
 	</script>
 
+</div>
 </body>
 </html>

@@ -10,7 +10,7 @@
 
 <%
 	String itemCssClass = "item";
-/*	int size = studio.getVideoList().size();
+	int size = tag.getVideoList().size();
 	if (size >= 100)
 		itemCssClass += "100";
 	else if (size >= 50)
@@ -23,24 +23,23 @@
 		itemCssClass += "5";
 	else
 		itemCssClass += "1";
-*/
+
 	if (view.equalsIgnoreCase("label")) {
 %>
 <label
 	class="item <%=itemCssClass %>" 
 	title="${tag.description}">
 	<form:checkbox path="selectedTag" id="selectedTag${count}" value="${tag.id}" cssClass="sr-only"/>
-	<span style="padding: 5px; margin: 5px;" 
-		class="box label label-default" id="checkbox-selectedTag${count}">${tag.name}</span>
+	<span class="label label-default" style="padding: 5px; margin: 5px;" 
+		id="checkbox-selectedTag${count}">${tag.name} <i>${tag.videoList.size()}</i></span>
 </label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip"
-	onclick="fnViewTagDetail('${tag.name}')" 
-	class="item <%=itemCssClass %> box nowrap" 
-	title="${tag.description}">
-		${tag.name}
+<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip" class="item <%=itemCssClass %> box nowrap" title="${tag.description}">
+	<span onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span> 
+	<span class="badge">${tag.videoList.size()}</span> 
+	<span onclick="fnDeleteTag(${tag.id}, this)" title="Delete">&times;</span>
 </span>
 <%
 	} else {

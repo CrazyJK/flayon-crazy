@@ -46,6 +46,7 @@ function fnSort(sort) {
 </script>
 </head>
 <body>
+<div class="container">
 
 	<div class="page-header">
 		<h1>Request Mapping List</h1>
@@ -74,5 +75,6 @@ function fnSort(sort) {
 		</tbody>
 	</table>
 
+</div>
 </body>
 </html>

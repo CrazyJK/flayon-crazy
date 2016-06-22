@@ -201,7 +201,7 @@ function fnViewBGImage() {
 				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">             
 					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
+						<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
 						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>

@@ -93,16 +93,16 @@ $(document).ready(function(){
 		        play: {active: true, interval:5000, auto: false},
 		        callback: {
 		        	loaded: function(number) {
-//		        		console.log("loaded callback : " + number);	 
+		        		console.log("loaded callback : " + number);	 
 		        		rePagination();
 		        	},
 		        	start: function(number) {
-//		        		console.log("start callback : " + number);	        
-//		        		rePagination();
+		        		console.log("start callback : " + number);	        
+		        		rePagination();
 		        	},
 		        	complete: function(number) {
-		        		//console.log("complete callback : " + number);
-		        		rePagination();
+		        		console.log("complete callback : " + number);
+//		        		rePagination();
 		        	}
 		        }
 			});

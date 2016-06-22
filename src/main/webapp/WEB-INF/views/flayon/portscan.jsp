@@ -32,12 +32,11 @@ label {
 </style>
 </head>
 <body>
-<div class="container" role="main" data-layout-fragment="content">
+<div class="container">
 
 	<div class="page-header">
 		<h1>Port Scanner</h1>
  	</div>
- 	
 
  	<form>
  	<div class="panel panel-info">

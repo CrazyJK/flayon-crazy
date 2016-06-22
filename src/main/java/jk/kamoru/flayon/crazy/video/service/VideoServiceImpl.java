@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +43,7 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * video service implement class
@@ -1177,11 +1176,25 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void updateTag(VTag tag) {
 		tagDao.merge(tag);
+		for (Video video : videoDao.getVideoList()) {
+			if (video.getInfo().getTags() == null)
+				continue;
+			if (video.getInfo().getTags().contains(tag)) {
+				video.updateTag(tag);
+			}
+		}
 	}
 
 	@Override
 	public void deleteTag(VTag tag) {
 		tagDao.remove(tag);
+		for (Video video : videoDao.getVideoList()) {
+			if (video.getInfo().getTags() == null)
+				continue;
+			if (video.getInfo().getTags().contains(tag)) {
+				video.toggleTag(tag);
+			}
+		}
 	}
 
 	@Override
@@ -1195,8 +1208,39 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void toggleTag(String opus, String tagname) {
-		videoDao.getVideo(opus).toggleTag(tagname);
+	public void toggleTag(String opus, VTag tag) {
+		VTag _tag = tagDao.findById(tag.getId());
+		videoDao.getVideo(opus).toggleTag(_tag);
+	}
+
+	@Override
+	public List<VTag> getTagListWithVideo() {
+		List<VTag> allTags = tagDao.findAll();
+		for (VTag vTag : allTags) {
+			vTag.getVideoList().clear();
+			for (Video video : videoDao.getVideoList()) {
+				if (video.getTags() == null)
+					continue;
+				if (video.getTags().contains(vTag)) {
+					vTag.addVideo(video);
+				}
+			}
+		}
+		return allTags;
+	}
+
+	@Override
+	public VTag getTag(Integer id) {
+		VTag vTag = tagDao.findById(id);
+		vTag.getVideoList().clear();
+		for (Video video : videoDao.getVideoList()) {
+			if (video.getTags() == null)
+				continue;
+			if (video.getTags().contains(vTag)) {
+				vTag.addVideo(video);
+			}
+		}
+		return vTag;
 	}
 
 }

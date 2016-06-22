@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+  	<ul class="nav nav-tabs">
+    	<li class="active"><a data-toggle="tab" href="#session">Session</a></li>
+    	<li><a data-toggle="tab" href="#request">Request</a></li>
+	</ul>
+	<div class="tab-content">
+    	<div id="session" class="tab-pane fade in active">
+		<section class="panel panel-info">
+			<header class="panel-heading">
+				<h3 class="panel-title">Session attributes</h3>
+			</header>
+			<div class="panel-body">
+				<ol><%
+						@SuppressWarnings("rawtypes")
+						java.util.Enumeration names = session.getAttributeNames();
+						while (names.hasMoreElements()) {
+							String name = (String) names.nextElement();
+							Object value = session.getAttribute(name);
+							String clazz = value.getClass().getName();
+					%>
+					<li>
+						<dl>
+							<dt><%=name%></dt>
+							<dd><%=value%></dd>
+							<dd><code><%=clazz%></code></dd>
+						</dl>
+					</li>
+					<%
+						}
+					%>
+				</ol>
+			</div>
+		</section>
+		</div>
+		<div id="request" class="tab-pane fade">
+		<section class="panel panel-info">
+			<header class="panel-heading">
+				<h3 class="panel-title">Request attributes</h3>
+			</header>
+			<div class="panel-body">
+				<ol>
+					<%
+						names = request.getAttributeNames();
+						while (names.hasMoreElements()) {
+							String name = (String) names.nextElement();
+							Object value = request.getAttribute(name);
+							String clazz = value.getClass().getName();
+							if ("org.springframework.core.convert.ConversionService".equals(name)) {
+								value = value.toString().substring(0, 20) + "...";
+							}
+					%>
+					<li>
+						<dl>
+							<dt><%=name%></dt>
+							<dd><%=value%></dd>
+							<dd><code><%=clazz%></code></dd>
+						</dl>
+					</li>
+					<%
+						}
+					%>
+				</ol>
+			</div>
+		</section>
+		</div>
+	</div>

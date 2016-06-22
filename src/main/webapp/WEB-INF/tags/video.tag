@@ -99,7 +99,7 @@
 	} else if (view.equalsIgnoreCase("rank")) {
 %>
 	<%	if (!"s".equals(mode)) { %>
-<input type="range" id="Rank-${video.opus}" name="points" class="form-control" style="padding: 0;" 
+<input type="range" id="Rank-${video.opus}" name="points" class="form-control" 
 	min="${minRank}" max="${maxRank}" value="${video.rank}"
 	onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
 	<%	} %>	
@@ -119,36 +119,38 @@
 </span>
 <%
 	} else if (view.equalsIgnoreCase("tags")) {
-
+%>
+	<div id="tags-${video.opus}">
+<%
 		if ("l".equals(mode)) {
-
 			for (jk.kamoru.flayon.crazy.video.domain.VTag tag : tagList) {
 				
 				if (video.getTags() == null || !video.getTags().contains(tag)) {
-					%>
-					<span class="label label-default" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getName()%>')"><%=tag.getName()%></span>
-					<%				
+%>
+		<span class="label label-default" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getId()%>')"><%=tag.getName()%></span>
+<%
 				}
 				else {
-					%>
-					<span class="${cssClass}" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getName()%>')"><%=tag.getName()%></span>
-					<%				
+%>
+		<span class="${cssClass}" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getId()%>')"><%=tag.getName()%></span>
+<%
 				}
 			}
 %>
-	<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle();">NEW</span>
-	<form action="/video/tag" method="post" role="form" class="form-inline" id="newTag-${video.opus}" style="margin-top: 5px; display:none;">
-		<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
-		<input type="hidden" name="opus" value="${video.opus}"/>
-		<input name="name" placeholder="name" class="form-control input-sm" required="required"/>
-		<input name="description" placeholder="Description" class="form-control input-sm" required="required"/>
-		<button class="btn btn-primary btn-sm" type="submit">Regist</button>
+	</div>
+	<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this)">
+		<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
+		<span style=" display:none;" id="newTag-${video.opus}">
+			<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
+			<input type="hidden" name="opus" value="${video.opus}"/>
+			<input name="name" placeholder="name" id="newTag-name-${video.opus}" class="form-control input-sm" required="required"/>
+			<input name="description" placeholder="Description" class="form-control input-sm"/>
+			<button class="btn btn-primary btn-sm" type="submit">Regist</button>
+		</span>
 	</form>
 <%
 		}
 		else {
-	
-
 %>
 <c:forEach items="${video.tags}" var="tag">
 	<span class="${cssClass}" title="${tag.description}" onclick="fnViewTagDetail('${tag.name}')">${tag.name}</span>

@@ -4,10 +4,12 @@ var calculatedDivHeight = 0;
  * div container 높이 조정
  */
 function resizeDivHeight() {
-	var windowHeight = $(window).height();
+	var offset = 30;
+	var windowHeight = $(window).outerHeight();
 	var header = $("#header_div").outerHeight();
-	calculatedDivHeight = windowHeight - header - 20 * 2;
-	debug2(calculatedDivHeight + "=" + windowHeight + " - " + header);
+	calculatedDivHeight = windowHeight - header - offset;
+//	console.log("window.height ", window.height, "window.innerHeight ", window.innerHeight, "$(window).outerHeight() ", $(window).outerHeight(), "$(window).height() ", $(window).height()); 
+//	console.log(calculatedDivHeight + " = " + windowHeight + " - " + header + " - " + offset);
 	$("#content_div").outerHeight(calculatedDivHeight);	
 	try {
 		resizeSecondDiv();
@@ -64,16 +66,16 @@ function fnDeleteOpus(selectedOpus) {
 			var frm = document.forms["actionFrm"];
 			frm.action = context + "video/" + selectedOpus;
 			frm.submit();
-			debug("delete " + selectedOpus);
+			console.log("delete " + selectedOpus);
 		}
 	
 }
 function fnEditSubtitles(selectedOpus) {
-	debug("edit subtitles " + selectedOpus);
+	console.log("edit subtitles " + selectedOpus);
 	$("#actionIframe").attr("src", context + "video/" + selectedOpus + "/subtitles");
 }
 function fnPlay(selectedOpus) {
-	debug("Video play " + selectedOpus);
+	console.log("Video play " + selectedOpus);
 	$("#actionIframe").attr("src", context + "video/" + selectedOpus + "/play");
 	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V') {
 		fnVideoDetail(selectedOpus);
@@ -94,7 +96,7 @@ function fnVideoWrong(selectedOpus) {
 	frm.submit();
 }
 function fnRandomPlay() {
-	debug("Random play start");
+	console.log("Random play start");
 	if(opusArray.length == 0) {
 		alert("다 봤슴당");
 		return;
@@ -135,11 +137,11 @@ function fnBGImageDELETE() {
 	actionFrm.submit();
 }
 function fnImageView(opus) {
-	debug("Cover image view : " + opus);
+	console.log("Cover image view : " + opus);
 	popupImage(context + "video/" + opus + "/cover");
 }
 function fnEditOverview(opus) {
-	debug("Overview Popup : " + opus);
+	console.log("Overview Popup : " + opus);
     popup(context + "video/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse');
 }
 function fnVideoDetail(opus) {
@@ -193,13 +195,6 @@ function fnFavorite(dom, name) {
 	frm.submit();
 }
 
-function debug(msg) {
-	$("#debug").html(msg);
-}
-function debug2(msg) {
-	$("#debug2").html(msg);
-}
-
 // for large view
 function fnPrevVideoView() {
 	fnHideVideoSlise(currentVideoIndex);
@@ -250,11 +245,11 @@ function fnHideVideoSlise(idx) {
 
 // for slides view
 function rePagination() {
-	var index = parseInt($(".active").attr("data-slidesjs-item"));
-    var debugHtml = "index=" + index;
+	var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
+    
     $(".slidesjs-pagination-item").each(function() {
     	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
-    	debugHtml += ". " + itemIdx;
+    	
     	if ((itemIdx < index + 5 && itemIdx > index - 5) || itemIdx == 0 || itemIdx == totalVideoSize-1) {
     		$(this).show();
     	}
@@ -262,8 +257,6 @@ function rePagination() {
     		$(this).hide();
     	}
     });
-    debug(debugHtml);
-
 }
 function fnRandomVideoView_Slide() {
 	var selectedNumber = getRandomInteger(1, totalVideoSize);
@@ -308,7 +301,7 @@ function fnMarkChoice(opus) {
 	$("#check-" + opus).addClass("mark");
 }
 
-function fnSetTag(dom, opus, tagname) {
+function fnSetTag(dom, opus, tagId) {
 	if ($(dom).hasClass("label-default")) {
 		$(dom).removeClass("label-default");
 		$(dom).addClass("label-plain");
@@ -317,11 +310,47 @@ function fnSetTag(dom, opus, tagname) {
 		$(dom).removeClass("label-plain");
 		$(dom).addClass("label-default");
 	}
+	$("#hiddenHttpMethod").val("POST");
 	var frm = document.forms["actionFrm"];
-	frm.action = context + "video/" + opus + "/tag/" + tagname;
+	$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
+	frm.action = context + "video/" + opus + "/tag";
 	frm.submit();
 }
-
+/**
+ * 저장한 태그를 화면에 추가한다
+ * @param frm
+ */
+function addTag(frm) {
+	var opus    = $(frm).find("input[name='opus']").val();
+	var tagname = $(frm).find("input[name='name']").val();
+	var tagdesc = $(frm).find("input[name='description']").val();
+	console.log("tag ",  opus, tagname, tagdesc);
+	var newTag = $("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname);
+	$("#tags-"+opus).append(newTag);
+	$(frm).children().first().click();
+	
+}
+/** TODO
+ * 태그 상세화면 팝업.
+ * @param name
+ */
+function fnViewTagDetail(name) {
+	popup(context + "video/tag/" + name, "tagDetail-" + name, 850, 600);
+}
+/**
+ * 태그 삭제
+ * @param tagId
+ */
+function fnDeleteTag(tagId, dom) {
+	if (confirm("Are you sure to delete it?")) {
+		$(dom).parent().hide();
+		$("#hiddenHttpMethod").val("DELETE");
+		var frm = document.forms["actionFrm"];
+		$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
+		frm.action = context + "video/tag";
+		frm.submit();
+	}
+}
 /**
  * background-size:contain; Scale the image to the largest size such that both its width and its height can fit inside the content area
  * 이 설정과 같이 움직이도록 하는 함수 
@@ -356,7 +385,7 @@ function resizeBackgroundImage() {
 				height = divHeight;
 			}
 		}
-		//debug("background-image resize :{"+imgWidth+","+imgHeight+"}->{"+width+","+height+"}");
+		//console.log("background-image resize :{"+imgWidth+","+imgHeight+"}->{"+width+","+height+"}");
 		$("#contentDiv").css("background-image", "url(" + currBGImageUrl + ")");
 		$("#contentDiv").css("background-size", width + "px " + height + "px");
 	});

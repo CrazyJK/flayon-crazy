@@ -24,7 +24,7 @@
 #thumbnailDiv {
 	position:absolute; 
 	bottom:0px; 
-	height:100px; 
+	height:105px; 
 	width:100%; 
 	margin:10px 5px 0px 0px; 
 	text-align:center; 
@@ -206,7 +206,7 @@ function fnDisplayThumbnail() {
 	<span class="label label-info"><span id="currNo"></span></span>
 	<span class="label label-info" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
 	<span class="label label-info" onclick="fnEndImageView();"><span id="endNo"></span></span>
-	<br/>
+	&nbsp;
 	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
 </div>
 <div id="imageDiv"></div>

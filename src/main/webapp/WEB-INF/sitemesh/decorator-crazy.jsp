@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html lang="${locale}">
+<html>
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,7 +28,7 @@ var context = '<c:url value="/"/>';
 var videoURL = '<c:url value="/video"/>';
 var locationPathname = window.location.pathname;
 var currBGImageNo = 0;
-var bgImageCount = ${bgImageCount};
+var bgImageCount = ${empty bgImageCount ? 0 : bgImageCount};
 /** content_div에 이미지를 보여줄지 여부 */
 var bgContinue = true;
 
@@ -71,7 +71,7 @@ function showNav() {
 	var found = false;
 	$("nav#deco_nav ul li a").each(function() {
 		if ($(this).attr("href") == locationPathname) {
-			$(this).parent().addClass("menu-selected");
+			$(this).parent().addClass("active");
 			found = true;
 		}
 	});

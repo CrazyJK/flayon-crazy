@@ -7,7 +7,9 @@
 <title><s:message code="default.home"/></title>
 </head>
 <body>
+<div>
 
+<div class="container">
 	<div class="jumbotron">
 		<h1>
 			<b><s:message code="jk.crazy"/></b> 
@@ -18,6 +20,8 @@
 		<p><s:message code="home.favorites.wording1"/></p>
 		<p><s:message code="home.favorites.wording2"/></p>
 	</div>
+</div>
 
+</div>
 </body>
 </html>

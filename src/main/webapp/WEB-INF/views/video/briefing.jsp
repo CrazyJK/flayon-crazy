@@ -5,7 +5,7 @@
 <%@ taglib prefix="s"   uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="jk"  tagdir="/WEB-INF/tags"%>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
-
+<c:set var="tab" value="${empty param.tab ? 'folder' : param.tab}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,28 +86,28 @@ function reloadVideo() {
 				<button class="btn btn-xs btn-default" onclick="setDELETE_LOWER_SCORE_VIDEO()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
 			</div>
 			</li>
-		<li><button type="button" class="btn btn-xs btn-default" onclick="reloadVideo()"><s:message code="video.reload.title"/></button></li>					
+		<li><button type="button" class="btn btn-xs btn-default" onclick="reloadVideo()"><s:message code="video.reload.title"/></button></li>
 	</ul>
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">
 
  	<ul class="nav nav-tabs">
-	    <li class="active"><a data-toggle="tab" href="#folder"><s:message code="video.video-by-folder"/></a></li>
-	    <li><a data-toggle="tab" href="#date"		><s:message code="video.video-by-date"/></a></li>
-	    <li><a data-toggle="tab" href="#play"		><s:message code="video.video-by-play"/></a></li>
-		<li><a data-toggle="tab" href="#rank"		><s:message code="video.video-by-rank"/></a></li>
-		<li><a data-toggle="tab" href="#score"		><s:message code="video.video-by-score"/></a></li>
-		<li><a data-toggle="tab" href="#length"		><s:message code="video.video-by-length"/></a></li>
-		<li><a data-toggle="tab" href="#extension"	><s:message code="video.video-by-extension"/></a></li>
+	    <li class="${tab eq 'folder'    ? 'active' : ''}"><a data-toggle="tab" href="#folder"     ><s:message code="video.video-by-folder"/></a></li>
+	    <li class="${tab eq 'date'      ? 'active' : ''}"><a data-toggle="tab" href="#date"		><s:message code="video.video-by-date"/></a></li>
+	    <li class="${tab eq 'play'      ? 'active' : ''}"><a data-toggle="tab" href="#play"		><s:message code="video.video-by-play"/></a></li>
+		<li class="${tab eq 'rank'      ? 'active' : ''}"><a data-toggle="tab" href="#rank"		><s:message code="video.video-by-rank"/></a></li>
+		<li class="${tab eq 'score'     ? 'active' : ''}"><a data-toggle="tab" href="#score"		><s:message code="video.video-by-score"/></a></li>
+		<li class="${tab eq 'length'    ? 'active' : ''}"><a data-toggle="tab" href="#length"		><s:message code="video.video-by-length"/></a></li>
+		<li class="${tab eq 'extension' ? 'active' : ''}"><a data-toggle="tab" href="#extension"	><s:message code="video.video-by-extension"/></a></li>
 		<%-- <li><a data-toggle="tab" href="#video"		><s:message code="video.video"/>   <span class="badge">${videoList.size()}</span></a></li> --%>
-		<li><a data-toggle="tab" href="#studio"		><s:message code="video.studio"/>  <span class="badge">${studioList.size()}</span></a></li>
-		<li><a data-toggle="tab" href="#actress"	><s:message code="video.actress"/> <span class="badge">${actressList.size()}</span></a></li>
-		<li><a data-toggle="tab" href="#tags"		><s:message code="video.tags"/>    <span class="badge">${tagList.size()}</span></a></li>
+		<li class="${tab eq 'studio'    ? 'active' : ''}"><a data-toggle="tab" href="#studio"		><s:message code="video.studio"/>  <span class="badge">${studioList.size()}</span></a></li>
+		<li class="${tab eq 'actress'   ? 'active' : ''}"><a data-toggle="tab" href="#actress"	><s:message code="video.actress"/> <span class="badge">${actressList.size()}</span></a></li>
+		<li class="${tab eq 'tags'      ? 'active' : ''}"><a data-toggle="tab" href="#tags"		><s:message code="video.tags"/>    <span class="badge">${tagList.size()}</span></a></li>
   	</ul>
 
 	<div class="tab-content">
-		<section id="folder" class="tab-pane fade in active">
+		<section id="folder" class="tab-pane fade ${tab eq 'folder' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -141,7 +141,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="date" class="tab-pane fade">
+		<section id="date" class="tab-pane fade ${tab eq 'date' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -192,7 +192,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="play" class="tab-pane fade">
+		<section id="play" class="tab-pane fade ${tab eq 'play' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -243,7 +243,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="rank" class="tab-pane fade">
+		<section id="rank" class="tab-pane fade ${tab eq 'rank' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -276,7 +276,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="score" class="tab-pane fade">
+		<section id="score" class="tab-pane fade ${tab eq 'score' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -315,7 +315,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="length" class="tab-pane fade">
+		<section id="length" class="tab-pane fade ${tab eq 'length' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -349,7 +349,7 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="extension" class="tab-pane fade">
+		<section id="extension" class="tab-pane fade ${tab eq 'extension' ? 'in active' : ''}">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -395,8 +395,8 @@ function reloadVideo() {
 			</table>
 		</section>
  --%>
-		<section id="studio" class="tab-pane fade">
-			<table class="table table-condensed table-bordered">
+		<section id="studio" class="tab-pane fade ${tab eq 'studio' ? 'in active' : ''}">
+			<table class="table">
 				<tr>
 					<td>
 						<c:forEach var="studio" items="${studioList}">
@@ -407,8 +407,8 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="actress" class="tab-pane fade">
-			<table class="table table-condensed table-bordered">
+		<section id="actress" class="tab-pane fade ${tab eq 'actress' ? 'in active' : ''}">
+			<table class="table">
 				<tr>
 					<td>
 						<c:forEach items="${actressList}" var="actress">
@@ -419,28 +419,40 @@ function reloadVideo() {
 			</table>
 		</section>
 
-		<section id="tags" class="tab-pane fade">
-			<table class="table table-condensed table-bordered">
+		<section id="tags" class="tab-pane fade ${tab eq 'tags' ? 'in active' : ''}">
+			<table class="table">
 				<tr>
 					<td>
+						<div id="taglist">
 						<c:forEach items="${tagList}" var="tag">
 							<jk:tags tag="${tag}" view="span"/>
 						</c:forEach>
+						</div>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<form action="/video/tag" method="post" role="form" class="form-inline">
+						<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();">
 							<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
-							<input name="name" placeholder="name" class="form-control" required="required"/>
-							<input name="description" placeholder="Description" class="form-control" required="required"/>
+							<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
+							<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
 							<button class="btn btn-primary" type="submit">Regist</button>
 						</form>
 					</td>
 				</tr>
 			</table>
+			<script type="text/javascript">
+			function appendNewTag() {
+				var newTag = $("<span>").attr("style", "padding: 5px; margin: 5px; background-color:#ff0;")
+								.attr("title", $("#newTagDesc").val())
+								.addClass("item box nowrap")
+								.html($("#newTagName").val());
+				//console.log("tags", $("#taglist"));
+				$("#taglist").append(newTag);
+			}
+			</script>
 		</section>
-	
+
 	</div>
 
 </div>
