@@ -38,10 +38,9 @@
 %>
 <span style="background-color:#fff;" data-toggle="tooltip"
 	onclick="fnViewActressDetail('${actress.name}')" 
-	class="item <%=itemCssClass %> box box-small nowarp" 
-	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
-		${actress.name} <span class="badge">${fn:length(actress.videoList)}</span>
-</span>
+	class="item <%=itemCssClass %> box box-small" 
+	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}"
+		>${actress.name} <small>${fn:length(actress.videoList)}</small></span>
 <%
 	} else {
 %>

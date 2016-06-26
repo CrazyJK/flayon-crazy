@@ -16,7 +16,7 @@ canvas#cv {
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;	
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(255, 255, 255, 0.5);
 }
 canvas#cv:hover {
 	cursor:pointer;
@@ -99,6 +99,7 @@ input[type=radio] {
 }
 </style>	
 <script>
+//bgContinue = false;
 var canvas, context, tool;
 
 var imagepath = '<s:url value="/image/" />';
@@ -117,9 +118,6 @@ $(document).ready(function() {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 
-		setBackgroundImage();
-		setInterval(function() {setBackgroundImage();},	60*1000);
-	
 		// Pencil tool 객체를 생성 한다.
 		tool = new tool_pencil();
 		$("#cv").bind("mousedown", ev_canvas);
@@ -213,13 +211,6 @@ $(document).ready(function() {
 	
 });	
 
-function setBackgroundImage() {
-	var bgImgUrl = "<c:url value="/image/random"/>?_t=" + new Date().getTime();
-	$("body").css("background-image", "url(" + bgImgUrl + ")");
-	$("body").css("background-repeat", "repeat");
-	$("body").css("background-position", "center center");
-	$("body").css("background-size", "contain");
-}
 function imageURL() {
 	return imagepath + selectedNumber + "?_t=" + new Date().getTime();
 }

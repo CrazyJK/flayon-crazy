@@ -36,12 +36,11 @@
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip"
+<span style="background-color:#fff;" data-toggle="tooltip"
 	onclick="fnViewStudioDetail('${studio.name}')" 
-	class="item <%=itemCssClass %> box box-small nowrap" 
-	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">
-		${studio.name} <span class="badge">${fn:length(studio.videoList)}</span>
-</span>
+	class="item <%=itemCssClass %> box box-small" 
+	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}"
+		>${studio.name} <small>${fn:length(studio.videoList)}</small></span>
 <%
 	} else {
 %>

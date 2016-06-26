@@ -8,6 +8,7 @@
 <head>
 <title>Archive [${video.opus}] ${video.title}</title>
 <script type="text/javascript">
+bgContinue = false;
 $(document).ready(function() {
 	$("body").css("background-image","url('<c:url value="/video/${video.opus}/cover" />')");
 	$("body").css("background-size", "100%");

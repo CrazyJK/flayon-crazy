@@ -84,16 +84,16 @@ function renderChart() {
 		        "id": "g1",
 		        "type" : "column",
 		        "lineThickness": 2,
+		        "fillAlphas": 0.8,
 		        "title": "Play video",
 		        "useLineColorForBulletBorder": true,
 		        "legendPeriodValueText": "total: [[value.sum]] played",
 		        "legendValueText": "[[value]] played",
 		        "valueField": "play",
 		        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
-		    },{
+		    }
+/* 		    ,{
 		        "id": "g2",
-//				"lineColor" : "#2F4F4F",
-//				"lineColor" : "#ffffff",
 		        "type" : "column",
 		        "clustered":false,
 		        "columnWidth":0.5,
@@ -105,7 +105,8 @@ function renderChart() {
 		        "legendValueText": "[[value]] removed",
 		        "valueField": "remove",
 		        "balloonText": "<span style='font-size:15px;'>Remove : [[value]]</span>"
-		    }],
+		    } */
+		    ],
 		    "chartScrollbar": {
 		    	updateOnReleaseOnly : true,
 		        "graph": "g1",

@@ -47,6 +47,7 @@
 }
 </style>
 <script type="text/javascript">
+bgContinue = false;
 var imagepath = '<s:url value="/image/" />';
 var selectedNumber;
 var selectedImgUrl;
@@ -54,6 +55,9 @@ var imageCount;
 var windowWidth  = $(window).width();
 var windowHeight = $(window).height();
 var imageMap;
+var playSlide = false;
+var playInterval = 10;
+var playSec = playInterval;
 
 $(document).ready(function(){
 	
@@ -70,6 +74,20 @@ $(document).ready(function(){
 		$("#firstNo").html(0);
 		$("#endNo").html(imageCount-1);
 
+		setInterval(function() {
+			if (playSlide) {
+				if (playSec % playInterval == 0) {
+					fnNextImageView();
+					playSec = playInterval;
+				}
+				showTimer(playSec);
+				//console.log("timer ", playSec);
+			}
+			playSec--;
+			if (playSec % playInterval == 0) {
+				playSec = playInterval;
+			}
+		},	1000);
 	});
 	
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
@@ -133,7 +151,7 @@ function fnViewImage(current) {
 	selectedImgUrl = imagepath + selectedNumber;
 
 	if (prevNumber - selectedNumber < 0) { // move forward
-		$("#imageDiv").hide("slow", function() {
+		$("#imageDiv").hide(300, function() {
 			$(this).css("background-image", "url('" + selectedImgUrl + "')");
 		});
 //		$("#imageDiv").slideUp("slow", function() {
@@ -143,10 +161,10 @@ function fnViewImage(current) {
 		$("#imageDiv").fadeIn("slow");
 	}
 	else { // move backward
-		$("#imageDiv").fadeOut("slow", function() {
+		$("#imageDiv").fadeOut(300, function() {
 			$(this).css("background-image", "url('" + selectedImgUrl + "')");
 		});
-		$("#imageDiv").show("slow");
+		$("#imageDiv").show(300);
 	}
 
 	$("#leftNo").html(getPrevNumber());
@@ -195,6 +213,21 @@ function fnDisplayThumbnail() {
 		$("#thumbnailUL").append(li);
 	}
 }
+function fnPlayImage() {
+	if (playSlide) {
+		playSlide = false;
+		showTimer(playInterval);
+		$("#timer").html("Play");
+	}
+	else {
+		playSlide = true;
+	}
+}
+function showTimer(sec) {
+	$("#timer").html(sec + "s");
+	$("#timerBar").attr("aria-valuenow", sec);
+	$("#timerBar").css("width", sec*10 + "%");
+}
 </script>
 </head>
 <body>
@@ -206,10 +239,15 @@ function fnDisplayThumbnail() {
 	<span class="label label-info"><span id="currNo"></span></span>
 	<span class="label label-info" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
 	<span class="label label-info" onclick="fnEndImageView();"><span id="endNo"></span></span>
-	&nbsp;
 	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
+
+	<div class="progress" style="width: 100px; margin: 5px 0px; z-index: 18;" onclick="fnPlayImage();">
+  		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10"
+  			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Play</span></div></div>
 </div>
+
 <div id="imageDiv"></div>
+
 <div id="thumbnailDiv"><ul id="thumbnailUL" class="list-inline"></ul></div>
 
 </div>

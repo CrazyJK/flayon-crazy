@@ -320,7 +320,7 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/{opus}/play", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void callVideoPlayer(Model model, @PathVariable String opus) {
+	public void callVideoPlayer(@PathVariable String opus) {
 		logger.trace(opus);
 		videoService.playVideo(opus);
 	}

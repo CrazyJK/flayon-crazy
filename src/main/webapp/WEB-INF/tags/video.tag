@@ -56,9 +56,13 @@
 	</c:if>
 </span>
 <c:if test="${mode eq 'l'}">&nbsp;
-	<span class="${cssClass}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
-	<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
-			onclick="popup('<s:eval expression="@environment.getProperty('url.search.actress')"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
+	<span class="${cssClass}" title="set Favorite actress"
+			onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<%-- <img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
+			onclick="popup('<s:eval expression="@environment.getProperty('url.search.actress')"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/> --%>
+	<span class="${cssClass}" title="<s:message code="video.find-info.actress"/>"
+			onclick="popup('<s:eval expression="@environment.getProperty('url.search.actress')"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"
+		><span class="glyphicon glyphicon-user"></span></span>
 </c:if>
 &nbsp;
 </c:forEach>
@@ -67,14 +71,20 @@
 %>
 <span class="${cssClass}" onclick="fnViewVideoDetail('${video.opus}')" title="${video.fullname}">${video.opus}</span>
 <c:if test="${mode eq 'l'}">
-	<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
-		onclick="popup('<s:eval expression="@environment.getProperty('url.search.video')"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
+	<%-- <img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
+		onclick="popup('<s:eval expression="@environment.getProperty('url.search.video')"/>${video.opus}', 'info_${video.opus}', 800, 600)"/> --%>
+	<span class="${cssClass}" title="<s:message code="video.find-info.opus"/>"
+		onclick="popup('<s:eval expression="@environment.getProperty('url.search.video')"/>${video.opus}', 'info_${video.opus}', 800, 600)"
+		><span class="glyphicon glyphicon-picture"></span></span>
 </c:if>
 <%
 	} else if (view.equalsIgnoreCase("torrent")) {
 %>
-<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.torrent"/>"
-	onclick="popup('<s:eval expression="@environment.getProperty('url.search.torrent')"/>${video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';"/>
+<%-- <img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.torrent"/>"
+	onclick="popup('<s:eval expression="@environment.getProperty('url.search.torrent')"/>${video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';"/> --%>
+<span class="${cssClass}" title="<s:message code="video.find-info.torrent"/>"
+	onclick="popup('<s:eval expression="@environment.getProperty('url.search.torrent')"/>${video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';"
+	><span class="glyphicon glyphicon-download-alt"></span></span>
 <%
 	} else if (view.equalsIgnoreCase("length")) {
 %>
@@ -140,12 +150,12 @@
 	</div>
 	<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this)">
 		<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
-		<span style=" display:none;" id="newTag-${video.opus}">
+		<span style="display:none; bg-info" id="newTag-${video.opus}">
 			<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
 			<input type="hidden" name="opus" value="${video.opus}"/>
 			<input name="name" placeholder="name" id="newTag-name-${video.opus}" class="form-control input-sm" required="required"/>
 			<input name="description" placeholder="Description" class="form-control input-sm"/>
-			<button class="btn btn-primary btn-sm" type="submit">Regist</button>
+			<button class="btn btn-primary btn-xs" type="submit">Regist</button>
 		</span>
 	</form>
 <%

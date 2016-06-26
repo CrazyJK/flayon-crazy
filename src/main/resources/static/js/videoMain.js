@@ -106,6 +106,7 @@ $(document).ready(function(){
 		        	}
 		        }
 			});
+		    $(".slidesjs-previous").html("Prev");
 		});
 		$(window).bind("mousewheel DOMMouseScroll", function(e) {
 			var delta = 0;

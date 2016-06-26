@@ -117,6 +117,13 @@ function loading(show, msg, interval) {
 		$("#loading").fadeOut(interval);
 	}
 }
+var bgToggle = 0;
+function toogleBody() {
+	$(".container-fluid, .container").animate({
+		"opacity": bgToggle % 2
+	}, 1000);
+	++bgToggle;
+}
 </script>
 
 <sitemesh:write property="head" />
@@ -135,6 +142,7 @@ function loading(show, msg, interval) {
 
 	<nav id="deco_nav">
 		<ul class="nav nav-pills">
+			<li><a onclick="toogleBody()" 			       		>Background</a>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>

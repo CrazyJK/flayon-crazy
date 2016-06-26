@@ -25,17 +25,35 @@ var currBGImageUrl;
 
 /** 바탕화면 보기 */
 function fnViewBGImage() {
+/* 	
 	$("#contentContainer").slideToggle("slow");
-	$("#bgActionGroup").toggle();
+	$("#content_div").toggleClass("box");
+	$("#bgActionGroup").toggle();	
+ */	
+	$("#contentContainer").slideToggle({
+		duration: 1000,
+		start: function() {
+			$("#bgActionGroup").toggle({
+				duration: 1000,
+				start: function() {
+					$("#content_div").toggleClass("box");
+				},
+				complete: function() {
+				}
+			});	
+		},
+		complete: function() {
+		}
+	});
 }
 </script>
 </head>
 <body>
 <div class="container-fluid" role="main">
 
-<div id="header_div">
+<div id="header_div" class="box">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
-	<div id="searchDiv" class="box">
+	<div id="searchDiv">
 		<!-- Search : Text -->
 		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
 		<form:input path="searchText" cssClass="form-control input-sm" placeHolder="Search" style="width:120px;"/>
@@ -95,7 +113,7 @@ function fnViewBGImage() {
 		</label>
 		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
 		<button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" title="<s:message code="video.reload.title"/>"><s:message code="video.reload"/></button>
-		<button class="btn btn-sm btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></button>
+		<button class="btn btn-xs btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></button>
 
 		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(studioList)}</span></li>
@@ -204,7 +222,8 @@ function fnViewBGImage() {
 						<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
 						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="opus" mode="l"/>
+							<jk:video video="${video}" view="torrent" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="release" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="download" mode="l"/></dd>
@@ -217,6 +236,7 @@ function fnViewBGImage() {
 				</div>
 			</c:forEach>
 			</div>
+			<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation" onclick="fnRandomVideoView_Slide()">Random View</a></div>
 		</div>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'L'}">
@@ -288,7 +308,7 @@ function fnViewBGImage() {
 	</c:choose>
 	</div>
 
-	<div id="bgActionGroup" class="text-center" style="display:none;">
+	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
 		<span class="btn btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
 		<span class="btn btn-info text-center" onclick="fnBGImageView();">VIEW</span>
 		<span class="btn btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>

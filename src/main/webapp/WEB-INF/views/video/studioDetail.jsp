@@ -8,6 +8,7 @@
 <title>${studio.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
+bgContinue = false;
 function fnRenameTo() {
 	var actressForm = document.forms['studioForm'];
 	actressForm.action = "<s:url value="/video/studio/${studio.name}/renameTo/"/>" + $("#newName").val();

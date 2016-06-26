@@ -8,6 +8,7 @@
 <title>${actress.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
+bgContinue = false;
 $(document).ready(function(){
 	
 });

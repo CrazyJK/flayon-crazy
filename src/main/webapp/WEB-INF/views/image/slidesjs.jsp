@@ -97,6 +97,7 @@ li.slidesjs-pagination-item a.active {
 </style>
 <script src="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"></script>
 <script type="text/javascript">
+bgContinue = false;
 var imagepath = '<s:url value="/image/" />';
 var selectedNumber;
 var selectedImgUrl;

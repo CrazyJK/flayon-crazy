@@ -396,51 +396,33 @@ function reloadVideo() {
 		</section>
  --%>
 		<section id="studio" class="tab-pane fade ${tab eq 'studio' ? 'in active' : ''}">
-			<table class="table">
-				<tr>
-					<td>
-						<c:forEach var="studio" items="${studioList}">
-							<jk:studio studio="${studio}" view="span"/>
-						</c:forEach>
-					</td>
-				</tr>
-			</table>
+			<ul class="list-inline">
+				<c:forEach var="studio" items="${studioList}">
+					<li><jk:studio studio="${studio}" view="span"/></li>
+				</c:forEach>
+			</ul>
 		</section>
 
 		<section id="actress" class="tab-pane fade ${tab eq 'actress' ? 'in active' : ''}">
-			<table class="table">
-				<tr>
-					<td>
-						<c:forEach items="${actressList}" var="actress">
-							<jk:actress actress="${actress}" view="span"/>
-						</c:forEach>
-					</td>
-				</tr>
-			</table>
+			<ul class="list-inline">
+				<c:forEach items="${actressList}" var="actress">
+					<li><jk:actress actress="${actress}" view="span"/></li>
+				</c:forEach>
+			</ul>
 		</section>
 
 		<section id="tags" class="tab-pane fade ${tab eq 'tags' ? 'in active' : ''}">
-			<table class="table">
-				<tr>
-					<td>
-						<div id="taglist">
-						<c:forEach items="${tagList}" var="tag">
-							<jk:tags tag="${tag}" view="span"/>
-						</c:forEach>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();">
-							<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
-							<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
-							<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
-							<button class="btn btn-primary" type="submit">Regist</button>
-						</form>
-					</td>
-				</tr>
-			</table>
+			<ul class="list-inline" id="taglist">
+				<c:forEach items="${tagList}" var="tag">
+					<li><jk:tags tag="${tag}" view="span"/></li>
+				</c:forEach>
+			</ul>
+			<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();" style="margin-top:10px;">
+				<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
+				<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
+				<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
+				<button class="btn btn-primary" type="submit">Regist</button>
+			</form>
 			<script type="text/javascript">
 			function appendNewTag() {
 				var newTag = $("<span>").attr("style", "padding: 5px; margin: 5px; background-color:#ff0;")

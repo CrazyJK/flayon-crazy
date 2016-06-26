@@ -36,9 +36,9 @@
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="padding: 5px; margin: 5px; background-color:#fff;" data-toggle="tooltip" class="item <%=itemCssClass %> box nowrap" title="${tag.description}">
+<span style="background-color:#fff;" data-toggle="tooltip" class="item <%=itemCssClass %> box box-small" title="${tag.description}">
 	<span onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span> 
-	<span class="badge">${tag.videoList.size()}</span> 
+	<small>${tag.videoList.size()}</small> 
 	<span onclick="fnDeleteTag(${tag.id}, this)" title="Delete">&times;</span>
 </span>
 <%
