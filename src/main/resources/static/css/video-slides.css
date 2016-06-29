@@ -1,27 +1,42 @@
 @CHARSET "UTF-8";
-.slides {
-	width:800px;
+/* 전체를 싸는 */
+#slides {
+	display: none;
+	width: 800px;
 	margin:0 auto;
 	text-align: center;
 }
+/* 뷰를 싸는 외곽 */
 .slidesjs-container {
 	margin-bottom: 10px;
 }
+/* 뷰를 싸는 내부 */
 .slidesjs-control {
 }
+/* 각 뷰 */
 .slidesjs-slide {
-	border-radius: 10px;
+	height: 100%;
 }
+/* 뷰 구성요소 */
+.slidesjs-slide > dl {
+	height: 100%; 
+	border-radius:10px; 
+	background-repeat: no-repeat; 
+	background-position: center center; 
+	background-size: cover;
+	background-color: rgba(255, 255, 255, 0.75);
+}
+.slidesjs-slide > dl > dt {
+	font-size: x-large;
+}
+.slidesjs-slide > dl > dd {
+	text-align: left;
+	margin: 3px 0px 0px 5px;
+	font-size: large;
+}
+
+/* 네비게이션 버튼 [prev, next, play, stop] */
 .slidesjs-navigation {
-/* 	font-size: 15px;
-	background-color:rgba(255, 255, 255, 0.5); 
-	color:black; 
-	text-shadow:1px 1px 1px white; 
-	padding:0px 5px 0px 5px;
-	border:1px solid orange; 
-	border-radius: 5px;
-	text-decoration:none;
- */	
 	display: inline-block;
 	padding: 5px 14px;
 	background-color: #fff;
@@ -30,7 +45,7 @@
 }
 .slidesjs-navigation:hover {
 	text-decoration:none;
-	background-color: #eee;
+	background-color: rgba(238, 238, 238, 0.5);
 }
 .slidesjs-previous {
 	float:left;
@@ -44,35 +59,29 @@
 	margin-right:20px;
 }
 
-ul.slidesjs-pagination {
+/* 페이징 UL */
+.slidesjs-pagination {
 	padding: 10px 0 0 0;
 	position: fixed;
     bottom: 0;
     width: inherit;
 }
-li.slidesjs-pagination-item {
+/* 각 페이지 LI */
+.slidesjs-pagination-item {
 	display:inline-block;
 }
-li.slidesjs-pagination-item:first-child {
+.slidesjs-pagination-item:first-child {
 	margin-right: 10px;
 }
-li.slidesjs-pagination-item:last-child {
+.slidesjs-pagination-item:last-child {
 	margin-left: 10px;
 }
-li.slidesjs-pagination-item a {
-/* 	background-color:rgba(255, 255, 255, 0.5); 
-	text-shadow:1px 1px 1px white; 
-	padding:0px 5px 0px 5px;
-	border:1px solid orange; 
-	border-radius: 5px;
-	text-decoration:none;
-	margin: 3px;
-	color:black;
- */	
+/* 페이지 번호 */
+.slidesjs-pagination-item a {
 	position: relative;
 	float: left;
 	padding: 6px 10px;
-	margin-left: 3px;
+	margin: 0px 2px;
 	width: 50px;
 	line-height: 1.5;
 	color: #337ab7;
@@ -81,57 +90,12 @@ li.slidesjs-pagination-item a {
 	background-color: #fff;
 	border: 1px solid #ddd;
 }
-li.slidesjs-pagination-item a.active {
-	/* padding: 5px; */
-	/* text-decoration:none;
-	color:#7d8ee2; */
-	z-index: 3;
+.slidesjs-pagination-item a.active {
 	color: #fff;
-	cursor: default;
 	background-color: #337ab7;
 	border-color: #337ab7;
 }
-li.slidesjs-pagination-item a:hover {
-	/* text-shadow:1px 1px 1px #7d8ee2; */
-	z-index: 2;
-	color: #23527c;
-	background-color: #eee;
-	border-color: #ddd;
-}
-
-/*  */
-.video-slide,
-.video-slide-bg {
-	border-radius:10px; 
-	-moz-border-radius:10px; 
-	-webkit-border-radius:10px;
-}
-.video-slide {
-	width:800px; 
-	height:560px; 
-	display: inline-block;
-}
-.video-slide-bg {
-	height:555px; 
-	background-repeat: no-repeat; 
-	background-position: center center; 
-	background-size: cover;
-	background-color: rgba(255, 255, 255, 0.75);
-}
-.video-slide-bg dt {
-	font-size: x-large;
-}
-.video-slide-bg dd {
-	text-align: left;
-	margin: 3px 0px 0px 5px;
-	font-size: large;
-}
-
-#video-slide-wrapper {
-	text-align: center;
-	float:center;
-	height: 100%;
-}
-#video_slide_bar {
-	margin-top: 10px;
+.slidesjs-pagination-item a:hover {
+	color: #337ab7;
+	background-color: rgba(238, 238, 238, 0.5);
 }

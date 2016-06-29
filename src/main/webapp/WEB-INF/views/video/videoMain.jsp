@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
-<script type="text/javascript" src="<c:url value="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="http://slidesjs.com/js/jquery.slides.min.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
 var opusArray = ${opusArray};
@@ -214,27 +214,27 @@ function fnViewBGImage() {
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'S'}">
 		<div id="video-slide-wrapper">
-			<div id="slides" class="slides">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">             
-					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-						<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
-						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="opus" mode="l"/>
-							<jk:video video="${video}" view="torrent" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="release" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="download" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="video" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="cover" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
-					</dl>
-				</div>
-			</c:forEach>
+			<div id="slides">
+				<c:forEach items="${videoList}" var="video">
+					<div id="opus-${video.opus}" style="display:none;">
+						<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+							<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+							<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
+							<dd><jk:video video="${video}" view="score" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="opus" mode="l"/>
+								<jk:video video="${video}" view="torrent" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="release" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="download" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="video" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="cover" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+						</dl>
+					</div>
+				</c:forEach>
 			</div>
 			<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation" onclick="fnRandomVideoView_Slide()">Random View</a></div>
 		</div>

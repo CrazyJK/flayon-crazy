@@ -4,20 +4,16 @@ $(document).ready(function(){
 	$('span[id^="checkbox"]')
 		.bind("click", function(){
 			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-//			alert(hiddenCheckbox.is(":checked"));
 			if(hiddenCheckbox.is(":checked")) {
-				//hiddenCheckbox.val("false");
 				$(this).addClass("label-default");
 				$(this).removeClass("label-success");
 			} else {
-				//hiddenCheckbox.val("true");
 				$(this).addClass("label-success");
 				$(this).removeClass("label-default");
 			}
 		})
 		.each(function(){
 			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-			//$("#debug2").html($(this).attr("id").split("-")[1] + " : " + hiddenCheckbox.val());
 			if(hiddenCheckbox.is(":checked")) {
 				$(this).addClass("label-success");
 				$(this).removeClass("label-default");
@@ -51,18 +47,10 @@ $(document).ready(function(){
 		if (!clicked || clicked == 'false') {
 			$(this).attr("clicked", "true");
 			$(this).addClass("li-box-select");
-//			$(this).children().animate({"height": "+=20px"}, "slow", function() {
-//				$("#DEL-"+$(this).parent().attr("id")).css("display", "");
-//				$(this).parent().addClass("li-box-select");
-//			});
 		}
 		else {
 			$(this).attr("clicked", "false");
 			$(this).removeClass("li-box-select");
-//			$(this).children().animate({"height": "-=20px"}, "slow", function() {
-//				$("#DEL-"+$(this).parent().attr("id")).css("display", "none");
-//				$(this).parent().removeClass("li-box-select");
-//			});
 		}
 	});
 	
@@ -87,10 +75,10 @@ $(document).ready(function(){
 			$('#slides').slidesjs({
 				start: currentVideoIndex,
 		        width: 800,
-		        height: 550,
-		        navigation: {active: true},
-		        /* pagination: false, */
-		        play: {active: true, interval:5000, auto: false},
+		        height: 650,
+		        navigation: {active: true, effect: "slide"},
+		        pagination: {active: true, effect: "slide"},
+		        play: {active: true, interval:5000, auto: false, effect: "fade"},
 		        callback: {
 		        	loaded: function(number) {
 		        		console.log("loaded callback : " + number);	 
@@ -102,8 +90,15 @@ $(document).ready(function(){
 		        	},
 		        	complete: function(number) {
 		        		console.log("complete callback : " + number);
-//		        		rePagination();
 		        	}
+		        },
+		        effect: {
+		            slide: {
+		            	speed: 1000
+		            },
+		            fade: {
+		            	speed: 1000, crossfade: true
+		            }
 		        }
 			});
 		    $(".slidesjs-previous").html("Prev");
@@ -111,7 +106,6 @@ $(document).ready(function(){
 		$(window).bind("mousewheel DOMMouseScroll", function(e) {
 			var delta = 0;
 			var event = window.event || e;
-//			console.log("mouse event ", event);
 			if (event.wheelDelta) {
 				delta = event.wheelDelta/120;
 				if (window.opera) delta = -delta;
@@ -120,17 +114,15 @@ $(document).ready(function(){
 				delta = -event.detail/3;
 			else
 				delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
-//			console.log("mouse delta ", delta);
 			if (delta) {
 				if (delta > 0) 
-					$(".slidesjs-previous").click(); //alert("마우스 휠 위로~");
+					$(".slidesjs-previous").click(); // 휠 위로
 			    else 	
-			    	$(".slidesjs-next").click(); //alert("마우스 휠 아래로~");
+			    	$(".slidesjs-next").click(); // 휠 아래로
 			}
 		});
 		$(window).bind("keyup", function(e) {
 			var event = window.event || e;
-//			console.log("input key : ", event.keyCode);
 			switch(event.keyCode) {
 			case 37: // left
 			case 40: // down
@@ -146,7 +138,6 @@ $(document).ready(function(){
 			}
 		});
 		$(window).on("mousedown", function(event) {
-//			console.log("mousedown event ", event);
 			switch (event.which) {
 			case 1: // left click
 				break;
@@ -175,15 +166,14 @@ $(document).ready(function(){
 				delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
 			if (delta) {
 				if (delta > 0) 
-					fnPrevVideoView(); //alert("마우스 휠 위로~");
+					fnPrevVideoView();
 			    else 	
-					fnNextVideoView(); //alert("마우스 휠 아래로~");
+					fnNextVideoView();
 			}
 		});
 		
 		$(window).bind("keyup", function(e) {
 			var event = window.event || e;
-			//alert(event.keyCode);
 			switch(event.keyCode) {
 			case 37: // left
 			case 40: // down

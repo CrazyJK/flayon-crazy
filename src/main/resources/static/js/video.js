@@ -101,7 +101,7 @@ function fnRandomPlay() {
 		alert("다 봤슴당");
 		return;
 	}
-	var selectedNumber = getRandomInteger(0, opusArray.length); // Math.floor(Math.random() * opusArray.length);
+	var selectedNumber = getRandomInteger(0, opusArray.length);
 	var selectedOpus = opusArray[selectedNumber];
 	opusArray.splice(selectedNumber, 1);
 	fnOpusFocus(selectedOpus);
@@ -109,7 +109,7 @@ function fnRandomPlay() {
 }
 function fnOpusFocus(opus) {
 	if (listViewType == 'L') {
-		var idx = $("#opus-" + opus).attr("tabindex");
+		var idx = $("#opus-" + opus).attr("slidesjs-index");
 		fnHideVideoSlise(currentVideoIndex);
 		currentVideoIndex = idx;
 		fnShowVideoSlise();
@@ -212,11 +212,11 @@ function fnNextVideoView() {
 }
 function fnRandomVideoView() {
 	fnHideVideoSlise(currentVideoIndex);
-	currentVideoIndex = getRandomInteger(1, totalVideoSize);
+	currentVideoIndex = getRandomInteger(0, totalVideoSize);
 	fnShowVideoSlise();
 }
 function fnShowVideoSlise() {
-	$("div[tabindex='" + currentVideoIndex + "']").fadeIn();
+	$("div[slidesjs-index='" + currentVideoIndex + "']").fadeIn();
 	$("#slideNumber").html(currentVideoIndex + " / " + totalVideoSize);
 	
 	$("#video_slide_bar").empty();
@@ -230,7 +230,7 @@ function fnShowVideoSlise() {
 			previewIndex = 1;
 		
 		var item = $("<div class='video-box' style='display:inline-block;'>");
-		item.append($("div[tabindex='" + previewIndex + "']").html());
+		item.append($("div[slidesjs-index='" + previewIndex + "']").html());
 		item.children("dl").removeClass("video-slide-bg").addClass("video-box-bg");
 		item.children().children().children().each(function() {
 			$(this).removeClass("label-large").addClass("label");
@@ -240,13 +240,13 @@ function fnShowVideoSlise() {
 	}
 }
 function fnHideVideoSlise(idx) {
-	$("div[tabindex='" + idx + "']").hide();
+	$("div[slidesjs-index='" + idx + "']").hide();
 }
 
 // for slides view
 function rePagination() {
 	var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
-    
+    console.log("active index", index);
     $(".slidesjs-pagination-item").each(function() {
     	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
     	
@@ -259,7 +259,7 @@ function rePagination() {
     });
 }
 function fnRandomVideoView_Slide() {
-	var selectedNumber = getRandomInteger(1, totalVideoSize);
+	var selectedNumber = getRandomInteger(0, totalVideoSize);
 	$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 }
 
@@ -330,7 +330,7 @@ function addTag(frm) {
 	$(frm).children().first().click();
 	
 }
-/** TODO
+/**
  * 태그 상세화면 팝업.
  * @param name
  */
@@ -351,47 +351,3 @@ function fnDeleteTag(tagId, dom) {
 		frm.submit();
 	}
 }
-/**
- * background-size:contain; Scale the image to the largest size such that both its width and its height can fit inside the content area
- * 이 설정과 같이 움직이도록 하는 함수 
-function resizeBackgroundImage() {
-	currBGImageUrl = context + "image/" + selectedNumber;
-	
-	var img = $("<img />");
-	img.hide();
-	img.attr("src", currBGImageUrl);
-	img.bind('load', function(){
-		var imgWidth  = $(this).width();
-		var imgHeight = $(this).height();
-		var divWidth  = $("#contentDiv").width() + 30;
-		var divHeight = $("#contentDiv").height() + 20;
-		var width  = 0;
-		var height = 0;
-		
-		if(imgWidth <= divWidth && imgHeight <= divHeight) { // 1. x:- y:-
-			width  = imgWidth;
-			height = imgHeight;
-		}else if(imgWidth <= divWidth && imgHeight > divHeight) { // 2. x:- y:+
-			width  = ratioSize(divHeight, imgWidth, imgHeight);
-			height = divHeight;
-		}else if(imgWidth > divWidth && imgHeight <= divHeight) { // 3. x:+ y:-
-			width  = divWidth;
-			height = ratioSize(divWidth, imgHeight, imgWidth);
-		}else if(imgWidth > divWidth && imgHeight > divHeight) { // 4. x:+ y:+
-			width  = divWidth;
-			height = ratioSize(width, imgHeight, imgWidth);
-			if(height > divHeight) {
-				width  = ratioSize(divHeight, imgWidth, imgHeight);
-				height = divHeight;
-			}
-		}
-		//console.log("background-image resize :{"+imgWidth+","+imgHeight+"}->{"+width+","+height+"}");
-		$("#contentDiv").css("background-image", "url(" + currBGImageUrl + ")");
-		$("#contentDiv").css("background-size", width + "px " + height + "px");
-	});
-	$("body").append(img);
-}
-function ratioSize(numerator1, numerator2, denominator) {
-	return parseInt(numerator1 * numerator2 / denominator);
-}
- */
