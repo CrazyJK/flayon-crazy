@@ -1,3 +1,22 @@
+var browser;
+var IE = "IE";
+var CHROME = "Chrome";
+var FIREFOX = "Firefox";
+var SAFARI = "Safari";
+var UNKNOWN = "Unknown";
+
+var agent = navigator.userAgent.toLowerCase();
+if (/trident/.test(agent))
+	browser = IE;
+else if (/chrome/.test(agent))
+	browser = CHROME;
+else if (/firefox/.test(agent))
+	browser = FIREFOX;
+else if (/safari/.test(agent))
+	browser = SAFARI;
+else 
+	browser = UNKNOWN;
+
 /**
  * 팝업창을 띄운다. 
  * @param url
@@ -197,4 +216,38 @@ function mw_image_window(img, w, h)
  */
 function getRandomInteger(startInt, range) {
 	return Math.floor(Math.random() * parseInt(range)) + parseInt(startInt);
+}
+
+/**
+ * @return 1 : wheel up, -1 : wheel down, 0 : undetermined
+ * <pre>
+ * E = event.originalEvent;
+ * [E.wheelDelta]
+ * IE : up 120, dn -120
+ * Chrome : up 120, dn -120
+ * Safari : up -12, dn 12   when 스크롤방향 자연스럽게 일 경우.
+ * 
+ * [E.detail]
+ * Firefox : up undefined -3, dn undefined 3
+ * </pre>
+ */
+function mousewheel(event) {
+/*
+	console.log("event", event);
+	console.log(navigator.userAgent.toLowerCase());
+	console.log("event.originalEvent", event.originalEvent);
+	console.log("event.originalEvent.wheelDelta", event.originalEvent.wheelDelta);
+	console.log("event.originalEvent.detail", event.originalEvent.detail);
+*/
+	var E = event.originalEvent;
+	var delta = 0;
+	if (browser == IE || browser == CHROME) {
+		delta = E.wheelDelta / 120;
+	} else if (browser == SAFARI) {
+		delta = E.wheelDelta / -12;
+	} else if (browser == FIREFOX) {
+		delta = E.detail / -3;
+	}
+	//console.log(delta);
+	return delta;
 }

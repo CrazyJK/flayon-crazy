@@ -33,15 +33,6 @@ function toggleInputDiv() {
 		$("#hideBtn").html("Hide");
 	}
 }
-function fnSearchOpus() {
-	popup('${urlSearchVideo}' + $("#query").val(), 'videoSearch', 900, 950);
-}
-function fnSearchActress() {
-	popup('${urlSearchActress}' + $("#query").val(), 'actressSearch', 900, 950);
-}
-function fnSearchTorrent() {
-	popup('${urlSearchTorrent}' + $("#query").val(), 'torrentSearch', 900, 950);
-}
 </script>
 </head>
 <body>

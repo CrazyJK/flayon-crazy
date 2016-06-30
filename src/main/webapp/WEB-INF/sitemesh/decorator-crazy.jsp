@@ -21,16 +21,21 @@
 <![endif]-->
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.crazy.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
 <script type="text/javascript">
 var context = '<c:url value="/"/>';
-var videoURL = '<c:url value="/video"/>';
+var videoPath = '<c:url value="/video"/>';
+var imagePath = '<c:url value="/image"/>';
 var locationPathname = window.location.pathname;
 var currBGImageNo = 0;
 var bgImageCount = ${empty bgImageCount ? 0 : bgImageCount};
 /** content_div에 이미지를 보여줄지 여부 */
 var bgContinue = true;
+var urlSearchVideo = '${urlSearchVideo}';
+var urlSearchActress = '${urlSearchActress}';
+var urlSearchTorrent = '${urlSearchTorrent}';
 
 $(document).ready(function() {
 
@@ -123,6 +128,9 @@ function toogleBody() {
 		"opacity": bgToggle % 2
 	}, 1000);
 	++bgToggle;
+	$("#bgActionGroup").toggle({
+		duration: 1000}
+	);
 }
 </script>
 
@@ -143,6 +151,7 @@ function toogleBody() {
 	<nav id="deco_nav">
 		<ul class="nav nav-pills">
 			<li><a onclick="toogleBody()" 			       		>Background</a>
+			<li><a onclick="fnReloadVideoSource()" 	       		>Reload</a>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
@@ -165,6 +174,12 @@ function toogleBody() {
 	
 	<form id="actionFrm" name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 	<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
+
+	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
+		<span class="btn btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
+		<span class="btn btn-info text-center" onclick="fnBGImageView();">VIEW</span>
+		<span class="btn btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
+	</div>
 
 </body>
 </html>

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="s" 	uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="jk"	tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,17 +57,18 @@ function fnPutStudioInfo() {
 	</div>
 	<div class="form-group" style="padding-left:60px;">
 		<c:forEach items="${studio.actressList}" var="actress">
-			<span class="label label-primary" onclick="fnViewActressDetail('${actress.name}')">
-					${actress.name} <i class="badge">${fn:length(actress.videoList)}</i>, Score ${actress.score}</span>
+			<span class="box">
+				<jk:actress actress="${actress}" view="detail"/>
+			</span>
 		</c:forEach>
 	</div>
 	<div class="form-group">
 		<span class="label label-info">Video <i class="badge">${fn:length(studio.videoList)}</i></span>
 	</div>
-	<div class="form-group box" style="padding-left:60px;">
+	<div class="form-group text-center">
 		<ul class="list-inline">
 			<c:forEach items="${studio.videoList}" var="video">
-				<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 			</c:forEach>
 		</ul>
 	</div>

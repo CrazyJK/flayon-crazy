@@ -26,21 +26,30 @@
 
 	if (view.equalsIgnoreCase("label")) {
 %>
-<label
-	class="item <%=itemCssClass %>" style="margin:0; padding:0;"
-	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
-	<form:checkbox path="selectedActress" id="selectedActress${count}" value="${actress.name}" cssClass="sr-only"/>
-	<span class="label label-default item" style="padding: 5px; margin: 5px;" 
-		id="checkbox-selectedActress${count}">${actress.name} <i>${fn:length(actress.videoList)}</i></span>
-</label>
+	<label
+		class="item <%=itemCssClass %>" style="margin:0; padding:0;"
+		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
+		<form:checkbox path="selectedActress" id="selectedActress${count}" value="${actress.name}" cssClass="sr-only"/>
+		<span class="label label-default item" style="padding: 5px; margin: 5px;" 
+			id="checkbox-selectedActress${count}">${actress.name} <i>${fn:length(actress.videoList)}</i></span>
+	</label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="background-color:#fff;" data-toggle="tooltip"
-	onclick="fnViewActressDetail('${actress.name}')" 
-	class="item <%=itemCssClass %> box box-small" 
-	title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}"
-		>${actress.name} <small>${fn:length(actress.videoList)}</small></span>
+	<span style="background-color:#fff;" data-toggle="tooltip"
+		onclick="fnViewActressDetail('${actress.name}')" 
+		class="item <%=itemCssClass %> box box-small" 
+		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}"
+			>${actress.name} <small>${fn:length(actress.videoList)}</small></span>
+<%
+	} else if (view.equalsIgnoreCase("detail")) {
+%>
+	<span class="label label-plain" title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+	<span class="label label-plain" title="age">${actress.age}</span> 
+	<span class="label label-plain" title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<span class="label label-plain" title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
+	<span class="label label-plain">${fn:length(actress.videoList)}</span>
+	<span class="label label-plain">Score ${actress.score}</span>
 <%
 	} else {
 %>

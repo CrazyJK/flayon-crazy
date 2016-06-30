@@ -47,6 +47,10 @@
 .video-box dd {
 	margin-left: 3px;
 }
+/* Card, Box view selected */
+.video-focus {
+	box-shadow: 0 3px 9px rgba(214, 29, 29, 0.8);
+}
 
 input[type=range] { 
 	width: 140px; 

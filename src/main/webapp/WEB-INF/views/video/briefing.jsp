@@ -50,16 +50,16 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 	$("#DELETE_LOWER_SCORE_VIDEO").html("" + DELETE_LOWER_SCORE_VIDEO);
 }
 function moveWatchedVideo() {
-	actionFrame(videoURL + '/manager/moveWatchedVideo', 'POST', 'Moving Watched Video');
+	actionFrame(videoPath + '/manager/moveWatchedVideo', 'POST', 'Moving Watched Video');
 }
 function removeLowerRankVideo() {
-	actionFrame(videoURL + '/manager/removeLowerRankVideo', 'POST', 'Deleting Lower Rank');
+	actionFrame(videoPath + '/manager/removeLowerRankVideo', 'POST', 'Deleting Lower Rank');
 }
 function removeLowerScoreVideo() {
-	actionFrame(videoURL + '/manager/removeLowerScoreVideo', 'POST', 'Deleting Lower Score');
+	actionFrame(videoPath + '/manager/removeLowerScoreVideo', 'POST', 'Deleting Lower Score');
 }
 function reloadVideo() {
-	actionFrame(videoURL + '/reload', 'POST', 'Reloading');
+	actionFrame(videoPath + '/reload', 'POST', 'Reloading');
 }
 /*]]>*/
 </script>

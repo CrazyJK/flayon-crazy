@@ -42,6 +42,13 @@
 	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}"
 		>${studio.name} <small>${fn:length(studio.videoList)}</small></span>
 <%
+	} else if (view.equalsIgnoreCase("detail")) {
+%>
+	<span class="label label-plain" title="${studio}" onclick="fnViewStudioDetail('${studio.name}')">${studio.name}</span>
+	<span class="label label-plain">${fn:length(studio.videoList)}</span>
+	<span class="label label-plain">Score ${studio.score}</span>
+	
+<%
 	} else {
 %>
 ${view} is undefined

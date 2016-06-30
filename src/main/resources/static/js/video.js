@@ -8,93 +8,97 @@ function resizeDivHeight() {
 	var windowHeight = $(window).outerHeight();
 	var header = $("#header_div").outerHeight();
 	calculatedDivHeight = windowHeight - header - offset;
-//	console.log("window.height ", window.height, "window.innerHeight ", window.innerHeight, "$(window).outerHeight() ", $(window).outerHeight(), "$(window).height() ", $(window).height()); 
-//	console.log(calculatedDivHeight + " = " + windowHeight + " - " + header + " - " + offset);
 	$("#content_div").outerHeight(calculatedDivHeight);	
 	try {
-		resizeSecondDiv();
+		resizeSecondDiv(); // if it exist
 	} catch (e) {}
 }
-
+/**
+ * background image set
+ * @param imgIdx
+ */
 function setBackgroundImage(imgIdx) {
 	if (imgIdx)
 		currBGImageNo = imgIdx;
 	else 
 		currBGImageNo = getRandomInteger(0, bgImageCount);
 	
-	currBGImageUrl = context + "image/" + currBGImageNo;
-//	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
-	$("body").css("background-image", "url(" + currBGImageUrl + ")")
+	currBGImageUrl = imagePath + "/" + currBGImageNo;
+	//$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
+	$("body")
+	.css("background-image", "url(" + currBGImageUrl + ")")
 		.css("background-position", "center center")
 		.css("background-size", "contain");
 }
-
-function fnVideoDivToggle() {
-	$("#videoDiv").toggle();
-}
+/**
+ * toggle studio div
+ */
 function fnStudioDivToggle() {
 	$("#studioDiv").toggle();
 	resizeDivHeight();
 }
+/**
+ * toggle actress div
+ */
 function fnActressDivToggle() {
 	$("#actressDiv").toggle();
 	resizeDivHeight();
 }
+/**
+ * toggle tag div
+ */
 function fnTagDivToggle() {
 	$("#tagDiv").toggle();
 	resizeDivHeight();
 }
-function fnSearch(txt) {
-	if(txt)
-		$("#searchText").val(txt);
-	var frm = document.forms[0];
-	frm.submit();
+/**
+ * form submit
+ */
+function fnSearch() {
+	document.forms[0].submit();
 }
-function fnDeleteOpus(selectedOpus) {
-	if(confirm("Really? Are you sure to delete this opus?")) 
-		if(confirm("Are you kidding? D.E.L.E.T.E [" + selectedOpus + "]?")) {
-			$("#hiddenHttpMethod").val("delete");
-			// hide it's box
-			$("#opus-" + selectedOpus).hide();
-			// remove element
-			for(var i=0; i<opusArray.length; i++) 
-				if(selectedOpus == opusArray[i]) {
-					opusArray.splice(i, 1);
-					break;
-				}
-			
-			var frm = document.forms["actionFrm"];
-			frm.action = context + "video/" + selectedOpus;
-			frm.submit();
-			console.log("delete " + selectedOpus);
-		}
-	
-}
+/**
+ * call subtitles editer
+ * @param selectedOpus
+ */
 function fnEditSubtitles(selectedOpus) {
 	console.log("edit subtitles " + selectedOpus);
-	$("#actionIframe").attr("src", context + "video/" + selectedOpus + "/subtitles");
+	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/subtitles");
 }
+/**
+ * call video player
+ * @param selectedOpus
+ */
 function fnPlay(selectedOpus) {
 	console.log("Video play " + selectedOpus);
-	$("#actionIframe").attr("src", context + "video/" + selectedOpus + "/play");
+	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/play");
 	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V') {
 		fnVideoDetail(selectedOpus);
 	}  
 }
+/**
+ * reset video info
+ * @param selectedOpus
+ */
 function fnVideoReset(selectedOpus) {
 	$("#hiddenHttpMethod").val("PUT");
-//	$("#actionFrm").removeAttr("target");
 	var frm = document.forms["actionFrm"];
-	frm.action = context + "video/" + selectedOpus + "/reset";
+	frm.action = videoPath + "/" + selectedOpus + "/reset";
 	frm.submit();
 }
+/**
+ * remove wrong video file
+ * @param selectedOpus
+ */
 function fnVideoWrong(selectedOpus) {
 	$("#hiddenHttpMethod").val("PUT");
-//	$("#actionFrm").removeAttr("target");
 	var frm = document.forms["actionFrm"];
-	frm.action = context + "video/" + selectedOpus + "/wrong";
+	frm.action = videoPath + "/" + selectedOpus + "/wrong";
 	frm.submit();
 }
+/**
+ * call video player by random
+ */
 function fnRandomPlay() {
 	console.log("Random play start");
 	if(opusArray.length == 0) {
@@ -104,65 +108,92 @@ function fnRandomPlay() {
 	var selectedNumber = getRandomInteger(0, opusArray.length);
 	var selectedOpus = opusArray[selectedNumber];
 	opusArray.splice(selectedNumber, 1);
-	fnOpusFocus(selectedOpus);
+	fnFocusVideo(selectedOpus);
 	fnPlay(selectedOpus);
 }
-function fnOpusFocus(opus) {
+/**
+ * focus on selected video
+ * @param opus
+ */
+function fnFocusVideo(opus) {
 	if (listViewType == 'L') {
-		var idx = $("#opus-" + opus).attr("slidesjs-index");
-		fnHideVideoSlise(currentVideoIndex);
-		currentVideoIndex = idx;
-		fnShowVideoSlise();
+		$.large.focusVideo(opus);
 	}
 	else if (listViewType == 'S' || listViewType == 'V') {
-		var idx = $("#opus-" + opus).attr("slidesjs-index");
-		$("a[data-slidesjs-item='" + idx + "']").click();
+		$.slide.focusVideo(opus);
 	}
-	else {
+	else { // Card, Box
 		$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
-			$(this).addClass("li-box-played");
+			$(this).addClass("video-focus");
 		});
 		var topValue = $("#opus-" + opus).position().top - $("#headerDiv").outerHeight() - 20;
 		$("#content_div").scrollTop(topValue);
 	}
 }
+/**
+ * popup view background image
+ */
 function fnBGImageView() {
-//	popup(currBGImageUrl, currBGImageUrl, 800, 600);
 	popupImage(currBGImageUrl, "bg-image");
 }
+/**
+ * delete current backgroung image
+ */
 function fnBGImageDELETE() {
 	$("#hiddenHttpMethod").val("DELETE");
 	var actionFrm = document.forms['actionFrm'];
 	actionFrm.action = currBGImageUrl;
 	actionFrm.submit();
 }
-function fnImageView(opus) {
+/**
+ * popup view video cover
+ * @param opus
+ */
+function fnCoverView(opus) {
 	console.log("Cover image view : " + opus);
-	popupImage(context + "video/" + opus + "/cover");
+	popupImage(videoPath + "/" + opus + "/cover");
 }
+/**
+ * popup overview editer
+ * @param opus
+ */
 function fnEditOverview(opus) {
 	console.log("Overview Popup : " + opus);
-    popup(context + "video/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse');
+    popup(videoPath + "/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse');
 }
+/**
+ * popup video detail info
+ * @param opus
+ */
 function fnVideoDetail(opus) {
-    popup(context + "video/" + opus, "detailview-"+opus, 850, 800);
+    popup(videoPath + "/" + opus, "detailview-"+opus, 850, 800);
 }
+/**
+ * save video rank
+ * @param opus
+ */
 function fnRank(opus) {
 	var rank = $("#Rank-"+opus);
 	fnRankColor(rank);
 	var frm;
 	if(opener) {
 		try {
-		$("#Rank-"+opus, opener.document).val(rank.val());
-		$("#Rank-"+opus+"-label", opener.document).html(rank.val());
-		opener.fnRankColor($("#Rank-"+opus, opener.document));
-		} catch(e) {/*opener가 이상하더라도 submit은 해야하므로*/}
+			$("#Rank-"+opus, opener.document).val(rank.val());
+			$("#Rank-"+opus+"-label", opener.document).html(rank.val());
+			opener.fnRankColor($("#Rank-"+opus, opener.document));
+		} catch(e) {/*opener가 이상하더라도 submit은 해야하므로*/
+			console.log("fnRank opener error", e);
+		}
 	}
 	$("#hiddenHttpMethod").val("put");
 	frm = document.forms["actionFrm"];
-	frm.action = context + "video/" + opus + "/rank/" + rank.val();
+	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();
 	frm.submit();
 }
+/**
+ * set rank color
+ * @param rank
+ */
 function fnRankColor(rank) {
 	if(rank.val() == 0) {
 		rank.css("background-color", "white");
@@ -174,95 +205,44 @@ function fnRankColor(rank) {
 		rank.css("background-color", "blue");
 	}
 }
+/**
+ * popup view actress detail
+ * @param name
+ */
 function fnViewActressDetail(name) {
-	popup(context + "video/actress/" + name, "actressDetail-" + name, 850, 600);
+	popup(videoPath + "/actress/" + name, "actressDetail-" + name, 850, 600);
 }
-
+/**
+ * popup view studio detail
+ * @param name
+ */
 function fnViewStudioDetail(name) {
-	popup(context + "video/studio/" + name, "studioDetail-" + name, 800, 600);
+	popup(videoPath + "/studio/" + name, "studioDetail-" + name, 800, 600);
 }
-
+/**
+ * popup view video datail
+ * @param opus
+ */
 function fnViewVideoDetail(opus) {
-	popup(context + "video/" + opus, "videoDetail-" + opus, 800, 600);
+	popup(videoPath + "/" + opus, "videoDetail-" + opus, 800, 600);
 }
-
+/**
+ * set, mark favorite actress
+ * @param dom
+ * @param name
+ */
 function fnFavorite(dom, name) {
 	var val = dom.innerHTML == '★';
 	dom.innerHTML = val ? '☆' : '★';
 	$("#hiddenHttpMethod").val('PUT');
 	var frm = document.forms["actionFrm"];
-	frm.action = context + "video/actress/" + name + "/favorite/" + !val;
+	frm.action = videoPath + "/actress/" + name + "/favorite/" + !val;
 	frm.submit();
 }
-
-// for large view
-function fnPrevVideoView() {
-	fnHideVideoSlise(currentVideoIndex);
-	if (currentVideoIndex == 1)
-		currentVideoIndex = totalVideoSize + 1;
-	currentVideoIndex--;
-	fnShowVideoSlise();
-}
-function fnNextVideoView() {
-	fnHideVideoSlise(currentVideoIndex);
-	if (currentVideoIndex == totalVideoSize)
-		currentVideoIndex = 0;
-	currentVideoIndex++;
-	fnShowVideoSlise();
-}
-function fnRandomVideoView() {
-	fnHideVideoSlise(currentVideoIndex);
-	currentVideoIndex = getRandomInteger(0, totalVideoSize);
-	fnShowVideoSlise();
-}
-function fnShowVideoSlise() {
-	$("div[slidesjs-index='" + currentVideoIndex + "']").fadeIn();
-	$("#slideNumber").html(currentVideoIndex + " / " + totalVideoSize);
-	
-	$("#video_slide_bar").empty();
-	var startIdx = parseInt(currentVideoIndex) - 1;
-	var endIdx = parseInt(currentVideoIndex) + 1;
-	for (var i=startIdx; i<=endIdx; i++) {
-		var previewIndex = i;
-		if (previewIndex == 0)
-			previewIndex = totalVideoSize;
-		else if (previewIndex == totalVideoSize + 1)
-			previewIndex = 1;
-		
-		var item = $("<div class='video-box' style='display:inline-block;'>");
-		item.append($("div[slidesjs-index='" + previewIndex + "']").html());
-		item.children("dl").removeClass("video-slide-bg").addClass("video-box-bg");
-		item.children().children().children().each(function() {
-			$(this).removeClass("label-large").addClass("label");
-		});
-		//item.append("<span style='color:red;'>" + startIdx + ":" + previewIndex + ":" + i + ":" + endIdx + "</span>");
-		$("#video_slide_bar").append(item);
-	}
-}
-function fnHideVideoSlise(idx) {
-	$("div[slidesjs-index='" + idx + "']").hide();
-}
-
-// for slides view
-function rePagination() {
-	var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
-    console.log("active index", index);
-    $(".slidesjs-pagination-item").each(function() {
-    	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
-    	
-    	if ((itemIdx < index + 5 && itemIdx > index - 5) || itemIdx == 0 || itemIdx == totalVideoSize-1) {
-    		$(this).show();
-    	}
-    	else {
-    		$(this).hide();
-    	}
-    });
-}
-function fnRandomVideoView_Slide() {
-	var selectedNumber = getRandomInteger(0, totalVideoSize);
-	$("a[data-slidesjs-item='" + selectedNumber + "']").click();
-}
-
+/**
+ * searching content by keyword
+ * @param keyword
+ */
 function searchContent(keyword) {
 	$("div#content_div table tr").each(function() {
 		var found = false;
@@ -271,26 +251,24 @@ function searchContent(keyword) {
 				found = true;
 			}
 		});
-		if (found)
-			$(this).show();
-		else
-			$(this).hide();
+		$(this).toggle(found);
 	});
 }
-
+/**
+ * all un checked in actress/studio/tag div
+ * @param obj
+ */
 function fnUnchecked(obj) {
-	$(obj).parent().children().children().children("input[type=checkbox]").each(function() {
-		console.log(this);
-		if ($(this).is(":checked")) {
-			$("#checkbox-" + $(this).attr("id")).click();
-//			$(this).children(':checked').parent().click();
-		}
+	$(obj).parent().children().children().children("input[type=checkbox]:checked").each(function() {
+		$("#checkbox-" + $(this).attr("id")).click();
 	});
 }
-
+/**
+ * reload video source
+ */
 function fnReloadVideoSource() {
 	var frm = document.forms["actionFrm"];
-	frm.action = context + "video/reload";
+	frm.action = videoPath + "/reload";
 	frm.submit();
 }
 
@@ -300,7 +278,12 @@ function fnReloadVideoSource() {
 function fnMarkChoice(opus) {
 	$("#check-" + opus).addClass("mark");
 }
-
+/**
+ * 비디오에 태그 설정
+ * @param dom 태그 object
+ * @param opus 
+ * @param tagId
+ */
 function fnSetTag(dom, opus, tagId) {
 	if ($(dom).hasClass("label-default")) {
 		$(dom).removeClass("label-default");
@@ -313,7 +296,7 @@ function fnSetTag(dom, opus, tagId) {
 	$("#hiddenHttpMethod").val("POST");
 	var frm = document.forms["actionFrm"];
 	$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
-	frm.action = context + "video/" + opus + "/tag";
+	frm.action = videoPath + "/" + opus + "/tag";
 	frm.submit();
 }
 /**
@@ -350,4 +333,29 @@ function fnDeleteTag(tagId, dom) {
 		frm.action = context + "video/tag";
 		frm.submit();
 	}
+}
+function fnSearchOpus() {
+	console.log(arguments);
+	var opus;
+	if (arguments.length == 0)
+		opus = $("#query").val();
+	else
+		opus = arguments[0];
+	popup(urlSearchVideo + opus, 'videoSearch', 900, 950);
+}
+function fnSearchActress(name) {
+	var name;
+	if (arguments.length == 0)
+		name = $("#query").val();
+	else
+		name = arguments[0];
+	popup(urlSearchActress + name, 'actressSearch', 900, 950);
+}
+function fnSearchTorrent(opus) {
+	var opus;
+	if (arguments.length == 0)
+		opus = $("#query").val();
+	else
+		opus = arguments[0];
+	popup(urlSearchTorrent + opus, 'torrentSearch', 900, 950);
 }

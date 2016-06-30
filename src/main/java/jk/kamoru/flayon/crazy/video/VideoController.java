@@ -426,8 +426,8 @@ public class VideoController extends AbstractController {
 			logger.debug("videoMain search {}", videoList.size());
 
 		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
-		if (videoList.size() == 1)
-			videoSearch.setListViewType(View.L);
+//		if (videoList.size() == 1)
+//			videoSearch.setListViewType(View.L);
 		
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());

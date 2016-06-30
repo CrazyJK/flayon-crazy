@@ -8,12 +8,8 @@
 <html>
 <head>
 <title><s:message code="video.video"/></title>
-<link rel="stylesheet" href="<c:url value="http://vjs.zencdn.net/c/video-js.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
-<script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
-<script type="text/javascript" src="<c:url value="http://slidesjs.com/js/jquery.slides.min.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
 var opusArray = ${opusArray};
@@ -49,7 +45,7 @@ function fnViewBGImage() {
 </script>
 </head>
 <body>
-<div class="container-fluid" role="main">
+<div class="container" role="main">
 
 <div id="header_div" class="box">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
@@ -60,21 +56,21 @@ function fnViewBGImage() {
 		<!-- Search : Additional condition. video, subtitles -->
 		<label title="<s:message code="video.addCondition"/>">
 			<form:checkbox path="addCond" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-addCond1"><s:message code="video.addCondition-short"/></span>
+			<span class="label" id="checkbox-addCond1"><s:message code="video.addCondition-short"/></span>
 		</label>
 		<label title="<s:message code="video.existVideo"/>">
 			<form:checkbox path="existVideo" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-existVideo1">V</span>
+			<span class="label" id="checkbox-existVideo1">V</span>
 		</label>
 		<label title="<s:message code="video.existSubtitles"/>">
 			<form:checkbox path="existSubtitles" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-existSubtitles1">S</span>			
+			<span class="label" id="checkbox-existSubtitles1">S</span>			
 		</label>
 		<!-- Search : rank -->
 		<c:forEach items="${rankRange}" var="rank" varStatus="rankStat">
 			<label title="<s:message code="video.rank"/> ${rank}">
 				<form:checkbox path="rankRange" value="${rank}" cssClass="sr-only"/>
-				<span class="label label-default" id="checkbox-rankRange${rankStat.count}">${rank}</span>
+				<span class="label" id="checkbox-rankRange${rankStat.count}">${rank}</span>
 			</label>
 		</c:forEach>
 		<!-- Search : play count -->
@@ -88,28 +84,28 @@ function fnViewBGImage() {
 		<!-- sort -->
 		<label title="<s:message code="video.reverseSort"/>">
 			<form:checkbox path="sortReverse" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-sortReverse1">R</span>
+			<span class="label" id="checkbox-sortReverse1">R</span>
 		</label>
 		<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method" style="width:80px;"/>
 		<!-- wholeActressStudioView -->
 		<label title="<s:message code="video.wholeActressStudioView"/>">
 			<form:checkbox path="wholeActressStudioView" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-wholeActressStudioView1">A</span>
+			<span class="label" id="checkbox-wholeActressStudioView1">A</span>
 		</label>
 		<!-- viewStudioPanel -->
 		<label title="<s:message code="video.viewStudioPanel"/>">
 			<form:checkbox path="viewStudioDiv" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-viewStudioDiv1" onclick="fnStudioDivToggle()">S</span>
+			<span class="label" id="checkbox-viewStudioDiv1" onclick="fnStudioDivToggle()">S</span>
 		</label>
 		<!-- viewActressDiv -->
 		<label title="<s:message code="video.viewActressPanel"/>">
 			<form:checkbox path="viewActressDiv" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>	
+			<span class="label" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>	
 		</label>
 		<!-- viewTagDiv -->
 		<label title="<s:message code="video.viewTagPanel"/>">
 			<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
-			<span class="label label-default" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
+			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
 		</label>
 		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
 		<button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" title="<s:message code="video.reload.title"/>"><s:message code="video.reload"/></button>
@@ -150,15 +146,15 @@ function fnViewBGImage() {
 		<c:when test="${videoSearch.listViewType eq 'C'}">
 		<ul class="list-inline">
 			<c:forEach items="${videoList}" var="video">
-			<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+			<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 			</c:forEach>
 		</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'B'}">
 		<ul class="list-inline">
 			<c:forEach items="${videoList}" var="video" varStatus="status">
-			<li id="opus-${video.opus}">
-				<div class="video-box">
+			<li>
+				<div id="opus-${video.opus}" class="video-box">
 					<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 						<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 						<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
@@ -216,14 +212,13 @@ function fnViewBGImage() {
 		<div id="video-slide-wrapper">
 			<div id="slides">
 				<c:forEach items="${videoList}" var="video">
-					<div id="opus-${video.opus}" style="display:none;">
+					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
 						<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 							<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
 							<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
 							<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="opus" mode="l"/>
-								<jk:video video="${video}" view="torrent" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="release" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="download" mode="l"/></dd>
@@ -236,41 +231,21 @@ function fnViewBGImage() {
 					</div>
 				</c:forEach>
 			</div>
-			<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation" onclick="fnRandomVideoView_Slide()">Random View</a></div>
+			<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
 		</div>
-		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'L'}">
-		<div id="video-slide-wrapper">
-			<div id="slides" class="slides">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">             
-					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
-						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="download" mode="l"/>
-						    <jk:video video="${video}" view="release" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="video" mode="l"/>
-							<jk:video video="${video}" view="cover" mode="l"/>
-							<jk:video video="${video}" view="subtitles" mode="l"/>
-							<jk:video video="${video}" view="overview" mode="l"/></dd>
-					</dl>
-				</div>
-			</c:forEach>
-			</div>
-			<div><span id="slideNumber" class="label-large"></span></div>
-			<div id="video_slide_bar" style=""></div>
-		</div>
+		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+		<script type="text/javascript">
+			$("#slides").slideview();
+		</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'V'}">
 		<div id="video-slide-wrapper">
-			<div id="slides" class="slides">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-				<div id="opus-${video.opus}" tabindex="${status.count}" class="video-slide" style="display:none;">    
-					<dl class="video-slide-bg">
+			<div id="slides">
+			<c:forEach items="${videoList}" var="video">
+				<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">    
+					<dl>
 						<dt style="height:40px;padding-top:3px;">
 							<jk:video video="${video}" view="studio"/>
 							<jk:video video="${video}" view="opus"/>
@@ -291,12 +266,51 @@ function fnViewBGImage() {
 								src="<c:url value="${video.videoURL}" />"
 								><%-- <source src="<c:url value="${video.videoURL}" />" type="video/mp4" ></source> --%></video>
 						</dd>
-						<dd><a href="<c:url value="${video.videoURL}" />"><span class="label">${video.videoURL}</span></a></dd>
+						<dd><a href="<c:url value="${video.videoURL}" />">[<span class="label">${video.videoURL}</span>]</a></dd>
 					</dl>				         
 				</div>
 			</c:forEach>
 			</div>
 		</div>
+		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+		<link rel="stylesheet" href="<c:url value="http://vjs.zencdn.net/c/video-js.css"/>"/>
+		<script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+		<script type="text/javascript">
+			$("#slides").slideview();
+		</script>
+		</c:when>
+		<c:when test="${videoSearch.listViewType eq 'L'}">
+		<div id="video-slide-wrapper">
+			<div id="slides" style="display: block;">
+			<c:forEach items="${videoList}" var="video" varStatus="status">
+				<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none; height: 550px;" class="slidesjs-slide">             
+					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
+						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="download" mode="l"/>
+						    <jk:video video="${video}" view="release" mode="l"/></dd>
+						<dd><jk:video video="${video}" view="video" mode="l"/>
+							<jk:video video="${video}" view="cover" mode="l"/>
+							<jk:video video="${video}" view="subtitles" mode="l"/>
+							<jk:video video="${video}" view="overview" mode="l"/></dd>
+					</dl>
+				</div>
+			</c:forEach>
+			</div>
+			<div class="text-center"><span id="slideNumber" class="label label-plain"></span></div>
+			<div id="video_slide_bar" class="text-center"></div>
+		</div>
+		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.large.js"/>"></script>
+		<script type="text/javascript">
+			$("#slides").largeview();
+		</script>
 		</c:when>
 		<c:otherwise>
 		<ol>
@@ -306,12 +320,6 @@ function fnViewBGImage() {
 		</ol>		
 		</c:otherwise>
 	</c:choose>
-	</div>
-
-	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
-		<span class="btn btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
-		<span class="btn btn-info text-center" onclick="fnBGImageView();">VIEW</span>
-		<span class="btn btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
 	</div>
 
 </div>

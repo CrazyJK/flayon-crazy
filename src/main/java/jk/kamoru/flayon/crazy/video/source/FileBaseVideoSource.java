@@ -206,6 +206,7 @@ public class FileBaseVideoSource implements VideoSource {
 	@PostConstruct
 	public void reload() {
 		load();
+		logger.info("reload completed");
 	}
 	
 	@Override

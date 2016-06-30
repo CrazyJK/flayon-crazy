@@ -95,7 +95,7 @@ li.slidesjs-pagination-item a.active {
 	z-index: 18;
 }
 </style>
-<script src="http://slidesjs.com/examples/standard/js/jquery.slides.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 var imagepath = '<s:url value="/image/" />';
@@ -140,37 +140,31 @@ $(document).ready(function(){
 			    }
 			});
 
-			$(".slidesjs-control").bind("click", function(e){
-				var event = window.event || e;
-				console.log(event.type + " - " + event.button + ", keyValue=" + event.keyCode);
+			$(".slidesjs-control").bind("click", function(event){
 				event.stopImmediatePropagation();
 				event.preventDefault();
 				event.stopPropagation();
-				if (event.button == 0) {
+				switch (event.which) {
+				case 1: // left click
 					$(".slidesjs-next").click();
-				};
+					break;
+				case 2: // middle click
+					$(".slidesjs-previous").click();
+					break;
+				case 3: // right click
+					break;
+				}
 			});
 			
 		});
 	});
 	
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
-		var delta = 0;
-		var event = window.event || e;
-		if (event.wheelDelta) {
-			delta = event.wheelDelta/120;
-			if (window.opera) delta = -delta;
-		} 
-		else if (event.detail)  
-			delta = -event.detail/3;
-		else
-			delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
-		if (delta) {
-			if (delta > 0) 
-				$(".slidesjs-previous").click(); //alert("마우스 휠 위로~");
-		    else 	
-		    	$(".slidesjs-next").click(); //alert("마우스 휠 아래로~");
-		}
+		var delta = mousewheel(e);
+		if (delta > 0) 
+			$(".slidesjs-previous").click();
+	    else 	
+	    	$(".slidesjs-next").click();
 	});
 	$(window).bind("keyup", function(e) {
 		var event = window.event || e;
@@ -205,7 +199,6 @@ function fnRandomImageView() {
 	$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 }
 function rePagination() {
-	console.log($(".active"));
     var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
 	selectedImgUrl = imagepath + index;
     $("#imageTitle").html(imageMap[index]);

@@ -91,23 +91,11 @@ $(document).ready(function(){
 	});
 	
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
-		var delta = 0;
-		var event = window.event || e;
-		if (event.wheelDelta) {
-			delta = event.wheelDelta/120;
-			if (window.opera) delta = -delta;
-		} 
-		else if (event.detail)  
-			delta = -event.detail/3;
-		else
-			delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
-		if (delta) {
-			if (delta > 0) 
-				fnPrevImageView(); //alert("마우스 휠 위로~");
-		    else 	
-				fnNextImageView(); //alert("마우스 휠 아래로~");
-		}
-		//alert("event=" + event + " delta=" + delta);
+		var delta = mousewheel(e);
+		if (delta > 0) 
+			fnPrevImageView(); //alert("마우스 휠 위로~");
+	    else 	
+			fnNextImageView(); //alert("마우스 휠 아래로~");
 	});
 	$(window).bind("keyup", function(e) {
 		var event = window.event || e;
@@ -125,15 +113,20 @@ $(document).ready(function(){
 			break;
 		}
 	});
-	$("#imageDiv").bind("click", function(e){
-		var event = window.event || e;
-		//alert(event.type + " - " + event.button + ", keyValue=" + event.keyCode);
+	$("#imageDiv").bind("click", function(event){
+		switch (event.which) {
+		case 1: // left click
+			fnNextImageView();
+			break;
+		case 2: // middle click
+			fnRandomImageView();
+			break;
+		case 3: // right click
+			break;
+		}
 		event.stopImmediatePropagation();
 		event.preventDefault();
 		event.stopPropagation();
-		if(event.button == 0) {
-			fnNextImageView();
-		} 
 	});
 	$(window).bind("resize", resizeImage);
 	

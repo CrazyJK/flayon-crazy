@@ -2,34 +2,32 @@
 <%@ taglib prefix="s"  uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="jk" tagdir="/WEB-INF/tags"%>
 
-<li id="opus-${video.opus}" class="li-box">
-	<div class="video-card" style="width:195px;">
-		<table style="width:100%;">
-			<tr>
-				<td colspan="2" style="text-align:center;">
-					<div class="nowrap" style="width:170px;">
-						<jk:video video="${video}" view="title" mode="l"/>
-					</div>
-				</td>
-			</tr>
-			<tr valign="top" height="120px">
-				<td width="70px" class="video-card-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />')">
-					&nbsp;
-				</td>
-				<td>
-					<dl>
-						<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="actress"   mode="s"/></div></dd>
-						<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="studio"    mode="s"/></div></dd> 
-						<dd><jk:video video="${video}" view="opus"      mode="s"/>
-							<jk:video video="${video}" view="score"     mode="s"/></dd>
-						<dd><jk:video video="${video}" view="video"     mode="s"/>
-							<jk:video video="${video}" view="cover"     mode="s"/>
-							<jk:video video="${video}" view="subtitles" mode="s"/>
-							<jk:video video="${video}" view="overview"  mode="s"/></dd>
-						<dd><jk:video video="${video}" view="rank"      mode="s"/></dd>
-					</dl>
-				</td>
-			</tr>
-		</table>
-	</div>
-</li>
+<div id="opus-${video.opus}" class="video-card box" style="width:195px;">
+	<table>
+		<tr>
+			<td colspan="2" class="text-center">
+				<div class="nowrap" style="width:170px;">
+					<jk:video video="${video}" view="title" mode="l"/>
+				</div>
+			</td>
+		</tr>
+		<tr valign="top" style="height:120px">
+			<td class="video-card-bg" style="width:70px; background-image:url('<c:url value="/video/${video.opus}/cover" />')">
+				&nbsp;
+			</td>
+			<td>
+				<dl>
+					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="actress"   mode="s"/></div></dd>
+					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="studio"    mode="s"/></div></dd> 
+					<dd><jk:video video="${video}" view="opus"      mode="s"/>
+						<jk:video video="${video}" view="score"     mode="s"/></dd>
+					<dd><jk:video video="${video}" view="video"     mode="s"/>
+						<jk:video video="${video}" view="cover"     mode="s"/>
+						<jk:video video="${video}" view="subtitles" mode="s"/>
+						<jk:video video="${video}" view="overview"  mode="s"/></dd>
+					<dd><jk:video video="${video}" view="rank"      mode="s"/></dd>
+				</dl>
+			</td>
+		</tr>
+	</table>
+</div>

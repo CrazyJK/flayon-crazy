@@ -41,7 +41,7 @@ $(document).ready(function(){
 		loading(true, 'Searching');
 		 
 		var keyword = $(this).val();
-		var queryUrl = context + 'video/search.json?q=' + keyword; 
+		var queryUrl = videoPath + '/search.json?q=' + keyword; 
 		
 		$.getJSON(queryUrl ,function(data) {
 			$('#foundVideoList').empty();
@@ -136,16 +136,6 @@ function resizeSecondDiv() {
 
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
-}
-
-function fnSearchOpus() {
-	popup('${urlSearchVideo}' + $("#query").val(), 'videoSearch', 900, 950);
-}
-function fnSearchActress() {
-	popup('${urlSearchActress}' + $("#query").val(), 'actressSearch', 900, 950);
-}
-function fnSearchTorrent() {
-	popup('${urlSearchTorrent}' + $("#query").val(), 'torrentSearch', 900, 950);
 }
 </script>
 </head>

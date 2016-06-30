@@ -2,6 +2,7 @@
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="s"      uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="jk"	tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,17 +91,18 @@ function toogleFavorite(dom) {
 	</div>
 	<div class="form-group" style="padding-left:60px;">
 		<c:forEach items="${actress.studioList}" var="studio">
-			<span class="label label-primary" onclick="fnViewStudioDetail('${studio.name}')">
-					${studio.name} <small class="badge">${fn:length(studio.videoList)}</small> Score ${studio.score}</span>
+			<span class="box">
+				<jk:studio studio="${studio}" view="detail"/>
+			</span>
 		</c:forEach>
 	</div>
 	<div class="form-group">
 		<span class="label label-info">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
 	</div>
-	<div class="form-group box" style="padding-left:60px;">
+	<div class="form-group text-center">
 		<ul class="list-inline">
 			<c:forEach items="${actress.videoList}" var="video">
-				<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 			</c:forEach>
 		</ul>
 	</div>

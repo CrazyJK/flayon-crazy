@@ -42,8 +42,8 @@ $(document).ready(function(){
  * 선택된 토렌트 찾기
  */
 function goTorrentSearch(opus) {
-	popup(videoURL + "/" + opus + '/cover/title', 'SearchTorrentCover');
-	popup(videoURL + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+	popup(videoPath + "/" + opus + '/cover/title', 'SearchTorrentCover');
+	popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
 
 	if (isHideClickedTorrentButton) { // 토렌트 찾기 모드일때, 숨기고, 선택된 비디오 이름 보여주기
 		$("#check-" + opus + "-t").hide();

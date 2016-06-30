@@ -32,10 +32,12 @@ try {
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.pulse.js" />"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('h1').animate({opacity: .1}, "slow");
-	$('h1').animate({opacity:  1}, "slow");
+//	$('h1').animate({opacity: .1}, "slow");
+//	$('h1').animate({opacity:  1}, "slow");
+	$('h1').pulse();
 });
 </script>
 <sitemesh:write property="head" />
