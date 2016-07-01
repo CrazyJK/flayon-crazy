@@ -36,17 +36,17 @@ var DELETE_LOWER_SCORE_VIDEO = ${DELETE_LOWER_SCORE_VIDEO};
 
 function setMOVE_WATCHED_VIDEO() {
 	MOVE_WATCHED_VIDEO = !MOVE_WATCHED_VIDEO;
-	actionFrame('<c:url value="/video/set/MOVE_WATCHED_VIDEO/"/>' + MOVE_WATCHED_VIDEO, "POST", "Set Watched Video to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + MOVE_WATCHED_VIDEO, "POST", "Set Watched Video to " + MOVE_WATCHED_VIDEO);
 	$("#MOVE_WATCHED_VIDEO").html("" + MOVE_WATCHED_VIDEO);
 }
 function setDELETE_LOWER_RANK_VIDEO() {
 	DELETE_LOWER_RANK_VIDEO = !DELETE_LOWER_RANK_VIDEO;
-	actionFrame('<c:url value="/video/set/DELETE_LOWER_RANK_VIDEO/"/>' + DELETE_LOWER_RANK_VIDEO, "POST", "Set Lower Rank to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + DELETE_LOWER_RANK_VIDEO, "POST", "Set Lower Rank to " + MOVE_WATCHED_VIDEO);
 	$("#DELETE_LOWER_RANK_VIDEO").html("" + DELETE_LOWER_RANK_VIDEO);
 }
 function setDELETE_LOWER_SCORE_VIDEO() {
 	DELETE_LOWER_SCORE_VIDEO = !DELETE_LOWER_SCORE_VIDEO;
-	actionFrame('<c:url value="/video/set/DELETE_LOWER_SCORE_VIDEO/"/>' + DELETE_LOWER_SCORE_VIDEO, "POST", "Set Lower Score to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + DELETE_LOWER_SCORE_VIDEO, "POST", "Set Lower Score to " + MOVE_WATCHED_VIDEO);
 	$("#DELETE_LOWER_SCORE_VIDEO").html("" + DELETE_LOWER_SCORE_VIDEO);
 }
 function moveWatchedVideo() {
