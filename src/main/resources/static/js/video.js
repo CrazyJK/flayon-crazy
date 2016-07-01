@@ -81,20 +81,22 @@ function fnPlay(selectedOpus) {
  * @param selectedOpus
  */
 function fnVideoReset(selectedOpus) {
-	$("#hiddenHttpMethod").val("PUT");
-	var frm = document.forms["actionFrm"];
-	frm.action = videoPath + "/" + selectedOpus + "/reset";
-	frm.submit();
+	actionFrame(videoPath + "/" + selectedOpus + "/reset", "PUT", selectedOpus + " reset");
+//	$("#hiddenHttpMethod").val("PUT");
+//	var frm = document.forms["actionFrm"];
+//	frm.action = videoPath + "/" + selectedOpus + "/reset";
+//	frm.submit();
 }
 /**
  * remove wrong video file
  * @param selectedOpus
  */
 function fnVideoWrong(selectedOpus) {
-	$("#hiddenHttpMethod").val("PUT");
-	var frm = document.forms["actionFrm"];
-	frm.action = videoPath + "/" + selectedOpus + "/wrong";
-	frm.submit();
+	actionFrame(videoPath + "/" + selectedOpus + "/wrong", "PUT", selectedOpus + " mark wrong");
+//	$("#hiddenHttpMethod").val("PUT");
+//	var frm = document.forms["actionFrm"];
+//	frm.action = videoPath + "/" + selectedOpus + "/wrong";
+//	frm.submit();
 }
 /**
  * call video player by random
@@ -140,10 +142,11 @@ function fnBGImageView() {
  * delete current backgroung image
  */
 function fnBGImageDELETE() {
-	$("#hiddenHttpMethod").val("DELETE");
-	var actionFrm = document.forms['actionFrm'];
-	actionFrm.action = currBGImageUrl;
-	actionFrm.submit();
+	actionFrame(currBGImageUrl, "DELETE", "this image delete");
+//	$("#hiddenHttpMethod").val("DELETE");
+//	var actionFrm = document.forms['actionFrm'];
+//	actionFrm.action = currBGImageUrl;
+//	actionFrm.submit();
 }
 /**
  * popup view video cover
@@ -185,10 +188,11 @@ function fnRank(opus) {
 			console.log("fnRank opener error", e);
 		}
 	}
-	$("#hiddenHttpMethod").val("put");
-	frm = document.forms["actionFrm"];
-	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();
-	frm.submit();
+	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val());
+//	$("#hiddenHttpMethod").val("put");
+//	frm = document.forms["actionFrm"];
+//	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();
+//	frm.submit();
 }
 /**
  * set rank color
@@ -234,10 +238,11 @@ function fnViewVideoDetail(opus) {
 function fnFavorite(dom, name) {
 	var val = dom.innerHTML == '★';
 	dom.innerHTML = val ? '☆' : '★';
-	$("#hiddenHttpMethod").val('PUT');
-	var frm = document.forms["actionFrm"];
-	frm.action = videoPath + "/actress/" + name + "/favorite/" + !val;
-	frm.submit();
+	actionFrame(videoPath + "/actress/" + name + "/favorite/" + !val, "PUT", name + " set favorite");
+//	$("#hiddenHttpMethod").val('PUT');
+//	var frm = document.forms["actionFrm"];
+//	frm.action = videoPath + "/actress/" + name + "/favorite/" + !val;
+//	frm.submit();
 }
 /**
  * searching content by keyword
@@ -267,9 +272,10 @@ function fnUnchecked(obj) {
  * reload video source
  */
 function fnReloadVideoSource() {
-	var frm = document.forms["actionFrm"];
-	frm.action = videoPath + "/reload";
-	frm.submit();
+	actionFrame(videoPath + "/reload", "GET", "Source reload");
+//	var frm = document.forms["actionFrm"];
+//	frm.action = videoPath + "/reload";
+//	frm.submit();
 }
 
 /**
@@ -293,11 +299,12 @@ function fnSetTag(dom, opus, tagId) {
 		$(dom).removeClass("label-plain");
 		$(dom).addClass("label-default");
 	}
-	$("#hiddenHttpMethod").val("POST");
-	var frm = document.forms["actionFrm"];
-	$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
-	frm.action = videoPath + "/" + opus + "/tag";
-	frm.submit();
+	actionFrame(videoPath + "/" + opus + "/tag?id=" + tagId, "POST", "set tag " + opus + " <- " + tagId);
+//	$("#hiddenHttpMethod").val("POST");
+//	var frm = document.forms["actionFrm"];
+//	$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
+//	frm.action = videoPath + "/" + opus + "/tag";
+//	frm.submit();
 }
 /**
  * 저장한 태그를 화면에 추가한다
@@ -327,11 +334,12 @@ function fnViewTagDetail(name) {
 function fnDeleteTag(tagId, dom) {
 	if (confirm("Are you sure to delete it?")) {
 		$(dom).parent().hide();
-		$("#hiddenHttpMethod").val("DELETE");
-		var frm = document.forms["actionFrm"];
-		$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
-		frm.action = context + "video/tag";
-		frm.submit();
+		actionFrame(videoPath + "/tag?id=" + tagId, "DELETE", tagId + " tag delete");
+//		$("#hiddenHttpMethod").val("DELETE");
+//		var frm = document.forms["actionFrm"];
+//		$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
+//		frm.action = videoPath + "/tag";
+//		frm.submit();
 	}
 }
 function fnSearchOpus() {

@@ -93,8 +93,8 @@ function actionFrame(reqUrl, method, msg) {
 		beforeSend : function() {
 			loading(true, msg ? msg : "Loading...");
 		}
-	}).done(function(msg) {
-		loading(true, "Done", 3000);
+	}).done(function(data) {
+		loading(true, msg + " Done", 3000);
 	}).fail(function(xhr, status, error) {
 		loading(true, "fail : [" + status + "] "+ error);
 	}).always(function() {
