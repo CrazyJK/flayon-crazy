@@ -1,10 +1,12 @@
 (function($) {
-	$.fn.slideview = function() {
+	$.fn.slideview = function(options) {
 
+		var opts = $.extend({}, $.fn.slideview.defaults, options);
+		
 		$(this).slidesjs({
 			start: currentVideoIndex,
-	        width: 800,
-	        height: 550,
+	        width: opts.width,
+	        height: opts.height,
 	        navigation: {active: true, effect: "slide"},
 	        pagination: {active: true, effect: "slide"},
 	        play: {active: true, interval:5000, auto: false, effect: "fade"},
@@ -70,6 +72,11 @@
 
 	};
 
+	$.fn.slideview.defaults = {
+			width: 800,
+			height: 550
+	};
+	
 	$.fn.rePagination = function() {
 	    if (totalVideoSize == 1) {
 	    	console.log("slidesjs-slide left 0");

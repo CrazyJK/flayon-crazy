@@ -33,14 +33,6 @@ function fnSaveActressInfo() {
 			opener.location.reload();
 	}
 }
-function toogleFavorite(dom) {
-	var favorite = $("#favorite").val() == 'true';
-	$("#favoriteTEXT").html(favorite ? '☆' : '★');
-	$("#favorite").val(!favorite);
-	if (opener) {
-		// TODO 메인의 배우 정보 업데이트 해야함
-	}
-}
 </script>
 </head>
 <body>
@@ -53,7 +45,7 @@ function toogleFavorite(dom) {
 
 	<div class="form-group">
 		<div class="col-sm-2 text-right">
-			<span id="favoriteTEXT" onclick="toogleFavorite()" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
+			<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
 		</div>
 		<div class="col-sm-4">
 			<input class="form-control" type="text" name="newname"   value="${actress.name}"      id="newName" />
@@ -90,11 +82,15 @@ function toogleFavorite(dom) {
 		<span class="label label-info">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
 	</div>
 	<div class="form-group" style="padding-left:60px;">
-		<c:forEach items="${actress.studioList}" var="studio">
-			<span class="box">
-				<jk:studio studio="${studio}" view="detail"/>
-			</span>
-		</c:forEach>
+		<ul class="list-inline">
+			<c:forEach items="${actress.studioList}" var="studio">
+				<li>
+					<div class="box box-small">
+						<jk:studio studio="${studio}" view="detail"/>
+					</div>
+				</li>
+			</c:forEach>
+		</ul>
 	</div>
 	<div class="form-group">
 		<span class="label label-info">Video <span class="badge">${fn:length(actress.videoList)}</span></span>

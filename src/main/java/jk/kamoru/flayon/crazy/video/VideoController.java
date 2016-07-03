@@ -424,10 +424,6 @@ public class VideoController extends AbstractController {
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
 		if (logger.isDebugEnabled())
 			logger.debug("videoMain search {}", videoList.size());
-
-		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
-//		if (videoList.size() == 1)
-//			videoSearch.setListViewType(View.L);
 		
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());
@@ -457,10 +453,6 @@ public class VideoController extends AbstractController {
 		List<Video> videoList =  videoService.searchVideoInArchive(videoSearch);
 		if (logger.isDebugEnabled())
 			logger.debug("videoArchive search {}", videoList.size());
-
-		// 1건만 검색될 경우 slide view가 보이지 않는 문제가 있어, view를 large로 변경
-		if (videoList.size() == 1)
-			videoSearch.setListViewType(View.L);
 
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());

@@ -88,7 +88,7 @@ function fnChangeMode(mode) {
 </script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
 
 <div id="header_div" class="box form-inline">
 	<s:message code="video.total"/> <s:message code="video.video"/> <span class="badge">${videoList.size()}</span> 

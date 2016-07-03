@@ -58,10 +58,6 @@ function removeLowerRankVideo() {
 function removeLowerScoreVideo() {
 	actionFrame(videoPath + '/manager/removeLowerScoreVideo', 'POST', 'Deleting Lower Score');
 }
-function reloadVideo() {
-	actionFrame(videoPath + '/reload', 'POST', 'Reloading');
-}
-/*]]>*/
 </script>
 </head>
 <body>
@@ -85,8 +81,7 @@ function reloadVideo() {
 				<button class="btn btn-xs btn-default" onclick="removeLowerScoreVideo()"><s:message code="video.mng.score"/></button>
 				<button class="btn btn-xs btn-default" onclick="setDELETE_LOWER_SCORE_VIDEO()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
 			</div>
-			</li>
-		<li><button type="button" class="btn btn-xs btn-default" onclick="reloadVideo()"><s:message code="video.reload.title"/></button></li>
+		</li>
 	</ul>
 </div>
 

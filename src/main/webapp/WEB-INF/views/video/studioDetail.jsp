@@ -56,11 +56,15 @@ function fnPutStudioInfo() {
 		<span class="label label-info">Actress <i class="badge">${fn:length(studio.actressList)}</i></span>
 	</div>
 	<div class="form-group" style="padding-left:60px;">
-		<c:forEach items="${studio.actressList}" var="actress">
-			<span class="box">
-				<jk:actress actress="${actress}" view="detail"/>
-			</span>
-		</c:forEach>
+		<ul class="list-inline">
+			<c:forEach items="${studio.actressList}" var="actress">
+				<li>
+					<div class="box box-small">
+						<jk:actress actress="${actress}" view="detail"/>
+					</div>
+				</li>
+			</c:forEach>
+		</ul>
 	</div>
 	<div class="form-group">
 		<span class="label label-info">Video <i class="badge">${fn:length(studio.videoList)}</i></span>

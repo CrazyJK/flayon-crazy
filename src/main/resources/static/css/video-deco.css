@@ -20,6 +20,17 @@ body {
 	padding: 2px;
 	font-weight: 700;
 }
+#deco_nav li a[onclick] {
+	color: #d02f6b;
+}
+#deco_nav li a:hover {
+	text-decoration: none;
+	background-color: rgba(51, 122, 183, 0.4);
+}
+#deco_nav li.active a:hover {
+	text-decoration: none;
+	background-color: rgba(51, 122, 183, 0.8);
+}
 
 div#header_div {
 }

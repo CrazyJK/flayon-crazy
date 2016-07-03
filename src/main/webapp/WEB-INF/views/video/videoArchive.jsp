@@ -44,7 +44,7 @@ function fnViewBGImage() {
 </script>
 </head>
 <body>
-<div class="container" role="main">
+<div class="container-fluid" role="main">
 
 <div id="header_div" class="box">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">

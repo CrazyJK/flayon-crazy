@@ -67,7 +67,7 @@ li.slidesjs-pagination-item a {
     font-size: 95%;
     font-weight: 700;
     line-height: 1;
-    width: 30px;
+    /* width: 30px; */
     color: #fff;
     text-align: center;
     white-space: nowrap;
@@ -88,8 +88,8 @@ li.slidesjs-pagination-item a.active {
 }
 #imageTitle {
 	position: absolute;
-	top: 0;
-	left: 222px;
+	top: 25px;
+	left: 0px;
 	padding: 5px;
 	margin: 7px;
 	z-index: 18;

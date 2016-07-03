@@ -1,5 +1,7 @@
+package jk.kamoru.flayon.crazy;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class JsonTest {
+public class VideoInfoTransfer {
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -29,20 +31,31 @@ public class JsonTest {
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) throws Exception {
-		JsonTest test = new JsonTest();
+		VideoInfoTransfer transfer = new VideoInfoTransfer();
 		String[] paths = {"D:\\Crazy", "E:\\Crazy"};
 
 		Collection<File> listFiles = Utils.listFiles(paths, new String[]{"info"}, true);
+		System.out.println("found " + listFiles.size());
+		int count = 0;
 		for (File file : listFiles) {
-			System.out.println(file);
-			test.transfer(file);
+			try {
+				transfer.transfer(file);
+				System.out.print(".");
+				if (++count % 100 == 0)
+					System.out.println();
+			} catch(Exception e) {
+				System.err.println(file);
+				e.printStackTrace();
+				break;
+			}
 		}
 	}
 
 	void transfer(File file) throws Exception {
+//		System.out.println(file);
 		// read / check original
 		String infoText = FileUtils.readFileToString(file, VIDEO.ENCODING);
-		if (StringUtils.isEmpty(infoText))
+		if (StringUtils.isBlank(infoText))
 			return;
 
 		// backup info file
@@ -56,12 +69,19 @@ public class JsonTest {
 		int rank        = parseInt(map.get("rank"));
 		int playCount   = parseInt(map.get("playCount"));
 		String overview = map.get("overview");
-		Date lastAccess = format.parse(map.get("lastAccess"));
+		Date lastAccess = dateFormat(map.get("lastAccess"));
 		Info info = new Info(opus, playCount, rank, overview, lastAccess, new ArrayList<Tag>());
 
+//		System.out.println(info);
 		// write result
 		mapper.writeValue(file, info);
 	
+	}
+	
+	private Date dateFormat(String dateString) throws ParseException {
+		if (StringUtils.isBlank(dateString))
+			return null;
+		return format.parse(dateString);
 	}
 	
 	private int parseInt(String number) {

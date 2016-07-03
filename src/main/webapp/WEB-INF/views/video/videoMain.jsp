@@ -45,7 +45,7 @@ function fnViewBGImage() {
 </script>
 </head>
 <body>
-<div class="container" role="main">
+<div class="container-fluid" role="main">
 
 <div id="header_div" class="box">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
@@ -108,7 +108,7 @@ function fnViewBGImage() {
 			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
 		</label>
 		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
-		<button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" title="<s:message code="video.reload.title"/>"><s:message code="video.reload"/></button>
+		<%-- <button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" title="<s:message code="video.reload.title"/>"><s:message code="video.reload"/></button> --%>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></button>
 
 		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
@@ -144,180 +144,214 @@ function fnViewBGImage() {
 	<div id="contentContainer">
 	<c:choose>
 		<c:when test="${videoSearch.listViewType eq 'C'}">
-		<ul class="list-inline">
-			<c:forEach items="${videoList}" var="video">
-			<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-			</c:forEach>
-		</ul>
+			<ul class="list-inline">
+				<c:forEach items="${videoList}" var="video">
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+				</c:forEach>
+			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'B'}">
-		<ul class="list-inline">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-			<li>
-				<div id="opus-${video.opus}" class="video-box">
-					<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
-						<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
-						<dd><jk:video video="${video}" view="opus" mode="s"/></dd>
-						<%-- <dd><jk:video video="${video}" view="actress" mode="s"/></dd> --%>
-						<dd><jk:video video="${video}" view="video" mode="s"/></dd>
-						<dd><jk:video video="${video}" view="subtitles" mode="s"/></dd>
-						<dd><jk:video video="${video}" view="overview" mode="s"/></dd>
-						<dd><jk:video video="${video}" view="rank" mode="s"/></dd>
-						<dd><jk:video video="${video}" view="score" mode="s"/></dd>
-					</dl>
-				</div>
-			</li>
-			</c:forEach>
-		</ul>
+			<ul class="list-inline">
+				<c:forEach items="${videoList}" var="video" varStatus="status">
+				<li>
+					<div id="opus-${video.opus}" class="video-box">
+						<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+							<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
+							<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
+							<dd><jk:video video="${video}" view="opus" mode="s"/></dd>
+							<%-- <dd><jk:video video="${video}" view="actress" mode="s"/></dd> --%>
+							<dd><jk:video video="${video}" view="video" mode="s"/></dd>
+							<dd><jk:video video="${video}" view="subtitles" mode="s"/></dd>
+							<dd><jk:video video="${video}" view="overview" mode="s"/></dd>
+							<dd><jk:video video="${video}" view="rank" mode="s"/></dd>
+							<dd><jk:video video="${video}" view="score" mode="s"/></dd>
+						</dl>
+					</div>
+				</li>
+				</c:forEach>
+			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'T'}">
-		<table class="table table-condensed table-hover table-bordered">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-			<tr id="opus-${video.opus}" class="nowarp">
-				<td style="width:80px;">
-					<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
-				<td style="width:80px;">
-					<jk:video video="${video}" view="opus"/></td>
-				<td style="max-width:300px;">
-					<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
-				</td>
-				<td style="max-width:150px;">
-					<%-- <div class="nowarp"><jk:video video="${video}" view="actress"/></div> --%>
-					<div class="nowrap">
-					<c:forEach items="${video.actressList}" var="actress">
-						<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-					</c:forEach>
-					</div>
-				</td>
-				<td style="width:70px;">
-					<jk:video video="${video}" view="release"/></td>
-				<td style="width:20px;">
-					<jk:video video="${video}" view="video" mode="s"/></td>
-				<td style="width:20px;">
-					<jk:video video="${video}" view="cover" mode="s"/></td>
-				<td style="width:20px;">
-					<jk:video video="${video}" view="subtitles" mode="s"/></td>
-				<td style="width:25px;" class="text-right">
-					<jk:video video="${video}" view="rank" mode="s"/></td>
-				<td style="width:25px;" class="text-right">
-					<jk:video video="${video}" view="score" mode="s"/></td>
-				<td style="width:50px;" class="text-right">
-					<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
-			</tr>
-			</c:forEach>
-		</table>
+			<table class="table table-condensed table-hover table-bordered">
+				<c:forEach items="${videoList}" var="video" varStatus="status">
+				<tr id="opus-${video.opus}" class="nowarp">
+					<td style="width:80px;">
+						<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
+					<td style="width:80px;">
+						<jk:video video="${video}" view="opus"/></td>
+					<td style="max-width:300px;">
+						<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
+					</td>
+					<td style="max-width:150px;">
+						<%-- <div class="nowarp"><jk:video video="${video}" view="actress"/></div> --%>
+						<div class="nowrap">
+						<c:forEach items="${video.actressList}" var="actress">
+							<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+						</c:forEach>
+						</div>
+					</td>
+					<td style="width:70px;">
+						<jk:video video="${video}" view="release"/></td>
+					<td style="width:20px;">
+						<jk:video video="${video}" view="video" mode="s"/></td>
+					<td style="width:20px;">
+						<jk:video video="${video}" view="cover" mode="s"/></td>
+					<td style="width:20px;">
+						<jk:video video="${video}" view="subtitles" mode="s"/></td>
+					<td style="width:25px;" class="text-right">
+						<jk:video video="${video}" view="rank" mode="s"/></td>
+					<td style="width:25px;" class="text-right">
+						<jk:video video="${video}" view="score" mode="s"/></td>
+					<td style="width:50px;" class="text-right">
+						<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
+				</tr>
+				</c:forEach>
+			</table>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'S'}">
-		<div id="video-slide-wrapper">
-			<div id="slides">
+			<div id="video-slide-wrapper">
+				<div id="slides">
+					<c:forEach items="${videoList}" var="video">
+						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
+							<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+								<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+								<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
+								<dd><jk:video video="${video}" view="score" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="release" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="download" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="video" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="cover" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
+								<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+							</dl>
+						</div>
+					</c:forEach>
+				</div>
+				<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
+			</div>
+			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+			<script type="text/javascript">
+				$("#slides").slideview();
+			</script>
+		</c:when>
+		<c:when test="${videoSearch.listViewType eq 'V'}">
+			<div id="video-slide-wrapper">
+				<div id="slides">
 				<c:forEach items="${videoList}" var="video">
-					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
-						<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">    
+						<dl>
+							<dt style="height:40px;padding-top:3px;">
+								<jk:video video="${video}" view="studio"/>
+								<jk:video video="${video}" view="opus"/>
+								<jk:video video="${video}" view="title"/>
+								<jk:video video="${video}" view="score"/>
+								<jk:video video="${video}" view="actress"/>
+								<br/>
+								<jk:video video="${video}" view="video"/>
+								<jk:video video="${video}" view="cover"/>
+								<jk:video video="${video}" view="subtitles"/>
+								<jk:video video="${video}" view="overview"/>
+								<jk:video video="${video}" view="rank"/>
+							</dt>
+							<dd>
+								<video poster="<c:url value="/video/${video.opus}/cover" />" 
+									preload="none" width="800" height="480"
+									controls="controls" class="video-js vjs-default-skin" data-setup="{}"
+									src="<c:url value="${video.videoURL}" />"
+									><%-- <source src="<c:url value="${video.videoURL}" />" type="video/mp4" ></source> --%></video>
+							</dd>
+							<dd><a href="<c:url value="${video.videoURL}" />">[<span class="label">${video.videoURL}</span>]</a></dd>
+						</dl>				         
+					</div>
+				</c:forEach>
+				</div>
+			</div>
+			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+			<link rel="stylesheet" href="<c:url value="http://vjs.zencdn.net/c/video-js.css"/>"/>
+			<script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+			<script type="text/javascript">
+				$("#slides").slideview();
+			</script>
+		</c:when>
+		<c:when test="${videoSearch.listViewType eq 'L'}">
+			<div id="video-slide-wrapper">
+				<div id="slides" style="display: block;">
+				<c:forEach items="${videoList}" var="video" varStatus="status">
+					<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none; height: 550px;" class="slidesjs-slide">             
+						<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 							<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-							<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
+							<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
 							<dd><jk:video video="${video}" view="score" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="release" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="download" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="video" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="cover" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="overview" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+							<dd><jk:video video="${video}" view="download" mode="l"/>
+							    <jk:video video="${video}" view="release" mode="l"/></dd>
+							<dd><jk:video video="${video}" view="video" mode="l"/>
+								<jk:video video="${video}" view="cover" mode="l"/>
+								<jk:video video="${video}" view="subtitles" mode="l"/>
+								<jk:video video="${video}" view="overview" mode="l"/></dd>
 						</dl>
 					</div>
 				</c:forEach>
-			</div>
-			<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
-		</div>
-		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
-		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
-		<script type="text/javascript">
-			$("#slides").slideview();
-		</script>
-		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'V'}">
-		<div id="video-slide-wrapper">
-			<div id="slides">
-			<c:forEach items="${videoList}" var="video">
-				<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">    
-					<dl>
-						<dt style="height:40px;padding-top:3px;">
-							<jk:video video="${video}" view="studio"/>
-							<jk:video video="${video}" view="opus"/>
-							<jk:video video="${video}" view="title"/>
-							<jk:video video="${video}" view="score"/>
-							<jk:video video="${video}" view="actress"/>
-							<br/>
-							<jk:video video="${video}" view="video"/>
-							<jk:video video="${video}" view="cover"/>
-							<jk:video video="${video}" view="subtitles"/>
-							<jk:video video="${video}" view="overview"/>
-							<jk:video video="${video}" view="rank"/>
-						</dt>
-						<dd>
-							<video poster="<c:url value="/video/${video.opus}/cover" />" 
-								preload="none" width="800" height="480"
-								controls="controls" class="video-js vjs-default-skin" data-setup="{}"
-								src="<c:url value="${video.videoURL}" />"
-								><%-- <source src="<c:url value="${video.videoURL}" />" type="video/mp4" ></source> --%></video>
-						</dd>
-						<dd><a href="<c:url value="${video.videoURL}" />">[<span class="label">${video.videoURL}</span>]</a></dd>
-					</dl>				         
 				</div>
-			</c:forEach>
+				<div class="text-center"><span id="slideNumber" class="label label-plain"></span></div>
+				<div id="video_slide_bar" class="text-center"></div>
 			</div>
-		</div>
-		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
-		<link rel="stylesheet" href="<c:url value="http://vjs.zencdn.net/c/video-js.css"/>"/>
-		<script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
-		<script type="text/javascript">
-			$("#slides").slideview();
-		</script>
+			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.large.js"/>"></script>
+			<script type="text/javascript">
+				$("#slides").largeview();
+			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'L'}">
-		<div id="video-slide-wrapper">
-			<div id="slides" style="display: block;">
-			<c:forEach items="${videoList}" var="video" varStatus="status">
-				<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none; height: 550px;" class="slidesjs-slide">             
-					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-						<dt><jk:video video="${video}" view="rank" mode="l"/></dt>
-						<dd><jk:video video="${video}" view="score" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="actress" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="download" mode="l"/>
-						    <jk:video video="${video}" view="release" mode="l"/></dd>
-						<dd><jk:video video="${video}" view="video" mode="l"/>
-							<jk:video video="${video}" view="cover" mode="l"/>
-							<jk:video video="${video}" view="subtitles" mode="l"/>
-							<jk:video video="${video}" view="overview" mode="l"/></dd>
-					</dl>
+		<c:when test="${videoSearch.listViewType eq 'M'}">
+			<div id="video-slide-wrapper">
+				<div id="slides">
+					<c:forEach items="${videoList}" var="video">
+						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
+							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 550px;">
+							</dl>
+							<div class="box box-small" style="background-color: rgba(218, 18, 18, 0.5);">
+								<h3 class="nowrap" style="margin:0;"><jk:video video="${video}" view="title" mode="l"/></h3>
+								<h4 style="margin:0;"><jk:video video="${video}" view="rank" mode="l"/></h4>
+								<h4><jk:video video="${video}" view="studio" mode="l"/>
+									<jk:video video="${video}" view="opus" mode="l"/>
+									<jk:video video="${video}" view="release" mode="l"/>
+									<jk:video video="${video}" view="download" mode="l"/></h4>
+								<h4><jk:video video="${video}" view="actress" mode="l"/></h4>
+								<h5><jk:video video="${video}" view="score" mode="l"/>
+									<jk:video video="${video}" view="video" mode="l"/>
+									<jk:video video="${video}" view="cover" mode="l"/>
+									<jk:video video="${video}" view="subtitles" mode="l"/>
+									<jk:video video="${video}" view="overview" mode="l"/></h5>
+								<div><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></div>
+							</div>
+						</div>
+					</c:forEach>
 				</div>
-			</c:forEach>
+				<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
 			</div>
-			<div class="text-center"><span id="slideNumber" class="label label-plain"></span></div>
-			<div id="video_slide_bar" class="text-center"></div>
-		</div>
-		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
-		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.large.js"/>"></script>
-		<script type="text/javascript">
-			$("#slides").largeview();
-		</script>
+			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+			<script type="text/javascript">
+				$("#slides").slideview({width:800, height:800});
+			</script>
 		</c:when>
 		<c:otherwise>
-		<ol>
-			<c:forEach items="${videoList}" var="video">
-			<li>${video.studio.name} ${video.opus} ${video.title} 
-			</c:forEach>
-		</ol>		
+			<ol>
+				<c:forEach items="${videoList}" var="video">
+				<li>${video.studio.name} ${video.opus} ${video.title} 
+				</c:forEach>
+			</ol>
 		</c:otherwise>
 	</c:choose>
 	</div>

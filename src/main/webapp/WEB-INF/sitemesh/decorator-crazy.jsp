@@ -30,7 +30,7 @@ var videoPath = '<c:url value="/video"/>';
 var imagePath = '<c:url value="/image"/>';
 var locationPathname = window.location.pathname;
 var currBGImageNo = 0;
-var bgImageCount = ${empty bgImageCount ? 0 : bgImageCount};
+var bgImageCount = parseInt(${bgImageCount});
 /** content_div에 이미지를 보여줄지 여부 */
 var bgContinue = true;
 var urlSearchVideo = '${urlSearchVideo}';
@@ -150,8 +150,8 @@ function toogleBody() {
 
 	<nav id="deco_nav">
 		<ul class="nav nav-pills">
-			<li><a onclick="toogleBody()" 			       		>Background</a>
-			<li><a onclick="fnReloadVideoSource()" 	       		>Reload</a>
+			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
+			<li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
@@ -176,9 +176,9 @@ function toogleBody() {
 	<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
 
 	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
-		<span class="btn btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
-		<span class="btn btn-info text-center" onclick="fnBGImageView();">VIEW</span>
-		<span class="btn btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
+		<span class="btn btn-xs btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
+		<span class="btn btn-xs btn-info text-center" onclick="fnBGImageView();">VIEW</span>
+		<span class="btn btn-xs btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
 	</div>
 
 </body>
