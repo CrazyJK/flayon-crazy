@@ -9,4 +9,10 @@
 			}
 		});
 	};
+	$.fn.randomBG = function(alpha) {
+		return this.each(function() {
+			var $element = $(this);
+			$element.css("background-color", randomColor(alpha));
+		});
+	};
 })(jQuery);

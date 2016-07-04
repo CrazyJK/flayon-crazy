@@ -19,11 +19,7 @@ try {
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/default.css"/>"/>
-<%-- 
-<link rel="stylesheet" href="<c:url value="/css/crazy-deco.css" />" />
-<link rel="stylesheet" href="<c:url value="/css/common.css" />" />
-<link rel="stylesheet" href="<c:url value="/css/scrollbar.css" />" />
- --%>
+<link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/typed.css"/>"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -33,10 +29,9 @@ try {
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.pulse.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-//	$('h1').animate({opacity: .1}, "slow");
-//	$('h1').animate({opacity:  1}, "slow");
 	$('h1').pulse();
 });
 </script>
@@ -52,6 +47,22 @@ $(document).ready(function() {
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
+
+<script type="text/javascript">
+$("#typed").typed({
+    // strings: ["Typed.js is a <strong>jQuery</strong> plugin.", "It <em>types</em> out sentences.", "And then deletes them.", "Try it out!"],
+    stringsElement: $('#typed-strings'),
+    typeSpeed: 30,
+    backDelay: 500,
+    loop: false,
+    contentType: 'html', // or text
+    // defaults to false for infinite loop
+    loopCount: false,
+    callback: function(){
+		$(".typed-cursor").hide();
+    }
+});
+</script>
 
 </body>
 </html>

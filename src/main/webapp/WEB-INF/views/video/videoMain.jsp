@@ -312,16 +312,16 @@ function fnViewBGImage() {
 				$("#slides").largeview();
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'M'}">
+		<c:when test="${videoSearch.listViewType eq 'F'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
-							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 550px;">
+							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 520px;">
 							</dl>
 							<div class="box box-small" style="background-color: rgba(218, 18, 18, 0.5);">
-								<h3 class="nowrap" style="margin:0;"><jk:video video="${video}" view="title" mode="l"/></h3>
-								<h4 style="margin:0;"><jk:video video="${video}" view="rank" mode="l"/></h4>
+								<h3 class="nowrap" style="margin:0; height:30px;"><jk:video video="${video}" view="title" mode="l"/></h3>
+								<h4 style="margin:0;" class="form-inline"><jk:video video="${video}" view="rank" mode="l"/></h4>
 								<h4><jk:video video="${video}" view="studio" mode="l"/>
 									<jk:video video="${video}" view="opus" mode="l"/>
 									<jk:video video="${video}" view="release" mode="l"/>

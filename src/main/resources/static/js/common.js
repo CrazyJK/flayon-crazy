@@ -251,3 +251,9 @@ function mousewheel(event) {
 	//console.log(delta);
 	return delta;
 }
+
+function randomColor(alpha) {
+	if (!alpha)
+		alpha = 1;
+	return "rgba(" + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + alpha + ")";
+}

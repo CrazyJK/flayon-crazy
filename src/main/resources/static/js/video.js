@@ -26,7 +26,7 @@ function setBackgroundImage(imgIdx) {
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
 	//$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
 	$("body")
-	.css("background-image", "url(" + currBGImageUrl + ")")
+		.css("background-image", "url(" + currBGImageUrl + ")")
 		.css("background-position", "center center")
 		.css("background-size", "contain");
 }
@@ -72,7 +72,7 @@ function fnEditSubtitles(selectedOpus) {
 function fnPlay(selectedOpus) {
 	console.log("Video play " + selectedOpus);
 	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/play");
-	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V') {
+	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F') {
 		fnVideoDetail(selectedOpus);
 	}  
 }
@@ -121,7 +121,7 @@ function fnFocusVideo(opus) {
 	if (listViewType == 'L') {
 		$.large.focusVideo(opus);
 	}
-	else if (listViewType == 'S' || listViewType == 'V') {
+	else if (listViewType == 'S' || listViewType == 'V' || listViewType == 'F') {
 		$.slide.focusVideo(opus);
 	}
 	else { // Card, Box

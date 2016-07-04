@@ -43,15 +43,15 @@ public class VideoSearch implements Serializable {
 	/**
 	 * View type
 	 */
-	View listViewType = View.S;
+	View listViewType = View.F;
 	/**
 	 * 정렬 방법 
 	 */
-	Sort sortMethod = Sort.M;
+	Sort sortMethod = Sort.O;
 	/**
 	 * 역정렬 여부
 	 */
-	boolean sortReverse = true;
+	boolean sortReverse = false;
 
 	/**
 	 * 검색조건 : 선택된 스튜디오

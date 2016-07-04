@@ -3,18 +3,23 @@
 
 <footer class="footer">
 	<div class="container">
-  		<span class="text-muted">kAmOrU. All rights reserved. <a target="_blank" href="http://ko.wikipedia.org/wiki/%ED%95%9C%EB%9F%89"><s:message code="home.i.want"/></a></span>
-  		
- 		<section style="float:right; font-size:10px; margin-top: 7px;">
-			<form name="langChange">
-				<span><%=lang%></span>
-				<select name="lang" onchange="document.forms['langChange'].submit();">
-					<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="default.korean"/></option>
-					<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="default.english"/></option>
-					<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="default.japanese"/></option>
-				</select>
-			</form>
-		</section>
+		<div class="type-wrap">
+            <div id="typed-strings">
+            	<p><span class="text-muted">kAmOrU. All rights reserved. <a target="_blank" href="http://ko.wikipedia.org/wiki/%ED%95%9C%EB%9F%89"><s:message code="home.i.want"/></a></span></p>
+  			</div>
+            <span id="typed" style="white-space:pre;"></span>
+
+	 		<section style="float:right; font-size:10px; margin-top: 7px;">
+				<form name="langChange">
+					<span><%=lang%></span>
+					<select name="lang" onchange="document.forms['langChange'].submit();">
+						<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="default.korean"/></option>
+						<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="default.english"/></option>
+						<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="default.japanese"/></option>
+					</select>
+				</form>
+			</section>
+        </div>
  		
 	</div>
 </footer>

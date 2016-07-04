@@ -22,7 +22,7 @@
 	        },
 	        effect: {
 	            slide: {
-	            	speed: 1000
+	            	speed: 500
 	            },
 	            fade: {
 	            	speed: 1000, crossfade: true
@@ -37,23 +37,26 @@
 
 		$(window).bind("mousewheel DOMMouseScroll", function(e) {
 			var delta = mousewheel(e);
-			if (delta > 0) 
-				$(".slidesjs-previous").click(); // 휠 위로
-		    else 	
-		    	$(".slidesjs-next").click(); // 휠 아래로
+			if (delta > 0) // 휠 위로
+				$.fn.previousView();
+		    else // 휠 아래로
+		    	$.fn.nextView();
 		});
 		$(window).bind("keyup", function(e) {
 			var event = window.event || e;
 			switch(event.keyCode) {
 			case 37: // left
 			case 40: // down
-				$(".slidesjs-previous").click(); break;
+				$.fn.previousView();
+				break;
 			case 39: // right
 			case 38: // up
-				$(".slidesjs-next").click(); break;
+				$.fn.nextView(); 
+				break;
 			//case 32: // space
 			case 34: // PageDown key
-				$(".slidesjs-random").click(); break;
+				$.fn.randomView(); 
+				break;
 			case 13: // enter
 				break;
 			}
@@ -73,8 +76,8 @@
 	};
 
 	$.fn.slideview.defaults = {
-			width: 800,
-			height: 550
+		width: 800,
+		height: 550
 	};
 	
 	$.fn.rePagination = function() {
@@ -82,7 +85,7 @@
 	    	console.log("slidesjs-slide left 0");
 	    	$(".slidesjs-slide").css("left", "0");
 	    }
-		var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
+		var index = currentIndex();
 	    //console.log("active index", index);
 	    $(".slidesjs-pagination-item").each(function() {
 	    	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
@@ -94,8 +97,22 @@
 	    		$(this).hide();
 	    	}
 	    });
+		$(".slidesjs-slide[slidesjs-index='" + currentIndex() + "'] > div").randomBG(0.5);
+	}
+	$.fn.previousView = function() {
+		$(".slidesjs-previous").click();
+	}
+	$.fn.nextView = function() {
+    	$(".slidesjs-next").click(); 
+	}
+	$.fn.randomView = function() {
+		$(".slidesjs-random").click();
 	}
 
+	function currentIndex() {
+		return parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
+	}
+	
 	$.slide = {
 		focusVideo: function(opus) {
 			var idx = $("#opus-" + opus).attr("slidesjs-index");

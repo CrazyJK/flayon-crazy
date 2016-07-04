@@ -64,3 +64,6 @@ div#content_div {
     font-size: 20px;
 	padding: 10px 20px;
 }
+#loading-msg-detail {
+	background-color: rgba(0, 0, 255, .5);
+}

@@ -67,6 +67,9 @@ $(document).ready(function() {
 	loading(false);
 	// bootstrap tooltip initialize
 	$('[data-toggle="tooltip"]').tooltip(); 
+	
+//	$(".box").randomBG(0.2);
+//	$("nav#deco_nav").randomBG(0.3);
 });
 
 /**
@@ -94,11 +97,17 @@ function actionFrame(reqUrl, method, msg) {
 			loading(true, msg ? msg : "Loading...");
 		}
 	}).done(function(data) {
-		loading(true, msg + " Done", 3000);
-	}).fail(function(xhr, status, error) {
-		loading(true, "fail : [" + status + "] "+ error);
-	}).always(function() {
-		//loading(false);
+		loading(true, msg + " Done", 2000);
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		errorHtml = $.parseHTML(jqXHR.responseText);
+		parsed = $('<div/>').append(errorHtml);
+		context = parsed.find(".container").html();
+
+		loading(true, "fail : " + reqUrl + " [" + textStatus + "] "+ errorThrown, 0, context);
+	}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
+//		console.log("actionFrame data_jqXHR", data_jqXHR);
+//		console.log("actionFrame textStatus", textStatus);
+//		console.log("actionFrame jqXHR_errorThrown", jqXHR_errorThrown);
 	});
 	/*
 	var actionFrm = document.forms['actionFrm'];
@@ -108,19 +117,17 @@ function actionFrame(reqUrl, method, msg) {
 	actionFrm.submit();
 	*/
 }
-function loading(show, msg, interval) {
-	if (show) {
+function loading(show, msg, interval, detail) {
+	if (show)
 		$("#loading").css("display", "table");
-	}
-	else {
+	else
 		$("#loading").hide();
-	}
-	if (msg) {
+	if (msg)
 		$("#loading-msg").html(msg);
-	}
-	if (interval) {
+	if (interval)
 		$("#loading").fadeOut(interval);
-	}
+	if (detail)
+		$("#loading-msg-detail").html(detail);
 }
 var bgToggle = 0;
 function toogleBody() {
@@ -142,6 +149,7 @@ function toogleBody() {
 	<div id="loading">
 		<div id="loading-content">
 			<span id="loading-msg" class="label"  onclick="loading(false);">Loading</span>
+			<div id="loading-msg-detail" class="box"></div>
 		</div>
 	</div>
 	<script type="text/javascript">

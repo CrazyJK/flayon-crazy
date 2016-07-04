@@ -14,6 +14,7 @@
 if (view.equalsIgnoreCase("video")) {
 %>
 	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" 
+		style="margin-right:3px;"
 		onclick="fnPlay('${video.opus}')">${mode eq 's' ? 'V' : 'Video'}
 		<c:if test="${mode eq 'l'}">
 			<em>${video.size}</em>
@@ -87,7 +88,7 @@ if (view.equalsIgnoreCase("video")) {
 <%
 } else if (view.equalsIgnoreCase("score")) {
 %>
-	<span class="${cssClass} rangeLabel" title="${video.scoreDesc}">${video.score}</span>
+	<span class="${cssClass}" title="${video.scoreDesc}">${video.score}</span>
 	<c:if test="${mode eq 'l'}">
 		<span class="${cssClass}" onclick="fnVideoReset('${video.opus}')">Reset</span>
 		<span class="${cssClass}" onclick="fnVideoWrong('${video.opus}')">Wrong</span>
@@ -96,11 +97,15 @@ if (view.equalsIgnoreCase("video")) {
 } else if (view.equalsIgnoreCase("rank")) {
 %>
 	<%	if (!"s".equals(mode)) { %>
-		<input type="range" id="Rank-${video.opus}" name="points" class="form-control" 
+	<div class="form-group has-feedback">
+		<input type="range" id="Rank-${video.opus}" name="points" class="form-control input-range" 
 			min="${minRank}" max="${maxRank}" value="${video.rank}"
 			onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
-	<%	} %>	
-	<span id="Rank-${video.opus}-label" class="${cssClass} rangeLabel" title="rank">${video.rank}</span>
+		<span id="Rank-${video.opus}-label" class="form-control-feedback text-primary" title="rank">${video.rank}</span>
+	</div>
+	<%	} else { %>
+		<span id="Rank-${video.opus}-label" class="${cssClass}" title="rank">${video.rank}</span>
+	<%  } %>	
 <%
 } else if (view.equalsIgnoreCase("label")) {
 %>
@@ -125,10 +130,10 @@ if (view.equalsIgnoreCase("video")) {
 					onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getId()%>')"><%=tag.getName()%></span>
 				<%	} %>
 			<%	} %>
+			<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
 		</div>
 		<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this)">
-			<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
-			<span style="display:none; bg-info" id="newTag-${video.opus}">
+			<span style="display:none; padding:3px;" class="bg-primary" id="newTag-${video.opus}">
 				<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
 				<input type="hidden" name="opus" value="${video.opus}"/>
 				<input name="name" placeholder="name" id="newTag-name-${video.opus}" class="form-control input-sm" required="required"/>
