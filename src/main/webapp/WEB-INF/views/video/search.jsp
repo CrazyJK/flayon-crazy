@@ -42,16 +42,16 @@ $(document).ready(function(){
 		}
 
 		loading(true, 'Searching');
-		 
+
 		var keyword = $(this).val();
 		var queryUrl = videoPath + '/search.json?q=' + keyword; 
+		$("#url").html(queryUrl);
+		
+//		$(".table").hide();
 		
 		$.getJSON(queryUrl ,function(data) {
 			$('#foundVideoList').empty();
 			$('#foundHistoryList').empty();
-			$('#foundVideoList').slideUp();
-			$('#foundHistoryList').slideUp();
-			$("#url").html(queryUrl);
 
 			var videoRow = data['videoList'];
 			$("#video-count").html(videoRow.length);
@@ -88,6 +88,10 @@ $(document).ready(function(){
 				tr.append(infoTD);
 				$('#foundVideoList').append(tr);
 			});
+			if (videoRow.length > 0)
+				$("#resultVideoDiv > table").show();
+			else
+				$("#resultVideoDiv > table").hide();
 
 			var historyRow = data['historyList'];
 			$("#history-count").html(historyRow.length);
@@ -109,17 +113,19 @@ $(document).ready(function(){
 				tr.append($("<td>").append(actDom));
 				tr.append($("<td>").append(descDom));
 				$('#foundHistoryList').append(tr);
-			}); 
+			});
+ 			if (historyRow.length > 0)
+ 				$("#resultHistoryDiv > table").show();
+ 			else
+ 				$("#resultHistoryDiv > table").hide();
 
  		    var rexp = eval('/' + keyword + "/gi");
  		    $("tbody > tr > td > span").each(function() {
  				$(this).html($(this).text().replace(rexp,"<mark>"+keyword+"</mark>"));
  			});
 
- 		    $('#foundVideoList').slideDown();
- 			$('#foundHistoryList').slideDown();
-			resizeDivHeight();
-			
+ 		    resizeDivHeight();
+
 			loading(false);
 		});
 	});
@@ -162,7 +168,7 @@ function resizeSecondDiv() {
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>
-				<table class="table table-condensed table-hover table-bordered">
+				<table class="table table-condensed table-hover table-bordered" style="display:none;">
 					<thead>
 						<tr>
 							<th>Studio</th>
@@ -179,7 +185,7 @@ function resizeSecondDiv() {
 		<div class="col-lg-6">		
 			<div id="resultHistoryDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.history"/> <span id="history-count" class="badge"></span></h4>
-				<table class="table table-condensed table-hover table-bordered">
+				<table class="table table-condensed table-hover table-bordered" style="display:none;">
 					<thead>
 						<tr>
 							<th>Date</th>
