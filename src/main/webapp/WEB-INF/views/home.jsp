@@ -7,7 +7,6 @@
 <title><s:message code="default.home"/></title>
 </head>
 <body>
-<div>
 
 <div class="container">
 	<div class="jumbotron">
@@ -17,11 +16,27 @@
 				<security:authentication property="principal.username" />
 			</security:authorize>
 		</h1>
-		<p><s:message code="home.favorites.wording1"/></p>
-		<p><s:message code="home.favorites.wording2"/></p>
+		<p>
+			<span id="wording"></span>
+		</p>
 	</div>
 </div>
 
-</div>
+<script type="text/javascript">
+$("#wording").typed({
+    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
+    //stringsElement: $('#wordings'),
+    typeSpeed: 50,
+    backDelay: 500,
+    loop: false,
+    contentType: 'html', // or text
+    // defaults to false for infinite loop
+    loopCount: false,
+    callback: function(){
+    	$("#wording").next(".typed-cursor").hide();
+    }
+});
+</script>
+
 </body>
 </html>

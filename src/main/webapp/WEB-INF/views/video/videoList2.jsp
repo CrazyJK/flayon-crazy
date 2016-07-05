@@ -9,24 +9,10 @@
 <head>
 <meta charset="UTF-8"></meta>
 <title><s:message code="video.video"/> <s:message code="video.list"/></title>
-<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
 <script type="text/javascript">
-var table;
-$(document).ready(function() {
-    table = $('#list').DataTable({
-    	scrollY:        (calculatedDivHeight - 70),
-        scrollCollapse: true,
-        paging:         false,
-        searching: false,
-        processing: true,
-        info: false
-    });
-});
-
-function resizeSecondDiv() {
-	table.draw();
+function sort(selectedSort) {
+	var reverseOrder = '${sort.name()}' == selectedSort ? ${!reverse} : true;
+	location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
 }
 </script>
 </head>
@@ -39,13 +25,23 @@ function resizeSecondDiv() {
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 	</div>
 
-	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<table id="list" class="table table-condensed table-hover table-bordered">
+	<div id="content_div" class="box">
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th>#</th>
 					<c:forEach items="${sorts}" var="s">
-					<th><s:message code="video.sort.${s.desc}"/></th>
+					<th>
+						<span onclick="sort('${s}')"><s:message code="video.sort.${s.desc}"/></span>
+						<c:if test="${s eq sort}">
+							<c:if test="${!reverse}">
+							<span class="glyphicon glyphicon-chevron-up"></span>
+							</c:if>
+							<c:if test="${reverse}">
+							<span class="glyphicon glyphicon-chevron-down"></span>
+							</c:if>
+						</c:if>
+					</th>
 					</c:forEach>
 				</tr>
 			</thead>

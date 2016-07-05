@@ -172,41 +172,80 @@ function fnViewBGImage() {
 			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'T'}">
-			<table class="table table-condensed table-hover table-bordered">
-				<c:forEach items="${videoList}" var="video" varStatus="status">
-				<tr id="opus-${video.opus}" class="nowarp">
-					<td style="width:80px;">
-						<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
-					<td style="width:80px;">
-						<jk:video video="${video}" view="opus"/></td>
-					<td style="max-width:300px;">
-						<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
-					</td>
-					<td style="max-width:150px;">
-						<%-- <div class="nowarp"><jk:video video="${video}" view="actress"/></div> --%>
-						<div class="nowrap">
-						<c:forEach items="${video.actressList}" var="actress">
-							<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+			<div class="wrapper" style="overflow-x: hidden;">
+				<table id="list" class="table table-condensed table-hover table-bordered">
+					<thead>
+						<tr>
+							<th>Studio</th>
+							<th>Opus</th>
+							<th>Title</th>
+							<th>Actress</th>
+							<th>Release</th>
+							<th>V</th>
+							<th>C</th>
+							<th>S</th>
+							<th>R</th>
+							<th>S</th>
+							<th>L</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${videoList}" var="video" varStatus="status">
+							<tr id="opus-${video.opus}" class="nowarp">
+								<td style="width:80px;">
+									<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
+								<td style="width:80px;">
+									<jk:video video="${video}" view="opus"/></td>
+								<td style="max-width:300px;">
+									<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
+								</td>
+								<td style="max-width:150px;">
+									<%-- <div class="nowarp"><jk:video video="${video}" view="actress"/></div> --%>
+									<div class="nowrap">
+									<c:forEach items="${video.actressList}" var="actress">
+										<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+									</c:forEach>
+									</div>
+								</td>
+								<td style="width:70px;">
+									<jk:video video="${video}" view="release"/></td>
+								<td style="width:20px;">
+									<jk:video video="${video}" view="video" mode="s"/></td>
+								<td style="width:20px;">
+									<jk:video video="${video}" view="cover" mode="s"/></td>
+								<td style="width:20px;">
+									<jk:video video="${video}" view="subtitles" mode="s"/></td>
+								<td style="width:25px;" class="text-right">
+									<jk:video video="${video}" view="rank" mode="s"/></td>
+								<td style="width:25px;" class="text-right">
+									<jk:video video="${video}" view="score" mode="s"/></td>
+								<td style="width:50px;" class="text-right">
+									<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
+							</tr>
 						</c:forEach>
-						</div>
-					</td>
-					<td style="width:70px;">
-						<jk:video video="${video}" view="release"/></td>
-					<td style="width:20px;">
-						<jk:video video="${video}" view="video" mode="s"/></td>
-					<td style="width:20px;">
-						<jk:video video="${video}" view="cover" mode="s"/></td>
-					<td style="width:20px;">
-						<jk:video video="${video}" view="subtitles" mode="s"/></td>
-					<td style="width:25px;" class="text-right">
-						<jk:video video="${video}" view="rank" mode="s"/></td>
-					<td style="width:25px;" class="text-right">
-						<jk:video video="${video}" view="score" mode="s"/></td>
-					<td style="width:50px;" class="text-right">
-						<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
-				</tr>
-				</c:forEach>
-			</table>
+					</tbody>
+				</table>
+			</div>
+			<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
+			<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
+			<script type="text/javascript">
+			var table;
+			$(document).ready(function() {
+			    table = $('#list').DataTable({
+			    	scrollY:        (calculatedDivHeight - 70),
+			        scrollCollapse: true,
+			        paging:         false,
+			        searching: false,
+			        processing: true,
+			        info: false
+			    });
+			});
+			
+			function resizeSecondDiv() {
+				table.draw();
+			}
+			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'S'}">
 			<div id="video-slide-wrapper">

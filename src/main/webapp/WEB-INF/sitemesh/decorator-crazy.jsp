@@ -89,7 +89,7 @@ function showNav() {
 /**
  * post 액션
  */
-function actionFrame(reqUrl, method, msg) {
+function actionFrame(reqUrl, method, msg, interval) {
 	$.ajax({
 		type : method ? method : "POST",
 		url : reqUrl,
@@ -97,7 +97,7 @@ function actionFrame(reqUrl, method, msg) {
 			loading(true, msg ? msg : "Loading...");
 		}
 	}).done(function(data) {
-		loading(true, msg + " Done", 2000);
+		loading(true, msg + " Done", interval ? interval : 2000);
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		errorHtml = $.parseHTML(jqXHR.responseText);
 		parsed = $('<div/>').append(errorHtml);
@@ -126,8 +126,10 @@ function loading(show, msg, interval, detail) {
 		$("#loading-msg").html(msg);
 	if (interval)
 		$("#loading").fadeOut(interval);
-	if (detail)
-		$("#loading-msg-detail").html(detail);
+	if (detail) {
+		var loadingMsgDetail = $("<div>").attr("id", "loading-msg-detail").addClass("box").html(detail);
+		$("#loading-content").append(loadingMsgDetail);
+	}
 }
 var bgToggle = 0;
 function toogleBody() {
@@ -149,7 +151,6 @@ function toogleBody() {
 	<div id="loading">
 		<div id="loading-content">
 			<span id="loading-msg" class="label"  onclick="loading(false);">Loading</span>
-			<div id="loading-msg-detail" class="box"></div>
 		</div>
 	</div>
 	<script type="text/javascript">

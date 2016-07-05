@@ -8,10 +8,13 @@ function resizeDivHeight() {
 	var windowHeight = $(window).outerHeight();
 	var header = $("#header_div").outerHeight();
 	calculatedDivHeight = windowHeight - header - offset;
-	$("#content_div").outerHeight(calculatedDivHeight);	
+	$("#content_div").outerHeight(calculatedDivHeight);
+	console.log("resizeDivHeight", calculatedDivHeight);
 	try {
 		resizeSecondDiv(); // if it exist
-	} catch (e) {}
+	} catch (e) {
+		console.log("resizeSecondDiv Error", e);
+	}
 }
 /**
  * background image set
@@ -188,7 +191,7 @@ function fnRank(opus) {
 			console.log("fnRank opener error", e);
 		}
 	}
-	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val());
+	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val(), 500);
 //	$("#hiddenHttpMethod").val("put");
 //	frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();

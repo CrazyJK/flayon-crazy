@@ -30,19 +30,17 @@ td {
 	color: blue;
 }
 </style>
+<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
+<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	var sort = location.search.split("=")[1]; 
-	if (sort == 'M')
-		$("#M").addClass("selected");
-	else if (sort == 'C')
-		$("#C").addClass("selected");
-	else
-		$("#P").addClass("selected");
+    $('#list').DataTable({
+    	scrollY:        '60vh',
+        scrollCollapse: true,
+        paging:         false
+    });
 });
-function fnSort(sort) {
-	location.href= "?sort=" + sort;
-}
 </script>
 </head>
 <body>
@@ -52,14 +50,14 @@ function fnSort(sort) {
 		<h1>Request Mapping List</h1>
  	</div>
 
-	<table class="table table-condensed">
+	<table id="list" class="table table-condensed">
 		<thead>
 			<tr>
-				<th align="center">	No</th>
-				<th align="left">	<span id="P" onclick="fnSort('P')">Pattern</span></th>
-				<th align="center">	<span id="M" onclick="fnSort('M')">Method</span></th>
-				<th align="right">	<span id="C" onclick="fnSort('C')">Class</span></th>
-				<th align="left">	Method</th>
+				<th class="text-center">No</th>
+				<th>Pattern</th>
+				<th>Method</th>
+				<th class="text-right">Class</th>
+				<th>Method</th>
 			</tr>
 		</thead>
 		<tbody>

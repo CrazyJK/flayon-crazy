@@ -1,25 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
-<footer class="footer">
+<footer class="nav navbar-default navbar-fixed-bottom">
 	<div class="container">
-		<div class="type-wrap">
-            <div id="typed-strings">
-            	<p><span class="text-muted">kAmOrU. All rights reserved. <a target="_blank" href="http://ko.wikipedia.org/wiki/%ED%95%9C%EB%9F%89"><s:message code="home.i.want"/></a></span></p>
-  			</div>
-            <span id="typed" style="white-space:pre;"></span>
+		<small id="typed" style="white-space:pre;"></small>
 
-	 		<section style="float:right; font-size:10px; margin-top: 7px;">
-				<form name="langChange">
-					<span><%=lang%></span>
-					<select name="lang" onchange="document.forms['langChange'].submit();">
-						<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="default.korean"/></option>
-						<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="default.english"/></option>
-						<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="default.japanese"/></option>
-					</select>
-				</form>
-			</section>
-        </div>
- 		
+ 		<section style="float:right; font-size:10px; margin-top: 3px;">
+			<form name="langChange">
+				<%-- <span><%=lang%></span> --%>
+				<select name="lang" onchange="document.forms['langChange'].submit();">
+					<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="default.korean"/></option>
+					<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="default.english"/></option>
+					<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="default.japanese"/></option>
+				</select>
+			</form>
+		</section>
 	</div>
 </footer>
+
+<div id="typed-strings">
+	<p><span class="text-muted">kAmOrU. All rights reserved. <a target="_blank" href="http://ko.wikipedia.org/wiki/%ED%95%9C%EB%9F%89"><s:message code="home.i.want"/></a></span></p>
+</div>
+
+<script type="text/javascript">
+$("#typed").typed({
+    // strings: ["Typed.js is a <strong>jQuery</strong> plugin.", "It <em>types</em> out sentences.", "And then deletes them.", "Try it out!"],
+    stringsElement: $('#typed-strings'),
+    typeSpeed: 30,
+    backDelay: 500,
+    loop: false,
+    contentType: 'html', // or text
+    // defaults to false for infinite loop
+    loopCount: false,
+    callback: function() {
+		$("#typed").next(".typed-cursor").hide();
+    }
+});
+</script>

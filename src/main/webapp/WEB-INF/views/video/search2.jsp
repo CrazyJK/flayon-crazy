@@ -11,9 +11,6 @@
 .label {
 	margin-right: 3px;
 }
-mark {
-	padding:0;
-}
 </style>
 <script type="text/javascript">
 //bgContinue = false;
@@ -65,28 +62,26 @@ $(document).ready(function(){
 				var existCover 	   = entry['existCover'];
 				var existSubtitles = entry['existSubtitles'];
 				
+				var li  = $("<li>");
+				var div = $("<div>");
+
 				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
 				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
 				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
-				var actressTD = $("<td>");
-				var actor = actress.split(",");
-				if (actor.length > 0) {
-					for (var i=0; i<actor.length; i++) {
-						$("<span>").addClass("label label-plain").attr("onclick", "fnViewActressDetail('" + actor[i] +"')").html(actor[i]).appendTo(actressTD);
-					}
-				}
-				var infoTD = $("<td>");
-				$("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V").appendTo(infoTD);
-				$("<span>").addClass("label").addClass((existCover == "true" ? "label-success" : "label-default" )).html("C").appendTo(infoTD);
-				$("<span>").addClass("label").addClass((existSubtitles == "true" ? "label-success" : "label-default" )).html("S").appendTo(infoTD);
+				var actressDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
+				var existVideoDom 	  = $("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V");
+				var existCoverDom 	  = $("<span>").addClass("label").addClass((existCover == "true" ? "label-success" : "label-default" )).html("C");
+				var existSubtitlesDom = $("<span>").addClass("label").addClass((existSubtitles == "true" ? "label-success" : "label-default" )).html("S");
 
-				var tr  = $("<tr>");
-				tr.append($("<td>").append(studioDom));
-				tr.append($("<td>").append(opusDom));
-				tr.append($("<td>").append(titleDom));
-				tr.append(actressTD);
-				tr.append(infoTD);
-				$('#foundVideoList').append(tr);
+				div.append(studioDom);
+				div.append(opusDom);
+				div.append(titleDom);
+				div.append(actressDom);
+				div.append(existVideoDom);
+				div.append(existCoverDom);
+				div.append(existSubtitlesDom);
+				li.append(div);
+				$('#foundVideoList').append(li);
 			});
 
 			var historyRow = data['historyList'];
@@ -98,22 +93,25 @@ $(document).ready(function(){
 				var act  = entry['act'];
 				var desc = entry['desc'];
 				
-				var dateDom = $("<span>").addClass("label label-plain").html(date);
-				var opusDom = $("<span>").addClass("label label-plain").html(opus).attr("onclick", "fnViewVideoDetail('" + opus +"')");
-				var actDom	= $("<span>").addClass("label label-plain").html(act);
-				var descDom = $("<span>").addClass("label label-plain").html(desc);
+				var li  = $("<li>");
+				var div = $("<div>");
 
-				var tr  = $("<tr>");
-				tr.append($("<td>").append(dateDom));
-				tr.append($("<td>").append(opusDom));
-				tr.append($("<td>").append(actDom));
-				tr.append($("<td>").append(descDom));
-				$('#foundHistoryList').append(tr);
+				var dateDom 		  = $("<span>").addClass("label label-plain").html(date);
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var actDom	 		  = $("<span>").addClass("label label-plain").html(act);
+				var descDom 		  = $("<span>").addClass("label label-plain").html(desc);
+
+				div.append(dateDom);
+				div.append(opusDom);
+				div.append(actDom);
+				div.append(descDom);
+				li.append(div);
+				$('#foundHistoryList').append(li);
 			}); 
 
  		    var rexp = eval('/' + keyword + "/gi");
- 		    $("tbody > tr > td > span").each(function() {
- 				$(this).html($(this).text().replace(rexp,"<mark>"+keyword+"</mark>"));
+ 		    $("div > ol > li > div > span").each(function() {
+ 				$(this).html($(this).html().replace(rexp,"<mark>"+keyword+"</mark>"));
  			});
 
  		    $('#foundVideoList').slideDown();
@@ -162,34 +160,13 @@ function resizeSecondDiv() {
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>
-				<table class="table table-condensed table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Studio</th>
-							<th>Opus</th>
-							<th>Title</th>
-							<th>Actress</th>
-							<th>Info</th>
-						</tr>
-					</thead>
-					<tbody id="foundVideoList"></tbody>
-				</table>
+				<ol id="foundVideoList" class="items"></ol>
 			</div>
 		</div>
 		<div class="col-lg-6">		
 			<div id="resultHistoryDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.history"/> <span id="history-count" class="badge"></span></h4>
-				<table class="table table-condensed table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Opus</th>
-							<th>Act</th>
-							<th>Desc</th>
-						</tr>
-					</thead>
-					<tbody id="foundHistoryList"></tbody>
-				</table>
+				<ol id="foundHistoryList" class="items"></ol>
 			</div>
 		</div>
 	</div>
