@@ -9,7 +9,7 @@
 <title>${actress.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
-bgContinue = false;
+//bgContinue = false;
 $(document).ready(function(){
 	
 });
@@ -42,7 +42,7 @@ function fnSaveActressInfo() {
 	<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
 	<input type="hidden" name="name" value="${actress.name}"/>
 	<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
-
+	<br/>
 	<div class="form-group">
 		<div class="col-sm-2 text-right">
 			<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
@@ -63,19 +63,19 @@ function fnSaveActressInfo() {
 	</div>
 	<div class="form-group">
 		<div class="col-sm-3">
-			<input class="form-control input-sm" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
+			<input class="form-control" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
 		</div>
 		<div class="col-sm-3">
-			<input class="form-control input-sm" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
+			<input class="form-control" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control input-sm" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
+			<input class="form-control" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
 		</div>
 		<div class="col-sm-2">
-			<input class="form-control input-sm" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
+			<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
 		</div>
 		<div class="col-sm-2">
-			<button class="btn btn-default btn-sm" onclick="fnSaveActressInfo()">Save</button>
+			<button class="btn btn-default" onclick="fnSaveActressInfo()">Save</button>
 		</div>
 	</div>
 	<div class="form-group">

@@ -224,14 +224,14 @@ function fnViewActressDetail(name) {
  * @param name
  */
 function fnViewStudioDetail(name) {
-	popup(videoPath + "/studio/" + name, "studioDetail-" + name, 800, 600);
+	popup(videoPath + "/studio/" + name, "studioDetail-" + name, 850, 600);
 }
 /**
  * popup view video datail
  * @param opus
  */
 function fnViewVideoDetail(opus) {
-	popup(videoPath + "/" + opus, "videoDetail-" + opus, 800, 600);
+	popup(videoPath + "/" + opus, "videoDetail-" + opus, 850, 600);
 }
 /**
  * set, mark favorite actress

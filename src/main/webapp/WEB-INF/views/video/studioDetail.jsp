@@ -9,7 +9,7 @@
 <title>${studio.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
-bgContinue = false;
+//bgContinue = false;
 function fnRenameTo() {
 	var actressForm = document.forms['studioForm'];
 	actressForm.action = "<s:url value="/video/studio/${studio.name}/renameTo/"/>" + $("#newName").val();
@@ -32,7 +32,7 @@ function fnPutStudioInfo() {
 
 <form id="studioForm" method="post" role="form" class="form-horizontal">
 	<input type="hidden" name="_method" id="hiddenHttpMethod" value="put"/>
-
+	<br/>
 	<div class="form-group">
 		<div class="col-sm-11">
 			<input class="form-control" type="text" name="newname" value="${studio.name}" id="newName" />
@@ -43,13 +43,13 @@ function fnPutStudioInfo() {
 	</div>
 	<div class="form-group">
 		<div class="col-sm-6">
-			<input class="form-control input-sm" id="homepage" name="homepage" value="${studio.homepage}" placeholder="Homepage"/>
+			<input class="form-control" id="homepage" name="homepage" value="${studio.homepage}" placeholder="Homepage"/>
 		</div>
 		<div class="col-sm-5">
-			<input class="form-control input-sm" id="company" name="company" value="${studio.company}" placeholder="Company"/>
+			<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
 		</div>
 		<div class="col-sm-1">
-			<span class="btn btn-default btn-sm" onclick="fnPutStudioInfo()">Save</span>
+			<span class="btn btn-default" onclick="fnPutStudioInfo()">Save</span>
 		</div>
 	</div>
 	<div class="form-group">

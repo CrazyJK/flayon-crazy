@@ -196,7 +196,7 @@ function fnViewBGImage() {
 									<div class="nowrap"><jk:video video="${video}" view="studio"/></div></td>
 								<td style="width:80px;">
 									<jk:video video="${video}" view="opus"/></td>
-								<td style="max-width:300px;">
+								<td style="max-width:200px;">
 									<div class="nowrap"><span class="label label-plain" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</span></div>
 								</td>
 								<td style="max-width:150px;">

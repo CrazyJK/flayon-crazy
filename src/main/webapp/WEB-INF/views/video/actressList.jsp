@@ -45,7 +45,7 @@ function resizeSecondDiv() {
 				<tr>
 					<th>#</th>
 					<c:forEach items="${sorts}" var="s">
-					<th><s:message code="actress.sort.${s}"/></th>
+					<th title="<s:message code="actress.sort.${s}"/>"><s:message code="actress.sort.short.${s}"/></th>
 					</c:forEach>
 					<th>Age</th>
 					<th>Video</th>

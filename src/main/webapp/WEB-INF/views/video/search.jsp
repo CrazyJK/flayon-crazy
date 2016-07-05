@@ -148,7 +148,7 @@ function resizeSecondDiv() {
 </script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
 
 	<div id="header_div" class="box form-inline">
 		<label for="search">

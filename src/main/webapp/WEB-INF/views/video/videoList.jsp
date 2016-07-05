@@ -45,7 +45,7 @@ function resizeSecondDiv() {
 				<tr>
 					<th>#</th>
 					<c:forEach items="${sorts}" var="s">
-					<th><s:message code="video.sort.${s.desc}"/></th>
+					<th title="<s:message code="video.sort.${s.desc}"/>"><s:message code="video.sort.short.${s.desc}"/></th>
 					</c:forEach>
 				</tr>
 			</thead>
@@ -61,10 +61,10 @@ function resizeSecondDiv() {
 					<td>
 						<a onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</a>
 					</td>
-					<td style="max-width: 180px;">
+					<td style="max-width: 150px;">
 						<div class="nowrap" title="${video.title}">${video.title}</div>
 					</td>
-					<td style="max-width: 120px;">
+					<td style="max-width: 100px;">
 						<div class="nowrap">
 						<c:forEach items="${video.actressList}" var="actress">
 							<a onclick="fnViewActressDetail('${actress.name}')">${actress.name}</a>
