@@ -17,7 +17,7 @@ mark {
 </style>
 <script type="text/javascript">
 //bgContinue = false;
-var BOOTSTRAP_COL_LG_6 = 970;
+var BOOTSTRAP_COL_LG_6 = 1230;
 
 $(document).ready(function(){
 	
@@ -83,9 +83,9 @@ $(document).ready(function(){
 				var tr  = $("<tr>");
 				tr.append($("<td>").append(studioDom));
 				tr.append($("<td>").append(opusDom));
-				tr.append($("<td>").append(titleDom));
-				tr.append(actressTD);
 				tr.append(infoTD);
+				tr.append(actressTD);
+				tr.append($("<td>").append(titleDom));
 				$('#foundVideoList').append(tr);
 			});
 			if (videoRow.length > 0)
@@ -142,6 +142,8 @@ function resizeSecondDiv() {
 		calculatedDivHeight = (contentDivHeight) / 2 - 15;
 	}
 
+	console.log(contentDivWidth, calculatedDivHeight);
+	
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
 }
@@ -173,9 +175,9 @@ function resizeSecondDiv() {
 						<tr>
 							<th>Studio</th>
 							<th>Opus</th>
-							<th>Title</th>
-							<th>Actress</th>
 							<th>Info</th>
+							<th>Actress</th>
+							<th>Title</th>
 						</tr>
 					</thead>
 					<tbody id="foundVideoList"></tbody>
