@@ -142,7 +142,7 @@ function resizeSecondDiv() {
 		calculatedDivHeight = (contentDivHeight) / 2 - 15;
 	}
 
-	console.log(contentDivWidth, calculatedDivHeight);
+	//console.log(contentDivWidth, calculatedDivHeight);
 	
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
@@ -162,11 +162,11 @@ function resizeSecondDiv() {
 				<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 				<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>		
-		<span id="url"></span>
-		<span id="debug"></span>
+		<span id="url" class="label label-info"></span>
+		<span id="debug" class="label label-info"></span>
 	</div>
 	
-	<div id="content_div" class="row">
+	<div id="content_div" class="row" style="margin:0;">
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>

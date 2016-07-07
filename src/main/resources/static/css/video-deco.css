@@ -77,3 +77,23 @@ div#content_div {
 #loading-msg-detail {
 	background-color: rgba(0, 0, 255, .5);
 }
+.loader {
+	display: block;
+	margin: 11px auto;
+	/* border: 6px solid #d3d3d3; */
+	border-radius: 50%;
+	border-top: 15px double rgba(0, 0, 255, .5);
+	width: 100px;
+	height: 100px;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s ease infinite;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

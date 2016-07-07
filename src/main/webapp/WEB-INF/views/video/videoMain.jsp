@@ -220,7 +220,7 @@ function fnViewBGImage() {
 								<td style="width:25px;" class="text-right">
 									<jk:video video="${video}" view="score" mode="s"/></td>
 								<td style="width:50px;" class="text-right">
-									<span class="label label-plain"><jk:video video="${video}" view="length"/></span></td>
+									<jk:video video="${video}" view="length"/></td>
 							</tr>
 						</c:forEach>
 					</tbody>

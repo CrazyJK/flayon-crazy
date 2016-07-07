@@ -138,8 +138,8 @@ function toogleBody() {
 	}, 1000);
 	++bgToggle;
 	$("#bgActionGroup").toggle({
-		duration: 1000}
-	);
+		duration: 1000
+	});
 }
 </script>
 
@@ -150,6 +150,7 @@ function toogleBody() {
 
 	<div id="loading">
 		<div id="loading-content">
+			<div class="loader"></div>
 			<span id="loading-msg" class="label"  onclick="loading(false);">Loading</span>
 		</div>
 	</div>

@@ -9,7 +9,7 @@ function resizeDivHeight() {
 	var header = $("#header_div").outerHeight();
 	calculatedDivHeight = windowHeight - header - offset;
 	$("#content_div").outerHeight(calculatedDivHeight);
-	console.log("resizeDivHeight", calculatedDivHeight);
+	//console.log("resizeDivHeight", calculatedDivHeight);
 	try {
 		resizeSecondDiv(); // if it exist
 	} catch (e) {
