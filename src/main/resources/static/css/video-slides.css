@@ -6,6 +6,9 @@
 	margin:0 auto;
 	text-align: center;
 }
+#slides h4 {
+	margin-top: 0;
+}
 /* 뷰를 싸는 외곽 */
 .slidesjs-container {
 	margin-bottom: 10px;

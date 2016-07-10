@@ -36,6 +36,8 @@ var bgContinue = true;
 var urlSearchVideo = '${urlSearchVideo}';
 var urlSearchActress = '${urlSearchActress}';
 var urlSearchTorrent = '${urlSearchTorrent}';
+var tSec = 1;
+var timer;
 
 $(document).ready(function() {
 
@@ -50,6 +52,14 @@ $(document).ready(function() {
 		$("#" + id).val("");
 	});
 
+	$("#deco_nav a[href]").on("click", function() {
+		loading(true);
+	});
+	$("#header_div form").submit(function(event) {
+		console.log("form submit...");
+		loading(true);
+	});
+	
  	showNav();
  	
 	$(window).bind("resize", resizeDivHeight);
@@ -118,10 +128,15 @@ function actionFrame(reqUrl, method, msg, interval) {
 	*/
 }
 function loading(show, msg, interval, detail) {
-	if (show)
+	if (show) {
 		$("#loading").css("display", "table");
-	else
+		tSec = 1;
+		timer = setInterval(function() {loadingTimer()}, 1000);
+	}
+	else {
 		$("#loading").hide();
+		loadingTimer(true);
+	}
 	if (msg)
 		$("#loading-msg").html(msg);
 	if (interval)
@@ -141,6 +156,12 @@ function toogleBody() {
 		duration: 1000
 	});
 }
+function loadingTimer(stop) {
+	$("#loading-timer").html(tSec++);
+	if (stop) {
+		clearInterval(timer);
+	}
+}
 </script>
 
 <sitemesh:write property="head" />
@@ -150,7 +171,9 @@ function toogleBody() {
 
 	<div id="loading">
 		<div id="loading-content">
-			<div class="loader"></div>
+			<div class="loader">
+				<span id="loading-timer" class="label label-danger lead"></span>
+			</div>
 			<span id="loading-msg" class="label"  onclick="loading(false);">Loading</span>
 		</div>
 	</div>

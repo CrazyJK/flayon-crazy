@@ -96,7 +96,7 @@ public class HistoryServiceImpl implements HistoryService {
 
 	@Override
 	public List<History> getDeduplicatedList() {
-		Map<String, History> found = new HashMap<String, History>();
+		Map<String, History> found = new HashMap<>();
 		for (History history : historyDao.getList()) {
 			if (!found.containsKey(history.getOpus()))
 				found.put(history.getOpus(), history);

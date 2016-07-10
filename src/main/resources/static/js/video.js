@@ -28,10 +28,7 @@ function setBackgroundImage(imgIdx) {
 	
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
 	//$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
-	$("body")
-		.css("background-image", "url(" + currBGImageUrl + ")")
-		.css("background-position", "center center")
-		.css("background-size", "contain");
+	$("body").css("background-image", "url(" + currBGImageUrl + ")");
 }
 /**
  * toggle studio div

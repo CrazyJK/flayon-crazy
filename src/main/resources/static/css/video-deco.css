@@ -1,6 +1,8 @@
 @CHARSET "UTF-8";
 body {
 	background-color: rgba(255, 255, 255, 0);
+	background-position: center center;
+	background-size: contain;
 }
 [onclick], [ng-click] {
 	cursor: pointer;
@@ -23,7 +25,7 @@ body {
 }
 #deco_nav:hover {
 	box-shadow: 0px 1px 10px rgba(0,0,0,0.5);
-	background-color: rgba(255, 255, 255, 1);
+	background-color: rgba(255, 255, 255, .9);
 }
 #deco_nav li a {
 	font-size: 10px;

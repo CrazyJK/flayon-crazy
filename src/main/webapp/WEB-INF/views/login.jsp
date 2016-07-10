@@ -65,7 +65,7 @@ $(document).ready(function(){
 							<input type="password" name="password" class="form-control" placeholder="Password" required="required"/>
 						</div>
 						<div class="checkbox">
-              				<label><input type="checkbox" name="remember-me"/>Remember me</label>
+              				<label><input type="checkbox" name="remember-me" checked="checked"/>Remember me</label>
             			</div>
 						<div>
 							<button class="btn btn-primary btn-block" type="submit">Log in</button>

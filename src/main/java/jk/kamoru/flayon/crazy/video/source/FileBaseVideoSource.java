@@ -38,9 +38,9 @@ public class FileBaseVideoSource implements VideoSource {
 //	private final String unclassifiedOpus 	 = UNKNOWN;
 
 	// data source
-	private Map<String, Video>     videoMap	= new HashMap<String, Video>();
-	private Map<String, Studio>   studioMap	= new HashMap<String, Studio>();
-	private Map<String, Actress> actressMap = new HashMap<String, Actress>();
+	private Map<String, Video>     videoMap	= new HashMap<>();
+	private Map<String, Studio>   studioMap	= new HashMap<>();
+	private Map<String, Actress> actressMap = new HashMap<>();
 	
 	// Domain provider
 	@Inject Provider<Video>     videoProvider;
