@@ -10,8 +10,10 @@
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	$("body").css("background-image","url('<c:url value="/video/${video.opus}/cover" />')");
-	$("body").css("background-size", "100%");
+	$("body")
+		.css("background-image","url('<c:url value="/video/${video.opus}/cover" />')")
+		.css("background-size", "100%")
+		.css("background-position", "left top");
 });
 </script>
 </head>

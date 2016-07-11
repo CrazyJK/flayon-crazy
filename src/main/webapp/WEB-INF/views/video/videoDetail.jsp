@@ -15,7 +15,7 @@ bgContinue = false;
 $(document).ready(function() {
 	$("body")
 		.css("background-image","url('<c:url value="/video/${video.opus}/cover" />')")
-		.css("background-size", "cover")
+		.css("background-size", "100%")
 		.css("background-position", "left top");
 
 });
