@@ -288,7 +288,7 @@ function fnViewBGImage() {
 			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
 			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
 			<script type="text/javascript">
-				$("#slides").slideview({width:800, height:800});
+				$("#slides").slideview({width:800, height:750});
 			</script>
 		</c:when>
 		<c:otherwise>
