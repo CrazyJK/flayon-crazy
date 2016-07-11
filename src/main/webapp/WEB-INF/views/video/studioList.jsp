@@ -28,6 +28,7 @@ function resizeSecondDiv() {
 	table.draw();
 }
 function view() {
+	loading(true);
 	location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
 }
 </script>
