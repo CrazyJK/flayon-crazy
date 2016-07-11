@@ -257,6 +257,40 @@ function fnViewBGImage() {
 			$("#slides").largeview();
 		</script>
 		</c:when>
+		<c:when test="${videoSearch.listViewType eq 'F'}">
+			<div id="video-slide-wrapper">
+				<div id="slides">
+					<c:forEach items="${videoList}" var="video">
+						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
+							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 520px;">
+								<dt style="margin-top: 479px;">
+									<div class="nowrap">
+										<jk:video video="${video}" view="title" mode="l"/>
+									</div>
+								</dt>
+							</dl>
+							<div class="box box-small" style="background-color: rgba(218, 18, 18, 0.5);">
+								<h4><jk:video video="${video}" view="studio" mode="l"/>
+									<jk:video video="${video}" view="opus" mode="l"/>
+									<jk:video video="${video}" view="release" mode="l"/>
+									<jk:video video="${video}" view="download" mode="l"/></h4>
+								<h4><jk:video video="${video}" view="actress" mode="l"/></h4>
+								<h5><jk:video video="${video}" view="cover" mode="l"/>
+									<jk:video video="${video}" view="subtitles" mode="l"/>
+									<jk:video video="${video}" view="overview" mode="l"/></h5>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+				<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
+			</div>
+			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
+			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+			<script type="text/javascript">
+				$("#slides").slideview({width:800, height:800});
+			</script>
+		</c:when>
 		<c:otherwise>
 		<ol>
 			<c:forEach items="${videoList}" var="video">

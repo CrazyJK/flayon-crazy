@@ -91,12 +91,16 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/actress", method=RequestMethod.GET)
 	public String actressList(Model model, @RequestParam(value="sort", required=false, defaultValue="NAME") ActressSort sort,
-			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse) {
-		logger.trace("actressList sort={} reverse={}", sort, reverse);
-		model.addAttribute(videoService.getActressList(sort, reverse));
+			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
+			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
+		logger.trace("actressList sort={} reverse={}, instance={}, archive={}", sort, reverse, instance, archive);
+		model.addAttribute(videoService.getActressList(sort, reverse, instance, archive));
 		model.addAttribute("sorts", ActressSort.values());
 		model.addAttribute("sort", sort);
 		model.addAttribute("reverse", reverse);
+		model.addAttribute("instance", instance);
+		model.addAttribute("archive", archive);
 		return "video/actressList";
 	}
 
@@ -192,12 +196,16 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public String videoList(Model model, @RequestParam(value="sort", required=false, defaultValue="O") Sort sort,
-			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse) {
-		logger.trace("videoList sort={} reverse={}", sort, reverse);
-		model.addAttribute("videoList", videoService.getVideoList(sort, reverse));
+			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
+			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
+		logger.trace("videoList sort={} reverse={}, instance={}, archive={}", sort, reverse, instance, archive);
+		model.addAttribute("videoList", videoService.getVideoList(sort, reverse, instance, archive));
 		model.addAttribute("sorts", Sort.values());
 		model.addAttribute("sort", sort);
 		model.addAttribute("reverse", reverse);
+		model.addAttribute("instance", instance);
+		model.addAttribute("archive", archive);
 		return "video/videoList";
 	}
 
@@ -256,12 +264,16 @@ public class VideoController extends AbstractController {
 	 */
 	@RequestMapping(value="/studio", method=RequestMethod.GET)
 	public String studioList(Model model, @RequestParam(value="sort", required=false, defaultValue="NAME") StudioSort sort,
-			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse) {
-		logger.trace("studioList sort={} reverse={}", sort, reverse);
-		model.addAttribute(videoService.getStudioList(sort, reverse));
+			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
+			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
+		logger.trace("studioList sort={} reverse={}, instance={}, archive={}", sort, reverse, instance, archive);
+		model.addAttribute(videoService.getStudioList(sort, reverse, instance, archive));
 		model.addAttribute("sorts", StudioSort.values());
 		model.addAttribute("sort", sort);
 		model.addAttribute("reverse", reverse);
+		model.addAttribute("instance", instance);
+		model.addAttribute("archive", archive);
 		return "video/studioList";
 	}
 
@@ -458,8 +470,8 @@ public class VideoController extends AbstractController {
 		model.addAttribute("sorts", 		Sort.values());
 		model.addAttribute("videoList", 	videoList);
 		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList());
-			model.addAttribute("studioList", 	videoService.getStudioList());
+			model.addAttribute("actressList", 	videoService.getActressListInArchive());
+			model.addAttribute("studioList", 	videoService.getStudioListInArchive());
 		}
 		else {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));

@@ -38,6 +38,26 @@ public class VideoUtils {
 	}
 
 	/**
+	 * 배우이름이 포함되어 있는지 검사
+	 * @param name1
+	 * @param name2
+	 * @return 성, 이름을 구분하여 조금이라도 포함되면 {@code true}
+	 */
+	public static boolean containsActress(String name1, String name2) {
+		String[] _name1 = StringUtils.split(name1);
+		String[] _name2 = StringUtils.split(name2);
+		if (_name1 == null || _name2 == null)
+			return false;
+		for (String name1a : _name1) {
+			for (String name2a : _name2) {
+				if (StringUtils.containsIgnoreCase(name1a, name2a))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * 공백이 들어간 이름을 소문자 순차정렬해서 반환
 	 * 
 	 * @param name

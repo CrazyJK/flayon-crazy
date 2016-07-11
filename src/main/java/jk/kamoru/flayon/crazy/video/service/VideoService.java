@@ -58,6 +58,8 @@ public interface VideoService {
 	 */
 	List<Actress> getActressList();
 
+	List<Actress> getActressListInArchive();
+
 	/**actress list in video
 	 * @param videoList
 	 * @return actress list
@@ -74,7 +76,9 @@ public interface VideoService {
 	 * @return studio list
 	 */
 	List<Studio> getStudioList();
-	
+
+	List<Studio> getStudioListInArchive();
+
 	/** get stuio ilst in video
 	 * @param videoList
 	 * @return studio list
@@ -179,6 +183,8 @@ public interface VideoService {
 	 */
 	List<Actress> getActressList(ActressSort sort, boolean reverse);
 
+	List<Actress> getActressList(ActressSort sort, Boolean reverse, Boolean instance, Boolean archive);
+
 	/**get all sorted studio list
 	 * @param sort
 	 * @param reverse 
@@ -186,12 +192,16 @@ public interface VideoService {
 	 */
 	List<Studio> getStudioList(StudioSort sort, boolean reverse);
 
+	List<Studio> getStudioList(StudioSort sort, Boolean reverse, Boolean instance, Boolean archive);
+
 	/**get all sorted video list
 	 * @param sort
 	 * @param reverse 
 	 * @return video list
 	 */
 	List<Video> getVideoList(Sort sort, boolean reverse);
+	
+	List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive);
 
 	/**get play count range
 	 * @return play count list
@@ -302,5 +312,5 @@ public interface VideoService {
 	List<VTag> getTagListWithVideo();
 
 	VTag getTag(Integer id);
-	
+
 }

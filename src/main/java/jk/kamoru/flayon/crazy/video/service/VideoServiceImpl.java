@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -316,6 +315,25 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		
+		return videoDao.getVideoList().stream()
+				.filter(v -> v.match(search))
+				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
+				.collect(Collectors.toList());
+/*		
+		return videoDao.getVideoList().stream()
+			.filter(v -> containsQuery(v, search.getSearchText()))
+			.filter(v -> addCond(v, search.isAddCond(), search.isExistVideo(), search.isExistSubtitles()))
+			.filter(v -> search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(v.getStudio().getName()))
+			.filter(v -> search.getSelectedActress() == null ? true : VideoUtils.containsActress(v, search.getSelectedActress()))
+			.filter(v -> rankMatch(v.getRank(), search.getRankRange()))
+			.filter(v -> playCountMatch(v.getPlayCount(), search.getPlayCount()))
+			.filter(v -> tagMatch(v, search.getSelectedTag()))
+			.map(v -> v.setSortMethod(search.getSortMethod()))
+			.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
+			.collect(Collectors.toList());
+			
+*/
+/*		
 		return videoDao.getVideoList().parallelStream()
 				.filter(new Predicate<Video>(){
 
@@ -346,7 +364,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				})
 				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
 				.collect(Collectors.toList());
-		
+*/		
 /*		
 		List<Video> foundList = new ArrayList<Video>();
 		for (Video video : videoDao.getVideoList()) {
@@ -381,7 +399,24 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 */		
 	}
-	
+/*	
+	private boolean addCond(Video video, boolean addCond, boolean existVideo, boolean existSubtitles) {
+		return addCond   
+				? ((existVideo ? video.isExistVideoFileList() : !video.isExistVideoFileList())
+						&& (existSubtitles ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
+				: true;
+	}
+*/
+/*
+	private boolean containsQuery(Video video, String searchText) {
+		return VideoUtils.equals(video.getStudio().getName(), searchText) 
+				|| VideoUtils.equals(video.getOpus(), searchText) 
+				|| VideoUtils.containsName(video.getTitle(), searchText) 
+				|| VideoUtils.containsActress(video, searchText)
+				|| VideoUtils.containsName(video.getReleaseDate(), searchText);
+	}
+*/
+/*
 	private boolean tagMatch(Video video, List<String> selectedTag) {
 		if (selectedTag == null)
 			return true;
@@ -393,27 +428,27 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 		return false;
 	}
-
+*/
 	/**compare play count. {@code true} if playCount2 is {@code null} or {@code -1}
 	 * @param playCount
 	 * @param playCount2
 	 * @return {@code true} if same of both or playCount2 {@code null}, {@code -1}
-	 */
 	private boolean playCountMatch(Integer playCount, Integer playCount2) {
 		if (playCount2 == null || playCount2 == -1)
 			return true;
 		else 
 			return playCount == playCount2;
 	}
+	 */
 
 	/**Returns {@code true} if rankRange list contains the specified rank
 	 * @param rank
 	 * @param rankRange rank range list
 	 * @return {@code true} if rankRange list contains the specified rank
-	 */
 	private boolean rankMatch(int rank, List<Integer> rankRange) {
 		return rankRange.contains(rank);
 	}
+	 */
 
 	@Override
 	public Map<String, Long[]> groupByPath() {
@@ -1105,6 +1140,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		for (Video video : videoDao.getArchiveVideoList()) {
 			video.arrange();
 		}
+		videoDao.reloadArchive();
 	}
 
 	@Override
@@ -1113,6 +1149,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		
+		return videoDao.getArchiveVideoList().stream()
+				.filter(v -> v.match(search))
+				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
+				.collect(Collectors.toList());
+
+/*		
 		return videoDao.getArchiveVideoList().parallelStream()
 				.filter(new Predicate<Video>() {
 
@@ -1136,6 +1178,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					}})
 				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
 				.collect(Collectors.toList());
+*/
 /*		
 		List<Video> foundList = new ArrayList<Video>();
 		for (Video video : videoDao.getArchiveVideoList()) {
@@ -1281,6 +1324,46 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			}
 		}
 		return vTag;
+	}
+
+	@Override
+	public List<Actress> getActressListInArchive() {
+		return videoDao.getArchiveActressList();
+	}
+
+	@Override
+	public List<Studio> getStudioListInArchive() {
+		return videoDao.getArchiveStudioList();
+	}
+
+	@Override
+	public List<Actress> getActressList(ActressSort sort, Boolean reverse, Boolean instance, Boolean archive) {
+		List<Actress> list = new ArrayList<>();
+		if (instance)
+			list.addAll(getActressList(sort, reverse));
+		if (archive)
+			list.addAll(getActressListInArchive().stream().filter(a -> !list.contains(a)).collect(Collectors.toList()));
+		return list;
+	}
+
+	@Override
+	public List<Studio> getStudioList(StudioSort sort, Boolean reverse, Boolean instance, Boolean archive) {
+		List<Studio> list = new ArrayList<>();
+		if (instance)
+			list.addAll(getStudioList(sort, reverse));
+		if (archive)
+			list.addAll(getStudioListInArchive().stream().filter(s -> !list.contains(s)).collect(Collectors.toList()));
+		return list;
+	}
+
+	@Override
+	public List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive) {
+		List<Video> list = new ArrayList<>();
+		if (instance)
+			list.addAll(getVideoList(sort, reverse));
+		if (archive)
+			list.addAll(videoDao.getArchiveVideoList().stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
+		return list;
 	}
 
 }

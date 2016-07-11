@@ -72,6 +72,8 @@ public interface VideoDao {
 	 */
 	void reload();
 
+	void reloadArchive();
+
 	/**
 	 * arrange video
 	 * @param opus
@@ -92,4 +94,9 @@ public interface VideoDao {
 	 * @return video list
 	 */
 	List<Video> getArchiveVideoList();
+
+	List<Actress> getArchiveActressList();
+
+	List<Studio> getArchiveStudioList();
+
 }

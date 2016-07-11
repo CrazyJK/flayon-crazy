@@ -133,6 +133,20 @@ public class VideoDaoFile implements VideoDao {
 		return archiveVideoSource.getVideoList();
 	}
 
+	@Override
+	public List<Actress> getArchiveActressList() {
+		return archiveVideoSource.getActressList();
+	}
+
+	@Override
+	public List<Studio> getArchiveStudioList() {
+		return archiveVideoSource.getStudioList();
+	}
+
+	@Override
+	public void reloadArchive() {
+		archiveVideoSource.reload();
+	}
 
 }
 

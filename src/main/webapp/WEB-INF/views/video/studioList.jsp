@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript">
 var table;
 $(document).ready(function() {
@@ -26,6 +27,9 @@ $(document).ready(function() {
 function resizeSecondDiv() {
 	table.draw();
 }
+function view() {
+	location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
+}
 </script>
 </head>
 <body>
@@ -36,6 +40,18 @@ function resizeSecondDiv() {
 			<s:message code="video.total"/> <s:message code="video.studio"/> <span class="badge">${fn:length(studioList)}</span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
+
+		<label>
+			<input type="checkbox" id="instance" name="i" value="${instance}" ${instance ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<span class="label" id="checkbox-instance">Instance</span>
+		</label>
+		<label>
+			<input type="checkbox" id="archive" name="a" value="${archive}" ${archive ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<span class="label" id="checkbox-archive">Archive</span>
+		</label>
+		
+		<button class="btn btn-xs btn-default" onclick="view()">View</button>
+
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">

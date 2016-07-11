@@ -48,7 +48,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 
 	private static final Logger logger = LoggerFactory.getLogger(Video.class);
 	
-	private static Sort sortMethod = VIDEO.DEFAULT_SORTMETHOD;
+	private Sort sortMethod = VIDEO.DEFAULT_SORTMETHOD;
 	
 	@JsonIgnore
 	@Autowired HistoryService historyService;
@@ -179,16 +179,20 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 	
 	/**
-	 * actress 이름이 있는지 확인. 같거나 포함되어 있거나
+	 * actress 이름이 있는지 확인. 
 	 * @param actressName
-	 * @return 있으면 {@code true}
+	 * @return 같거나 포함되어 있으면 {@code true}
 	 */
 	public boolean containsActress(String actressName) {
+		
+		return actressList.stream().allMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
+/*		
 		for(Actress actress : actressList)
 			if (VideoUtils.equalsActress(actress.getName(), actressName)
 					|| StringUtils.contains(actress.getName(), actressName))
 				return true;
 		return false;
+*/
 	}
 	
 	/**
@@ -796,9 +800,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * sort method. 정렬 방식 
 	 * @param sortMethod
 	 */
-	@SuppressWarnings("static-access")
-	public void setSortMethod(Sort sortMethod) {
+	public Video setSortMethod(Sort sortMethod) {
 		this.sortMethod = sortMethod;
+		return this;
 	}
 
 	/**
@@ -1124,5 +1128,76 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			info.getTags().add(tag);
 			saveInfo();
 		}		
+	}
+	
+	public boolean match(VideoSearch search) {
+		if ((matchStudio(search.getSearchText()) 
+				|| matchOpus(search.getSearchText()) 
+				|| matchTitle(search.getSearchText()) 
+				|| matchActress(search.getSearchText())
+				|| matchRelease(search.getSearchText())) 
+			&& matchExist(search.isAddCond(), search.isExistVideo(), search.isExistSubtitles()) 
+			&& matchStudioList(search.getSelectedStudio())
+			&& matchActressList(search.getSelectedActress())
+			&& matchRank(search.getRankRange())
+			&& matchPlay(search.getPlayCount())
+			&& matchTag(search.getSelectedTag())
+			) 
+		{
+			setSortMethod(search.getSortMethod());
+			return true;
+		}
+		return false;
+	}
+
+	private boolean matchTag(List<String> selectedTag) {
+		if (selectedTag == null)
+			return true;
+		if (getTags() == null)
+			return false;
+		return getTags().stream().anyMatch(t -> selectedTag.contains(t.getId().toString()));
+	}
+
+	private boolean matchPlay(Integer playCount) {
+		return playCount == null || playCount < 0 || this.playCount == playCount;
+	}
+
+	private boolean matchRank(List<Integer> rankRange) {
+		return rankRange.contains(rank);
+	}
+
+	private boolean matchActressList(List<String> selectedActress) {
+		return selectedActress == null ? true : selectedActress.stream().anyMatch(s -> containsActress(s));
+	}
+
+	private boolean matchStudioList(List<String> selectedStudio) {
+		return selectedStudio == null ? true : selectedStudio.contains(studio.getName());
+	}
+
+	private boolean matchExist(boolean addCond, boolean existVideo, boolean existSubtitles) {
+		return addCond
+				? (existVideo ? isExistVideoFileList() : !isExistVideoFileList())
+					&& (existSubtitles ? isExistSubtitlesFileList() : !isExistSubtitlesFileList()) 
+				: true;
+	}
+
+	private boolean matchRelease(String searchText) {
+		return StringUtils.isBlank(searchText) || StringUtils.contains(releaseDate, searchText);
+	}
+
+	private boolean matchActress(String searchText) {
+		return StringUtils.isBlank(searchText) || containsActress(searchText);
+	}
+
+	private boolean matchTitle(String searchText) {
+		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(title, searchText);
+	}
+
+	private boolean matchOpus(String searchText) {
+		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(opus, searchText);
+	}
+
+	private boolean matchStudio(String searchText) {
+		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(studio.getName(), searchText);
 	}
 }
