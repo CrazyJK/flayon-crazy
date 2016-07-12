@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="<c:url value="/css/video-deco.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -38,6 +39,7 @@ var urlSearchActress = '${urlSearchActress}';
 var urlSearchTorrent = '${urlSearchTorrent}';
 var tSec = 1;
 var timer;
+var neon = ${empty param.neon ? true : param.neon};
 
 $(document).ready(function() {
 
@@ -52,6 +54,8 @@ $(document).ready(function() {
 		$("#" + id).val("");
 	});
 
+ 	showNav();
+ 	
 	$("#deco_nav a[href]").on("click", function() {
 		loading(true);
 	});
@@ -60,8 +64,6 @@ $(document).ready(function() {
 		loading(true);
 	});
 	
- 	showNav();
- 	
 	$(window).bind("resize", resizeDivHeight);
 
 	resizeDivHeight();
@@ -77,7 +79,24 @@ $(document).ready(function() {
 	loading(false);
 	// bootstrap tooltip initialize
 	$('[data-toggle="tooltip"]').tooltip(); 
-	
+
+	if (neon) {
+		// add neon
+		$("#deco_nav a[href]").not(".blink-1").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(2, 4)).css("color", "#eee");
+		});
+		$("#deco_nav a[onclick]").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(2, 4)).css("color", "#eee");
+		});
+		$(".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 4)).css("color", "#eee").css("font-weight", "bold");
+		});
+		$("#deco_nav").css("background-color", "rgba(0, 0, 0, .5)");
+		$(".label").not("[id^='checkbox']").css("background-color", "rgba(0, 0, 0, .5)")
+		$(".btn").css("background-color", "rgba(0, 0, 0, .5)").removeClass("btn-default");
+		$("select").css("font-family", "'clipregular', sans-serif").css("background-color", "rgba(0, 0, 0, .5)");
+		$("input[type=text], input[type=search]").css("background-color", "rgba(0, 0, 0, .5)").css("color", "#eee");
+	}	
 //	$(".box").randomBG(0.2);
 //	$("nav#deco_nav").randomBG(0.3);
 });
@@ -90,6 +109,7 @@ function showNav() {
 	$("nav#deco_nav ul li a").each(function() {
 		if ($(this).attr("href") == locationPathname) {
 			$(this).parent().addClass("active");
+			$(this).addClass("blink-1");
 			found = true;
 		}
 	});
@@ -209,9 +229,9 @@ function loadingTimer(stop) {
 	<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
 
 	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
-		<span class="btn btn-xs btn-success float-right" onclick="setBackgroundImage();">NEXT</span>
-		<span class="btn btn-xs btn-info text-center" onclick="fnBGImageView();">VIEW</span>
-		<span class="btn btn-xs btn-danger float-left" onclick="fnBGImageDELETE();">DELETE</span>
+		<span class="blink-1 float-right" onclick="setBackgroundImage();">NEXT</span>
+		<span class="blink-2 text-center" onclick="fnBGImageView();">VIEW</span>
+		<span class="blink-3 float-left" onclick="fnBGImageDELETE();">DELETE</span>
 	</div>
 
 </body>
