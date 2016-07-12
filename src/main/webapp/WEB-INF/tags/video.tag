@@ -83,7 +83,7 @@ if (view.equalsIgnoreCase("video")) {
 <%
 } else if (view.equalsIgnoreCase("title")) {
 %>
-	<span class="${cssClass}" title="${video.title}" 
+	<span class="${cssClass} title" title="${video.title}" 
 		onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 <%
 } else if (view.equalsIgnoreCase("score")) {
