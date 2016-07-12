@@ -91,12 +91,18 @@ function fnChangeMode(mode) {
 <div class="container-fluid">
 
 <div id="header_div" class="box form-inline">
-	<s:message code="video.total"/> <s:message code="video.video"/> <span class="badge">${videoList.size()}</span> 
-	Candidate <span class="badge" id="totalCandidatedVideo"></span>
+	<label>
+		<s:message code="video.total"/> <s:message code="video.video"/> <span class="badge">${videoList.size()}</span>
+	</label>
+	<label> 
+		Candidate <span class="badge" id="totalCandidatedVideo"></span>
+	</label>
 	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
 	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
 	<input id="searchInput" class="form-control input-sm" placeHolder="Search"/>
-	<a onclick="confirmAll()">Confirm all!!!</a>
+	<label>
+		<a onclick="confirmAll()">Confirm all!!!</a>
+	</label>
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">
