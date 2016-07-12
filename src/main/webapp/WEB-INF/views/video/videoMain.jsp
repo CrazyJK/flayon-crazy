@@ -35,6 +35,7 @@ function fnViewBGImage() {
 					$("#content_div").toggleClass("box");
 				},
 				complete: function() {
+					loading(false);
 				}
 			});	
 		},
