@@ -188,7 +188,7 @@ function fnRank(opus) {
 			console.log("fnRank opener error", e);
 		}
 	}
-	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val(), 500);
+	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val(), 300);
 //	$("#hiddenHttpMethod").val("put");
 //	frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();
