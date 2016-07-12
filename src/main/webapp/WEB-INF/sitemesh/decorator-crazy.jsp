@@ -76,29 +76,42 @@ $(document).ready(function() {
 				}, 
 				60*1000);
 	}
-	loading(false);
 	// bootstrap tooltip initialize
 	$('[data-toggle="tooltip"]').tooltip(); 
 
 	if (neon) {
-		// add neon
-		$("#deco_nav a[href]").not(".blink-1").each(function() {
-			$(this).addClass("blink-" + getRandomInteger(2, 4)).css("color", "#eee");
+		// add neon for nav
+		$("#deco_nav li.active").addClass("blink-4");
+		$("#deco_nav a[href]").not(".blink-4").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 3)).css("color", "#eee");
 		});
 		$("#deco_nav a[onclick]").each(function() {
-			$(this).addClass("blink-" + getRandomInteger(2, 4)).css("color", "#eee");
+			$(this).addClass("blink-" + getRandomInteger(1, 3)).css("color", "#eee");
 		});
-		$(".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]").each(function() {
+//		$("#deco_nav").css("background-color", "rgba(0, 0, 0, .5)");
+		
+		/* add neon for each
+		 */
+		$(".title").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 4)).css("color", "#eee").css("font-weight", "bold").css("background-color", "rgba(0, 0, 0, .5)");
+		});
+		/*
+	 	var selectors1 = ".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]";
+	 	var selectors2 = "#header_div input[type=text], #header_div input[type=search], #header_div .label, #header_div select, #header_div .btn, #header_div label";
+		$(selectors2).each(function() {
 			$(this).addClass("blink-" + getRandomInteger(1, 4)).css("color", "#eee").css("font-weight", "bold");
 		});
-		$("#deco_nav").css("background-color", "rgba(0, 0, 0, .5)");
-		$(".label").not("[id^='checkbox']").css("background-color", "rgba(0, 0, 0, .5)")
-		$(".btn").css("background-color", "rgba(0, 0, 0, .5)").removeClass("btn-default");
-		$("select").css("font-family", "'clipregular', sans-serif").css("background-color", "rgba(0, 0, 0, .5)");
-		$("input[type=text], input[type=search]").css("background-color", "rgba(0, 0, 0, .5)").css("color", "#eee");
+		$("#header_div .label").not("[id^='checkbox']").css("background-color", "rgba(0, 0, 0, .5)");
+		$("#header_div .btn").css("background-color", "rgba(0, 0, 0, .5)").removeClass("btn-default");
+		$("#header_div select").css("font-family", "'clipregular', sans-serif").css("background-color", "rgba(0, 0, 0, .5)");
+		$("#header_div input[type=text], #header_div input[type=search]").css("background-color", "rgba(0, 0, 0, .5)").css("color", "#eee");
+		*/
 	}	
 //	$(".box").randomBG(0.2);
 //	$("nav#deco_nav").randomBG(0.3);
+
+	loading(false);
+
 });
 
 /**
@@ -109,7 +122,6 @@ function showNav() {
 	$("nav#deco_nav ul li a").each(function() {
 		if ($(this).attr("href") == locationPathname) {
 			$(this).parent().addClass("active");
-			$(this).addClass("blink-1");
 			found = true;
 		}
 	});
