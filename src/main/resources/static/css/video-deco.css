@@ -79,7 +79,7 @@ div#content_div {
 #loading-msg-detail {
 	background-color: rgba(0, 0, 255, .5);
 }
-.loader {
+#loader {
 	display: block;
 	margin: 11px auto;
 	/* border: 6px solid #d3d3d3; */
@@ -94,7 +94,6 @@ div#content_div {
   0% { -webkit-transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); }
 }
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
