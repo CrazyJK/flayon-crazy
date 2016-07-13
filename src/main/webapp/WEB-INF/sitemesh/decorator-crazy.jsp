@@ -81,19 +81,20 @@ $(document).ready(function() {
 
 	if (neon) {
 		// add neon for nav
-		$("#deco_nav li.active").addClass("blink-4");
-		$("#deco_nav a[href]").not(".blink-4").each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 3)).css("color", "#eee");
+//		$("#deco_nav li.active").addClass("blink-4");
+//		$("#deco_nav a[href]").not(".blink-4").each(function() {
+//			$(this).addClass("blink-" + getRandomInteger(1, 3)).css("color", "#eee");
+//		});
+		$("#deco_nav a").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 10)).css({color: "#fff"});
 		});
-		$("#deco_nav a[onclick]").each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 3)).css("color", "#eee");
-		});
-//		$("#deco_nav").css("background-color", "rgba(0, 0, 0, .5)");
+		$("#deco_nav").css({backgroundColor: "rgba(0, 0, 0, .5)"});
 		
 		/* add neon for each
 		 */
-		$(".title").each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 4)).css("color", "#eee").css("font-weight", "bold").css("background-color", "rgba(0, 0, 0, .5)");
+		var styles = {color: "#eee", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, .5)"};
+		$(".title, #loading-msg, #loading-timer").each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
 		});
 		/*
 	 	var selectors1 = ".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]";
@@ -203,10 +204,10 @@ function loadingTimer(stop) {
 
 	<div id="loading">
 		<div id="loading-content">
-			<div class="loader">
+			<div id="loader">
 				<span id="loading-timer" class="label label-danger lead"></span>
 			</div>
-			<span id="loading-msg" class="label"  onclick="loading(false);">Loading</span>
+			<span id="loading-msg" class="label" onclick="loading(false);">Loading</span>
 		</div>
 	</div>
 	<script type="text/javascript">

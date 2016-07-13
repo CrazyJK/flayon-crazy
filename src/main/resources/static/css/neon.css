@@ -73,7 +73,7 @@
 @keyframes blink-4 {
 	0%, 14%, 16%, 24%, 42%, 58%, 69%, 71%, 88%, 98%, 100% {
 		opacity: 1;
-		text-shadow: 0 0 5px #1fc139,0 0 10px #1fc139,0 0 20px #1fc139,0 0 30px #1fc139,0 0 40px #11691f,0 0 55px #11691f;
+		text-shadow: 0 0 5px #1fc139, 0 0 10px #1fc139, 0 0 20px #1fc139, 0 0 30px #1fc139, 0 0 40px #11691f, 0 0 55px #11691f;
 	}
 	15%, 22%, 40%, 55%, 63%, 70%, 82%, 99% {
 	    opacity: .5;
@@ -81,7 +81,28 @@
 	}
 }
 
-.blink-1, .blink-2, .blink-3, .blink-4 {
+@-webkit-keyframes blink-5 {
+	0%, 16%, 20%, 58%, 69%, 88%, 98%, 100% {
+		opacity: 1;
+		text-shadow: 0 0 5px #fefcc9, 0 0 10px #feec85, 0 0 20px #ffae34, 0 0 30px #ec760c, 0 0 40px #cd4606, 0 0 55px #973716;
+	}
+	15%, 61%, 70%, 82%, 99% {
+	    opacity: .5;
+	    text-shadow: none;
+	}
+}
+@keyframes blink-5 {
+	0%, 16%, 20%, 58%, 69%, 88%, 98%, 100% {
+		opacity: 1;
+		text-shadow: 0 0 5px #fefcc9, 0 0 10px #feec85, 0 0 20px #ffae34, 0 0 30px #ec760c, 0 0 40px #cd4606, 0 0 55px #973716;
+	}
+	15%, 61%, 70%, 82%, 99% {
+	    opacity: .5;
+	    text-shadow: none;
+	}
+}
+
+.blink-1, .blink-2, .blink-3, .blink-4, .blink-5, .blink-6, .blink-7, .blink-8, .blink-9, .blink-10 {
 	font-family: 'clipregular', sans-serif;
 }
 .blink-1 {
@@ -99,6 +120,30 @@
 .blink-4 {
 	-webkit-animation: blink-4 25s linear infinite;
 	        animation: blink-4 25s linear infinite;
+}
+.blink-5 {
+	-webkit-animation: blink-5 35s linear infinite;
+	        animation: blink-5 35s linear infinite;
+}
+.blink-6 {
+	-webkit-animation: blink-1 15s linear infinite;
+	        animation: blink-1 15s linear infinite;
+}
+.blink-7 {
+	-webkit-animation: blink-2 20s linear infinite;
+	        animation: blink-2 20s linear infinite;
+}
+.blink-8 {
+	-webkit-animation: blink-3 20s linear infinite;
+	        animation: blink-3 20s linear infinite;
+}
+.blink-9 {
+	-webkit-animation: blink-4 35s linear infinite;
+	        animation: blink-4 35s linear infinite;
+}
+.blink-10 {
+	-webkit-animation: blink-5 20s linear infinite;
+	        animation: blink-5 20s linear infinite;
 }
 
 @font-face {
