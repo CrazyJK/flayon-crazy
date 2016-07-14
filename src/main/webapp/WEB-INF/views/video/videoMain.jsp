@@ -153,18 +153,18 @@ function fnViewBGImage() {
 			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'B'}">
-			<ul class="list-inline">
+			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
-				<li>
-					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom video-box-bg"><a href="#">
+				<li style="padding: 0 10px;">
+					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom video-box-bg" style="width:400px; height:270px;"><a href="#">
 	        			<div class="img"><img src="<c:url value="/video/${video.opus}/cover" />" alt="img"></div>
 	        			<div class="info">
 	          				<div class="info-back">
 	            				<h3 class="nowrap"><jk:video video="${video}" view="title" mode="s"/></h3>
 	            				<p>
 		            				<jk:video video="${video}" view="studio" mode="s"/>
-									<jk:video video="${video}" view="opus" mode="s"/><br/>
-									<jk:video video="${video}" view="actress" mode="s"/><br/>
+									<jk:video video="${video}" view="opus" mode="s"/><br/><br/>
+									<jk:video video="${video}" view="actress" mode="s"/><br/><br/>
 									<jk:video video="${video}" view="video" mode="s"/>
 									<jk:video video="${video}" view="subtitles" mode="s"/>
 									<jk:video video="${video}" view="overview" mode="s"/>
@@ -424,16 +424,20 @@ function fnViewBGImage() {
 			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'A'}">
-			<ol class="list-inline">
+			<ol class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
-				<li>
-					<div id="aperture_${video.opus}" style="width:250px; height: 250px;"></div>
+				<li style="padding: 10px;">
+					<div id="aperture_${video.opus}" style="width:200px; height: 137px;"></div>
 				</li>
 				<script type="text/javascript">
-				$("#aperture_${video.opus}").aperture({
+				$("#aperture_${video.opus}")
+				.attr("onclick", "fnVideoDetail('${video.opus}')")
+				.aperture({
 					src:"<c:url value="/video/${video.opus}/cover" />",
 					baseColor: randomColor(0.5),
-					outerMargin: "10 auto"
+					outerMargin: "10 auto",
+					width: "200px;",
+					height: "137px"
 				});
 				</script>
 				</c:forEach>

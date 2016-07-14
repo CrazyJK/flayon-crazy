@@ -81,6 +81,18 @@
 				"}" +
 			"</style>";
 		$(_style).appendTo("head");
+		if (opts.width != opts.height) {
+			var _style2 = "<style>" +
+							cssId+".circle-wrapper, " + cssId+" div.circle, " + cssId+" div.circle:before, "+cssId+" div.circle:after {" +
+									"border-radius: 25%;" +
+							"}" +
+							cssId+" div.circle:after {" +
+									"transform: none;" +
+									"-webkit-transform: none;" +
+							"}" +
+					"</style>";
+			$(_style2).appendTo("head");
+		}
 		
 	};
 
