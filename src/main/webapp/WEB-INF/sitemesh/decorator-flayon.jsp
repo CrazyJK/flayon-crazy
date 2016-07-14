@@ -20,6 +20,7 @@ try {
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/default.css"/>"/>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/typed.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -29,6 +30,7 @@ try {
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.pulse.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
 <script type="text/javascript">
 $(document).ready(function() {

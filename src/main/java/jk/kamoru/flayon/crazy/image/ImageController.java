@@ -79,6 +79,11 @@ public class ImageController extends AbstractController {
 		return "image/canvas";
 	}
 
+	@RequestMapping(value = "/aperture", method = RequestMethod.GET)
+	public String aperture() {
+		return "image/aperture";
+	}
+
 	@RequestMapping(value = "/{idx}/thumbnail")
 	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx) {
 		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF);

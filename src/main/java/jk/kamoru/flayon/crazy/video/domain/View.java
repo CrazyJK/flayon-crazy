@@ -18,7 +18,11 @@ public enum View {
 	/** video type */
 	V("Video"),
 	/** Flay */
-	F("Flay");
+	F("Flay"),
+	/** Aperture */
+	A("Aperture"),
+	/** Test */
+	Test("Test");
 	
 	private String desc;
 	

@@ -9,6 +9,7 @@
 <head>
 <title><s:message code="video.video"/></title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/ihover.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
@@ -155,12 +156,33 @@ function fnViewBGImage() {
 			<ul class="list-inline">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li>
+					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom video-box-bg"><a href="#">
+	        			<div class="img"><img src="<c:url value="/video/${video.opus}/cover" />" alt="img"></div>
+	        			<div class="info">
+	          				<div class="info-back">
+	            				<h3 class="nowrap"><jk:video video="${video}" view="title" mode="s"/></h3>
+	            				<p>
+		            				<jk:video video="${video}" view="studio" mode="s"/>
+									<jk:video video="${video}" view="opus" mode="s"/><br/>
+									<jk:video video="${video}" view="actress" mode="s"/><br/>
+									<jk:video video="${video}" view="video" mode="s"/>
+									<jk:video video="${video}" view="subtitles" mode="s"/>
+									<jk:video video="${video}" view="overview" mode="s"/>
+									<jk:video video="${video}" view="rank" mode="s"/>
+									<jk:video video="${video}" view="score" mode="s"/>
+								</p>
+	          				</div>
+	        			</div></a>
+	        		</div>
+        		</li>
+				<%-- 
+				<li>
 					<div id="opus-${video.opus}" class="video-box">
 						<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 							<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 							<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
 							<dd><jk:video video="${video}" view="opus" mode="s"/></dd>
-							<%-- <dd><jk:video video="${video}" view="actress" mode="s"/></dd> --%>
+							<dd><jk:video video="${video}" view="actress" mode="s"/></dd>
 							<dd><jk:video video="${video}" view="video" mode="s"/></dd>
 							<dd><jk:video video="${video}" view="subtitles" mode="s"/></dd>
 							<dd><jk:video video="${video}" view="overview" mode="s"/></dd>
@@ -169,8 +191,15 @@ function fnViewBGImage() {
 						</dl>
 					</div>
 				</li>
+				 --%>
 				</c:forEach>
 			</ul>
+			<script type="text/javascript">
+			var _randomNumber = getRandomInteger(1, 15);
+			$(".ih-item").each(function() {
+				$(this).addClass("effect" + _randomNumber);
+			});
+			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'T'}">
 			<div class="wrapper" style="overflow-x: hidden;">
@@ -394,12 +423,23 @@ function fnViewBGImage() {
 				$("#slides").slideview({width:800, height:750});
 			</script>
 		</c:when>
-		<c:otherwise>
-			<ol>
+		<c:when test="${videoSearch.listViewType eq 'A'}">
+			<ol class="list-inline">
 				<c:forEach items="${videoList}" var="video">
-				<li>${video.studio.name} ${video.opus} ${video.title} 
+				<li>
+					<div id="aperture_${video.opus}" style="width:250px; height: 250px;"></div>
+				</li>
+				<script type="text/javascript">
+				$("#aperture_${video.opus}").aperture({
+					src:"<c:url value="/video/${video.opus}/cover" />",
+					baseColor: randomColor(0.5),
+					outerMargin: "10 auto"
+				});
+				</script>
 				</c:forEach>
 			</ol>
+		</c:when>
+		<c:otherwise>
 		</c:otherwise>
 	</c:choose>
 	</div>

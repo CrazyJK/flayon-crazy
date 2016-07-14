@@ -19,6 +19,15 @@
         		<li><a href="<c:url value="/video"/>"><span class="glyphicon glyphicon-film"></span> Video</a></li>
         		<li><a href="<c:url value="/image"/>"><span class="glyphicon glyphicon-picture"></span> Picture</a></li>
       		</ul>
+      		<div id="aperture" style="display:inline-block;margin-left:100px;"></div>
+			<script type="text/javascript">
+			$("#aperture").aperture({
+				src:"/img/favicon-crazy.jpg",
+				baseColor: "rgba(252,252,252,.9)",
+				outerMargin: "0 auto",
+				width: "50px"
+			});
+			</script>
       		</security:authorize>
       		<ul class="nav navbar-nav navbar-right">
 	    		<security:authorize access="!isAuthenticated()">

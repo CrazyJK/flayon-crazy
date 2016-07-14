@@ -47,7 +47,7 @@ $(document).ready(function() {
 <div class="container">
 
 	<div class="page-header">
-		<h1>Request Mapping List</h1>
+		<h1 style="display:inline-block">Request Mapping List</h1>
  	</div>
 
 	<table id="list" class="table table-condensed">

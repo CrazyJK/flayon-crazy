@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -25,6 +26,7 @@
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript">
 var context = '<c:url value="/"/>';
 var videoPath = '<c:url value="/video"/>';
@@ -225,6 +227,7 @@ function loadingTimer(stop) {
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
 			<li><a href="<c:url value="/video/studio"/>"		><s:message code="video.studio"/></a>
 			<li><a href="<c:url value="/image"/>"				><s:message code="video.image"/></a>
+			<li><a href="<c:url value="/image/aperture"/>"		>Aperture</a>
 			<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
 			<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
