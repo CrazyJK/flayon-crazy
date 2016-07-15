@@ -97,6 +97,13 @@ public class ImageController extends AbstractController {
 	@RequestMapping(value = "/{idx}")
 	public HttpEntity<byte[]> imageMaster(@PathVariable int idx, HttpServletResponse response) {
 		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(idx)));
+		response.setHeader("Cache-Control","public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+		
+		for (String name : response.getHeaderNames()) {
+			for (String value : response.getHeaders(name)) {
+				log.info("HEADER {}: {}", name, value);
+			}
+		}
 		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.MASTER), MediaType.IMAGE_JPEG);
 	}
 
@@ -127,12 +134,12 @@ public class ImageController extends AbstractController {
 		long today = new Date().getTime();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+//		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
 		headers.setContentLength(imageBytes.length);
 		headers.setContentType(type);
-		headers.setDate(today - VIDEO.WEBCACHETIME_MILI);
-		headers.setExpires(today - VIDEO.WEBCACHETIME_MILI);
-		headers.setLastModified(today - VIDEO.WEBCACHETIME_MILI);
+		headers.setDate(today + VIDEO.WEBCACHETIME_MILI);
+		headers.setExpires(today + VIDEO.WEBCACHETIME_MILI);
+		headers.setLastModified(today + VIDEO.WEBCACHETIME_MILI);
 
 		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
