@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
+@SuppressWarnings("unused")
 public class Lambda {
 
 	List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
