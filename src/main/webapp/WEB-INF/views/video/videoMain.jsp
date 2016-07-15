@@ -50,7 +50,7 @@ function fnViewBGImage() {
 <div class="container-fluid" role="main">
 
 <div id="header_div" class="box">
-	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
+	<form:form method="GET" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
 	<div id="searchDiv">
 		<!-- Search : Text -->
 		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
@@ -437,13 +437,17 @@ function fnViewBGImage() {
 					baseColor: randomColor(0.5),
 					outerMargin: "10 auto",
 					width: "200px;",
-					height: "137px"
+					height: "137px",
+					content: '${video.title}'
 				});
 				</script>
 				</c:forEach>
 			</ol>
 		</c:when>
 		<c:otherwise>
+			<c:forEach items="${videoList}" var="video">
+				<jk:video video="${video}" view="title" mode="l"/>
+			</c:forEach>
 		</c:otherwise>
 	</c:choose>
 	</div>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
-<html>
+<html manifest="<c:url value="/crazy.appcache"/>">
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -197,6 +197,23 @@ function loadingTimer(stop) {
 		clearInterval(timer);
 	}
 }
+// 페이지 로드시 새로 캐쉬받아야 하는지 확인.
+window.addEventListener('load', function(e) {
+
+  window.applicationCache.addEventListener('updateready', function(e) {
+    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+      // 브라우저가 새 앱 캐시를 다운받는다. 
+      // 캐시를 교체하고, 따끈따끈한 새 파일을 받기위해 페이지 리로드.
+      window.applicationCache.swapCache();
+      if (confirm('A new version of this site is available. Load it?')) {
+        window.location.reload();
+      }
+    } else {
+      // 메니페스트 파일이 바뀐게 없다. 제공할 새로운게 없음.
+    }
+  }, false);
+
+}, false);
 </script>
 
 <sitemesh:write property="head" />
