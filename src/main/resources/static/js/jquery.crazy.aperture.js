@@ -71,6 +71,7 @@
 						"inset 0  " + innerRadius + " 0 " + opts.baseColor + "," +
 						"inset -" + innerRadius + " 0 0 " + opts.baseColor + "," +
 						"inset 0 -" + innerRadius + " 0 " + opts.baseColor + ";" +
+					"content: '" + opts.content + "';" +
 				"}" +
 				""+cssId+" div.circle:hover:after, "+cssId+" div.circle:hover:before {" +
 					"box-shadow: " +
@@ -112,7 +113,8 @@
 		color2: "rgba(252, 150,   0, .5)",	// 2nd circle color
 		color3: "rgba(0,   255,   0, .5)", // 3th circle color
 		color4: "rgba(0,   150, 255, .5)", // 4th circle color
-		innerCirclePadding: "15px"	// inner circle padding 
+		innerCirclePadding: "15px",	// inner circle padding
+		content: ""
 	};
 
 	/*

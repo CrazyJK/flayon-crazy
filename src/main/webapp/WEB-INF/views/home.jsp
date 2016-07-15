@@ -88,14 +88,13 @@
 				<img class="img-circle" src="/img/kamoru_crazy_artistic.png"/>
 			</div>
 		</div>
-   		<div id="aperture-O" style="display:inline-block; width:30px; height: 30px; position: absolute; top: 146px; left: 314px;"></div>
+   		<div id="aperture-O" style="display:inline-block; width:24px; height: 24px; position: relative; top: -450px; left: 140px;"></div>
 		<script type="text/javascript">
 		$("#aperture-O").aperture({
 			src:"/img/favicon-crazy.jpg",
 			baseColor: "rgba(238,238,238,.9)",
 			outerMargin: "0 auto",
-			duration: "5s"
-			/* width: "50px" */
+			/* duration: "5s" */
 		});
 		</script>
 		</security:authorize>
