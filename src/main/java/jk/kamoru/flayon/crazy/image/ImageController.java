@@ -127,11 +127,11 @@ public class ImageController extends AbstractController {
 		long today = new Date().getTime();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setCacheControl("max-age=" + VIDEO.WEBCACHETIME_SEC);
+		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
 		headers.setContentLength(imageBytes.length);
 		headers.setContentType(type);
-		headers.setDate(today + VIDEO.WEBCACHETIME_MILI);
-		headers.setExpires(today + VIDEO.WEBCACHETIME_MILI);
+		headers.setDate(today - VIDEO.WEBCACHETIME_MILI);
+		headers.setExpires(today - VIDEO.WEBCACHETIME_MILI);
 		headers.setLastModified(today - VIDEO.WEBCACHETIME_MILI);
 
 		return new HttpEntity<byte[]>(imageBytes, headers);
