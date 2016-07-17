@@ -34,6 +34,8 @@ public class ImageController extends AbstractController {
 
 	private static final String Cookie_LAST_RANDOM_IMAGE_INDEX = "lastRandomImageNo";;
 
+	private static final long today = new Date().getTime();
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewSlide() {
 		return "image/slide";
@@ -85,26 +87,24 @@ public class ImageController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/{idx}/thumbnail")
-	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx) {
-		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF);
+	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx, HttpServletResponse response) {
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF, response);
 	}
 
 	@RequestMapping(value = "/{idx}/WEB")
-	public HttpEntity<byte[]> imageWEB(@PathVariable int idx) {
-		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.WEB), MediaType.IMAGE_JPEG);
+	public HttpEntity<byte[]> imageWEB(@PathVariable int idx, HttpServletResponse response) {
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.WEB), MediaType.IMAGE_JPEG, response);
 	}
 
 	@RequestMapping(value = "/{idx}")
 	public HttpEntity<byte[]> imageMaster(@PathVariable int idx, HttpServletResponse response) {
 		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(idx)));
-		response.setHeader("Cache-Control","public, max-age=" + VIDEO.WEBCACHETIME_SEC);
-		
-		for (String name : response.getHeaderNames()) {
-			for (String value : response.getHeaders(name)) {
-				log.info("HEADER {}: {}", name, value);
-			}
-		}
-		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.MASTER), MediaType.IMAGE_JPEG);
+//		for (String name : response.getHeaderNames()) {
+//			for (String value : response.getHeaders(name)) {
+//				log.info("HEADER {}: {}", name, value);
+//			}
+//		}
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.MASTER), MediaType.IMAGE_JPEG, response);
 	}
 
 	@RequestMapping(value = "/random")
@@ -130,16 +130,20 @@ public class ImageController extends AbstractController {
 		imageService.delete(idx);
 	}
 
-	private HttpEntity<byte[]> getImageEntity(byte[] imageBytes, MediaType type) {
-		long today = new Date().getTime();
+	private HttpEntity<byte[]> getImageEntity(byte[] imageBytes, MediaType type, HttpServletResponse response) {
+
+		response.setHeader("Cache-Control", "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+		response.setHeader("Pragma", "public");
+		response.setDateHeader("Expires", today + VIDEO.WEBCACHETIME_MILI);
+		response.setDateHeader("Last-Modified", today - VIDEO.WEBCACHETIME_MILI);
 
 		HttpHeaders headers = new HttpHeaders();
-//		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
 		headers.setContentLength(imageBytes.length);
 		headers.setContentType(type);
-		headers.setDate(today + VIDEO.WEBCACHETIME_MILI);
-		headers.setExpires(today + VIDEO.WEBCACHETIME_MILI);
-		headers.setLastModified(today + VIDEO.WEBCACHETIME_MILI);
+//		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+//		headers.setDate(today + VIDEO.WEBCACHETIME_MILI);
+//		headers.setExpires(today + VIDEO.WEBCACHETIME_MILI);
+//		headers.setLastModified(today + VIDEO.WEBCACHETIME_MILI);
 
 		return new HttpEntity<byte[]>(imageBytes, headers);
 	}

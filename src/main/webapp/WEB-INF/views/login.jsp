@@ -38,8 +38,8 @@ $(document).ready(function(){
 				<security:authentication property="principal.username" />
 			</security:authorize>
 		</h1>
-		<p><s:message code="home.favorites.wording1"/></p>
-		<p><s:message code="home.favorites.wording2"/></p>
+		<p><s:message code="home.favorites.wording1"/><br/>
+		   <s:message code="home.favorites.wording2"/></p>
 	</div>
 	
 	<div id="aperture"></div>

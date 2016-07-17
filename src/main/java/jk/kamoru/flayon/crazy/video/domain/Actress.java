@@ -202,35 +202,40 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	 * actress info load
 	 */
 	private void loadInfo() {
-		if (!loaded) {
-			if (log.isDebugEnabled())
-				log.debug("loadInfo : start [{}]", name);
-			File file = getInfoFile();
-			if (log.isDebugEnabled())
-				log.debug("loadInfo : file {}", file);
-			if (file.isFile()) {
-				info = Utils.readFileToMap(file);
-				this.name      = Utils.trimToDefault(info.get(NEWNAME), name);
-				this.localName = Utils.trimToDefault(info.get(LOCALNAME), localName);
-				this.birth     = Utils.trimToDefault(info.get(BIRTH), birth);
-				this.height    = Utils.trimToDefault(info.get(HEIGHT), height);
-				this.bodySize  = Utils.trimToDefault(info.get(BODYSIZE), bodySize);
-				this.debut     = Utils.trimToDefault(info.get(DEBUT), debut);
-				this.favorite  = Boolean.valueOf(info.get(FAVORITE));
-				if (!StringUtils.isEmpty(birth))
-					try {
-						Calendar cal = Calendar.getInstance();
-						int CurrYear = cal.get(Calendar.YEAR);
-						int birthYear = Integer.parseInt(birth.substring(0, 4));
-						age = String.valueOf(CurrYear - birthYear + 1);
-					} catch(Exception e) {}
+		try {
+			if (!loaded) {
+				if (log.isDebugEnabled())
+					log.debug("loadInfo : start [{}]", name);
+				File file = getInfoFile();
+				if (log.isDebugEnabled())
+					log.debug("loadInfo : file {}", file);
+				if (file.isFile()) {
+					info = Utils.readFileToMap(file);
+					this.name      = Utils.trimToDefault(info.get(NEWNAME), name);
+					this.localName = Utils.trimToDefault(info.get(LOCALNAME), localName);
+					this.birth     = Utils.trimToDefault(info.get(BIRTH), birth);
+					this.height    = Utils.trimToDefault(info.get(HEIGHT), height);
+					this.bodySize  = Utils.trimToDefault(info.get(BODYSIZE), bodySize);
+					this.debut     = Utils.trimToDefault(info.get(DEBUT), debut);
+					this.favorite  = Boolean.valueOf(info.get(FAVORITE));
+					if (!StringUtils.isEmpty(birth))
+						try {
+							Calendar cal = Calendar.getInstance();
+							int CurrYear = cal.get(Calendar.YEAR);
+							int birthYear = Integer.parseInt(birth.substring(0, 4));
+							age = String.valueOf(CurrYear - birthYear + 1);
+						} catch(Exception e) {}
+				}
+				else {
+					info = new HashMap<>();
+				}
+				loaded = true;
+				if (log.isDebugEnabled())
+					log.debug("loadInfo : end {}", toString());
 			}
-			else {
-				info = new HashMap<>();
-			}
-			loaded = true;
-			if (log.isDebugEnabled())
-				log.debug("loadInfo : end {}", toString());
+		} catch(Throwable e) {
+			log.error("loadInfo error : " + name, e);
+			throw new CrazyException("loadInfo error : " + name, e);
 		}
 	}
 

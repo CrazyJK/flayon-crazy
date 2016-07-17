@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -178,12 +179,12 @@ public class Utils {
 	public static void saveFileFromMap(File file, Map<String, String> params) {
 		if (params == null || params.size() == 0)
 			throw new CrazyException("params is null or size 0");
-		StringBuilder sb = new StringBuilder();
+		List<String> data = new ArrayList<>();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
-			sb.append(String.format("%s=%s%n",entry.getKey().toUpperCase().trim(), entry.getValue().trim()));
+			data.add(String.format("%s=%s",entry.getKey().toUpperCase().trim(), entry.getValue().trim()));
 		}
 		try {
-			Files.write(file.toPath(), sb.toString().getBytes(), CREATE, WRITE);
+			Files.write(file.toPath(), data, StandardCharsets.UTF_8, CREATE, WRITE);
 		} catch (IOException e) {
 			log.error("write file error", e);
 			throw new CrazyException("write file error", e);

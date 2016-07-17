@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,8 @@ public class VideoController extends AbstractController {
 	@Autowired private HistoryService historyService;
 	@Autowired private VideoBatch videoBatch;
 
+	long today = new Date().getTime();
+	
 	/**minimum rank model attrubute by named 'minRank'
 	 * @return model attribute
 	 */
@@ -284,24 +288,53 @@ public class VideoController extends AbstractController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/{opus}/cover", method=RequestMethod.GET)
-	public HttpEntity<byte[]> videoCover(@PathVariable String opus) throws IOException {
+	public HttpEntity<byte[]> videoCover(@PathVariable String opus, HttpServletResponse response) throws IOException {
 		logger.trace("{}", opus);
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile));
+		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile), response, imageFile);
 	}
 	
 	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
-	public HttpEntity<byte[]> videoCoverWithTitle(@PathVariable String opus) throws IOException {
+	public HttpEntity<byte[]> videoCoverWithTitle(@PathVariable String opus, HttpServletResponse response) throws IOException {
 		logger.trace("{}", opus);
 		Video video = videoService.getVideo(opus);
 		File imageFile = video.getCoverFile();
 		if(imageFile == null)
 			return null;
-		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), Utils.getExtension(imageFile));
+		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), Utils.getExtension(imageFile), response, imageFile);
 	}
-	
+
+	/**
+	 * returns image entity<br>
+	 * cache time {@link VIDEO#WEBCACHETIME_SEC}, {@link VIDEO#WEBCACHETIME_MILI}
+	 * @param imageBytes
+	 * @param suffix
+	 * @param response
+	 * @param imageFile
+	 * @return image entity
+	 */
+	private HttpEntity<byte[]> httpEntity(byte[] imageBytes, String suffix, HttpServletResponse response, File imageFile) {
+		if (imageBytes == null)
+			return null;
+
+		response.setHeader("Cache-Control", "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+		response.setHeader("Pragma", "public");
+		response.setDateHeader("Expires", today + VIDEO.WEBCACHETIME_MILI);
+		response.setDateHeader("Last-Modified", imageFile.lastModified());
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentLength(imageBytes.length);
+		headers.setContentType(MediaType.parseMediaType("image/" + suffix));
+//		headers.setCacheControl("max-age=" + VIDEO.WEBCACHETIME_SEC);
+//		headers.setDate(		today + VIDEO.WEBCACHETIME_MILI);
+//		headers.setExpires(		today + VIDEO.WEBCACHETIME_MILI);
+//		headers.setLastModified(today - VIDEO.WEBCACHETIME_MILI);
+		
+		return new HttpEntity<byte[]>(imageBytes, headers);
+	}
+
 	/**display video overview view
 	 * @param model
 	 * @param opus
@@ -492,29 +525,6 @@ public class VideoController extends AbstractController {
 	public void reload(Model model) {
 		logger.trace("reload");
 		videoService.reload();
-	}
-
-	/**returns image entity<br>
-	 * cache time {@link VIDEO#WEBCACHETIME_SEC}, {@link VIDEO#WEBCACHETIME_MILI}
-	 * @param imageBytes
-	 * @param suffix
-	 * @return image entity
-	 */
-	private HttpEntity<byte[]> httpEntity(byte[] imageBytes, String suffix) {
-		if (imageBytes == null)
-			return null;
-		
-		long today = new Date().getTime();
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setCacheControl("max-age=" + VIDEO.WEBCACHETIME_SEC);
-		headers.setContentLength(imageBytes.length);
-		headers.setContentType(MediaType.parseMediaType("image/" + suffix));
-		headers.setDate(		today + VIDEO.WEBCACHETIME_MILI);
-		headers.setExpires(		today + VIDEO.WEBCACHETIME_MILI);
-		headers.setLastModified(today - VIDEO.WEBCACHETIME_MILI);
-		
-		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
 
 	/**display video manager view

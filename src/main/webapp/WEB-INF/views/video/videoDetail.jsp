@@ -10,6 +10,11 @@
 <head>
 <title>[${video.opus}] ${video.title}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
+<style type="text/css">
+#fileinfoDiv .label {
+	font-family: '나눔고딕코딩';
+}
+</style>
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
@@ -32,8 +37,8 @@ function fnToggleFileinfo() {
 <c:set var="opus" value="${video.opus}"/>
 
 <dl class="dl-detail">
-	<dt><jk:video video="${video}" view="title"     mode="l"/></dt>
-	<dt><jk:video video="${video}" view="rank"      mode="l"/></dt>
+	<dt style="font-size: x-large;"><jk:video video="${video}" view="title"     mode="l"/></dt>
+	<dt class="form-inline"><jk:video video="${video}" view="rank" mode="l"/></dt>
 	<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
 	<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
 	<dd><jk:video video="${video}" view="opus" 	    mode="l"/></dd>

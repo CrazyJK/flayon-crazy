@@ -21,6 +21,7 @@ try {
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/default.css"/>"/>
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/typed.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

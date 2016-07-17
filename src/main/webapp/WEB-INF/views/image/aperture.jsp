@@ -107,7 +107,7 @@ function resizeImage() {
 		width: (calcDivWidth - 50) + "px",
 		height: (calcDivHeight - 50) + "px",
 		outerRadius: "0",		// circle outer radius
-		baseColor: "rgba(255, 255, 255, .9)", // default color
+		baseColor: randomColor(0.5), //"rgba(238, 238, 238, .9)", // default color
 		innerCirclePadding: "15px"
 	});
 

@@ -15,13 +15,13 @@
 	text-align: center;
 	font-family: Courier,monospace;
 	padding: 6px;
-	width: 132px;
+	/* width: 132px; */
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 }
 .colordva {
-	height: 120px;
-	width: 120px;
+	height: 110px;
+	width: 110px;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 }

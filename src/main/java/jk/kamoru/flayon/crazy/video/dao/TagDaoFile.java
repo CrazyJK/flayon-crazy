@@ -22,7 +22,7 @@ import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import lombok.extern.slf4j.Slf4j;
 
-// TODO file dao implementation
+// file dao implementation
 @Slf4j
 @Repository
 public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {

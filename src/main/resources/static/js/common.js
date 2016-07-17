@@ -214,8 +214,8 @@ function mw_image_window(img, w, h)
  * @param range
  * @returns
  */
-function getRandomInteger(startInt, range) {
-	return Math.floor(Math.random() * parseInt(range)) + parseInt(startInt);
+function getRandomInteger(start, end) {
+	return Math.floor(Math.random() * parseInt(end - start)) + parseInt(start);
 }
 
 /**

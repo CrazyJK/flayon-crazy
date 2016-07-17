@@ -5,104 +5,92 @@
 <html>
 <head>
 <title><s:message code="default.home"/></title>
+<security:authorize access="isAuthenticated()">
 <style type="text/css">
-.circle-wrapper {
-	margin: 50px auto;
-	width: 300px;
-	height: 300px;
-	border-radius: 50%;
-	box-shadow: none;
-	transition: all 5s;
+body {
+	background-image: url("/img/neon-bg.jpg");
+	background-position: top left;	
+	font-family: 'clipregular';
 }
-.circle-wrapper:hover {
-	box-shadow: 
-		-150px    0   0 rgba(255,   0,   0, 0.5), 
-		   0   -150px 0 rgba(252, 150,   0, 0.5), 
-		 150px    0   0 rgba(0,   255,   0, 0.5), 
-		   0    150px 0 rgba(0,   150, 255, 0.5),
-		 106px  106px 0 rgba(255,   0,   0, 0.5),
-		-106px  106px 0 rgba(252, 150,   0, 0.5), 
-		-106px -106px 0 rgba(0,   255,   0, 0.5), 
-		 106px -106px 0 rgba(0,   150, 255, 0.5);
+.aperture {
+	z-index: 1;
+	display:inline-block;
 }
-.circle {
-	background: #fff;
-	border-radius: 100%;
-	cursor: pointer;
-	width: 300px;
-	height: 300px;
-	text-align: center;
-	margin:0 auto;
-	overflow: hidden;
-	transform: translateZ(0);
-	-webkit-transform: translateZ(0);
-}
-.circle:before, .circle:after {
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	border-radius: 100%;
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: inherit;
-	height: inherit;
-	background-size: 100%;
-	box-shadow: 
-		inset 150px  0 0 rgba(238, 238, 238, .588), 
-		inset 0  150px 0 rgba(238, 238, 238, .588), 
-		inset -150px 0 0 rgba(238, 238, 238, .588), 
-		inset 0 -150px 0 rgba(238, 238, 238, .588);
-	transition: all 5s;
-}
-.circle:after {
-	transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-}
-.circle:hover:after, .circle:hover:before {
-	box-shadow: 
-		inset 15px  0 0 rgba(255,   0,   0, 0.5), 
-		inset 0  15px 0 rgba(252, 150,   0, 0.5), 
-		inset -15px 0 0 rgba(0,   255,   0, 0.5), 
-		inset 0 -15px 0 rgba(0,   150, 255, 0.5);
-	background-image:none;
-}
-.img-circle {
-	width: 100%;
+.jumbotron {
+	background-color: rgba(0,0,0,.8);
+	z-index: 588;
 }
 </style>
+<script type="text/javascript">
+var windowWidth = $(window).innerWidth();
+var windowHeight = $(window).innerHeight();
+
+$(document).ready(function() {
+	// change inverse
+	$(".nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
+	
+	// neon effect
+	var styles = {color: "#eee", fontWeight: "bold"};
+	$("li a, #hello, #user, #wording, #typed, .navbar-header a, select").each(function() {
+		$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
+	});
+
+	// aperture
+	setInterval(function() {
+		aperture($("#aperture-O1"), "/image/random");
+	}, 1000 * getRandomInteger(3, 10));
+	setInterval(function() {
+		aperture($("#aperture-O2"), "/image/random");
+	}, 1000 * getRandomInteger(3, 10));
+	setInterval(function() {
+		aperture($("#aperture-O3"), "/image/random");
+	}, 1000 * getRandomInteger(3, 10));
+
+});
+function aperture($obj, imgSrc) {
+	var _width = getRandomInteger(1, windowWidth - 180);
+	var _height = getRandomInteger(500, windowHeight - 200);
+	var _aWidth = getRandomInteger(20, 200);
+	console.log(_width, _height, _aWidth);
+	$obj.css({
+		position: "absolute", /* relative */ 
+		left: _width + "px",
+		top: _height + "px"
+	}).aperture({
+		src: imgSrc,
+		baseColor: "rgba(0,0,0,.8)",
+		outerMargin: "0 auto",
+		timing: "ease-in-out",
+		width: _aWidth + "px"
+		/* duration: "5s" */
+	});
+	
+}
+</script>
+</security:authorize>
 </head>
 <body>
 
-<div class="container">
-	<div class="jumbotron">
+<div class="container text-center">
+	<div class="jumbotron" style="display: inline-block;">
 		<h1>
-			<b><s:message code="jk.crazy"/></b> 
+			<b id="hello"><s:message code="jk.crazy"/></b> 
 			<security:authorize access="isAuthenticated()">
-				<security:authentication property="principal.username" />
+				<span id="user"><security:authentication property="principal.username" /></span>
 			</security:authorize>
 		</h1>
-		<security:authorize access="isAuthenticated()">
-		<div class="circle-wrapper">
-			<div class="circle">
-				<img class="img-circle" src="/img/kamoru_crazy_artistic.png"/>
-			</div>
-		</div>
-   		<div id="aperture-O" style="display:inline-block; width:24px; height: 24px; position: relative; top: -450px; left: 140px;"></div>
-		<script type="text/javascript">
-		$("#aperture-O").aperture({
-			src:"/img/favicon-crazy.jpg",
-			baseColor: "rgba(238,238,238,.9)",
-			outerMargin: "0 auto",
-			/* duration: "5s" */
-		});
-		</script>
-		</security:authorize>
+	</div>
+	<div class="jumbotron text-left">
 		<p>
 			<span id="wording"></span>
 		</p>
 	</div>
+
 </div>
+
+<div id="aperture-O1" class="aperture"></div>
+<div id="aperture-O2" class="aperture"></div>
+<div id="aperture-O3" class="aperture"></div>
 
 <script type="text/javascript">
 $("#wording").typed({
@@ -119,6 +107,7 @@ $("#wording").typed({
     }
 });
 </script>
+
 
 </body>
 </html>

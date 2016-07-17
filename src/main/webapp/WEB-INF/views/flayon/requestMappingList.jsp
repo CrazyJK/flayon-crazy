@@ -7,7 +7,7 @@
 <title>RequestMapping List</title>
 <style type="text/css">
 table {
-	font-size:0.8em; width:100%;
+	font-size:0.8em;
 }
 tbody > tr:hover {
 	background-color:rgba(255,165,0,.25);
@@ -28,6 +28,11 @@ td {
 }
 .selected {
 	color: blue;
+}
+.row {
+    margin-right: -20px;
+    margin-left: -20px;
+}
 }
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>

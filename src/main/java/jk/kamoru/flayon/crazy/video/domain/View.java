@@ -9,6 +9,8 @@ public enum View {
 	C("Card"), 
 	/** box type */
 	B("Box"), 
+	/** ihover type */
+	IH("ihover"), 
 	/** table type */
 	T("Table"), 
 	/** slide type */

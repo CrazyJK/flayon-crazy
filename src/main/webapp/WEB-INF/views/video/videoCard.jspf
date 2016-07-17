@@ -19,13 +19,13 @@
 				<dl>
 					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="actress"   mode="s"/></div></dd>
 					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="studio"    mode="s"/></div></dd> 
-					<dd><jk:video video="${video}" view="opus"      mode="s"/>
-						<jk:video video="${video}" view="score"     mode="s"/></dd>
+					<dd><jk:video video="${video}" view="opus"      mode="s"/></dd>
 					<dd><jk:video video="${video}" view="video"     mode="s"/>
 						<jk:video video="${video}" view="cover"     mode="s"/>
 						<jk:video video="${video}" view="subtitles" mode="s"/>
 						<jk:video video="${video}" view="overview"  mode="s"/></dd>
-					<dd><jk:video video="${video}" view="rank"      mode="s"/></dd>
+					<dd><jk:video video="${video}" view="rank"      mode="s"/>
+						<jk:video video="${video}" view="score"     mode="s"/></dd>
 				</dl>
 			</td>
 		</tr>
