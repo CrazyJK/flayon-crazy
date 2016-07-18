@@ -8,7 +8,7 @@
 <security:authorize access="isAuthenticated()">
 <style type="text/css">
 body {
-	background-image: url("/img/neon-bg.jpg");
+	background-image: url("/img/neon-bg2.png");
 	background-position: top left;	
 	font-family: 'clipregular';
 }
@@ -26,6 +26,10 @@ var windowWidth = $(window).innerWidth();
 var windowHeight = $(window).innerHeight();
 
 $(document).ready(function() {
+	// background-color random
+	$("body").css("background-color", randomColor(1));
+	
+	
 	// change inverse
 	$(".nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
 	
