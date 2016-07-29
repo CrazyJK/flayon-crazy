@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+.rainbow:hover {
+	-webkit-animation: rainbow 25s linear infinite;
+	   -moz-animation: rainbow 25s linear infinite;
+	     -o-animation: rainbow 25s linear infinite;
+	        animation: rainbow 25s linear infinite;
+	color: #fff;
+}
+@keyframes rainbow {
+	0%, 7%, 14%, 21%, 28%, 35%, 42%, 49%, 56%, 63%, 70%, 77%, 84%, 91%, 98% {
+		background: -webkit-linear-gradient(    left, red, orange, yellow, green, blue, indigo, violet);
+		background:    -moz-linear-gradient(   right, red, orange, yellow, green, blue, indigo, violet);
+		background:      -o-linear-gradient(   right, red, orange, yellow, green, blue, indigo, violet);
+	    background:         linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+	}
+	1%, 8%, 15%, 22%, 29%, 36%, 43%, 50%, 57%, 64%, 71%, 78%, 85%, 92%, 99% {
+		background: -webkit-linear-gradient(    left, violet, red, orange, yellow, green, blue, indigo);
+		background:    -moz-linear-gradient(   right, violet, red, orange, yellow, green, blue, indigo);
+		background:      -o-linear-gradient(   right, violet, red, orange, yellow, green, blue, indigo);
+	    background:         linear-gradient(to right, violet, red, orange, yellow, green, blue, indigo);
+	}
+	2%, 9%, 16%, 23%, 30%, 37%, 44%, 51%, 58%, 65%, 72%, 79%, 86%, 93%, 100% {
+		background: -webkit-linear-gradient(    left, indigo, violet, red, orange, yellow, green, blue);
+		background:    -moz-linear-gradient(   right, indigo, violet, red, orange, yellow, green, blue);
+		background:      -o-linear-gradient(   right, indigo, violet, red, orange, yellow, green, blue);
+	    background:         linear-gradient(to right, indigo, violet, red, orange, yellow, green, blue);
+	}
+	3%, 10%, 17%, 24%, 31%, 38%, 45%, 52%, 59%, 66%, 73%, 80%, 87%, 94% {
+		background: -webkit-linear-gradient(    left, blue, indigo, violet, red, orange, yellow, green);
+		background:    -moz-linear-gradient(   right, blue, indigo, violet, red, orange, yellow, green);
+		background:      -o-linear-gradient(   right, blue, indigo, violet, red, orange, yellow, green);
+	    background:         linear-gradient(to right, blue, indigo, violet, red, orange, yellow, green);
+	}
+	4%, 11%, 18%, 25%, 32%, 39%, 46%, 53%, 60%, 67%, 74%, 81%, 88%, 95% {
+		background: -webkit-linear-gradient(    left, green, blue, indigo, violet, red, orange, yellow);
+		background:    -moz-linear-gradient(   right, green, blue, indigo, violet, red, orange, yellow);
+		background:      -o-linear-gradient(   right, green, blue, indigo, violet, red, orange, yellow);
+	    background:         linear-gradient(to right, green, blue, indigo, violet, red, orange, yellow);
+	}
+	5%, 12%, 19%, 26%, 33%, 40%, 47%, 54%, 61%, 68%, 75%, 82%, 89%, 96% {
+		background: -webkit-linear-gradient(    left, yellow, green, blue, indigo, violet, red, orange);
+		background:    -moz-linear-gradient(   right, yellow, green, blue, indigo, violet, red, orange);
+		background:      -o-linear-gradient(   right, yellow, green, blue, indigo, violet, red, orange);
+	    background:         linear-gradient(to right, yellow, green, blue, indigo, violet, red, orange);
+	}
+	6%, 13%, 20%, 27%, 34%, 41%, 48%, 55%, 62%, 69%, 76%, 83%, 90%, 97% {
+		background: -webkit-linear-gradient(    left, orange, yellow, green, blue, indigo, violet, red);
+		background:    -moz-linear-gradient(   right, orange, yellow, green, blue, indigo, violet, red);
+		background:      -o-linear-gradient(   right, orange, yellow, green, blue, indigo, violet, red);
+	    background:         linear-gradient(to right, orange, yellow, green, blue, indigo, violet, red);
+	}
+}
