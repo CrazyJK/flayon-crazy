@@ -36,7 +36,7 @@ function toggleInputDiv() {
 </script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
 
 <form method="post" onsubmit="loading(true, 'Parsing...')">
 
@@ -76,11 +76,11 @@ function toggleInputDiv() {
 							<td width="100px">
 								<a class="btn btn-xs btn-default" id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}'); document.title='${title}'">
 									Get Info 
-									<c:if test="${title.check}"><mark>${title.checkDescShort}</mark></c:if>
 								</a>
+								<c:if test="${title.check}"><mark class="text-danger">${title.checkDescShort}</mark></c:if>
 							</td>
 							<td>
-								<input id="dataTitle_${title.opus}" style="width:100%;" value="${title}"/>
+								<input id="dataTitle_${title.opus}" style="width:100%; font-size: 12px;" value="${title}"/>
 							</td>
 						</tr>
 						<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>

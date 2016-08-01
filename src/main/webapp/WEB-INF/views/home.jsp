@@ -10,6 +10,7 @@
 body {
 	background-image: url("/img/neon-bg2.png");
 	background-position: top left;	
+	background-size: contain;
 	font-family: 'clipregular';
 }
 .aperture {
@@ -17,8 +18,9 @@ body {
 	display:inline-block;
 }
 .jumbotron {
-	background-color: rgba(0,0,0,.8);
+	background-color: rgba(0,0,0,0);
 	z-index: 588;
+	
 }
 </style>
 <script type="text/javascript">
@@ -49,23 +51,23 @@ $(document).ready(function() {
 	setInterval(function() {
 		aperture($("#aperture-O3"), "/image/random");
 	}, 1000 * getRandomInteger(3, 10));
-
+	
 });
 function aperture($obj, imgSrc) {
-	var _width = getRandomInteger(1, windowWidth - 180);
+	var _width = getRandomInteger(1, windowWidth - 200);
 	var _height = getRandomInteger(500, windowHeight - 200);
 	var _aWidth = getRandomInteger(20, 200);
 	console.log(_width, _height, _aWidth);
 	$obj.css({
-		position: "absolute", /* relative */ 
+		position: "absolute", /* relative, absolute */ 
 		left: _width + "px",
 		top: _height + "px"
 	}).aperture({
 		src: imgSrc,
-		baseColor: "rgba(0,0,0,.8)",
+		baseColor: "rgba(0,0,0,.5)",
 		outerMargin: "0 auto",
 		timing: "ease-in-out",
-		width: _aWidth + "px"
+		width: _aWidth + "px",
 		/* duration: "5s" */
 	});
 	
@@ -74,6 +76,10 @@ function aperture($obj, imgSrc) {
 </security:authorize>
 </head>
 <body>
+
+<div id="aperture-O1" class="aperture"></div>
+<div id="aperture-O2" class="aperture"></div>
+<div id="aperture-O3" class="aperture"></div>
 
 <div class="container text-center">
 	<div class="jumbotron" style="display: inline-block;">
@@ -89,12 +95,8 @@ function aperture($obj, imgSrc) {
 			<span id="wording"></span>
 		</p>
 	</div>
-
 </div>
 
-<div id="aperture-O1" class="aperture"></div>
-<div id="aperture-O2" class="aperture"></div>
-<div id="aperture-O3" class="aperture"></div>
 
 <script type="text/javascript">
 $("#wording").typed({
