@@ -36,27 +36,27 @@ var DELETE_LOWER_SCORE_VIDEO = ${DELETE_LOWER_SCORE_VIDEO};
 
 function setMOVE_WATCHED_VIDEO() {
 	MOVE_WATCHED_VIDEO = !MOVE_WATCHED_VIDEO;
-	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + MOVE_WATCHED_VIDEO, "POST", "Set Watched Video to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + MOVE_WATCHED_VIDEO, {}, "POST", "Set Watched Video to " + MOVE_WATCHED_VIDEO);
 	$("#MOVE_WATCHED_VIDEO").html("" + MOVE_WATCHED_VIDEO);
 }
 function setDELETE_LOWER_RANK_VIDEO() {
 	DELETE_LOWER_RANK_VIDEO = !DELETE_LOWER_RANK_VIDEO;
-	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + DELETE_LOWER_RANK_VIDEO, "POST", "Set Lower Rank to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + DELETE_LOWER_RANK_VIDEO, {}, "POST", "Set Lower Rank to " + MOVE_WATCHED_VIDEO);
 	$("#DELETE_LOWER_RANK_VIDEO").html("" + DELETE_LOWER_RANK_VIDEO);
 }
 function setDELETE_LOWER_SCORE_VIDEO() {
 	DELETE_LOWER_SCORE_VIDEO = !DELETE_LOWER_SCORE_VIDEO;
-	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + DELETE_LOWER_SCORE_VIDEO, "POST", "Set Lower Score to " + MOVE_WATCHED_VIDEO);
+	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + DELETE_LOWER_SCORE_VIDEO, {}, "POST", "Set Lower Score to " + MOVE_WATCHED_VIDEO);
 	$("#DELETE_LOWER_SCORE_VIDEO").html("" + DELETE_LOWER_SCORE_VIDEO);
 }
 function moveWatchedVideo() {
-	actionFrame(videoPath + '/manager/moveWatchedVideo', 'POST', 'Moving Watched Video');
+	actionFrame(videoPath + '/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
 }
 function removeLowerRankVideo() {
-	actionFrame(videoPath + '/manager/removeLowerRankVideo', 'POST', 'Deleting Lower Rank');
+	actionFrame(videoPath + '/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
 }
 function removeLowerScoreVideo() {
-	actionFrame(videoPath + '/manager/removeLowerScoreVideo', 'POST', 'Deleting Lower Score');
+	actionFrame(videoPath + '/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
 }
 </script>
 </head>

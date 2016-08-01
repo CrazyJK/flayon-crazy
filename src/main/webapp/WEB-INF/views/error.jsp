@@ -2,6 +2,13 @@
 <%@ page import="java.util.*"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+String exception = (String) request.getAttribute("exception");
+String message = (String) request.getAttribute("message");
+response.setHeader("error", "true");
+response.setHeader("error.message", message);
+response.setHeader("error.cause", exception);
+%>
 <!DOCTYPE html>
 <html>
 <head>

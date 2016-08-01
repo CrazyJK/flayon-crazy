@@ -81,7 +81,7 @@ function fnPlay(selectedOpus) {
  * @param selectedOpus
  */
 function fnVideoReset(selectedOpus) {
-	actionFrame(videoPath + "/" + selectedOpus + "/reset", "PUT", selectedOpus + " reset");
+	actionFrame(videoPath + "/" + selectedOpus + "/reset", {}, "PUT", selectedOpus + " reset");
 //	$("#hiddenHttpMethod").val("PUT");
 //	var frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/" + selectedOpus + "/reset";
@@ -92,7 +92,7 @@ function fnVideoReset(selectedOpus) {
  * @param selectedOpus
  */
 function fnVideoWrong(selectedOpus) {
-	actionFrame(videoPath + "/" + selectedOpus + "/wrong", "PUT", selectedOpus + " mark wrong");
+	actionFrame(videoPath + "/" + selectedOpus + "/wrong", {}, "PUT", selectedOpus + " mark wrong");
 //	$("#hiddenHttpMethod").val("PUT");
 //	var frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/" + selectedOpus + "/wrong";
@@ -142,7 +142,7 @@ function fnBGImageView() {
  * delete current backgroung image
  */
 function fnBGImageDELETE() {
-	actionFrame(currBGImageUrl, "DELETE", "this image delete");
+	actionFrame(currBGImageUrl, {}, "DELETE", "this image delete");
 //	$("#hiddenHttpMethod").val("DELETE");
 //	var actionFrm = document.forms['actionFrm'];
 //	actionFrm.action = currBGImageUrl;
@@ -188,7 +188,7 @@ function fnRank(opus) {
 			console.log("fnRank opener error", e);
 		}
 	}
-	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), "PUT", opus + " rank " + rank.val(), 300);
+	actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), {}, "PUT", opus + " rank " + rank.val(), 300);
 //	$("#hiddenHttpMethod").val("put");
 //	frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/" + opus + "/rank/" + rank.val();
@@ -238,7 +238,7 @@ function fnViewVideoDetail(opus) {
 function fnFavorite(dom, name) {
 	var val = dom.innerHTML == '★';
 	dom.innerHTML = val ? '☆' : '★';
-	actionFrame(videoPath + "/actress/" + name + "/favorite/" + !val, "PUT", name + " set favorite");
+	actionFrame(videoPath + "/actress/" + name + "/favorite/" + !val, {}, "PUT", name + " set favorite");
 //	$("#hiddenHttpMethod").val('PUT');
 //	var frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/actress/" + name + "/favorite/" + !val;
@@ -272,7 +272,7 @@ function fnUnchecked(obj) {
  * reload video source
  */
 function fnReloadVideoSource() {
-	actionFrame(videoPath + "/reload", "GET", "Source reload");
+	actionFrame(videoPath + "/reload", {}, "GET", "Source reload");
 //	var frm = document.forms["actionFrm"];
 //	frm.action = videoPath + "/reload";
 //	frm.submit();
@@ -299,7 +299,7 @@ function fnSetTag(dom, opus, tagId) {
 		$(dom).removeClass("label-plain");
 		$(dom).addClass("label-default");
 	}
-	actionFrame(videoPath + "/" + opus + "/tag?id=" + tagId, "POST", "set tag " + opus + " <- " + tagId);
+	actionFrame(videoPath + "/" + opus + "/tag?id=" + tagId, {}, "POST", "set tag " + opus + " <- " + tagId);
 //	$("#hiddenHttpMethod").val("POST");
 //	var frm = document.forms["actionFrm"];
 //	$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));
@@ -334,7 +334,7 @@ function fnViewTagDetail(name) {
 function fnDeleteTag(tagId, dom) {
 	if (confirm("Are you sure to delete it?")) {
 		$(dom).parent().hide();
-		actionFrame(videoPath + "/tag?id=" + tagId, "DELETE", tagId + " tag delete");
+		actionFrame(videoPath + "/tag?id=" + tagId, {}, "DELETE", tagId + " tag delete");
 //		$("#hiddenHttpMethod").val("DELETE");
 //		var frm = document.forms["actionFrm"];
 //		$(frm).append($("<input type=hidden name=id value=" + tagId + ">"));

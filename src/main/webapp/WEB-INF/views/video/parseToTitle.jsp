@@ -33,13 +33,25 @@ function toggleInputDiv() {
 		$("#hideBtn").html("Hide");
 	}
 }
+function saveCover(opus) {
+	fnMarkChoice(opus);
+	var url = context + "video/" + opus + "/saveCover";
+	var resultStatus = actionFrame(url, {title: $("#dataTitle_" + opus).val()}, "POST", 'save cover ' + opus, 1000);
+	if (resultStatus == 200) {
+		loading(true, 'Fail to save cover');
+	}
+}
+function saveCoverAll() {
+	$("#saveCoverAll").val(true);
+	document.forms[0].submit();
+}
 </script>
 </head>
 <body>
 <div class="container-fluid">
 
 <form method="post" onsubmit="loading(true, 'Parsing...')">
-
+	<input type="hidden" id="saveCoverAll" name="saveCoverAll" value="false"/> 
 	<div id="header_div" class="box form-inline">
 		<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
 		<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();">Parse <i class="badge">${titleList.size()}</i></a>	
@@ -49,6 +61,7 @@ function toggleInputDiv() {
 			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
+		<a class="btn btn-xs btn-default" onclick="saveCoverAll()">All Save</a>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">
@@ -75,9 +88,12 @@ function toggleInputDiv() {
 							</td>
 							<td width="100px">
 								<a class="btn btn-xs btn-default" id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}'); document.title='${title}'">
-									Get Info 
+									Info
 								</a>
 								<c:if test="${title.check}"><mark class="text-danger">${title.checkDescShort}</mark></c:if>
+								<c:if test="${!title.check}">
+									<a class="btn btn-xs btn-primary" onclick="saveCover('${title.opus}')">Save</a>
+								</c:if>
 							</td>
 							<td>
 								<input id="dataTitle_${title.opus}" style="width:100%; font-size: 12px;" value="${title}"/>

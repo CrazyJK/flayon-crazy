@@ -615,9 +615,12 @@ public class VideoController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/parseToTitle")
-	public String parseToTitle(Model model, @RequestParam(value="titleData", required=false, defaultValue="") String titleData) {
+	public String parseToTitle(Model model, 
+			@RequestParam(value="titleData", required=false, defaultValue="") String titleData,
+			@RequestParam(value="saveCoverAll", required=false, defaultValue="false") Boolean saveCoverAll,
+			@RequestParam Map<String, String> params) {
 		logger.trace("parse to title");
-		model.addAttribute("titleList", videoService.parseToTitleData(titleData));
+		model.addAttribute("titleList", videoService.parseToTitleData(titleData, saveCoverAll));
 		model.addAttribute("titleData", titleData);
 		return "video/parseToTitle";
 	}
@@ -733,5 +736,10 @@ public class VideoController extends AbstractController {
 	public void toggleTag(@ModelAttribute VTag tag, @PathVariable String opus) {
 		videoService.toggleTag(opus, tag);
 	}
-	
+
+	@RequestMapping("/{opus}/saveCover")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void saveCover(@PathVariable String opus, @RequestParam String title) {
+		videoService.saveCover(opus, title);
+	}
 }

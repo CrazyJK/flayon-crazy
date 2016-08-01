@@ -135,15 +135,24 @@ function showNav() {
 /**
  * post 액션
  */
-function actionFrame(reqUrl, method, msg, interval) {
+function actionFrame(reqUrl, reqData, method, msg, interval) {
+	console.log(reqUrl, reqData, method, msg, interval);
 	$.ajax({
-		type : method ? method : "POST",
-		url : reqUrl,
+		type: method ? method : "POST",
+		url: reqUrl,
+		data: reqData,
 		beforeSend : function() {
 			loading(true, msg ? msg : "Loading...");
 		}
-	}).done(function(data) {
-		loading(true, msg + " Done", interval ? interval : 2000);
+	}).done(function(data, textStatus, jqXHR) {
+		loading(false);
+		if (jqXHR.getResponseHeader('error') == 'true') {
+			var errorMessge = jqXHR.getResponseHeader('error.message');
+			loading(true, 'Fail : ' + errorMessge, 10000);
+		}
+		else {
+			loading(true, msg + " Done", interval ? interval : 2000);
+		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		errorHtml = $.parseHTML(jqXHR.responseText);
 		parsed = $('<div/>').append(errorHtml);
@@ -167,7 +176,7 @@ function loading(show, msg, interval, detail) {
 	if (show) {
 		$("#loading").css("display", "table");
 		tSec = 1;
-		timer = setInterval(function() {loadingTimer()}, 1000);
+		timer = setInterval(function() {loadingTimer(true)}, 1000);
 	}
 	else {
 		$("#loading").hide();
@@ -176,7 +185,10 @@ function loading(show, msg, interval, detail) {
 	if (msg)
 		$("#loading-msg").html(msg);
 	if (interval)
-		$("#loading").fadeOut(interval);
+		$("#loading").fadeOut(interval, function() {
+			console.log("call clearTimer");
+			loadingTimer(false);
+		});
 	if (detail) {
 		var loadingMsgDetail = $("<div>").attr("id", "loading-msg-detail").addClass("box").html(detail);
 		$("#loading-content").append(loadingMsgDetail);
@@ -193,9 +205,12 @@ function toogleBody() {
 	});
 }
 function loadingTimer(start) {
-	console.log(tSec);
-	$("#loading-timer").html(tSec++);
-	if (!start) {
+	if (start) {
+		console.log("loadingTimer", tSec);
+		$("#loading-timer").html(tSec++);
+	}
+	else {
+		console.log("clearInterval", timer);
 		clearInterval(timer);
 	}
 }

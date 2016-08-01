@@ -1167,7 +1167,11 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean matchActressList(List<String> selectedActress) {
-		return selectedActress == null ? true : selectedActress.stream().anyMatch(s -> containsActress(s));
+		return selectedActress == null ? true : selectedActress.stream().anyMatch(s -> equalsActress(s));
+	}
+
+	private boolean equalsActress(String actressName) {
+		return actressList.stream().allMatch(a -> VideoUtils.equalsActress(a.getName(), actressName));
 	}
 
 	private boolean matchStudioList(List<String> selectedStudio) {

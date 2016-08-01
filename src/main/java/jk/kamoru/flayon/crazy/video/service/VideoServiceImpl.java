@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import jk.kamoru.flayon.crazy.CRAZY;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
@@ -64,6 +67,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Autowired VideoDao videoDao;
 	@Autowired HistoryService historyService;
 	@Autowired TagDao tagDao;
+	@Autowired ArzonLookupService arzonLookupService;
 
 	@Override
 	public void removeVideo(String opus) {
@@ -928,7 +932,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public List<TitlePart> parseToTitleData(String titleData) {
+	public List<TitlePart> parseToTitleData(String titleData, Boolean saveCoverAll) {
 		List<TitlePart> titlePartList = new ArrayList<>();
 		
 		if (!StringUtils.isEmpty(titleData)) {
@@ -1011,6 +1015,23 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			} catch(ArrayIndexOutOfBoundsException e) {
 				log.error("End");
 			}
+
+			if (saveCoverAll) { // TODO
+				List<TitlePart> _titlePartList = new ArrayList<>(); 
+				for (TitlePart titlePart : titlePartList) {
+					CompletableFuture<Boolean> result = arzonLookupService.get(titlePart.getOpus(), titlePart.getTitle(), STAGE_PATHS[0]);
+					try {
+						if (!result.get()) {
+							_titlePartList.add(titlePart);
+						}
+					} catch (InterruptedException | ExecutionException e) {
+						log.error("", e);
+					}
+				}
+				videoDao.reload();
+				titlePartList = _titlePartList;
+			}
+			
 			// sort list
 			Collections.sort(titlePartList);
 		}
@@ -1364,6 +1385,19 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		if (archive)
 			list.addAll(videoDao.getArchiveVideoList().stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
 		return list;
+	}
+
+	@Override
+	public void saveCover(String opus, String title) {
+		log.info("saveCover {}, {}, {}", opus, title, STAGE_PATHS[0]);
+		CompletableFuture<Boolean> result = arzonLookupService.get(opus, title, STAGE_PATHS[0]);
+		try {
+			if(!result.get()) {
+				throw new CrazyException("not found cover : " + opus);
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			throw new CrazyException("fail to saveCover : " + opus, e);
+		}
 	}
 
 }

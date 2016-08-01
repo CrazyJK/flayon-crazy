@@ -265,7 +265,7 @@ public interface VideoService {
 
 	void rename(String opus, String newName);
 
-	List<TitlePart> parseToTitleData(String titleData);
+	List<TitlePart> parseToTitleData(String titleData, Boolean saveCoverAll);
 
 	List<TitlePart> parseToTitleData2(String titleData);
 
@@ -312,5 +312,7 @@ public interface VideoService {
 	List<VTag> getTagListWithVideo();
 
 	VTag getTag(Integer id);
+
+	void saveCover(String opus, String title);
 
 }
