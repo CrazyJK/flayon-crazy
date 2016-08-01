@@ -1016,10 +1016,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				log.error("End");
 			}
 
-			if (saveCoverAll) { // TODO
+			if (saveCoverAll) {
 				List<TitlePart> _titlePartList = new ArrayList<>(); 
 				for (TitlePart titlePart : titlePartList) {
-					CompletableFuture<Boolean> result = arzonLookupService.get(titlePart.getOpus(), titlePart.getTitle(), STAGE_PATHS[0]);
+					CompletableFuture<Boolean> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), STAGE_PATHS[0]);
 					try {
 						if (!result.get()) {
 							_titlePartList.add(titlePart);

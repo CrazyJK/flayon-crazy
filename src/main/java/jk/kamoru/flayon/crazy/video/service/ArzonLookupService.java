@@ -54,9 +54,9 @@ public class ArzonLookupService {
 	private static String ARZON_HOST = "https://www.arzon.jp";
 	private static String ARZON_SEARCH = ARZON_HOST + "/index.php?action=adult_customer_agecheck&agecheck=1&redirect=https%3A%2F%2Fwww.arzon.jp%2Fitemlist.html%3Ft%3D%26m%3Dall%26s%3D%26q%3D";
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
-		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
-	}
+//	public static void main(String[] args) throws ClientProtocolException, IOException {
+//		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
+//	}
 
 	public static void testFlayon() {
 
