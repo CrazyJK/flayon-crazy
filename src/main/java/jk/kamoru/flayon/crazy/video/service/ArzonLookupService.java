@@ -13,12 +13,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLContext;
 import javax.xml.ws.spi.http.HttpContext;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -54,7 +54,7 @@ public class ArzonLookupService {
 	private static String ARZON_HOST = "https://www.arzon.jp";
 	private static String ARZON_SEARCH = ARZON_HOST + "/index.php?action=adult_customer_agecheck&agecheck=1&redirect=https%3A%2F%2Fwww.arzon.jp%2Fitemlist.html%3Ft%3D%26m%3Dall%26s%3D%26q%3D";
 
-//	public static void main(String[] args) throws ClientProtocolException, IOException {
+//	public static void main(String[] args) throws IOException {
 //		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
 //	}
 
@@ -75,12 +75,12 @@ public class ArzonLookupService {
 			// req video main
 			url = "http://127.0.0.1:58818/video";
 			response = httpclient.execute(new HttpGet(url));
-	        log.info("video main : {} - {}", url, response.getStatusLine());
+	        log.debug("video main : {} - {}", url, response.getStatusLine());
 			
 			// req actress list
 			url = "http://127.0.0.1:58818/video/actress";
 			response = httpclient.execute(new HttpGet(url));
-	        log.info("actress list : {} - {}", url, response.getStatusLine());
+	        log.debug("actress list : {} - {}", url, response.getStatusLine());
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -92,7 +92,16 @@ public class ArzonLookupService {
 		}
 	}
 	
-	private static String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
+	/**
+	 * httpResponse convert to Stirng
+	 * traditional method
+	 * @param response
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unused")
+	private static String readResponse2(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
 		BufferedReader bin = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 		StringBuilder sb = new StringBuilder();
@@ -103,8 +112,23 @@ public class ArzonLookupService {
 		return sb.toString();
 	}
 
+	/**
+	 * httpResponse convert to string
+	 * JAVA 8 over
+	 * @param response
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * @throws IOException
+	 */
+	private static String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		return reader.lines().collect(Collectors.joining("\n"));
+	}
+
 	@Async
 	public CompletableFuture<Boolean> get(String opus, String title, String imageLocation) {
+		log.info("Look up {} cover at arzon.jp", opus);
+		
 		HttpClientContext context = HttpClientContext.create();
 	    InetSocketAddress torSocksAddr = new InetSocketAddress("127.0.0.1", 9150);
 	    context.setAttribute("socks.address", torSocksAddr);
@@ -121,25 +145,26 @@ public class ArzonLookupService {
 		    // search
 			String url = ARZON_SEARCH + opus;
 		    CloseableHttpResponse response = httpclient.execute(new HttpGet(url));
-	        log.info("Searching... {} - {}", url, response.getStatusLine());
+	        log.debug("Searching... {} - {}", url, response.getStatusLine());
 			Document document = Jsoup.parse(readResponse(response));
 			Elements item = document.select("#item");
 			Elements ankers = item.select("div.pictlist dl.hentry dt a");
 			if (ankers == null || ankers.isEmpty()) {
-				log.info("  not found : {}", opus);
+				log.warn("Not found : {}", opus);
 				return CompletableFuture.completedFuture(new Boolean(false));
 			}
+			
 			String firstItemUri = ankers.get(0).attr("href");
-			log.info("  found firstItemUri : {}", firstItemUri);
+			log.debug("  found firstItemUri : {}", firstItemUri);
 			
 			// find itemlist
 			String itemlistUrl = ARZON_HOST + firstItemUri;
 			response = httpclient.execute(new HttpGet(itemlistUrl));
-	        log.info("Finding itemlist... {} - {}", url, response.getStatusLine());
+	        log.debug("Finding itemlist... {} - {}", url, response.getStatusLine());
 			document = Jsoup.parse(readResponse(response));
 			Elements img = document.select("img.item_img");
 			String imgSrc = img.attr("src");
-			log.info("  found img src : {}", imgSrc);
+			log.debug("  found img src : {}", imgSrc);
 			
 			// image save
 			String imgUrl = "https:" + imgSrc;
@@ -147,17 +172,18 @@ public class ArzonLookupService {
 //			httpGetImage.addHeader("Accept", "image/png,image/*;q=0.8,*/*;q=0.5");
 			httpGetImage.addHeader("Referer", itemlistUrl);
 			response = httpclient.execute(httpGetImage);
-	        log.info("Get image... {} - {}", imgUrl, response.getStatusLine());
+	        log.debug("Get image... {} - {}", imgUrl, response.getStatusLine());
 	        if (response.getStatusLine().getStatusCode() != 200) {
-	        	log.info("fail to save image, {}", response.getStatusLine().getStatusCode());
+	        	log.warn("Fail to save cover, {}", response.getStatusLine().getStatusCode());
 				return CompletableFuture.completedFuture(new Boolean(false));
 	        }
+	        
 			Path target = Paths.get(imageLocation, title + ".jpg");
 			Files.copy(response.getEntity().getContent(), target, StandardCopyOption.REPLACE_EXISTING);
-			log.info("  save image at {}", imageLocation);
+			log.info("Save cover, {}", imageLocation);
 			return CompletableFuture.completedFuture(new Boolean(true));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Fail to look up cover", e);
 			return CompletableFuture.completedFuture(new Boolean(false));
 		} finally {
 		    try {
@@ -171,13 +197,13 @@ public class ArzonLookupService {
 
 	    public TorConnectionSocketFactory(final SSLContext sslContext) {
 	        super(sslContext);
-	        log.info("init");
+	        log.debug("init");
 	    }
 
 	    public Socket createSocket(final HttpContext context) throws IOException {
 	        InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
 	        Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
-	        log.info("createSocket : {}", proxy);
+	        log.debug("createSocket : {}", proxy);
 	        return new Socket(proxy);
 	    }
 
