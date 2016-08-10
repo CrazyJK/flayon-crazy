@@ -177,13 +177,14 @@ function fnVideoDetail(opus) {
  */
 function fnRank(opus) {
 	var rank = $("#Rank-"+opus);
-	fnRankColor(rank);
+	var rankLabel = $("#Rank-"+opus+"-label");
+	fnRankColor(rank, rankLabel);
 	var frm;
 	if(opener) {
 		try {
 			$("#Rank-"+opus, opener.document).val(rank.val());
 			$("#Rank-"+opus+"-label", opener.document).html(rank.val());
-			opener.fnRankColor($("#Rank-"+opus, opener.document));
+			opener.fnRankColor($("#Rank-"+opus, opener.document), $("#Rank-"+opus+"-label", opener.document));
 		} catch(e) {/*opener가 이상하더라도 submit은 해야하므로*/
 			console.log("fnRank opener error", e);
 		}
@@ -198,16 +199,21 @@ function fnRank(opus) {
  * set rank color
  * @param rank
  */
-function fnRankColor(rank) {
+function fnRankColor(rank, rankLabel) {
+	try {
 	if(rank.val() == 0) {
 		rank.css("background-color", "white");
+		rankLabel.css("color", "white");
 	}
 	else if(rank.val() > 0) {
 		rank.css("background-color", "red");
+		rankLabel.css("color", "red");
 	}
 	else {
 		rank.css("background-color", "blue");
+		rankLabel.css("color", "blue");
 	}
+	} catch(e) {}
 }
 /**
  * popup view actress detail

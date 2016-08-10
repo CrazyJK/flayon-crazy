@@ -8,7 +8,7 @@
 	        width: opts.width,
 	        height: opts.height,
 	        navigation: {active: true, effect: "slide"},
-	        pagination: {active: true, effect: "slide"},
+	        pagination: {active: true, effect: "fade"},
 	        play: {active: true, interval:5000, auto: false, effect: "fade"},
 	        callback: {
 	        	loaded: function(number) {
@@ -22,7 +22,7 @@
 	        },
 	        effect: {
 	            slide: {
-	            	speed: 500
+	            	speed: 300
 	            },
 	            fade: {
 	            	speed: 1000, crossfade: true

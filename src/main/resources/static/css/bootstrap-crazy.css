@@ -80,3 +80,10 @@ select.input-sm, .input-sm {
 	/* width: auto; */
 	display: inline-block;
 }
+
+.text-red {
+	color: red;
+}
+.text-bold {
+	font-weight: bold;
+}

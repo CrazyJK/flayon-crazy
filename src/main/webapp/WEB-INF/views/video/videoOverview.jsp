@@ -6,11 +6,13 @@
 <head>
 <title><s:message code="video.overview"/> [${video.opus}]</title>
 <style type="text/css">
-.overviewTxt {width:100%; height:215px;}
+.overviewTxt {
+	width:100%; 
+	height: 180px;
+}
 </style>
 <script type="text/javascript">
-function overviewSave()
-{
+function overviewSave() {
 	var overview = $(".overviewTxt");
 	$("#overview-${video.opus}", opener.document).attr("title", overview.val());
 	var frm = document.forms['overviewFrm'];

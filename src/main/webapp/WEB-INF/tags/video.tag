@@ -101,7 +101,7 @@ if (view.equalsIgnoreCase("video")) {
 		<input type="range" id="Rank-${video.opus}" name="points" class="form-control input-range" 
 			min="${minRank}" max="${maxRank}" value="${video.rank}"
 			onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
-		<span id="Rank-${video.opus}-label" class="form-control-feedback text-primary" title="rank">${video.rank}</span>
+		<span id="Rank-${video.opus}-label" class="form-control-feedback text-bold" style="font-size:16px;" title="rank">${video.rank}</span>
 	</div>
 	<%	} else { %>
 		<span id="Rank-${video.opus}-label" class="${cssClass}" title="rank">${video.rank}</span>

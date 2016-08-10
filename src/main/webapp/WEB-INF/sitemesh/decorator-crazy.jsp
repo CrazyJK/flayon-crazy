@@ -42,7 +42,7 @@ var urlSearchActress = '${urlSearchActress}';
 var urlSearchTorrent = '${urlSearchTorrent}';
 var tSec = 1;
 var timer;
-var neon = ${empty param.neon ? true : param.neon};
+var neon = ${empty param.neon ? false : param.neon};
 
 $(document).ready(function() {
 
@@ -94,11 +94,11 @@ $(document).ready(function() {
 		$("#deco_nav").css({backgroundColor: "rgba(0, 0, 0, .5)"});
 		
 		/* add neon for each
-		 */
 		var styles = {color: "#eee", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, .5)"};
 		$(".title, #loading-msg, #loading-timer").each(function() {
 			$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
 		});
+		 */
 		/*
 	 	var selectors1 = ".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]";
 	 	var selectors2 = "#header_div input[type=text], #header_div input[type=search], #header_div .label, #header_div select, #header_div .btn, #header_div label";
