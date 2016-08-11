@@ -39,9 +39,9 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 	private static final String GiB = "GiB";
 	private static final String MiB = "MiB";
 	
-	public static void main(String[] args) throws IOException {
-		new SukebeiNyaaLookupService().get("SCOP-121", "제목2", "/home/kamoru/workspace");
-	}
+//	public static void main(String[] args) throws IOException {
+//		new SukebeiNyaaLookupService().get("SCOP-121", "제목2", "/home/kamoru/workspace");
+//	}
 
 	@Override
 	public CompletableFuture<File> get(String opus, String title, String saveLocation) {
