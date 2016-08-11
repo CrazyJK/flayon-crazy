@@ -63,13 +63,6 @@ function fnSelectCandidateVideo(opus) {
 	$("#check-" + opus).hide();
 	$("#totalCandidatedVideo").html(--totalCandidatedVideo);
 }
-function confirmAll() {
-//	alert("Not working...");
-	$("form input:submit").each(function() {
-		$(this).click();
-		$(this).parent().parent().parent().hide();
-	}); 
-}
 /*
  * 보기 모드를 변경한다. 토렌트 찾기 모드와 cadidate선택 모드
  */
@@ -101,7 +94,7 @@ function fnChangeMode(mode) {
 	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
 	<input id="searchInput" class="form-control input-sm" placeHolder="Search"/>
 	<label>
-		<a onclick="confirmAll()">Confirm all!!!</a>
+		<a class="btn btn-xs btn-link" href="?getAllTorrents=true">Get All Torrents</a>
 	</label>
 </div>
 
@@ -121,7 +114,9 @@ function fnChangeMode(mode) {
 					${status.count}
 				</td>
 				<td style="width: 70px;">
-					<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Torrent</button>
+					<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Torrent
+						<small class="badge">${video.torrents.size()}</small>
+					</button>
 				</td>
 				<td style="min-width:450px; width:500px; max-width:600px;">
 					<div class="nowrap">
@@ -150,7 +145,7 @@ function fnChangeMode(mode) {
 			<c:forEach items="${videoList}" var="video">
 			<li id="check-${video.opus}-t"  class="box" style="width:80px;">
 				<div class="nowrap text-center" onclick="goTorrentSearch('${video.opus}');">
-					${video.opus}<br>Torrent
+					${video.opus}<br>Torrent <small class="badge">${video.torrents.size()}</small>
 				</div>
 			</li>
 			</c:forEach>

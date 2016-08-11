@@ -218,9 +218,9 @@ public class VideoController extends AbstractController {
 	 * @return view name
 	 */
 	@RequestMapping(value="/torrent", method=RequestMethod.GET)
-	public String torrent(Model model) {
+	public String torrent(Model model, @RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
 		logger.trace("torrent");
-		model.addAttribute("videoList", videoService.torrent());
+		model.addAttribute("videoList", videoService.torrent(getAllTorrents));
 		return "video/torrent";
 	}
 

@@ -64,6 +64,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	private File infoFile; // json file
 	private List<File> etcFileList;
 	private List<File> videoCandidates;
+	private List<File> torrents;
 
 	// info
 	private Studio studio;
@@ -85,6 +86,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		subtitlesFileList 	= new ArrayList<File>();
 		etcFileList 		= new ArrayList<File>();
 		videoCandidates		= new ArrayList<File>();
+		torrents			= new ArrayList<>();
 		
 		actressList = new ArrayList<Actress>();
 //		historyList = new ArrayList<History>();
@@ -1204,4 +1206,22 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	private boolean matchStudio(String searchText) {
 		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(studio.getName(), searchText);
 	}
+
+	public void resetTorrents() {
+		torrents.clear();
+	}
+
+	public void addTorrents(File file) {
+		torrents.add(file);
+	}
+
+	public List<File> getTorrents() {
+		return torrents;
+	}
+
+	public void setTorrents(List<File> torrents) {
+		this.torrents = torrents;
+	}
+
+	
 }

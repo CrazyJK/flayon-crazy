@@ -249,8 +249,9 @@ public interface VideoService {
 	void arrangeVideo();
 
 	/**get video list with torrent info
+	 * @param getAllTorrents 
 	 */
-	List<Video> torrent();
+	List<Video> torrent(Boolean getAllTorrents);
 
 	/**move video file. rename to fullname
 	 * @param opus

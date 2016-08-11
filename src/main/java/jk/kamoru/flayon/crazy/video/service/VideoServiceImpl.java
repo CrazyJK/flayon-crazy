@@ -45,6 +45,7 @@ import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
 import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +68,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Autowired VideoDao videoDao;
 	@Autowired HistoryService historyService;
 	@Autowired TagDao tagDao;
-	@Autowired ArzonLookupService arzonLookupService;
+	@Autowired WebFileLookupService arzonLookupService;
+	@Autowired WebFileLookupService sukebeiNyaaLookupService;
 
 	@Override
 	public void removeVideo(String opus) {
@@ -822,7 +824,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 	
 	@Override
-	public List<Video> torrent() {
+	public List<Video> torrent(Boolean getAllTorrents) {
 		log.debug("torrent");
 		
 		List<Video> list = new ArrayList<>();
@@ -834,14 +836,15 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 		log.debug("  need torrent videos - {}", list.size());
 		
+		// CANDIDATE_PATHS에서 찾은 파일들
 		List<File> foundFiles = new ArrayList<>();
 
 		log.info("Candidate Scan... {}", Arrays.toString(CANDIDATE_PATHS));
 		for (String candidatePath : CANDIDATE_PATHS) {
 		
 			// get downloaded torrent file
-			File torrentDirectory = new File(candidatePath);
-			if (!torrentDirectory.exists() || !torrentDirectory.isDirectory()) {
+			File candidateDirectory = new File(candidatePath);
+			if (!candidateDirectory.exists() || !candidateDirectory.isDirectory()) {
 				log.warn("{} is not valid", candidatePath);
 				continue;
 			}
@@ -849,13 +852,19 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			log.trace("extensions - {}", Arrays.toString(extensions));
 			
-			Collection<File> torrents = FileUtils.listFiles(torrentDirectory, extensions, true);
-			log.info("  found {} cadidates file in [{}]", torrents.size(), torrentDirectory);
+			Collection<File> found = FileUtils.listFiles(candidateDirectory, new String[]{"torrent", "TORRENT"}, true);
+			log.info("  found {} cadidates file in [{}]", found.size(), candidateDirectory);
 			
-			foundFiles.addAll(torrents);
+			foundFiles.addAll(found);
 		}
+		
+		// find torrent
+		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), 
+				String.format("%s,%s", CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()).split(","), true);
+		
 		// matching video file
 		for (Video video : list) {
+			// candidates
 			video.resetVideoCandidates();
 			String opus = video.getOpus().toLowerCase();
 			log.debug("  OPUS : {}", opus);
@@ -866,6 +875,27 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					if (fileName.contains(key)) {
 						video.addVideoCandidates(file);
 						log.info("    add video candidate {} : {}", opus, file.getAbsolutePath());
+					}
+				}
+			}
+			// torrents
+			video.resetTorrents();
+			for (File file : foundTorrent) {
+				if (StringUtils.contains(file.getName(), video.getOpus())) {
+					video.addTorrents(file);
+					log.info("    add Torrent {} : {}", opus, file.getName());
+				}
+			}
+			// find & save torrent
+			if (getAllTorrents) {
+				if (video.getTorrents().isEmpty()) {
+					CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
+					try {
+						File file = completableFuture.get();
+						if (file != null)
+							video.addTorrents(file);
+					} catch (InterruptedException | ExecutionException e) {
+						log.error("sukebeiNyaaLookupService : completableFuture.get()", e);
 					}
 				}
 			}
@@ -1019,9 +1049,9 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			if (saveCoverAll) {
 				List<TitlePart> _titlePartList = new ArrayList<>(); 
 				for (TitlePart titlePart : titlePartList) {
-					CompletableFuture<Boolean> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), STAGE_PATHS[0]);
+					CompletableFuture<File> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), STAGE_PATHS[0]);
 					try {
-						if (!result.get()) {
+						if (result.get() == null) {
 							_titlePartList.add(titlePart);
 						}
 					} catch (InterruptedException | ExecutionException e) {
@@ -1390,9 +1420,9 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void saveCover(String opus, String title) {
 		log.info("saveCover {}, {}, {}", opus, title, STAGE_PATHS[0]);
-		CompletableFuture<Boolean> result = arzonLookupService.get(opus, title, STAGE_PATHS[0]);
+		CompletableFuture<File> result = arzonLookupService.get(opus, title, STAGE_PATHS[0]);
 		try {
-			if(!result.get()) {
+			if(result.get() == null) {
 				throw new CrazyException("not found cover : " + opus);
 			}
 		} catch (InterruptedException | ExecutionException e) {

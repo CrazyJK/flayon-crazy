@@ -1,6 +1,7 @@
-package jk.kamoru.flayon.crazy.video.service;
+package jk.kamoru.flayon.crazy.video.service.webfile;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
@@ -48,8 +49,8 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Service
-public class ArzonLookupService {
+@Service("arzonLookupService")
+public class ArzonLookupService implements WebFileLookupService {
 
 	private static String ARZON_HOST = "https://www.arzon.jp";
 	private static String ARZON_SEARCH = ARZON_HOST + "/index.php?action=adult_customer_agecheck&agecheck=1&redirect=https%3A%2F%2Fwww.arzon.jp%2Fitemlist.html%3Ft%3D%26m%3Dall%26s%3D%26q%3D";
@@ -125,8 +126,9 @@ public class ArzonLookupService {
 		return reader.lines().collect(Collectors.joining("\n"));
 	}
 
+	@Override
 	@Async
-	public CompletableFuture<Boolean> get(String opus, String title, String imageLocation) {
+	public CompletableFuture<File> get(String opus, String title, String imageLocation) {
 		log.info("Look up {} cover at arzon.jp", opus);
 		
 		HttpClientContext context = HttpClientContext.create();
@@ -151,7 +153,7 @@ public class ArzonLookupService {
 			Elements ankers = item.select("div.pictlist dl.hentry dt a");
 			if (ankers == null || ankers.isEmpty()) {
 				log.warn("Not found : {}", opus);
-				return CompletableFuture.completedFuture(new Boolean(false));
+				return CompletableFuture.completedFuture(null);
 			}
 			
 			String firstItemUri = ankers.get(0).attr("href");
@@ -175,16 +177,16 @@ public class ArzonLookupService {
 	        log.debug("Get image... {} - {}", imgUrl, response.getStatusLine());
 	        if (response.getStatusLine().getStatusCode() != 200) {
 	        	log.warn("Fail to save cover, {}", response.getStatusLine().getStatusCode());
-				return CompletableFuture.completedFuture(new Boolean(false));
+				return CompletableFuture.completedFuture(null);
 	        }
 	        
 			Path target = Paths.get(imageLocation, title + ".jpg");
 			Files.copy(response.getEntity().getContent(), target, StandardCopyOption.REPLACE_EXISTING);
 			log.info("Save cover, {}", imageLocation);
-			return CompletableFuture.completedFuture(new Boolean(true));
+			return CompletableFuture.completedFuture(target.toFile());
 		} catch (IOException e) {
 			log.error("Fail to look up cover", e);
-			return CompletableFuture.completedFuture(new Boolean(false));
+			return CompletableFuture.completedFuture(null);
 		} finally {
 		    try {
 				httpclient.close();

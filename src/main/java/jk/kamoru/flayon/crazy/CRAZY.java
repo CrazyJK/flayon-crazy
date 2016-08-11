@@ -8,6 +8,8 @@ public interface CRAZY {
 	
 	public static final String SUFFIX_SUBTITLES = "smi,srt,ass,smil";
 
+	public static final String SUFFIX_TORRENT = "torrent";
+
 	public static final String STAGE = "Stage";
 	
 	public static final String COVER = "Cover";
