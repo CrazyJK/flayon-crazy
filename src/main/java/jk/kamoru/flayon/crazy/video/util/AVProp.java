@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
  * usage) private AVProp prop = AVProp.getInstance();<br>
  * properties file location is /resource/av.[hostname].properties
  * @author kamoru
- *
+ * @deprecated
+ * 
  */
 public class AVProp implements Serializable {
 

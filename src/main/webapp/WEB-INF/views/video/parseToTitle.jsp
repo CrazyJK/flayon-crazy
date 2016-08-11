@@ -61,7 +61,7 @@ function saveCoverAll() {
 			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
-		<a class="btn btn-xs btn-default" onclick="saveCoverAll()">All Save</a>
+		<a class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</a>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">

@@ -55,6 +55,10 @@ function goTorrentSearch(opus) {
 		fnMarkChoice(opus);
 	}
 	$("#check-" + opus).addClass("clicked");
+	
+	var totalVideoCount = parseInt($("#totalVideoCount").html());
+	$("#totalVideoCount").html(--totalVideoCount);
+	
 }
 /*
  * cadidate파일을 누르면, form에의해 submit되면서 숨기고, 카운트를 줄인다.
@@ -85,16 +89,16 @@ function fnChangeMode(mode) {
 
 <div id="header_div" class="box form-inline">
 	<label>
-		<s:message code="video.total"/> <s:message code="video.video"/> <span class="badge">${videoList.size()}</span>
+		<s:message code="video.total"/> <s:message code="video.video"/> <small id="totalVideoCount" class="badge">${videoList.size()}</small>
 	</label>
-	<label> 
+	<label>
 		Candidate <span class="badge" id="totalCandidatedVideo"></span>
 	</label>
 	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
 	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
-	<input id="searchInput" class="form-control input-sm" placeHolder="Search"/>
+	<input type="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 	<label>
-		<a class="btn btn-xs btn-link" href="?getAllTorrents=true">Get All Torrents</a>
+		<a class="btn btn-xs btn-primary" href="?getAllTorrents=true">Get All Torrents</a>
 	</label>
 </div>
 

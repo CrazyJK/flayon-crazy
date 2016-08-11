@@ -41,6 +41,7 @@ import org.jsoup.select.Elements;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import jk.kamoru.flayon.crazy.video.VideoException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -152,8 +153,7 @@ public class ArzonLookupService implements WebFileLookupService {
 			Elements item = document.select("#item");
 			Elements ankers = item.select("div.pictlist dl.hentry dt a");
 			if (ankers == null || ankers.isEmpty()) {
-				log.warn("Not found : {}", opus);
-				return CompletableFuture.completedFuture(null);
+				throw new VideoException("Not found list : " + opus);
 			}
 			
 			String firstItemUri = ankers.get(0).attr("href");
@@ -176,8 +176,7 @@ public class ArzonLookupService implements WebFileLookupService {
 			response = httpclient.execute(httpGetImage);
 	        log.debug("Get image... {} - {}", imgUrl, response.getStatusLine());
 	        if (response.getStatusLine().getStatusCode() != 200) {
-	        	log.warn("Fail to save cover, {}", response.getStatusLine().getStatusCode());
-				return CompletableFuture.completedFuture(null);
+				throw new VideoException("Fail to save cover : " + opus + " HTTP " + response.getStatusLine().getStatusCode());
 	        }
 	        
 			Path target = Paths.get(imageLocation, title + ".jpg");
@@ -186,6 +185,9 @@ public class ArzonLookupService implements WebFileLookupService {
 			return CompletableFuture.completedFuture(target.toFile());
 		} catch (IOException e) {
 			log.error("Fail to look up cover", e);
+			return CompletableFuture.completedFuture(null);
+		} catch (VideoException e) {
+			log.warn(e.getMessage());
 			return CompletableFuture.completedFuture(null);
 		} finally {
 		    try {

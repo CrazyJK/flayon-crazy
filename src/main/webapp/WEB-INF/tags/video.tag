@@ -49,9 +49,13 @@ if (view.equalsIgnoreCase("video")) {
 %>
 	<c:forEach items="${video.actressList}" var="actress">
 		<span class="${cssClass}" style="margin-right:3px;"> 
-			<span title="${actress}"
-				onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-			<c:if test="${mode eq 'l'}">
+			<c:if test="${mode ne 'f'}">
+				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+			</c:if>
+			<c:if test="${mode eq 'f'}">
+				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
+			</c:if>
+			<c:if test="${mode eq 'l' || mode eq 'f'}">
 				<span title="age">${actress.age}</span> 
 				<span title="set Favorite actress" 
 					onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>

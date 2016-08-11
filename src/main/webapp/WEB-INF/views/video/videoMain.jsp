@@ -407,7 +407,7 @@ function fnViewBGImage() {
 									<jk:video video="${video}" view="opus" mode="l"/>
 									<jk:video video="${video}" view="release" mode="l"/>
 									<jk:video video="${video}" view="download" mode="l"/></h4>
-								<h4><jk:video video="${video}" view="actress" mode="l"/></h4>
+								<h4><jk:video video="${video}" view="actress" mode="f"/></h4>
 								<h5><jk:video video="${video}" view="score" mode="l"/>
 									<jk:video video="${video}" view="video" mode="l"/>
 									<jk:video video="${video}" view="cover" mode="l"/>

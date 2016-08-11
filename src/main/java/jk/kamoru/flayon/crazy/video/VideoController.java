@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.crazy.AbstractController;
+import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.domain.Action;
@@ -50,7 +50,7 @@ import jk.kamoru.flayon.crazy.video.util.VideoUtils;
  */
 @Controller
 @RequestMapping("/video")
-public class VideoController extends AbstractController {
+public class VideoController extends CrazyController {
 
 	protected static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	

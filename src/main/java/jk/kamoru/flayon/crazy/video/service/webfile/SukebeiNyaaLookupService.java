@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
-import jk.kamoru.flayon.crazy.CrazyException;
+import jk.kamoru.flayon.crazy.video.VideoException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,8 +65,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 			if (list.isEmpty()) {
 				Elements viewdownloadbutton = document.select(".viewdownloadbutton");
 				if (viewdownloadbutton.isEmpty()) {
-					log.warn("Not found : {}", opus);
-					throw new CrazyException("Not found list : " + opus);
+					throw new VideoException("Not found list : " + opus);
 				}
 				selectedUrl = viewdownloadbutton.select("a").attr("href");
 				selectedSize = megaBytes(document.select("table.viewtable td.vtop").last().text());
@@ -88,9 +87,11 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 					}
 				}
 			}
-			log.info("selected : {} - {} - {}MB", selectedName, selectedUrl, selectedSize);
 			if (selectedUrl == null) {
-				throw new CrazyException("no selected download url : " + opus);
+				throw new VideoException("no selected download url : " + opus);
+			}
+			else {
+				log.info("selected : {} - {}MB - {}", selectedUrl, selectedSize, selectedName);
 			}
 			
 			// 선택된 row에서 torrent 다운로드
@@ -99,8 +100,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 			response = httpclient.execute(downloadHttpGet);
 	        log.info("Get torrent... {} - {}", downloadUrl, response.getStatusLine());
 	        if (response.getStatusLine().getStatusCode() != 200) {
-	        	log.warn("Fail to save torrent, {}", response.getStatusLine().getStatusCode());
-	        	throw new CrazyException("Fail to save torrent file : " + opus + " HTTP " + response.getStatusLine().getStatusCode());
+	        	throw new VideoException("Fail to save torrent file : " + opus + " HTTP " + response.getStatusLine().getStatusCode());
 	        }
 
 	        Path target = Paths.get(saveLocation, String.format("%s_%s.torrent", title, selectedSize));
@@ -109,16 +109,16 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 			
 			try {
 				Torrent torrent = SharedTorrent.load(target.toFile());
-				log.info("Torrent : {}, {}, {}", torrent.getName(), torrent.getFilenames(), FileUtils.byteCountToDisplaySize(torrent.getSize()));
+				log.info("Torrent : {}\n{}\n{}", torrent.getName(), torrent.getFilenames(), FileUtils.byteCountToDisplaySize(torrent.getSize()));
 			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
+				log.error("Fail to read torrent info", e);
 			}
 			
 			return CompletableFuture.completedFuture(target.toFile());
 		} catch (IOException e) {
 			log.error("Fail to look up torrent", e);
 			return CompletableFuture.completedFuture(null);
-		} catch (CrazyException e) {
+		} catch (VideoException e) {
 			log.warn(e.getMessage());
 			return CompletableFuture.completedFuture(null);
 		} finally {

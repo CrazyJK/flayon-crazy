@@ -46,6 +46,11 @@ var neon = ${empty param.neon ? false : param.neon};
 
 $(document).ready(function() {
 
+	// set .box color
+	$(".box").each(function() {
+		$(this).css("background-color", randomColor(0.3));
+	});
+	
 	//set rank color
  	$('input[type="range"]').each(function() {
  		fnRankColor($(this));

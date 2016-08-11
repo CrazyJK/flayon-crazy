@@ -18,6 +18,14 @@ function overviewSave() {
 	var frm = document.forms['overviewFrm'];
 	frm.submit();
 }
+function resizeSecondDiv() {
+	var offset = 50;
+	var windowHeight = $(window).outerHeight();
+	var header = $(".btn").outerHeight();
+	calculatedDivHeight = windowHeight - header - offset;
+	$(".overviewTxt").outerHeight(calculatedDivHeight);
+
+}
 </script>
 </head>
 <body>

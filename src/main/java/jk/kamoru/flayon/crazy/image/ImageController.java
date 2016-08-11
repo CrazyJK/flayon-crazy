@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.crazy.AbstractController;
+import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.ImageType;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/image")
 @Slf4j
-public class ImageController extends AbstractController {
+public class ImageController extends CrazyController {
 
 	private static final String Cookie_LAST_IMAGE_INDEX = "lastImageNo";
 
