@@ -827,18 +827,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	public List<Video> torrent(Boolean getAllTorrents) {
 		log.debug("torrent");
 		
-		List<Video> list = new ArrayList<>();
-		for (Video video : videoDao.getVideoList())
-			if (!video.isExistVideoFileList()) {
-				video.setSortMethod(Sort.VC);
-				list.add(video);
-			}
-		
+		List<Video> list = videoDao.getVideoList().stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
 		log.debug("  need torrent videos - {}", list.size());
 		
 		// CANDIDATE_PATHS에서 찾은 파일들
 		List<File> foundFiles = new ArrayList<>();
-
 		log.info("Candidate Scan... {}", Arrays.toString(CANDIDATE_PATHS));
 		for (String candidatePath : CANDIDATE_PATHS) {
 		
@@ -850,9 +843,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			}
 		
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
-			log.trace("extensions - {}", Arrays.toString(extensions));
-			
-			Collection<File> found = FileUtils.listFiles(candidateDirectory, new String[]{"torrent", "TORRENT"}, true);
+			Collection<File> found = FileUtils.listFiles(candidateDirectory, extensions, true);
 			log.info("  found {} cadidates file in [{}]", found.size(), candidateDirectory);
 			
 			foundFiles.addAll(found);
@@ -900,8 +891,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			}
 		}
-		Collections.sort(list);
-		return list;
+
+		Comparator<Video> byCandidates = (v2, v1) -> Integer.compare(v1.getVideoCandidates().size(), v2.getVideoCandidates().size());
+		Comparator<Video> byTorrents = (v2, v1) -> Integer.compare(v1.getTorrents().size(), v2.getTorrents().size());
+		Comparator<Video> byOpus = (v1, v2) -> v1.getOpus().compareTo(v2.getOpus());
+		return list.stream().sorted(byCandidates.thenComparing(byTorrents).thenComparing(byOpus)).collect(Collectors.toList());
+
 	}
 
 	@Override

@@ -17,26 +17,19 @@
 .clicked {
 	background-color: lightgreen;
 }
+#header_div .label {
+	margin-right: .6em;
+	font-size: 100%;
+}
 </style>
 <script type="text/javascript">
 var totalCandidatedVideo = 0;
+var havingTorrents = 0;
 var MODE_TORRENT = 1;
 var MODE_CANDIDATED = 2;
 var isHideClickedTorrentButton = false;
 
-$(document).ready(function(){
-	$("#totalCandidatedVideo").html(totalCandidatedVideo);
-	
-	$("#searchInput").bind("keyup", function() {
-		var keyword = $(this).val();
-		$(".fullname").each(function() {
-			if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) > -1)
-				$(this).parent().parent().parent().show();
-			else
-				$(this).parent().parent().parent().hide();
-		});
-	});
-});
+$(document).ready(function(){});
 
 /*
  * 선택된 토렌트 찾기
@@ -88,14 +81,23 @@ function fnChangeMode(mode) {
 <div class="container-fluid">
 
 <div id="header_div" class="box form-inline">
-	<label>
-		<s:message code="video.total"/> <s:message code="video.video"/> <small id="totalVideoCount" class="badge">${videoList.size()}</small>
+	<label class="label label-info label-xs">
+		<s:message code="video.total"/> <s:message code="video.video"/> <i id="totalVideoCount">${videoList.size()}</i>
 	</label>
-	<label>
-		Candidate <span class="badge" id="totalCandidatedVideo"></span>
+	<label class="label label-primary">
+		Candidate <i id="totalCandidatedVideo"></i>
 	</label>
-	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File</label>
-	<label class="btn btn-xs btn-default"><input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent</label>
+	<label class="label label-warning">
+		Having torrents <i id="havingTorrents"></i>
+	</label>
+	<div class="btn-group">
+		<label class="btn btn-xs btn-default">
+			<input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_CANDIDATED);" checked="checked"/>File
+		</label>
+		<label class="btn btn-xs btn-default">
+			<input type="radio" name="mode" class="sr-only" onclick="fnChangeMode(MODE_TORRENT);"/>Torrent
+		</label>
+	</div>
 	<input type="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 	<label>
 		<a class="btn btn-xs btn-primary" href="?getAllTorrents=true">Get All Torrents</a>
@@ -106,41 +108,45 @@ function fnChangeMode(mode) {
 	<div id="forCandidate">
 		<table class="table table-condensed table-hover table-bordered">
 			<c:if test="${empty videoList}">
-			<tr>
-				<td>
-					No Video
-				</td>
-			</tr>
+				<tr><td>No Video</td></tr>
 			</c:if>
 			<c:forEach items="${videoList}" var="video" varStatus="status">
-			<tr id="check-${video.opus}" class="nowrap">
-				<td style="width: 40px;" class="text-right">
-					${status.count}
-				</td>
-				<td style="width: 70px;">
-					<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Torrent
-						<small class="badge">${video.torrents.size()}</small>
-					</button>
-				</td>
-				<td style="min-width:450px; width:500px; max-width:600px;">
-					<div class="nowrap">
-						<small id="fullname-${video.opus}" class="text-primary" onclick="fnViewVideoDetail('${video.opus}')">${video.fullname}</small>
-					</div>
-				</td>
-				<td>
-					<c:forEach items="${video.videoCandidates}" var="candidate">
-					<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
-						<input type="hidden" name="path" value="${candidate.absolutePath}"/>
-						<button type="submit" class="btn btn-xs btn-default" onclick="fnSelectCandidateVideo('${video.opus}');">${candidate.name}</button>
-					</form>
-					<script type="text/javascript">
-						totalCandidatedVideo += 1;	
-					</script>
-					</c:forEach>
-				</td>
-			</tr>
+				<tr id="check-${video.opus}" class="nowrap">
+					<td style="width: 40px;" class="text-right">
+						${status.count}
+					</td>
+					<td style="width: 70px;">
+						<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Torrent
+							<small class="badge">${video.torrents.size()}</small>
+						</button>
+						<script type="text/javascript">
+							havingTorrents += (${video.torrents.size()} > 0) ? 1 : 0;
+						</script>
+					</td>
+					<td style="min-width:450px; width:500px; max-width:600px;">
+						<div class="nowrap">
+							<small id="fullname-${video.opus}" class="text-primary" onclick="fnViewVideoDetail('${video.opus}')">${video.fullname}</small>
+						</div>
+					</td>
+					<td>
+						<c:forEach items="${video.videoCandidates}" var="candidate">
+						<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
+							<input type="hidden" name="path" value="${candidate.absolutePath}"/>
+							<button type="submit" class="btn btn-xs btn-default" onclick="fnSelectCandidateVideo('${video.opus}');">${candidate.name}</button>
+						</form>
+						<script type="text/javascript">
+							totalCandidatedVideo += 1;	
+						</script>
+						</c:forEach>
+					</td>
+				</tr>
 			</c:forEach>
 		</table>
+		<script type="text/javascript">
+		$("#totalCandidatedVideo").html(totalCandidatedVideo);
+		$("#havingTorrents").html(havingTorrents);
+		console.log(totalCandidatedVideo, havingTorrents);
+		</script>
 	</div>
 	
 	<div id="forTorrent" style="display:none;">

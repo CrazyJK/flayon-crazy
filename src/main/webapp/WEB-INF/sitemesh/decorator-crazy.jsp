@@ -47,7 +47,7 @@ var neon = ${empty param.neon ? false : param.neon};
 $(document).ready(function() {
 
 	// set .box color
-	$(".box").each(function() {
+	$("#header_div, #content_div").each(function() {
 		$(this).css("background-color", randomColor(0.3));
 	});
 	

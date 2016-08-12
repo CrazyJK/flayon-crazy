@@ -55,6 +55,12 @@ label {
 .float-right {
 	float: right;
 }
+.text-red {
+	color: red;
+}
+.text-bold {
+	font-weight: bold;
+}
 
 /* bootstrap override */
 .table {
@@ -80,10 +86,6 @@ select.input-sm, .input-sm {
 	/* width: auto; */
 	display: inline-block;
 }
-
-.text-red {
-	color: red;
-}
-.text-bold {
-	font-weight: bold;
+.badge {
+	background-color: #9e3737;
 }

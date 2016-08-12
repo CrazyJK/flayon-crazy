@@ -450,18 +450,30 @@ function fnViewBGImage() {
 			</ol>
 		</c:when>
 		<c:otherwise>
-			<ol>
-			<c:forEach items="${videoList}" var="video">
-				<c:if test="${video.videoFileList.size() > 1 }">
-					<li><b class="badge">${video.videoFileList.size()}</b> 
-						<label class="label label-plain">${video.opus}</label>
-						<c:forEach items="${video.videoFileList}" var="file">
-							<br/><span class="label label-info" onclick="fnPlay('${video.opus}')">${file}</span>
-						</c:forEach>
+			<div class="">
+				<ol>
+				<c:forEach items="${videoList}" var="video">
+					<c:if test="${video.videoFileList.size() > 1 }">
+						<li><b class="badge">${video.videoFileList.size()}</b> 
+							<label class="label label-plain">${video.opus}</label>
+							<c:forEach items="${video.videoFileList}" var="file">
+								<br/><span class="label label-info" onclick="fnPlay('${video.opus}')">${file}</span>
+							</c:forEach>
+						</li>
+					</c:if>
+				</c:forEach>
+				</ol>
+				<ul class="list-group">
+				<c:forEach items="${videoList}" var="video">
+					<li class="list-group-item">
+						<div class="btn btn-info">
+							<span class="glyphicon glyphicon-film text-red"></span>
+							${video.fullname}
+						</div>
 					</li>
-				</c:if>
-			</c:forEach>
-			</ol>
+				</c:forEach>
+				</ul>
+			</div>
 		</c:otherwise>
 	</c:choose>
 	</div>
