@@ -103,7 +103,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 	        	throw new VideoException("Fail to save torrent file : " + opus + " HTTP " + response.getStatusLine().getStatusCode());
 	        }
 
-	        Path target = Paths.get(saveLocation, String.format("%s_%s.torrent", title, selectedSize));
+	        Path target = Paths.get(saveLocation, String.format("[%s]%s_%s.torrent", opus, StringUtils.substring(title, 0, 20), selectedSize));
 			Files.copy(response.getEntity().getContent(), target, StandardCopyOption.REPLACE_EXISTING);
 			log.info("Save torrent, {}", saveLocation);
 			
