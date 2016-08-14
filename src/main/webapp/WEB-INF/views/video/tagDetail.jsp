@@ -43,7 +43,7 @@ function fnSaveTagInfo() {
 	<div class="form-group box" style="padding-left: 60px;">
 		<ul class="list-inline">
 			<c:forEach items="${tag.videoList}" var="video">
-				<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 			</c:forEach>
 		</ul>
 	</div>

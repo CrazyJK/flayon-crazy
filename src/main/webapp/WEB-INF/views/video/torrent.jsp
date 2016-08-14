@@ -19,7 +19,6 @@
 }
 #header_div .label {
 	margin-right: .6em;
-	font-size: 100%;
 }
 </style>
 <script type="text/javascript">
