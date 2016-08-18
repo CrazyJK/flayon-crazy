@@ -57,7 +57,6 @@ public class VideoBatch extends CrazyProperties {
 	public synchronized void batchVideoSource() {
 		
 		logger.info("BATCH Video START");
-		long startTime = System.currentTimeMillis();
 
 		logger.info("  BATCH : delete lower rank video [{}]", DELETE_LOWER_RANK_VIDEO);
 		if (DELETE_LOWER_RANK_VIDEO)
@@ -80,8 +79,7 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("  BATCH : reload");
 		videoService.reload();
 		
-		long elapsedTime = System.currentTimeMillis() - startTime;
-		logger.info("BATCH Video END. Elapsed time : {} ms", elapsedTime);
+		logger.info("BATCH Video END");
 	}
 	
 	@Scheduled(fixedDelay = 1000 * 60)
