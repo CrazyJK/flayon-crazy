@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import jk.kamoru.flayon.boot.scheduling.SimpleWatchDirectory;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableAsync
+@EnableAspectJAutoProxy
 @Slf4j
 public class CrazyConfig {
 
