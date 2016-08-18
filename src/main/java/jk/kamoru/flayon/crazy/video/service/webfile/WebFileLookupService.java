@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Async;
 
 /**
  * 비디오 관련 웹의 파일을 찾아 다운로드<br>
- * @EnableAsync 설정이 되어 있으면 비동기로 수행
  * @author kamoru
  *
  */
@@ -15,6 +14,7 @@ public interface WebFileLookupService {
 
 	/**
 	 * 파일 찾아 다운로드 
+	 * <code>@EnableAsync</code> 설정이 되어 있으면 비동기로 수행
 	 * @param opus 찾을 키워드
 	 * @param title 저장할 파일에 사용될 이름
 	 * @param saveLocation 저장할 위치
