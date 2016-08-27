@@ -48,17 +48,15 @@ if (view.equalsIgnoreCase("video")) {
 } else if (view.equalsIgnoreCase("actress")) {
 %>
 	<c:forEach items="${video.actressList}" var="actress">
-		<span class="${cssClass}" style="margin-right:3px;"> 
+		<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
 			<c:if test="${mode ne 'f'}">
 				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 			</c:if>
 			<c:if test="${mode eq 'f'}">
+				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
-			</c:if>
-			<c:if test="${mode eq 'l' || mode eq 'f'}">
 				<span title="age">${actress.age}</span> 
-				<span title="set Favorite actress" 
-					onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				<span title="<s:message code="video.find-info.actress"/>" 
 					onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
 			</c:if>

@@ -30,7 +30,7 @@
 		class="item <%=itemCssClass %>" style="margin:0; padding:0;"
 		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">
 		<form:checkbox path="selectedActress" id="selectedActress${count}" value="${actress.name}" cssClass="sr-only"/>
-		<span class="label label-default item" style="padding: 5px; margin: 5px;" 
+		<span class="label label-default item ${actress.favorite ? 'favorite' : ''}" style="padding: 5px; margin: 5px;" 
 			id="checkbox-selectedActress${count}">${actress.name} <i>${fn:length(actress.videoList)}</i></span>
 	</label>
 <%
@@ -38,7 +38,7 @@
 %>
 	<span style="background-color:#fff;" data-toggle="tooltip"
 		onclick="fnViewActressDetail('${actress.name}')" 
-		class="item <%=itemCssClass %> box box-small" 
+		class="item <%=itemCssClass %> box box-small ${actress.favorite ? 'favorite' : ''}" 
 		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}"
 			>${actress.name} <small>${fn:length(actress.videoList)}</small></span>
 <%

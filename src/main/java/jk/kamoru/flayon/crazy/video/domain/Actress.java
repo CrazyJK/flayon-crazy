@@ -83,8 +83,8 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	
 	@Override
 	public String toString() {
-		return String.format("%s(%s) B:%s S:%s D:%s H:%scm F:%s S:%s V:%s",
-						name, localName, birth, bodySize, debut, height, favorite, getScore(), videoList.size());
+		return String.format("%s%s %s %s %s %s %ss %sv",
+						name, StringUtils.isEmpty(localName) ? "" : "("+localName+")", birth, bodySize, debut, StringUtils.isEmpty(height) ? "" : height + "cm", getScore(), videoList.size());
 	}
 
 	@Override

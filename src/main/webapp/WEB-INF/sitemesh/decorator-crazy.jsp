@@ -43,6 +43,7 @@ var urlSearchTorrent = '${urlSearchTorrent}';
 var tSec = 1;
 var timer;
 var neon = ${empty param.neon ? false : param.neon};
+var bgChangeInterval = 60;
 
 $(document).ready(function() {
 
@@ -76,14 +77,21 @@ $(document).ready(function() {
 
 	resizeDivHeight();
 
+	var bgImageChange;
 	if (bgContinue) {
+		$("#bgChangeInterval").val(bgChangeInterval);
 		setBackgroundImage();
-		setInterval(
-				function() {
-					setBackgroundImage();
-				}, 
-				60*1000);
+		bgImageChange = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 	}
+	
+	$("#bgChangeInterval").on("keyup", function() {
+		bgChangeInterval = parseInt($(this).val());
+		clearInterval(bgImageChange);
+		setBackgroundImage();
+		bgImageChange = setInterval(setBackgroundImage, bgChangeInterval * 1000);
+		console.log("bgChangeInterval", bgChangeInterval, bgImageChange);
+	});
+	
 	// bootstrap tooltip initialize
 	$('[data-toggle="tooltip"]').tooltip(); 
 
@@ -286,6 +294,9 @@ window.addEventListener('load', function(e) {
 	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
 		<span class="blink-1 float-right" onclick="setBackgroundImage();">NEXT</span>
 		<span class="blink-2 text-center" onclick="fnBGImageView();">VIEW</span>
+		<span class="blink-4">
+			<input id="bgChangeInterval" style="background-color: rgba(0,0,0,0); border: 0; width: 20px; text-align: right; color: cyan;"/>s
+		</span>
 		<span class="blink-3 float-left" onclick="fnBGImageDELETE();">DELETE</span>
 	</div>
 
