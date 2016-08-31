@@ -810,15 +810,29 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			log.trace("    arrange video {}", opus);
 			
 			// if no cover, find archive
-			if (video.isExistVideoFileList() && !video.isExistCoverFile()) {
-				try {
+			if (video.isExistVideoFileList()) {
+				// cover
+				if (!video.isExistCoverFile()) {
 					Video archiveVideo = videoDao.getArchiveVideo(opus);
-					if (archiveVideo != null && archiveVideo.isExistCoverFile()) {
-						video.setCoverFile(archiveVideo.getCoverFile());
-						log.info("found in archive storage - {}", opus);
+					if (archiveVideo != null) {
+						if (archiveVideo.isExistCoverFile()) {
+							video.setCoverFile(archiveVideo.getCoverFile());
+							log.info("found cover in archive storage - {}", opus);
+						}
+					}			
+				}
+				// subtitles
+				if (!video.isExistSubtitlesFileList()) {
+					Video archiveVideo = videoDao.getArchiveVideo(opus);
+					if (archiveVideo != null) {
+						if (archiveVideo.isExistSubtitlesFileList()) {
+							video.setSubtitlesFileList(archiveVideo.getSubtitlesFileList());
+							log.info("found subtitles in archive storage - {}", opus);
+						}
 					}
-				} catch (VideoException e) {}
+				}
 			}
+			
 			videoDao.arrangeVideo(opus);
 		}
 	}
