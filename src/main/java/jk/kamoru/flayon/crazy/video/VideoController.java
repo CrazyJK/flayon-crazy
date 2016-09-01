@@ -742,4 +742,9 @@ public class VideoController extends CrazyController {
 	public void saveCover(@PathVariable String opus, @RequestParam String title) {
 		videoService.saveCover(opus, title);
 	}
+	
+	@RequestMapping("/historyOnDB")
+	public void historyOnDB(Model model) {
+		model.addAttribute(historyService.findOnDB());
+	}
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.dao.HistoryDao;
+import jk.kamoru.flayon.crazy.video.dao.HistoryRepository;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.History;
@@ -30,11 +31,13 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 public class HistoryServiceImpl implements HistoryService {
 
 	@Autowired HistoryDao historyDao;
-	
+	@Autowired HistoryRepository historyRepository;
+
 	@Override
 	public void persist(History history) {
 		try {
 			historyDao.persist(history);
+			historyRepository.save(history);
 		} catch (IOException e) {
 			throw new CrazyException("history persist error", e);
 		}
@@ -127,6 +130,11 @@ public class HistoryServiceImpl implements HistoryService {
 			}
 		}
 		return data.values();
+	}
+
+	@Override
+	public List<History> findOnDB() {
+		return historyRepository.findAll();
 	}
 	
 }

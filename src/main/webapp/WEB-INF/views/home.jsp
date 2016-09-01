@@ -34,6 +34,7 @@ $(document).ready(function() {
 	
 	// change inverse
 	$(".nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
+	$("ul.dropdown-menu").css("background-color", "rgba(0, 0, 0, 0.5)");
 	
 	// neon effect
 	var styles = {color: "#eee", fontWeight: "bold"};

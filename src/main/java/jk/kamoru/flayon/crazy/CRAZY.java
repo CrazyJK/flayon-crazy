@@ -22,4 +22,5 @@ public interface CRAZY {
 
 	public static final String ENCODING = "UTF-8";
 
+	public static final String LINE = System.getProperty("line.separator");
 }

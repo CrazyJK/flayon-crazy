@@ -77,5 +77,7 @@ public interface HistoryService {
 	List<History> getDeduplicatedList();
 
 	Collection<HistoryData> getGraphData(String pattern);
+
+	List<History> findOnDB();
 	
 }

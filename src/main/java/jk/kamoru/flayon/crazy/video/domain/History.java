@@ -5,18 +5,32 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.Data;
 
+@Entity
 @Data
 public class History implements Serializable {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
 	private Date date;
 	private String opus;
 	private Action action;
 	private String desc;
+	
+	@Transient
 	private Video video;
 	
 	public History() {}
@@ -56,7 +70,7 @@ public class History implements Serializable {
 				video.getOpus(), 
 				action, 
 				desc, 
-				System.getProperty("line.separator"));
+				CRAZY.LINE);
 	}
 
 }
