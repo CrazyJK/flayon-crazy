@@ -45,6 +45,7 @@
 			            <li><a href="<c:url value="/flayon/colors"/>"><span class="glyphicon glyphicon-leaf"></span> Standard color</a></li>
 			            <li><a href="<c:url value="/flayon/portscan"/>"><span class="glyphicon glyphicon-leaf"></span> Port scan</a></li>
 			            <li><a href="<c:url value="/flayon/logviewt"/>"><span class="glyphicon glyphicon-leaf"></span> Log view</a></li>
+			            <li><a href="<c:url value="/flayon/faceoff"/>"><span class="glyphicon glyphicon-leaf"></span> Face off</a></li>
           			</ul>
         		</li>
         		<li class="dropdown">
