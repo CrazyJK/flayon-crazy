@@ -36,6 +36,11 @@ try {
 <script type="text/javascript">
 $(document).ready(function() {
 	$('h1').pulse();
+	
+	// bootstrap tooltip, popover initialize
+	$('[data-toggle="tooltip"]').tooltip(); 
+	$('[data-toggle="popover"]').popover();
+
 });
 </script>
 <sitemesh:write property="head" />

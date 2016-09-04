@@ -39,6 +39,7 @@
 			            <li><a href="<c:url value="/flayon/memory"/>"><span class="glyphicon glyphicon-leaf"></span> Memory</a></li>
 			            <li><a href="<c:url value="/flayon/threaddump"/>"><span class="glyphicon glyphicon-leaf"></span> Thread dump</a></li>
 			            <li><a href="<c:url value="/flayon/webcontext"/>"><span class="glyphicon glyphicon-leaf"></span> Web attribute</a></li>
+			            <li><a href="<c:url value="/flayon/accesslog"/>"><span class="glyphicon glyphicon-leaf"></span> Access log</a></li>
 			            <li><a href="<c:url value="/flayon/error"/>"><span class="glyphicon glyphicon-leaf"></span> Error</a></li>
 			            <li class="divider"></li>
 			            <li class="dropdown-header"><span class="glyphicon glyphicon-tag"></span> Utility</li>

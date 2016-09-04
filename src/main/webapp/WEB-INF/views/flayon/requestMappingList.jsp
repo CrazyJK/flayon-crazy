@@ -33,7 +33,6 @@ td {
     margin-right: -20px;
     margin-left: -20px;
 }
-}
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
