@@ -24,6 +24,7 @@ $(document).ready(function(){
 		img1Change(100-val);
 		img2Change(val);
     });
+    $("img").addClass("img-rounded");
 	img1Change(100);
 	img2Change(100);
 });
