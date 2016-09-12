@@ -82,20 +82,22 @@ function fnToggleFileinfo() {
 	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 	
 	<c:forEach items="${video.actressList}" var="actress">
-	<dd class="box">
-		<jk:actress actress="${actress}" view="detail"/>
-		<div class="form-group text-center">
-			<ul class="list-inline">
-				<c:forEach items="${actress.videoList}" var="video">
-					<c:choose>
-						<c:when test="${video.opus != opus }">
-							<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-						</c:when>
-					</c:choose>
-				</c:forEach>
-			</ul>
-		</div>
-	</dd>
+		<c:if test="${actress.name ne 'Amateur'}">
+			<dd class="box">
+				<jk:actress actress="${actress}" view="detail"/>
+				<div class="form-group text-center">
+					<ul class="list-inline">
+						<c:forEach items="${actress.videoList}" var="video">
+							<c:choose>
+								<c:when test="${video.opus != opus }">
+									<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</ul>
+				</div>
+			</dd>
+		</c:if>
 	</c:forEach>
 </dl>
 

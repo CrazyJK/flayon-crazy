@@ -96,11 +96,13 @@ function fnSaveActressInfo() {
 		<span class="label label-info">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
 	</div>
 	<div class="form-group text-center">
-		<ul class="list-inline">
-			<c:forEach items="${actress.videoList}" var="video">
-				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-			</c:forEach>
-		</ul>
+		<c:if test="${actress.name ne 'Amateur'}">
+			<ul class="list-inline">
+				<c:forEach items="${actress.videoList}" var="video">
+					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+				</c:forEach>
+			</ul>
+		</c:if>
 	</div>
 </form>
 

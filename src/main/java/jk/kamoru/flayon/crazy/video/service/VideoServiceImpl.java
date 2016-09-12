@@ -1070,11 +1070,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				videoDao.reload();
 				titlePartList = _titlePartList;
 			}
-			
-			// sort list
-			Collections.sort(titlePartList);
 		}
-		return titlePartList;
+		return titlePartList.stream()
+				.sorted(Comparator.comparing(TitlePart::getCheckDesc).reversed().thenComparing(Comparator.comparing(TitlePart::toString)))
+				.collect(Collectors.toList());
 	}
 	
 	@Override
@@ -1136,7 +1135,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				// do nothing
 			}
 			// sort list
-			Collections.sort(titlePartList);
+//			Collections.sort(titlePartList);
 		}
 		return titlePartList;
 	}

@@ -10,14 +10,14 @@ import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 import lombok.Data;
 
 @Data
-public class TitlePart implements Comparable<TitlePart> {
+public class TitlePart {
 	String studio;
 	String opus;
 	String title;
 	String actress;
 	String releaseDate;
 
-	Boolean check;
+	boolean check;
 	String checkDesc;
 	String checkDescShort;
 	
@@ -152,11 +152,6 @@ public class TitlePart implements Comparable<TitlePart> {
 	public String toString() {
 		return String.format("[%s][%s][%s][%s][%s]", 
 				studio, opus, title, actress, releaseDate);
-	}
-
-	@Override
-	public int compareTo(TitlePart o) {
-		return Utils.compareTo(this.toString(), o.toString());
 	}
 
 	public void setSeen() {

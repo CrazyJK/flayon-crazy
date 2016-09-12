@@ -41,12 +41,25 @@ td {
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+/* 
     $('#list').DataTable({
     	scrollY:        '60vh',
         scrollCollapse: true,
         paging:         false
     });
+ */
+
+	$("#size").on("keyup", function(e) {
+		var event = window.event || e;
+		if (event.keyCode == 13) {
+			go(${pageImpl.number});
+		}
+	});
 });
+function go(page) {
+	var size = $("#size").val();
+	this.location.href = "?size=" + size + "&page=" + page + "&sort=id,desc";
+}
 </script>
 </head>
 <body>
@@ -56,6 +69,23 @@ $(document).ready(function() {
 		<h1>Access Log Viewer</h1>
  	</div>
 
+	<ul class="pager">
+	    <c:if test="${!pageImpl.first}">
+	    <li class="previous">
+	        <a href="?page=${pageImpl.number-1}">&larr; Prev Page</a>
+	    </li>
+	    </c:if>
+	    
+	    <li><input id="size" size="4" placeholder="Size" value="${pageImpl.size}" class="text-center"/>
+	    
+	    <c:if test="${!pageImpl.last}">
+	    <li class="next">
+	        <a href="?page=${pageImpl.number+1}">Next Page &rarr;</a>
+	    </li>
+	    </c:if>
+	</ul>
+
+
 	<table id="list" class="table table-condensed">
 		<thead>
 			<tr>
@@ -64,15 +94,15 @@ $(document).ready(function() {
 				<th>RemoteAddr</th>
 				<th>Method</th>
 				<th>RequestURI</th>
-				<th>ContentType</th>
-				<th>ElapsedTime</th>
+				<th style="text-align:right">ContentType</th>
+				<th style="text-align:right">Elapsed</th>
 				<th>HandlerInfo</th>
 				<th>ExceptionInfo</th>
 				<th>ModelAndViewInfo</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${accessLogList}" var="accessLog" varStatus="accessLogStat">
+			<c:forEach items="${pageImpl.content}" var="accessLog" varStatus="accessLogStat">
 			<tr>
 				<td align="center">${accessLogStat.count}</td>
 				<td align="left"  ><fmt:formatDate pattern="yy-MM-dd hh:mm:ss" value="${accessLog.accessDate}" /></td>
@@ -89,6 +119,26 @@ $(document).ready(function() {
 			</c:forEach>
 		</tbody>
 	</table>
+
+	<div class="text-center">
+		<ul class="pagination">
+			<c:forEach var="i" begin="0" end="${pageImpl.totalPages-1}" step="1">
+				<c:if test="${i == 0 or i == pageImpl.totalPages-1 or (pageImpl.number - i < 5 and i - pageImpl.number < 5)}">
+				  	<li class="${i eq pageImpl.number ? 'active' : ''}"><a href="javascript:go(${i})">${i == 0 ? 'First ' : ''}${i == pageImpl.totalPages-1 ? 'Last ' : ''}${i+1}</a></li>
+				</c:if>
+			</c:forEach>
+		</ul>
+	</div>
+
+	<p>
+		totalElements: ${pageImpl.totalElements},
+		totalPages: ${pageImpl.totalPages},
+		first: ${pageImpl.first},
+		last: ${pageImpl.last},
+		number: ${pageImpl.number},
+		size: ${pageImpl.size},
+		numberOfElements: ${pageImpl.numberOfElements}
+	</p>
 
 </div>
 </body>
