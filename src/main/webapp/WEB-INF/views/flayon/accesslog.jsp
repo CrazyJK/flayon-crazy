@@ -75,9 +75,6 @@ function go(page) {
 	        <a href="?page=${pageImpl.number-1}">&larr; Prev Page</a>
 	    </li>
 	    </c:if>
-	    
-	    <li><input id="size" size="4" placeholder="Size" value="${pageImpl.size}" class="text-center"/>
-	    
 	    <c:if test="${!pageImpl.last}">
 	    <li class="next">
 	        <a href="?page=${pageImpl.number+1}">Next Page &rarr;</a>
@@ -94,11 +91,11 @@ function go(page) {
 				<th>RemoteAddr</th>
 				<th>Method</th>
 				<th>RequestURI</th>
-				<th style="text-align:right">ContentType</th>
+				<!-- <th style="text-align:right">ContentType</th> -->
 				<th style="text-align:right">Elapsed</th>
 				<th>HandlerInfo</th>
 				<th>ExceptionInfo</th>
-				<th>ModelAndViewInfo</th>
+				<!-- <th>ModelAndViewInfo</th> -->
 			</tr>
 		</thead>
 		<tbody>
@@ -109,12 +106,12 @@ function go(page) {
 				<td align="left"  >${accessLog.remoteAddr}</td>
 				<td align="left"  >${accessLog.method}</td>
 				<td align="left"  >${accessLog.requestURI}</td>
-				<td align="right" >${accessLog.contentType}</td>
+				<%-- <td align="right" >${accessLog.contentType}</td> --%>
 				<td align="right" ><fmt:formatNumber type="number" pattern="#,##0 ms" value="${accessLog.elapsedTime}" /></td>
 				<%-- <td align="center" title="${accessLog.handlerInfo}" data-toggle="popover" data-placement="left" data-content="${accessLog.exceptionInfo} ${accessLog.modelAndViewInfo}">Popover</td> --%>
 				<td align="left"  >${fn:replace(accessLog.handlerInfo, 'org.springframework.web.servlet.mvc.', '')}</td>
 				<td align="left"  >${accessLog.exceptionInfo}</td>
-				<td align="left"  >${accessLog.modelAndViewInfo}</td>
+				<%-- <td align="left"  >${accessLog.modelAndViewInfo}</td> --%>
 			</tr>
 			</c:forEach>
 		</tbody>
@@ -128,9 +125,10 @@ function go(page) {
 				</c:if>
 			</c:forEach>
 		</ul>
+		<div style="float: right;"><input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center"/></div>
 	</div>
 
-	<p>
+	<code>
 		totalElements: ${pageImpl.totalElements},
 		totalPages: ${pageImpl.totalPages},
 		first: ${pageImpl.first},
@@ -138,7 +136,7 @@ function go(page) {
 		number: ${pageImpl.number},
 		size: ${pageImpl.size},
 		numberOfElements: ${pageImpl.numberOfElements}
-	</p>
+	</code>
 
 </div>
 </body>
