@@ -7,7 +7,7 @@ response.setHeader("error", "true");
 response.setHeader("error.message", exception.getMessage());
 if (exception.getCause() != null)
 	response.setHeader("error.cause", exception.getCause().toString());
-response.setHeader("timestamp", new java.util.Date());
+request.setAttribute("timestamp", new java.util.Date());
 %>
 <!DOCTYPE html>
 <html>
