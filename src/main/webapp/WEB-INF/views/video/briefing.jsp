@@ -58,6 +58,9 @@ function removeLowerRankVideo() {
 function removeLowerScoreVideo() {
 	actionFrame(videoPath + '/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
 }
+function fsOpen(folder) {
+	actionFrame('/flayon/openFolder', {'folder' : folder}, 'POST', 'Open folder ' + folder);
+}
 </script>
 </head>
 <body>
@@ -116,7 +119,7 @@ function removeLowerScoreVideo() {
 					<c:choose>
 						<c:when test="${path.key ne 'Total'}">
 					<tr>
-						<td>${path.key}</td>
+						<td><a href="javascript:fsOpen('${fn:replace(path.key, '\\', '/')}')" title="open this folder">${path.key}</a></td>
 						<td class="text-right"><span class="videoCount"><fmt:formatNumber value="${path.value[0]}" type="NUMBER"/></span></td>
 						<td class="text-right"><span class="videoSize"><fmt:formatNumber value="${path.value[1] / ONE_GB}" pattern="#,##0 GB"/></span></td>
 					</tr>
