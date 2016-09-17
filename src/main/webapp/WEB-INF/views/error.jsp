@@ -29,7 +29,7 @@ response.setHeader("error.cause", exception);
   	</div>
   	
     <p>${status} : ${exception}</p>
-    <pre>${message}</pre>
+    <code>${message}</code>
 
 	<div class="text-right">
 		<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>

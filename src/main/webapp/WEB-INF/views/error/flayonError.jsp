@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s"    uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="s"   uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 Exception exception = (Exception) request.getAttribute("exception");
 response.setHeader("error", "true");
 response.setHeader("error.message", exception.getMessage());
 if (exception.getCause() != null)
 	response.setHeader("error.cause", exception.getCause().toString());
+response.setHeader("timestamp", new java.util.Date());
 %>
 <!DOCTYPE html>
 <html>
@@ -20,9 +22,11 @@ bgContinue = false;
 <div class="container">
 
  	<div class="page-header">
-	    <h1>${exception.message}</h1>
+	    <h1>${exception.message}
+	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
+	    </h1>
 	</div>
-    <pre>${exception.cause}</pre>
+    <code>${exception.cause}</code>
 
 	<div class="text-right">
 		<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
