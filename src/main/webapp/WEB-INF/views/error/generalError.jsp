@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>FlayOn Error</title>
+<title>General Error</title>
 <script type="text/javascript">
 bgContinue = false;
 </script>
