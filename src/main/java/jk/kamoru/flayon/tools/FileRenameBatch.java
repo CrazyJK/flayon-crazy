@@ -13,10 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileRenameBatch {
 
-	public static void main(String[] args) {
-		FileRenameBatch.rename("E:\\kAmOrU\\Pictures\\Girls\\Entertainer\\수지", "수지");
-
-	}
+//	public static void main(String[] args) {
+//		FileRenameBatch.rename("E:\\kAmOrU\\Pictures\\Girls\\Entertainer\\수지", "수지");
+//
+//	}
 
 	static void rename(String path, String prefixName) {
 		File filePath = new File(path);
