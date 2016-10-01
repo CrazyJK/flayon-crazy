@@ -1209,7 +1209,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			search.setRankRange(getRankRange());
 		
 		return videoDao.getArchiveVideoList().stream()
-				.filter(v -> v.match(search))
+				.filter(v -> v.matchArchive(search))
 				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
 				.collect(Collectors.toList());
 

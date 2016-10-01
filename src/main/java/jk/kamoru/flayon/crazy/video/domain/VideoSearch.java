@@ -19,18 +19,22 @@ public class VideoSearch implements Serializable {
 	 * 검색조건 : 검색어
 	 */
 	String searchText;
-	/**
-	 * 검색조건 : 추가 여부. 조건 {@link #existVideo}, {@link #existSubtitles}
-	 */
-	boolean addCond = false;
+//	/**
+//	 * 검색조건 : 추가 여부. 조건 {@link #existVideo}, {@link #existSubtitles}
+//	 */
+//	boolean addCond = false;
 	/**
 	 * 검색조건 : 비디오 존재
 	 */
-	boolean existVideo = false;
+	boolean existVideo = true;
 	/**
-	 * 검색조건 : 자막 존재
+	 * 검색조건 : 비디오 & 자막 존재
 	 */
-	boolean existSubtitles;
+	boolean existSubtitles = true;
+	/**
+	 * 검색조건 : 커버 존재
+	 */
+	boolean existCover = false;
 	/**
 	 * 검색조건 : 랭킹 범위
 	 */

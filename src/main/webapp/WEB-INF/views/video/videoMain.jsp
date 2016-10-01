@@ -51,22 +51,22 @@ function fnViewBGImage() {
 
 <div id="header_div" class="box">
 	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
-	<div id="searchDiv">
+	<div id="searchDiv" class="text-center">
 		<!-- Search : Text -->
 		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
 		<form:input path="searchText" cssClass="form-control input-sm" placeHolder="Search" style="width:120px;"/>
-		<!-- Search : Additional condition. video, subtitles -->
-		<label title="<s:message code="video.addCondition"/>">
-			<form:checkbox path="addCond" cssClass="sr-only"/>
-			<span class="label" id="checkbox-addCond1"><s:message code="video.addCondition-short"/></span>
-		</label>
+		<!-- Search : Additional condition. video, subtitles, cover -->
 		<label title="<s:message code="video.existVideo"/>">
 			<form:checkbox path="existVideo" cssClass="sr-only"/>
 			<span class="label" id="checkbox-existVideo1">V</span>
 		</label>
 		<label title="<s:message code="video.existSubtitles"/>">
 			<form:checkbox path="existSubtitles" cssClass="sr-only"/>
-			<span class="label" id="checkbox-existSubtitles1">S</span>			
+			<span class="label" id="checkbox-existSubtitles1">VS</span>			
+		</label>
+		<label title="<s:message code="video.existCover"/>">
+			<form:checkbox path="existCover" cssClass="sr-only"/>
+			<span class="label" id="checkbox-existCover1">C</span>			
 		</label>
 		<!-- Search : rank -->
 		<c:forEach items="${rankRange}" var="rank" varStatus="rankStat">

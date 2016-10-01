@@ -1138,11 +1138,28 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				|| matchTitle(search.getSearchText()) 
 				|| matchActress(search.getSearchText())
 				|| matchRelease(search.getSearchText())) 
-			&& matchExist(search.isAddCond(), search.isExistVideo(), search.isExistSubtitles()) 
+			&& matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover())
 			&& matchStudioList(search.getSelectedStudio())
 			&& matchActressList(search.getSelectedActress())
 			&& matchRank(search.getRankRange())
 			&& matchPlay(search.getPlayCount())
+			&& matchTag(search.getSelectedTag())
+			) 
+		{
+			setSortMethod(search.getSortMethod());
+			return true;
+		}
+		return false;
+	}
+
+	public boolean matchArchive(VideoSearch search) {
+		if ((matchStudio(search.getSearchText()) 
+				|| matchOpus(search.getSearchText()) 
+				|| matchTitle(search.getSearchText()) 
+				|| matchActress(search.getSearchText())
+				|| matchRelease(search.getSearchText())) 
+			&& matchStudioList(search.getSelectedStudio())
+			&& matchActressList(search.getSelectedActress())
 			&& matchTag(search.getSelectedTag())
 			) 
 		{
@@ -1180,11 +1197,14 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		return selectedStudio == null ? true : selectedStudio.contains(studio.getName());
 	}
 
-	private boolean matchExist(boolean addCond, boolean existVideo, boolean existSubtitles) {
-		return addCond
-				? (existVideo ? isExistVideoFileList() : !isExistVideoFileList())
-					&& (existSubtitles ? isExistSubtitlesFileList() : !isExistSubtitlesFileList()) 
-				: true;
+	private boolean matchExist(boolean existVideo, boolean existSubtitles, boolean existCover) {
+		if (existVideo)
+			return isExistVideoFileList() && !isExistSubtitlesFileList(); // 비디오만 있는
+		if (existSubtitles)
+			return isExistVideoFileList() && isExistSubtitlesFileList(); // 비디오와 자막이 있는
+		if (existCover)
+			return !isExistVideoFileList() && isExistCoverFile(); // 비디오 없이 커버만 있는, 자막은 고려안함
+		return false;
 	}
 
 	private boolean matchRelease(String searchText) {
