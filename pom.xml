@@ -5,10 +5,10 @@
 	
   	<groupId>jk.kamoru</groupId>
   	<artifactId>flayon-crazy</artifactId>
-  	<version>0.0.1-SNAPSHOT</version>
+  	<version>5.8.8-1.1</version>
   	<packaging>jar</packaging>
   
-  	<name>flayon crazy</name>
+  	<name>FlayOn Crazy</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
