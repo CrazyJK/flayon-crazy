@@ -66,7 +66,9 @@ function go(page) {
 <div class="container-fluid">
 
 	<div class="page-header">
-		<h1>Access Log Viewer</h1>
+		<h1>Access Log Viewer
+			<small class="badge">${pageImpl.totalElements}</small>
+		</h1>
  	</div>
 
 	<ul class="pager">
