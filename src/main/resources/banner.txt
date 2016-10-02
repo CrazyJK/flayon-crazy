@@ -43,6 +43,73 @@ ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${
 ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} 
 ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE}.${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} ${AnsiColor.BRIGHT_WHITE} 
 
-${AnsiColor.RED}  :: Flay on crazy :: ${AnsiColor.BRIGHT_BLACK}${spring-boot.formatted-version}
-  :: ${application.title} ${application.formatted-version}
-${AnsiColor.BRIGHT_BLACK}
+${AnsiColor.BLUE}
+                                                                                                                                                                                                                   
+FFFFFFFFFFFFFFFFFFFFFFlllllll                                              OOOOOOOOO                                    CCCCCCCCCCCCC                                                                              
+F::::::::::::::::::::Fl:::::l                                            OO:::::::::OO                               CCC::::::::::::C                                                                              
+F::::::::::::::::::::Fl:::::l                                          OO:::::::::::::OO                           CC:::::::::::::::C                                                                              
+FF::::::FFFFFFFFF::::Fl:::::l                                         O:::::::OOO:::::::O                         C:::::CCCCCCCC::::C                                                                              
+  F:::::F       FFFFFF l::::l   aaaaaaaaaaaaayyyyyyy           yyyyyyyO::::::O   O::::::Onnnn  nnnnnnnn          C:::::C       CCCCCCrrrrr   rrrrrrrrr   aaaaaaaaaaaaa   zzzzzzzzzzzzzzzzzyyyyyyy           yyyyyyy
+  F:::::F              l::::l   a::::::::::::ay:::::y         y:::::y O:::::O     O:::::On:::nn::::::::nn       C:::::C              r::::rrr:::::::::r  a::::::::::::a  z:::::::::::::::z y:::::y         y:::::y 
+  F::::::FFFFFFFFFF    l::::l   aaaaaaaaa:::::ay:::::y       y:::::y  O:::::O     O:::::On::::::::::::::nn      C:::::C              r:::::::::::::::::r aaaaaaaaa:::::a z::::::::::::::z   y:::::y       y:::::y  
+  F:::::::::::::::F    l::::l            a::::a y:::::y     y:::::y   O:::::O     O:::::Onn:::::::::::::::n     C:::::C              rr::::::rrrrr::::::r         a::::a zzzzzzzz::::::z     y:::::y     y:::::y   
+  F:::::::::::::::F    l::::l     aaaaaaa:::::a  y:::::y   y:::::y    O:::::O     O:::::O  n:::::nnnn:::::n     C:::::C               r:::::r     r:::::r  aaaaaaa:::::a       z::::::z       y:::::y   y:::::y    
+  F::::::FFFFFFFFFF    l::::l   aa::::::::::::a   y:::::y y:::::y     O:::::O     O:::::O  n::::n    n::::n     C:::::C               r:::::r     rrrrrrraa::::::::::::a      z::::::z         y:::::y y:::::y     
+  F:::::F              l::::l  a::::aaaa::::::a    y:::::y:::::y      O:::::O     O:::::O  n::::n    n::::n     C:::::C               r:::::r           a::::aaaa::::::a     z::::::z           y:::::y:::::y      
+  F:::::F              l::::l a::::a    a:::::a     y:::::::::y       O::::::O   O::::::O  n::::n    n::::n      C:::::C       CCCCCC r:::::r          a::::a    a:::::a    z::::::z             y:::::::::y       
+FF:::::::FF           l::::::la::::a    a:::::a      y:::::::y        O:::::::OOO:::::::O  n::::n    n::::n       C:::::CCCCCCCC::::C r:::::r          a::::a    a:::::a   z::::::zzzzzzzz        y:::::::y        
+F::::::::FF           l::::::la:::::aaaa::::::a       y:::::y          OO:::::::::::::OO   n::::n    n::::n        CC:::::::::::::::C r:::::r          a:::::aaaa::::::a  z::::::::::::::z         y:::::y         
+F::::::::FF           l::::::l a::::::::::aa:::a     y:::::y             OO:::::::::OO     n::::n    n::::n          CCC::::::::::::C r:::::r           a::::::::::aa:::az:::::::::::::::z        y:::::y          
+FFFFFFFFFFF           llllllll  aaaaaaaaaa  aaaa    y:::::y                OOOOOOOOO       nnnnnn    nnnnnn             CCCCCCCCCCCCC rrrrrrr            aaaaaaaaaa  aaaazzzzzzzzzzzzzzzzz       y:::::y           
+                                                   y:::::y                                                                                                                                      y:::::y            
+                                                  y:::::y                                                                                                                                      y:::::y             
+                                                 y:::::y                                                                                                                                      y:::::y              
+                                                y:::::y                                                                                                                                      y:::::y               
+                                               yyyyyyy                                                                                                                                      yyyyyyy                
+                                                                                                                                                                                                                   
+ _______  ___      _______  __   __  _______  __    _    _______  ______    _______  _______  __   __ 
+|       ||   |    |   _   ||  | |  ||       ||  |  | |  |       ||    _ |  |   _   ||       ||  | |  |
+|    ___||   |    |  |_|  ||  |_|  ||   _   ||   |_| |  |       ||   | ||  |  |_|  ||____   ||  |_|  |
+|   |___ |   |    |       ||       ||  | |  ||       |  |       ||   |_||_ |       | ____|  ||       |
+|    ___||   |___ |       ||_     _||  |_|  ||  _    |  |      _||    __  ||       || ______||_     _|
+|   |    |       ||   _   |  |   |  |       || | |   |  |     |_ |   |  | ||   _   || |_____   |   |  
+|___|    |_______||__| |__|  |___|  |_______||_|  |__|  |_______||___|  |_||__| |__||_______|  |___|  
+
+
+                                                                                          
+,------.,--.                  ,-----.              ,-----.                                
+|  .---'|  | ,--,--.,--. ,--.'  .-.  ',--,--,     '  .--./,--.--. ,--,--.,-----.,--. ,--. 
+|  `--, |  |' ,-.  | \  '  / |  | |  ||      \    |  |    |  .--'' ,-.  |`-.  /  \  '  /  
+|  |`   |  |\ '-'  |  \   '  '  '-'  '|  ||  |    '  '--'\|  |   \ '-'  | /  `-.  \   '   
+`--'    `--' `--`--'.-'  /    `-----' `--''--'     `-----'`--'    `--`--'`-----'.-'  /    
+                    `---'                                                       `---'     
+
+  _____ _              ___           ____                     
+ |  ___| | __ _ _   _ / _ \ _ __    / ___|_ __ __ _ _____   _ 
+ | |_  | |/ _` | | | | | | | '_ \  | |   | '__/ _` |_  / | | |
+ |  _| | | (_| | |_| | |_| | | | | | |___| | | (_| |/ /| |_| |
+ |_|   |_|\__,_|\__, |\___/|_| |_|  \____|_|  \__,_/___|\__, |
+                |___/                                   |___/ 
+
+ ________  __                     ___                ______                                 
+|_   __  |[  |                  .'   `.            .' ___  |                                
+  | |_ \_| | |  ,--.    _   __ /  .-.  \ _ .--.   / .'   \_| _ .--.  ,--.   ____    _   __  
+  |  _|    | | `'_\ :  [ \ [  ]| |   | |[ `.-. |  | |       [ `/'`\]`'_\ : [_   ]  [ \ [  ] 
+ _| |_     | | // | |,  \ '/ / \  `-'  / | | | |  \ `.___.'\ | |    // | |, .' /_   \ '/ /  
+|_____|   [___]\'-;__/[\_:  /   `.___.' [___||__]  `.____ .'[___]   \'-;__/[_____][\_:  /   
+                       \__.'                                                       \__.'    
+
+  ______ _              ____           _____                     
+ |  ____| |            / __ \         / ____|                    
+ | |__  | | __ _ _   _| |  | |_ __   | |     _ __ __ _ _____   _ 
+ |  __| | |/ _` | | | | |  | | '_ \  | |    | '__/ _` |_  / | | |
+ | |    | | (_| | |_| | |__| | | | | | |____| | | (_| |/ /| |_| |
+ |_|    |_|\__,_|\__, |\____/|_| |_|  \_____|_|  \__,_/___|\__, |
+                  __/ |                                     __/ |
+                 |___/                                     |___/ 
+
+
+${AnsiColor.RED}
+  ${application.title} ${application.formatted-version} by Spring Boot ${spring-boot.formatted-version}
+${AnsiColor.BLACK}
+                                                                                                                                                                                                                   
