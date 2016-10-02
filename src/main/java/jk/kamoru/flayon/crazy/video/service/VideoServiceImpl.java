@@ -1277,7 +1277,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
 		
 		List<File> folders = new ArrayList<>();
-		folders.add(new File(ARCHIVE_PATHS));
+		folders.add(new File(ARCHIVE_PATH));
 		for (String storage : STORAGE_PATHS)
 			folders.add(new File(storage));
 		for (String stage : STAGE_PATHS)
@@ -1427,8 +1427,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void saveCover(String opus, String title) {
-		log.info("saveCover {}, {}, {}", opus, title, STAGE_PATHS[0]);
-		CompletableFuture<File> result = arzonLookupService.get(opus, title, STAGE_PATHS[0]);
+		log.info("saveCover {}, {}, {}", opus, title, COVER_PATH);
+		CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
 		try {
 			if(result.get() == null) {
 				throw new CrazyException("not found cover : " + opus);

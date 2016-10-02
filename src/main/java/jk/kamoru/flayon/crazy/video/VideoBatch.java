@@ -84,36 +84,36 @@ public class VideoBatch extends CrazyProperties {
 	
 	@Scheduled(fixedDelay = 1000 * 60)
 	public synchronized void moveFile() {
-		logger.trace("BATCH File move START {}", Arrays.toString(PATH_MOVE_FILE));
+		logger.trace("BATCH File move START {}", Arrays.toString(MOVE_FILE_PATHS));
 
 		// 설정이 안됬거나
-		if (PATH_MOVE_FILE == null) {
+		if (MOVE_FILE_PATHS == null) {
 			logger.error("PATH_MOVE_FILE is not set");
 			return;
 		}
 		// 값이 없으면 pass
-		if (PATH_MOVE_FILE.length == 0)
+		if (MOVE_FILE_PATHS.length == 0)
 			return;
 		
 		// 3배수가 아니면
-		if (PATH_MOVE_FILE.length % 3 != 0) {
-			logger.error("PATH length is not 3 multiple", Arrays.toString(PATH_MOVE_FILE));
+		if (MOVE_FILE_PATHS.length % 3 != 0) {
+			logger.error("PATH length is not 3 multiple", Arrays.toString(MOVE_FILE_PATHS));
 			return;
 		}
 		// 2,3번째가 폴더가 아니거나
-		for (int i=0; i<PATH_MOVE_FILE.length; i++) {
+		for (int i=0; i<MOVE_FILE_PATHS.length; i++) {
 			if (i % 3 == 0)
 				continue;
 			else
-				if (!new File(PATH_MOVE_FILE[i]).isDirectory()) {
-					logger.error("PATH [{}] is not Directory", PATH_MOVE_FILE[i]);
+				if (!new File(MOVE_FILE_PATHS[i]).isDirectory()) {
+					logger.error("PATH [{}] is not Directory", MOVE_FILE_PATHS[i]);
 					return;
 				}
 		}
-		for (int i=0; i<PATH_MOVE_FILE.length;) {
-			String ext = PATH_MOVE_FILE[i++];
-			File from = new File(PATH_MOVE_FILE[i++]);
-			File to   = new File(PATH_MOVE_FILE[i++]);
+		for (int i=0; i<MOVE_FILE_PATHS.length;) {
+			String ext = MOVE_FILE_PATHS[i++];
+			File from = new File(MOVE_FILE_PATHS[i++]);
+			File to   = new File(MOVE_FILE_PATHS[i++]);
 			for (File file : FileUtils.listFiles(from, new String[]{ext.toUpperCase(), ext.toLowerCase()}, false)) {
 				try {
 					logger.info("Moving... {} to {}", file.getAbsolutePath(), to.getAbsolutePath());

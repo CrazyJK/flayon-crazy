@@ -628,7 +628,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				else
 					logger.error("delete fail : {}", file.getAbsolutePath());
 		// the others move
-		File archiveDir = new File(ARCHIVE_PATHS);
+		File archiveDir = new File(ARCHIVE_PATH);
 		for (File file : getFileWithoutVideo())
 			if (file != null)
 				try {

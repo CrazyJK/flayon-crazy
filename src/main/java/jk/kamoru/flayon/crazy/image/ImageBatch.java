@@ -23,12 +23,12 @@ public class ImageBatch extends CrazyProperties {
 	public synchronized void renameSoraPicture() {
 		log.trace("Rename Sora picture Start");
 
-		if (PATH_SORA_PICTURES == null) {
+		if (SORA_PICTURES_PATHS == null) {
 			log.warn("PATH_SORA_PICTURES is not set");
 			return;
 		}
 		
-		for (String soraPath : PATH_SORA_PICTURES) {
+		for (String soraPath : SORA_PICTURES_PATHS) {
 			
 			File directory = new File(soraPath);
 			if (!directory.isDirectory()) {
