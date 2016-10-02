@@ -16,20 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CrazyConfig {
 
-	@Value("${path.video.storage},${path.video.stage}") String[] paths;
-	@Value("${path.video.archive}") String archive;
+	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
+	@Value("${path.video.archive}") String archivePath;
 
 	@Bean
 	public FileBaseVideoSource instanceVideoSource() {
 		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
-		videoSouece.setPaths(paths);
+		videoSouece.setPaths(instancePaths);
 		return videoSouece;
 	}
 	
 	@Bean
 	public FileBaseVideoSource archiveVideoSource() {
 		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
-		videoSouece.setPaths(archive);
+		videoSouece.setPaths(archivePath);
 		videoSouece.setArchive(true);
 		return videoSouece;
 	}
@@ -48,7 +48,7 @@ public class CrazyConfig {
 			@Override
 			protected String getPath() {
 				log.debug("WatchDirectory init");
-				return paths[0] + "/_info";
+				return instancePaths[0] + "/_info";
 			}
         	
         };
