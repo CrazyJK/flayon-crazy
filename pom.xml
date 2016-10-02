@@ -97,6 +97,7 @@
   	</dependencies>
 
 	<build>
+		<finalName>flayon-crazy</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
