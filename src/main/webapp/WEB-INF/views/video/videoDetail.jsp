@@ -53,7 +53,7 @@ function fnToggleFileinfo() {
 	<dd><span class="label label-plain">ETC info : ${video.etcInfo}</span></dd>
 	</c:if>
 
-	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/></em></span>
+	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
 		<div id="fileinfoDiv" style="display:none; background-color:rgba(255, 255, 255, 0.75); border-radius: 10px;" class="box">
 			<c:forEach items="${video.videoFileList}" var="file">
 			<p><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file}</span></p>
