@@ -8,6 +8,11 @@
 <head>
 <title>${actress.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
+<style type="text/css">
+.form-control {
+	background-color: rgba(255,255,255,.75);
+}
+</style>
 <script type="text/javascript">
 //bgContinue = false;
 $(document).ready(function(){
