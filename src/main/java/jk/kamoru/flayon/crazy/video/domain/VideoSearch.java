@@ -36,6 +36,10 @@ public class VideoSearch implements Serializable {
 	 */
 	boolean existCover = false;
 	/**
+	 * 검색조건 : favorite 비디오
+	 */
+	boolean favorite = false;
+	/**
 	 * 검색조건 : 랭킹 범위
 	 */
 	List<Integer> rankRange;
