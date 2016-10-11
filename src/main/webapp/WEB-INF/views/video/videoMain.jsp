@@ -68,6 +68,10 @@ function fnViewBGImage() {
 			<form:checkbox path="existCover" cssClass="sr-only"/>
 			<span class="label" id="checkbox-existCover1">C</span>			
 		</label>
+		<label title="<s:message code="video.favorite"/>">
+			<form:checkbox path="favorite" cssClass="sr-only"/>
+			<span class="label" id="checkbox-favorite1">F</span>			
+		</label>
 		<!-- Search : rank -->
 		<c:forEach items="${rankRange}" var="rank" varStatus="rankStat">
 			<label title="<s:message code="video.rank"/> ${rank}">

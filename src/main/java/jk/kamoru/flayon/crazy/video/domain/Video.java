@@ -1139,6 +1139,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				|| matchActress(search.getSearchText())
 				|| matchRelease(search.getSearchText())) 
 			&& matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover())
+			&& matchFavorite(search.isFavorite())
 			&& matchStudioList(search.getSelectedStudio())
 			&& matchActressList(search.getSelectedActress())
 			&& matchRank(search.getRankRange())
@@ -1150,6 +1151,18 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			return true;
 		}
 		return false;
+	}
+
+	private boolean matchFavorite(boolean favorite) {
+		if (favorite) {
+			for (Actress actress : actressList) {
+				if (actress.getFavorite())
+					return true;
+			}
+			return false;
+		}
+		else 
+			return true;
 	}
 
 	public boolean matchArchive(VideoSearch search) {
