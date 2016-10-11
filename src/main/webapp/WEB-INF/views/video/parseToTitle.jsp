@@ -62,6 +62,7 @@ function saveCoverAll() {
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
 		<a class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</a>
+		<span class="label label-danger" id="alert"></span>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">
@@ -99,7 +100,20 @@ function saveCoverAll() {
 								<input id="dataTitle_${title.opus}" style="width:100%; font-size: 12px;" value="${title}"/>
 							</td>
 						</tr>
-						<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>
+						<script type="text/javascript">
+						try {
+							var client_${title.opus} = new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));
+							client_${title.opus}.on('ready', function(readyEvent) {
+								/* console.log('ZeroClipboard SWF is ready', ${title.opus}); */
+								client_${title.opus}.on('aftercopy', function(event) {
+									event.target.style.color = 'red';
+									console.log('Copied text to clipboard: ' + event.data['text/plain'], ${title.opus});
+								});
+							});
+						} catch(e) {
+							$("#alert").append(${title.opus} + ' ');
+						}
+						</script>
 						</c:forEach>
 					</table>
 				</td>
