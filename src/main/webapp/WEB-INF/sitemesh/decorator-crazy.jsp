@@ -45,6 +45,11 @@ var timer;
 var neon = ${empty param.neon ? false : param.neon};
 var bgChangeInterval = 60;
 
+window.onerror = function (e) {
+	console.log('Error: ', e);
+	alert('Error: ' + e);
+};
+
 $(document).ready(function() {
 
 	// set .box color
