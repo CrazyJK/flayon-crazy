@@ -58,7 +58,9 @@ $(document).ready(function() {
 });
 function go(page) {
 	var size = $("#size").val();
-	this.location.href = "?size=" + size + "&page=" + page + "&sort=id,desc";
+	var remoteAddr = $("#remoteAddr").val();
+	var requestURI = $("#requestURI").val();
+	this.location.href = "?size=" + size + "&page=" + page + "&sort=id,desc&requestURI=" + requestURI + "&remoteAddr=" + remoteAddr;
 }
 </script>
 </head>
@@ -91,6 +93,7 @@ function go(page) {
 				<th class="text-center">No</th>
 				<th>Date</th>
 				<th>RemoteAddr</th>
+				<th>User</th>
 				<th>Method</th>
 				<th>RequestURI</th>
 				<!-- <th style="text-align:right">ContentType</th> -->
@@ -106,16 +109,28 @@ function go(page) {
 				<td align="center">${accessLogStat.count}</td>
 				<td align="left"  ><fmt:formatDate pattern="yy-MM-dd hh:mm:ss" value="${accessLog.accessDate}" /></td>
 				<td align="left"  >${accessLog.remoteAddr}</td>
+				<td align="left"  >${accessLog.user.name}</td>
 				<td align="left"  >${accessLog.method}</td>
 				<td align="left"  >${accessLog.requestURI}</td>
 				<%-- <td align="right" >${accessLog.contentType}</td> --%>
 				<td align="right" ><fmt:formatNumber type="number" pattern="#,##0 ms" value="${accessLog.elapsedTime}" /></td>
 				<%-- <td align="center" title="${accessLog.handlerInfo}" data-toggle="popover" data-placement="left" data-content="${accessLog.exceptionInfo} ${accessLog.modelAndViewInfo}">Popover</td> --%>
 				<td align="left"  >${fn:replace(accessLog.handlerInfo, 'org.springframework.web.servlet.mvc.', '')}</td>
-				<td align="left"  >${accessLog.exceptionInfo}</td>
+				<td align="left"  ><c:out value="${accessLog.exceptionInfo}"></c:out></td>
 				<%-- <td align="left"  >${accessLog.modelAndViewInfo}</td> --%>
 			</tr>
 			</c:forEach>
+			<tr>
+				<td></td>
+				<td></td>
+				<td><input id="remoteAddr" name="remoteAddr" placeholder="remoteAddr" value="${param.remoteAddr}"/></td>
+				<td></td>
+				<td></td>
+				<td><input id="requestURI" name="requestURI" placeholder="requestURI" value="${param.requestURI}"/></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
 		</tbody>
 	</table>
 
@@ -127,7 +142,11 @@ function go(page) {
 				</c:if>
 			</c:forEach>
 		</ul>
-		<div style="float: right;"><input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center"/></div>
+		<div style="float: right;">
+		    
+		    
+			<input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center"/>
+		</div>
 	</div>
 
 	<code>
