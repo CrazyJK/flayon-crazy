@@ -17,6 +17,7 @@
     		<security:authorize access="isAuthenticated()">
       		<ul class="nav navbar-nav">
         		<li><a href="<c:url value="/video"/>"><span class="glyphicon glyphicon-film"></span> Video</a></li>
+        		<li><a href="<c:url value="/video/search"/>"><span class="glyphicon glyphicon-search"></span> Search</a></li>
         		<li><a href="<c:url value="/image"/>"><span class="glyphicon glyphicon-picture"></span> Picture</a></li>
       		</ul>
       		</security:authorize>
