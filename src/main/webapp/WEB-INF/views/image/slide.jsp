@@ -77,11 +77,18 @@ $(document).ready(function(){
 		setInterval(function() {
 			if (playSlide) {
 				if (playSec % playInterval == 0) {
-					fnNextImageView();
+					// fnNextImageView();
+					$("#thumbnailDiv").css('height', '5px').hide();
+					resizeImage();
+					fnRandomImageView();
 					playSec = playInterval;
 				}
 				showTimer(playSec);
 				//console.log("timer ", playSec);
+			}
+			else {
+				$("#thumbnailDiv").css('height', '105px').show();
+				resizeImage();
 			}
 			playSec--;
 			if (playSec % playInterval == 0) {
@@ -135,7 +142,8 @@ $(document).ready(function(){
 function resizeImage() {
 	windowHeight = $(window).height();
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
-	fnDisplayThumbnail();
+	if (!playSlide) 
+		fnDisplayThumbnail();
 }
 
 function fnViewImage(current) {
@@ -164,7 +172,8 @@ function fnViewImage(current) {
 	$("#currNo").html(selectedNumber);
 	$("#rightNo").html(getNextNumber());
 	$("#imageTitle").html(imageMap[selectedNumber]);
-	fnDisplayThumbnail();
+	if (!playSlide)
+		fnDisplayThumbnail();
 }
 function fnFullyImageView() {
 	popupImage(selectedImgUrl);
@@ -236,7 +245,7 @@ function showTimer(sec) {
 
 	<div class="progress" style="width: 100px; margin: 5px 0px; z-index: 18;" onclick="fnPlayImage();">
   		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10"
-  			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Play</span></div></div>
+  			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Random Play</span></div></div>
 </div>
 
 <div id="imageDiv"></div>
