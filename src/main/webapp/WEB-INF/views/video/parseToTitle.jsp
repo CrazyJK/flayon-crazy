@@ -14,6 +14,9 @@
 	font-size:11px;
 	opacity: 0.75;
 }
+.mark {
+	color: red;
+}
 </style>
 <script src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
@@ -101,18 +104,15 @@ function saveCoverAll() {
 							</td>
 						</tr>
 						<script type="text/javascript">
-						try {
-							var client_${title.opus} = new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));
-							client_${title.opus}.on('ready', function(readyEvent) {
+							var client_${status.count} = new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));
+							client_${status.count}.on('ready', function(readyEvent) {
 								/* console.log('ZeroClipboard SWF is ready', ${title.opus}); */
-								client_${title.opus}.on('aftercopy', function(event) {
+								client_${status.count}.on('aftercopy', function(event) {
 									event.target.style.color = 'red';
-									console.log('Copied text to clipboard: ' + event.data['text/plain'], ${title.opus});
+									$("#check-${title.opus}").css('color', 'red');
+									console.log('Copied text to clipboard: ' + event.data['text/plain'], '${title.opus}');
 								});
 							});
-						} catch(e) {
-							$("#alert").append(${title.opus} + ' ');
-						}
 						</script>
 						</c:forEach>
 					</table>
