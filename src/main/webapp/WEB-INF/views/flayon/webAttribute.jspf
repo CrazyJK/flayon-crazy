@@ -3,65 +3,115 @@
   	<ul class="nav nav-tabs">
     	<li class="active"><a data-toggle="tab" href="#session">Session</a></li>
     	<li><a data-toggle="tab" href="#request">Request</a></li>
+    	<li><a data-toggle="tab" href="#environment ">Environment</a></li>
+    	<li><a data-toggle="tab" href="#properties">System Properties</a></li>
 	</ul>
 	<div class="tab-content">
     	<div id="session" class="tab-pane fade in active">
-		<section class="panel panel-info">
-			<header class="panel-heading">
-				<h3 class="panel-title">Session attributes</h3>
-			</header>
-			<div class="panel-body">
-				<ol><%
-						@SuppressWarnings("rawtypes")
-						java.util.Enumeration names = session.getAttributeNames();
-						while (names.hasMoreElements()) {
-							String name = (String) names.nextElement();
-							Object value = session.getAttribute(name);
-							String clazz = value.getClass().getName();
-					%>
-					<li>
-						<dl>
-							<dt><%=name%></dt>
-							<dd><%=value%></dd>
-							<dd><code><%=clazz%></code></dd>
-						</dl>
-					</li>
-					<%
-						}
-					%>
-				</ol>
-			</div>
-		</section>
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Session attributes</h3>
+				</header>
+				<div class="panel-body">
+					<ol><%
+							@SuppressWarnings("rawtypes")
+							java.util.Enumeration names = session.getAttributeNames();
+							while (names.hasMoreElements()) {
+								String name = (String) names.nextElement();
+								Object value = session.getAttribute(name);
+								String clazz = value.getClass().getName();
+						%>
+						<li>
+							<dl>
+								<dt><%=name%></dt>
+								<dd><%=value%></dd>
+								<dd><code><%=clazz%></code></dd>
+							</dl>
+						</li>
+						<%
+							}
+						%>
+					</ol>
+				</div>
+			</section>
 		</div>
 		<div id="request" class="tab-pane fade">
-		<section class="panel panel-info">
-			<header class="panel-heading">
-				<h3 class="panel-title">Request attributes</h3>
-			</header>
-			<div class="panel-body">
-				<ol>
-					<%
-						names = request.getAttributeNames();
-						while (names.hasMoreElements()) {
-							String name = (String) names.nextElement();
-							Object value = request.getAttribute(name);
-							String clazz = value.getClass().getName();
-							if ("org.springframework.core.convert.ConversionService".equals(name)) {
-								value = value.toString().substring(0, 20) + "...";
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Request attributes</h3>
+				</header>
+				<div class="panel-body">
+					<ol>
+						<%
+							names = request.getAttributeNames();
+							while (names.hasMoreElements()) {
+								String name = (String) names.nextElement();
+								Object value = request.getAttribute(name);
+								String clazz = value.getClass().getName();
+							//	if ("org.springframework.core.convert.ConversionService".equals(name)) {
+							//		value = value.toString().substring(0, 20) + "...";
+							//	}
+						%>
+						<li>
+							<dl>
+								<dt><%=name%></dt>
+								<dd class="text-nowrap"><%=value%></dd>
+								<dd><code><%=clazz%></code></dd>
+							</dl>
+						</li>
+						<%
 							}
-					%>
-					<li>
-						<dl>
-							<dt><%=name%></dt>
-							<dd><%=value%></dd>
-							<dd><code><%=clazz%></code></dd>
-						</dl>
-					</li>
-					<%
+						%>
+					</ol>
+				</div>
+			</section>
+		</div>
+    	<div id="environment" class="tab-pane fade">
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Environment</h3>
+				</header>
+				<div class="panel-body">
+					<ol>
+						<%
+						java.util.Map<String, String> envMap = System.getenv();
+						for (java.util.Map.Entry<String, String> entry : envMap.entrySet()) {
+						%>
+						<li>
+							<dl>
+								<dt><%=entry.getKey()%></dy>
+								<dd class="text-nowrap"><%=entry.getValue()%></dd>
+							</dl>
+						</li>
+						<%
 						}
-					%>
-				</ol>
-			</div>
-		</section>
+						%>
+					</ol>
+				</div>
+			</section>
+		</div>
+    	<div id="properties" class="tab-pane fade">
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Environment</h3>
+				</header>
+				<div class="panel-body">
+					<ol>
+						<%
+						for (java.util.Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
+						%>
+						<li>
+							<dl>
+								<dt><%=entry.getKey()%></dt>
+								<dd class="text-nowrap"><%=entry.getValue()%></dd>
+								<dd><code><%=entry.getValue().getClass().getName()%></code></dd>
+							</dl>
+						</li>
+						<%
+						}
+						%>
+					</ol>
+				</div>
+			</section>
 		</div>
 	</div>
