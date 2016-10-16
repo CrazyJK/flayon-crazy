@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon-crazy.ico" />"/>
-<title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy</title>
+<title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy [<%=System.getenv("COMPUTERNAME")%>]</title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/video-deco.css"/>"/>
