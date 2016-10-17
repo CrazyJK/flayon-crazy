@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
   	<ul class="nav nav-tabs">
-    	<li class="active"><a data-toggle="tab" href="#session">Session</a></li>
-    	<li><a data-toggle="tab" href="#request">Request</a></li>
-    	<li><a data-toggle="tab" href="#environment ">Environment</a></li>
-    	<li><a data-toggle="tab" href="#properties">System Properties</a></li>
+    	<li class="active"><a data-toggle="tab" href="#session">Session attributes</a></li>
+    	<li><a data-toggle="tab" href="#request">Request attributes</a></li>
+    	<li><a data-toggle="tab" href="#properties">System properties</a></li>
+    	<li><a data-toggle="tab" href="#environment">Environment</a></li>
+    	<li><a data-toggle="tab" href="#profiles">Spring profiles</a></li>
 	</ul>
 	<div class="tab-content">
     	<div id="session" class="tab-pane fade in active">
@@ -13,14 +15,13 @@
 					<h3 class="panel-title">Session attributes</h3>
 				</header>
 				<div class="panel-body">
-					<ol><%
-							@SuppressWarnings("rawtypes")
-							java.util.Enumeration names = session.getAttributeNames();
-							while (names.hasMoreElements()) {
-								String name = (String) names.nextElement();
-								Object value = session.getAttribute(name);
-								String clazz = value.getClass().getName();
-						%>
+					<ol>
+					<%	@SuppressWarnings("rawtypes")
+						java.util.Enumeration sessionAttributeNames = session.getAttributeNames();
+						while (sessionAttributeNames.hasMoreElements()) {
+							String name = (String) sessionAttributeNames.nextElement();
+							Object value = session.getAttribute(name);
+							String clazz = value.getClass().getName(); %>
 						<li>
 							<dl>
 								<dt><%=name%></dt>
@@ -28,9 +29,7 @@
 								<dd><code><%=clazz%></code></dd>
 							</dl>
 						</li>
-						<%
-							}
-						%>
+					<%	} %>
 					</ol>
 				</div>
 			</section>
@@ -42,16 +41,11 @@
 				</header>
 				<div class="panel-body">
 					<ol>
-						<%
-							names = request.getAttributeNames();
-							while (names.hasMoreElements()) {
-								String name = (String) names.nextElement();
-								Object value = request.getAttribute(name);
-								String clazz = value.getClass().getName();
-							//	if ("org.springframework.core.convert.ConversionService".equals(name)) {
-							//		value = value.toString().substring(0, 20) + "...";
-							//	}
-						%>
+					<%	java.util.Enumeration requestAttributeNames = request.getAttributeNames();
+						while (requestAttributeNames.hasMoreElements()) {
+							String name = (String) requestAttributeNames.nextElement();
+							Object value = request.getAttribute(name);
+							String clazz = value.getClass().getName(); %>
 						<li>
 							<dl>
 								<dt><%=name%></dt>
@@ -59,9 +53,27 @@
 								<dd><code><%=clazz%></code></dd>
 							</dl>
 						</li>
-						<%
-							}
-						%>
+					<%	} %>
+					</ol>
+				</div>
+			</section>
+		</div>
+    	<div id="properties" class="tab-pane fade">
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">System properties</h3>
+				</header>
+				<div class="panel-body">
+					<ol>
+					<%	for (java.util.Map.Entry<Object, Object> entry : System.getProperties().entrySet()) { %>
+						<li>
+							<dl>
+								<dt><%=entry.getKey()%></dt>
+								<dd class="text-nowrap"><%=entry.getValue()%></dd>
+								<dd><code><%=entry.getValue().getClass().getName()%></code></dd>
+							</dl>
+						</li>
+					<%	} %>
 					</ol>
 				</div>
 			</section>
@@ -73,45 +85,38 @@
 				</header>
 				<div class="panel-body">
 					<ol>
-						<%
-						java.util.Map<String, String> envMap = System.getenv();
-						for (java.util.Map.Entry<String, String> entry : envMap.entrySet()) {
-						%>
+					<%	java.util.Map<String, String> envMap = System.getenv();
+						for (java.util.Map.Entry<String, String> entry : envMap.entrySet()) { %>
 						<li>
 							<dl>
 								<dt><%=entry.getKey()%></dy>
 								<dd class="text-nowrap"><%=entry.getValue()%></dd>
 							</dl>
 						</li>
-						<%
-						}
-						%>
+					<%	} %>
 					</ol>
 				</div>
 			</section>
 		</div>
-    	<div id="properties" class="tab-pane fade">
+    	<div id="profiles" class="tab-pane fade">
 			<section class="panel panel-info">
 				<header class="panel-heading">
-					<h3 class="panel-title">Environment</h3>
+					<h3 class="panel-title">Spring profiles</h3>
 				</header>
 				<div class="panel-body">
 					<ol>
-						<%
-						for (java.util.Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
-						%>
+						<c:forEach items="${profiles}" var="profile">
 						<li>
 							<dl>
-								<dt><%=entry.getKey()%></dt>
-								<dd class="text-nowrap"><%=entry.getValue()%></dd>
-								<dd><code><%=entry.getValue().getClass().getName()%></code></dd>
+								<dt>${profile}</dy>
 							</dl>
 						</li>
-						<%
-						}
-						%>
+						</c:forEach>
 					</ol>
 				</div>
 			</section>
 		</div>
+		<script type="text/javascript">
+		$(".panel-heading").hide();
+		</script>
 	</div>
