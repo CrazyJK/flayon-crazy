@@ -682,8 +682,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 						score, 
 						video.getFullname(),
 						video.getScoreDesc());
-				saveHistory(video, Action.REMOVE);
 				videoDao.removeVideo(video.getOpus());
+				saveHistory(video, Action.REMOVE);
 			}
 			else {
 				minAliveScore = score;
@@ -695,15 +695,15 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 	
 	/**
-	 * Score로 정렬된 비디오 목록
+	 * Score로 정렬된 비디오 목록<br>
+	 * 가장 높은 score가 앞, 같으면 release날자가 과거인거 
 	 * @return
 	 */
 	private List<Video> getVideoListSortByScore() {
 		return videoDao.getVideoList().stream()
 				.sorted(Comparator.comparing(Video::getScore)
 						.reversed()
-						.thenComparing(Comparator.comparing(Video::getReleaseDate))
-						.reversed())
+						.thenComparing(Comparator.comparing(Video::getReleaseDate)))
 				.collect(Collectors.toList());
 /*
 		List<Video> list = videoDao.getVideoList();
