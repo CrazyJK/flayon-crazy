@@ -45,6 +45,9 @@
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);	
 }
+body, .label-info, .progress, .paging {
+	transition: background .5s ease, background-image .5s ease;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -75,20 +78,15 @@ $(document).ready(function(){
 		$("#endNo").html(imageCount-1);
 
 		setInterval(function() {
+			toggleSlideView();
+			resizeImage();
 			if (playSlide) {
 				if (playSec % playInterval == 0) {
-					// fnNextImageView();
-					$("#thumbnailDiv").css('height', '5px').hide();
-					resizeImage();
 					fnRandomImageView();
 					playSec = playInterval;
 				}
 				showTimer(playSec);
 				//console.log("timer ", playSec);
-			}
-			else {
-				$("#thumbnailDiv").css('height', '105px').show();
-				resizeImage();
 			}
 			playSec--;
 			if (playSec % playInterval == 0) {
@@ -139,6 +137,27 @@ $(document).ready(function(){
 	
 });
 
+function toggleSlideView() {
+	if (playSlide) {
+		$("#thumbnailDiv").css('height', '5px').hide();
+		$("body").css("background", "#000");
+		$("#deco_nav").css("background", "#000");
+		$(".label-info").css("background", "#000");
+		$("#timerBar").css("background", "#000");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
+		$(".paging").hide();
+	}
+	else {
+		$("#thumbnailDiv").css('height', '105px').show();
+		$("body").css("background", "#fff");
+		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
+		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$("#timerBar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
+		$(".paging").show();
+	}
+}
+ 
 function resizeImage() {
 	windowHeight = $(window).height();
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
@@ -150,30 +169,67 @@ function fnViewImage(current) {
 	var prevNumber = selectedNumber;
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
-
-	if (prevNumber - selectedNumber < 0) { // move forward
-		$("#imageDiv").hide(300, function() {
-			$(this).css("background-image", "url('" + selectedImgUrl + "')");
-		});
-//		$("#imageDiv").slideUp("slow", function() {
-//			$(this).css("background-image", "url('" + selectedImgUrl + "')");
-//		});
-//		$("#imageDiv").slideDown("slow");
-		$("#imageDiv").fadeIn("slow");
+	
+	var imageDiv = $("#imageDiv");
+	if (playSlide) {
+		var rNoP = Math.floor(Math.random() * 3);
+		var iNoP = Math.floor(Math.random() * 1000);
+		var rNoN = Math.floor(Math.random() * 3);
+		var iNoN = Math.floor(Math.random() * 1000);
+//		console.log("rNoP", rNoP, "iNoP", iNoP, "rNoN", rNoN, "iNoN", iNoN);
+		switch (rNoP) { // hide prev image
+		case 0:
+			imageDiv.fadeOut(iNoP, function() {
+				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+			});
+			break;
+		case 1:
+			imageDiv.hide(iNoP, function() {
+				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+			});
+			break;
+		case 2:
+			imageDiv.slideUp(iNoP, function() {
+				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+			});
+			break;
+		}
+		switch (rNoN) { // show next image
+		case 0:
+			imageDiv.fadeIn(iNoN);
+			break;
+		case 1:
+			imageDiv.slideDown(iNoN);
+			break;
+		case 2:
+			imageDiv.show(iNoN);
+			break;
+		}
 	}
-	else { // move backward
-		$("#imageDiv").fadeOut(300, function() {
-			$(this).css("background-image", "url('" + selectedImgUrl + "')");
-		});
-		$("#imageDiv").show(300);
+	else {
+		if (prevNumber - selectedNumber < 0) { // move forward
+			imageDiv.hide(300, function() {
+				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+			});
+//			imageDiv.slideUp("slow", function() {
+//				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+//			});
+//			imageDiv.slideDown("slow");
+			imageDiv.fadeIn("slow");
+		}
+		else { // move backward
+			imageDiv.fadeOut(300, function() {
+				$(this).css("background-image", "url('" + selectedImgUrl + "')");
+			});
+			imageDiv.show(300);
+		}
+		fnDisplayThumbnail();
 	}
 
 	$("#leftNo").html(getPrevNumber());
 	$("#currNo").html(selectedNumber);
 	$("#rightNo").html(getNextNumber());
 	$("#imageTitle").html(imageMap[selectedNumber]);
-	if (!playSlide)
-		fnDisplayThumbnail();
 }
 function fnFullyImageView() {
 	popupImage(selectedImgUrl);
@@ -216,14 +272,16 @@ function fnDisplayThumbnail() {
 	}
 }
 function fnPlayImage() {
+//	$(".container-fluid").css({'opacity':0});
 	if (playSlide) {
 		playSlide = false;
 		showTimer(playInterval);
-		$("#timer").html("Play");
+		$("#timer").html("Random Play");
 	}
 	else {
 		playSlide = true;
 	}
+//	$(".container-fluid").css({'opacity':1});
 }
 function showTimer(sec) {
 	$("#timer").html(sec + "s");
@@ -236,11 +294,11 @@ function showTimer(sec) {
 <div class="container-fluid">
 
 <div id="navDiv">
-	<span class="label label-info" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
-	<span class="label label-info" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
-	<span class="label label-info"><span id="currNo"></span></span>
-	<span class="label label-info" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
-	<span class="label label-info" onclick="fnEndImageView();"><span id="endNo"></span></span>
+	<span class="label label-info paging" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
+	<span class="label label-info paging" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
+	<span class="label label-info paging"><span id="currNo"></span></span>
+	<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
+	<span class="label label-info paging" onclick="fnEndImageView();"><span id="endNo"></span></span>
 	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
 
 	<div class="progress" style="width: 100px; margin: 5px 0px; z-index: 18;" onclick="fnPlayImage();">
