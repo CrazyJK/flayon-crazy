@@ -157,7 +157,7 @@ function toggleSlideView() {
 		$(".paging").show();
 	}
 }
- 
+
 function resizeImage() {
 	windowHeight = $(window).height();
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);

@@ -123,8 +123,8 @@ $(document).ready(function(){
 			
 			$('#slides').slidesjs({
 				start: selectedNumber == -1 ? getRandomInteger(0, imageCount) : selectedNumber,
-				    width: windowWidth,
-				    height: windowHeight - topOffset,
+				width: windowWidth,
+				height: windowHeight - topOffset,
 			    navigation: {active: true},
 			    /* pagination: false, */
 			    play: {active: true, interval:5000, auto: false},
@@ -136,6 +136,7 @@ $(document).ready(function(){
 			    		rePagination();
 			    	},
 			    	complete: function(number) {
+			    		toggleSlideView();
 			    	}
 			    }
 			});
@@ -158,7 +159,7 @@ $(document).ready(function(){
 			
 		});
 	});
-	
+
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
 		var delta = mousewheel(e);
 		if (delta > 0) 
@@ -202,7 +203,7 @@ function rePagination() {
     var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
 	selectedImgUrl = imagepath + index;
     $("#imageTitle").html(imageMap[index]);
-    
+
     if (false) {
     	var img = $("<img>").attr("src", selectedImgUrl);
         $("div[slidesjs-index='" + index + "']").empty();
@@ -225,6 +226,33 @@ function rePagination() {
 function fnFullyImageView() {
 	popupImage(selectedImgUrl);
 }
+function toggleSlideView() {
+	var displayValue = $(".slidesjs-play").css("display");
+//	console.log(".slidesjs-play", displayValue);
+	if (displayValue == 'none') {
+		$(".slidesjs-pagination").hide();
+		$(".slidesjs-navigation").css("background-color", "#000");
+		$("#thumbnailDiv").css('height', '5px').hide();
+		$("body").css("background", "#000");
+		$("#deco_nav").css("background", "#000");
+		$(".label-info").css("background", "#000");
+		$("#timerBar").css("background", "#000");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
+		$(".paging").hide();
+	}
+	else {
+		$(".slidesjs-pagination").show();
+		$(".slidesjs-navigation").css("background-color", "#5bc0de");
+		$("#thumbnailDiv").css('height', '105px').show();
+		$("body").css("background", "#fff");
+		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
+		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$("#timerBar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
+		$(".paging").show();
+	}
+}
+
 </script>
 </head>
 <body>

@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title>Aperture</title>
 <style type="text/css">
+body, .label-info, .progress, .paging {
+	transition: background .5s ease, background-image .5s ease;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -20,17 +23,15 @@ var imageMap;
 var playSlide = false;
 var playInterval = 10;
 var playSec = playInterval;
-var calcDivHeight;
 
 $(document).ready(function(){
-
-	resizeImage();
 	
 	$.getJSON(imagepath + "data.json" ,function(data) {
 		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
+		resizeImage();
 		if (selectedNumber > -1)
 			fnViewImage(selectedNumber);
 		else
@@ -39,9 +40,10 @@ $(document).ready(function(){
 		$("#endNo").html(imageCount-1);
 
 		setInterval(function() {
+			toggleSlideView();
 			if (playSlide) {
 				if (playSec % playInterval == 0) {
-					fnNextImageView();
+					fnRandomImageView();
 					playSec = playInterval;
 				}
 				showTimer(playSec);
@@ -95,6 +97,30 @@ $(document).ready(function(){
 	$(window).bind("resize", resizeImage);
 	
 });
+ {
+	
+}
+
+function toggleSlideView() {
+	if (playSlide) {
+		$(".circle").css({'background-color': '#000'});
+		$("body").css("background", "#000");
+		$("#deco_nav").css("background", "#000");
+		$(".label-info").css("background", "#000");
+		$("#timerBar").css("background", "#000");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
+		$(".paging").hide();
+	}
+	else {
+		$(".circle").css({'background-color': '#fff'});
+		$("body").css("background", "#fff");
+		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
+		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$("#timerBar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
+		$(".paging").show();
+	}
+}
 
 function resizeImage() {
 	windowHeight = $(window).height();
@@ -119,7 +145,7 @@ function fnViewImage(current) {
 	selectedImgUrl = imagepath + selectedNumber;
 
 	$("#aperture img").attr("src", selectedImgUrl);
-	
+
 	$("#leftNo").html(getPrevNumber());
 	$("#currNo").html(selectedNumber);
 	$("#rightNo").html(getNextNumber());
@@ -153,7 +179,7 @@ function fnPlayImage() {
 	if (playSlide) {
 		playSlide = false;
 		showTimer(playInterval);
-		$("#timer").html("Play");
+		$("#timer").html("Random Play");
 	}
 	else {
 		playSlide = true;
@@ -170,16 +196,16 @@ function showTimer(sec) {
 <div class="container-fluid">
 
 <div id="navDiv">
-	<span class="label label-info" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
-	<span class="label label-info" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
-	<span class="label label-info"><span id="currNo"></span></span>
-	<span class="label label-info" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
-	<span class="label label-info" onclick="fnEndImageView();"><span id="endNo"></span></span>
+	<span class="label label-info paging" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
+	<span class="label label-info paging" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
+	<span class="label label-info paging"><span id="currNo"></span></span>
+	<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
+	<span class="label label-info paging" onclick="fnEndImageView();"><span id="endNo"></span></span>
 	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
 
 	<div class="progress" style="width: 100px; margin: 5px 0px; z-index: 18;" onclick="fnPlayImage();">
   		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10"
-  			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Play</span></div></div>
+  			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Random Play</span></div></div>
 </div>
 
 <div id="imageDiv">
