@@ -140,6 +140,7 @@ function resizeImage() {
 }
 
 function fnViewImage(current) {
+	resizeImage();
 	var prevNumber = selectedNumber;
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
