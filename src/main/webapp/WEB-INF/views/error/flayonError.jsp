@@ -12,7 +12,6 @@ bgContinue = false;
 </head>
 <body>
 <div class="container">
-
  	<div class="page-header">
 	    <h1>${exception.message}
 	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>

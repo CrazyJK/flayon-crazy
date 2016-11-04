@@ -14,11 +14,15 @@ bgContinue = false;
 <div class="container">
 
  	<div class="page-header">
-	    <h1>${exception.message}
+ 		<h1>Opps.. Sorry!
 	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
-	    </h1>
+ 		</h1>
 	</div>
-    <code>${exception.cause}</code>
+    <code>
+    	${exception.message}
+    	<hr/>
+    	${exception.cause}
+    </code>
 
 	<div class="text-right">
 		<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
