@@ -282,6 +282,7 @@ window.addEventListener('load', function(e) {
 			<li><a href="<c:url value="/image/aperture"/>"		>Aperture</a>
 			<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
 			<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
+			<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
 			<li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a>
 			<li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a>

@@ -86,6 +86,11 @@ public class ImageController extends CrazyController {
 		return "image/aperture";
 	}
 
+	@RequestMapping(value = "/lightbox", method = RequestMethod.GET)
+	public String lightbox() {
+		return "image/lightbox";
+	}
+
 	@RequestMapping(value = "/{idx}/thumbnail")
 	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx, HttpServletResponse response) {
 		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF, response);
