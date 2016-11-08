@@ -1211,13 +1211,16 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean matchExist(boolean existVideo, boolean existSubtitles, boolean existCover) {
+		boolean matchVideo = false;
+		boolean matchSubtitles = false;
+		boolean matchCover = false;
 		if (existVideo)
-			return isExistVideoFileList() && !isExistSubtitlesFileList(); // 비디오만 있는
+			matchVideo = isExistVideoFileList() && !isExistSubtitlesFileList(); // 비디오만 있는
 		if (existSubtitles)
-			return isExistVideoFileList() && isExistSubtitlesFileList(); // 비디오와 자막이 있는
+			matchSubtitles = isExistVideoFileList() && isExistSubtitlesFileList(); // 비디오와 자막이 있는
 		if (existCover)
-			return !isExistVideoFileList() && isExistCoverFile(); // 비디오 없이 커버만 있는, 자막은 고려안함
-		return false;
+			matchCover = !isExistVideoFileList() && isExistCoverFile(); // 비디오 없이 커버만 있는, 자막은 고려안함
+		return (existVideo && matchVideo) || (existSubtitles && matchSubtitles) || (existCover && matchCover);
 	}
 
 	private boolean matchRelease(String searchText) {
