@@ -13,7 +13,7 @@ function resizeDivHeight() {
 	try {
 		resizeSecondDiv(); // if it exist
 	} catch (e) {
-		console.log("resizeSecondDiv Error", e);
+		//console.log("resizeSecondDiv Error", e.message);
 	}
 }
 /**

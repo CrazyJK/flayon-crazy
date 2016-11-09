@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s"    uri="http://www.springframework.org/tags" %>
 <%--  manifest="<c:url value="/crazy.appcache"/>" --%>
 <!DOCTYPE html>
 <html>
@@ -228,10 +228,11 @@ function loadingTimer(start) {
 		$("#loading-timer").html(tSec++);
 	}
 	else {
-		console.log("clearInterval", timer);
+		//console.log("clearInterval", timer);
 		clearInterval(timer);
 	}
 }
+/*
 // 페이지 로드시 새로 캐쉬받아야 하는지 확인.
 window.addEventListener('load', function(e) {
 
@@ -249,6 +250,7 @@ window.addEventListener('load', function(e) {
   }, false);
 
 }, false);
+*/
 </script>
 
 <sitemesh:write property="head" />
