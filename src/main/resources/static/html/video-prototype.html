@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Video prototype test</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-crazy.css">
+<style type="text/css">
+*[onclick] {
+	cursor: pointer;
+}
+.list-inline li dl {
+	margin: 3px;
+	padding: 3px;
+	width: 266px;
+	height: 177px;
+	border: 1px solid #abe;
+	border-radius: 10px;
+	text-align: left;
+}
+.video-cover {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;	
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/video.js"></script>
+<script type="text/javascript" src="video-prototype.js"></script>
+<script type="text/javascript">
+"use strict";
+var videoList;
+var videoPath = "/video";
+
+(function($) {
+	$(document).ready(function() {
+		$.getJSON('/video/list.json' ,function(data) {
+			videoList = data.videoList;
+			render();
+		});
+	});
+}(jQuery));
+
+function render() {
+	$.each(videoList, function(entryIndex, entry) {
+		var video = new Video(entry);
+		console.log(entryIndex);
+		$("ul.list-group").append(videoJsonToDom(video));
+		$("tbody").append(renderTable(video));
+	});
+}
+
+function videoJsonToDom(video) {
+	var dl = $("<dl>").css("background-image", "url('" + video.coverURL + "')").addClass("video-cover");
+	$("<dt>").html(video.titleHtml).addClass("nowrap text-center").appendTo(dl);
+	$("<dd>").html(video.studioHtml).appendTo(dl);
+	$("<dd>").html(video.opusHtml).appendTo(dl);
+	$("<dd>").html(video.actressHtml).appendTo(dl);
+	$("<dd>").html(video.releaseHtml).appendTo(dl);
+	return $("<li>").append(dl);
+}
+function renderTable(video) {
+	var tr = $("<tr>");
+	$("<td>").html(video.studioHtml).appendTo(tr);
+	$("<td>").html(video.opusHtml).appendTo(tr);
+	$("<td>").html(video.titleHtml).appendTo(tr);
+	$("<td>").html(video.actressHtml).appendTo(tr);
+	$("<td>").html(video.releaseHtml).appendTo(tr);
+	return tr;
+}
+</script>
+</head>
+<body>
+	<div class="container">
+		<h1>video list</h1>
+		
+		<ul class="nav nav-tabs">
+			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
+			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<section id="box" class="tab-pane fade">
+				<ul class="list-group list-inline"></ul>
+			</section>
+			<section id="table" class="tab-pane fade in active">
+				<table class="table table-condensed table-hover table-responsive">
+					<tbody></tbody>
+				</table>
+			</section>
+		</div>
+	</div>
+	<iframe id="actionIframe" style="display:none;"></iframe>
+</body>
+</html>
