@@ -28,6 +28,7 @@
 <script type="text/javascript" src="<c:url value="/js/common.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
 var context = '<c:url value="/"/>';
 var videoPath = '<c:url value="/video"/>';

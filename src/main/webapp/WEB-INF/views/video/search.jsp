@@ -164,6 +164,7 @@ function resizeSecondDiv() {
 		</div>		
 		<span id="url" class="label label-info"></span>
 		<span id="debug" class="label label-info"></span>
+		<span id="searchURL" class="label label-info"></span>
 	</div>
 	
 	<div id="content_div" class="row" style="margin:0;">

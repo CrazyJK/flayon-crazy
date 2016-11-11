@@ -355,6 +355,7 @@ function fnSearchOpus() {
 		opus = $("#query").val();
 	else
 		opus = arguments[0];
+	showDebug("searchURL", urlSearchVideo + opus);
 	popup(urlSearchVideo + opus, 'videoSearch', 900, 950);
 }
 function fnSearchActress(name) {
@@ -363,6 +364,7 @@ function fnSearchActress(name) {
 		name = $("#query").val();
 	else
 		name = arguments[0];
+	showDebug("searchURL", urlSearchActress + name);
 	popup(urlSearchActress + name, 'actressSearch', 900, 950);
 }
 function fnSearchTorrent(opus) {
@@ -371,5 +373,22 @@ function fnSearchTorrent(opus) {
 		opus = $("#query").val();
 	else
 		opus = arguments[0];
+	showDebug("searchURL", urlSearchTorrent + opus);
 	popup(urlSearchTorrent + opus, 'torrentSearch', 900, 950);
+}
+
+function showDebug(debugDomId, msg) {
+	var resultId = "copyResult";
+	var resultObj = $("#" + resultId);
+	if (resultObj.length == 0)
+		resultObj = $("<span>").attr("id", resultId).addClass("label label-danger").html("Copied").hide();
+	$("#" + debugDomId).attr("data-clipboard-text", msg).css("cursor", "copy").html(msg).parent().append(resultObj);
+
+	new ZeroClipboard(document.getElementById(debugDomId)).on('aftercopy', function(event) {
+		// event.target.style.color = 'red';
+		resultObj.show();
+		setTimeout(function() {
+			resultObj.fadeOut(500);
+	    }, 1000);
+	});	
 }

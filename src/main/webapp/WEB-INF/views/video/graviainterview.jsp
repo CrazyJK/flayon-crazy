@@ -5,7 +5,6 @@
 <html>
 <head>
 <title>Source RSS</title>
-<script src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
 </head>
 <body>
 <div class="container-fluid" role="main">

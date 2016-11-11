@@ -18,7 +18,6 @@
 	color: red;
 }
 </style>
-<script src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
 function fnFindVideo(opus) {
 	fnMarkChoice(opus);
@@ -65,7 +64,8 @@ function saveCoverAll() {
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
 		<a class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</a>
-		<span class="label label-danger" id="alert"></span>
+		<span id="debug" class="label label-info"></span>
+		<span id="searchURL" class="label label-info"></span>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">
