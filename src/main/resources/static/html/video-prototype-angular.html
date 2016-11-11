@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap-crazy.css">
 <style type="text/css">
-*[onclick], *[ng-click] {
+*[onclick], *[data-ng-click] {
 	cursor: pointer;
 }
 .sortorder:after {
@@ -17,24 +17,24 @@
 }
 
 /* animate */
-.ng-enter,
-.ng-leave,
-.ng-move {
+.data-ng-enter,
+.data-ng-leave,
+.data-ng-move {
 	-webkit-transition: 0.5s;
 	transition: 0.5s;
 }
-.ng-enter,
-.ng-move {
+.data-ng-enter,
+.data-ng-move {
 	opacity: 0.5;
 }
-.ng-enter-active,
-.ng-move-active {
+.data-ng-enter-active,
+.data-ng-move-active {
 	opacity: 1;
 }
-.ng-leave {
+.data-ng-leave {
 	opacity: 1;
 }
-.ng-leave-active {
+.data-ng-leave-active {
 	opacity: 0;
 }
 </style>
@@ -52,20 +52,8 @@ var videoPath = "/video";
 
 var app = angular.module("videoApp", ['ngAnimate']);
 app.controller("videoController", function($scope, $http) {
-//	$scope.rows = gwInfos;
-	$http({
-		url : "/video/list.json"
-	}).then(function success(response) {
-		var videoList = new Array();
-		$.each(response.data.videoList, function(entryIndex, entry) {
-			var video = new Video(entry);
-			videoList.push(video)
-		});
-		$scope.videoList = videoList;
-	}, function error(response) {
-		// error
-	});
-	$scope.predicate = '';
+	$scope.videoList = [];
+	$scope.predicate = 'opus';
 	$scope.reverse = false;
 	$scope.order = function(predicate) {
 	    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
@@ -73,11 +61,26 @@ app.controller("videoController", function($scope, $http) {
 	};
 	$scope.videoDetail = function(opus) {
 		fnVideoDetail(opus);
-	} 
+	}; 
 	$scope.actressDetail = function(actressName) {
 		console.log(actressName);
 		fnViewActressDetail(actressName);
-	} 
+	};
+
+	$http({
+		url : "/video/list.json"
+	}).then(function success(response) {
+		var _videoList = new Array();
+		$.each(response.data.videoList, function(entryIndex, entry) {
+			var video = new Video(entry);
+			_videoList.push(video)
+		});
+		$scope.videoList = _videoList;
+		console.log("video size ", $scope.videoList.length);
+	}, function error(response) {
+		// error
+	});
+
 });
 </script>
 </head>
@@ -85,31 +88,42 @@ app.controller("videoController", function($scope, $http) {
 	<div class="container">
 		<h1>video list</h1>
 
-		<div ng-app="videoApp">
-			<table ng-controller="videoController" class="table table-condensed table-hover table-responsive">
+		<div data-ng-app="videoApp">
+			<table data-ng-controller="videoController" class="table table-condensed table-hover table-responsive">
 				<thead>
 					<tr>
-						<th ng-click="order('studio')"  >Studio   <span class="sortorder" ng-show="predicate === 'studio'"   ng-class="{reverse:reverse}"></span></th>
-						<th ng-click="order('opus')"    >Opus     <span class="sortorder" ng-show="predicate === 'opus'"     ng-class="{reverse:reverse}"></span></th>
-						<th ng-click="order('title')"   >Title    <span class="sortorder" ng-show="predicate === 'title'"    ng-class="{reverse:reverse}"></span></th>
-						<th ng-click="order('actress')" >Actress  <span class="sortorder" ng-show="predicate === 'actress'"  ng-class="{reverse:reverse}"></span></th>
-						<th ng-click="order('released')">Released <span class="sortorder" ng-show="predicate === 'released'" ng-class="{reverse:reverse}"></span></th>
+						<th data-ng-click="order('studio')"  >Studio   <span class="sortorder" data-ng-show="predicate === 'studio'"   data-ng-class="{reverse:reverse}"></span></th>
+						<th data-ng-click="order('opus')"    >Opus     <span class="sortorder" data-ng-show="predicate === 'opus'"     data-ng-class="{reverse:reverse}"></span></th>
+						<th data-ng-click="order('title')"   >Title    <span class="sortorder" data-ng-show="predicate === 'title'"    data-ng-class="{reverse:reverse}"></span></th>
+						<th data-ng-click="order('actress')" >Actress  <span class="sortorder" data-ng-show="predicate === 'actress'"  data-ng-class="{reverse:reverse}"></span></th>
+						<th data-ng-click="order('released')">Released <span class="sortorder" data-ng-show="predicate === 'released'" data-ng-class="{reverse:reverse}"></span></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="video in videoList | orderBy:predicate:reverse">
-						<td><span class="label label-plain">{{ video.studio.name }}</span></td>
-						<td><span class="label label-plain" ng-click="videoDetail(video.opus)">{{ video.opus }}</span></td>
-						<td class="nowarp"><span class="label label-plain">{{ video.title }}</span></td>
-						<td><span ng-repeat="actress in video.actressList" class="label label-plain" ng-click="actressDetail(actress.name)">
+					<tr data-ng-repeat="video in videoList | orderBy:predicate:reverse">
+						<td>
+							<span class="label label-plain">{{ video.studio.name }}</span>
+						</td>
+						<td>
+							<span class="label label-plain" data-ng-click="videoDetail(video.opus)">{{ video.opus }}</span>
+						</td>
+						<td class="nowarp">
+							<span class="label label-plain">{{ video.title }}</span>
+						</td>
+						<td>
+							<span data-ng-repeat="actress in video.actressList" data-ng-click="actressDetail(actress.name)" class="label label-plain">
 								{{ actress.name }}
-							</span></td>
-						<td><span class="label label-plain">{{ video.releaseDate }}</span></td>
+							</span>
+						</td>
+						<td>
+							<span class="label label-plain">{{ video.releaseDate }}</span>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<iframe id="actionIframe" style="display:none;"></iframe>
+
 </body>
 </html>

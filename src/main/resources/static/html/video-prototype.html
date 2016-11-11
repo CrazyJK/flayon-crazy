@@ -33,6 +33,8 @@
 "use strict";
 var videoList;
 var videoPath = "/video";
+var pages = 0;
+var lastPage = false;
 
 (function($) {
 	$(document).ready(function() {
@@ -40,16 +42,34 @@ var videoPath = "/video";
 			videoList = data.videoList;
 			render();
 		});
+		$(document).scroll(function() {
+			var maxHeight = $(document).height();
+			var currentScroll = $(window).scrollTop() + $(window).height();
+
+			if (maxHeight <= currentScroll + 50 && !lastPage) {
+				console.log(maxHeight, currentScroll);
+				render();
+			}
+		});
+
 	});
 }(jQuery));
 
 function render() {
-	$.each(videoList, function(entryIndex, entry) {
-		var video = new Video(entry);
-		console.log(entryIndex);
-		$("ul.list-group").append(videoJsonToDom(video));
-		$("tbody").append(renderTable(video));
-	});
+	for (var entryIndex=0; entryIndex<videoList.length; entryIndex++) {
+		if (pages*10 <= entryIndex && entryIndex < (pages + 1)*10) {
+			// console.log(entryIndex);
+			var video = new Video(videoList[entryIndex]);
+			$("ul.list-group").append(videoJsonToDom(video));
+			$("tbody").append(renderTable(video));
+			
+			if (entryIndex == videoList.length - 1) {
+				lastPage = true;
+				$(".more").hide();
+			}
+		}
+	}
+	pages++;
 }
 
 function videoJsonToDom(video) {
@@ -90,6 +110,7 @@ function renderTable(video) {
 					<tbody></tbody>
 				</table>
 			</section>
+			<p class="more"><button onclick="render()">More...</button></p>
 		</div>
 	</div>
 	<iframe id="actionIframe" style="display:none;"></iframe>
