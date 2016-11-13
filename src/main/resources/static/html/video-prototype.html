@@ -2,19 +2,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Video prototype test</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="shortcut icon" type="image/x-icon" href="/img/favicon-crazy.ico">
+<title>Video list by prototype</title>
+<link rel="stylesheet" href="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap-crazy.css">
+<link rel="stylesheet" href="/css/videoMain.css">
 <style type="text/css">
 *[onclick] {
 	cursor: pointer;
 }
+ul.list-inline {
+	padding: 3px 6px;
+}
 .list-inline li dl {
 	margin: 3px;
 	padding: 3px;
-	width: 266px;
-	height: 177px;
-	border: 1px solid #abe;
+	width: 300px;
+	height: 225px;
 	border-radius: 10px;
 	text-align: left;
 }
@@ -23,53 +29,179 @@
 	background-position: center center;
 	background-size: cover;	
 }
+.nonExist {
+	background-color: rgba(74, 60, 60, 0.3);;
+}
+.title {
+	font-weight: bold;
+}
+.table-title {
+	margin: 0;
+}
+.tab-content {
+    margin-top: 88px;
+}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/webjars/jQuery/2.2.3/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/video.js"></script>
 <script type="text/javascript" src="video-prototype.js"></script>
 <script type="text/javascript">
 "use strict";
-var videoList;
+var videoList = new Array();
 var videoPath = "/video";
 var pages = 0;
 var lastPage = false;
+var pageSize = 12;
+var listViewType = 'prototype';
+var currSort = '';
+var reverse = true;
+var entryIndex = 0;
+var renderingCount = 0;
 
 (function($) {
 	$(document).ready(function() {
-		$.getJSON('/video/list.json' ,function(data) {
-			videoList = data.videoList;
-			render();
-		});
+		
+		request();
+		
 		$(document).scroll(function() {
 			var maxHeight = $(document).height();
 			var currentScroll = $(window).scrollTop() + $(window).height();
 
 			if (maxHeight <= currentScroll + 50 && !lastPage) {
-				console.log(maxHeight, currentScroll);
-				render();
+				console.log("maxHeight, currentScroll", maxHeight, currentScroll);
+				render(false);
 			}
 		});
-
+		
+		$(".search").on('keyup', function(e) {
+			var event = window.event || e;
+			if (event.keyCode == 13) {
+				render(true);
+			}
+		});
 	});
 }(jQuery));
 
-function render() {
-	for (var entryIndex=0; entryIndex<videoList.length; entryIndex++) {
-		if (pages*10 <= entryIndex && entryIndex < (pages + 1)*10) {
-			// console.log(entryIndex);
-			var video = new Video(videoList[entryIndex]);
-			$("ul.list-group").append(videoJsonToDom(video));
-			$("tbody").append(renderTable(video));
-			
-			if (entryIndex == videoList.length - 1) {
-				lastPage = true;
-				$(".more").hide();
+function request() {
+	$.getJSON({
+		method: 'GET',
+		url: '/video/list.json',
+		data: {},
+		cache: false,
+		timeout: 30000
+	})
+		.done(function(data) {
+			if (data.exception) {
+		    	$(".loading").removeClass("label-info").addClass("label-danger").html(data.exception.message);
+			}
+			else {
+				$.each(data.videoList, function(i, row) {
+					videoList.push(new Video(row));
+				});
+				$(".loading").html(videoList.length);
+				
+				sort('SC');
+			}
+		})
+		.fail(function(jqxhr, textStatus, error) {
+	    	$(".loading").removeClass("label-info").addClass("label-danger").html(textStatus + ", " + error);
+		});	
+}
+
+function sort(sort) {
+	if (currSort === sort) {
+		reverse = !reverse;
+	}
+	else {
+		currSort = sort;
+	}
+	$(".sortMethod").html(sort + " " + (reverse ? "DESC" : ""));
+	videoList.sort(function(video1, video2) {
+		switch(sort) {
+		case 'S':
+			return compareTo(video1.studio.name, video2.studio.name, reverse); 
+		case 'O':
+			return compareTo(video1.opus, video2.opus, reverse); 
+		case 'T':
+			return compareTo(video1.title, video2.title, reverse); 
+		case 'A':
+			return compareTo(video1.actress, video2.actress, reverse); 
+		case 'D':
+			return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
+		case 'R':
+			return compareTo(video1.rank, video2.rank, reverse); 
+		case 'SC':
+			return compareTo(video1.score, video2.score, reverse); 
+		default:
+			return video1.title > video2.title ? 1 : -1;
+		}
+	});
+
+	render(true);
+}
+
+function compareTo(obj1, obj2, reverse) {
+	return obj1 > obj2 ? (reverse ? -1 : 1) : (reverse ? 1 : -1);
+}
+
+function render(first) {
+	if (first) {
+		$("ul.list-group").empty();
+		$(".table-list > tbody").empty();
+		pages = 0;
+		entryIndex = 0;
+		renderingCount = 0;
+		lastPage = false;
+		$(".more").show();
+	}
+	$(".btn-more").html("loading...");
+	$(".status").html("loading...").show();
+	
+	var displayCount = 0;
+	var query = $(".search").val();
+	while (entryIndex < videoList.length) {
+		if (query != '') {
+			if (!videoList[entryIndex].contains(query)) {
+				entryIndex++;
+				continue;
 			}
 		}
+		if (displayCount < pageSize) {
+
+			$("ul.list-group").append(videoJsonToDom(videoList[entryIndex]));
+			$(".table-list > tbody").append(renderTable(videoList[entryIndex]));
+			$(".loading").html(++renderingCount + " / " + videoList.length);
+
+			console.log("renderingCount", renderingCount, "displayCount", displayCount, "entryIndex", entryIndex);
+
+			displayCount++;
+			entryIndex++;
+		}
+		else {
+			break;
+		}
+	}
+	console.log("entryIndex >= videoList.length", entryIndex, videoList.length);
+	if (entryIndex >= videoList.length) {
+		lastPage = true;
+		$(".more").hide();
+		console.log("it`s lastpage");
+	}
+	else {
+		$(".btn-more").html("More...");
+		$(".status").fadeOut(1500);
 	}
 	pages++;
+	
+	// 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
+	var maxHeight = $(document).height();
+	var currentScroll = $(window).scrollTop() + $(window).height();
+	console.log("more scroll maxHeight, currentScroll ", maxHeight, currentScroll);
+	if (maxHeight === currentScroll) {
+		render();
+	}
 }
 
 function videoJsonToDom(video) {
@@ -79,6 +211,10 @@ function videoJsonToDom(video) {
 	$("<dd>").html(video.opusHtml).appendTo(dl);
 	$("<dd>").html(video.actressHtml).appendTo(dl);
 	$("<dd>").html(video.releaseHtml).appendTo(dl);
+	$("<dd>").html(video.rankHtml).appendTo(dl);
+	$("<dd>").html(video.scoreHtml).appendTo(dl);
+	$("<dd>").html(video.existVideoHtml).appendTo(dl);
+	$("<dd>").html(video.existSubtitlesHtml).appendTo(dl);
 	return $("<li>").append(dl);
 }
 function renderTable(video) {
@@ -93,24 +229,50 @@ function renderTable(video) {
 </script>
 </head>
 <body>
-	<div class="container">
-		<h1>video list</h1>
+	<div class="container-fluid">
+	
+		<nav class="nav navbar-default navbar-fixed-top">
 		
-		<ul class="nav nav-tabs">
-			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
-			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
-		</ul>
-
+			<table class="table table-title">
+				<tr>
+					<td>
+						<strong class="lead title">Video list</strong>
+						<span class="lead text-primary loading">Loading...</span>
+					</td>
+					<td>
+						<input class="form-control search" placeholder="Search...">
+					</td>
+					<td class="text-right">
+						<button class="btn btn-info btn-xs" onclick="sort('S')">Studio</button>
+						<button class="btn btn-info btn-xs" onclick="sort('O')">Opus</button>
+						<button class="btn btn-info btn-xs" onclick="sort('T')">Title</button>
+						<button class="btn btn-info btn-xs" onclick="sort('A')">Actress</button>
+						<button class="btn btn-info btn-xs" onclick="sort('D')">Released</button>
+						<button class="btn btn-info btn-xs" onclick="sort('R')">Rank</button>
+						<button class="btn btn-info btn-xs" onclick="sort('SC')">Score</button>
+					</td>
+				</tr>
+			</table>
+			
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#box">BOX</a></li>
+				<li class=""><a data-toggle="tab" href="#table">TABLE</a></li>
+				<li><a class="sortMethod"></a></li>
+				<li><a class="status text-danger"></a></li>
+			</ul>
+	
+		</nav>
+			
 		<div class="tab-content">
-			<section id="box" class="tab-pane fade">
+			<section id="box" class="tab-pane fade in active">
 				<ul class="list-group list-inline"></ul>
 			</section>
-			<section id="table" class="tab-pane fade in active">
-				<table class="table table-condensed table-hover table-responsive">
+			<section id="table" class="tab-pane fade">
+				<table class="table table-condensed table-hover table-responsive table-list">
 					<tbody></tbody>
 				</table>
 			</section>
-			<p class="more"><button onclick="render()">More...</button></p>
+			<p class="more text-center"><button class="btn btn-warning btn-more" onclick="render()">More...</button></p>
 		</div>
 	</div>
 	<iframe id="actionIframe" style="display:none;"></iframe>
