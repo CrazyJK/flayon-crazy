@@ -13,33 +13,46 @@
 *[onclick] {
 	cursor: pointer;
 }
-ul.list-inline {
+ul.list-group.list-inline {
 	padding: 3px 6px;
 }
-.list-inline li dl {
-	margin: 3px;
-	padding: 3px;
-	width: 300px;
-	height: 225px;
-	border-radius: 10px;
-	text-align: left;
-}
-.video-cover {
+dl.video-cover {
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-size: cover;	
+	background-size: cover;
+	transition: all 3s;	
+
+	margin: 5px;
+	padding: 3px;
+	width: 290px;
+	height: 210px;
+	border-radius: 10px;
+	text-align: left;
+	box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+dt.nowrap.text-center {
+	width: 97%;
 }
 .nonExist {
 	background-color: rgba(74, 60, 60, 0.3);;
 }
-.title {
-	font-weight: bold;
+.more {
+	display: none;
 }
-.table-title {
-	margin: 0;
+.navbar {
+	border: 0;
 }
-.tab-content {
-    margin-top: 88px;
+.navbar-nav, .navbar-right {
+	margin: 5px;
+}
+.nav > li > a {
+	padding: 5px 20px;
+}
+.nav, .navbar-header {
+	padding-left: 5px;
+}
+.sorted {
+	font-size: 90%;
 }
 </style>
 <script type="text/javascript" src="/webjars/jQuery/2.2.3/dist/jquery.min.js"></script>
@@ -49,115 +62,139 @@ ul.list-inline {
 <script type="text/javascript" src="video-prototype.js"></script>
 <script type="text/javascript">
 "use strict";
-var videoList = new Array();
 var videoPath = "/video";
-var pages = 0;
-var lastPage = false;
-var pageSize = 12;
 var listViewType = 'prototype';
-var currSort = '';
-var reverse = true;
-var entryIndex = 0;
-var renderingCount = 0;
+var lastPage = false;			// 마지막 페이지까지 다 보여줬는지
+var pageSize = 12;				// 한페이지게 보여줄 개수
+var currSort = '';				// 정렬 항목
+var reverse = true;				// 역정렬 여부
+var videoList = new Array(); 	// 비디오 배열
+var entryIndex = 0;				// 비디오 인덱스 
+var renderingCount = 0;			// 보여준 개수
+var sortList = [{code: "S", name: "Studio"}, {code: "O", name: "Opus"}, {code: "T", name: "Title"}, 
+	{code: "A", name: "Actress"}, {code: "D", name: "Released"}, {code: "R", name: "Rank"}, {code: "SC", name: "Score"}];
 
 (function($) {
 	$(document).ready(function() {
 		
-		request();
-		
-		$(document).scroll(function() {
-			var maxHeight = $(document).height();
-			var currentScroll = $(window).scrollTop() + $(window).height();
+		// init components
+		$.each(sortList, function(i, sort) {
+			$("<button>").addClass("btn btn-xs").attr("data-sort-code", sort.code).attr("data-sort-name", sort.name)
+				.html(sort.name).appendTo($(".btn-group-sort"));
+		});
+		$(".tab-content").css("margin-top", $(".navbar").height() + "px");
 
-			if (maxHeight <= currentScroll + 50 && !lastPage) {
-				console.log("maxHeight, currentScroll", maxHeight, currentScroll);
-				render(false);
-			}
-		});
+		// add EventListener
+		fnAddEventListener();
 		
-		$(".search").on('keyup', function(e) {
-			var event = window.event || e;
-			if (event.keyCode == 13) {
-				render(true);
-			}
-		});
+		request();
 	});
 }(jQuery));
 
 function request() {
+	showStatus(true, "Request...");
 	$.getJSON({
 		method: 'GET',
 		url: '/video/list.json',
 		data: {},
 		cache: false,
 		timeout: 30000
-	})
-		.done(function(data) {
-			if (data.exception) {
-		    	$(".loading").removeClass("label-info").addClass("label-danger").html(data.exception.message);
-			}
-			else {
-				$.each(data.videoList, function(i, row) {
-					videoList.push(new Video(row));
-				});
-				$(".loading").html(videoList.length);
-				
-				sort('SC');
-			}
-		})
-		.fail(function(jqxhr, textStatus, error) {
-	    	$(".loading").removeClass("label-info").addClass("label-danger").html(textStatus + ", " + error);
-		});	
-}
-
-function sort(sort) {
-	if (currSort === sort) {
-		reverse = !reverse;
-	}
-	else {
-		currSort = sort;
-	}
-	$(".sortMethod").html(sort + " " + (reverse ? "DESC" : ""));
-	videoList.sort(function(video1, video2) {
-		switch(sort) {
-		case 'S':
-			return compareTo(video1.studio.name, video2.studio.name, reverse); 
-		case 'O':
-			return compareTo(video1.opus, video2.opus, reverse); 
-		case 'T':
-			return compareTo(video1.title, video2.title, reverse); 
-		case 'A':
-			return compareTo(video1.actress, video2.actress, reverse); 
-		case 'D':
-			return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
-		case 'R':
-			return compareTo(video1.rank, video2.rank, reverse); 
-		case 'SC':
-			return compareTo(video1.score, video2.score, reverse); 
-		default:
-			return video1.title > video2.title ? 1 : -1;
+	}).done(function(data) {
+		if (data.exception) {
+			showStatus(true, data.exception.message, true);
 		}
-	});
-
-	render(true);
+		else {
+			$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
+				videoList.push(new Video(row));
+			});
+			$("button[data-sort-code='SC']").click(); // 정렬하여 보여주기
+		}
+	}).fail(function(jqxhr, textStatus, error) {
+		showStatus(true, textStatus + ", " + error, true);
+	});	
 }
 
-function compareTo(obj1, obj2, reverse) {
-	return obj1 > obj2 ? (reverse ? -1 : 1) : (reverse ? 1 : -1);
+function fnAddEventListener() {
+	// scroll
+	$(document).scroll(function() {
+		var maxHeight = $(document).height();
+		var currentScroll = $(window).scrollTop() + $(window).height();
+
+		if (maxHeight <= currentScroll + 50 && !lastPage)
+			render(false); // next page
+	});
+	// search	
+	$(".search").on('keyup', function(e) {
+		var event = window.event || e;
+		if (event.keyCode == 13)
+			render(true);
+	});
+	// sort
+	$(".btn-group-sort").children().on('click', function() {
+		$(this).parent().children().each(function() {
+			var sortName = $(this).attr("data-sort-name");
+			$(this).removeClass("btn-warning").addClass("btn-default").html(sortName);
+		});
+		var sortCode = $(this).attr('data-sort-code');
+		var sortName = $(this).attr('data-sort-name');
+		if (currSort === sortCode) // 같은 정렬
+			reverse = !reverse;
+		else	// 다른 정렬
+			reverse = true;
+		currSort = sortCode;
+		
+		$(".sorted").html(sortName + (reverse ? " desc" : ""));
+		
+		videoList.sort(function(video1, video2) {
+			switch(sortCode) {
+			case 'S':
+				return compareTo(video1.studio.name, video2.studio.name, reverse); 
+			case 'O':
+				return compareTo(video1.opus, video2.opus, reverse); 
+			case 'T':
+				return compareTo(video1.title, video2.title, reverse); 
+			case 'A':
+				return compareTo(video1.actress, video2.actress, reverse); 
+			case 'D':
+				return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
+			case 'R':
+				return compareTo(video1.rank, video2.rank, reverse); 
+			case 'SC':
+				return compareTo(video1.score, video2.score, reverse); 
+			default:
+				return video1.title > video2.title ? 1 : -1;
+			}
+		});
+
+		$(this).removeClass("btn-default").addClass("btn-warning").html(sortName + (reverse ? ' ▼' : ' ▲'));
+		
+		render(true);
+	});
+}
+
+function compareTo(data1, data2, reverse) {
+	var result = 0;
+	if (typeof data1 === 'number') {
+		result = data1 - data2;
+	} else if (typeof data1 === 'string') {
+		result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
+	} else {
+		result = data1 > data2 ? 1 : -1;
+	}
+	return result * (reverse ? -1 : 1);
 }
 
 function render(first) {
 	if (first) {
-		$("ul.list-group").empty();
-		$(".table-list > tbody").empty();
-		pages = 0;
 		entryIndex = 0;
 		renderingCount = 0;
 		lastPage = false;
+		$("ul.list-group").empty();
+		$(".table-list > tbody").empty();
 		$(".more").show();
 	}
-	$(".btn-more").html("loading...");
-	$(".status").html("loading...").show();
+	
+	showStatus(true, "loading...");
 	
 	var displayCount = 0;
 	var query = $(".search").val();
@@ -169,38 +206,48 @@ function render(first) {
 			}
 		}
 		if (displayCount < pageSize) {
-
+			renderingCount++; 	// 화면에 보여준 개수
+			displayCount++;		// 이번 메서드에서 보여준 개수
+			
 			$("ul.list-group").append(videoJsonToDom(videoList[entryIndex]));
 			$(".table-list > tbody").append(renderTable(videoList[entryIndex]));
-			$(".loading").html(++renderingCount + " / " + videoList.length);
+			
+			$(".count").html(renderingCount + " / " + videoList.length);
 
-			console.log("renderingCount", renderingCount, "displayCount", displayCount, "entryIndex", entryIndex);
-
-			displayCount++;
-			entryIndex++;
+			entryIndex++;		// videoList의 현개 인덱스 증가
 		}
 		else {
 			break;
 		}
 	}
-	console.log("entryIndex >= videoList.length", entryIndex, videoList.length);
-	if (entryIndex >= videoList.length) {
+
+	if (entryIndex >= videoList.length) { // 전부 보여주었으면
 		lastPage = true;
 		$(".more").hide();
-		console.log("it`s lastpage");
 	}
-	else {
-		$(".btn-more").html("More...");
-		$(".status").fadeOut(1500);
-	}
-	pages++;
 	
-	// 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
+	showStatus(false);
+	
 	var maxHeight = $(document).height();
 	var currentScroll = $(window).scrollTop() + $(window).height();
-	console.log("more scroll maxHeight, currentScroll ", maxHeight, currentScroll);
-	if (maxHeight === currentScroll) {
+	if (maxHeight === currentScroll && !lastPage) { // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
 		render();
+	}
+
+}
+
+function showStatus(show, msg, isError) {
+	// console.log("showStatus", show, msg, isError);
+	if (show) { // loading start
+		if (isError) {
+			$(".status").html(msg).show();
+		}
+		else {
+			$(".status").html(msg).show();
+		}
+	}
+	else { // loading complete
+		$(".status").fadeOut(1500);
 	}
 }
 
@@ -224,45 +271,36 @@ function renderTable(video) {
 	$("<td>").html(video.titleHtml).appendTo(tr);
 	$("<td>").html(video.actressHtml).appendTo(tr);
 	$("<td>").html(video.releaseHtml).appendTo(tr);
+	$("<td>").html(video.rankHtml).appendTo(tr);
+	$("<td>").html(video.scoreHtml).appendTo(tr);
+	$("<td>").html(video.existVideoHtml).appendTo(tr);
+	$("<td>").html(video.existSubtitlesHtml).appendTo(tr);
 	return tr;
 }
 </script>
 </head>
 <body>
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+	  	<div class="container-fluid">
+	    	<div class="navbar-header">
+				<strong class="lead text-justify title">Video</strong>
+	    	</div>
+	    	<ul class="nav navbar-nav navbar-right">
+	      		<li><input class="form-control input-sm search" placeholder="Search..."></li>
+	      		<li><div class="btn-group btn-group-sort"></div></li>
+	    	</ul>
+	  	</div>
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#box">BOX</a></li>
+			<li class=""><a data-toggle="tab" href="#table">TABLE</a></li>
+			<li><a class="text-info count">Initialize...</a></li>
+			<li><a class="btn btn-xs text-danger status"></a></li>
+			<li style="float: right;"><a class="text-warning sorted"></a></li>
+		</ul>
+	</nav>
+
 	<div class="container-fluid">
-	
-		<nav class="nav navbar-default navbar-fixed-top">
-		
-			<table class="table table-title">
-				<tr>
-					<td>
-						<strong class="lead title">Video list</strong>
-						<span class="lead text-primary loading">Loading...</span>
-					</td>
-					<td>
-						<input class="form-control search" placeholder="Search...">
-					</td>
-					<td class="text-right">
-						<button class="btn btn-info btn-xs" onclick="sort('S')">Studio</button>
-						<button class="btn btn-info btn-xs" onclick="sort('O')">Opus</button>
-						<button class="btn btn-info btn-xs" onclick="sort('T')">Title</button>
-						<button class="btn btn-info btn-xs" onclick="sort('A')">Actress</button>
-						<button class="btn btn-info btn-xs" onclick="sort('D')">Released</button>
-						<button class="btn btn-info btn-xs" onclick="sort('R')">Rank</button>
-						<button class="btn btn-info btn-xs" onclick="sort('SC')">Score</button>
-					</td>
-				</tr>
-			</table>
-			
-			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#box">BOX</a></li>
-				<li class=""><a data-toggle="tab" href="#table">TABLE</a></li>
-				<li><a class="sortMethod"></a></li>
-				<li><a class="status text-danger"></a></li>
-			</ul>
-	
-		</nav>
-			
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade in active">
 				<ul class="list-group list-inline"></ul>
@@ -272,7 +310,7 @@ function renderTable(video) {
 					<tbody></tbody>
 				</table>
 			</section>
-			<p class="more text-center"><button class="btn btn-warning btn-more" onclick="render()">More...</button></p>
+			<p class="more text-center"><button class="btn btn-warning" onclick="render()">More...</button></p>
 		</div>
 	</div>
 	<iframe id="actionIframe" style="display:none;"></iframe>
