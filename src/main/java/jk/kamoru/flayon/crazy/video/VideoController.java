@@ -213,6 +213,15 @@ public class VideoController extends CrazyController {
 		return "video/videoList";
 	}
 
+	/**
+	 * for single page application
+	 * @return
+	 */
+	@RequestMapping(value="/list_spa", method=RequestMethod.GET)
+	public String videoListBySpa() {
+		return "video/videoListBySpa";
+	}
+	
 	/**display video torrent info view
 	 * @param model
 	 * @return view name

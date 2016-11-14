@@ -143,9 +143,11 @@ $(document).ready(function() {
 function showNav() {
 	var found = false;
 	$("nav#deco_nav ul li a").each(function() {
-		if ($(this).attr("href") == locationPathname) {
+		console.log($(this).attr("href"), locationPathname);
+		if ($(this).attr("href") === locationPathname) {
 			$(this).parent().addClass("active");
 			found = true;
+			console.log("found");
 		}
 	});
 	if(!found)
@@ -279,6 +281,7 @@ window.addEventListener('load', function(e) {
 			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
 			<li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a>
+			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/>2</a>
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
 			<li><a href="<c:url value="/video/studio"/>"		><s:message code="video.studio"/></a>
 			<li><a href="<c:url value="/image"/>"				><s:message code="video.image"/></a>
