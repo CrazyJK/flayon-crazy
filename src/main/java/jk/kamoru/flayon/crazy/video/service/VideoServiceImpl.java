@@ -281,6 +281,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
+	public List<Video> getArchiveVideoList() {
+		return videoDao.getArchiveVideoList().stream().sorted().collect(Collectors.toList()); 
+	}
+
+	@Override
 	public void playVideo(String opus) {
 		log.debug(opus);
 		Video video = videoDao.getVideo(opus);

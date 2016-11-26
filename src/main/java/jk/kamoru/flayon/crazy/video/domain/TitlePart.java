@@ -21,9 +21,9 @@ public class TitlePart {
 	String checkDesc;
 	String checkDescShort;
 	
-	final String regexKorean = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
-	final String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
-	final String regexDate = "^((19|20)\\d\\d).(0?[1-9]|1[012]).(0?[1-9]|[12][0-9]|3[01])$";
+	final static String regexKorean = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
+	final static String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
+	final static String regexDate = "^((19|20)\\d\\d).(0?[1-9]|1[012]).(0?[1-9]|[12][0-9]|3[01])$";
 	
 	public TitlePart() {
 		this.checkDesc = "";
@@ -67,8 +67,8 @@ public class TitlePart {
 	 */
 	public void setStudio(String studio) {
 		this.studio = studio;
-		// 값이 없으면
-		if (StringUtils.isBlank(studio)) {
+		// valid check
+		if (invalidStudio(studio)) {
 			this.check = true;
 			this.checkDesc += "Studio ";
 			this.checkDescShort += "S ";
@@ -80,8 +80,8 @@ public class TitlePart {
 	 */
 	public void setOpus(String opus) {
 		this.opus = opus;
-		// 공백이 포함되어 있으면
-		if (StringUtils.containsWhitespace(opus)) {
+		// valid check
+		if (invalidOpus(opus)) {
 			this.check = true;
 			this.checkDesc += "Opus ";
 			this.checkDescShort += "O ";
@@ -93,8 +93,8 @@ public class TitlePart {
 	 */
 	public void setTitle(String title) {
 		this.title = Utils.removeInvalidFilename(title);
-		// 값이 없으면
-		if (StringUtils.isBlank(title)) {
+		// valid check
+		if (invalidTitle(title)) {
 			this.check = true;
 			this.checkDesc += "Title ";
 			this.checkDescShort += "T ";
@@ -114,8 +114,8 @@ public class TitlePart {
 			actress = actress.trim();
 		}
 		this.actress = actress;
-		// 한글이 포함되어 있으면
-		if (Pattern.matches(regexKorean, actress)) {
+		// valid check
+		if (invalidActress(actress)) {
 			this.check = true;
 			this.checkDesc += "Actress ";
 			this.checkDescShort += "A ";
@@ -127,24 +127,11 @@ public class TitlePart {
 	 */
 	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = releaseDate;
-		// 값이 없으면
-		if (StringUtils.isBlank(releaseDate)) {
+		// valid check
+		if (invalidReleaseDate(releaseDate)) {
 			this.check = true;
 			this.checkDesc += "Date ";
 			this.checkDescShort += "D ";
-		}
-		else {
-			// 패턴이 틀리면 
-			if (!Pattern.matches(regexSimple, releaseDate)) {
-				this.check = true;
-				this.checkDesc += "Date ";
-				this.checkDescShort += "D ";
-			}
-			else if (!Pattern.matches(regexDate, releaseDate)) {
-				this.check = true;
-				this.checkDesc += "Date ";
-				this.checkDescShort += "D ";
-			}
 		}
 	}
 
@@ -159,4 +146,65 @@ public class TitlePart {
 		this.checkDesc += "Seen ";
 		this.checkDescShort += "Seen ";
 	}
+	
+	
+	/**
+	 * 스튜디오 검증. 값이 있어야 한다.
+	 * @param studioText
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalidStudio(String studioText) {
+		return StringUtils.isBlank(studioText);
+	}
+	
+	/**
+	 * 품번 검증. 값이 있고, 공백이 포함되어 있으면 안된다.
+	 * @param opusText
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalidOpus(String opusText) {
+		return StringUtils.isBlank(opusText) || StringUtils.containsWhitespace(opusText);
+	}
+	
+	/**
+	 * 제목 검증. 값이 있어야 한다.
+	 * @param titleText
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalidTitle(String titleText) {
+		return StringUtils.isBlank(titleText);
+	}
+	
+	/**
+	 * 배우이름 검증. 한글이 포함되어 있으면 안된다.
+	 * @param actressName
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalidActress(String actressText) {
+		return Pattern.matches(regexKorean, actressText);
+	}
+	
+	/**
+	 * 날자 검증. 값이 있고, 날자 형식이 맞아야 한다. 
+	 * @param releaseDate
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalidReleaseDate(String releaseText) {
+		return StringUtils.isBlank(releaseText) || !Pattern.matches(regexSimple, releaseText) || !Pattern.matches(regexDate, releaseText);
+	}
+
+	/**
+	 * 전체 이름 검증
+	 * @param studioText
+	 * @param opusText
+	 * @param titleText
+	 * @param actressText
+	 * @param releaseText
+	 * @return 틀리면 <code>true</code>
+	 */
+	public static boolean invalid(String studioText, String opusText, String titleText, String actressText, String releaseText) {
+		return invalidStudio(studioText) || invalidOpus(opusText) || invalidTitle(titleText) || invalidActress(actressText) || invalidReleaseDate(releaseText);
+	}
+	
+
 }

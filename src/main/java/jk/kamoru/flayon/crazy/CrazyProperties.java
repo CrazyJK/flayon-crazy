@@ -23,7 +23,9 @@ public class CrazyProperties {
 	/** 다운받은 이미지의 이름 바꿀 경로 */ 	@Value("${path.sora.pictures}")			protected String[] 	SORA_PICTURES_PATHS;
 	/** 이미지 파일 경로 */						@Value("${path.image.storage}") 		protected String[] 	        IMAGE_PATHS;
 	/** 토렌트 파일 경로 */						@Value("${path.video.torrent}") 		protected String 	      TORRENT_PATH;
-	
+
+	/** 백업 경로 */							@Value("${path.backup}") 				protected String	BACKUP_PATH;
+
 	/*
 	 * Common Properties
 	 */

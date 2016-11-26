@@ -316,4 +316,6 @@ public interface VideoService {
 
 	void saveCover(String opus, String title);
 
+	List<Video> getArchiveVideoList();
+
 }

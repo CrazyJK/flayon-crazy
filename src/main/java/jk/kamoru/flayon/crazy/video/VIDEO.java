@@ -11,7 +11,7 @@ public interface VIDEO extends CRAZY {
 
 	public static final Sort DEFAULT_SORTMETHOD = Sort.T;
 
-	public static final String HISTORY_LOG = "history.log";
+	public static final String HISTORY_LOG_FILENAME = "history.log";
 
 	public static final String MAC_NETWORKSTORES = ".DS_Store";
 
@@ -32,5 +32,8 @@ public interface VIDEO extends CRAZY {
 	public static final String DATE_TIME_PATTERN = DATE_PATTERN + " " + TIME_PATTERN;
 
 	public static final String TAG_DATA_FILENAME = "tag.data";
+	
+	public static final String WRONG_FILENAME = "wrongFilenames.txt";
 
+	public static final String BACKUP_FILENAME = "backup.csv";
 }

@@ -1,16 +1,19 @@
 package jk.kamoru.flayon.crazy.video.source;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +26,7 @@ import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
+import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 	
@@ -95,6 +99,8 @@ public class FileBaseVideoSource implements VideoSource {
 		logger.debug("load START");
 		firstLoad = true;
 		loading = true;
+
+		List<String> wrongFileNames = new ArrayList<>();
 		
 		// find files
 		Collection<File> files = Utils.listFiles(paths, null, true);
@@ -115,12 +121,12 @@ public class FileBaseVideoSource implements VideoSource {
 				name = StringUtils.normalizeSpace(name);
 				
 				// Unnecessary file exclusion
-				if (filename.equals(VIDEO.HISTORY_LOG) 
+				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO)
+						|| filename.equals(VIDEO.HISTORY_LOG_FILENAME) 
 						|| filename.equals(VIDEO.MAC_NETWORKSTORES)
 						|| filename.equals(VIDEO.WINDOW_DESKTOPINI)
-						|| ext.equals(VIDEO.EXT_ACTRESS) 
-						|| ext.equals(VIDEO.EXT_STUDIO) 
-						|| filename.equals(VIDEO.TAG_DATA_FILENAME)) {
+						|| filename.equals(VIDEO.TAG_DATA_FILENAME)
+						|| filename.equals(VIDEO.WRONG_FILENAME)) {
 					continue;
 				}
 				
@@ -128,7 +134,8 @@ public class FileBaseVideoSource implements VideoSource {
 				// [studio][opus][title][actress][date]etc...
 				String[] names 		= StringUtils.split(name, "]", 6);
 				if (names == null || names.length < 5) {
-					logger.warn("Unclassified file {}", file.getAbsolutePath());
+					logger.warn("Unclassified file {}", file.getCanonicalPath());
+					wrongFileNames.add(String.format("%s : %s", "Unclassified", file.getCanonicalPath()));
 					continue;
 				}
 
@@ -140,6 +147,13 @@ public class FileBaseVideoSource implements VideoSource {
 				String etcInfo 		= "";
 				if (names.length > 5)
 					etcInfo 	    = VideoUtils.removeUnnecessaryCharacter(names[5]);
+
+				// check valid
+				if (TitlePart.invalid(studioName, opus, title, actressNames, releaseDate)) {
+					logger.warn("Invalid file {}", file.getCanonicalPath());
+					wrongFileNames.add(String.format("%s : %s", "Invalid", file.getCanonicalPath()));
+					continue;
+				}
 				
 				Video video = videoMap.get(opus.toLowerCase());
 				if (video == null) {
@@ -197,6 +211,14 @@ public class FileBaseVideoSource implements VideoSource {
 				logger.error("File loading error", e);
 			}
 		}
+		
+		try {
+			if (wrongFileNames.size() > 0)
+				FileUtils.writeLines(new File(paths[0], VIDEO.WRONG_FILENAME), VIDEO.ENCODING, wrongFileNames.stream().sorted().collect(Collectors.toList()), false);
+		} catch (IOException e) {
+			logger.error("write wrong file name fail", e);
+		}
+		
 		logger.debug("    total loaded video {}", videoMap.size());
 		loading = false;
 		logger.debug("load END");

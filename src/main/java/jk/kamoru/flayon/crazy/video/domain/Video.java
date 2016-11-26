@@ -571,23 +571,23 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @param destDir
 	 */
 	public synchronized void move(String destDir) {
-		File destFile = new File(destDir);
-		if (!destFile.exists()) 
+		File destDirFile = new File(destDir);
+		if (!destDirFile.exists()) 
 			throw new VideoException(this, "directory(" + destDir + ") is not exist!");
-		move(destFile);
+		move(destDirFile);
 	}
 
-	public synchronized void move(File destFile) {
+	public synchronized void move(File destDir) {
 		for (File file : getFileAll()) {
-			if (file != null && file.exists() && !file.getParent().equals(destFile.getAbsolutePath())) {
-				if (!Utils.getRootDirectory(file).equals(Utils.getRootDirectory(destFile)) &&
-						destFile.getFreeSpace() < file.length()) {
-					logger.warn("{} -> {} is small. {}mb > {}mb",file, destFile, file.length() / FileUtils.ONE_MB, destFile.getFreeSpace() / FileUtils.ONE_MB);
+			if (file != null && file.exists() && !file.getParent().equals(destDir.getAbsolutePath())) {
+				if (!Utils.getRootDirectory(file).equals(Utils.getRootDirectory(destDir)) &&
+						destDir.getFreeSpace() < file.length()) {
+					logger.warn("{} -> {} is small. {}mb > {}mb",file, destDir, file.length() / FileUtils.ONE_MB, destDir.getFreeSpace() / FileUtils.ONE_MB);
 					break;
 				}
 				try {
-					FileUtils.moveFileToDirectory(file, destFile, false);
-					logger.debug("file moved from [{}] to [{}]", file.getAbsolutePath(), destFile.getAbsolutePath());
+					FileUtils.moveFileToDirectory(file, destDir, false);
+					logger.debug("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
 				} catch (FileExistsException fe) {
 					logger.warn("File exist, then delete", fe);
 					FileUtils.deleteQuietly(file);
