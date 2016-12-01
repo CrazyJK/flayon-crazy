@@ -43,12 +43,12 @@ function img2Change(val) {
 </script>
 </head>
 <body>
-<div class="container-fluid">
-
+<div class="container">
 	<div class="page-header">
 		<h1>Face off</h1>
  	</div>
- 	
+</div> 	
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-4 text-center">
 			<div class="form-group has-feedback">

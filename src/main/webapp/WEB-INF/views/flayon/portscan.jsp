@@ -6,8 +6,6 @@
 <meta charset="UTF-8"></meta>
 <title>Port Sacn</title>
 <style type="text/css">
-#postScan-container {
-}
 .result-li {
 	display: inline-block;
 	border:1px solid orange;
@@ -22,9 +20,10 @@
 .result-close {
 	display: none;
 }
-input, textarea {
+input {
 	/* background-color:rgba(0,0,0,0); */
-	border:0;
+	/* border:0; */
+	text-align: center;
 }
 label {
 	margin-right: 15px;
@@ -39,17 +38,12 @@ label {
  	</div>
 
  	<form>
- 	<div class="panel panel-info">
+ 	<div class="panel panel-default">
  		<div class="panel-heading">
-	 		<h3 class="panel-title">
-		 		<label>IP Address
-		 			<input name="ip" size="11" value="${ip}" placeHolder="ip address"/></label>
-		 		<label>Port from
-		 			<input name="ports" size="5" value="${ports}" placeHolder="port"/></label>
-		 		<label>to
-		 			<input name="porte" size="5" value="${porte}" placeHolder="port"/></label>
-		 		<button class="btn btn-sm btn-success" style="float:right" type="submit">Scan</button>
-	 		</h3>
+	 		IP Address <input name="ip" size="11" value="${ip}" placeHolder="ip address"/>
+	 		 Port from <input name="ports" size="5" value="${ports}" placeHolder="port"/>
+	 		        to <input name="porte" size="5" value="${porte}" placeHolder="port"/>
+	 		<button class="btn btn-sm btn-default" style="float:right" type="submit">Scan</button>
  		</div>
  		<div class="panel-body">
 	 		<textarea name="portArr" style="width:100%; height:100px;" placeHolder="ex. 8080, 8081, 8082">${portArr}</textarea>
@@ -57,9 +51,9 @@ label {
 	</div>
  	</form>
  	
- 	<div class="panel panel-info">
+ 	<div class="panel panel-default">
  		<div class="panel-heading">
-			<h3 class="panel-title">Result - <span class="result-listen">LISTEN</span></h3>
+			Result - <span class="result-listen">LISTEN</span>
  		</div>
  		<div class="panel-body">
  			<c:forEach items="${results}" var="result">

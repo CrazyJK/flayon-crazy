@@ -7,31 +7,21 @@
 <title>RequestMapping List</title>
 <style type="text/css">
 table {
-	font-size:0.8em;
+	/* font-size:0.8em; */
+}
+thead > tr {
+	background-color:rgba(255,165,0,.5);
 }
 tbody > tr:hover {
 	background-color:rgba(255,165,0,.25);
 }
-th {
-	background-color:rgba(255,165,0,.5);
-}
 td {
 	font-family: "나눔고딕코딩";
 }
-* [onclick] {
-	cursor:pointer;
-}
-* [onclick]:hover {
+.link:hover {
 	color:orange; 
 	text-decoration:none; 
 	text-shadow:1px 1px 1px black;
-}
-.selected {
-	color: blue;
-}
-.row {
-    margin-right: -20px;
-    margin-left: -20px;
 }
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
@@ -51,15 +41,15 @@ $(document).ready(function() {
 <div class="container">
 
 	<div class="page-header">
-		<h1 style="display:inline-block">Request Mapping List</h1>
+		<h1>Request Mapping List</h1>
  	</div>
 
 	<table id="list" class="table table-condensed">
 		<thead>
 			<tr>
 				<th class="text-center">No</th>
-				<th>Pattern</th>
 				<th>Method</th>
+				<th>Pattern</th>
 				<th class="text-right">Class</th>
 				<th>Method</th>
 			</tr>
@@ -68,8 +58,8 @@ $(document).ready(function() {
 			<c:forEach items="${mappingList}" var="mapping" varStatus="mappingStat">
 			<tr>
 				<td align="center">${mappingStat.count}</td>
-				<td align="left"  >${mapping.reqPattern}</td>
 				<td align="center">${mapping.reqMethod}</td>
+				<td align="left"  ><a href="${mapping.reqPattern}" class="link" target="_blank">${mapping.reqPattern}</a></td>
 				<td align="right" >${mapping.beanType}</td>
 				<td align="left"  >${mapping.beanMethod}</td>
 			</tr>

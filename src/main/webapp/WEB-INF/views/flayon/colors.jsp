@@ -34,7 +34,7 @@
 		<h1>Color Palette</h1>
  	</div>
  	
- 	<div class="panel panel-info">
+ 	<div class="panel panel-default">
  		<div class="panel-heading">
 	 		<h3 class="panel-title">If you want to see custom color, input parameter by <a href="?c=rgba(123,123,123,0.5)">?c=rgba(123,123,123,0.5)</a></h3>
 	 	</div>

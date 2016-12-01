@@ -13,13 +13,13 @@ p {
 </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
 
 	<div class="page-header">
 		<h1>Thread Info ... <span class="badge">${threadInfos.size()}</span></h1>
 	</div>
 	
-	<section class="panel panel-info">
+	<section class="panel panel-default">
 		<header class="panel-heading">
 			<form:form method="get" commandName="paramInfo">
 				Show only what thread name starts with <form:input path="name"/> 
@@ -27,7 +27,7 @@ p {
 										<option value="">All</option>
 		 								<form:options items="${threadStates}"/>
 									</form:select>
-				<button type="submit" class="btn btn-sm btn-success" style="float:right">View</button>
+				<button type="submit" class="btn btn-sm btn-default" style="float:right">View</button>
 			</form:form>
 		</header>
 		<div class="panel-body">

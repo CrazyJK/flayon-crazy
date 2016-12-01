@@ -65,14 +65,17 @@ function go(page) {
 </script>
 </head>
 <body>
-<div class="container-fluid">
-
+<div class="container">
 	<div class="page-header">
 		<h1>Access Log Viewer
 			<small class="badge">${pageImpl.totalElements}</small>
+			<c:if test="${!useAccesslogRepository}">
+				<span class="label label-danger" style="float:right;">No repository</span>
+			</c:if>
 		</h1>
  	</div>
-
+</div>
+<div class="container-fluid">
 	<ul class="pager">
 	    <c:if test="${!pageImpl.first}">
 	    <li class="previous">
