@@ -17,7 +17,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.util.ZipUtils;
 
@@ -27,6 +29,7 @@ public class VideoBatch extends CrazyProperties {
 	private static final Logger logger = LoggerFactory.getLogger(VideoBatch.class);
 
 	@Autowired VideoService videoService;
+	@Autowired HistoryService historyService;
 
 	public boolean isMOVE_WATCHED_VIDEO() {
 		return MOVE_WATCHED_VIDEO;
@@ -161,20 +164,43 @@ public class VideoBatch extends CrazyProperties {
 		// video list backup to csv
 		List<Video> videoList = videoService.getVideoList();
 		List<Video> archiveVideoList = videoService.getArchiveVideoList();
+		List<History> historyList = historyService.getDeduplicatedList();
+
+		final String csvHeader = "Studio, Opus, Title, Actress, Released, Rank, Fullname";
+		final String csvFormat = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\"";
+		// instance
 		List<String> rowList = new ArrayList<>();
-		String csvHeader = "Type, Studio, Opus, Title, Actress, Released, Rank, Fullname";
 		rowList.add(csvHeader);
-		String csvFormat = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\"";
 		for (Video video : videoList) {
-			rowList.add(String.format(csvFormat, "INSTANCE", video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), video.getRank(), video.getFullname()));
-		}
-		for (Video video : archiveVideoList) {
-			rowList.add(String.format(csvFormat, "ARCHIVE", video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), "", video.getFullname()));
+			rowList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), video.getRank(), video.getFullname()));
 		}
 		try {
-			FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_FILENAME), "EUC-KR", rowList, false); 
+			FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_INSTANCE_FILENAME), "EUC-KR", rowList, false); 
 		} catch (IOException e) {
-			logger.error("BATCH - csv list backup fail", e);
+			logger.error("BATCH - backup instance fail", e);
+		}
+		// archive
+		rowList.clear();
+		rowList.add(csvHeader);
+		for (Video video : archiveVideoList) {
+			rowList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), "", video.getFullname()));
+		}
+		for (History history : historyList) {
+			String opus = history.getOpus();
+			boolean foundInArchive = false;
+			for (Video video : archiveVideoList) {
+				if (video.getOpus().equals(opus)) {
+					foundInArchive = true;
+					break;
+				}
+			}
+			if (!foundInArchive)
+				rowList.add(String.format(csvFormat, "", history.getOpus(), "", "", "", "", history.getDesc()));
+		}
+		try {
+			FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_ARCHIVE_FILENAME), "EUC-KR", rowList, false); 
+		} catch (IOException e) {
+			logger.error("BATCH - backup archive fail", e);
 		}
 		
 		// _info folder backup to zip

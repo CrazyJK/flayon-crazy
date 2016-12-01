@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -83,20 +84,20 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 				catch (VideoNotFoundException e) {
 					log.trace("{}", e.getMessage());
 				}
-//				catch (Exception e) {
-//					log.warn("{} - {}", e.getMessage(), line);
-//				}
 				historyList.add(history);
 			}
 		}
+		Collections.reverse(historyList);
 		log.debug("historyList.size = {}", historyList.size());
 		isHistoryChanged = false;
 	}
 	
-	private String trimDesc(String string) {
-		if (string == null) 
+	private String trimDesc(String desc) {
+		if (desc == null) 
 			return "";
-		return StringUtils.replace(string.trim(), "\"", "");
+		int startIdx = StringUtils.indexOf(desc, "[");
+		int lastIdx  = StringUtils.lastIndexOf(desc, "]");
+		return StringUtils.substring(desc, startIdx, lastIdx + 1);
 	}
 
 	private void saveHistory(History history) throws IOException {

@@ -35,5 +35,8 @@ public interface VIDEO extends CRAZY {
 	
 	public static final String WRONG_FILENAME = "wrongFilenames.txt";
 
-	public static final String BACKUP_FILENAME = "backup.csv";
+	public static final String BACKUP_INSTANCE_FILENAME = "backup-instance.csv";
+	
+	public static final String BACKUP_ARCHIVE_FILENAME = "backup-archive.csv";
+
 }
