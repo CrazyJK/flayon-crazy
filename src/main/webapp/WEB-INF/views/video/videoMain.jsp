@@ -54,7 +54,7 @@ function fnViewBGImage() {
 	<div id="searchDiv" class="text-center">
 		<!-- Search : Text -->
 		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
-		<form:input path="searchText" cssClass="form-control input-sm" placeHolder="Search" style="width:120px;"/>
+		<form:input path="searchText" cssClass="form-control input-sm input-search" placeHolder="Search" style="width:120px;"/>
 		<!-- Search : Additional condition. video, subtitles, cover -->
 		<label title="<s:message code="video.existVideo"/>">
 			<form:checkbox path="existVideo" cssClass="sr-only"/>

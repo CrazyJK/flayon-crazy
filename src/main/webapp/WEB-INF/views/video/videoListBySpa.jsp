@@ -297,9 +297,11 @@ function renderTable(video) {
 				<strong class="lead text-justify title">Video</strong>
 	    	</div>
 	    	<ul class="nav navbar-nav navbar-right">
-	      		<li><input class="form-control input-sm search" placeholder="Search..."></li>
 	      		<li><div class="btn-group btn-group-sort"></div></li>
 	    	</ul>
+	    	<ul class="nav navbar-nav navbar-right">
+	      		<li><input class="form-control input-sm search" placeholder="Search..."></li>
+	      	</ul>
 	  	</div>
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#box">BOX</a></li>
