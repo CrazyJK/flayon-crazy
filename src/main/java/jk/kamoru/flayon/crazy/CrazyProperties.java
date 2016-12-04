@@ -15,7 +15,10 @@ public class CrazyProperties {
 	/** 다운받은 후보 비디오 경로 */			@Value("${path.video.candidate}") 		protected String[] 	CANDIDATE_PATHS;
 	/** 비디오 Stage 경로 */					@Value("${path.video.stage}") 			protected String[] 	    STAGE_PATHS;
 	/** 비디오 cover 경로 */					@Value("${path.video.cover}") 			protected String 	    COVER_PATH;
+	/** Torrent seed 경로 */					@Value("${path.video.seed}") 			protected String 	     SEED_PATH;
 
+	
+	
 	/** 비디오 플레이어 실행 파일 */			@Value("${app.video-player}") 			protected String   	PLAYER;
 	/** 자막 편집 실행 파일 */					@Value("${app.subtitles-editor}") 		protected String   	EDITOR;
 	

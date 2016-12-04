@@ -68,7 +68,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 					throw new VideoException("Not found list : " + opus);
 				}
 				selectedUrl = viewdownloadbutton.select("a").attr("href");
-				selectedSize = megaBytes(document.select("table.viewtable td.vtop").last().text());
+				selectedSize = parseMega(document.select("table.viewtable td.vtop").last().text());
 				
 			}
 			// 목록으로 찾은 경우
@@ -79,7 +79,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 					if (!StringUtils.containsIgnoreCase(tlistname, opus)) {
 						continue;
 					}
-					long tlistsize = megaBytes(tlistrow.select(".tlistsize").text());
+					long tlistsize = parseMega(tlistrow.select(".tlistsize").text());
 					if (selectedSize < tlistsize) {
 						selectedName = tlistname;
 						selectedSize = tlistsize;
@@ -133,7 +133,7 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 	 * @param text
 	 * @return
 	 */
-	private long megaBytes(String text) {
+	private long parseMega(String text) {
 		if (StringUtils.contains(text, GiB)) {
 			return (long) (Double.valueOf(text.replace(GiB, "").trim()) * 1000l);
 		}

@@ -318,4 +318,6 @@ public interface VideoService {
 
 	List<Video> getArchiveVideoList();
 
+	void moveTorrentToSeed(String opus);
+
 }

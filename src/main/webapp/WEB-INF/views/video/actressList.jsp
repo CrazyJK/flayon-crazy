@@ -68,16 +68,16 @@ function view() {
 			</thead>
 			<c:forEach items="${actressList}" var="actress" varStatus="status">
 			<tr class="nowrap">
-				<td class="text-right">${status.count}</td>
+				<td class="number">${status.count}</td>
 				<td><a onclick="fnViewActressDetail('${actress.name}')">${actress.name}</a></td>
 				<td class="text-center">${actress.favorite ? '★' : ''}</td>
 				<td>${actress.birth}</td>
 				<td>${actress.bodySize}</td>
-				<td class="text-right">${actress.height}</td>
-				<td class="text-right">${actress.debut}</td>
-				<td class="text-right">${fn:length(actress.videoList)}</td> 
-				<td class="text-right">${actress.score}</td>
-				<td class="text-right">${actress.age}</td>
+				<td class="number">${actress.height}</td>
+				<td class="number">${actress.debut}</td>
+				<td class="number">${fn:length(actress.videoList)}</td> 
+				<td class="number">${actress.score}</td>
+				<td class="number">${actress.age}</td>
 				<td style="max-width:150px;">
 					<div class="nowrap">
 						<c:forEach items="${actress.videoList}" var="video">

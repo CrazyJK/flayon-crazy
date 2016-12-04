@@ -1259,5 +1259,14 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		this.torrents = torrents;
 	}
 
-	
+	public boolean isFavorite() {
+		boolean favorite = false;
+		for (Actress actress : getActressList()) {
+			if (actress.getFavorite()) {
+				favorite = true;
+				break;
+			}
+		}
+		return favorite;
+	}
 }

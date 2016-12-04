@@ -844,14 +844,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	
 	@Override
 	public List<Video> torrent(Boolean getAllTorrents) {
-		log.debug("torrent");
+		log.info("Torrent, getAllTorrents = {}", getAllTorrents);
 		
 		List<Video> list = videoDao.getVideoList().stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
 		log.debug("  need torrent videos - {}", list.size());
 		
 		// CANDIDATE_PATHS에서 찾은 파일들
 		List<File> foundFiles = new ArrayList<>();
-		log.info("Candidate Scan... {}", Arrays.toString(CANDIDATE_PATHS));
 		for (String candidatePath : CANDIDATE_PATHS) {
 		
 			// get downloaded torrent file
@@ -863,7 +862,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			Collection<File> found = FileUtils.listFiles(candidateDirectory, extensions, true);
-			log.info("  found {} cadidates file in [{}]", found.size(), candidateDirectory);
+			log.info("Scan video file {}, found {}", candidateDirectory, found.size());
 			
 			foundFiles.addAll(found);
 		}
@@ -871,6 +870,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		// find torrent
 		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), 
 				String.format("%s,%s", CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()).split(","), true);
+		log.info("Scan torrents file {}, found {}", TORRENT_PATH, foundTorrent.size());
 		
 		// matching video file
 		for (Video video : list) {
@@ -884,7 +884,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					log.trace("    compare : {} = {}", fileName, key);
 					if (fileName.contains(key)) {
 						video.addVideoCandidates(file);
-						log.info("    add video candidate {} : {}", opus, file.getAbsolutePath());
+						log.debug("    add video candidate {} : {}", opus, file.getAbsolutePath());
 					}
 				}
 			}
@@ -893,7 +893,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			for (File file : foundTorrent) {
 				if (StringUtils.contains(file.getName(), video.getOpus())) {
 					video.addTorrents(file);
-					log.info("    add Torrent {} : {}", opus, file.getName());
+					log.debug("    add Torrent {} : {}", opus, file.getName());
 				}
 			}
 			// find & save torrent
@@ -910,6 +910,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			}
 		}
+		log.debug("Matching candidates and torrent file complete");
 
 		Comparator<Video> byCandidates = (v2, v1) -> Integer.compare(v1.getVideoCandidates().size(), v2.getVideoCandidates().size());
 		Comparator<Video> byTorrents = (v2, v1) -> Integer.compare(v1.getTorrents().size(), v2.getTorrents().size());
@@ -1443,6 +1444,17 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			}
 		} catch (InterruptedException | ExecutionException e) {
 			throw new CrazyException("fail to saveCover : " + opus, e);
+		}
+	}
+
+	@Override
+	public void moveTorrentToSeed(String opus) {
+		for (File file : videoDao.getVideo(opus).getTorrents()) {
+			try {
+				FileUtils.moveFileToDirectory(file, new File(SEED_PATH), false);
+			} catch (IOException e) {
+				log.error("Fail to move torrent to seed dir" + opus, e);
+			}
 		}
 	}
 

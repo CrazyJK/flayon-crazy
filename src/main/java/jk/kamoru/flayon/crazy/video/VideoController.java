@@ -756,4 +756,10 @@ public class VideoController extends CrazyController {
 	public void historyOnDB(Model model) {
 		model.addAttribute(historyService.findOnDB());
 	}
+	
+	@RequestMapping(value="/{opus}/moveTorrentToSeed", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void moveTorrentToSeed(@PathVariable String opus) {
+		videoService.moveTorrentToSeed(opus);
+	}
 }

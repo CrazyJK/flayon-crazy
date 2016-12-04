@@ -71,7 +71,11 @@ if (view.equalsIgnoreCase("video")) {
 		<span class="${cssClass}" title="<s:message code="video.find-info.opus"/>"
 			onclick="fnSearchOpus('${video.opus}')"><span class="glyphicon glyphicon-picture"></span></span>
 		<span class="${cssClass}" title="<s:message code="video.find-info.torrent"/>"
-			onclick="fnSearchTorrent('${video.opus}'); this.style.backgroundColor='red';"><span class="glyphicon glyphicon-download-alt"></span></span>
+			onclick="fnSearchTorrent('${video.opus}'); this.style.backgroundColor='red';"><span class="glyphicon glyphicon-magnet"></span></span>
+		<c:if test="${video.torrents.size() > 0}">
+		<span class="${cssClass}" title="Start torrent download ${video.torrents}" 
+			onclick="goTorrentMove('${video.opus}'); this.style.backgroundColor='red';"><span class="glyphicon glyphicon-cloud-download"></span></span>
+		</c:if>
 	</c:if>
 <%
 } else if (view.equalsIgnoreCase("length")) {

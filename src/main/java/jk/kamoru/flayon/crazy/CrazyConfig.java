@@ -18,20 +18,16 @@ public class CrazyConfig {
 
 	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
 	@Value("${path.video.archive}") String archivePath;
+	@Value("${path.video.torrent}") String torrentPath;
 
 	@Bean
 	public FileBaseVideoSource instanceVideoSource() {
-		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
-		videoSouece.setPaths(instancePaths);
-		return videoSouece;
+		return new FileBaseVideoSource(false, torrentPath, instancePaths);
 	}
 	
 	@Bean
 	public FileBaseVideoSource archiveVideoSource() {
-		FileBaseVideoSource videoSouece = new FileBaseVideoSource();
-		videoSouece.setPaths(archivePath);
-		videoSouece.setArchive(true);
-		return videoSouece;
+		return new FileBaseVideoSource(true, null, archivePath);
 	}
 
     @Bean

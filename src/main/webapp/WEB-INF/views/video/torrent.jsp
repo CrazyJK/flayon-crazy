@@ -98,29 +98,35 @@ function fnChangeMode(mode) {
 		</label>
 	</div>
 	<input type="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
-	<label>
+	<label class="label label-info label-search hide">
+		Searching <i class="count-search"></i>
+	</label>
+	<label class="float-right">
 		<a class="btn btn-xs btn-primary" href="?getAllTorrents=true">Get All Torrents</a>
 	</label>
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">
 	<div id="forCandidate">
-		<table class="table table-condensed table-hover table-bordered">
+		<table class="table table-condensed table-hover">
 			<c:if test="${empty videoList}">
 				<tr><td>No Video</td></tr>
 			</c:if>
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 				<tr id="check-${video.opus}" class="nowrap">
-					<td style="width: 40px;" class="text-right">
+					<td style="width: 40px;" class="text-right number">
 						${status.count}
 					</td>
-					<td style="width: 70px;">
-						<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Torrent
-							<small class="badge">${video.torrents.size()}</small>
-						</button>
+					<td style="width: 50px;">
+						<button class="btn btn-xs btn-default" onclick="goTorrentSearch('${video.opus}');">Find</button>
 						<script type="text/javascript">
 							havingTorrents += (${video.torrents.size()} > 0) ? 1 : 0;
 						</script>
+					</td>
+					<td style="width: 40px;">
+						<c:if test="${video.favorite}">
+							<span class="label label-success">Fav</span>
+						</c:if>
 					</td>
 					<td style="min-width:450px; width:500px; max-width:600px;">
 						<div class="nowrap">
@@ -137,6 +143,11 @@ function fnChangeMode(mode) {
 							totalCandidatedVideo += 1;	
 						</script>
 						</c:forEach>
+						<c:if test="${video.torrents.size() > 0}">
+							<button class="btn btn-xs btn-default" onclick="goTorrentMove('${video.opus}');" title="${video.torrents}">Start
+								<small class="badge">${video.torrents.size()}</small>
+							</button>
+						</c:if>
 					</td>
 				</tr>
 			</c:forEach>

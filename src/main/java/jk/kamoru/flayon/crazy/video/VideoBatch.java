@@ -61,30 +61,30 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("  - batch.score.deleteVideo = {}", DELETE_LOWER_SCORE_VIDEO);
 	}
 	
-	@Scheduled(cron="0 */5 * * * *")
+	@Scheduled(cron="0 */15 * * * *")
 	public synchronized void batchVideoSource() {
 		
 		logger.info("BATCH Video START");
 
-		logger.info("  BATCH : delete lower rank video [{}]", DELETE_LOWER_RANK_VIDEO);
+		logger.info(" - delete lower rank video [{}]", DELETE_LOWER_RANK_VIDEO);
 		if (DELETE_LOWER_RANK_VIDEO)
 			videoService.removeLowerRankVideo();
 		
-		logger.info("  BATCH : delete lower score video [{}]", DELETE_LOWER_SCORE_VIDEO);
+		logger.info(" - delete lower score video [{}]", DELETE_LOWER_SCORE_VIDEO);
 		if (DELETE_LOWER_SCORE_VIDEO)
 			videoService.removeLowerScoreVideo();
 		
-		logger.info("  BATCH : delete garbage file");
+		logger.info(" - delete garbage file");
 		videoService.deleteGarbageFile();
 		
-		logger.info("  BATCH : arrange to same folder");
+		logger.info(" - arrange to same folder");
 		videoService.arrangeVideo();
 		
-		logger.info("  BATCH : move watched video [{}]", MOVE_WATCHED_VIDEO);
+		logger.info(" - move watched video [{}]", MOVE_WATCHED_VIDEO);
 		if (MOVE_WATCHED_VIDEO)
 			videoService.moveWatchedVideo();
 
-		logger.info("  BATCH : reload");
+		logger.info(" - reload");
 		videoService.reload();
 		
 		logger.info("BATCH Video END");

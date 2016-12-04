@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
@@ -56,16 +57,19 @@ public class FileBaseVideoSource implements VideoSource {
 	private static boolean loading = false;
 	
 	// property
-	private String[] paths;
 	private boolean isArchive;
+	private String torrentPath;
+	private String[] paths;
 
-	// property setter
-	public void setPaths(String...paths) {
-		logger.info(ArrayUtils.toString(paths, "IS NULL"));
-		this.paths = paths;
-	}
-	public void setArchive(boolean isArchive) {
+	public FileBaseVideoSource(boolean isArchive, String torrentPath, String...paths) {
 		this.isArchive = isArchive;
+		this.torrentPath = torrentPath;
+		this.paths = paths;
+		logger.info("init {}, {}, {}", toTypeString(), torrentPath, ArrayUtils.toString(paths, "IS NULL"));
+	}
+	
+	private String toTypeString() {
+		return isArchive ? "Archive" : "Instance";
 	}
 	/**
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
@@ -77,7 +81,7 @@ public class FileBaseVideoSource implements VideoSource {
 			if (loading) {
 				do {
 					try {
-						logger.info("loading...");
+						logger.warn("loading...");
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						logger.error("sleep error", e);
@@ -96,7 +100,7 @@ public class FileBaseVideoSource implements VideoSource {
 	 * video데이터를 로드한다.
 	 */
 	private synchronized void load() {
-		logger.debug("load START");
+		logger.info("Start {} video source load", toTypeString());
 		firstLoad = true;
 		loading = true;
 
@@ -219,16 +223,34 @@ public class FileBaseVideoSource implements VideoSource {
 			logger.error("write wrong file name fail", e);
 		}
 		
-		logger.debug("    total loaded video {}", videoMap.size());
 		loading = false;
-		logger.debug("load END");
+		logger.info("End {} video source load. {} videos", toTypeString(), videoMap.size());
 	}
 
 	@Override
 	@PostConstruct
 	public void reload() {
 		load();
-		logger.info("reload completed");
+		matchTorrent();
+		logger.info("reload {} completed", toTypeString());
+	}
+
+	private synchronized void matchTorrent() {
+		// find torrents
+		if (torrentPath != null) {
+			Collection<File> foundTorrent = FileUtils.listFiles(new File(torrentPath), 
+					String.format("%s,%s", CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()).split(","), true);
+			logger.debug("Scan torrents file {}, found {}", torrentPath, foundTorrent.size());
+			
+			for (Video video : getVideoList()) {
+				video.resetTorrents();
+				for (File file : foundTorrent) {
+					if (StringUtils.contains(file.getName(), video.getOpus())) {
+						video.addTorrents(file);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override

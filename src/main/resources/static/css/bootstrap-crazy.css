@@ -61,6 +61,11 @@ label {
 .text-bold {
 	font-weight: bold;
 }
+.number {
+	font-size: 12px;
+	text-align: right;
+}
+
 
 /* bootstrap override */
 .table {
@@ -91,7 +96,7 @@ select.input-sm, .input-sm {
 }
 
 #query, #search, .search {
-	background-color: rgba(255, 255, 255, 0);
+	background-color: rgba(255, 255, 255, 0.5);
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 0 0 1px rgba(0,0,0,0.08);	
 	transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
 	color: #000;

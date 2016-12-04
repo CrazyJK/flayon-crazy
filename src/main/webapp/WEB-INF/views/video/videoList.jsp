@@ -69,7 +69,7 @@ function view() {
 			<tbody>
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<tr class="nowrap">
-					<td class="text-right">${status.count}</td>
+					<td class="number">${status.count}</td>
 					<td style="max-width: 90px;">
 						<div class="nowrap">
 							<a onclick="fnViewStudioDetail('${video.studio.name}')">${video.studio.name}</a>
@@ -90,15 +90,15 @@ function view() {
 					</td>
 					<td>${video.releaseDate}</td>
 					<td>${video.videoDate}</td>
-					<td class="text-right">${video.playCount}</td>
-					<td class="text-right">${video.rank}</td>
-					<td class="text-right">
+					<td class="number">${video.playCount}</td>
+					<td class="number">${video.rank}</td>
+					<td class="number">
 						<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.00G"/>
 					</td>
-					<td class="text-right">
+					<td class="number">
 						<span title="${video.scoreDesc}">${video.score}</span>
 					</td>
-					<td class="text-right">${video.videoCandidates.size()}</td>
+					<td class="number">${video.videoCandidates.size()}</td>
 				</tr>
 				</c:forEach>
 			</tbody>

@@ -255,15 +255,24 @@ function fnFavorite(dom, name) {
  * @param keyword
  */
 function searchContent(keyword) {
+	var foundCount = 0;
 	$("div#content_div table tr").each(function() {
 		var found = false;
 		$(this).children().each(function() {
 			if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
 				found = true;
+				foundCount++;
 			}
 		});
 		$(this).toggle(found);
 	});
+	if (keyword === '') {
+		$(".label-search").hide();
+	}
+	else {
+		$(".label-search").removeClass("hide").show();
+		$(".count-search").html(foundCount);
+	}
 }
 /**
  * all un checked in actress/studio/tag div
@@ -391,4 +400,9 @@ function showDebug(debugDomId, msg) {
 			resultObj.fadeOut(500);
 	    }, 1000);
 	});	
+}
+
+function goTorrentMove(opus) {
+	fnMarkChoice(opus);
+	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 }

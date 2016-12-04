@@ -108,7 +108,7 @@ function request() {
 		url: '/video/list.json',
 		data: {},
 		cache: false,
-		timeout: 30000
+		timeout: 60000
 	}).done(function(data) {
 		if (data.exception) {
 			showStatus(true, data.exception.message, true);
