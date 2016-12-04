@@ -106,12 +106,12 @@ function fsOpen(folder) {
 
 	<div class="tab-content">
 		<section id="folder" class="tab-pane fade ${tab eq 'folder' ? 'in active' : ''}">
-			<table class="table table-condensed table-hover table-bordered">
+			<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
 						<th><s:message code="video.folder"/></th>
-						<th><s:message code="video.size"/></th>
-						<th><s:message code="video.length"/></th>
+						<th class="text-right"><s:message code="video.size"/></th>
+						<th class="text-right"><s:message code="video.length"/></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -130,12 +130,14 @@ function fsOpen(folder) {
 						</c:otherwise>
 					</c:choose>
 					</c:forEach>
-					<tr>
-						<td style="border-top:1px double blue;"><s:message code="video.total"/></td>
-						<td class="text-right" style="border-top:1px double blue;"><fmt:formatNumber value="${totalSize}" type="NUMBER"/></td>
-						<td class="text-right" style="border-top:1px double blue;"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></td>
-					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td><s:message code="video.total"/></td>
+						<td class="text-right"><fmt:formatNumber value="${totalSize}" type="NUMBER"/></td>
+						<td class="text-right"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></td>
+					</tr>
+				</tfoot>
 			</table>
 		</section>
 
