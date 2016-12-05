@@ -255,6 +255,9 @@ function fnFavorite(dom, name) {
  * @param keyword
  */
 function searchContent(keyword) {
+	if(event.keyCode != 13)
+		return;
+	loading(true, "Search : " + keyword);
 	var foundCount = 0;
 	$("div#content_div table tr").each(function() {
 		var found = false;
@@ -273,6 +276,7 @@ function searchContent(keyword) {
 		$(".label-search").removeClass("hide").show();
 		$(".count-search").html(foundCount);
 	}
+	loading(false);
 }
 /**
  * all un checked in actress/studio/tag div

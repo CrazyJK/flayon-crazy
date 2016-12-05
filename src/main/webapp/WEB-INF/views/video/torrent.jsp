@@ -137,15 +137,17 @@ function fnChangeMode(mode) {
 						<c:forEach items="${video.videoCandidates}" var="candidate">
 						<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
 							<input type="hidden" name="path" value="${candidate.absolutePath}"/>
-							<button type="submit" class="btn btn-xs btn-default" onclick="fnSelectCandidateVideo('${video.opus}');">${candidate.name}</button>
+							<button type="submit" class="btn btn-xs btn-primary" onclick="fnSelectCandidateVideo('${video.opus}');">${candidate.name}</button>
 						</form>
 						<script type="text/javascript">
 							totalCandidatedVideo += 1;	
 						</script>
 						</c:forEach>
 						<c:if test="${video.torrents.size() > 0}">
-							<button class="btn btn-xs btn-default" onclick="goTorrentMove('${video.opus}');" title="${video.torrents}">Start
-								<small class="badge">${video.torrents.size()}</small>
+							<button class="btn btn-xs btn-warning" onclick="goTorrentMove('${video.opus}');" title="${video.torrents}">
+								<c:forEach items="${video.torrents}" var="torrent">
+									${torrent.name}
+								</c:forEach>
 							</button>
 						</c:if>
 					</td>
