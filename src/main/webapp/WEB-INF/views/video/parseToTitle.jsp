@@ -17,6 +17,13 @@
 .mark {
 	color: red;
 }
+#inputDiv {
+	position: fixed; 
+	top: 74px; 
+	left: 18px; 
+	width: 200px; 
+	padding-right: 5px;
+}
 </style>
 <script type="text/javascript">
 function fnFindVideo(opus) {
@@ -24,7 +31,8 @@ function fnFindVideo(opus) {
 	popup('${urlSearchVideo}' + opus, 'videoSearch', 900, 950);
 }
 function resizeSecondDiv() {
-	$("#inputDiv").outerHeight(calculatedDivHeight - 25);	
+	$("#inputDiv").offset({top: $(".table").offset().top}).outerHeight(calculatedDivHeight - 25);
+	//console.log("Top", $(".table").offset().top);
 }
 function toggleInputDiv() {
 	$("#inputTd").toggle();
@@ -72,7 +80,7 @@ function saveCoverAll() {
 		<table id="resultList" style="width:100%;">
 			<tr>
 				<td id="inputTd" style="width:200px;">
-					<div id="inputDiv" style="position:absolute; top:10px; left:10px; width:200px; padding-right: 5px;">
+					<div id="inputDiv">
 						<textarea id="titleData" name="titleData" class="titleArea" placeholder="input title data">${titleData}</textarea>
 					</div>
 				</td>

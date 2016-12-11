@@ -22,7 +22,8 @@ public class TitlePart {
 	String checkDescShort;
 	
 	final static String regexKorean = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
-	final static String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
+	final static String regexEnglish = " ^[a-zA-Z]*$";
+//	final static String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
 	final static String regexDate = "^((19|20)\\d\\d).(0?[1-9]|1[012]).(0?[1-9]|[12][0-9]|3[01])$";
 	
 	public TitlePart() {
@@ -94,7 +95,7 @@ public class TitlePart {
 	public void setTitle(String title) {
 		this.title = Utils.removeInvalidFilename(title);
 		// valid check
-		if (invalidTitle(title)) {
+		if (invalidTitle(title) || warningTitle(title)) {
 			this.check = true;
 			this.checkDesc += "Title ";
 			this.checkDescShort += "T ";
@@ -141,6 +142,10 @@ public class TitlePart {
 				studio, opus, title, actress, releaseDate);
 	}
 
+	public String toFullLowerName() {
+		return toString().toLowerCase();
+	}
+	
 	public void setSeen() {
 		this.check = true;
 		this.checkDesc += "Seen ";
@@ -167,12 +172,16 @@ public class TitlePart {
 	}
 	
 	/**
-	 * 제목 검증. 값이 있어야 한다.
+	 * 제목 검증. 값이 있어야 한다 영어가 포함되면 의심.
 	 * @param titleText
 	 * @return 틀리면 <code>true</code>
 	 */
 	public static boolean invalidTitle(String titleText) {
 		return StringUtils.isBlank(titleText);
+	}
+	
+	public static boolean warningTitle(String titleText) {
+		return Pattern.matches(regexEnglish, titleText);
 	}
 	
 	/**
@@ -190,7 +199,7 @@ public class TitlePart {
 	 * @return 틀리면 <code>true</code>
 	 */
 	public static boolean invalidReleaseDate(String releaseText) {
-		return StringUtils.isBlank(releaseText) || !Pattern.matches(regexSimple, releaseText) || !Pattern.matches(regexDate, releaseText);
+		return StringUtils.isBlank(releaseText) || !Pattern.matches(regexDate, releaseText);
 	}
 
 	/**

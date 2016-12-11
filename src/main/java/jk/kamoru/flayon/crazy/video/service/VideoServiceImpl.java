@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy.video.service;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -742,30 +743,37 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		/// 폴더의 최대 크기
 		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
 		// 한번에 옮길 비디오 개수
-		int maximumCountOfMoveVideo = 5;
+		int maximumCountOfMoveVideo = 15;
 		// 옮긴 비디오 개수
 		int countOfMoveVideo = 0;
 		// Watched 폴더
 		File mainBaseFile = new File(STORAGE_PATHS[0]);
+		// Watched Root
+		Path mainBaseRoot = mainBaseFile.toPath().getRoot();
 		// Watched 폴더 크기
 		long usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		// 여유 공간
 		long freeSpace = mainBaseFile.getFreeSpace();
 		
-		log.info("    MOVE WATCHED VIDEO START :: Watched {} GB, free {} GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		log.info("    MOVE WATCHED VIDEO START :: Watched {} GB, free {} GB, watched root={}", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB, mainBaseRoot);
 
 		// 전체 비디오중에서
 		for (Video video : getVideoListSortByScore()) {
 			
-			// 드라이드에 남은 공간이 최소 공간보다 작으면 break
-			if (freeSpace < MIN_FREE_SPAC) {
-				log.info("      Not enough space. {} < {}", freeSpace / FileUtils.ONE_GB, MIN_FREE_SPAC / FileUtils.ONE_GB);
-				break;
-			}
-			// Watched 폴더 크기가 최대 크기보다 커졌으면 break
-			if (usedSpace > maximumSizeOfEntireVideo) {
-				log.info("      Exceed the maximum size. {}  > {}", usedSpace / FileUtils.ONE_GB, maximumSizeOfEntireVideo / FileUtils.ONE_GB);
-				break;
+			Path videoRoot = video.getDelegatePathFile().toPath().getRoot();
+			// 다른 드라이브에 있는 파일이면, 가능한 공간 체크
+			if (!mainBaseRoot.equals(videoRoot)) {
+				log.debug("video root {}", videoRoot);
+				// 드라이드에 남은 공간이 최소 공간보다 작으면 break
+				if (freeSpace < MIN_FREE_SPAC) {
+					log.debug("      Not enough space, {} < {}. opus={}", freeSpace / FileUtils.ONE_GB, MIN_FREE_SPAC / FileUtils.ONE_GB, video.getOpus());
+					continue;
+				}
+				// Watched 폴더 크기가 최대 크기보다 커졌으면 break
+				if (usedSpace > maximumSizeOfEntireVideo) {
+					log.debug("      Exceed the maximum size, {}  > {}. opus={}", usedSpace / FileUtils.ONE_GB, maximumSizeOfEntireVideo / FileUtils.ONE_GB, video.getOpus());
+					continue;
+				}
 			}
 			
 			// 플레이 한적이 없는 비디오는 pass
@@ -1081,7 +1089,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			}
 		}
 		return titlePartList.stream()
-				.sorted(Comparator.comparing(TitlePart::getCheckDesc).reversed().thenComparing(Comparator.comparing(TitlePart::toString)))
+//				.sorted(Comparator.comparing(TitlePart::getCheckDesc).reversed().thenComparing(Comparator.comparing(TitlePart::toString)))
+				.sorted(Comparator.comparing(TitlePart::toFullLowerName))
 				.collect(Collectors.toList());
 	}
 	

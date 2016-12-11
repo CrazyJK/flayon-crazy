@@ -143,7 +143,7 @@ $(document).ready(function() {
 function showNav() {
 	var found = false;
 	$("nav#deco_nav ul li a").each(function() {
-		console.log($(this).attr("href"), locationPathname);
+		// console.log($(this).attr("href"), locationPathname);
 		if ($(this).attr("href") === locationPathname) {
 			$(this).parent().addClass("active");
 			found = true;
