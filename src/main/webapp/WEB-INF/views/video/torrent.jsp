@@ -144,11 +144,11 @@ function fnChangeMode(mode) {
 						</script>
 						</c:forEach>
 						<c:if test="${video.torrents.size() > 0}">
-							<button class="btn btn-xs btn-warning" onclick="goTorrentMove('${video.opus}');" title="${video.torrents}">
-								<c:forEach items="${video.torrents}" var="torrent">
+							<c:forEach items="${video.torrents}" var="torrent">
+								<button class="btn btn-xs btn-warning" onclick="goTorrentMove('${video.opus}');">
 									${torrent.name}
-								</c:forEach>
-							</button>
+								</button>
+							</c:forEach>
 						</c:if>
 					</td>
 				</tr>
