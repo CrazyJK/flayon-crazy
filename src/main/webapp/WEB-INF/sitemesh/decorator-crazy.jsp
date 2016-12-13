@@ -273,7 +273,7 @@ window.addEventListener('load', function(e) {
 	loading(true, "Loading...");
 	</script> 
 
-	<nav id="deco_nav">
+ 	<nav id="deco_nav">
 		<ul class="nav nav-pills">
 			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
 			<li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a>
