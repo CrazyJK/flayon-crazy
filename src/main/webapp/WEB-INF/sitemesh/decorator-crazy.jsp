@@ -72,7 +72,7 @@ $(document).ready(function() {
  	showNav();
  	
 	$("#deco_nav a[href]").on("click", function() {
-		loading(true);
+		loading(true, "Loading");
 	});
 	$("#header_div form").submit(function(event) {
 		console.log("form submit...");
