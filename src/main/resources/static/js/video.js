@@ -395,10 +395,11 @@ function showDebug(debugDomId, msg) {
 	var resultObj = $("#" + resultId);
 	if (resultObj.length == 0)
 		resultObj = $("<span>").attr("id", resultId).addClass("label label-danger").html("Copied").hide();
-	$("#" + debugDomId).attr("data-clipboard-text", msg).css("cursor", "copy").html(msg).parent().append(resultObj);
+	$("#" + debugDomId).attr("data-clipboard-text", msg).css("cursor", "pointer").html("Click to copy url").show().parent().append(resultObj);
 
 	new ZeroClipboard(document.getElementById(debugDomId)).on('aftercopy', function(event) {
 		// event.target.style.color = 'red';
+		event.target.style.display = 'none';
 		resultObj.show();
 		setTimeout(function() {
 			resultObj.fadeOut(500);
