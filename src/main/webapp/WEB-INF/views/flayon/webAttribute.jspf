@@ -8,6 +8,7 @@
     	<li><a data-toggle="tab" href="#environment">Environment</a></li>
     	<li><a data-toggle="tab" href="#profiles">Spring profiles</a></li>
 	</ul>
+
 	<div class="tab-content">
     	<div id="session" class="tab-pane fade in active">
 			<section class="panel panel-info">

@@ -420,7 +420,7 @@ public class VideoController extends CrazyController {
 	 */
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public String videoDetail(Model model, @PathVariable String opus) {
-		logger.info(opus);
+		logger.info("videoDetail {}", opus);
 		Video video = videoService.getVideo(opus);
 		if (video == null)
 			throw new VideoNotFoundException(opus);

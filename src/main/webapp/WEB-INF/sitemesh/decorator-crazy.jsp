@@ -147,7 +147,6 @@ function showNav() {
 		if ($(this).attr("href") === locationPathname) {
 			$(this).parent().addClass("active");
 			found = true;
-			console.log("found");
 		}
 	});
 	if(!found)
@@ -157,7 +156,7 @@ function showNav() {
  * post 액션
  */
 function actionFrame(reqUrl, reqData, method, msg, interval) {
-	console.log(reqUrl, reqData, method, msg, interval);
+	console.log("actionFrame", reqUrl, reqData, method, msg, interval);
 	$.ajax({
 		type: method ? method : "POST",
 		url: reqUrl,
@@ -194,6 +193,7 @@ function actionFrame(reqUrl, reqData, method, msg, interval) {
 	*/
 }
 function loading(show, msg, interval, detail) {
+	console.log("loading", show, msg, interval, detail);
 	if (show) {
 		$("#loading").css("display", "table");
 		tSec = 1;
@@ -207,7 +207,6 @@ function loading(show, msg, interval, detail) {
 		$("#loading-msg").html(msg);
 	if (interval)
 		$("#loading").fadeOut(interval, function() {
-			console.log("call clearTimer");
 			loadingTimer(false);
 		});
 	if (detail) {
@@ -226,8 +225,8 @@ function toogleBody() {
 	});
 }
 function loadingTimer(start) {
+	console.log("loadingTimer", start, tSec);
 	if (start) {
-		console.log("loadingTimer", tSec);
 		$("#loading-timer").html(tSec++);
 	}
 	else {

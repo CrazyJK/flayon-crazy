@@ -8,6 +8,8 @@ public class CrazyException extends FlayOnException {
 	
 	private static final String KIND = "Crazy";
 	
+	String kind = KIND;
+	
 	public CrazyException(String message, Throwable cause) {
 		super(message, cause);
 	}
@@ -21,7 +23,10 @@ public class CrazyException extends FlayOnException {
 	}
 
 	public String getKind() {
-		return KIND;
+		return kind;
 	}
 
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
 }

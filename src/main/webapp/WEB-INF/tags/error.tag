@@ -3,9 +3,9 @@
 <%@ taglib prefix="s"    uri="http://www.springframework.org/tags"%>
 
 <div>
-	<a class="label" onclick="$('#stack-trace').toggle()"><s:message code="default.stacktrace"/></a>
-	<a class="label" onclick="$('#request-attribute').toggle()"><s:message code="default.request-attribute"/></a>
-	<a class="label" onclick="$('#session-attribute').toggle()"><s:message code="default.session-attribute"/></a>
+	<a class="btn btn-link" onclick="$('#stack-trace').toggle()"><s:message code="default.stacktrace"/></a>
+	<a class="btn btn-link" onclick="$('#request-attribute').toggle()"><s:message code="default.request-attribute"/></a>
+	<a class="btn btn-link" onclick="$('#session-attribute').toggle()"><s:message code="default.session-attribute"/></a>
 </div>
 
 <div id="stack-trace" style="display:none;">
@@ -60,5 +60,5 @@
 </div>
 	
 <script type="text/javascript">
-loading(true, "done", 100);
+//loading(true, "done", 100);
 </script>	

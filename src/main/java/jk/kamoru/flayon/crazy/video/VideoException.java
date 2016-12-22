@@ -16,38 +16,39 @@ public class VideoException extends CrazyException {
 	
 	public VideoException(String message, Throwable cause) {
 		super(message, cause);
+		super.setKind(KIND);
 	}
 
 	public VideoException(String message) {
 		super(message);
+		super.setKind(KIND);
 	}
 
 	public VideoException(Throwable cause) {
 		super(cause);
+		super.setKind(KIND);
 	}
 
 	public VideoException(Video video, String message, Throwable cause) {
 		super(String.format("[%s] %s", video.getOpus(), message), cause);
+		super.setKind(KIND);
 		this.video = video;
 	}
 
 	public VideoException(Video video, String message) {
 		super(String.format("[%s] %s", video.getOpus(), message));
+		super.setKind(KIND);
 		this.video = video;
 	}
 
 	public VideoException(Video video, Throwable cause) {
 		super(String.format("[%s]", video.getOpus()), cause);
+		super.setKind(KIND);
 		this.video = video;
 	}
 
 	public Video getVideo() {
 		return video;
-	}
-	
-	@Override
-	public String getKind() {
-		return KIND;
 	}
 
 }

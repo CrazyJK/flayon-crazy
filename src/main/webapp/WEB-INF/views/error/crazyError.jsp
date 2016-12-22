@@ -8,20 +8,34 @@
 <head>
 <title><s:message code="error.kamoru.title" arguments="${exception.kind}"/></title>
 <script type="text/javascript">
+bgContinue = false;
 if (self.innerHeight == 0)
 	alert('<s:message code="error.kamoru.message" arguments="${exception.kind},${exception.message}"/>');
 </script>
 </head>
 <body>
 
-	<header id="error-header">
-		<h1><s:message code="error.kamoru.header" arguments="${exception.kind}"/></h1>
-		<h2><s:message code="error.kamoru.message" arguments="${exception.kind},${exception.message}"/></h2>
-	</header>
+	<div class="container">
+		<div class="jumbotron">
+			<header id="page-header">
+				<h1>${exception.kind} Error</h1>
+				<h2>${exception.message}</h2>
+			</header>
+		</div>
 
-	<article id="error-article">
-		<jk:error/>
-	</article>
+
+		<div class="text-right">
+			<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
+		</div>
+		<div id="webContext" class="collapse">
+		<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
+		</div>
+<%-- 	
+		<article id="error-article">
+			<jk:error/>
+		</article>
+ --%>
+	</div>
 
 </body>
 </html>

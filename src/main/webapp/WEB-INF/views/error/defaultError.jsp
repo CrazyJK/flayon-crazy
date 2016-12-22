@@ -8,6 +8,7 @@
 <head>
 <title><s:message code="error.default.title"/></title>
 <script type="text/javascript">
+bgContinue = false;
 if (self.innerHeight == 0) {
 	alert('<s:message code="error.default.message" arguments="${exception.message}"/>');
 }

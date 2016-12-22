@@ -13,34 +13,34 @@ public class ImageException extends CrazyException {
 	
 	public ImageException(Image image, String message, Throwable cause) {
 		super(String.format("[%s] %s", image.getName(), message), cause);
+		super.setKind(KIND);
 		this.image = image;
 	}
 
 	public ImageException(Image image, String message) {
 		super(String.format("[%s] %s", image.getName(), message));
+		super.setKind(KIND);
 		this.image = image;
 	}
 
 	public ImageException(Image image, Throwable cause) {
 		super(String.format("[%s]", image.getName()), cause);
+		super.setKind(KIND);
 		this.image = image;
 	}
 	
 	public ImageException(String message, Throwable cause) {
 		super(message, cause);
+		super.setKind(KIND);
 	}
 	
 	public ImageException(String message) {
 		super(message);
+		super.setKind(KIND);
 	}
 	
 	public Image getImage() {
 		return image;
-	}
-	
-	@Override
-	public String getKind() {
-		return KIND;
 	}
 
 }
