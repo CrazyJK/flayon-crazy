@@ -157,14 +157,14 @@ function resizeSecondDiv() {
 			<s:message code="video.video"/> <s:message code="video.search"/>
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>
+		<span id="debug"     class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 		<div class="btn-group">
 				<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
 				<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 				<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>		
-		<span id="url" class="label label-info"></span>
-		<span id="debug" class="label label-info"></span>
-		<span id="searchURL" class="label label-info"></span>
+		<span id="url"       class="label label-info"></span>
+		<span id="searchURL" class="label label-primary"></span>
 	</div>
 	
 	<div id="content_div" class="row" style="margin:0;">
