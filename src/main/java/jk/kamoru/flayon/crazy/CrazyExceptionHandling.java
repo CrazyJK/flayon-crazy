@@ -21,30 +21,36 @@ public class CrazyExceptionHandling {
 	public ModelAndView crazyException(CrazyException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/crazyError");
 	}
+	
 	@ExceptionHandler(value = VideoException.class)
 	public ModelAndView videoException(VideoException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/videoError");
 	}
-//	@ExceptionHandler(value = VideoNotFoundException.class)
-//	public ModelAndView videoNotFoundException(VideoNotFoundException exception, WebRequest request, HttpServletResponse response) {
-//		return modelAndView(exception, response, "error/videoNotFoundError");
-//	}
-//	@ExceptionHandler(value = StudioNotFoundException.class)
-//	public ModelAndView studioNotFoundException(StudioNotFoundException exception, WebRequest request, HttpServletResponse response) {
-//		return modelAndView(exception, response, "error/studioNotFoundError");
-//	}
-//	@ExceptionHandler(value = ActressNotFoundException.class)
-//	public ModelAndView actressNotFoundException(ActressNotFoundException exception, WebRequest request, HttpServletResponse response) {
-//		return modelAndView(exception, response, "error/actressNotFoundError");
-//	}
+	
+	@ExceptionHandler(value = VideoNotFoundException.class)
+	public ModelAndView videoNotFoundException(VideoNotFoundException exception, WebRequest request, HttpServletResponse response) {
+		return modelAndView(exception, response, "error/videoError");
+	}
+	
+	@ExceptionHandler(value = StudioNotFoundException.class)
+	public ModelAndView studioNotFoundException(StudioNotFoundException exception, WebRequest request, HttpServletResponse response) {
+		return modelAndView(exception, response, "error/videoError");
+	}
+	
+	@ExceptionHandler(value = ActressNotFoundException.class)
+	public ModelAndView actressNotFoundException(ActressNotFoundException exception, WebRequest request, HttpServletResponse response) {
+		return modelAndView(exception, response, "error/videoError");
+	}
+	
 	@ExceptionHandler(value = ImageException.class)
 	public ModelAndView imageException(ImageException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/imageError");
 	}
-//	@ExceptionHandler(value = ImageNotFoundException.class)
-//	public ModelAndView imageNotFoundException(ImageNotFoundException exception, WebRequest request, HttpServletResponse response) {
-//		return modelAndView(exception, response, "error/imageNotFoundError");
-//	}
+	
+	@ExceptionHandler(value = ImageNotFoundException.class)
+	public ModelAndView imageNotFoundException(ImageNotFoundException exception, WebRequest request, HttpServletResponse response) {
+		return modelAndView(exception, response, "error/imageError");
+	}
 
 	private ModelAndView modelAndView(CrazyException exception, HttpServletResponse response, String viewName) {
 		ModelAndView modelAndView = new ModelAndView(viewName);
