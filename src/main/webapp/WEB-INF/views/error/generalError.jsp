@@ -25,7 +25,7 @@ bgContinue = false;
     </code>
 
 	<div class="text-right">
-		<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
+		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
 	</div>
 	<div id="webContext" class="collapse">
 	<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    

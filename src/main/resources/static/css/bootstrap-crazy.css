@@ -115,3 +115,19 @@ select.input-sm, .input-sm {
 	box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08);
 }
 
+.webattributes dt {
+	text-align: left;
+}
+.webattributes dd {
+	color: #337ab7;
+}
+.webattributes ul.stack-view {
+	list-style: none;
+	background-color: #111;
+	color: #eee;
+	padding: 5px;
+	border-radius: 4px;
+	word-wrap: break-word;
+}
+
+

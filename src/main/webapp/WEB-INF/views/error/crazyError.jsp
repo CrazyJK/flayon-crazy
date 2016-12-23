@@ -7,6 +7,10 @@
 <html>
 <head>
 <title><s:message code="error.kamoru.title" arguments="${exception.kind}"/></title>
+<link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
+<script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript">
 bgContinue = false;
 if (self.innerHeight == 0)
@@ -23,18 +27,14 @@ if (self.innerHeight == 0)
 			</header>
 		</div>
 
-
-		<div class="text-right">
-			<button class="btn btn-info" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
+		<div class="error-detail">
+			<div class="text-right">
+				<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
+			</div>
+			<div id="webContext" class="collapse">
+				<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
+			</div>
 		</div>
-		<div id="webContext" class="collapse">
-		<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
-		</div>
-<%-- 	
-		<article id="error-article">
-			<jk:error/>
-		</article>
- --%>
 	</div>
 
 </body>

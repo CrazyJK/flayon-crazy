@@ -22,8 +22,8 @@
   	</mapping>-->
    
    	<!-- Exclude path from decoration. -->
-  	<mapping path="/res/*" 	exclue="false"/>
-  	<mapping path="/h2console*" 	exclue="false"/>
+  	<mapping path="/res/*" 	    exclue="false"/>
+  	<mapping path="/h2console*" exclue="false"/>
   	<mapping path="/html/*" 	exclue="false"/>
 
 </sitemesh>

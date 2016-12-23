@@ -7,9 +7,12 @@
     	<li><a data-toggle="tab" href="#properties">System properties</a></li>
     	<li><a data-toggle="tab" href="#environment">Environment</a></li>
     	<li><a data-toggle="tab" href="#profiles">Spring profiles</a></li>
+    	<c:if test="${exception ne null}">
+    	<li><a data-toggle="tab" href="#exception">Exception.stackTrace</a></li>
+    	</c:if>
 	</ul>
 
-	<div class="tab-content">
+	<div class="tab-content webattributes">
     	<div id="session" class="tab-pane fade in active">
 			<section class="panel panel-info">
 				<header class="panel-heading">
@@ -117,6 +120,22 @@
 				</div>
 			</section>
 		</div>
+		<c:if test="${exception ne null}">
+    	<div id="exception" class="tab-pane fade">
+			<section class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Exception stackTrace</h3>
+				</header>
+				<div class="panel-body">
+					<ul class="stack-view">
+						<c:forEach items="${exception.stackTrace}" var="stackTrace">
+						<li>${stackTrace}</li>
+						</c:forEach>
+					</ul>
+				</div>
+			</section>
+		</div>
+		</c:if>
 		<script type="text/javascript">
 		$(".panel-heading").hide();
 		</script>

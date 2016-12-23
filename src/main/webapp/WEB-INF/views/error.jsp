@@ -52,6 +52,7 @@ $(document).ready(function() {
 	    <h1>${status} : ${error}</h1>
 	    <p>${exception}</p>
 	    <pre><c:out value="${message}" escapeXml="true"/></pre>
+		<pre><c:out value="${requestScope['javax.servlet.error.exception']}" escapeXml="true"/></pre>
 	</div>
 
 	<c:if test="${status ne 404}">

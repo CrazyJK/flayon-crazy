@@ -2,8 +2,10 @@ package jk.kamoru.flayon.crazy;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,36 +20,43 @@ import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 public class CrazyExceptionHandling {
 
 	@ExceptionHandler(value = CrazyException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView crazyException(CrazyException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/crazyError");
 	}
 	
 	@ExceptionHandler(value = VideoException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView videoException(VideoException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/videoError");
 	}
 	
 	@ExceptionHandler(value = VideoNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView videoNotFoundException(VideoNotFoundException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/videoError");
 	}
 	
 	@ExceptionHandler(value = StudioNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView studioNotFoundException(StudioNotFoundException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/videoError");
 	}
 	
 	@ExceptionHandler(value = ActressNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView actressNotFoundException(ActressNotFoundException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/videoError");
 	}
 	
 	@ExceptionHandler(value = ImageException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView imageException(ImageException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/imageError");
 	}
 	
 	@ExceptionHandler(value = ImageNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView imageNotFoundException(ImageNotFoundException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, response, "error/imageError");
 	}
