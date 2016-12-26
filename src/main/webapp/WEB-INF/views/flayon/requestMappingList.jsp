@@ -7,7 +7,7 @@
 <title>RequestMapping List</title>
 <style type="text/css">
 table {
-	/* font-size:0.8em; */
+	font-size:0.8em;
 }
 thead > tr {
 	background-color:rgba(255,165,0,.5);

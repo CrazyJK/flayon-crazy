@@ -14,7 +14,6 @@ import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
-import jk.kamoru.flayon.crazy.video.domain.Video;
 
 public abstract class CrazyController extends CrazyProperties {
 

@@ -27,7 +27,7 @@ if (self.innerHeight == 0) {
 			</div>
 			</c:if>
 			<header id="page-header">
-				<h1>${exception.kind} Error ${exception.video.opus}</h1>
+				<h1>${exception.kind} ${exception.video.opus}</h1>
 				<h2>${exception.message}</h2>
 			</header>
 		</div>

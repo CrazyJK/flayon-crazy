@@ -23,7 +23,7 @@ if (self.innerHeight == 0)
 			<img src="<c:url value="/image/${exception.image.idx}"/>" class="img-thumbnail" style="height:150px; float:right;"/>
 			</c:if>
 			<header id="page-header">
-				<h1>${exception.kind} Error ${exception.image.idx}</h1>
+				<h1>${exception.kind} ${exception.image.idx}</h1>
 				<h2>${exception.message}</h2>
 			</header>
 		</div>

@@ -224,13 +224,30 @@ public class VideoController extends CrazyController {
 	
 	/**display video torrent info view
 	 * @param model
+	 * @param getAllTorrents
+	 * @param withData
 	 * @return view name
 	 */
 	@RequestMapping(value="/torrent", method=RequestMethod.GET)
-	public String torrent(Model model, @RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
+	public String torrent(Model model, 
+			@RequestParam(value="data", required=false, defaultValue="false") Boolean withData) {
 		logger.trace("torrent");
-		model.addAttribute("videoList", videoService.torrent(getAllTorrents));
+		if (withData)
+			model.addAttribute("videoList", videoService.torrent(false));
 		return "video/torrent";
+	}
+
+	@RequestMapping(value="/torrent/getAll", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void torrentGetAll() {
+		videoService.torrent(true);
+	}
+	
+	@RequestMapping(value="/torrent2", method=RequestMethod.GET)
+	public String torrent2(Model model, 
+			@RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
+		model.addAttribute("videoList", videoService.torrent(getAllTorrents));
+		return "video/torrent2";
 	}
 
 	/**
@@ -420,7 +437,7 @@ public class VideoController extends CrazyController {
 	 */
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public String videoDetail(Model model, @PathVariable String opus) {
-		logger.info("videoDetail {}", opus);
+		logger.debug("videoDetail {}", opus);
 		Video video = videoService.getVideo(opus);
 		if (video == null)
 			throw new VideoNotFoundException(opus);

@@ -76,7 +76,7 @@ $(document).ready(function() {
 	});
 	$("#header_div form").submit(function(event) {
 		console.log("form submit...");
-		loading(true);
+		loading(true, "form submit");
 	});
 	
 	$(window).bind("resize", resizeDivHeight);
