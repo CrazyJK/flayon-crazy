@@ -19,31 +19,6 @@ var totalVideoSize = parseInt('${fn:length(videoList)}');
 var currentVideoIndex = getRandomInteger(1, totalVideoSize);
 var listViewType = '${videoSearch.listViewType}';
 var currBGImageUrl;
-
-/** 바탕화면 보기 */
-function fnViewBGImage() {
-/* 	
-	$("#contentContainer").slideToggle("slow");
-	$("#content_div").toggleClass("box");
-	$("#bgActionGroup").toggle();	
- */	
-	$("#contentContainer").slideToggle({
-		duration: 1000,
-		start: function() {
-			$("#bgActionGroup").toggle({
-				duration: 1000,
-				start: function() {
-					$("#content_div").toggleClass("box");
-				},
-				complete: function() {
-					loading(false);
-				}
-			});	
-		},
-		complete: function() {
-		}
-	});
-}
 </script>
 </head>
 <body>
@@ -54,7 +29,7 @@ function fnViewBGImage() {
 	<div id="searchDiv" class="text-center">
 		<!-- Search : Text -->
 		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
-		<form:input path="searchText" cssClass="form-control input-sm input-search" placeHolder="Search" style="width:120px;"/>
+		<form:input path="searchText" cssClass="form-control input-sm search" placeHolder="Search" style="width:120px;"/>
 		<!-- Search : Additional condition. video, subtitles, cover -->
 		<label title="<s:message code="video.existVideo"/>">
 			<form:checkbox path="existVideo" cssClass="sr-only"/>
@@ -113,8 +88,7 @@ function fnViewBGImage() {
 			<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
 			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
 		</label>
-		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
-		<%-- <button class="btn btn-xs btn-default" onclick="fnReloadVideoSource();" title="<s:message code="video.reload.title"/>"><s:message code="video.reload"/></button> --%>
+		<!-- Play -->
 		<button class="btn btn-xs btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></button>
 
 		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">

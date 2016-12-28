@@ -78,7 +78,9 @@ function searchAndHighlight(searchTerm) {
 <body>
 <div id="debugDiv"></div>
 <div id="queryDiv" class="div-box">
-	<label for="query"><s:message code="video.history"/> <s:message code="video.search"/></label>
+	<label for="query" class="title">
+		<s:message code="video.history"/> <s:message code="video.search"/>
+	</label>
 	<input type="search" name="query" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
 	<span id="debug"></span>
 </div>

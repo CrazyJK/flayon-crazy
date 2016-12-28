@@ -27,7 +27,7 @@ function setBackgroundImage(imgIdx) {
 		currBGImageNo = getRandomInteger(0, bgImageCount);
 	
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
-	//$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
+//	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
 	$("body").css("background-image", "url(" + currBGImageUrl + ")");
 }
 /**

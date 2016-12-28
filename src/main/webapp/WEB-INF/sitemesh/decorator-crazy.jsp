@@ -35,7 +35,7 @@ var videoPath = '<c:url value="/video"/>';
 var imagePath = '<c:url value="/image"/>';
 var locationPathname = window.location.pathname;
 var currBGImageNo = 0;
-var bgImageCount = parseInt(${bgImageCount});
+var bgImageCount = parseInt('${bgImageCount}');
 /** content_div에 이미지를 보여줄지 여부 */
 var bgContinue = true;
 var urlSearchVideo = '${urlSearchVideo}';

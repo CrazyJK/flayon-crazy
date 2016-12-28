@@ -153,7 +153,7 @@ function resizeSecondDiv() {
 <div class="container-fluid">
 
 	<div id="header_div" class="box form-inline">
-		<label for="search">
+		<label for="query" class="title">
 			<s:message code="video.video"/> <s:message code="video.search"/>
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>

@@ -115,7 +115,7 @@ function request() {
 		}
 		else {
 			$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
-				videoList.push(new Video(row));
+				videoList.push(new Video(i, row));
 			});
 			$("button[data-sort-code='SC']").click(); // 정렬하여 보여주기
 		}

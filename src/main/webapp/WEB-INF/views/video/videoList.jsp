@@ -38,7 +38,7 @@ function view() {
 <body>
 <div class="container-fluid" role="main">
 	<div id="header_div" class="box form-inline">
-		<label for="search">
+		<label for="search" class="title">
 			<s:message code="video.total"/> <s:message code="video.video"/> <span class="badge">${fn:length(videoList)}</span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
@@ -57,7 +57,7 @@ function view() {
 	</div>
 
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<table id="list" class="table table-condensed table-hover table-bordered">
+		<table id="list" class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th>#</th>

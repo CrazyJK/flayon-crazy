@@ -7,44 +7,53 @@ body {
 [onclick], [ng-click] {
 	cursor: pointer;
 }
-#deco_nav {
+nav#deco_nav {
 	position: fixed;
 	top: 0;
 	right: 20px;
 	margin: 0;
 	padding: 1px;
 	z-index: 1818;
-	background-color: rgba(255, 255, 255, 0.8);
-	/* border-radius: 4px; */
-	border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-	transition: box-shadow 500ms linear 0ms,
-				background-color .5s ease;
+	background-color: rgba(255, 255, 255, 0);
+	border-radius: 0 0 4px 4px;
+	transition: box-shadow 500ms linear 0ms, background-color .5s ease;
 }
-#deco_nav:hover {
+nav#deco_nav:hover {
 	box-shadow: 0px 1px 10px rgba(0,0,0,0.5);
-	background-color: rgba(255, 255, 255, .9);
+	background-color: rgba(255, 255, 255, 0.8);
 }
-#deco_nav li a {
+nav#deco_nav > ul.nav-pills > li {
 	font-size: 10px;
-	padding: 2px;
-	font-weight: 700;
 }
-#deco_nav li a[onclick] {
+nav#deco_nav > ul.nav-pills > li > a {
+	color: #333;
+	padding: 2px;
+	font-weight: 500;
+	text-decoration: none;
+}
+nav#deco_nav > ul.nav-pills > li > a[onclick] {
 	color: #d02f6b;
 }
-#deco_nav li a:hover {
-	text-decoration: none;
-	background-color: rgba(51, 122, 183, 0.4);
+nav#deco_nav > ul.nav-pills > li > a:hover {
+	background-color: rgba(91, 192, 222, 0.4);
 }
-#deco_nav li.active a:hover {
-	text-decoration: none;
-	background-color: rgba(51, 122, 183, 0.8);
+nav#deco_nav > ul.nav-pills > li.active > a {
+	background-color: rgba(91, 192, 222, 0.9);
+	color: #eee;
+}
+nav#deco_nav > ul.nav-pills > li.active > a:hover {
+	background-color: rgba(91, 192, 222, 0.8);
 }
 
 div#header_div {
+	padding-top: 25px;
+	margin-top: 0;
+	border-radius: 0 0 6px 6px;
+	border-top: 0;
+	box-shadow: 0 0 9px rgba(0,0,0,.5);
+}
+div#header_div > ul.list-inline {
+	margin-left: 0;
 }
 div#content_div {
 	overflow:auto; 

@@ -1,7 +1,8 @@
 /**
  * Video Prototype
  */
-function Video(data) {
+function Video(idx, data) {
+	this.idx = idx;
 	this.studio = data.studio;
 	this.opus = data.opus;
 	this.title = data.title;
@@ -33,7 +34,7 @@ function Video(data) {
 	this.actress = this.actressNames();
 
 	this.torrentsHtml = this.torrentNames();
-	this.torrentFindBtn = "<button class='btn btn-xs btn-info' onclick=\"goTorrentSearch('" + this.opus + "');\">Find</button>";
+	this.torrentFindBtn = '<button class="btn btn-xs btn-info" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</button>';
 	this.favoriteHtml = this.favorite ? '<span class="label label-success">Fav</span>' : '';
 
 	this.videoCandidatesHtml = this.candidatesNames();
@@ -48,7 +49,7 @@ Video.prototype.candidatesNames = function() {
 			html += "&nbsp;";
 		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;">';
 		html += '<input type="hidden" name="path" value="' + this.videoCandidates[i] + '"/>';
-		html += '<button type="submit" class="btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(this)">' + getFilename(this.videoCandidates[i]) + '</span>';
+		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</span>';
 		html += '</form>';
 	}
 	return html + "&nbsp;";
@@ -59,7 +60,7 @@ Video.prototype.torrentNames = function() {
 	for (var i=0; i<this.torrents.length; i++) {
 		if (i > 0)
 			html += "&nbsp;";
-		html += "<span class='label label-warning' onclick=\"goTorrentMove('" + this.opus + "')\">" + getFilename(this.torrents[i]) + "</span>";
+		html += '<span class="label label-warning" onclick="goTorrentMove(\'' + this.opus + '\',' + this.idx + ')">' + getFilename(this.torrents[i]) + '</span>';
 	}
 	return html + "&nbsp;";
 }
@@ -101,6 +102,8 @@ Video.prototype.contains = function(query) {
 
 function getFilename(file) {
 	var lastIndex = file.lastIndexOf("\\");
+	if (lastIndex < 0)
+		lastIndex = file.lastIndexOf("/");
 	return file.substring(lastIndex + 1, file.length);
 }
 
