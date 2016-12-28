@@ -10,11 +10,20 @@
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	$("body")
-		.css("background-image","url('<c:url value="/video/${video.opus}/cover" />')")
-		.css("background-size", "100%")
-		.css("background-position", "left top");
+	$("body").css({
+		"background-image": "url('<c:url value="/video/${video.opus}/cover" />')",
+		"background-size": "100%",
+		"background-position": "left top"
+	});
 });
+function moveToInstance() {
+	loading(true, "Move to instance");
+	$("#hiddenHttpMethod").val('PUT');
+	var actionFrm = document.forms['actionFrm'];
+	actionFrm.action = '<c:url value="/video/${video.opus}/moveToInstance"/>';
+	actionFrm.target = '';
+	actionFrm.submit();
+}
 </script>
 </head>
 <body>
@@ -28,6 +37,8 @@ $(document).ready(function() {
 		<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 		<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
 	</dl>
+	<button onclick="moveToInstance()" class="btn btn-xs btn-primary">Move to instance</button>
 </div>
+
 </body>
 </html>
