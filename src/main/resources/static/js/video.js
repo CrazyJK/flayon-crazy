@@ -4,10 +4,10 @@ var calculatedDivHeight = 0;
  * div container 높이 조정
  */
 function resizeDivHeight() {
-	var offset = 30;
+	var offsetMargin = 20;
 	var windowHeight = $(window).outerHeight();
 	var header = $("#header_div").outerHeight();
-	calculatedDivHeight = windowHeight - header - offset;
+	calculatedDivHeight = windowHeight - header - offsetMargin;
 	$("#content_div").outerHeight(calculatedDivHeight);
 	//console.log("resizeDivHeight", calculatedDivHeight);
 	try {

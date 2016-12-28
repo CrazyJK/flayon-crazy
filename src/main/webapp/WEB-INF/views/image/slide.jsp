@@ -141,7 +141,7 @@ function toggleSlideView() {
 	if (playSlide) {
 		$("#thumbnailDiv").css('height', '5px').hide();
 		$("body").css("background", "#000");
-		$("#deco_nav").css("background", "#000");
+//		$("#deco_nav").css("background", "#000");
 		$(".label-info").css("background", "#000");
 		$("#timerBar").css("background", "#000");
 		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
@@ -150,7 +150,7 @@ function toggleSlideView() {
 	else {
 		$("#thumbnailDiv").css('height', '105px').show();
 		$("body").css("background", "#fff");
-		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
+//		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
 		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
 		$("#timerBar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
 		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
@@ -256,7 +256,8 @@ function fnRandomImageView() {
 	fnViewImage(Math.floor(Math.random() * imageCount));
 }
 function fnDisplayThumbnail() {
-	var thumbnailRange = parseInt(parseInt($(window).width() / 200) / 2);
+	var windowWidth = $(window).width();
+	var thumbnailRange = windowWidth / 200 / 2;
 	$("#thumbnailUL").empty();
 	for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
 		var thumbNo = current;

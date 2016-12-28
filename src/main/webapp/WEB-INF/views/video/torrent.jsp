@@ -27,10 +27,6 @@
 .nav-tabs > li > a {
 	padding: 5px 20px;
 }
-.nav-tabs > li > a.nav-info:hover {
-	border-color: transparent;
-	background-color: transparent;
-}
 
 /* for box view */
 #box > ul {
@@ -44,7 +40,7 @@
 
 	margin: 5px;
 	padding: 3px;
-	width: 290px;
+	width: 285px;
 	height: 210px;
 	border-radius: 10px;
 	text-align: left;
@@ -55,11 +51,6 @@
 }
 
 /* for logic */
-.nav-info {
-	font-size: 90%;
-	padding: 5px 10px !important;
-	text-shadow: 1px 1px azure;
-}
 .found {
 	background-color: rgba(73, 153, 108, 0.5);
 }
@@ -98,20 +89,19 @@ var hadTorrentCount = 0;
 
 (function($) {
 	$(document).ready(function() {
-		
 		// init components
 		$.each(sortList, function(i, sort) {
 			$("<button>").addClass("btn btn-xs").data("sort", sort).appendTo($(".btn-group-sort"));
 		});
-
 		// add EventListener
 		fnAddEventListener();
-		
+		// ajax data		
 		request();
 	});
 }(jQuery));
 
 function request() {
+	loading(true, "request...");
 	showStatus(true, "Request...");
 	$.getJSON({
 		method: 'GET',
@@ -144,6 +134,8 @@ function request() {
 		}
 	}).fail(function(jqxhr, textStatus, error) {
 		showStatus(true, textStatus + ", " + error, true);
+	}).always(function() {
+		loading(false);
 	});	
 }
 
@@ -351,10 +343,10 @@ function getAllTorrents() {
 	<div id="header_div" class="box form-inline">
 		<label class="title">
 			Torrent
+      		<input class="form-control input-sm search" placeholder="Search...">
 		</label>
-      	<input class="form-control input-sm search" placeholder="Search...">
-		<span class="nav-info text-info count">Initialize...</span>
-      	<span class="nav-info text-danger status"></span>
+		<span class="label label-info count">Initialize...</span>
+      	<span class="label label-danger status"></span>
       	<div class="float-right">
 			<div class="btn-group btn-group-sort"></div>
 			<button class="btn btn-xs btn-default" onclick="getAllTorrents()">Get All</button>
@@ -363,11 +355,13 @@ function getAllTorrents() {
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
 		<ul class="nav nav-tabs">
-			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
 			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
-			<li class="float-right"><a class="nav-info text-success sorted"></a></li>
-			<li class="float-right"><a class="nav-info text-warning candidate"></a></li>
-			<li class="float-right"><a class="nav-info text-primary torrents"></a></li>
+			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
+			<li class="float-right">
+				<span class="label label-primary torrents"></span>
+				<span class="label label-warning candidate"></span>
+				<span class="label label-success sorted"></span>
+			</li>
 		</ul>
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade">

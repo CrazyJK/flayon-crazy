@@ -366,8 +366,8 @@ var currBGImageUrl;
 		<c:when test="${videoSearch.listViewType eq 'F'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
-					<c:forEach items="${videoList}" var="video">
-						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
+					<c:forEach items="${videoList}" var="video" varStatus="status">
+						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
 							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 520px;">
 								<dt style="margin-top: 479px;">
 									<div class="nowrap">

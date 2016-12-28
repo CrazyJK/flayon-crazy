@@ -43,7 +43,7 @@ var urlSearchActress = '${urlSearchActress}';
 var urlSearchTorrent = '${urlSearchTorrent}';
 var tSec = 1;
 var timer;
-var neon = ${empty param.neon ? false : param.neon};
+var neon = '${param.neon}' === 'true' ? true : false;
 var bgChangeInterval = 60;
 
 window.onerror = function (e) {
@@ -111,18 +111,16 @@ $(document).ready(function() {
 			$(this).addClass("blink-" + getRandomInteger(1, 10)).css({color: "#fff"});
 		});
 		$("#deco_nav").css({backgroundColor: "rgba(0, 0, 0, .5)"});
-		
-		/* add neon for each
+		/* add neon for each */
 		var styles = {color: "#eee", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, .5)"};
 		$(".title, #loading-msg, #loading-timer").each(function() {
 			$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
 		});
-		 */
 		/*
 	 	var selectors1 = ".label, .btn, label, h4, .item, th, .slidesjs-navigation, .slidesjs-pagination-item, select, input[type=text], input[type=search]";
 	 	var selectors2 = "#header_div input[type=text], #header_div input[type=search], #header_div .label, #header_div select, #header_div .btn, #header_div label";
-		$(selectors2).each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 4)).css("color", "#eee").css("font-weight", "bold");
+		$(selectors1).each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 10)).css("color", "#eee").css("font-weight", "bold");
 		});
 		$("#header_div .label").not("[id^='checkbox']").css("background-color", "rgba(0, 0, 0, .5)");
 		$("#header_div .btn").css("background-color", "rgba(0, 0, 0, .5)").removeClass("btn-default");
@@ -130,8 +128,6 @@ $(document).ready(function() {
 		$("#header_div input[type=text], #header_div input[type=search]").css("background-color", "rgba(0, 0, 0, .5)").css("color", "#eee");
 		*/
 	}	
-//	$(".box").randomBG(0.2);
-//	$("nav#deco_nav").randomBG(0.3);
 
 	loading(false);
 
@@ -283,11 +279,16 @@ window.addEventListener('load', function(e) {
 			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/>2</a>
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
 			<li><a href="<c:url value="/video/studio"/>"		><s:message code="video.studio"/></a>
-			<li><a href="<c:url value="/image"/>"				><s:message code="video.image"/></a>
-			<li><a href="<c:url value="/image/aperture"/>"		>Aperture</a>
-			<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
-			<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
-			<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
+			<li class="dropdown">
+    			<a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">Image<span class="caret"></span></a>
+    			<ul class="dropdown-menu">
+					<li><a href="<c:url value="/image"/>"				><s:message code="video.image"/></a>
+					<li><a href="<c:url value="/image/aperture"/>"		>Aperture</a>
+					<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
+					<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
+					<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
+    			</ul>
+  			</li>			
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
 			<li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a>
 			<li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a>

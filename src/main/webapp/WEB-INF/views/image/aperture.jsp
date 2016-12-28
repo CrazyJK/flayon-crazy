@@ -105,7 +105,7 @@ function toggleSlideView() {
 	if (playSlide) {
 		$(".circle").css({'background-color': '#000'});
 		$("body").css("background", "#000");
-		$("#deco_nav").css("background", "#000");
+//		$("#deco_nav").css("background", "#000");
 		$(".label-info").css("background", "#000");
 		$("#timerBar").css("background", "#000");
 		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
@@ -114,7 +114,7 @@ function toggleSlideView() {
 	else {
 		$(".circle").css({'background-color': '#fff'});
 		$("body").css("background", "#fff");
-		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
+//		$("#deco_nav").css("background", "rgba(255,255,255,.8)");
 		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
 		$("#timerBar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
 		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
