@@ -101,11 +101,7 @@ var hadTorrentCount = 0;
 		
 		// init components
 		$.each(sortList, function(i, sort) {
-			$("<button>")
-				.addClass("btn btn-xs")
-				.attr({"data-sort-code": sort.code, "data-sort-name": sort.name})
-				.html(sort.name)
-				.appendTo($(".btn-group-sort"));
+			$("<button>").addClass("btn btn-xs").data("sort", sort).appendTo($(".btn-group-sort"));
 		});
 
 		// add EventListener
@@ -137,7 +133,14 @@ function request() {
 			});
 			$(".candidate").html("Candidate " + candidateCount);
 			$(".torrents").html("Having " + hadTorrentCount + " torrents");
-			$("button[data-sort-code='C']").click(); // 정렬하여 보여주기 => sort
+
+			// 정렬하여 보여주기 => sort
+			$(".btn-group-sort").children().each(function() {
+				var sort = $(this).data("sort");
+				if (sort.code === 'C') {
+					$(this).click();
+				}
+			});
 		}
 	}).fail(function(jqxhr, textStatus, error) {
 		showStatus(true, textStatus + ", " + error, true);
@@ -170,19 +173,18 @@ function fnAddEventListener() {
 	// sort
 	$(".btn-group-sort").children().on('click', function() {
 		$(this).parent().children().each(function() {
-			var sortName = $(this).attr("data-sort-name");
-			$(this).removeClass("btn-warning").addClass("btn-default").html(sortName);
+			var sort = $(this).data("sort");
+			$(this).removeClass("btn-warning").addClass("btn-default").html(sort.name);
 		});
-		var sortCode = $(this).attr('data-sort-code');
-		var sortName = $(this).attr('data-sort-name');
-		if (currSort === sortCode) // 같은 정렬
+		var sort = $(this).data('sort');
+		if (currSort === sort.code) // 같은 정렬
 			reverse = !reverse;
 		else	// 다른 정렬
 			reverse = true;
-		currSort = sortCode;
+		currSort = sort.code;
 		
 		videoList.sort(function(video1, video2) {
-			switch(sortCode) {
+			switch(sort.code) {
 			case 'S':
 				return compareTo(video1.studio.name, video2.studio.name, reverse); 
 			case 'O':
@@ -215,8 +217,8 @@ function fnAddEventListener() {
 			}
 		});
 
-		$(".sorted").html(sortName + (reverse ? " desc" : ""));
-		$(this).removeClass("btn-default").addClass("btn-warning").html(sortName + (reverse ? ' ▼' : ' ▲'));
+		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
+		$(this).removeClass("btn-default").addClass("btn-warning").html(sort.name + (reverse ? ' ▼' : ' ▲'));
 		
 		render(true);
 	});
