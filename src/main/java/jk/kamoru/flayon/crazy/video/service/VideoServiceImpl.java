@@ -32,6 +32,7 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.dao.VideoDao;
 import jk.kamoru.flayon.crazy.video.domain.Action;
@@ -671,7 +672,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		List<Video> list = getVideoListSortByScore();
 		
 		for (Video video : list) {
-			if (video.getPlayCount() == 0)
+			if (video.getPlayCount() == 0 || video.getRank() == 0)
 				continue;
 			
 			int score = video.getScore();
@@ -1465,6 +1466,17 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				log.error("Fail to move torrent to seed dir" + opus, e);
 			}
 		}
+	}
+
+	@Override
+	public void moveToInstance(String opus) {
+		Video archiveVideo = videoDao.getArchiveVideo(opus);
+		if (archiveVideo == null)
+			throw new VideoNotFoundException(opus);
+		archiveVideo.resetScore();
+		archiveVideo.move(STAGE_PATHS[0]);
+		videoDao.reloadArchive();
+		videoDao.reload();
 	}
 
 }
