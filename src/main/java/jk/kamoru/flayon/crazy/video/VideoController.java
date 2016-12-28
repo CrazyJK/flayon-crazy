@@ -779,4 +779,11 @@ public class VideoController extends CrazyController {
 	public void moveTorrentToSeed(@PathVariable String opus) {
 		videoService.moveTorrentToSeed(opus);
 	}
+	
+	@RequestMapping(value="/{opus}/moveToInstance", method=RequestMethod.PUT)
+	public String moveToInstance(@PathVariable String opus) {
+		videoService.moveToInstance(opus);
+		return "redirect:/video/" + opus;
+	}
+	
 }

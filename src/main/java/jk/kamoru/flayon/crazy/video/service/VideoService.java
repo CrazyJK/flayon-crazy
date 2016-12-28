@@ -320,4 +320,6 @@ public interface VideoService {
 
 	void moveTorrentToSeed(String opus);
 
+	void moveToInstance(String opus);
+
 }
