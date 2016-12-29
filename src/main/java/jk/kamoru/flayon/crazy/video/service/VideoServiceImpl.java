@@ -42,7 +42,7 @@ import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
-import jk.kamoru.flayon.crazy.video.domain.TistoryItem;
+import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
@@ -1364,7 +1364,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public List<TistoryItem> getTistoryItem() {
+	public List<TistoryGraviaItem> getTistoryItem() {
 		return TistoryRSSReader.get(rssUrl);
 	}
 

@@ -13,15 +13,25 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import jk.kamoru.flayon.crazy.video.domain.TistoryItem;
+import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Tistory RSS를 읽어 목록을 만든다
+ * @author kamoru
+ *
+ */
 @Slf4j
 public class TistoryRSSReader {
 
-	public static List<TistoryItem> get(URL rssUrl) {
+	/**
+	 * rss url을 읽어 item 태그(각 페이지)를 {@link jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem TistoryItem}의 생성자로 넣어 List 반환
+	 * @param rssUrl
+	 * @return
+	 */
+	public static List<TistoryGraviaItem> get(URL rssUrl) {
 		log.info("read rss ; {}", rssUrl);
-		List<TistoryItem> items = new ArrayList<>();
+		List<TistoryGraviaItem> items = new ArrayList<>();
 		
 		try (InputStream is = rssUrl.openConnection().getInputStream()) {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -34,7 +44,7 @@ public class TistoryRSSReader {
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 				Node nNode = nList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					items.add(new TistoryItem((Element) nNode));
+					items.add(new TistoryGraviaItem((Element) nNode));
 				}
 			}
 			log.info("found item {}", items.size());
