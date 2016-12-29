@@ -22,12 +22,13 @@ public class TistoryRSSReader {
 	public static List<TistoryItem> get(URL rssUrl) {
 		log.info("read rss ; {}", rssUrl);
 		List<TistoryItem> items = new ArrayList<>();
+		
 		try (InputStream is = rssUrl.openConnection().getInputStream()) {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(is);
 			doc.getDocumentElement().normalize();
-			log.info("Root element :" + doc.getDocumentElement().getNodeName());
+			log.debug("Root element :" + doc.getDocumentElement().getNodeName());
 			
 			NodeList nList = doc.getElementsByTagName("item");
 			for (int temp = 0; temp < nList.getLength(); temp++) {

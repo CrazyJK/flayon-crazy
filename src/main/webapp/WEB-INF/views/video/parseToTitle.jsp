@@ -63,17 +63,22 @@ function saveCoverAll() {
 <form method="post" onsubmit="loading(true, 'Parsing...')">
 	<input type="hidden" id="saveCoverAll" name="saveCoverAll" value="false"/> 
 	<div id="header_div" class="box form-inline">
+		<label class="title">
+			ParseToTitle
+		</label>
 		<a class="btn btn-xs btn-default" onclick="toggleInputDiv()" id="hideBtn">hide</a>
-		<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();">Parse <i class="badge">${titleList.size()}</i></a>	
+		<a class="btn btn-xs btn-default" onclick="document.forms[0].submit();">Parse <span class="badge">${titleList.size()}</span></a>	
 		<input type="search" id="query" class="form-control input-sm" placeholder="Opus Actress Torrent"/>
 		<div class="btn-group">
 			<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"><s:message code="video.opus"/></a>
 			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
-		<a class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</a>
-		<span id="debug" class="label label-info"></span>
+		<span id="debug"     class="label label-info"></span>
 		<span id="searchURL" class="label label-info"></span>
+		<div class="float-right">
+			<a class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</a>
+		</div>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">

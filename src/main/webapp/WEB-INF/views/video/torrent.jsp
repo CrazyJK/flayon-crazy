@@ -166,7 +166,7 @@ function fnAddEventListener() {
 	$(".btn-group-sort").children().on('click', function() {
 		$(this).parent().children().each(function() {
 			var sort = $(this).data("sort");
-			$(this).removeClass("btn-warning").addClass("btn-default").html(sort.name);
+			$(this).removeClass("btn-success").addClass("btn-default").html(sort.name);
 		});
 		var sort = $(this).data('sort');
 		if (currSort === sort.code) // 같은 정렬
@@ -210,7 +210,7 @@ function fnAddEventListener() {
 		});
 
 		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
-		$(this).removeClass("btn-default").addClass("btn-warning").html(sort.name + (reverse ? ' ▼' : ' ▲'));
+		$(this).removeClass("btn-default").addClass("btn-success").html(sort.name + (reverse ? ' ▼' : ' ▲'));
 		
 		render(true);
 	});
@@ -349,7 +349,7 @@ function getAllTorrents() {
       	<span class="label label-danger status"></span>
       	<div class="float-right">
 			<div class="btn-group btn-group-sort"></div>
-			<button class="btn btn-xs btn-default" onclick="getAllTorrents()">Get All</button>
+			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get All</button>
       	</div>
 	</div>
 	

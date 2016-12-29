@@ -67,13 +67,13 @@ public class TistoryItem implements Serializable {
             		// p 2 : opus, actress, release
             		String text = ps.get(1).text();
 //            		String html = ps.get(1).html();
-            		if (debugStart < debugMax) log.info("  text = {}", text);
+            		if (debugStart < debugMax) log.debug("  text = {}", text);
 //            		if (debugStart < debugMax) log.info("  html = {}", ps.get(1).html());
             		if (StringUtils.isNotBlank(text)) {
         				String[] strings = StringUtils.splitByWholeSeparator(text, "  ");
                 		if (debugStart < debugMax) {
                 			for (String str : strings)
-                				log.info("  - [{}]", str);
+                				log.debug("  - [{}]", str);
                 		}
                 		if (strings.length == 3) {
             				title.setOpus(strings[0]);
@@ -96,13 +96,13 @@ public class TistoryItem implements Serializable {
             		title.setTitle(ps.get(2).text());
             		titles.add(title);
             		if (debugStart < debugMax) {
-            			log.info("   {}", title);
+            			log.debug("   {}", title);
             		}
             		debugStart++;
             	}
             }
 		}
-		log.info("{} found {}", title, titles.size());
+		log.info("[{}] found {}", title, titles.size());
 	}
 	
 	private String getContent(Element eElement, String name) {

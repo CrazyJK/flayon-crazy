@@ -35,15 +35,13 @@ nav#deco_nav > ul.nav-pills > li > a {
 nav#deco_nav > ul.nav-pills > li > a[onclick] {
 	color: #d02f6b;
 }
-nav#deco_nav > ul.nav-pills > li > a:hover {
-	background-color: rgba(91, 192, 222, 0.4);
+nav#deco_nav > ul.nav-pills > li > a:hover,
+nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li > a:hover {
+	background-color: rgba(255, 255, 255, 0.4);
 }
-nav#deco_nav > ul.nav-pills > li.active > a {
-	background-color: rgba(91, 192, 222, 0.9);
-	color: #eee;
-}
-nav#deco_nav > ul.nav-pills > li.active > a:hover {
-	background-color: rgba(91, 192, 222, 0.8);
+nav#deco_nav > ul.nav-pills > li.active > a,
+nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li.active > a {
+	background-color: rgba(255, 255, 255, 0.8);
 }
 nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu {
 	font-size: 10px;
@@ -61,16 +59,6 @@ nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li > a {
 	color: #333;
 	font-weight: 700;
 	text-shadow: 1px 1px 9px rgb(255, 255, 255);
-}
-nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li > a:hover {
-	background-color: rgba(91, 192, 222, 0.4);
-}
-nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li.active > a {
-	background-color: rgba(91, 192, 222, 0.9);
-}
-nav#deco_nav > ul.nav-pills > li.dropdown.open > ul.dropdown-menu > li.active > a:hover {
-	background-color: rgba(91, 192, 222, 0.8);
-	color: #eee;
 }
 
 div#header_div {
