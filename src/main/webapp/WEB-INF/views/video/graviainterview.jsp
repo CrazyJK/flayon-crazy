@@ -6,9 +6,13 @@
 <head>
 <title>Source RSS</title>
 <style type="text/css">
-.affix-top, .affix {
+.gravia-item {
 	position: fixed;
 	top: 80px;
+}
+.gravia-content {
+	font-size: 12px;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 div#content_div ul.nav li a {
 	font-size: 12px;
@@ -39,43 +43,95 @@ div#content_div ol li div span {
 </style>
 <script type="text/javascript">
 bgContinue = false;
-function resizeSecondDiv() {
-	markOffsetData();
-}
-$(document).ready(function() {
+var graviaList = new Array();
 
-	markOffsetData();
-	lazyLoading();
+(function($) {
+	$(document).ready(function() {
 	
-	$("#content_div").scroll(function() {
-		lazyLoading();
+		request();
+	
 	});
+}(jQuery));
 
-});
-function lazyLoading() {
-	var scrollTop = $("#content_div").scrollTop();
-//	console.log(scrollTop);
-	
-	$("div#content_div ol li").each(function() {
-		var offsetTop = $(this).data("offsetTop");
-		
-		if (scrollTop < offsetTop && offsetTop < scrollTop + 900) {
-//			console.log("offset.top=" + offsetTop, "scrollTop=" + scrollTop, $(this).attr("id"));
-			if ($(this).css("background-image") == 'none') {
-				var imgSrc = $(this).attr("data-imgSrc");
-				$(this).css("background-image", "url(" + imgSrc + ")");
-			}
+function request() {
+	loading(true, "request...");
+	$.getJSON({
+		method: 'GET',
+		url: '/video/gravia/data.json',
+		data: {},
+		cache: false,
+		timeout: 60000
+	}).done(function(data) {
+		if (data.exception) {
+			showStatus(true, data.exception.message, true);
 		}
-	});
+		else {
+			$.each(data.tistoryGraviaItemList, function(i, row) { // 응답 json을 List 배열로 변환
+				var itemTitle = row.title;
+				var titles = row.titles;
+				graviaList.push({"itemIndex": i, "itemTitle": itemTitle, "itemList": titles});
+			});
+		}
+		console.log(graviaList[0]);
+		render();
+	}).fail(function(jqxhr, textStatus, error) {
+		loading(true, textStatus + ", " + error);
+	}).always(function() {
+		loading(false);
+	});	
 }
-function markOffsetData() {
-	$("div#content_div ol li").each(function() {
-		var cord = $(this).offset();
-		var id = $(this).attr("id");
-		$(this).data("offsetTop", cord.top);
-		// $("#span-" + id).html(cord.top + " : " + id);
-	});
+
+function render() {
+	var titleNavContainer = $(".gravia-item");
+	for (var i=0; i<graviaList.length; i++) {
+		graviaList[i].itemTitle;
+		var link = $("<a>").addClass("nowrap")
+						.attr({"href": "#item-" + graviaList[i].itemIndex, "onclick": "renderContent(" + i + ")", "data-toggle": "pill"})
+						.html(graviaList[i].itemTitle + " " + graviaList[i].itemList.length);
+		$("<li>").css({"max-width": "150px"}).append(link).appendTo(titleNavContainer);
+		
+	}
 }
+function renderContent(idx) {
+	var mode = $("input:radio[name='mode']:checked").val();
+	console.log("mode is ", mode);
+	var rowContainer = $(".gravia-content").empty();
+	
+	if (mode === 'text') {
+		for (var i=0; i < graviaList[idx].itemList.length; i++) {
+			var title = graviaList[idx].itemList[i];
+			$("<p>").addClass(title.check ? "text-danger" : "text-info").attr({"title": title.rowData}).html(title.styleString).appendTo(rowContainer);;
+		}
+	}
+	else if(mode === 'image') {
+	}
+	else if(mode === 'edit') {
+		var table = $("<table>").addClass("table table-condensed");
+		var tbody = $("<tbody>");
+		for (var i=0; i < graviaList[idx].itemList.length; i++) {
+			var title = graviaList[idx].itemList[i];
+			var tr = $("<tr>").addClass(title.check ? "danger" : "default");
+			var td0 = $("<td>").css({"width": "50px"});
+			var findBtn = $("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find");
+			td0.append(findBtn);
+			var td1 = $("<td>").css({"width": "50px"});
+			var checkLabel = $("<span>").addClass("label label-warning").html(title.checkDescShort);
+			td1.append(checkLabel);
+			var td2 = $("<td>");
+			var input = $("<input>").addClass("form-control input-sm").val(title.styleString);
+			td2.append(input);
+			tr.append(td0).append(td1).append(td2).appendTo(tbody);
+		}
+		tbody.appendTo(table);
+		table.appendTo(rowContainer);
+	}	
+	
+}
+function fnFindVideo(opus) {
+	fnMarkChoice(opus);
+	popup('${urlSearchVideo}' + opus, 'videoSearch', 900, 950);
+}
+
 </script>
 </head>
 <body>
@@ -92,41 +148,21 @@ function markOffsetData() {
 			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
-		<a href="?mode=text">Text</a>
-		<a href="?mode=image">Image</a>
-		
+	
+		<div class="btn-group" data-toggle="buttons">
+			<a class="btn btn-xs btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
+			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="image">Image</a>
+			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="edit">Editable</a>
+		</div>
+	
+	
 	</div>
 
 	<div id="content_div" class="box row" style="overflow:auto;">
-		<nav id="crazyScrollspy" class="col-sm-2">
-			<ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="0">
-				<c:forEach items="${tistoryGraviaItemList}" var="item" varStatus="itemStat">
-			    <li style="max-width:150px;"><a class="nowrap" href="#item-${itemStat.count}">${item.title} ${item.titles.size()}</a></li>
-				</c:forEach>
-			</ul>
-		</nav>
-		<div class="col-sm-10">
-			<c:forEach items="${tistoryGraviaItemList}" var="item" varStatus="itemStat">
-			<div id="item-${itemStat.count}" class="box">
-				<h5 class="text-info">${item.title} ${item.titles.size()}</h5>
-				<ol>
-					<c:forEach items="${item.titles}" var="title" varStatus="titleStat">
-					<li id="item-${itemStat.count}-${titleStat.count}" data-imgSrc="${title.imgSrc}">
-						<div class="${title.check ? 'text-danger' : 'text-primary'}">
-							<span>
-								${title.opus}<br/>
-								${title.actress}<br/>
-								${title.release}<br/>
-								${title.title}<br/><br/>
-							</span>
-							<%-- <span id="span-item-${itemStat.count}-${titleStat.count}" class="label label-info"></span> --%>
-						</div>
-					</li>
-					</c:forEach>
-				</ol>
-			</div>
-			</c:forEach>
+		<div class="col-sm-2">
+			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
 		</div>
+		<div class="col-sm-10 gravia-content"></div>
 	</div>
 
 </div>

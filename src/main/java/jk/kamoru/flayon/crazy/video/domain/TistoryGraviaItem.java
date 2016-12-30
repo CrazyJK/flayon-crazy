@@ -4,16 +4,22 @@ import java.io.Serializable;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Element;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,18 +39,21 @@ public class TistoryGraviaItem implements Serializable {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	private static final String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
-
 	public static final SimpleDateFormat tistoryDateFormat = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
 	private String title;
 	private URL link;
 	private URL guid;
 	private Date pubDate;
+	@JsonIgnore
 	private String description;
-	private List<TistoryGraviaTitle> titles;
+	private List<TitlePart> titles;
 	
-	public TistoryGraviaItem(Element eElement) throws Exception {
+	private Map<String, String> studioMap;
+	
+	public TistoryGraviaItem(Element eElement, Map<String, String> studioMap) throws Exception {
+		this.studioMap = studioMap;
+		
 		title = eElement.getElementsByTagName("title").item(0).getTextContent();
 		link = new URL(getContent(eElement, "link"));
 		guid = new URL(getContent(eElement, "guid"));
@@ -64,7 +73,7 @@ public class TistoryGraviaItem implements Serializable {
             	Elements ps = td.select("p");
 //        		if (debug && debugStart < debugMax) log.info("p html = [{}]", ps);
             	if (ps.size() == 4) {
-            		TistoryGraviaTitle title = new TistoryGraviaTitle();
+            		TitlePart title = new TitlePart();
 
                 	// p[1] : img
             		org.jsoup.nodes.Element img = ps.get(0).select("img").first();
@@ -84,15 +93,17 @@ public class TistoryGraviaItem implements Serializable {
                 		if (strings.length == 3) {
             				title.setOpus(strings[0]);
             				title.setActress(strings[1]);
-            				title.setRelease(strings[2]);
+            				title.setReleaseDate(strings[2]);
                 		}
                 		else if (strings.length == 2) {
             				title.setOpus(strings[0]);
-            				if (Pattern.matches(regexSimple, strings[1])) {
-            					title.setRelease(strings[1]);
+            				if (Pattern.matches(CRAZY.REGEX_DATE_SIMPLE, strings[1])) {
+            					title.setActress("");
+            					title.setReleaseDate(strings[1]);
             				}
             				else {
                 				title.setActress(strings[1]);
+                				title.setReleaseDate("");
             				}
                 		}
             		}
@@ -102,19 +113,29 @@ public class TistoryGraviaItem implements Serializable {
             		if (debug && debugStart < debugMax) log.info("p2 text = [{}]", p2);
             		title.setTitle(p2);
             		
+            		// set Studio info
+            		String studio = findStudio(title.getOpus());
+            		title.setStudio(studio);
+            		
             		// set row data
                 	title.setRowData(p1 + "  " + p2);
 
             		titles.add(title);
-            		if (debug && debugStart < debugMax) log.info("StyleString = [{}], rowData = [{}]", title.toStyleString(), title.toString());
+            		if (debug && debugStart < debugMax) log.info("StyleString = [{}], rowData = [{}]", title.toString(), title.getRowData());
 
             		debugStart++;
             	}
             }
 		}
 		log.info("[{}] found {}", title, titles.size());
+		titles = titles.stream().sorted(Comparator.comparing(TitlePart::toString)).collect(Collectors.toList());
 	}
 	
+	private String findStudio(String opus) {
+		String key = StringUtils.substringBefore(opus, "-");
+		return studioMap.get(key);
+	}
+
 	private String getContent(Element eElement, String name) {
 		return eElement.getElementsByTagName(name).item(0).getTextContent();
 	}
@@ -154,11 +175,6 @@ public class TistoryGraviaItem implements Serializable {
 //		System.out.println("list : " + list);	
 		return list.toArray(new String[]{});
 	}
-	/*
-	public static void main(String[] args) {
-		String text = "zizg-020  Shuri Atomi  2016.03.25";
-		split2White(text);		
-	}
-	*/
+
 }
 

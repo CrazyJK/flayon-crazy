@@ -18,8 +18,14 @@ public interface CRAZY {
 	
 	public static final String COVER = "Cover";
 	
-	public static final String REGEX_DATE = "^((19|20)\\d\\d).(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$";
+	public static final String REGEX_DATE = "^((19|20)\\d\\d).(0?[1-9]|1[012]).(0?[1-9]|[12][0-9]|3[01])$";
 
+	public static final String REGEX_DATE_SIMPLE = "\\d{4}.\\d{2}.\\d{2}";
+
+	public static final String REGEX_KOREAN = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
+
+	public static final String REGEX_ENGLISH = " ^[a-zA-Z]*$";
+	
 	public static final String ARCHIVE = "Archive";
 
 	public static final String ENCODING = "UTF-8";

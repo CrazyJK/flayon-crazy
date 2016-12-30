@@ -752,11 +752,15 @@ public class VideoController extends CrazyController {
 	}
 	
 	@RequestMapping("/gravia")
-	public String graviainterview(Model model) {
-		model.addAttribute(videoService.getTistoryItem());
+	public String graviainterview() {
 		return "video/graviainterview";
 	}
-	
+
+	@RequestMapping("/gravia/data")
+	public void graviainterviewData(Model model) {
+		model.addAttribute(videoService.getTistoryItem());
+	}
+
 	@RequestMapping(value="/{opus}/tag", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void toggleTag(@ModelAttribute VTag tag, @PathVariable String opus) {

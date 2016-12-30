@@ -1365,9 +1365,39 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<TistoryGraviaItem> getTistoryItem() {
-		return TistoryRSSReader.get(rssUrl);
+		return TistoryRSSReader.get(rssUrl, studioMapByOpus());
 	}
-
+	
+	private Map<String, String> studioMapByOpus() {
+		Map<String, String> map = new HashMap<>();
+		List<Video> videoList = videoDao.getVideoList().stream().sorted(
+					Comparator.comparing(Video::getReleaseDate).reversed()
+					.thenComparing(Comparator.comparing(Video::getReleaseDate).reversed())
+				).collect(Collectors.toList());
+		for (Video video : videoList) {
+			String opus = video.getOpus();
+			String studio = video.getStudio().getName();
+			String key = StringUtils.substringBefore(opus, "-");
+			if (!map.containsKey(key)) {
+				map.put(key, studio);
+			}
+		}
+		List<History> deduplicatedList = historyService.getDeduplicatedList().stream().sorted(
+					Comparator.comparing(History::getDate).reversed()
+				).collect(Collectors.toList());
+		for (History history : deduplicatedList) {
+			String opus = history.getOpus();
+			String key = StringUtils.substringBefore(opus, "-");
+			String desc = history.getVideo() == null ? history.getDesc() : history.getVideo().getFullname();
+			String studio = StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]");
+			if (!map.containsKey(key)) {
+				map.put(key, studio);
+			}
+		}
+		log.info("studioMapByOpus {}", map);
+		return map;
+	}
+	
 	@Override
 	public void toggleTag(String opus, VTag tag) {
 		VTag _tag = tagDao.findById(tag.getId());

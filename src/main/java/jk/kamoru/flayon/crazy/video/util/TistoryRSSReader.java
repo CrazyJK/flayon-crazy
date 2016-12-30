@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +30,7 @@ public class TistoryRSSReader {
 	 * @param rssUrl
 	 * @return
 	 */
-	public static List<TistoryGraviaItem> get(URL rssUrl) {
+	public static List<TistoryGraviaItem> get(URL rssUrl, Map<String, String> studioMap) {
 		log.info("read rss ; {}", rssUrl);
 		List<TistoryGraviaItem> items = new ArrayList<>();
 		
@@ -44,7 +45,7 @@ public class TistoryRSSReader {
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 				Node nNode = nList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					items.add(new TistoryGraviaItem((Element) nNode));
+					items.add(new TistoryGraviaItem((Element) nNode, studioMap));
 				}
 			}
 			log.info("found item {}", items.size());

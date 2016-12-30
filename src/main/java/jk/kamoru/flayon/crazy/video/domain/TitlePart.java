@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
@@ -16,15 +17,13 @@ public class TitlePart {
 	String title;
 	String actress;
 	String releaseDate;
+	
+	String imgSrc;
+	String rowData;
 
 	boolean check;
 	String checkDesc;
 	String checkDescShort;
-	
-	final static String regexKorean = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
-	final static String regexEnglish = " ^[a-zA-Z]*$";
-//	final static String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
-	final static String regexDate = "^((19|20)\\d\\d).(0?[1-9]|1[012]).(0?[1-9]|[12][0-9]|3[01])$";
 	
 	public TitlePart() {
 		this.checkDesc = "";
@@ -70,6 +69,7 @@ public class TitlePart {
 		this.studio = studio;
 		// valid check
 		if (invalidStudio(studio)) {
+			this.studio = "";
 			this.check = true;
 			this.checkDesc += "Studio ";
 			this.checkDescShort += "S ";
@@ -80,12 +80,14 @@ public class TitlePart {
 	 * @param opus the opus to set
 	 */
 	public void setOpus(String opus) {
-		this.opus = opus;
 		// valid check
 		if (invalidOpus(opus)) {
 			this.check = true;
 			this.checkDesc += "Opus ";
 			this.checkDescShort += "O ";
+		}
+		else {
+			this.opus = opus.toUpperCase();
 		}
 	}
 
@@ -93,7 +95,7 @@ public class TitlePart {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = Utils.removeInvalidFilename(title);
+		this.title = StringUtils.trim(Utils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(title) || warningTitle(title)) {
 			this.check = true;
@@ -106,7 +108,7 @@ public class TitlePart {
 	 * @param actress the actress to set
 	 */
 	public void setActress(String actress) {
-		String[] array = StringUtils.split(actress);
+		String[] array = StringUtils.split(StringUtils.removeEnd(actress.trim(), "외"));
 		if (array != null) {
 			actress = "";
 			for (String name : array) {
@@ -127,7 +129,7 @@ public class TitlePart {
 	 * @param releaseDate the releaseDate to set
 	 */
 	public void setReleaseDate(String releaseDate) {
-		this.releaseDate = releaseDate;
+		this.releaseDate = StringUtils.trim(releaseDate);
 		// valid check
 		if (invalidReleaseDate(releaseDate)) {
 			this.check = true;
@@ -136,10 +138,13 @@ public class TitlePart {
 		}
 	}
 
+	public String getStyleString() {
+		return String.format("[%s][%s][%s][%s][%s]", studio, opus, title, actress, releaseDate);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("[%s][%s][%s][%s][%s]", 
-				studio, opus, title, actress, releaseDate);
+		return getStyleString();
 	}
 
 	public String toFullLowerName() {
@@ -172,7 +177,7 @@ public class TitlePart {
 	}
 	
 	/**
-	 * 제목 검증. 값이 있어야 한다 영어가 포함되면 의심.
+	 * 제목 검증. 값이 있어야 한다
 	 * @param titleText
 	 * @return 틀리면 <code>true</code>
 	 */
@@ -180,8 +185,13 @@ public class TitlePart {
 		return StringUtils.isBlank(titleText);
 	}
 	
+	/**
+	 * 영어가 포함되면 의심.
+	 * @param titleText
+	 * @return
+	 */
 	public static boolean warningTitle(String titleText) {
-		return Pattern.matches(regexEnglish, titleText);
+		return Pattern.matches(CRAZY.REGEX_ENGLISH, titleText);
 	}
 	
 	/**
@@ -190,7 +200,7 @@ public class TitlePart {
 	 * @return 틀리면 <code>true</code>
 	 */
 	public static boolean invalidActress(String actressText) {
-		return Pattern.matches(regexKorean, actressText);
+		return Pattern.matches(CRAZY.REGEX_KOREAN, actressText);
 	}
 	
 	/**
@@ -199,7 +209,7 @@ public class TitlePart {
 	 * @return 틀리면 <code>true</code>
 	 */
 	public static boolean invalidReleaseDate(String releaseText) {
-		return StringUtils.isBlank(releaseText) || !Pattern.matches(regexDate, releaseText);
+		return StringUtils.isBlank(releaseText) || !Pattern.matches(CRAZY.REGEX_DATE, releaseText);
 	}
 
 	/**
