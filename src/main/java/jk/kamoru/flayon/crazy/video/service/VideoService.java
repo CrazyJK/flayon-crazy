@@ -322,4 +322,6 @@ public interface VideoService {
 
 	void moveToInstance(String opus);
 
+	int saveCover(List<String> titles);
+
 }

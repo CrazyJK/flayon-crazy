@@ -25,6 +25,8 @@ public class TitlePart {
 	String checkDesc;
 	String checkDescShort;
 	
+	private boolean exist;
+	
 	public TitlePart() {
 		this.checkDesc = "";
 		this.checkDescShort = "";
@@ -66,7 +68,7 @@ public class TitlePart {
 	 * @param studio the studio to set
 	 */
 	public void setStudio(String studio) {
-		this.studio = studio;
+		this.studio = VideoUtils.trimBlank(studio);
 		// valid check
 		if (invalidStudio(studio)) {
 			this.studio = "";
@@ -87,7 +89,7 @@ public class TitlePart {
 			this.checkDescShort += "O ";
 		}
 		else {
-			this.opus = opus.toUpperCase();
+			this.opus = VideoUtils.trimBlank(opus).toUpperCase();
 		}
 	}
 
@@ -95,7 +97,7 @@ public class TitlePart {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = StringUtils.trim(Utils.removeInvalidFilename(title));
+		this.title = VideoUtils.trimBlank(Utils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(title) || warningTitle(title)) {
 			this.check = true;
@@ -114,7 +116,7 @@ public class TitlePart {
 			for (String name : array) {
 				actress += StringUtils.capitalize(name.toLowerCase()) + " ";
 			}
-			actress = actress.trim();
+			actress = VideoUtils.trimBlank(actress);
 		}
 		this.actress = actress;
 		// valid check
@@ -129,7 +131,7 @@ public class TitlePart {
 	 * @param releaseDate the releaseDate to set
 	 */
 	public void setReleaseDate(String releaseDate) {
-		this.releaseDate = StringUtils.trim(releaseDate);
+		this.releaseDate = VideoUtils.trimBlank(releaseDate);
 		// valid check
 		if (invalidReleaseDate(releaseDate)) {
 			this.check = true;
@@ -224,6 +226,5 @@ public class TitlePart {
 	public static boolean invalid(String studioText, String opusText, String titleText, String actressText, String releaseText) {
 		return invalidStudio(studioText) || invalidOpus(opusText) || invalidTitle(titleText) || invalidActress(actressText) || invalidReleaseDate(releaseText);
 	}
-	
 
 }

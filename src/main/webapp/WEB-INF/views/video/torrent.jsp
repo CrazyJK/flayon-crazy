@@ -67,6 +67,24 @@
 	/* width: 104px; */
 	padding-bottom: 0px;
 }
+
+.hover_img > span { 
+	position:relative;
+	text-decoration: none;
+}
+.hover_img > span > a { 
+	position:absolute; 
+	display:none; 
+	z-index:99; 
+}
+.hover_img > span:hover > a { 
+	display:block; 
+}
+.hover_img > span:hover > a > img {
+	position: fixed;
+	right: 30px;
+	top: 125px;
+}
 </style>
 <script type="text/javascript" src="/js/video-prototype.js"></script>
 <script type="text/javascript">
@@ -312,7 +330,16 @@ function renderBox(index, video, parent) {
 function renderTable(index, video, parent) {
 	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx});
 	$('<td>').appendTo(tr).addClass("text-right").html("<span class='label label-plain'>" + (index+1) + "</span>");
-	$('<td>').appendTo(tr).css({"max-width": "450px"}).html('<div class="nowrap" title="' + video.fullname + '">' + video.fullnameHtml + '</div>');
+	$('<td>').appendTo(tr).css({"max-width": "450px"})
+	.append(
+		$('<div>').addClass("nowrap hover_img").attr({"title": video.fullname}).append(
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.fullname).append(
+				$('<a>').append(
+					$('<img>').attr({"src": video.coverURL + "/title"}).css({"width": "600px"}).addClass("img-thumbnail")	
+				)	
+			)
+		)
+	);
 	$("<td>").appendTo(tr).html(video.favoriteHtml);
 	$("<td>").appendTo(tr).html(video.torrentFindBtn);
 	$("<td>").appendTo(tr).append($("<div>").append(video.videoCandidatesHtml).append(video.torrentsHtml));

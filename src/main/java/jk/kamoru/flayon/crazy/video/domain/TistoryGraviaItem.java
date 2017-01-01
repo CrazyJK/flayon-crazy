@@ -51,7 +51,7 @@ public class TistoryGraviaItem implements Serializable {
 	
 	private Map<String, String> studioMap;
 	
-	public TistoryGraviaItem(Element eElement, Map<String, String> studioMap) throws Exception {
+	public TistoryGraviaItem(Element eElement, Map<String, String> studioMap, List<String> opusList) throws Exception {
 		this.studioMap = studioMap;
 		
 		title = eElement.getElementsByTagName("title").item(0).getTextContent();
@@ -120,6 +120,10 @@ public class TistoryGraviaItem implements Serializable {
             		// set row data
                 	title.setRowData(p1 + "  " + p2);
 
+                	// set exist
+                	if (opusList.contains(title.getOpus()))
+                		title.setExist(true);
+                	
             		titles.add(title);
             		if (debug && debugStart < debugMax) log.info("StyleString = [{}], rowData = [{}]", title.toString(), title.getRowData());
 
@@ -127,7 +131,7 @@ public class TistoryGraviaItem implements Serializable {
             	}
             }
 		}
-		log.info("[{}] found {}", title, titles.size());
+		log.debug("[{}] found {}", title, titles.size());
 		titles = titles.stream().sorted(Comparator.comparing(TitlePart::toString)).collect(Collectors.toList());
 	}
 	

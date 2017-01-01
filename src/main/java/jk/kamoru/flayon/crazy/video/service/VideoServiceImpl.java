@@ -1365,9 +1365,21 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<TistoryGraviaItem> getTistoryItem() {
-		return TistoryRSSReader.get(rssUrl, studioMapByOpus());
+		return TistoryRSSReader.get(rssUrl, studioMapByOpus(), opusList());
+	}
+
+	private List<String> opusList() {
+		List<String> opusList = new ArrayList<>();
+		for (Video video : videoDao.getVideoList()) {
+			opusList.add(video.getOpus());
+		}
+		return opusList;
 	}
 	
+	/**
+	 * opus앞과 스튜디오 맵
+	 * @return
+	 */
 	private Map<String, String> studioMapByOpus() {
 		Map<String, String> map = new HashMap<>();
 		List<Video> videoList = videoDao.getVideoList().stream().sorted(
@@ -1394,7 +1406,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put(key, studio);
 			}
 		}
-		log.info("studioMapByOpus {}", map);
+		log.debug("studioMapByOpus {}", map);
 		return map;
 	}
 	
@@ -1507,6 +1519,40 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		archiveVideo.move(STAGE_PATHS[0]);
 		videoDao.reloadArchive();
 		videoDao.reload();
+	}
+
+	@Override
+	public int saveCover(List<String> titles) {
+		log.info("saveCover titles in {}", COVER_PATH);
+		int index = 0;
+		int count = 0;
+		int total = titles.size();
+		for (String title : titles) {
+			String opus = VideoUtils.getOpusInTitle(title);
+			
+			log.info("Save {} Cover {}/{}", opus, ++index, total);
+			
+			// check opus text
+			if (StringUtils.isBlank(opus))
+				continue;
+
+			// check exists video
+			if (videoDao.contains(opus))
+				continue;
+			
+			CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
+			try {
+				if(result.get() != null) {
+					count++;
+				}
+			} catch (InterruptedException | ExecutionException e) {
+//				throw new CrazyException("fail to saveCover : " + opus, e);
+				log.error("fail to saveCover : " + opus, e);
+				break;
+			}
+		}
+		videoDao.reload();
+		return count;
 	}
 
 }

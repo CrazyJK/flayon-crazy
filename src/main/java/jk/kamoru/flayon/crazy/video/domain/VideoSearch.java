@@ -1,6 +1,7 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import jk.kamoru.flayon.crazy.video.VIDEO;
@@ -19,10 +20,6 @@ public class VideoSearch implements Serializable {
 	 * 검색조건 : 검색어
 	 */
 	String searchText;
-//	/**
-//	 * 검색조건 : 추가 여부. 조건 {@link #existVideo}, {@link #existSubtitles}
-//	 */
-//	boolean addCond = false;
 	/**
 	 * 검색조건 : 비디오 존재
 	 */
@@ -42,11 +39,11 @@ public class VideoSearch implements Serializable {
 	/**
 	 * 검색조건 : 랭킹 범위
 	 */
-	List<Integer> rankRange;
+	List<Integer> rankRange = Arrays.asList(0);
 	/**
 	 * 검색조건 : 플레이 횟수 
 	 */
-	Integer playCount = 0;
+	Integer playCount = -1;
 
 	/**
 	 * View type
@@ -55,7 +52,7 @@ public class VideoSearch implements Serializable {
 	/**
 	 * 정렬 방법 
 	 */
-	Sort sortMethod = Sort.O;
+	Sort sortMethod = Sort.M;
 	/**
 	 * 역정렬 여부
 	 */
@@ -92,16 +89,4 @@ public class VideoSearch implements Serializable {
 	 */
 	boolean wholeActressStudioView = true;
 	
-	/* Not use
-	boolean neverPlay = false;
-	boolean oldVideo = false;
-	String studio;
-	String title;
-	String opus;
-	String actress;
-	InequalitySign rankSign = InequalitySign.gt;
-	boolean zeroRank = false;
-	Integer rank = -2;
-	*/
-
 }

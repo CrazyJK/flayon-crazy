@@ -352,4 +352,37 @@ public class VideoUtils {
 		return video.getDelegatePath();
 	}
 
+	/**
+	 * title(full name)에서 opus를 찾아 반환
+	 * @param title
+	 * @return
+	 */
+	public static String getOpusInTitle(String title) {
+		String[] split = StringUtils.split(title, "]", 6);
+		if (split == null || split.length < 2)
+			return "";
+		return removeUnnecessaryCharacter(split[1]);
+	}
+
+	/**
+	 * 공백, nbsp 등등 지우기
+	 * @param text
+	 * @return
+	 */
+	public static String trimBlank(String text) {
+//		String str = "";
+//		boolean pass = false;
+//		for (int i = 0; i < text.length(); i++) {
+//			char ch = text.charAt(i);
+//			int chInt = (int)ch;
+//			if (chInt == 32 || chInt == 160) {
+//			}
+//			else {
+//				str += Character.toString(ch);
+//			}
+//		}
+//		return str;
+		return StringUtils.trimToEmpty(text).replaceAll("(^\\p{Z}+|\\p{Z}+$)", "");
+	}
+
 }

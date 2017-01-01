@@ -30,7 +30,7 @@ public class TistoryRSSReader {
 	 * @param rssUrl
 	 * @return
 	 */
-	public static List<TistoryGraviaItem> get(URL rssUrl, Map<String, String> studioMap) {
+	public static List<TistoryGraviaItem> get(URL rssUrl, Map<String, String> studioMap, List<String> opusList) {
 		log.info("read rss ; {}", rssUrl);
 		List<TistoryGraviaItem> items = new ArrayList<>();
 		
@@ -45,7 +45,7 @@ public class TistoryRSSReader {
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 				Node nNode = nList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					items.add(new TistoryGraviaItem((Element) nNode, studioMap));
+					items.add(new TistoryGraviaItem((Element) nNode, studioMap, opusList));
 				}
 			}
 			log.info("found item {}", items.size());

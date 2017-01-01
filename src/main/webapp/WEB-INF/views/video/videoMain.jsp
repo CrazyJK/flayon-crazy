@@ -429,6 +429,7 @@ var currBGImageUrl;
 		</c:when>
 		<c:otherwise>
 			<div class="">
+				<h3><span  class="label label-primary">파일 2개이상인 비디오</span></h3>
 				<ol>
 				<c:forEach items="${videoList}" var="video">
 					<c:if test="${video.videoFileList.size() > 1 }">
@@ -441,6 +442,8 @@ var currBGImageUrl;
 					</c:if>
 				</c:forEach>
 				</ol>
+			</div>
+			<div class="">
 				<ul class="list-group">
 				<c:forEach items="${videoList}" var="video">
 					<li class="list-group-item">
