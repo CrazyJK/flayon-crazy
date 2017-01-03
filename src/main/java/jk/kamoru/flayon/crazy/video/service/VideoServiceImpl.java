@@ -1218,7 +1218,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		for (Video video : videoDao.getArchiveVideoList()) {
 			video.arrange();
 		}
-		videoDao.reloadArchive();
 	}
 
 	@Override
@@ -1290,7 +1289,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void arrangeSubFolder() {
+	public void deletEmptyFolder() {
 		if (log.isDebugEnabled())
 			log.debug("arrangeSubFolder START");
 		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
@@ -1553,6 +1552,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 		videoDao.reload();
 		return count;
+	}
+
+	@Override
+	public void reloadArchive() {
+		videoDao.reloadArchive();
 	}
 
 }

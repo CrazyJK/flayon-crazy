@@ -41,12 +41,6 @@ public class History implements Serializable {
 		this.opus = video.getOpus();
 		this.date = new Date();
 	}
-
-	@Override
-	public String toString() {
-		return String.format("History [date=%s, opus=%s, action=%s, desc=%s]",
-				date, opus, action, desc);
-	}
 	
 	public String toFileSaveString() {
 		String desc = null; 
@@ -59,18 +53,23 @@ public class History implements Serializable {
 				desc = video.getFullname();
 				break;
 			case RANK :
-				desc = String.valueOf(video.getRank()) + " - " + video.getFullname();
+				desc = video.getRank() + " - " + video.getFullname();
 				break;
 			default:
 				desc = "Undefined Action : " + action.toString();
 		}
 		this.desc = desc;
 		return MessageFormat.format("{0}, {1}, {2}, \"{3}\"{4}",
-				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date), 
+				new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).format(date), 
 				video.getOpus(), 
 				action, 
 				desc, 
 				CRAZY.LINE);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("History [date=%s, opus=%s, action=%s, desc=%s]", date, opus, action, desc);
 	}
 
 }

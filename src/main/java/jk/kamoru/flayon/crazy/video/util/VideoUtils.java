@@ -382,7 +382,27 @@ public class VideoUtils {
 //			}
 //		}
 //		return str;
-		return StringUtils.trimToEmpty(text).replaceAll("(^\\p{Z}+|\\p{Z}+$)", "");
+		return trimWhitespace(text).replaceAll("(^\\p{Z}+|\\p{Z}+$)", "");
+	}
+
+	/**
+	 * Trim leading and trailing whitespace from the given {@code String}.
+	 * @param str the {@code String} to check
+	 * @return the trimmed {@code String}
+	 * @see java.lang.Character#isWhitespace
+	 */
+	public static String trimWhitespace(String str) {
+		if (str == null || str.trim().length() == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(str);
+		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0))) {
+			sb.deleteCharAt(0);
+		}
+		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(sb.length() - 1))) {
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
 	}
 
 }

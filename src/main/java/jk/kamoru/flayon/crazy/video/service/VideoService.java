@@ -294,7 +294,10 @@ public interface VideoService {
 
 	List<Video> searchVideoInArchive(VideoSearch videoSearch);
 
-	void arrangeSubFolder();
+	/**
+	 * 하위에 속이 빈 폴더를 지운다
+	 */
+	void deletEmptyFolder();
 
 	void setFavoriteOfActress(String actressName, Boolean favorite);
 
@@ -323,5 +326,7 @@ public interface VideoService {
 	void moveToInstance(String opus);
 
 	int saveCover(List<String> titles);
+
+	void reloadArchive();
 
 }

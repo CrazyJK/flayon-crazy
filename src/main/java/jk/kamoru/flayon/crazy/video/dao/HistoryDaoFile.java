@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
@@ -34,52 +35,53 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	/** history list */
 	private List<History> historyList;
 	
-	/** whether or not history changed */
-	private static boolean isHistoryChanged = true;
+	private static boolean isHistoryLoaded = false;
 
 	@Autowired VideoDao videoDao;
+
+/*	히스토리 파일이 없으면 안되므로, 생성하지 않는다
+	@PostConstruct
+	public void init() {
+		if (!getHistoryFile().exists())
+			try {
+				getHistoryFile().createNewFile();
+				log.warn("history file created {}", getHistoryFile().getAbsolutePath());
+			} catch (IOException e) {
+				log.error("history cannot create", e);
+			}
+	}
+*/
 	
-//	@PostConstruct
-//	public void init() {
-//		if (!getHistoryFile().exists())
-//			try {
-//				getHistoryFile().createNewFile();
-//				log.warn("history file created {}", getHistoryFile().getAbsolutePath());
-//			} catch (IOException e) {
-//				log.error("history cannot create", e);
-//			}
-//	}
-	
-	/**get history file
-	 * @return {@link #historyFile}
-	 */
 	private File getHistoryFile() {
 		if(historyFile == null)
-			historyFile = new File(STORAGE_PATHS[0], "history.log");
-		log.debug("history file is {}", historyFile.getAbsolutePath());
+			historyFile = new File(STORAGE_PATHS[0], VIDEO.HISTORY_LOG_FILENAME);
 		return historyFile;
 	}
 
 	private synchronized void loadHistory() throws IOException, ParseException {
-		historyList = new ArrayList<History>();
+		historyList = new ArrayList<>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN);
+		StopWatch stopWatch = new StopWatch("Load history");
 
+		stopWatch.start("read line");
 		List<String> lines = FileUtils.readLines(getHistoryFile(), VIDEO.ENCODING);
-		log.debug("reading file size = {}", lines.size());
+		stopWatch.stop();
 
+		stopWatch.start("parse history " + lines.size() + " lines");
 		for (String line : lines) {
 			if (line.trim().length() > 0) {
-				String[] parts = StringUtils.split(line, ",", 4);
+				String[] split = StringUtils.split(line, ",", 4);
 				History history = new History();
-				if (parts.length > 0)
-					history.setDate(new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).parse(parts[0].trim()));
-				if (parts.length > 1)
-					history.setOpus(parts[1].trim());
-				if (parts.length > 2)
-					history.setAction(Action.valueOf(parts[2].toUpperCase().trim()));
-				if (parts.length > 3)
-					history.setDesc(trimDesc(parts[3]));
+				if (split.length > 0)
+					history.setDate(simpleDateFormat.parse(split[0].trim()));
+				if (split.length > 1)
+					history.setOpus(split[1].trim());
+				if (split.length > 2)
+					history.setAction(Action.valueOf(split[2].toUpperCase().trim()));
+				if (split.length > 3)
+					history.setDesc(trimDesc(split[3]));
 				try {
-					history.setVideo(videoDao.getVideo(parts[1].trim()));
+					history.setVideo(videoDao.getVideo(split[1].trim()));
 				}
 				catch (VideoNotFoundException e) {
 					log.trace("{}", e.getMessage());
@@ -87,9 +89,13 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 				historyList.add(history);
 			}
 		}
+		stopWatch.stop();
+		
+		stopWatch.start("list reverse");
 		Collections.reverse(historyList);
-		log.debug("historyList.size = {}", historyList.size());
-		isHistoryChanged = false;
+		stopWatch.stop();
+		
+		log.info("Load history\n{}", stopWatch.prettyPrint());
 	}
 	
 	private String trimDesc(String desc) {
@@ -100,15 +106,11 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 		return StringUtils.substring(desc, startIdx, lastIdx + 1);
 	}
 
-	private void saveHistory(History history) throws IOException {
-		FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VIDEO.ENCODING, true);
-		isHistoryChanged = true;
-	}
-
 	private List<History> historyList() {
-		if (isHistoryChanged)
+		if (!isHistoryLoaded)
 			try {
 				loadHistory();
+				isHistoryLoaded = true;
 			} catch (Exception e) {
 				throw new CrazyException("history load error", e);
 			}
@@ -116,9 +118,13 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	}
 		
 	@Override
-	public void persist(History history) throws IOException {
+	public void persist(History history) {
 		historyList().add(history);
-		saveHistory(history);
+		try {
+			FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VIDEO.ENCODING, true);
+		} catch (IOException e) {
+			throw new CrazyException("Fail to history save", e);
+		}
 	}
 
 	@Override

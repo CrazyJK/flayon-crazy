@@ -18,6 +18,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.Utils;
@@ -101,19 +102,25 @@ public class FileBaseVideoSource implements VideoSource {
 	 */
 	private synchronized void load() {
 		logger.info("Start {} video source load", toTypeString());
+		StopWatch stopWatch = new StopWatch(toTypeString() + " VideoSource");
+		
 		firstLoad = true;
 		loading = true;
 
 		List<String> wrongFileNames = new ArrayList<>();
 		
+		stopWatch.start("listFiles");
 		// find files
 		Collection<File> files = Utils.listFiles(paths, null, true);
 		logger.debug("    total found file {}", files.size());
+		stopWatch.stop();
+		
 
 		videoMap.clear();
 		studioMap.clear();
 		actressMap.clear();
 
+		stopWatch.start("mave Video object");
 		// 3. domain create & data source   
 		for (File file : files) {
 			try {
@@ -215,15 +222,19 @@ public class FileBaseVideoSource implements VideoSource {
 				logger.error("File loading error", e);
 			}
 		}
+		stopWatch.stop();
 		
+		stopWatch.start("save wrong filename");
 		try {
 			if (wrongFileNames.size() > 0)
 				FileUtils.writeLines(new File(paths[0], VIDEO.WRONG_FILENAME), VIDEO.ENCODING, wrongFileNames.stream().sorted().collect(Collectors.toList()), false);
 		} catch (IOException e) {
 			logger.error("write wrong file name fail", e);
 		}
+		stopWatch.stop();
 		
 		loading = false;
+		logger.info("\n" + stopWatch.prettyPrint());
 		logger.info("End {} video source load. {} videos", toTypeString(), videoMap.size());
 	}
 

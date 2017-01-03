@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.video.domain.History;
@@ -61,36 +62,66 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("  - batch.score.deleteVideo = {}", DELETE_LOWER_SCORE_VIDEO);
 	}
 	
+	// cron every 0, 15, 30, 45 minutes
 	@Scheduled(cron="0 */15 * * * *")
-	public synchronized void batchVideoSource() {
-		
-		logger.info("BATCH Video START");
+	public synchronized void batchInstanceVideoSource() {
+		logger.info("BATCH Instance VideoSource START");
+		StopWatch stopWatch = new StopWatch("Instance VideoSource Batch");
 
 		logger.info(" - delete lower rank video [{}]", DELETE_LOWER_RANK_VIDEO);
-		if (DELETE_LOWER_RANK_VIDEO)
+		if (DELETE_LOWER_RANK_VIDEO) {
+			stopWatch.start("delete lower rank");
 			videoService.removeLowerRankVideo();
+			stopWatch.stop();
+		}
 		
 		logger.info(" - delete lower score video [{}]", DELETE_LOWER_SCORE_VIDEO);
-		if (DELETE_LOWER_SCORE_VIDEO)
+		if (DELETE_LOWER_SCORE_VIDEO) {
+			stopWatch.start("delete lower score");
 			videoService.removeLowerScoreVideo();
+			stopWatch.stop();
+		}
 		
 		logger.info(" - delete garbage file");
+		stopWatch.start("delete garbage file");
 		videoService.deleteGarbageFile();
+		stopWatch.stop();
 		
 		logger.info(" - arrange to same folder");
+		stopWatch.start("arrange to same folder");
 		videoService.arrangeVideo();
+		stopWatch.stop();
 		
 		logger.info(" - move watched video [{}]", MOVE_WATCHED_VIDEO);
-		if (MOVE_WATCHED_VIDEO)
+		if (MOVE_WATCHED_VIDEO) {
+			stopWatch.start("move watched video");
 			videoService.moveWatchedVideo();
-
-		logger.info(" - reload");
-		videoService.reload();
+			stopWatch.stop();
+		}
 		
-		logger.info("BATCH Video END");
+		stopWatch.start("videoService.reload");
+		videoService.reload();
+		stopWatch.stop();
+
+		logger.info("\n" + stopWatch.prettyPrint());
+		logger.info("BATCH Instance VideoSource END");
 	}
-	
-	@Scheduled(fixedDelay = 1000 * 60) // per 1 min
+
+	// fixedDelay per 1 hr
+	@Scheduled(cron="0 13 */1 * * *")
+	public synchronized void batchArchiveVideoSource() {
+		logger.info("BATCH Archive VideoSource START");
+		
+		logger.info(" - arrange to DateFormat folder");
+		videoService.arrangeArchiveVideo();
+		
+		videoService.reloadArchive();
+
+		logger.info("BATCH Archive VideoSource END");
+	}
+
+	// fixedDelay per 1 min
+	@Scheduled(fixedDelay = 1000 * 60) 
 	public synchronized void moveFile() {
 		logger.trace("BATCH File move START {}", Arrays.toString(MOVE_FILE_PATHS));
 
@@ -136,19 +167,15 @@ public class VideoBatch extends CrazyProperties {
 		logger.trace("BATCH File move END");
 	}
 	
-	@Scheduled(fixedRate = 1000 * 60 * 60) // per 1 hr
-	public synchronized void arrangeArchive() {
-		logger.info("BATCH - arrange archive video");
-		videoService.arrangeArchiveVideo();
-	}
-
-	@Scheduled(fixedRate = 1000 * 60 * 13) // per 13 min
-	public synchronized void arrangeSubFolder() {
-		logger.info("BATCH - arrange sub-folder");
-		videoService.arrangeSubFolder();
+	// fixedRate per 13 min
+	@Scheduled(fixedRate = 1000 * 60 * 13) 
+	public synchronized void deletEmptyFolder() {
+		logger.info("BATCH - delete empty folder");
+		videoService.deletEmptyFolder();
 	}
 	
-	@Scheduled(fixedRate = 1000 * 60 * 60 * 24) // per day
+	// fixedRate per day
+	@Scheduled(fixedRate = 1000 * 60 * 60 * 24) 
 	public synchronized void backup() {
 		
 		if (StringUtils.isBlank(BACKUP_PATH)) {
