@@ -2,6 +2,8 @@ package jk.kamoru.flayon.crazy.video.dao;
 
 import java.util.List;
 
+import org.springframework.util.StopWatch;
+
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.Video;
@@ -67,6 +69,12 @@ public interface VideoDao {
 	 */
 	void moveVideo(String opus, String destPath);
 	
+	/**
+	 * reload video source
+	 * @param stopWatch 
+	 */
+	void reload(StopWatch stopWatch);
+
 	/**
 	 * reload video source
 	 */

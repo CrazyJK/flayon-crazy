@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.StopWatch;
+
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
@@ -163,6 +165,12 @@ public interface VideoService {
 	 * @param path destination path
 	 */
 	void moveVideo(String opus, String path);
+
+	/**
+	 * reload video source
+	 * @param stopWatch 
+	 */
+	void reload(StopWatch stopWatch);
 
 	/**
 	 * reload video source

@@ -3,6 +3,8 @@ package jk.kamoru.flayon.crazy.video.source;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.StopWatch;
+
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.Video;
@@ -45,9 +47,15 @@ public interface VideoSource {
 	
 	/**
 	 * 비디오 리로드.
+	 * @param stopWatch 
+	 */
+	void reload(StopWatch stopWatch);
+
+	/**
+	 * 비디오 리로드.
 	 */
 	void reload();
-	
+
 	/**
 	 * remove video to archive
 	 * @param opus

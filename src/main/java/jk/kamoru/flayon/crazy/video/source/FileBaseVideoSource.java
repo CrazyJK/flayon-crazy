@@ -92,7 +92,7 @@ public class FileBaseVideoSource implements VideoSource {
 			}
 		}
 		else {
-			load();
+			load(null);
 		}
 //		logger.info("videoSource END");			
 	}
@@ -100,16 +100,20 @@ public class FileBaseVideoSource implements VideoSource {
 	/**
 	 * video데이터를 로드한다.
 	 */
-	private synchronized void load() {
-		logger.info("Start {} video source load", toTypeString());
-		StopWatch stopWatch = new StopWatch(toTypeString() + " VideoSource");
+	private synchronized void load(StopWatch stopWatch) {
+		logger.debug("Start {} video source load", toTypeString());
+		boolean standalone = false;
+		if (stopWatch == null) {
+			standalone = true;
+			stopWatch = new StopWatch(toTypeString() + " VideoSource load");
+		}
 		
 		firstLoad = true;
 		loading = true;
 
 		List<String> wrongFileNames = new ArrayList<>();
 		
-		stopWatch.start("listFiles");
+		stopWatch.start("load : listFiles");
 		// find files
 		Collection<File> files = Utils.listFiles(paths, null, true);
 		logger.debug("    total found file {}", files.size());
@@ -120,7 +124,7 @@ public class FileBaseVideoSource implements VideoSource {
 		studioMap.clear();
 		actressMap.clear();
 
-		stopWatch.start("mave Video object");
+		stopWatch.start("load : make Video object in " + files.size() + " files");
 		// 3. domain create & data source   
 		for (File file : files) {
 			try {
@@ -224,7 +228,7 @@ public class FileBaseVideoSource implements VideoSource {
 		}
 		stopWatch.stop();
 		
-		stopWatch.start("save wrong filename");
+		stopWatch.start("load : save wrong filename");
 		try {
 			if (wrongFileNames.size() > 0)
 				FileUtils.writeLines(new File(paths[0], VIDEO.WRONG_FILENAME), VIDEO.ENCODING, wrongFileNames.stream().sorted().collect(Collectors.toList()), false);
@@ -234,16 +238,23 @@ public class FileBaseVideoSource implements VideoSource {
 		stopWatch.stop();
 		
 		loading = false;
-		logger.info("\n" + stopWatch.prettyPrint());
-		logger.info("End {} video source load. {} videos", toTypeString(), videoMap.size());
+		if (standalone)
+			logger.info("{} video source load. {} videos\n\n{}", toTypeString(), videoMap.size(), stopWatch.prettyPrint());
+		else
+			logger.info("{} video source load. {} videos", toTypeString(), videoMap.size());
+	}
+
+	@Override
+	public void reload(StopWatch stopWatch) {
+		load(stopWatch);
+		matchTorrent();
+//		logger.info("reload {} completed", toTypeString());
 	}
 
 	@Override
 	@PostConstruct
 	public void reload() {
-		load();
-		matchTorrent();
-		logger.info("reload {} completed", toTypeString());
+		reload(null);
 	}
 
 	private synchronized void matchTorrent() {

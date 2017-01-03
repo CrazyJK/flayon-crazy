@@ -29,7 +29,7 @@ public class CoverUtils {
 		int imgWidth = bi.getWidth();
 		int imgHeight = bi.getHeight();
 
-		log.info("loadedImage width : {}, height : {}", imgWidth, imgHeight);
+		log.debug("loadedImage width : {}, height : {}", imgWidth, imgHeight);
 
 		Graphics2D g2 = bi.createGraphics();
 
@@ -39,7 +39,7 @@ public class CoverUtils {
 		Rectangle2D r2 = font.getStringBounds(title, frc);
 		int textWidth = (int) r2.getWidth();
 		int textHeight = (int) r2.getHeight();
-		log.info("Text width : {}, height : {}", textWidth, textHeight);
+		log.debug("Text width : {}, height : {}", textWidth, textHeight);
 		
 		// 입력하는 문자의 가용 넓이
 		int textBound = imgWidth;
@@ -47,7 +47,7 @@ public class CoverUtils {
 		if (paddingleft < 0)
 			paddingleft = 0;
 
-		log.info("paddingleft : " + paddingleft);
+		log.debug("paddingleft : " + paddingleft);
 
 		// 라운드 사각형 채우기
 		int rectY = 10;

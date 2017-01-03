@@ -83,9 +83,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 				try {
 					history.setVideo(videoDao.getVideo(split[1].trim()));
 				}
-				catch (VideoNotFoundException e) {
-					log.trace("{}", e.getMessage());
-				}
+				catch (VideoNotFoundException ignore) {}
 				historyList.add(history);
 			}
 		}
@@ -95,7 +93,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 		Collections.reverse(historyList);
 		stopWatch.stop();
 		
-		log.info("Load history\n{}", stopWatch.prettyPrint());
+		log.info("Load history\n\n{}", stopWatch.prettyPrint());
 	}
 	
 	private String trimDesc(String desc) {

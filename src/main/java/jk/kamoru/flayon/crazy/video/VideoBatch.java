@@ -99,12 +99,9 @@ public class VideoBatch extends CrazyProperties {
 			stopWatch.stop();
 		}
 		
-		stopWatch.start("videoService.reload");
-		videoService.reload();
-		stopWatch.stop();
+		videoService.reload(stopWatch);
 
-		logger.info("\n" + stopWatch.prettyPrint());
-		logger.info("BATCH Instance VideoSource END");
+		logger.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
 	}
 
 	// fixedDelay per 1 hr

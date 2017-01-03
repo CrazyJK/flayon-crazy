@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyException;
@@ -556,6 +557,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	public void moveVideo(String opus, String path) {
 		log.info("{} move to {}", opus, path);
 		videoDao.moveVideo(opus, path);
+	}
+
+	@Override
+	public void reload(StopWatch stopWatch) {
+		log.debug("reload");
+		videoDao.reload(stopWatch);
 	}
 
 	@Override
@@ -1296,6 +1303,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 		List<File> folders = new ArrayList<>();
 		folders.add(new File(ARCHIVE_PATH));
+		folders.add(new File(COVER_PATH));
 		for (String storage : STORAGE_PATHS)
 			folders.add(new File(storage));
 		for (String stage : STAGE_PATHS)

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
@@ -107,6 +108,12 @@ public class VideoDaoFile implements VideoDao {
 	}
 	@Override
 //	@CacheEvict(value = { "videoCache", "studioCache", "actressCache" }, allEntries=true)
+	public void reload(StopWatch stopWatch) {
+		logger.trace("reload");
+		instanceVideoSource.reload(stopWatch);
+	}
+
+	@Override
 	public void reload() {
 		logger.trace("reload");
 		instanceVideoSource.reload();
