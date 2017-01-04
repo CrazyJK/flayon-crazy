@@ -72,6 +72,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 		if(!videoList.contains(video))
 			this.videoList.add(video);		
 	}
+	
 	public void addActress(Actress actress) {
 		boolean found = false;
 		for(Actress actressInList : this.actressList) {
@@ -104,9 +105,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 		case COMPANY:
 			return Utils.compareTo(this.getCompany(), comp.getCompany());
 		case VIDEO:
-			return this.getVideoList().size() - comp.getVideoList().size();
+			return Utils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
 		case SCORE:
-			return this.getScore() - comp.getScore();
+			return Utils.compareTo(this.getScore(), comp.getScore());
 		default:
 			return Utils.compareTo(this.getName(), comp.getName());
 		}

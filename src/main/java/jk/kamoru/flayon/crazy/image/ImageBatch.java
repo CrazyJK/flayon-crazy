@@ -1,9 +1,6 @@
 package jk.kamoru.flayon.crazy.image;
 
 import java.io.File;
-import java.util.Collection;
-
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,48 +9,41 @@ import org.springframework.stereotype.Component;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class ImageBatch extends CrazyProperties {
 
-	private final String[] extensions = new String[]{"gif", "jpg", "jpeg", "png"};
+	private boolean isSet = true;
 	
-	@Scheduled(cron="*/10 * * * * *")
+	@Scheduled(fixedDelay = 1000 * 60)
 	public synchronized void renameSoraPicture() {
-		log.trace("Rename Sora picture Start");
+		log.debug("Rename Sora picture Start");
 
-		if (SORA_PICTURES_PATHS == null) {
+		if (isSet && (SORA_PICTURES_PATHS == null || SORA_PICTURES_PATHS.length < 1)) {
+			isSet = false;
 			log.warn("PATH_SORA_PICTURES is not set");
 			return;
 		}
 		
 		for (String soraPath : SORA_PICTURES_PATHS) {
-			
 			File directory = new File(soraPath);
 			if (!directory.isDirectory()) {
 				log.warn("not directory : {}", soraPath);
 				continue;
 			}
 			
-			Collection<File> found = FileUtils.listFiles(directory, extensions, false);
-			log.trace("{} found : {}", soraPath, found.size());
-			
-			String folderName = directory.getName();
-			for (File file : found) {
-				if (StringUtils.startsWith(file.getName(), folderName)) {
+			for (File file : FileUtils.listFiles(directory, IMAGE.imageSuffix, false)) {
+				if (StringUtils.startsWith(file.getName(), directory.getName()))
 					continue;
-				}
-				else {
-					String suffix = Utils.getExtension(file);
-					File dest = new File(directory, folderName + "_" + file.lastModified() + "." + suffix);
 
-					file.renameTo(dest);
-					log.info("rename {} to {}", file.getName(), dest.getName());
-				}
+				File dest = new File(directory, directory.getName() + "_" + file.lastModified() + "." + Utils.getExtension(file));
+				file.renameTo(dest);
+				log.info("rename {} to {}", file.getName(), dest.getName());
 			}
 		}
-		log.trace("Rename Sora picture End");
+		log.debug("Rename Sora picture End");
 	}
 	
 }

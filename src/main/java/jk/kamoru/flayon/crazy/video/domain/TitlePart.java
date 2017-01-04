@@ -12,11 +12,13 @@ import lombok.Data;
 
 @Data
 public class TitlePart {
+	
 	String studio;
 	String opus;
 	String title;
 	String actress;
 	String releaseDate;
+	String etcInfo;
 	
 	String imgSrc;
 	String rowData;
@@ -25,7 +27,7 @@ public class TitlePart {
 	String checkDesc;
 	String checkDescShort;
 	
-	private boolean exist;
+	boolean exist;
 	
 	public TitlePart() {
 		this.checkDesc = "";
@@ -33,31 +35,38 @@ public class TitlePart {
 	}
 	
 	public TitlePart(String title) {
+		this();
 		String[] parts = StringUtils.split(title, "]");
-		if (parts != null)
+		if (parts != null && parts.length > 4)
 			for (int i = 0; i < parts.length; i++) {
-				setDate(i, VideoUtils.removeUnnecessaryCharacter(parts[i]));
+				setData(i, StringUtils.replace(parts[i], "[", ""));
 			}
-		else
-			throw new CrazyException(String.format("parsing error : %s", title));
+		else {
+			check = true;
+			checkDesc += "Unclassified ";
+			checkDescShort += "U ";
+		}
 	}
 
-	private void setDate(int i, String data) {
+	private void setData(int i, String data) {
 		switch (i) {
 		case 0:
-			studio = data;
+			setStudio(data);
 			break;
 		case 1:
-			opus = data.toUpperCase();
+			setOpus(data);
 			break;
 		case 2:
-			title = data;
+			setTitle(data);
 			break;
 		case 3:
-			actress = data;
+			setActress(data);
 			break;
 		case 4:
-			releaseDate = data;
+			setReleaseDate(data);
+			break;
+		case 5:
+			setEtcInfo(data);
 			break;
 		default:
 			throw new CrazyException(String.format("invalid title data. %s : %s", i, data));
@@ -198,7 +207,7 @@ public class TitlePart {
 	
 	/**
 	 * 배우이름 검증. 한글이 포함되어 있으면 안된다.
-	 * @param actressName
+	 * @param actressText
 	 * @return 틀리면 <code>true</code>
 	 */
 	public static boolean invalidActress(String actressText) {

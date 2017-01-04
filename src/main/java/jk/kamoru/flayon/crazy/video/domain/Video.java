@@ -30,7 +30,6 @@ import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
-import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
@@ -154,15 +153,15 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		case D:
 			return Utils.compareTo(this.getReleaseDate(), comp.getReleaseDate());
 		case M:
-			return this.getDelegateFile().lastModified() > comp.getDelegateFile().lastModified() ? 1 : -1;
+			return Utils.compareTo(this.getDelegateFile().lastModified(), comp.getDelegateFile().lastModified());
 		case P:
-			return this.getPlayCount() - comp.getPlayCount();
+			return Utils.compareTo(this.getPlayCount(), comp.getPlayCount());
 		case R:
-			return this.getRank() - comp.getRank();
+			return Utils.compareTo(this.getRank(), comp.getRank());
 		case L:
-			return this.getLength() > comp.getLength() ? 1 : -1;
+			return Utils.compareTo(this.getLength(), comp.getLength());
 		case SC:
-			return this.getScore() - comp.getScore();
+			return Utils.compareTo(this.getScore(), comp.getScore());
 		case VC:
 			if (this.videoCandidates.size() > 0) {
 				if (comp.videoCandidates.size() == 0) {
@@ -641,6 +640,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				}
 	}
 	
+	/**
+	 * 싹다 지운다
+	 */
 	public void deleteVideo() {
 		for (File file : getFileAll())
 			if (file != null)
@@ -928,10 +930,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public int getActressScore() {
 		int actressVideoScore = 0;
-		if (getActressList().size() == 1 
-				&& getActressList().get(0).getName().equals(FileBaseVideoSource.unclassifiedActress))
-			return actressVideoScore;
-			
 		for (Actress actress : getActressList()) {
 			actressVideoScore += Math.round(actress.getVideoList().size() * ACTRESS_RATIO / 10);
 		}
@@ -942,17 +940,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getActressScoreDesc() {
 		String desc = "";
-
-		if (getActressList().size() == 1 
-				&& getActressList().get(0).getName().equals(FileBaseVideoSource.unclassifiedActress))
-			return FileBaseVideoSource.unclassifiedActress;
-		
 		boolean first = true;
 		for (Actress actress : getActressList()) {
-			desc += first ? "" : "+";
-			if (!actress.getName().equals(FileBaseVideoSource.unclassifiedActress))
-				desc += actress.getVideoList().size();
-			
+			desc += (first ? "" : "+") + actress.getVideoList().size();
 			first = false;
 		}
 		return desc;
@@ -1268,5 +1258,12 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			}
 		}
 		return favorite;
+	}
+
+	public void setTitlePart(TitlePart titlePart) {
+		this.setOpus(titlePart.getOpus());
+		this.setTitle(titlePart.getTitle());
+		this.setReleaseDate(titlePart.getReleaseDate());
+		this.setEtcInfo(titlePart.getEtcInfo());
 	}
 }

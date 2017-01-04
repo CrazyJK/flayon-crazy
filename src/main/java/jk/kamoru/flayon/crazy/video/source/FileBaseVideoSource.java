@@ -37,13 +37,7 @@ public class FileBaseVideoSource implements VideoSource {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FileBaseVideoSource.class);
 
-	public static final String unclassifiedActress = "Amateur";
-
-	private final String UNKNOWN 			 = "_Unknown";
-	private final String unclassifiedStudio  = UNKNOWN;
-//	private final String unclassifiedOpus 	 = UNKNOWN;
-
-	// data source
+	// domain map
 	private Map<String, Video>     videoMap	= new HashMap<>();
 	private Map<String, Studio>   studioMap	= new HashMap<>();
 	private Map<String, Actress> actressMap = new HashMap<>();
@@ -72,13 +66,12 @@ public class FileBaseVideoSource implements VideoSource {
 	private String toTypeString() {
 		return isArchive ? "Archive" : "Instance";
 	}
+	
 	/**
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
 	private final void videoSource() {
-//		logger.info("videoSource START firstLoad = {}", firstLoad);
 		if (firstLoad) {
-//			logger.info("loading = {}", loading);
 			if (loading) {
 				do {
 					try {
@@ -94,12 +87,8 @@ public class FileBaseVideoSource implements VideoSource {
 		else {
 			load(null);
 		}
-//		logger.info("videoSource END");			
 	}
 	
-	/**
-	 * video데이터를 로드한다.
-	 */
 	private synchronized void load(StopWatch stopWatch) {
 		logger.debug("Start {} video source load", toTypeString());
 		boolean standalone = false;
@@ -113,28 +102,24 @@ public class FileBaseVideoSource implements VideoSource {
 
 		List<String> wrongFileNames = new ArrayList<>();
 		
-		stopWatch.start("load : listFiles");
 		// find files
+		stopWatch.start("load : listFiles");
 		Collection<File> files = Utils.listFiles(paths, null, true);
-		logger.debug("    total found file {}", files.size());
 		stopWatch.stop();
-		
+		logger.debug("    total found file {}", files.size());
 
 		videoMap.clear();
 		studioMap.clear();
 		actressMap.clear();
 
+		// domain create & data source
 		stopWatch.start("load : make Video object in " + files.size() + " files");
-		// 3. domain create & data source   
 		for (File file : files) {
+			String filename = file.getName();
+			String     name = Utils.getNameExceptExtension(file);
+			String      ext = Utils.getExtension(file).toLowerCase();
+
 			try {
-				String filename = file.getName();
-				String     name = Utils.getNameExceptExtension(file);
-				String      ext = Utils.getExtension(file).toLowerCase();
-				
-				// 연속 스페이스 제거
-				name = StringUtils.normalizeSpace(name);
-				
 				// Unnecessary file exclusion
 				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO)
 						|| filename.equals(VIDEO.HISTORY_LOG_FILENAME) 
@@ -145,40 +130,21 @@ public class FileBaseVideoSource implements VideoSource {
 					continue;
 				}
 				
-				// 1       2     3      4        5     6
-				// [studio][opus][title][actress][date]etc...
-				String[] names 		= StringUtils.split(name, "]", 6);
-				if (names == null || names.length < 5) {
-					logger.warn("Unclassified file {}", file.getCanonicalPath());
-					wrongFileNames.add(String.format("%s : %s", "Unclassified", file.getCanonicalPath()));
-					continue;
-				}
-
-				String studioName  	= VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
-				String opus    		= VideoUtils.removeUnnecessaryCharacter(names[1]);
-				String title   		= VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
-				String actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
-				String releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
-				String etcInfo 		= "";
-				if (names.length > 5)
-					etcInfo 	    = VideoUtils.removeUnnecessaryCharacter(names[5]);
-
-				// check valid
-				if (TitlePart.invalid(studioName, opus, title, actressNames, releaseDate)) {
-					logger.warn("Invalid file {}", file.getCanonicalPath());
-					wrongFileNames.add(String.format("%s : %s", "Invalid", file.getCanonicalPath()));
+				/*  1       2     3      4        5       6
+				   [studio][opus][title][actress][release]etc...*/
+				TitlePart titlePart = new TitlePart(name);
+				if (titlePart.isCheck()) {
+					logger.warn("wrong file : {}, {}, {}", file.getCanonicalPath(), titlePart.getCheckDescShort(), titlePart.getStyleString());
+					wrongFileNames.add(String.format("[%s] : %s, %s, %s", file.getPath(), file.getName(), titlePart.getCheckDescShort(), titlePart.getStyleString()));
 					continue;
 				}
 				
-				Video video = videoMap.get(opus.toLowerCase());
+				Video video = videoMap.get(titlePart.getOpus());
 				if (video == null) {
 					video = videoProvider.get();
-					video.setOpus(opus.toUpperCase());
-					video.setTitle(title);
-					video.setReleaseDate(releaseDate);
-					video.setEtcInfo(etcInfo);
+					video.setTitlePart(titlePart);
 					video.setArchive(isArchive);
-					videoMap.put(opus.toLowerCase(), video);
+					videoMap.put(video.getOpus(), video);
 				}
 				// set video File
 				if (VIDEO.SUFFIX_VIDEO.contains(ext))
@@ -192,27 +158,25 @@ public class FileBaseVideoSource implements VideoSource {
 				else
 					video.addEtcFile(file);
 				
-				Studio studio = studioMap.get(studioName.toLowerCase());
+				Studio studio = studioMap.get(titlePart.getStudio().toUpperCase());
 				if (studio == null) {
 					studio = studioProvider.get();
-					studio.setName(studioName);
-					studioMap.put(studioName.toLowerCase(), studio);
+					studio.setName(titlePart.getStudio());
+					studioMap.put(studio.getName().toUpperCase(), studio);
 				}
 				// inject reference
 				studio.addVideo(video);
 				video.setStudio(studio);
 				
-				for (String actressName : StringUtils.split(actressNames, ",")) { 
+				for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
+					actressName = VideoUtils.trimBlank(actressName);
 					String forwardActressName = VideoUtils.sortForwardName(actressName);
+					
 					Actress actress = actressMap.get(forwardActressName);
 					if (actress == null) {
 						actress = actressProvider.get();
-						actress.setName(actressName.trim());
+						actress.setName(actressName);
 						actressMap.put(forwardActressName, actress);
-						
-						if (actressName.trim().length() == 0) {
-							logger.error("Check file {}", file);
-						}
 					}
 					// inject reference
 					actress.addVideo(video);
@@ -223,11 +187,11 @@ public class FileBaseVideoSource implements VideoSource {
 				}
 			}
 			catch (Exception e) {
-				logger.error("File loading error", e);
+				logger.error("File loading error : " + filename, e);
 			}
 		}
 		stopWatch.stop();
-		
+
 		stopWatch.start("load : save wrong filename");
 		try {
 			if (wrongFileNames.size() > 0)
@@ -248,7 +212,6 @@ public class FileBaseVideoSource implements VideoSource {
 	public void reload(StopWatch stopWatch) {
 		load(stopWatch);
 		matchTorrent();
-//		logger.info("reload {} completed", toTypeString());
 	}
 
 	@Override
@@ -293,8 +256,8 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public Video getVideo(String opus) {
 		videoSource();
-		if (videoMap.containsKey(opus.toLowerCase()))
-			return videoMap.get(opus.toLowerCase());
+		if (videoMap.containsKey(opus.toUpperCase()))
+			return videoMap.get(opus.toUpperCase());
 		else
 			if (isArchive)
 				return null;
@@ -304,8 +267,8 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public Studio getStudio(String name) {
 		videoSource();
-		if (studioMap.containsKey(name.toLowerCase()))
-			return studioMap.get(name.toLowerCase());
+		if (studioMap.containsKey(name.toUpperCase()))
+			return studioMap.get(name.toUpperCase());
 		else
 			if (isArchive)
 				return new Studio();
@@ -341,24 +304,24 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public void moveVideo(String opus, String destPath) {
 		videoSource();
-		videoMap.get(opus.toLowerCase()).move(destPath);
+		videoMap.get(opus.toUpperCase()).move(destPath);
 	}
 	@Override
 	public void arrangeVideo(String opus) {
 		videoSource();
-		videoMap.get(opus.toLowerCase()).arrange();
+		videoMap.get(opus.toUpperCase()).arrange();
 	}
 	@Override
 	public void removeVideo(String opus) {
 		videoSource();
-		videoMap.get(opus.toLowerCase()).removeVideo();
-		videoMap.remove(opus.toLowerCase());
+		videoMap.get(opus.toUpperCase()).removeVideo();
+		videoMap.remove(opus.toUpperCase());
 	}
 	@Override
 	public void deleteVideo(String opus) {
 		videoSource();
-		videoMap.get(opus.toLowerCase()).deleteVideo();
-		videoMap.remove(opus.toLowerCase());
+		videoMap.get(opus.toUpperCase()).deleteVideo();
+		videoMap.remove(opus.toUpperCase());
 	}
 
 }

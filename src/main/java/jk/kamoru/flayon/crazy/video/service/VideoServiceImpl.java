@@ -1103,70 +1103,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 	
 	@Override
-	public List<TitlePart> parseToTitleData2(String titleData) {
-		List<TitlePart> titlePartList = new ArrayList<>();
-		
-		final String UNKNOWN 			 = "_Unknown";
-//		final String unclassifiedStudio  = UNKNOWN;
-		final String unclassifiedOpus 	 = UNKNOWN;
-		final String unclassifiedActress = "Amateur";
-
-		
-		if (!StringUtils.isEmpty(titleData)) {
-			String[] titles = titleData.split(System.getProperty("line.separator"));
-
-			try {
-				for (int i = 0; i < titles.length; i++) {
-					if (!StringUtils.isEmpty(titles[i])) {
-						String[] names 		= StringUtils.split(titles[i], "]");
-//						String studioName 	 = VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
-						String opus 		 = VideoUtils.removeUnnecessaryCharacter(names[1], unclassifiedOpus);
-						String title 		 = VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
-						String actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
-						String releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
-
-						TitlePart titlePart = new TitlePart();
-						titlePart.setOpus(opus);
-						titlePart.setTitle(title);
-						titlePart.setActress(actressNames);
-						titlePart.setReleaseDate(releaseDate);
-					
-						if (videoDao.contains(titlePart.getOpus())) {
-							log.info("{} exist", titlePart.getOpus());
-							continue;
-						}
-						
-						// history check
-						if (historyService.contains(titlePart.getOpus())) {
-							titlePart.setSeen();
-						}
-
-						// find Studio
-						List<Map<String, String>> histories = findHistory(StringUtils.substringBefore(titlePart.getOpus(), "-") + "-");
-						if (histories.size() > 0) {
-							Map<String, String> data = histories.get(0);
-							String desc = data.get("desc");
-							
-							titlePart.setStudio(StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]"));
-						}
-						else {
-							titlePart.setStudio("");
-						}
-						
-						// add TitlePart
-						titlePartList.add(titlePart);
-					}
-				}
-			} catch(ArrayIndexOutOfBoundsException e) {
-				// do nothing
-			}
-			// sort list
-//			Collections.sort(titlePartList);
-		}
-		return titlePartList;
-	}
-	
-	@Override
 	public Map<Integer, List<Video>> groupByLength() {
 		log.debug("groupByLength");
 		Map<Integer, List<Video>> map = new TreeMap<>(Collections.reverseOrder());
@@ -1297,9 +1233,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void deletEmptyFolder() {
-		if (log.isDebugEnabled())
-			log.debug("arrangeSubFolder START");
-		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
+		log.debug("deletEmptyFolder START");
 		
 		List<File> folders = new ArrayList<>();
 		folders.add(new File(ARCHIVE_PATH));
@@ -1310,30 +1244,34 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			folders.add(new File(stage));
 			
 		for (File path : folders) {
+			if (path == null || !path.exists()) {
+				log.warn("deletEmptyFolder : wrong path [{}]", path);
+				continue;
+			}
 			File[] dirs = path.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {
 					return file.isDirectory();
-				}});
-			if (log.isDebugEnabled())
-				log.debug("arrangeSubFolder scan {} - {}", path, dirs);
+				}
+			});
+			log.info("deletEmptyFolder : {} scan - {}", path, dirs);
 
 			for (File dir : dirs) {
 				if (Utils.isEmptyDirectory(dir)) {
-					if (log.isDebugEnabled())
-						log.debug("arrangeSubFolder   attempt to delete {}", dir);
 					dir.delete();
+					if (log.isDebugEnabled())
+						log.debug("deletEmptyFolder : delete {}", dir);
 				}
 			}
 		}
-		log.debug("arrangeSubFolder END");
+		log.debug("deletEmptyFolder END");
 	}
 
 	@Override
 	public void setFavoriteOfActress(String actressName, Boolean favorite) {
 		Actress actress = videoDao.getActress(actressName);
 		actress.setFavorite(favorite);
-		videoDao.reload();
+//		videoDao.reload();
 	}
 
 	@Override

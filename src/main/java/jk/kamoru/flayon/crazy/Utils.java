@@ -58,7 +58,19 @@ public class Utils {
 			return 0;
 		return obj1.toString().compareToIgnoreCase(obj2.toString());
 	}
-
+	public static int compareTo(String str1, String str2) {
+		if (str1 == null || str2 == null)
+			return 0;
+		return str1.compareToIgnoreCase(str2);
+	}
+	public static int compareTo(long x, long y) {
+		return (x < y) ? -1 : ((x == y) ? 0 : 1);
+	}
+	public static int compareTo(int x, int y) {
+		return (x < y) ? -1 : ((x == y) ? 0 : 1);
+	}
+	
+	
 	/**
 	 * properties 형태의 파일을 읽어 Map으로 반환
 	 * @see #saveFileFromMap(File, Map)
