@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +27,6 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
-import jk.kamoru.flayon.crazy.video.dao.TagDao;
-import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
@@ -49,17 +46,10 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	
 	private Sort sortMethod = VIDEO.DEFAULT_SORTMETHOD;
 	
-	@JsonIgnore
-	@Autowired HistoryService historyService;
-
-	@JsonIgnore
-	@Autowired TagDao tagDao;
-	
 	// files
 	private List<File> videoFileList;
 	private List<File> subtitlesFileList;
 	private File coverFile;
-//	private File coverWebpFile;
 	private File infoFile; // json file
 	private List<File> etcFileList;
 	private List<File> videoCandidates;
@@ -88,7 +78,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		torrents			= new ArrayList<>();
 		
 		actressList = new ArrayList<Actress>();
-//		historyList = new ArrayList<History>();
 
 		playCount 	= 0;
 		rank 		= 0;
@@ -185,15 +174,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return 같거나 포함되어 있으면 {@code true}
 	 */
 	public boolean containsActress(String actressName) {
-		
 		return actressList.stream().allMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
-/*		
-		for(Actress actress : actressList)
-			if (VideoUtils.equalsActress(actress.getName(), actressName)
-					|| StringUtils.contains(actress.getName(), actressName))
-				return true;
-		return false;
-*/
 	}
 	
 	/**
@@ -209,11 +190,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	/**
-	 * Actress 목록. 이름순 정렬
-	 * @return actress list by name sort
+	 * @return actress list
 	 */
 	public List<Actress> getActressList() {
-//		Collections.sort(actressList);
 		return actressList;
 	}
 	
@@ -266,8 +245,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			return this.getEtcFileList().get(0);
 		else if (this.infoFile != null) 
 			return this.infoFile;
-//		else if (this.coverWebpFile != null)
-//			return this.coverWebpFile;
 		else 
 			throw new VideoException(this, "No delegate video file : " + this.opus + " " + this.toString());
 	}
@@ -331,7 +308,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		list.addAll(getSubtitlesFileList());
 		list.addAll(getEtcFileList());
 		list.add(this.coverFile);
-//		list.add(this.coverWebpFile);
 		list.add(this.infoFile);
 		return list;
 	}
@@ -341,7 +317,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		list.addAll(getSubtitlesFileList());
 		list.addAll(getEtcFileList());
 		list.add(this.coverFile);
-//		list.add(this.coverWebpFile);
 		list.add(this.infoFile);
 		return list;
 	}
@@ -524,14 +499,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public boolean isExistCoverFile() {
 		return this.coverFile != null;
 	}
-
-//	/**
-//	 * WebP 커버 파일이 존재하는지
-//	 * @return {@code true} if exist
-//	 */
-//	public boolean isExistCoverWebpFile() {
-//		return this.coverWebpFile != null;
-//	}
 
 	/**
 	 * 기타 파일이 존재하는지
@@ -741,14 +708,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		this.coverFile = coverFile;
 	}
 
-//	/**
-//	 * webp cover file
-//	 * @param coverWebpFile
-//	 */
-//	public void setCoverWebpFile(File coverWebpFile) {
-//		this.coverWebpFile = coverWebpFile;
-//	}
-
 	/**
 	 * etc file
 	 * @param file
@@ -911,6 +870,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public String getScoreRatio() {
 		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", RANK_RATIO, PLAY_RATIO, ACTRESS_RATIO, SUBTITLES_RATIO);
 	}
+	
 	/**환산된 랭킹 점수
 	 * @return score of rank
 	 */
@@ -1135,8 +1095,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			&& matchRank(search.getRankRange())
 			&& matchPlay(search.getPlayCount())
 			&& matchTag(search.getSelectedTag())
-			) 
-		{
+			) {
 			setSortMethod(search.getSortMethod());
 			return true;
 		}
@@ -1164,8 +1123,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			&& matchStudioList(search.getSelectedStudio())
 			&& matchActressList(search.getSelectedActress())
 			&& matchTag(search.getSelectedTag())
-			) 
-		{
+			) {
 			setSortMethod(search.getSortMethod());
 			return true;
 		}

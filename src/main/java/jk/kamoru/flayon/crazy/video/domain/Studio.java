@@ -31,10 +31,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	public static final String NAME = "NAME";
-	public static final String NEWNAME = "NEWNAME";
-	public static final String HOMEPAGE = "HOMEPAGE";
-	public static final String COMPANY = "COMPANY";
+	private static final String NEWNAME = "NEWNAME";
+	private static final String HOMEPAGE = "HOMEPAGE";
+	private static final String COMPANY = "COMPANY";
 	
 	private String name;
 	private URL    homepage;
@@ -44,9 +43,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	private List<Video> videoList;
 	@JsonIgnore
 	private List<Actress> actressList;
-
+	@JsonIgnore
 	private boolean loaded;
-
+	@JsonIgnore
 	private StudioSort sort = StudioSort.NAME;
 	
 	public Studio() {

@@ -33,14 +33,13 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	public static final String NAME = "NAME";
-	public static final String NEWNAME = "NEWNAME";
-	public static final String FAVORITE = "FAVORITE";
-	public static final String LOCALNAME = "LOCALNAME";
-	public static final String BIRTH = "BIRTH";
-	public static final String BODYSIZE = "BODYSIZE";
-	public static final String HEIGHT = "HEIGHT";
-	public static final String DEBUT = "DEBUT";
+	private static final String NEWNAME = "NEWNAME";
+	private static final String FAVORITE = "FAVORITE";
+	private static final String LOCALNAME = "LOCALNAME";
+	private static final String BIRTH = "BIRTH";
+	private static final String BODYSIZE = "BODYSIZE";
+	private static final String HEIGHT = "HEIGHT";
+	private static final String DEBUT = "DEBUT";
 	
 	private String name;
 	private String localName;
@@ -60,8 +59,10 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	/**
 	 * is loaded actress infomation
 	 */
+	@JsonIgnore
 	private boolean loaded;
 	
+	@JsonIgnore
 	private ActressSort sort = ActressSort.NAME;
 
 	public Actress() {

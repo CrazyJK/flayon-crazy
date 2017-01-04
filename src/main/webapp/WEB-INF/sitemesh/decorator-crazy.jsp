@@ -45,6 +45,7 @@ var tSec = 1;
 var timer;
 var neon = '${param.neon}' === 'true' ? true : false;
 var bgChangeInterval = 60;
+var bgImageChange;
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -83,7 +84,6 @@ $(document).ready(function() {
 
 	resizeDivHeight();
 
-	var bgImageChange;
 	if (bgContinue) {
 		$("#bgChangeInterval").val(bgChangeInterval);
 		setBackgroundImage();
@@ -139,14 +139,14 @@ $(document).ready(function() {
 function showNav() {
 	var found = false;
 	$("nav#deco_nav ul li a").each(function() {
-		// console.log($(this).attr("href"), locationPathname);
-		if ($(this).attr("href") === locationPathname) {
+//		console.log($(this).attr("href"), locationPathname);
+		if ($(this).attr("href") === locationPathname || $(this).attr("href") + '/' === locationPathname) {
 			$(this).parent().addClass("active");
 			found = true;
 		}
 	});
 	if(!found)
-		$("nav#deco_nav").css("display", "none");
+		$("nav#deco_nav").hide();
 }
 /**
  * post 액션
@@ -199,17 +199,30 @@ function loading(show, msg, interval, detail) {
 		$("#loading").hide();
 		loadingTimer(false);
 	}
+	
 	if (msg)
 		$("#loading-msg").html(msg);
+	
 	if (interval)
 		$("#loading").fadeOut(interval, function() {
 			loadingTimer(false);
 		});
+	
 	if (detail) {
 		var loadingMsgDetail = $("<div>").attr("id", "loading-msg-detail").addClass("box").html(detail);
 		$("#loading-content").append(loadingMsgDetail);
 	}
 }
+function loadingTimer(start) {
+	console.log("loadingTimer", start, tSec);
+	if (start) {
+		$("#loading-timer").html(tSec++);
+	}
+	else {
+		clearInterval(timer);
+	}
+}
+
 var bgToggle = 0;
 function toogleBody() {
 	$(".container-fluid, .container").animate({
@@ -219,16 +232,6 @@ function toogleBody() {
 	$("#bgActionGroup").toggle({
 		duration: 1000
 	});
-}
-function loadingTimer(start) {
-	console.log("loadingTimer", start, tSec);
-	if (start) {
-		$("#loading-timer").html(tSec++);
-	}
-	else {
-		//console.log("clearInterval", timer);
-		clearInterval(timer);
-	}
 }
 /*
 // 페이지 로드시 새로 캐쉬받아야 하는지 확인.

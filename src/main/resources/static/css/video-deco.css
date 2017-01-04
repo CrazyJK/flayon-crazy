@@ -12,7 +12,7 @@ nav#deco_nav {
 	top: 0;
 	right: 20px;
 	margin: 0;
-	padding: 1px;
+	padding: 0;
 	z-index: 1818;
 	background-color: rgba(255, 255, 255, 0);
 	border-radius: 0 0 4px 4px;
@@ -26,11 +26,12 @@ nav#deco_nav > ul.nav-pills > li {
 	font-size: 10px;
 }
 nav#deco_nav > ul.nav-pills > li > a {
-	padding: 2px;
+	padding: 2px 3px;
 	color: #333;
 	font-weight: 700;
 	text-shadow: 1px 1px 9px rgb(255, 255, 255);
 	text-decoration: none;
+	border-radius: 0 0 4px 4px;
 }
 nav#deco_nav > ul.nav-pills > li > a[onclick] {
 	color: #d02f6b;
