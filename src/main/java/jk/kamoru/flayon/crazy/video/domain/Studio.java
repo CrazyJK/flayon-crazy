@@ -151,11 +151,11 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	}
 
 	private File getInfoFile() {
-		return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	public String saveInfo(Map<String, String> params) {

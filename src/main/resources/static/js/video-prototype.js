@@ -26,8 +26,8 @@ function Video(idx, data) {
 	this.opusHtml    = "<span class='label label-plain'>" + this.opus + "</span>";
 	this.actressHtml = this.actressHtmlNames();
 	this.releaseHtml = "<span class='label label-plain'>" + this.releaseDate + "</span>";
-	this.scoreHtml = "<span class='label label-plain'>" + this.score + "</span>";
-	this.rankHtml = "<span class='label label-plain'>R " + this.rank + "</span>";
+	this.scoreHtml = "<span class='label label-plain' title='Score "+ this.rank + "'>" + this.score + "</span>";
+	this.rankHtml = "<span class='label label-plain' title='Rank "+ this.rank + "'>R " + this.rank + "</span>";
 	this.existVideoHtml = "<span class='label label-plain " + (this.existVideoFileList ? "exist" : "nonExist") + "' onclick=\"fnPlay('" + this.opus + "')\">Video</span>";
 	this.existSubtitlesHtml = "<span class='label label-plain " + (this.existSubtitlesFileList ? "exist" : "nonExist") + "'>Sub</span>";
 

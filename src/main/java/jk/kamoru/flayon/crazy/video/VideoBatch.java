@@ -228,7 +228,7 @@ public class VideoBatch extends CrazyProperties {
 		}
 		
 		// _info folder backup to zip
-		File src = new File(STORAGE_PATHS[0], "_info");
+		File src = new File(STORAGE_PATH, "_info");
 		ZipUtils zipUtils = new ZipUtils();
 		try {
 			zipUtils.zip(src, backupPath, VIDEO.ENCODING, true);
@@ -237,7 +237,7 @@ public class VideoBatch extends CrazyProperties {
 		}
 
 		// history backup
-		File historyFile = new File(STORAGE_PATHS[0], VIDEO.HISTORY_LOG_FILENAME);
+		File historyFile = new File(STORAGE_PATH, VIDEO.HISTORY_LOG_FILENAME);
 		try {
 			FileUtils.copyFileToDirectory(historyFile, backupPath);
 		} catch (IOException e) {
@@ -245,7 +245,7 @@ public class VideoBatch extends CrazyProperties {
 		}
 		
 		// tag data backup
-		File tagFile = new File(STORAGE_PATHS[0], VIDEO.TAG_DATA_FILENAME);
+		File tagFile = new File(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME);
 		try {
 			FileUtils.copyFileToDirectory(tagFile, backupPath);
 		} catch (IOException e) {

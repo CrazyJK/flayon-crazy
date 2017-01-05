@@ -54,7 +54,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	
 	private File getHistoryFile() {
 		if(historyFile == null)
-			historyFile = new File(STORAGE_PATHS[0], VIDEO.HISTORY_LOG_FILENAME);
+			historyFile = new File(STORAGE_PATH, VIDEO.HISTORY_LOG_FILENAME);
 		return historyFile;
 	}
 

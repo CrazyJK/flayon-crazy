@@ -471,8 +471,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		Long[] total = new Long[]{0l, 0l};
 		for (Video video : videoDao.getVideoList()) {
 			String path = video.getDelegatePath();
-			if (path.contains(STORAGE_PATHS[0]))
-				path = STORAGE_PATHS[0];
+			if (path.contains(STORAGE_PATH))
+				path = STORAGE_PATH;
 			long length = video.getLength();
 			Long[] data = pathMap.get(path);
 			if (data == null) {
@@ -755,7 +755,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		// 옮긴 비디오 개수
 		int countOfMoveVideo = 0;
 		// Watched 폴더
-		File mainBaseFile = new File(STORAGE_PATHS[0]);
+		File mainBaseFile = new File(STORAGE_PATH);
 		// Watched Root
 		Path mainBaseRoot = mainBaseFile.toPath().getRoot();
 		// Watched 폴더 크기
@@ -1238,8 +1238,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		List<File> folders = new ArrayList<>();
 		folders.add(new File(ARCHIVE_PATH));
 		folders.add(new File(COVER_PATH));
-		for (String storage : STORAGE_PATHS)
-			folders.add(new File(storage));
+//		folders.add(new File(STORAGE_PATH));
 		for (String stage : STAGE_PATHS)
 			folders.add(new File(stage));
 			
@@ -1254,13 +1253,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					return file.isDirectory();
 				}
 			});
-			log.info("deletEmptyFolder : {} scan - {}", path, dirs);
+			log.debug("deletEmptyFolder : {} scan - {}", path, dirs);
 
 			for (File dir : dirs) {
 				if (Utils.isEmptyDirectory(dir)) {
 					dir.delete();
-					if (log.isDebugEnabled())
-						log.debug("deletEmptyFolder : delete {}", dir);
+					log.info("deletEmptyFolder : delete {}", dir);
 				}
 			}
 		}

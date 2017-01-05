@@ -242,14 +242,14 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 
 	private File getInfoFile() {
 		try {
-			return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+			return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 		} catch (NullPointerException e) {
 			throw new CrazyException("Why name=[" + name + "]", e);
 		}
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(STORAGE_PATHS[0], "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 	}
 	
 	/**

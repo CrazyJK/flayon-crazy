@@ -402,7 +402,10 @@ var currBGImageUrl;
 			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
 			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
 			<script type="text/javascript">
-				$("#slides").slideview({width:800, height:750});
+			function resizeSecondDiv() {
+				var flayonSlideHeight = calculatedDivHeight - 100;
+				$("#slides").slideview({width:800, height:flayonSlideHeight});
+			}
 			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'A'}">

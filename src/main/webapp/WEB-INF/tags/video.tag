@@ -47,7 +47,9 @@ if (view.equalsIgnoreCase("video")) {
 <%
 } else if (view.equalsIgnoreCase("actress")) {
 %>
+	<div style="max-height:${mode eq 'f' ? '70' : '50'}px; overflow:auto;">
 	<c:forEach items="${video.actressList}" var="actress">
+		<c:if test="${mode eq 'f'}"><div style="margin-bottom: 5px;"></c:if>
 		<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
 			<c:if test="${mode ne 'f'}">
 				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
@@ -60,8 +62,9 @@ if (view.equalsIgnoreCase("video")) {
 				<span title="<s:message code="video.find-info.actress"/>" 
 					onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
 			</c:if>
-		</span>
+		</span><c:if test="${mode eq 'f'}"></div></c:if>
 	</c:forEach>
+	</div>
 <%
 } else if (view.equalsIgnoreCase("opus")) {
 %>
