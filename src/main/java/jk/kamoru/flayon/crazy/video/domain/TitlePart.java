@@ -13,6 +13,8 @@ import lombok.Data;
 @Data
 public class TitlePart {
 	
+	private static final String AMATEUR = "Amateur";
+	
 	String studio;
 	String opus;
 	String title;
@@ -119,15 +121,20 @@ public class TitlePart {
 	 * @param actress the actress to set
 	 */
 	public void setActress(String actress) {
-		String[] array = StringUtils.split(StringUtils.removeEnd(actress.trim(), "외"));
-		if (array != null) {
-			actress = "";
-			for (String name : array) {
-				actress += StringUtils.capitalize(name.toLowerCase()) + " ";
-			}
-			actress = VideoUtils.trimBlank(actress);
+		if (StringUtils.isBlank(actress)) {
+			this.actress = AMATEUR;
 		}
-		this.actress = actress;
+		else {
+			String[] array = StringUtils.split(StringUtils.removeEnd(actress.trim(), "외"));
+			if (array != null) {
+				actress = "";
+				for (String name : array) {
+					actress += StringUtils.capitalize(name.toLowerCase()) + " ";
+				}
+				actress = VideoUtils.trimBlank(actress);
+			}
+			this.actress = actress;
+		}
 		// valid check
 		if (invalidActress(actress)) {
 			this.check = true;
