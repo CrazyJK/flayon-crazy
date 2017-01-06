@@ -6,6 +6,7 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
+import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
 /**
@@ -14,20 +15,22 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
  */
 public interface VideoDao {
 
+	// --- getter for Instance source --------------------------------------
+	
 	/**
 	 * @return total video list
 	 */
-	List<Video> getVideoList();
+	List<Video> getVideoList(Boolean instance, Boolean archive);
 	
 	/**
 	 * @return total studio list
 	 */
-	List<Studio> getStudioList();
+	List<Studio> getStudioList(Boolean instance, Boolean archive);
 
 	/**
 	 * @return total actress list
 	 */
-	List<Actress> getActressList();
+	List<Actress> getActressList(Boolean instance, Boolean archive);
 
 	/**
 	 * video by opus
@@ -51,6 +54,66 @@ public interface VideoDao {
 	Actress getActress(String name);
 
 	/**
+	 * whether opus contains at source 
+	 * @param opus
+	 * @return
+	 */
+	boolean contains(String opus, Boolean instance, Boolean archive);
+
+	// --- getter for Archive source --------------------------------------
+	
+	/**
+	 * archive video list
+	 * @return video list
+	 */
+//	List<Video> getArchiveVideoList();
+
+	/**
+	 * archive actress list
+	 * @return
+	 */
+//	List<Actress> getArchiveActressList();
+
+	/**
+	 * archive studio list
+	 * @return
+	 */
+//	List<Studio> getArchiveStudioList();
+
+	/**
+	 * archive video by opus
+	 * @param opus
+	 * @return
+	 */
+//	Video getArchiveVideo(String opus);
+
+	// --- source reload --------------------------------------
+	
+	/**
+	 * reload instance videosource
+	 * @param stopWatch 
+	 */
+	void reload(StopWatch stopWatch, Boolean instance, Boolean archive);
+
+	/**
+	 * reload instance videosource
+	 */
+//	void reload(Boolean instance, Boolean archive);
+
+	/**
+	 * reload archive videosource
+	 */
+//	void reloadArchive();
+
+	// --- action method -----------------------------
+	
+	/**
+	 * arrange video
+	 * @param opus
+	 */
+	void arrangeVideo(String opus);
+	
+	/**
 	 * remove video
 	 * @param opus
 	 */
@@ -70,41 +133,22 @@ public interface VideoDao {
 	void moveVideo(String opus, String destPath);
 	
 	/**
-	 * reload video source
-	 * @param stopWatch 
+	 * rename video domain
+	 * @param opus
+	 * @param newName
 	 */
-	void reload(StopWatch stopWatch);
+	void renameVideo(String opus, String newName);
 
 	/**
-	 * reload video source
+	 * build Video domain
+	 * @param titlePart
+	 * @param cOVER_PATH
 	 */
-	void reload();
-
-	void reloadArchive();
+	void buildVideo(TitlePart titlePart);
 
 	/**
-	 * arrange video
+	 * move to instance source
 	 * @param opus
 	 */
-	void arrangeVideo(String opus);
-
-	boolean contains(String opus);
-
-	/**
-	 * archive video by opus
-	 * @param opus
-	 * @return
-	 */
-	Video getArchiveVideo(String opus);
-
-	/**
-	 * archive video list
-	 * @return video list
-	 */
-	List<Video> getArchiveVideoList();
-
-	List<Actress> getArchiveActressList();
-
-	List<Studio> getArchiveStudioList();
-
+	void moveToInstance(String opus);
 }

@@ -106,8 +106,8 @@ public class VideoController extends CrazyController {
 		model.addAttribute("videoList", 	videoList);
 		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringWithVideofile(videoList));
 		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList());
-			model.addAttribute("studioList", 	videoService.getStudioList());
+			model.addAttribute("actressList", 	videoService.getActressList(null, false, true, false));
+			model.addAttribute("studioList", 	videoService.getStudioList(null, false, true, false));
 		}
 		else {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
@@ -175,7 +175,7 @@ public class VideoController extends CrazyController {
 	@RequestMapping(value="/briefing", method=RequestMethod.GET)
 	public String briefing(Model model) {
 
-		videoService.reload();
+//		videoService.reload();
 		model.addAttribute("pathMap", 		videoService.groupByPath());
 		model.addAttribute("dateMap", 		videoService.groupByDate());
 		model.addAttribute("rankMap", 		videoService.groupByRank());
@@ -184,9 +184,9 @@ public class VideoController extends CrazyController {
 		model.addAttribute("lengthMap", 	videoService.groupByLength());
 		model.addAttribute("extensionMap", 	videoService.groupByExtension());
 		
-		model.addAttribute(videoService.getStudioList());
-		model.addAttribute(videoService.getActressList());
-		model.addAttribute(videoService.getVideoList());
+		model.addAttribute(videoService.getStudioList(null, false, true, false));
+		model.addAttribute(videoService.getActressList(null, false, true, false));
+		model.addAttribute(videoService.getVideoList(null, false, true, false));
 
 		model.addAttribute("tagList", videoService.getTagListWithVideo());
 
@@ -503,8 +503,8 @@ public class VideoController extends CrazyController {
 		model.addAttribute("sorts", 		Sort.values());
 		model.addAttribute("videoList", 	videoList);
 		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressListInArchive());
-			model.addAttribute("studioList", 	videoService.getStudioListInArchive());
+			model.addAttribute("actressList", 	videoService.getActressList(null, false, false, true));
+			model.addAttribute("studioList", 	videoService.getStudioList(null, false, false, true));
 		}
 		else {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
@@ -522,7 +522,7 @@ public class VideoController extends CrazyController {
 	@RequestMapping("/reload")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void reload(Model model) {
-		videoService.reload();
+		videoService.reload(null);
 	}
 
 	/**
@@ -543,7 +543,7 @@ public class VideoController extends CrazyController {
 	public void moveWatchedVideo(Model model) {
 		synchronized (java.lang.Object.class) {
 			videoService.moveWatchedVideo();
-			videoService.reload();
+//			videoService.reload();
 		}
 	}
 	
@@ -595,7 +595,7 @@ public class VideoController extends CrazyController {
 	@RequestMapping("/transferPlayCountInfo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void transferPlayCountInfo() {
-		for (Video video : videoService.getVideoList()) {
+		for (Video video : videoService.getVideoList(null, false, true, false)) {
 			int playCount = 0;
 			List<History> histories = historyService.findByVideo(video);
 			for (History history : histories) {

@@ -118,7 +118,7 @@ public class FileBaseVideoSource implements VideoSource {
 			String filename = file.getName();
 			String     name = Utils.getNameExceptExtension(file);
 			String      ext = Utils.getExtension(file).toLowerCase();
-
+			logger.info("");
 			try {
 				// Unnecessary file exclusion
 				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO)
@@ -132,59 +132,17 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				/*  1       2     3      4        5       6
 				   [studio][opus][title][actress][release]etc...*/
+				logger.info("name {}", name);
 				TitlePart titlePart = new TitlePart(name);
+				titlePart.setFiles(file);
+				logger.info("titlePart {}", titlePart);
 				if (titlePart.isCheck()) {
 					logger.warn("wrong file : {}, {}, {}", file.getCanonicalPath(), titlePart.getCheckDescShort(), titlePart.getStyleString());
 					wrongFileNames.add(String.format("[%s] : %s, %s, %s", file.getPath(), file.getName(), titlePart.getCheckDescShort(), titlePart.getStyleString()));
 					continue;
 				}
 				
-				Video video = videoMap.get(titlePart.getOpus());
-				if (video == null) {
-					video = videoProvider.get();
-					video.setTitlePart(titlePart);
-					video.setArchive(isArchive);
-					videoMap.put(video.getOpus(), video);
-				}
-				// set video File
-				if (VIDEO.SUFFIX_VIDEO.contains(ext))
-					video.addVideoFile(file);
-				else if (VIDEO.SUFFIX_IMAGE.contains(ext))
-					video.setCoverFile(file);
-				else if (VIDEO.SUFFIX_SUBTITLES.contains(ext))
-					video.addSubtitlesFile(file);
-				else if (VIDEO.EXT_INFO.equalsIgnoreCase(ext))
-					video.setInfoFile(file);
-				else
-					video.addEtcFile(file);
-				
-				Studio studio = studioMap.get(titlePart.getStudio().toUpperCase());
-				if (studio == null) {
-					studio = studioProvider.get();
-					studio.setName(titlePart.getStudio());
-					studioMap.put(studio.getName().toUpperCase(), studio);
-				}
-				// inject reference
-				studio.addVideo(video);
-				video.setStudio(studio);
-				
-				for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
-					actressName = VideoUtils.trimBlank(actressName);
-					String forwardActressName = VideoUtils.sortForwardName(actressName);
-					
-					Actress actress = actressMap.get(forwardActressName);
-					if (actress == null) {
-						actress = actressProvider.get();
-						actress.setName(actressName);
-						actressMap.put(forwardActressName, actress);
-					}
-					// inject reference
-					actress.addVideo(video);
-					actress.addStudio(studio);
-
-					studio.addActress(actress);
-					video.addActress(actress);
-				}
+				addTitlePart(titlePart);
 			}
 			catch (Exception e) {
 				logger.error("File loading error : " + filename, e);
@@ -253,6 +211,11 @@ public class FileBaseVideoSource implements VideoSource {
 		videoSource();
 		return actressMap;
 	}
+	/**
+	 * if instance, 못찾으면 VideoNotFoundException
+	 * if archive, 못찾으면 null;
+	 * @see jk.kamoru.flayon.crazy.video.source.VideoSource#getVideo(java.lang.String)
+	 */
 	@Override
 	public Video getVideo(String opus) {
 		videoSource();
@@ -312,16 +275,86 @@ public class FileBaseVideoSource implements VideoSource {
 		videoMap.get(opus.toUpperCase()).arrange();
 	}
 	@Override
-	public void removeVideo(String opus) {
+	public void removeElement(String opus) {
 		videoSource();
-		videoMap.get(opus.toUpperCase()).removeVideo();
+		Video video = videoMap.get(opus);
+		Studio studio = video.getStudio();
+		List<Actress> actressList = video.getActressList();
 		videoMap.remove(opus.toUpperCase());
+		studioMap.remove(studio.getName());
+		for (Actress actress : actressList) 
+			actressMap.remove(VideoUtils.sortForwardName(actress.getName()));
+	}
+	@Override
+	public void removeVideo(String opus) {
+		videoMap.get(opus.toUpperCase()).removeVideo();
+		removeElement(opus);
 	}
 	@Override
 	public void deleteVideo(String opus) {
-		videoSource();
 		videoMap.get(opus.toUpperCase()).deleteVideo();
-		videoMap.remove(opus.toUpperCase());
+		removeElement(opus);
+	}
+
+	@Override
+	public void addVideo(Video video) {
+		videoSource();
+		videoMap.put(video.getOpus(), video);
+	}
+
+	@Override
+	public void addFile(File file) {
+		TitlePart part = new TitlePart(file.getName());
+		part.setFiles(file);
+		addTitlePart(part);
+	}
+
+	@Override
+	public void addTitlePart(TitlePart titlePart) {
+		Video video = videoMap.get(titlePart.getOpus());
+		if (video == null) {
+			video = videoProvider.get();
+			video.setTitlePart(titlePart);
+			video.setArchive(isArchive);
+			videoMap.put(video.getOpus(), video);
+		}
+		for (File file : titlePart.getFiles()) {
+			String ext = Utils.getExtension(file).toLowerCase();
+			if (VIDEO.SUFFIX_VIDEO.contains(ext))
+				video.addVideoFile(file);
+			else if (VIDEO.SUFFIX_IMAGE.contains(ext))
+				video.setCoverFile(file);
+			else if (VIDEO.SUFFIX_SUBTITLES.contains(ext))
+				video.addSubtitlesFile(file);
+			else if (VIDEO.EXT_INFO.equalsIgnoreCase(ext))
+				video.setInfoFile(file);
+			else
+				video.addEtcFile(file);
+		}
+		Studio studio = studioMap.get(titlePart.getStudio().toUpperCase());
+		if (studio == null) {
+			studio = studioProvider.get();
+			studio.setName(titlePart.getStudio());
+			studioMap.put(titlePart.getStudio().toUpperCase(), studio);
+		}
+		studio.addVideo(video);
+		video.setStudio(studio);
+
+		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
+			actressName = VideoUtils.trimBlank(actressName);
+			String forwardActressName = VideoUtils.sortForwardName(actressName);
+
+			Actress actress = actressMap.get(forwardActressName);
+			if (actress == null) {
+				actress = actressProvider.get();
+				actress.setName(actressName);
+				actressMap.put(VideoUtils.sortForwardName(actressName), actress);
+			}		
+			actress.addVideo(video);
+			actress.addStudio(studio);
+			studio.addActress(actress);
+			video.addActress(actress);
+		}
 	}
 
 }

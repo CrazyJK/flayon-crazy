@@ -299,16 +299,24 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	/**
-	 * 모든 파일 list. null도 포함 되어 있을수 있음
+	 * 모든 파일 list.
 	 * @return all file
 	 */
 	public List<File> getFileAll() {
 		List<File> list = new ArrayList<File>();
-		list.addAll(getVideoFileList());
-		list.addAll(getSubtitlesFileList());
-		list.addAll(getEtcFileList());
-		list.add(this.coverFile);
-		list.add(this.infoFile);
+		for (File file : getVideoFileList())
+			if (file != null)
+				list.add(file);
+		for (File file : getSubtitlesFileList())
+			if (file != null)
+				list.add(file);
+		for (File file : getEtcFileList())
+			if (file != null)
+				list.add(file);
+		if (coverFile != null)
+			list.add(this.coverFile);
+		if (infoFile != null)
+			list.add(this.infoFile);
 		return list;
 	}
 
@@ -1056,6 +1064,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			}
 			this.setVideoFileList(null);
 		}
+		resetScore();
 	}
 
 	public void toggleTag(VTag tag) {
@@ -1218,10 +1227,18 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		return favorite;
 	}
 
+	/**
+	 * opus, title, releaseDate, etcInfo 설정 
+	 * @param titlePart
+	 */
 	public void setTitlePart(TitlePart titlePart) {
 		this.setOpus(titlePart.getOpus());
 		this.setTitle(titlePart.getTitle());
 		this.setReleaseDate(titlePart.getReleaseDate());
 		this.setEtcInfo(titlePart.getEtcInfo());
+	}
+
+	public void clearActress() {
+		this.actressList.clear();
 	}
 }

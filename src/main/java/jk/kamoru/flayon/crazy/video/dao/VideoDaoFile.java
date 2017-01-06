@@ -1,72 +1,71 @@
 package jk.kamoru.flayon.crazy.video.dao;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
 
+import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
+import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 
-//@SuppressWarnings("unused")
 @Repository
-public class VideoDaoFile implements VideoDao {
+public class VideoDaoFile extends CrazyProperties implements VideoDao {
 	
-	protected static final Logger logger = LoggerFactory.getLogger(VideoDaoFile.class);
-
 	@Autowired private VideoSource instanceVideoSource;
 	@Autowired private VideoSource archiveVideoSource;
 
 	@Override
-//	@Cacheable(value="videoCache")
-	public List<Video> getVideoList() {
-		return instanceVideoSource.getVideoList();
+	public List<Video> getVideoList(Boolean instance, Boolean archive) {
+		List<Video> list = new ArrayList<>();
+		if (instance)
+			list.addAll(instanceVideoSource.getVideoList());
+		if (archive)
+			list.addAll(archiveVideoSource.getVideoList());
+		return list;
 	}
 	
 	@Override
-//	@Cacheable("studioCache")
-	public List<Studio> getStudioList() {
-		logger.trace("getStudioList");
-		return instanceVideoSource.getStudioList();
+	public List<Studio> getStudioList(Boolean instance, Boolean archive) {
+		List<Studio> list = new ArrayList<>();
+		if (instance)
+			list.addAll(instanceVideoSource.getStudioList());
+		if (archive)
+			list.addAll(archiveVideoSource.getStudioList());
+		return list;
 	}
 
 	@Override
-//	@Cacheable("actressCache")
-	public List<Actress> getActressList() {
-		logger.trace("getActressList");
-		return instanceVideoSource.getActressList();
+	public List<Actress> getActressList(Boolean instance, Boolean archive) {
+		List<Actress> list = new ArrayList<>();
+		if (instance)
+			list.addAll(instanceVideoSource.getActressList());
+		if (archive)
+			list.addAll(archiveVideoSource.getActressList());
+		return list;
 	}
 
 	@Override
-//	@Cacheable(value="videoCache")
 	public Video getVideo(String opus) {
-		logger.trace(opus);
 		try {
 			return instanceVideoSource.getVideo(opus);
 		} catch (VideoNotFoundException e) {
 			return archiveVideoSource.getVideo(opus);
 		}
 	}
-
-	@Override
-	public Video getArchiveVideo(String opus) {
-		logger.trace(opus);
-		return archiveVideoSource.getVideo(opus);
-	}
 	
 	@Override
-//	@Cacheable("studioCache")
 	public Studio getStudio(String name) {
-		logger.trace(name);
 		try {
 			return instanceVideoSource.getStudio(name);
 		} catch (StudioNotFoundException e) {
@@ -75,9 +74,7 @@ public class VideoDaoFile implements VideoDao {
 	}
 
 	@Override
-//	@Cacheable("actressCache")
 	public Actress getActress(String name) {
-		logger.trace(name);
 		try {
 			return instanceVideoSource.getActress(name);
 		} catch (ActressNotFoundException e) {
@@ -86,74 +83,116 @@ public class VideoDaoFile implements VideoDao {
 	}
 
 	@Override
-//	@CacheEvict(value = { "videoCache" }, allEntries=true)
 	public void removeVideo(String opus) {
-		logger.trace(opus);
 		instanceVideoSource.removeVideo(opus);
 	}
 
 	@Override
 	public void deleteVideo(String opus) {
-		logger.trace(opus);
 		instanceVideoSource.deleteVideo(opus);
 	}
 
 	@Override
-//	@CacheEvict(value = { "videoCache" }, allEntries=true)
 	public void moveVideo(String opus, String destPath) {
-		logger.trace(opus);
-		long elapsedTime = System.currentTimeMillis();
 		instanceVideoSource.moveVideo(opus, destPath);
-		logger.info("{} moved. elapsed time {} ms", opus, System.currentTimeMillis() - elapsedTime);
 	}
 	@Override
-//	@CacheEvict(value = { "videoCache", "studioCache", "actressCache" }, allEntries=true)
-	public void reload(StopWatch stopWatch) {
-		logger.trace("reload");
-		instanceVideoSource.reload(stopWatch);
+	public void reload(StopWatch stopWatch, Boolean instance, Boolean archive) {
+		if (instance)
+			instanceVideoSource.reload(stopWatch);
+		if (archive)
+			archiveVideoSource.reload(stopWatch);
 	}
 
+//	@Override
+//	public void reload(Boolean instance, Boolean archive) {
+//		if (instance)
+//			instanceVideoSource.reload();
+//		if (archive)
+//			archiveVideoSource.reload();
+//	}
+
 	@Override
-	public void reload() {
-		logger.trace("reload");
-		instanceVideoSource.reload();
+	public boolean contains(String opus, Boolean instance, Boolean archive) {
+		boolean found = false;
+		if (instance)
+			try {
+				found = instanceVideoSource.getVideo(opus) != null;
+			} catch (VideoException ignore) {
+				found = false;
+			}
+		if (archive)
+			found = archiveVideoSource.getVideo(opus) != null;
+		return found;
 	}
 
 	@Override
 	public void arrangeVideo(String opus) {
-		logger.trace(opus);
+		Video video = instanceVideoSource.getVideo(opus);
+		boolean foundArchive = false;
+		// if no cover, find archive
+		if (video.isExistVideoFileList()) {
+			// cover
+			if (!video.isExistCoverFile()) {
+				Video archiveVideo = archiveVideoSource.getVideo(opus);
+				if (archiveVideo != null) {
+					if (archiveVideo.isExistCoverFile()) {
+						video.setCoverFile(archiveVideo.getCoverFile());
+						foundArchive = true;
+					}
+				}			
+			}
+			// subtitles
+			if (!video.isExistSubtitlesFileList()) {
+				Video archiveVideo = archiveVideoSource.getVideo(opus);
+				if (archiveVideo != null) {
+					if (archiveVideo.isExistSubtitlesFileList()) {
+						video.setSubtitlesFileList(archiveVideo.getSubtitlesFileList());
+						foundArchive = true;
+					}
+				}
+			}
+		}
+		if (foundArchive)
+			archiveVideoSource.deleteVideo(opus);
+		
 		instanceVideoSource.arrangeVideo(opus);
 	}
 
 	@Override
-	public boolean contains(String opus) {
+	public void moveToInstance(String opus) {
+		Video archiveVideo = archiveVideoSource.getVideo(opus);
+		if (archiveVideo == null)
+			throw new VideoNotFoundException(opus);
+
 		try {
-			instanceVideoSource.getVideo(opus);
-			return true;
-		} catch (VideoException e) {
-			return false;
+			Video video = instanceVideoSource.getVideo(opus);
+			throw new VideoException(video, "this video exist both instance and archive");
+		} 
+		catch(VideoNotFoundException e) {
+			archiveVideo.resetScore();
+			archiveVideo.setArchive(false);
+			archiveVideo.move(STAGE_PATHS[0]);
+			instanceVideoSource.addVideo(archiveVideo);
+			archiveVideoSource.removeVideo(archiveVideo.getOpus());
 		}
 	}
 
 	@Override
-	public List<Video> getArchiveVideoList() {
-		return archiveVideoSource.getVideoList();
+	public void renameVideo(String opus, String newName) {
+		Video video = instanceVideoSource.getVideo(opus);
+		video.rename(newName);
+		List<File> fileAll = video.getFileAll();
+		instanceVideoSource.removeElement(opus);
+		
+		TitlePart titlePart = new TitlePart(newName);
+		titlePart.setFiles(fileAll.toArray(new File[fileAll.size()]));
+		buildVideo(titlePart);
 	}
 
 	@Override
-	public List<Actress> getArchiveActressList() {
-		return archiveVideoSource.getActressList();
+	public void buildVideo(TitlePart titlePart) {
+		instanceVideoSource.addTitlePart(titlePart);
 	}
-
-	@Override
-	public List<Studio> getArchiveStudioList() {
-		return archiveVideoSource.getStudioList();
-	}
-
-	@Override
-	public void reloadArchive() {
-		archiveVideoSource.reload();
-	}
-
 }
 

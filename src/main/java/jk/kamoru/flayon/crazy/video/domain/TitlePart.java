@@ -1,5 +1,6 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,8 @@ public class TitlePart {
 	String imgSrc;
 	String rowData;
 
+	File[] files;
+	
 	boolean check;
 	String checkDesc;
 	String checkDescShort;
@@ -156,6 +159,10 @@ public class TitlePart {
 		}
 	}
 
+	public void setFiles(File...files) {
+		this.files = files;
+	}
+	
 	public String getStyleString() {
 		return String.format("[%s][%s][%s][%s][%s]", studio, opus, title, actress, releaseDate);
 	}

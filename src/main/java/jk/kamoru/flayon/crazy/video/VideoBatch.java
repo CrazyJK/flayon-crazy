@@ -186,8 +186,8 @@ public class VideoBatch extends CrazyProperties {
 			backupPath.mkdirs();
 
 		// video list backup to csv
-		List<Video> videoList = videoService.getVideoList();
-		List<Video> archiveVideoList = videoService.getArchiveVideoList();
+		List<Video> videoList = videoService.getVideoList(null, false, true, false);
+		List<Video> archiveVideoList = videoService.getVideoList(null, false, false, true);
 		List<History> historyList = historyService.getDeduplicatedList();
 
 		final String csvHeader = "Studio, Opus, Title, Actress, Released, Rank, Fullname";
