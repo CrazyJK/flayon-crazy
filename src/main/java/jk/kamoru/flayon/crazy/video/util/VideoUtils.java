@@ -58,7 +58,7 @@ public class VideoUtils {
 	}
 	
 	/**
-	 * 공백이 들어간 이름을 소문자 순차정렬해서 반환
+	 * 공백이 들어간 이름을 순차정렬해서 반환
 	 * 
 	 * @param name
 	 * @return string of sort name
@@ -66,7 +66,7 @@ public class VideoUtils {
 	public static String sortForwardName(String name) {
 		if (name == null)
 			return "";
-		String[] nameArr = StringUtils.split(name);
+		String[] nameArr = StringUtils.split(name.trim());
 		Arrays.sort(nameArr);
 		return StringUtils.join(nameArr, " ");
 	}
@@ -405,4 +405,21 @@ public class VideoUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * 공백 구분하여, 첫글자를 대문자로, 뒤는 소문자로
+	 * @param actress
+	 * @return
+	 */
+	public static String capitalizeActressName(String actress) {
+		String[] array = StringUtils.split(actress);
+		if (array != null) {
+			actress = "";
+			for (String name : array) {
+				actress += StringUtils.capitalize(name.toLowerCase()) + " ";
+			}
+			actress = VideoUtils.trimBlank(actress);
+		}
+		return actress;
+	}
+	
 }

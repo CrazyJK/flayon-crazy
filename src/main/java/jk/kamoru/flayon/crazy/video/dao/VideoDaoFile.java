@@ -2,8 +2,11 @@ package jk.kamoru.flayon.crazy.video.dao;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
@@ -18,8 +21,11 @@ import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
+import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
+@Slf4j
 public class VideoDaoFile extends CrazyProperties implements VideoDao {
 	
 	@Autowired private VideoSource instanceVideoSource;
@@ -89,7 +95,12 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 
 	@Override
 	public void deleteVideo(String opus) {
-		instanceVideoSource.deleteVideo(opus);
+		if (contains(opus, true, false))
+			instanceVideoSource.deleteVideo(opus);
+		else if (contains(opus, false, true))
+			archiveVideoSource.deleteVideo(opus);
+		else
+			throw new VideoNotFoundException(opus);
 	}
 
 	@Override
@@ -185,7 +196,9 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 		List<File> fileAll = video.getFileAll();
 		instanceVideoSource.removeElement(opus);
 		
+		log.info("renameVideo : opus={}, newName={}", opus, newName);
 		TitlePart titlePart = new TitlePart(newName);
+		log.info("renameVideo : titlePart = {}", titlePart.getStyleString());
 		titlePart.setFiles(fileAll.toArray(new File[fileAll.size()]));
 		buildVideo(titlePart);
 	}
@@ -193,6 +206,49 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 	@Override
 	public void buildVideo(TitlePart titlePart) {
 		instanceVideoSource.addTitlePart(titlePart);
+	}
+
+	@Override
+	public void renameStudio(Map<String, String> data) {
+		String studioName = data.get("name");
+		String studioNewName = data.get("newname");
+		if (!StringUtils.equals(studioName, studioNewName)) {
+			Studio studio = instanceVideoSource.getStudio(studioName.toUpperCase());	
+			Map<String, String> renameData = new HashMap<>();
+			for (Video video : studio.getVideoList()) {
+				String newFullname = String.format("[%s][%s][%s][%s][%s]", studioNewName, video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate());
+				renameData.put(video.getOpus(), newFullname);
+			}
+			for (Map.Entry<String, String> entry : renameData.entrySet()) {
+				renameVideo(entry.getKey(), entry.getValue());
+			}
+		}
+		instanceVideoSource.getStudio(studioNewName.toUpperCase()).saveInfo(data);
+	}
+
+	@Override
+	public void renameActress(Map<String, String> data) {
+		String actressName = data.get("name");
+		String actressNewName = data.get("newname");
+		log.info("renameActress name={}, newname={}", actressName, actressNewName);
+		
+		if (!actressName.equals(actressNewName)) {
+			Actress actress = instanceVideoSource.getActress(VideoUtils.sortForwardName(actressName));
+			log.info("renameActress video size = {}", actress.getVideoList());
+			
+			Map<String, String> renameData = new HashMap<>();
+			for (Video video : actress.getVideoList()) {
+				String actressNames = video.getActressName();
+ 				String newActressNames = StringUtils.replace(actressNames, actressName, actressNewName);
+				String newFullname = String.format("[%s][%s][%s][%s][%s]", video.getStudio().getName(), video.getOpus(), video.getTitle(), newActressNames, video.getReleaseDate());
+				renameData.put(video.getOpus(), newFullname);
+			}
+			
+			for (Map.Entry<String, String> entry : renameData.entrySet()) {
+				renameVideo(entry.getKey(), entry.getValue());
+			}
+		}
+		instanceVideoSource.getActress(VideoUtils.sortForwardName(actressNewName)).saveInfo(data);
 	}
 }
 

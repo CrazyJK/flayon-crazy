@@ -76,27 +76,39 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	// --- private
 	
 	private List<Video> getVideoList(List<Video> list, Sort sort, boolean reverse) {
-		for (Video video : list) 
-			video.setSortMethod(sort);
-		return list.stream()
-				.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-				.collect(Collectors.toList());
+		if (sort == null)
+			return list;
+		else {
+			for (Video video : list) 
+				video.setSortMethod(sort);
+			return list.stream()
+					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
+					.collect(Collectors.toList());
+		}
 	}
 
 	private List<Studio> getStudioList(List<Studio> list, StudioSort sort, boolean reverse) {
-		for (Studio studio : list)
-			studio.setSort(sort);
-		return list.stream()
-				.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-				.collect(Collectors.toList());
+		if (sort == null)
+			return list;
+		else {
+			for (Studio studio : list)
+				studio.setSort(sort);
+			return list.stream()
+					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
+					.collect(Collectors.toList());
+		}
 	}
 
 	private List<Actress> getActressList(List<Actress> list, ActressSort sort, boolean reverse) {
-		for (Actress actress : list)
-			actress.setSort(sort);
-		return list.stream()
-				.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-				.collect(Collectors.toList());
+		if (sort == null)
+			return list;
+		else {
+			for (Actress actress : list)
+				actress.setSort(sort);
+			return list.stream()
+					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
+					.collect(Collectors.toList());
+		}
 	}
 
 	// --- public
@@ -496,9 +508,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public String saveActressInfo(String name, Map<String, String> params) {
-		log.debug("name={}, params={}", name, params);
-		return videoDao.getActress(name).saveInfo(params);
+	public void saveActressInfo(Map<String, String> params) {
+		videoDao.renameActress(params);
 	}
 
 	@Override
@@ -574,9 +585,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 //	}
 
 	@Override
-	public String saveStudioInfo(String studioName, Map<String, String> params) {
-		log.debug("name={}, params={}", studioName, params);
-		return videoDao.getStudio(studioName).saveInfo(params);
+	public void saveStudioInfo(Map<String, String> params) {
+		videoDao.renameStudio(params);
 	}
 	
 	@Override

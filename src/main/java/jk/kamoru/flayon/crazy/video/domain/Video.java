@@ -954,36 +954,47 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		logger.debug("rename {} -> {}", getFullname(), newName);
 		int count = 1;
 		// video
+		List<File> videoFileList = new ArrayList<>();
 		int videoCount = getVideoFileList().size();
 		for (File file : VideoUtils.sortFile(getVideoFileList())) {
 			if (videoCount == 1) {
-				Utils.renameFile(file, newName);
+				videoFileList.add(Utils.renameFile(file, newName));
 			}
 			else {
-				Utils.renameFile(file, newName + count++);
+				videoFileList.add(Utils.renameFile(file, newName + count++));
 			}
 		}
+		setVideoFileList(videoFileList);
+		
 		// cover
+		
 		if (coverFile != null && coverFile.exists())
-			Utils.renameFile(coverFile, newName);
+			setCoverFile(Utils.renameFile(coverFile, newName));
+
 		// subtitles, if exist
 		count = 1;
+		List<File> subtitlesFileList = new ArrayList<>();
 		int subtitlesCount = getSubtitlesFileList().size();
 		for (File file : VideoUtils.sortFile(getSubtitlesFileList())) {
 			if (subtitlesCount == 1) {
-				Utils.renameFile(file, newName);
+				subtitlesFileList.add(Utils.renameFile(file, newName));
 			}
 			else {
-				Utils.renameFile(file, newName + count++);
+				subtitlesFileList.add(Utils.renameFile(file, newName + count++));
 			}
 		}
+		setSubtitlesFileList(subtitlesFileList);
+		
 		// info file
 		if (infoFile != null && infoFile.exists())
-			Utils.renameFile(infoFile, newName);
+			setInfoFile(Utils.renameFile(infoFile, newName));
+			
 		// etc file
+		List<File> etcFileList = new ArrayList<>();
 		for (File file : this.getEtcFileList()) {
-			Utils.renameFile(file, newName);
+			etcFileList.add(Utils.renameFile(file, newName));
 		}
+		setEtcFileList(etcFileList);
 	}
 
 	public void renameOfActress(String oldName, String newName) {
@@ -1241,4 +1252,22 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public void clearActress() {
 		this.actressList.clear();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Video other = (Video) obj;
+		if (opus == null) {
+			if (other.opus != null)
+				return false;
+		} else if (!opus.equals(other.opus))
+			return false;
+		return true;
+	}
+	
 }

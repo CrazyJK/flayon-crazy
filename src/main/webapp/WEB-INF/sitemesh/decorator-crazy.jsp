@@ -60,8 +60,9 @@ $(document).ready(function() {
 	});
 	
 	//set rank color
- 	$('input[type="range"]').each(function() {
- 		fnRankColor($(this));
+ 	$('input[type="range"].input-range').each(function() {
+		var opus = $(this).attr("data-opus");
+		fnRankColor($(this), $("#Rank-"+opus+"-label"));
  	});
 
 	// Add listener : if labal click, empty input text value

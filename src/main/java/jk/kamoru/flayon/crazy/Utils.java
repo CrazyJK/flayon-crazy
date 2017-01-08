@@ -99,13 +99,13 @@ public class Utils {
 	 * @param newName   확장자 제외 이름만 
 	 * @throws 실패시 에러
 	 */
-	public static void renameFile(File srcFile, String newName) {
+	public static File renameFile(File srcFile, String newName) {
 		try {
 			String suffix = getExtension(srcFile);
 			if (StringUtils.isNotEmpty(suffix))
 				newName = newName + "." + suffix;
 			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
-			Files.move(srcFile.toPath(), Paths.get(srcFile.getParent(), newName), StandardCopyOption.REPLACE_EXISTING);
+			return Files.move(srcFile.toPath(), Paths.get(srcFile.getParent(), newName), StandardCopyOption.REPLACE_EXISTING).toFile();
 		} catch (IOException e) {
 			log.error("rename fail", e);
 			throw new CrazyException("file rename fail", e);

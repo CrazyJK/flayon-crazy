@@ -62,8 +62,8 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("  - batch.score.deleteVideo = {}", DELETE_LOWER_SCORE_VIDEO);
 	}
 	
-	// cron every 0, 15, 30, 45 minutes
-	@Scheduled(cron="0 */15 * * * *")
+	// cron every 1h
+	@Scheduled(cron="0 0 */1 * * *")
 	public synchronized void batchInstanceVideoSource() {
 		logger.info("BATCH Instance VideoSource START");
 		StopWatch stopWatch = new StopWatch("Instance VideoSource Batch");
@@ -104,8 +104,8 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
 	}
 
-	// fixedDelay per 1 hr
-	@Scheduled(cron="0 13 */1 * * *")
+	// cron every 2h 13m
+	@Scheduled(cron="0 13 */2 * * *")
 	public synchronized void batchArchiveVideoSource() {
 		logger.info("BATCH Archive VideoSource START");
 		

@@ -1,6 +1,7 @@
 package jk.kamoru.flayon.crazy.video.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.StopWatch;
 
@@ -151,4 +152,17 @@ public interface VideoDao {
 	 * @param opus
 	 */
 	void moveToInstance(String opus);
+	
+	/**
+	 * rename Studio
+	 * @param data
+	 */
+	void renameStudio(Map<String, String> data);
+	
+	/**
+	 * rename Actress
+	 * @param data
+	 */
+	void renameActress(Map<String, String> data);
+	
 }

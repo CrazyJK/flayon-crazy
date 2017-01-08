@@ -9,42 +9,32 @@
 <title>${actress.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <style type="text/css">
-.form-control {
+#actressForm .form-control {
 	background-color: rgba(255,255,255,.75);
 }
 </style>
 <script type="text/javascript">
 //bgContinue = false;
-$(document).ready(function(){
-	
+$(document).ready(function() {
+	$("form#actressForm").submit(function(event) {
+		console.log("form submit...");
+		loading(true, "save...");
+		setInterval(function() {
+			if (opener) {
+				if (opener.location.href.indexOf("video/actress") > -1) 
+					opener.location.reload();
+			}
+			location.href = "<s:url value="/video/actress/"/>" + $("#newName").val();
+		}, 1000);
+	});
+
 });
-
-/**
- * @deprecated
- */
-function fnRenameTo() {
-	var actressForm = document.forms['actressForm'];
-	actressForm.action = "<s:url value="/video/actress/${actress.name}/renameTo/"/>" + $("#newName").val();
-	actressForm.submit();
-}
-
-function fnSaveActressInfo() {
-	loading(true, "Saving...");
-	var actressForm = document.forms['actressForm'];
-	actressForm.action = "<s:url value="/video/actress/${actress.name}"/>";
-	actressForm.submit();
-	if (opener) {
-		if (opener.location.href.indexOf("video/actress") > -1) 
-			opener.location.reload();
-	}
-}
 </script>
 </head>
 <body>
 <div class="container">
 
-<form id="actressForm" method="post" role="form" class="form-horizontal">
-	<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
+<form id="actressForm" method="post" role="form" target="ifrm" action="<s:url value="/video/actress"/>" class="form-horizontal">
 	<input type="hidden" name="name" value="${actress.name}"/>
 	<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
 	<br/>
@@ -80,9 +70,11 @@ function fnSaveActressInfo() {
 			<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
 		</div>
 		<div class="col-sm-2">
-			<button class="btn btn-default" onclick="fnSaveActressInfo()">Save</button>
+			<button type="submit" class="btn btn-default">Save</button>
 		</div>
 	</div>
+</form>
+	
 	<div class="form-group">
 		<span class="label label-info">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
 	</div>
@@ -109,7 +101,6 @@ function fnSaveActressInfo() {
 			</ul>
 		</c:if>
 	</div>
-</form>
 
 </div>
 

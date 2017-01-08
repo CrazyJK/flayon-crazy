@@ -179,6 +179,7 @@ function fnRank(opus) {
 	var rank = $("#Rank-"+opus);
 	var rankLabel = $("#Rank-"+opus+"-label");
 	fnRankColor(rank, rankLabel);
+
 	var frm;
 	if(opener) {
 		try {
@@ -201,18 +202,19 @@ function fnRank(opus) {
  */
 function fnRankColor(rank, rankLabel) {
 	try {
-	if(rank.val() == 0) {
-		rank.css("background-color", "white");
-		rankLabel.css("color", "white");
-	}
-	else if(rank.val() > 0) {
-		rank.css("background-color", "red");
-		rankLabel.css("color", "red");
-	}
-	else {
-		rank.css("background-color", "blue");
-		rankLabel.css("color", "blue");
-	}
+		rankLabel.html(rank.val());
+		if(rank.val() == 0) {
+			rank.css({"background-color": "rgba(255, 255, 255, 0.5)", "box-shadow": "0 0 5px 1px rgba(255, 255, 255, 0.5)"});
+			rankLabel.css("color", "white");
+		}
+		else if(rank.val() > 0) {
+			rank.css({"background-color": "rgba(255, 0, 0, 0.5)", "box-shadow": "0 0 5px 1px rgba(255, 0, 0, 0.5)"});
+			rankLabel.css("color", "red");
+		}
+		else {
+			rank.css({"background-color": "rgba(0, 0, 255, 0.5)", "box-shadow": "0 0 5px 1px rgba(0, 0, 255, 0.5)"});
+			rankLabel.css("color", "blue");
+		}
 	} catch(e) {}
 }
 /**

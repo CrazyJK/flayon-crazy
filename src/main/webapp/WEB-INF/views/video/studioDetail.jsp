@@ -9,34 +9,33 @@
 <title>${studio.name}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <style type="text/css">
-.form-control {
+#studioForm .form-control {
 	background-color: rgba(255,255,255,.75);
 }
 </style>
 <script type="text/javascript">
 //bgContinue = false;
-function fnRenameTo() {
-	var actressForm = document.forms['studioForm'];
-	actressForm.action = "<s:url value="/video/studio/${studio.name}/renameTo/"/>" + $("#newName").val();
-	actressForm.submit();
-}
+$(document).ready(function() {
+	$("form#studioForm").submit(function(event) {
+		console.log("form submit...");
+		loading(true, "save...");
+		setInterval(function() {
+			if (opener) {
+				if (opener.location.href.indexOf("video/studio") > -1) 
+					opener.location.reload();
+			}
+			location.href = "<s:url value="/video/studio/"/>" + $("#newName").val();
+		}, 1000);
+	});
 
-function fnPutStudioInfo() {
-	var actressForm = document.forms['studioForm'];
-	actressForm.action = "<s:url value="/video/studio/${studio.name}"/>";
-	actressForm.submit();
-	if (opener) {
-		if (opener.location.href.indexOf("video/studio") > -1) 
-			opener.location.reload();
-	}
-}
+});
 </script>
 </head>
 <body>
 <div class="container">
 
-<form id="studioForm" method="post" role="form" class="form-horizontal">
-	<input type="hidden" name="_method" id="hiddenHttpMethod" value="put"/>
+<form id="studioForm" method="post" target="ifrm" role="form" action="<s:url value="/video/studio"/>" class="form-horizontal">
+	<input type="hidden" name="name" value="${studio.name}"/>
 	<br/>
 	<div class="form-group">
 		<div class="col-sm-11">
@@ -54,9 +53,11 @@ function fnPutStudioInfo() {
 			<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
 		</div>
 		<div class="col-sm-1">
-			<span class="btn btn-default" onclick="fnPutStudioInfo()">Save</span>
+			<button type="submit" class="btn btn-default">Save</button>
 		</div>
 	</div>
+</form>
+
 	<div class="form-group">
 		<span class="label label-info">Actress <i class="badge">${fn:length(studio.actressList)}</i></span>
 	</div>
@@ -81,7 +82,6 @@ function fnPutStudioInfo() {
 			</c:forEach>
 		</ul>
 	</div>
-</form>
 
 </div>
 </body>

@@ -144,6 +144,7 @@ function render() {
 		var count = $("<code>").addClass("float-right").html(graviaList[i].titles.length).appendTo(link);
 		$("<li>").append(link).appendTo(titleNavContainer);
 	}
+	titleNavContainer.children().first().addClass("active");
 	renderContent(0);
 }
 function renderContent(idx) {

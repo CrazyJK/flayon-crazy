@@ -392,7 +392,7 @@ function getAllTorrents() {
 		</ul>
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade">
-				<ul class="list-group list-inline"></ul>
+				<ul class="list-group list-inline vbox"></ul>
 			</section>
 			<section id="table" class="tab-pane fade in active">
 				<table class="table table-condensed table-hover table-responsive">

@@ -106,7 +106,6 @@ public class FileBaseVideoSource implements VideoSource {
 		stopWatch.start("load : listFiles");
 		Collection<File> files = Utils.listFiles(paths, null, true);
 		stopWatch.stop();
-		logger.debug("    total found file {}", files.size());
 
 		videoMap.clear();
 		studioMap.clear();
@@ -118,7 +117,6 @@ public class FileBaseVideoSource implements VideoSource {
 			String filename = file.getName();
 			String     name = Utils.getNameExceptExtension(file);
 			String      ext = Utils.getExtension(file).toLowerCase();
-			logger.info("");
 			try {
 				// Unnecessary file exclusion
 				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO)
@@ -132,16 +130,13 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				/*  1       2     3      4        5       6
 				   [studio][opus][title][actress][release]etc...*/
-				logger.info("name {}", name);
 				TitlePart titlePart = new TitlePart(name);
 				titlePart.setFiles(file);
-				logger.info("titlePart {}", titlePart);
 				if (titlePart.isCheck()) {
 					logger.warn("wrong file : {}, {}, {}", file.getCanonicalPath(), titlePart.getCheckDescShort(), titlePart.getStyleString());
 					wrongFileNames.add(String.format("[%s] : %s, %s, %s", file.getPath(), file.getName(), titlePart.getCheckDescShort(), titlePart.getStyleString()));
 					continue;
 				}
-				
 				addTitlePart(titlePart);
 			}
 			catch (Exception e) {
@@ -241,8 +236,9 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public Actress getActress(String name) {
 		videoSource();
-		if (actressMap.containsKey(VideoUtils.sortForwardName(name)))
-			return actressMap.get(VideoUtils.sortForwardName(name));
+		name = VideoUtils.sortForwardName(name);
+		if (actressMap.containsKey(name))
+			return actressMap.get(name);
 		else
 			if (isArchive)
 				return new Actress();
@@ -278,13 +274,25 @@ public class FileBaseVideoSource implements VideoSource {
 	public void removeElement(String opus) {
 		videoSource();
 		Video video = videoMap.get(opus);
-		Studio studio = video.getStudio();
-		List<Actress> actressList = video.getActressList();
 		videoMap.remove(opus.toUpperCase());
-		studioMap.remove(studio.getName());
-		for (Actress actress : actressList) 
-			actressMap.remove(VideoUtils.sortForwardName(actress.getName()));
+
+		Studio studio = video.getStudio();
+		studio.removeVideo(video);
+		Studio studioElement = studioMap.get(studio.getName().toUpperCase());
+		studioElement.removeVideo(video);
+		if (studioElement.getVideoList().size() == 0)
+			studioMap.remove(studio.getName().toUpperCase());
+		
+		List<Actress> actressList = video.getActressList();
+		for (Actress actress : actressList) {
+			actress.removeVideo(video);
+			Actress actressElement = actressMap.get(VideoUtils.sortForwardName(actress.getName()));
+			actressElement.removeVideo(video);
+			if (actressElement.getVideoList().size() == 0)
+				actressMap.remove(VideoUtils.sortForwardName(actress.getName()));
+		}
 	}
+	
 	@Override
 	public void removeVideo(String opus) {
 		videoMap.get(opus.toUpperCase()).removeVideo();
@@ -331,6 +339,7 @@ public class FileBaseVideoSource implements VideoSource {
 			else
 				video.addEtcFile(file);
 		}
+		
 		Studio studio = studioMap.get(titlePart.getStudio().toUpperCase());
 		if (studio == null) {
 			studio = studioProvider.get();
@@ -341,14 +350,13 @@ public class FileBaseVideoSource implements VideoSource {
 		video.setStudio(studio);
 
 		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
-			actressName = VideoUtils.trimBlank(actressName);
 			String forwardActressName = VideoUtils.sortForwardName(actressName);
 
 			Actress actress = actressMap.get(forwardActressName);
 			if (actress == null) {
 				actress = actressProvider.get();
 				actress.setName(actressName);
-				actressMap.put(VideoUtils.sortForwardName(actressName), actress);
+				actressMap.put(forwardActressName, actress);
 			}		
 			actress.addVideo(video);
 			actress.addStudio(studio);

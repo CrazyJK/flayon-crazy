@@ -24,7 +24,7 @@ if (view.equalsIgnoreCase("video")) {
 <%
 } else if (view.equalsIgnoreCase("cover")) {
 %>
-	<span class="${cssClass} ${video.existCoverFile ? 'exist' : 'nonExist'}" 
+	<span class="${cssClass} ${video.existCoverFile ? 'exist' : 'nonExist'}"
 		onclick="fnCoverView('${video.opus}')">${mode eq 's' ? 'C' : 'Cover'}</span>
 <%
 } else if (view.equalsIgnoreCase("subtitles")) {
@@ -34,7 +34,7 @@ if (view.equalsIgnoreCase("video")) {
 <%
 } else if (view.equalsIgnoreCase("overview")) {
 %>
-	<span class="${cssClass}" title="${video.overviewText}"
+	<span class="${cssClass}" title="${video.overviewText}" id="overview-${video.opus}" style="${video.existOverview ? 'color:red' : ''}"
 		 onclick="fnEditOverview('${video.opus}')">${mode eq 's' ? 'O' : (video.existOverview ? video.overviewText : 'Overview')}</span>
 <%
 } else if (view.equalsIgnoreCase("download")) {
@@ -107,10 +107,9 @@ if (view.equalsIgnoreCase("video")) {
 %>
 	<%	if (!"s".equals(mode)) { %>
 	<div class="form-group has-feedback">
-		<input type="range" id="Rank-${video.opus}" name="points" class="form-control input-range" 
-			min="${minRank}" max="${maxRank}" value="${video.rank}"
-			onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
-		<span id="Rank-${video.opus}-label" class="form-control-feedback text-bold" style="font-size:16px;" title="rank">${video.rank}</span>
+		<input type="range" id="Rank-${video.opus}" name="rankPoints" class="form-control input-range" data-opus="${video.opus}"
+			min="${minRank}" max="${maxRank}" value="${video.rank}" onmouseup="fnRank('${video.opus}')" />
+		<span id="Rank-${video.opus}-label" class="form-control-feedback text-bold" style="font-size:16px;">${video.rank}</span>
 	</div>
 	<%	} else { %>
 		<span id="Rank-${video.opus}-label" class="${cssClass}" title="rank">${video.rank}</span>

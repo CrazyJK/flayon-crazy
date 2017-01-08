@@ -128,14 +128,7 @@ public class TitlePart {
 			this.actress = AMATEUR;
 		}
 		else {
-			String[] array = StringUtils.split(StringUtils.removeEnd(actress.trim(), "외"));
-			if (array != null) {
-				actress = "";
-				for (String name : array) {
-					actress += StringUtils.capitalize(name.toLowerCase()) + " ";
-				}
-				actress = VideoUtils.trimBlank(actress);
-			}
+			actress = StringUtils.removeEnd(actress.trim(), "외");
 			this.actress = actress;
 		}
 		// valid check

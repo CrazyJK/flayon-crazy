@@ -91,6 +91,9 @@ label.title {
     padding-right: 0;
     padding-left: 0;
 }
+.vbox.list-inline > li {
+	display: inline-flex;	
+}
 .container-fluid {
 	padding: 0;
 }

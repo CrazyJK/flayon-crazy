@@ -23,6 +23,14 @@ $(document).ready(function() {
 		.css("background-size", "100%")
 		.css("background-position", "left top");
 
+	$("form#renameForm").submit(function(event) {
+		console.log("form submit...");
+		loading(true, "rename...");
+		setInterval(function() {
+			location.reload();
+		}, 1000);
+	});
+
 });
 function fnToggleRenameForm() {
 	$("#renameForm").toggle();

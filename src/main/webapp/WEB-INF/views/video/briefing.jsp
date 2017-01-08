@@ -61,6 +61,9 @@ function removeLowerScoreVideo() {
 function fsOpen(folder) {
 	actionFrame('/flayon/openFolder', {'folder' : folder}, 'POST', 'Open folder ' + folder);
 }
+function startVideoBatch(type) {
+	actionFrame(videoPath + '/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
+}
 </script>
 </head>
 <body>
@@ -83,6 +86,12 @@ function fsOpen(folder) {
 			<div class="btn-group">
 				<button class="btn btn-xs btn-default" onclick="removeLowerScoreVideo()"><s:message code="video.mng.score"/></button>
 				<button class="btn btn-xs btn-default" onclick="setDELETE_LOWER_SCORE_VIDEO()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
+			</div>
+		</li>
+		<li>
+			<div class="btn-group">
+				<button class="btn btn-xs btn-default" onclick="startVideoBatch('instance')">InstanceVideoBatch</button>
+				<button class="btn btn-xs btn-default" onclick="startVideoBatch('archive')">ArchiveVideoBatch</button>
 			</div>
 		</li>
 	</ul>

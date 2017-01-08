@@ -371,7 +371,7 @@ public interface VideoService {
 	 * @param params map of actress info
 	 * @return 
 	 */
-	String saveActressInfo(String name, Map<String, String> params);
+	void saveActressInfo(Map<String, String> params);
 
 	/**
 	 * set favorite
@@ -382,12 +382,11 @@ public interface VideoService {
 
 	// --- action method of actress --------------------------------------
 
-	/**save studio info
-	 * @param studio
+	/**
+	 * save studio info
 	 * @param params map of studio info
-	 * @return 
 	 */
-	String saveStudioInfo(String studio, Map<String, String> params);
+	void saveStudioInfo(Map<String, String> params);
 	
 	// --- action method of source --------------------------------------
 	

@@ -280,11 +280,12 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 					log.debug("saveInfo : save file {}", getInfoFile(newname));
 				Utils.saveFileFromMap(getInfoFile(newname), params);
 			}
+			
 			// actress의 비디오 파일 이름 변경
-			if (log.isDebugEnabled())
-				log.debug("saveInfo : rename video {} -> {}", name, newname);
-			for (Video video : getVideoList())
-				video.renameOfActress(name, newname);
+//			if (log.isDebugEnabled())
+//				log.debug("saveInfo : rename video {} -> {}", name, newname);
+//			for (Video video : getVideoList())
+//				video.renameOfActress(name, newname);
 
 			// 새이름 업데이트 
 			name = newname;
@@ -295,6 +296,11 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 
 		reloadInfo();
 		return name;
+	}
+	public void removeVideo(Video video) {
+		if (videoList.contains(video))
+			if (!videoList.remove(video))
+				log.warn("fail to remove {}", video);
 	}
 	
 }

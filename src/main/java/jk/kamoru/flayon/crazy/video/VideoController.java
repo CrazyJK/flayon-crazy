@@ -155,10 +155,11 @@ public class VideoController extends CrazyController {
 	 * @param actressName
 	 * @param params map of info
 	 */
-	@RequestMapping(value="/actress/{actressName}", method=RequestMethod.POST)
-	public String saveActressInfo(@PathVariable String actressName, @RequestParam Map<String, String> params) {
-		String currentActressName = videoService.saveActressInfo(actressName, params);
-		return "redirect:/video/actress/" + currentActressName;
+	@RequestMapping(value="/actress", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void saveActressInfo(@RequestParam Map<String, String> params) {
+		logger.info("params = {}", params);
+		videoService.saveActressInfo(params);
 	}
 
 	@RequestMapping(value="/actress/{actressName}/favorite/{favorite}", method=RequestMethod.PUT)
@@ -295,10 +296,10 @@ public class VideoController extends CrazyController {
 	 * @param studio
 	 * @param params map of info
 	 */
-	@RequestMapping(value="/studio/{studio}", method=RequestMethod.PUT)
-	public String putStudioInfo(@PathVariable String studio, @RequestParam Map<String, String> params) {
-		String studioName = videoService.saveStudioInfo(studio, params);
-		return "redirect:/video/studio/" + studioName;
+	@RequestMapping(value="/studio", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void saveStudioInfo(@RequestParam Map<String, String> params) {
+		videoService.saveStudioInfo(params);
 	}
 
 	/**
@@ -358,14 +359,17 @@ public class VideoController extends CrazyController {
 		if (imageBytes == null)
 			return null;
 
+		MediaType mediaType = MediaType.parseMediaType("image/" + suffix);
+		
 		response.setHeader("Cache-Control", "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
 		response.setHeader("Pragma", "public");
 		response.setDateHeader("Expires", today + VIDEO.WEBCACHETIME_MILI);
 		response.setDateHeader("Last-Modified", imageFile.lastModified());
+		response.setContentType(mediaType.getType());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentLength(imageBytes.length);
-		headers.setContentType(MediaType.parseMediaType("image/" + suffix));
+		headers.setContentType(mediaType);
 //		headers.setCacheControl("max-age=" + VIDEO.WEBCACHETIME_SEC);
 //		headers.setDate(		today + VIDEO.WEBCACHETIME_MILI);
 //		headers.setExpires(		today + VIDEO.WEBCACHETIME_MILI);
@@ -752,6 +756,17 @@ public class VideoController extends CrazyController {
 	public String moveToInstance(@PathVariable String opus) {
 		videoService.moveToInstance(opus);
 		return "redirect:/video/" + opus;
+	}
+	
+	@RequestMapping(value="/manager/startVideoBatch/{type}", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void startVideoBatch(@PathVariable String type) {
+		if ("instance".equals(type))
+			videoBatch.batchInstanceVideoSource();
+		else if ("archive".equals(type))
+			videoBatch.batchArchiveVideoSource();
+		else
+			throw new VideoException("unknown videobatch type : " + type);
 	}
 	
 }
