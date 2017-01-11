@@ -124,14 +124,14 @@ listViewType = '${videoSearch.listViewType}';
 	<div id="contentContainer">
 	<c:choose>
 		<c:when test="${videoSearch.listViewType eq 'C'}">
-			<ul class="list-inline">
+			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
 				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 				</c:forEach>
 			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'B'}">
-			<ul class="list-inline">
+			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li>
 					<div id="opus-${video.opus}" class="video-box">

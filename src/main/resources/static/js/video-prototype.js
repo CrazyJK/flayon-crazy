@@ -84,12 +84,12 @@ Video.prototype.torrentNames = function() {
 }
 
 Video.prototype.actressHtmlNames = function() {
-	var actressNames = "<div class='nowrap'>";
+	var actressNames = "<div class='nowrap'  title='" + this.actressName + "'>";
 	for (var i=0; i<this.actressList.length; i++) {
 		var actress = this.actressList[i];
 		if (i > 0)
 			actressNames += " ";
-		actressNames += "<span class='label label-plain " + (actress.favorite ? "favorite" : "") + "' onclick=\"fnViewActressDetail('" + actress.name + "')\" title='" + actress.name + "'>" + actress.name + "</span>";
+		actressNames += "<span class='label label-plain " + (actress.favorite ? "favorite" : "") + "' onclick=\"fnViewActressDetail('" + actress.name + "')\">" + actress.name + "</span>";
 	}
 	return actressNames + "</div>";
 }
@@ -102,7 +102,7 @@ Video.prototype.contains = function(query) {
 	return this.studio.name.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.opus.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.title.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.actress.toLowerCase().indexOf(query.toLowerCase()) > -1
+		|| this.actressName.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.releaseDate.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| (query.toLowerCase().indexOf('fav') > -1 ? this.favorite : false);
 }

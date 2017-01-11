@@ -226,7 +226,7 @@ function changeTheme(_theme) {
 <div class="container-fluid">
 
 <div id="header_div" class="box form-inline">
-	<label for="search">History Graph</label>
+	<label class="title">History Graph</label>
 	&nbsp;
 	<div class="btn-group" data-toggle="buttons">
 		<a id="zoom1"  class="btn btn-xs btn-default" onclick="zoomChart(1)"><input type="radio"/>M-1</a>

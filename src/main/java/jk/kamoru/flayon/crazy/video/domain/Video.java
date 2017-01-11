@@ -174,7 +174,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return 같거나 포함되어 있으면 {@code true}
 	 */
 	public boolean containsActress(String actressName) {
-		return actressList.stream().allMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
+//		return actressList.stream().allMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
+		return actressList.stream().anyMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
 	}
 	
 	/**
@@ -1127,11 +1128,12 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 	
 	public boolean match(VideoSearch search) {
-		if ((matchStudio(search.getSearchText()) 
-				|| matchOpus(search.getSearchText()) 
-				|| matchTitle(search.getSearchText()) 
-				|| matchActress(search.getSearchText())
-				|| matchRelease(search.getSearchText())) 
+		if ((matchStudio(search.getSearchText()) || 
+			 matchOpus(search.getSearchText()) || 
+			 matchTitle(search.getSearchText()) || 
+			 matchActress(search.getSearchText()) ||
+			 matchRelease(search.getSearchText())
+			) 
 			&& matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover())
 			&& matchFavorite(search.isFavorite())
 			&& matchStudioList(search.getSelectedStudio())
@@ -1195,7 +1197,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean equalsActress(String actressName) {
-		return actressList.stream().allMatch(a -> VideoUtils.equalsActress(a.getName(), actressName));
+		return actressList.stream().anyMatch(a -> VideoUtils.equalsActress(a.getName(), actressName));
 	}
 
 	private boolean matchStudioList(List<String> selectedStudio) {
