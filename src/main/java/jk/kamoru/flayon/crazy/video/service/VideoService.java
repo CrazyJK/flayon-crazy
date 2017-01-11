@@ -228,6 +228,8 @@ public interface VideoService {
 	 */
 	List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive);
 
+	List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive, Boolean withTorrent);
+
 	/**
 	 * get play count range
 	 * @return play count list
@@ -450,24 +452,5 @@ public interface VideoService {
 	 * 하위에 속이 빈 폴더를 지운다
 	 */
 	void deletEmptyFolder();
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

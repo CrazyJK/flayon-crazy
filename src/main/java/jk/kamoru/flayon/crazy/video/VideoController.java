@@ -220,8 +220,9 @@ public class VideoController extends CrazyController {
 	public String videoList(Model model, @RequestParam(value="sort", required=false, defaultValue="O") Sort sort,
 			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
 			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
-			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
-		model.addAttribute("videoList", videoService.getVideoList(sort, reverse, instance, archive));
+			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive,
+			@RequestParam(value="t", required=false, defaultValue="false") Boolean withTorrent) {
+		model.addAttribute("videoList", videoService.getVideoList(sort, reverse, instance, archive, withTorrent));
 		model.addAttribute("sorts", Sort.values());
 		model.addAttribute("sort", sort);
 		model.addAttribute("reverse", reverse);

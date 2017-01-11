@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/video-deco.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/video.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
@@ -46,6 +47,7 @@ var timer;
 var neon = '${param.neon}' === 'true' ? true : false;
 var bgChangeInterval = 60;
 var bgImageChange;
+var listViewType;
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -279,8 +281,8 @@ window.addEventListener('load', function(e) {
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
-			<li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a>
-			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/>2</a>
+			<%-- <li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a> --%>
+			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/></a>
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
 			<li><a href="<c:url value="/video/studio"/>"		><s:message code="video.studio"/></a>
 			<li class="dropdown">
@@ -292,9 +294,9 @@ window.addEventListener('load', function(e) {
 					<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
 					<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
     			</ul>
-  			</li>			
+  			</li>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
-			<li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a>
+			<%-- <li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a> --%>
 			<li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a>
 			<li><a href="<c:url value="/video/gravia"/>"		><s:message code="video.gravia"/></a>
 			<li><a href="<c:url value="/video/archive"/>"		><s:message code="video.archive"/></a>

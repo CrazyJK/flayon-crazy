@@ -829,8 +829,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 		
 		// find torrent
-		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), 
-				String.format("%s,%s", CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()).split(","), true);
+		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
 		log.info("Scan torrents file {}, found {}", TORRENT_PATH, foundTorrent.size());
 		
 		// matching video file
@@ -1444,6 +1443,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public void reloadArchive() {
 		videoDao.reload(null, false, true);
+	}
+
+	@Override
+	public List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive, Boolean withTorrent) {
+		if (withTorrent)
+			torrent(false);
+		return getVideoList(sort, reverse, instance, archive);
 	}
 
 }

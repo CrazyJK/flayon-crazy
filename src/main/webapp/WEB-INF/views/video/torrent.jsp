@@ -100,10 +100,13 @@ var renderingCount = 0;			// 보여준 개수
 var sortList = [
 		{code: "S", name: "Studio"}, {code: "O", name: "Opus"}, {code: "T", name: "Title"}, 
 		{code: "A", name: "Actress"}, {code: "D", name: "Released"}, 
-	//	{code: "R", name: "Rank"}, {code: "SC", name: "Score"}, 
-		{code: "T", name: "Torrent"}, {code: "F", name: "Favorite"}, {code: "C", name: "Candidates"}];
+		{code: "R", name: "Rank"}, {code: "Sc", name: "Score"}, 
+		{code: "To", name: "Torrent"}, {code: "F", name: "Favorite"}, {code: "C", name: "Candidates"}];
 var candidateCount = 0;
 var hadTorrentCount = 0;
+var videoCount = 0;
+var withTorrent = false;
+var isShortWidth = false;
 
 (function($) {
 	$(document).ready(function() {
@@ -121,10 +124,18 @@ var hadTorrentCount = 0;
 function request() {
 	loading(true, "request...");
 	showStatus(true, "Request...");
+	withTorrent = $("#withTorrent").is(":checked");
+
+	// reset variables
+	reverse = !reverse;
+	hadTorrentCount = 0;
+	candidateCount = 0;
+	videoCount = 0;
+	
 	$.getJSON({
 		method: 'GET',
-		url: '/video/torrent.json',
-		data: {'data': true},
+		url: '/video/list.json',
+		data: {"t": withTorrent},
 		cache: false,
 		timeout: 60000
 	}).done(function(data) {
@@ -132,15 +143,20 @@ function request() {
 			showStatus(true, data.exception.message, true);
 		}
 		else {
+			videoList = [];
 			$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
 				if (row.torrents.length > 0)
 					hadTorrentCount++;
 				if (row.videoCandidates.length > 0)
 					candidateCount++;
+				if (row.videoFileList.length > 0)
+					videoCount++;
 				videoList.push(new Video(i, row));
 			});
 			$(".candidate").html("Candidate " + candidateCount);
-			$(".torrents").html("Having " + hadTorrentCount + " torrents");
+			$(".torrents").html("Torrents " + hadTorrentCount);
+			$(".videoCount").html("Video " + videoCount);
+			
 
 			// 정렬하여 보여주기 => sort
 			$(".btn-group-sort").children().each(function() {
@@ -180,11 +196,11 @@ function fnAddEventListener() {
 			render(true);
 	});
 	
-	// sort
+	// sorting & render
 	$(".btn-group-sort").children().on('click', function() {
 		$(this).parent().children().each(function() {
 			var sort = $(this).data("sort");
-			$(this).removeClass("btn-success").addClass("btn-default").html(sort.name);
+			$(this).removeClass("btn-success").addClass("btn-default").attr({"title": sort.name}).html(sort.code);
 		});
 		var sort = $(this).data('sort');
 		if (currSort === sort.code) // 같은 정렬
@@ -193,59 +209,31 @@ function fnAddEventListener() {
 			reverse = true;
 		currSort = sort.code;
 		
-		videoList.sort(function(video1, video2) {
-			switch(sort.code) {
-			case 'S':
-				return compareTo(video1.studio.name, video2.studio.name, reverse); 
-			case 'O':
-				return compareTo(video1.opus, video2.opus, reverse); 
-			case 'T':
-				return compareTo(video1.title, video2.title, reverse); 
-			case 'A':
-				return compareTo(video1.actress, video2.actress, reverse); 
-			case 'D':
-				return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
-			case 'R':
-				return compareTo(video1.rank, video2.rank, reverse); 
-			case 'SC':
-				return compareTo(video1.score, video2.score, reverse); 
-			case 'T':
-				return compareTo(video1.torrents.length, video2.torrents.length, reverse); 
-			case 'F':
-				return compareTo(video1.favorite, video2.favorite, reverse); 
-			case 'C':
-				var result = compareTo(video1.existCandidates, video2.existCandidates, reverse);
-				if (result == 0)
-					result = compareTo(video1.favorite, video2.favorite, reverse);
-				if (result == 0)
-					result = compareTo(video1.existTorrents, video2.existTorrents, reverse);
-				if (result == 0)
-					result = compareTo(video1.opus, video2.opus, reverse); 
-				return result; 
-			default:
-				return video1.title > video2.title ? 1 : -1;
-			}
-		});
+		videoSort(videoList, sort.code, reverse);
 
 		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
 		$(this).removeClass("btn-default").addClass("btn-success").html(sort.name + (reverse ? ' ▼' : ' ▲'));
 		
 		render(true);
 	});
-}
-
-function compareTo(data1, data2, reverse) {
-	var result = 0;
-	if (typeof data1 === 'number') {
-		result = data1 - data2;
-	} else if (typeof data1 === 'string') {
-		result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
-	} else if (typeof data1 === 'boolean') {
-		result = data1 ? 1 : (data2 ? -1 : 0);
-	} else {
-		result = data1 > data2 ? 1 : -1;
-	}
-	return result * (reverse ? -1 : 1);
+	
+	// checkbox
+	$("input[type='checkbox']").on('click', function() {
+		if ($(this).is(":checked")) {
+			$(this).next().addClass("label-success").removeClass("label-default");
+			$($(this).attr("data-toggle")).removeClass("hide");
+		}
+		else {
+			$(this).next().addClass("label-default").removeClass("label-success");
+			$($(this).attr("data-toggle")).addClass("hide");
+		}
+	});
+	
+	// re-request
+	$(".count").attr({"title": "re-request"}).on('click', function() {
+		request();
+	});
+	
 }
 
 function render(first) {
@@ -295,7 +283,7 @@ function render(first) {
 
 	if (fnIsScrollBottom()) // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
 		render();
-
+	
 	$(".count").html(renderingCount + " / " + videoList.length);
 	showStatus(false);
 }
@@ -316,33 +304,43 @@ function showStatus(show, msg, isError) {
 
 function renderBox(index, video, parent) {
 	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover");
-	$("<dt>").addClass("nowrap text-center").html(video.titleHtml).appendTo(dl);
-	$("<dd>").appendTo(dl).html(video.studioHtml);
-	$("<dd>").appendTo(dl).html(video.opusHtml);
-	$("<dd>").appendTo(dl).html(video.actressHtml);
-	$("<dd>").appendTo(dl).html(video.releaseHtml);
-	$("<dd>").appendTo(dl).html(video.favoriteHtml);
-	$("<dd>").appendTo(dl).html(video.videoCandidatesHtml);
-	$("<dd>").appendTo(dl).html(video.torrentsHtml);
-	$("<dd>").appendTo(dl).html(video.torrentFindBtn);
+	$("<dt>").appendTo(dl).html(video.html_title).addClass("nowrap text-center");
+	$("<dd>").appendTo(dl).html(video.html_studio);
+	$("<dd>").appendTo(dl).html(video.html_opus);
+	$("<dd>").appendTo(dl).html(video.html_actress);
+	$("<dd>").appendTo(dl).html(video.html_release);
+	$("<dd>").appendTo(dl).html(video.html_video);
+	$("<dd>").appendTo(dl).html(video.html_subtitles);
+	$("<dd>").appendTo(dl).html(video.html_videoCandidates);
+	$("<dd>").appendTo(dl).html(video.html_torrents + video.html_torrentFindBtn);
+	$("<dd>").appendTo(dl).html(video.overviewText);
 	$("<li>").append(dl).appendTo(parent).attr({"data-idx": video.idx});
+//	console.log(video.html_studio);
 }
+
 function renderTable(index, video, parent) {
 	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx});
 	$('<td>').appendTo(tr).addClass("text-right").html("<span class='label label-plain'>" + (index+1) + "</span>");
-	$('<td>').appendTo(tr).css({"max-width": "450px"})
-	.append(
+	$("<td>").appendTo(tr).html(video.html_studio);
+	$("<td>").appendTo(tr).html(video.html_opus);
+	$('<td>').appendTo(tr).html(
 		$('<div>').addClass("nowrap hover_img").attr({"title": video.fullname}).append(
-			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.fullname).append(
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.title).append(
 				$('<a>').append(
-					$('<img>').attr({"src": video.coverURL + "/title"}).css({"width": "600px"}).addClass("img-thumbnail")	
+					$('<img>').css({"width": "600px"}).attr({"src": video.coverURL + "/title"}).addClass("img-thumbnail")	
 				)	
 			)
 		)
-	);
-	$("<td>").appendTo(tr).html(video.favoriteHtml);
-	$("<td>").appendTo(tr).html(video.torrentFindBtn);
-	$("<td>").appendTo(tr).append($("<div>").append(video.videoCandidatesHtml).append(video.torrentsHtml));
+	).css({"max-width": "300px"});
+	$("<td>").appendTo(tr).html(video.html_actress).css({"max-width": "100px"});
+	$("<td>").appendTo(tr).html(video.html_release).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_video);
+	$("<td>").appendTo(tr).html(video.html_subtitles).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_rank).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_score).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).append(
+			$("<div>").append(video.html_videoCandidates).append(video.html_torrents).append(video.html_torrentFindBtn)
+	).addClass("extraInfo " + (withTorrent ? "" : "hide"));
 }
 
 function fnSelectCandidateVideo(opus, idx) {
@@ -362,21 +360,31 @@ function goTorrentMove(opus, idx) {
 function getAllTorrents() {
 	actionFrame(videoPath + "/torrent/getAll", {}, "POST", "Torrent get all");
 }
+function resizeSecondDiv() {
+	isShortWidth = $(window).width() < 950;
+	if (isShortWidth)
+		$(".shortWidth").addClass("hide");
+	else
+		$(".shortWidth").removeClass("hide");
+}
 </script>
 </head>
 <body>
 <div class="container-fluid" role="main">
 
 	<div id="header_div" class="box form-inline">
-		<label class="title">
-			Torrent
-      		<input class="form-control input-sm search" placeholder="Search...">
-		</label>
+
+   		<input class="form-control input-sm search" placeholder="Search...">
 		<span class="label label-info count">Initialize...</span>
+		<label>
+			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only" data-toggle=".extraInfo">
+			<span class="label label-default" id="checkbox-withTorrent">Extra info</span>
+		</label>
       	<span class="label label-danger status"></span>
+      	
       	<div class="float-right">
 			<div class="btn-group btn-group-sort"></div>
-			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get All</button>
+			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get all torrents</button>
       	</div>
 	</div>
 	
@@ -385,17 +393,18 @@ function getAllTorrents() {
 			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
 			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
 			<li class="float-right">
-				<span class="label label-primary torrents"></span>
-				<span class="label label-warning candidate"></span>
-				<span class="label label-success sorted"></span>
+				<span class="label label-info videoCount"></span>
+				<span class="label label-primary candidate"></span>
+				<span class="label label-warning torrents"></span>
+				<span class="label label-success sorted hide"></span>
 			</li>
 		</ul>
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade">
 				<ul class="list-group list-inline vbox"></ul>
 			</section>
-			<section id="table" class="tab-pane fade in active">
-				<table class="table table-condensed table-hover table-responsive">
+			<section id="table" class="tab-pane fade in active table-responsive">
+				<table class="table table-condensed table-hover table-bordered">
 					<tbody></tbody>
 				</table>
 			</section>

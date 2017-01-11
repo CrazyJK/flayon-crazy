@@ -102,6 +102,3 @@
 .item:hover {
 	z-index: 3;
 }
-.favorite {
-	box-shadow: 0 0px 5px 3px rgba(250, 0, 0, 0.5) inset;
-}

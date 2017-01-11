@@ -17,8 +17,8 @@ var opusArray = ${opusArray};
 var bgImageCount = ${bgImageCount};
 var totalVideoSize = parseInt('${fn:length(videoList)}');
 var currentVideoIndex = getRandomInteger(1, totalVideoSize);
-var listViewType = '${videoSearch.listViewType}';
 var currBGImageUrl;
+listViewType = '${videoSearch.listViewType}';
 </script>
 </head>
 <body>
