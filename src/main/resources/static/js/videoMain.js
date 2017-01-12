@@ -4,12 +4,15 @@ $(document).ready(function(){
 	$('span[id^="checkbox"]')
 		.css("cursor", "pointer")
 		.bind("click", function() {
-			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-			$(this).swapClass("label-success", "label-default", hiddenCheckbox.is(":checked"));
+			var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
+			//console.log("checkbox click", $(this).attr("id"), isChecked);
+			$(this).swapClass("label-success", "label-default", isChecked);
+			$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
 		})
 		.each(function() {
-			var hiddenCheckbox = $("#" + $(this).attr("id").split("-")[1]);
-			$(this).swapClass("label-success", "label-default", !hiddenCheckbox.is(":checked"));
+			var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
+			$(this).swapClass("label-success", "label-default", !isChecked);
+			$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
 		});
 	
 	// Add listener : implement radio element

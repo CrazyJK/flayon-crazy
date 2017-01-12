@@ -101,7 +101,8 @@
 	transition: all .2s ease-in-out;
  }
 </style>
-<script type="text/javascript" src="/js/video-prototype.js"></script>
+<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/video-prototype.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
 "use strict";
@@ -139,10 +140,58 @@ var queryFoundCount = 0;
 	});
 }(jQuery));
 
+function fnAddEventListener() {
+	// scroll
+	$("#content_div").scroll(function() {
+		if (fnIsScrollBottom())
+			render(false); // next page
+	});
+
+	// search	
+	$(".search").on('keyup', function(e) {
+		var event = window.event || e;
+		if (event.keyCode == 13)
+			render(true);
+	});
+	
+	// sorting & render
+	$(".btn-group-sort").children().on('click', function() {
+		$(this).parent().children().each(function() {
+			var sort = $(this).data("sort");
+			$(this).removeClass("btn-success").addClass("btn-default").attr({"title": sort.name}).html(sort.code);
+		});
+		var sort = $(this).data('sort');
+		if (currSort === sort.code) // 같은 정렬
+			reverse = !reverse;
+		else	// 다른 정렬
+			reverse = true;
+		currSort = sort.code;
+		
+		videoSort(videoList, sort.code, reverse);
+
+		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
+		$(this).removeClass("btn-default").addClass("btn-success").html(sort.name + (reverse ? ' ▼' : ' ▲'));
+		
+		render(true);
+	});
+	
+	// re-request
+	$(".count").attr({"title": "re-request"}).on('click', function() {
+		request();
+	});
+
+	// image click
+	$("#cover").on("click", function() {
+		$("#checkbox-viewImage").click();
+		$(this).hide();
+		//console.log("image click", $("#checkbox-viewImage").prev().prop("checked"));
+	});
+
+}
+
 function request() {
 	loading(true, "request...");
 	showStatus(true, "Request...");
-	withTorrent = $("#withTorrent").is(":checked");
 
 	// reset variables
 	reverse = !reverse;
@@ -191,69 +240,6 @@ function request() {
 	});	
 }
 
-function fnIsScrollBottom() {
-	var containerHeight    = $("#content_div").height();
-	var containerScrollTop = $("#content_div").scrollTop();
-	var documentHeight     = $("ul.nav-tabs").height() + $("div.tab-content").height();
-	var scrollMargin       = $("p.more").height();
-//	console.log("fnIsScrollBottom", containerHeight, ' + ', containerScrollTop, ' = ', (containerHeight + containerScrollTop), ' > ', documentHeight, ' + ', scrollMargin, ' = ', (documentHeight - scrollMargin), lastPage);
-	return (containerHeight + containerScrollTop > documentHeight - scrollMargin) && !lastPage;
-}
-
-function fnAddEventListener() {
-	// scroll
-	$("#content_div").scroll(function() {
-		if (fnIsScrollBottom())
-			render(false); // next page
-	});
-
-	// search	
-	$(".search").on('keyup', function(e) {
-		var event = window.event || e;
-		if (event.keyCode == 13)
-			render(true);
-	});
-	
-	// sorting & render
-	$(".btn-group-sort").children().on('click', function() {
-		$(this).parent().children().each(function() {
-			var sort = $(this).data("sort");
-			$(this).removeClass("btn-success").addClass("btn-default").attr({"title": sort.name}).html(sort.code);
-		});
-		var sort = $(this).data('sort');
-		if (currSort === sort.code) // 같은 정렬
-			reverse = !reverse;
-		else	// 다른 정렬
-			reverse = true;
-		currSort = sort.code;
-		
-		videoSort(videoList, sort.code, reverse);
-
-		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
-		$(this).removeClass("btn-default").addClass("btn-success").html(sort.name + (reverse ? ' ▼' : ' ▲'));
-		
-		render(true);
-	});
-	
-	// checkbox
-	$("input[type='checkbox']").on('click', function() {
-		if ($(this).is(":checked")) {
-			$(this).next().addClass("label-success").removeClass("label-default");
-			$($(this).attr("data-toggle")).removeClass("hide");
-		}
-		else {
-			$(this).next().addClass("label-default").removeClass("label-success");
-			$($(this).attr("data-toggle")).addClass("hide");
-		}
-	});
-	
-	// re-request
-	$(".count").attr({"title": "re-request"}).on('click', function() {
-		request();
-	});
-
-}
-
 function render(first) {
 	showStatus(true, "rendering...");
 	
@@ -261,7 +247,8 @@ function render(first) {
 	var query = $(".search").val();
 	var parentOfVideoBox  = $("#box > ul");
 	var parentOfTableList = $("#table > table > tbody");
-	
+	withTorrent = $("#withTorrent").is(":checked");
+
 	if (first) { // initialize if first rendering 
 		entryIndex = 0;
 		renderingCount = 0;
@@ -278,6 +265,7 @@ function render(first) {
 				}
 			}
 		}
+		// console.log("withTorrent", withTorrent);
 	}
 	
 	while (entryIndex < videoList.length) {
@@ -318,6 +306,15 @@ function render(first) {
 		$(".count").html(renderingCount + " / " + videoList.length);
 	}
 	showStatus(false);
+}
+
+function fnIsScrollBottom() {
+	var containerHeight    = $("#content_div").height();
+	var containerScrollTop = $("#content_div").scrollTop();
+	var documentHeight     = $("ul.nav-tabs").height() + $("div.tab-content").height();
+	var scrollMargin       = $("p.more").height();
+//	console.log("fnIsScrollBottom", containerHeight, ' + ', containerScrollTop, ' = ', (containerHeight + containerScrollTop), ' > ', documentHeight, ' + ', scrollMargin, ' = ', (documentHeight - scrollMargin), lastPage);
+	return (containerHeight + containerScrollTop > documentHeight - scrollMargin) && !lastPage;
 }
 
 function showStatus(show, msg, isError) {
@@ -362,10 +359,7 @@ function renderTable(index, video, parent) {
 	).css({"max-width": "300px"}).hover(
 			function(event) {
 				if ($("input:checkbox[id='viewImage']").prop("checked")) {
-					$("#cover").show(500).attr({"src": video.coverURL + "/title"}).css({"left": 150, "top": event.clientY + 40, "cursor": "pointer"}).on("click", function() {
-						$(this).hide();
-						$("input:checkbox[id='viewImage']").prop("checked", false);
-					});
+					$("#cover").show(500).attr({"src": video.coverURL}).css({"left": 150, "top": event.clientY + 40, "cursor": "pointer"});
 					//var img = $("#cover"); console.log("in", "x : " + img.css("left") + "->" + event.clientX, "y : " + img.css("top") + "->" + event.clientY);
 				}
 			}, function(event) {
@@ -414,17 +408,19 @@ function resizeSecondDiv() {
 <div class="container-fluid" role="main">
 
 	<div id="header_div" class="box form-inline">
-
    		<input class="form-control input-sm search" placeholder="Search...">
 		<span class="label label-info count">Initialize...</span>
 		<label>
-			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only" data-toggle=".extraInfo">
-			<span class="label label-default" id="checkbox-withTorrent">Extra info</span>
+			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only">
+			<span class="label label-default" id="checkbox-withTorrent" data-toggle=".extraInfo">Extra info</span>
 		</label>
+     		<label>
+      		<input type="checkbox" id="viewImage" name="viewImage" checked="checked" class="sr-only">
+      		<span class="label label-success" id="checkbox-viewImage">Image</span>
+      	</label>
       	<span class="label label-danger status"></span>
       	
       	<div class="float-right">
-      		<label class="checkbox-inline"><input type="checkbox" id="viewImage">Image</label>
 			<div class="btn-group btn-group-sort"></div>
 			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get all torrents</button>
       	</div>

@@ -79,7 +79,7 @@ $(document).ready(function(){
 
 		setInterval(function() {
 			toggleSlideView();
-			resizeImage();
+			//resizeImage();
 			if (playSlide) {
 				if (playSec % playInterval == 0) {
 					fnRandomImageView();
@@ -158,11 +158,17 @@ function toggleSlideView() {
 	}
 }
 
+function resizeSecondDiv() {
+	resizeImage();
+}
+
 function resizeImage() {
 	windowHeight = $(window).height();
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
-	if (!playSlide) 
+	if (!playSlide) {
+		//console.log("resizeImage");				
 		fnDisplayThumbnail();
+	}
 }
 
 function fnViewImage(current) {
@@ -223,6 +229,7 @@ function fnViewImage(current) {
 			});
 			imageDiv.show(300);
 		}
+		//console.log("fnViewImage");
 		fnDisplayThumbnail();
 	}
 
@@ -257,7 +264,7 @@ function fnRandomImageView() {
 }
 function fnDisplayThumbnail() {
 	var windowWidth = $(window).width();
-	var thumbnailRange = windowWidth / 200 / 2;
+	var thumbnailRange = parseInt(windowWidth / 200 / 2);
 	$("#thumbnailUL").empty();
 	for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
 		var thumbNo = current;
@@ -265,11 +272,11 @@ function fnDisplayThumbnail() {
 			thumbNo = imageCount + thumbNo;
 		if (thumbNo >= imageCount)
 			thumbNo = thumbNo - imageCount;
-		var li = $("<li>");
-		var div = $("<div class='img-thumbnail " + (thumbNo == selectedNumber ? "active" : "") + "' onclick='fnViewImage("+thumbNo+")'>");
-		div.css("background-image", "url('" + imagepath + thumbNo + "" + "')");
-		li.append(div);
-		$("#thumbnailUL").append(li);
+		$("<li>").append(
+			$("<div>").addClass("img-thumbnail " + (thumbNo == selectedNumber ? "active" : "")).css("background-image", "url('" + imagepath + thumbNo + "')").data("imgNo", thumbNo).on("click", function() {
+				fnViewImage($(this).data("imgNo"));
+			})
+		).appendTo($("ul#thumbnailUL"));
 	}
 }
 function fnPlayImage() {

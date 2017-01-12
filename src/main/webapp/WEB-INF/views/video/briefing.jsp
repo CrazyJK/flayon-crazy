@@ -13,21 +13,20 @@
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
 $(document).ready(function(){
-	
-	$("input:radio[name=viewType]").bind("click", function() {
-		var view = $(this).val();
+
+	$(".btn-group-viewType").children().bind("click", function() {
+		var viewType = $(this).attr("data-viewType");
 		$("[data-opus]").each(function() {
-			if (view == 'normal') {
+			if (viewType == 'n') {
 				$(this).html($(this).attr("data-opus"));
 			}
 			else {
 				$(this).html('O');
 			}
 		});
-	}).css("display","none");
-	
+	});
 	// set initial view
-	$('input:radio[name=viewType]:nth(1)').click();
+	$('.btn-group-viewType > :nth-child(2)').click();
 	
 });
 var MOVE_WATCHED_VIDEO = ${MOVE_WATCHED_VIDEO};
@@ -71,8 +70,12 @@ function startVideoBatch(type) {
 
 <div id="header_div" class="box">
 	<ul class="list-inline">
-		<li><label class="btn btn-xs btn-default"><input type="radio" name="viewType" value="normal"/><span>Normal</span></label></li>
-		<li><label class="btn btn-xs btn-default"><input type="radio" name="viewType" value="simple"/><span>Simple</span></label></li>
+		<li>
+			<div class="btn-group btn-group-viewType" data-toggle="buttons">
+				<a class="btn btn-xs btn-info" data-viewType="n"><input type="radio"/>Normal</a>
+				<a class="btn btn-xs btn-info" data-viewType="s"><input type="radio"/>Simple</a>
+			</div>
+		</li>
 		<li><span class="label label-info">Max : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span></li>
 		<li>
 			<div class="btn-group">
@@ -264,7 +267,7 @@ function startVideoBatch(type) {
 				<tbody>
 					<c:forEach items="${rankMap}" var="rank" varStatus="status">
 					<tr class="nowrap">
-						<td style="width: 60px;">${rank.key} <span class="badge float-right">${fn:length(rank.value)}</span></td>
+						<td style="width: 80px;">${rank.key} <span class="badge float-right">${fn:length(rank.value)}</span></td>
 						<td style="width: 80px;" class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${rank.value}" var="video" varStatus="status">
