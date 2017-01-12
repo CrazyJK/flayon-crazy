@@ -361,10 +361,13 @@ function renderTable(index, video, parent) {
 		)
 	).css({"max-width": "300px"}).hover(
 			function(event) {
-				$("#cover").show(500).attr({"src": video.coverURL + "/title"}).css({"left": 150, "top": event.clientY + 40, "cursor": "pointer"}).on("click", function() {
-					$(this).hide();
-				});
-				//var img = $("#cover"); console.log("in", "x : " + img.css("left") + "->" + event.clientX, "y : " + img.css("top") + "->" + event.clientY);
+				if ($("input:checkbox[id='viewImage']").prop("checked")) {
+					$("#cover").show(500).attr({"src": video.coverURL + "/title"}).css({"left": 150, "top": event.clientY + 40, "cursor": "pointer"}).on("click", function() {
+						$(this).hide();
+						$("input:checkbox[id='viewImage']").prop("checked", false);
+					});
+					//var img = $("#cover"); console.log("in", "x : " + img.css("left") + "->" + event.clientX, "y : " + img.css("top") + "->" + event.clientY);
+				}
 			}, function(event) {
 				//$("#cover").hide();
 				//console.log("out");
