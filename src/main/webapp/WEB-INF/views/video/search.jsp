@@ -14,9 +14,15 @@
 mark {
 	padding:0;
 }
+.row {
+	margin: 0;
+}
+.col-lg-6 {
+	padding: 0;
+}
 </style>
 <script type="text/javascript">
-//bgContinue = false;
+bgContinue = false;
 var BOOTSTRAP_COL_LG_6 = 1230;
 
 $(document).ready(function(){
@@ -167,7 +173,7 @@ function resizeSecondDiv() {
 		<span id="searchURL" class="label label-primary"></span>
 	</div>
 	
-	<div id="content_div" class="row" style="margin:0;">
+	<div id="content_div" class="row">
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
 				<h4><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>

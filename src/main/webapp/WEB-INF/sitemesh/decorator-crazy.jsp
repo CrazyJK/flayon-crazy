@@ -18,6 +18,19 @@
 <link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
+<style type="text/css">
+#innerSearchPage {
+	display: none;
+	position: fixed;
+	background-color: white;
+	z-index: 588;
+}
+#innerSearchPage > iframe {
+	border: 0;
+	width: 100%;
+	height: 100%;
+}
+</style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -48,6 +61,8 @@ var neon = '${param.neon}' === 'true' ? true : false;
 var bgChangeInterval = 60;
 var bgImageChange;
 var listViewType;
+var windowWidth = 0;
+var windowHeight = 0;
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -255,6 +270,15 @@ window.addEventListener('load', function(e) {
 
 }, false);
 */
+var isLoadedSearchPage = false;
+function viewInnerSearchPage() {
+	if (!isLoadedSearchPage) {
+		$("#innerSearchPage > iframe").attr({"src": "<c:url value="/video/search"/>"});
+		isLoadedSearchPage = true;
+	}
+	$("#innerSearchPage").toggle();
+	
+}
 </script>
 
 <sitemesh:write property="head" />
@@ -279,7 +303,8 @@ window.addEventListener('load', function(e) {
 			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
 			<li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
-			<li><a href="<c:url value="/video/search"/>"		><s:message code="video.search"/></a>
+			<%-- <li><a href="<c:url value="/video/search"/>"	><s:message code="video.search"/></a> --%>
+			<li><a onclick="viewInnerSearchPage()"	            ><s:message code="video.search"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
 			<%-- <li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a> --%>
 			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/></a>
@@ -316,6 +341,10 @@ window.addEventListener('load', function(e) {
 			<input id="bgChangeInterval" style="background-color: rgba(0,0,0,0); border: 0; width: 20px; text-align: right; color: cyan;"/>s
 		</span>
 		<span class="blink-3 float-left" onclick="fnBGImageDELETE();">DELETE</span>
+	</div>
+
+	<div id="innerSearchPage" class="box">
+		<iframe></iframe>
 	</div>
 
 </body>

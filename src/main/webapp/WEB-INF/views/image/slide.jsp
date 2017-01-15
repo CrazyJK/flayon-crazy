@@ -156,6 +156,7 @@ function toggleSlideView() {
 		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
 		$(".paging").show();
 	}
+	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
 }
 
 function resizeSecondDiv() {

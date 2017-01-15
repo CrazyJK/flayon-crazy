@@ -5,11 +5,18 @@ var calculatedDivHeight = 0;
  */
 function resizeDivHeight() {
 	var offsetMargin = 20;
-	var windowHeight = $(window).outerHeight();
+	windowHeight = $(window).outerHeight();
 	var header = $("#header_div").outerHeight();
 	calculatedDivHeight = windowHeight - header - offsetMargin;
 	$("#content_div").outerHeight(calculatedDivHeight);
 	//console.log("resizeDivHeight", calculatedDivHeight);
+	
+	windowWidth  = $(window).width();
+	$("#innerSearchPage").css({
+		"left": "0px", "top": "20px", "width": windowWidth - offsetMargin, "height": windowHeight - (offsetMargin * 2)
+	});
+
+	
 	try {
 		resizeSecondDiv(); // if it exist
 	} catch (e) {

@@ -98,6 +98,7 @@
 	/* bottom: 20px;
 	left: 20px; */
 	width: 600px;
+	box-shadow: 0 0 6px rgba(255,0,0,1);
 	transition: all .2s ease-in-out;
  }
 </style>
@@ -137,6 +138,10 @@ var queryFoundCount = 0;
 		// ajax data		
 		request();
 		
+		$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default");
+			$(e.target).removeClass("btn-default").addClass("btn-info");
+		});
 	});
 }(jQuery));
 
@@ -359,7 +364,10 @@ function renderTable(index, video, parent) {
 	).css({"max-width": "300px"}).hover(
 			function(event) {
 				if ($("input:checkbox[id='viewImage']").prop("checked")) {
-					$("#cover").show(500).attr({"src": video.coverURL}).css({"left": 150, "top": event.clientY + 40, "cursor": "pointer"});
+					var imgWidth = windowWidth / 2;
+					var imgLeft = windowWidth / 4;
+					var imgTop = event.clientY + 40;
+					$("#cover").show(500).attr({"src": video.coverURL}).css({"left": imgLeft, "top": imgTop, "width": imgWidth, "cursor": "pointer"});
 					//var img = $("#cover"); console.log("in", "x : " + img.css("left") + "->" + event.clientX, "y : " + img.css("top") + "->" + event.clientY);
 				}
 			}, function(event) {
@@ -414,20 +422,24 @@ function resizeSecondDiv() {
 			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only">
 			<span class="label label-default" id="checkbox-withTorrent" data-toggle=".extraInfo">Extra info</span>
 		</label>
-     		<label>
+     	<label>
       		<input type="checkbox" id="viewImage" name="viewImage" checked="checked" class="sr-only">
       		<span class="label label-success" id="checkbox-viewImage">Image</span>
       	</label>
       	<span class="label label-danger status"></span>
       	
       	<div class="float-right">
+			<div class="btn-group">
+		      	<button class="btn btn-xs btn-info" data-toggle="tab" href="#table">TABLE</button>
+		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">BOX</button>
+			</div>
 			<div class="btn-group btn-group-sort"></div>
 			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get all torrents</button>
       	</div>
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<ul class="nav nav-tabs">
+		<%-- <ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
 			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
 			<li class="float-right">
@@ -436,7 +448,7 @@ function resizeSecondDiv() {
 				<span class="label label-warning torrents"></span>
 				<span class="label label-success sorted hide"></span>
 			</li>
-		</ul>
+		</ul> --%>
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade">
 				<ul class="list-group list-inline vbox"></ul>
