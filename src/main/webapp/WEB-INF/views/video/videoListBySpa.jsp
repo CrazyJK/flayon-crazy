@@ -131,17 +131,13 @@ var queryFoundCount = 0;
 	$(document).ready(function() {
 		// init components
 		$.each(sortList, function(i, sort) {
-			$("<button>").addClass("btn btn-xs").data("sort", sort).appendTo($(".btn-group-sort"));
+			$("<button>").addClass("btn btn-xs").data("sort", sort).html(sort.code).appendTo($(".btn-group-sort"));
 		});
 		// add EventListener
 		fnAddEventListener();
 		// ajax data		
 		request();
 		
-		$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-			$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default");
-			$(e.target).removeClass("btn-default").addClass("btn-info");
-		});
 	});
 }(jQuery));
 
@@ -189,7 +185,15 @@ function fnAddEventListener() {
 	$("#cover").on("click", function() {
 		$("#checkbox-viewImage").click();
 		$(this).hide();
-		//console.log("image click", $("#checkbox-viewImage").prev().prop("checked"));
+	}).css({"cursor": "pointer"});
+
+	// tab event
+	$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default");
+		$(e.target).removeClass("btn-default").addClass("btn-info");
+		if ($(e.target).attr("href") === '#box') {
+			$("#cover").hide();
+		} 
 	});
 
 }
@@ -270,7 +274,6 @@ function render(first) {
 				}
 			}
 		}
-		// console.log("withTorrent", withTorrent);
 	}
 	
 	while (entryIndex < videoList.length) {
@@ -295,7 +298,6 @@ function render(first) {
 	}
 
 //	console.log("render", first, displayCount, entryIndex, renderingCount, videoList.length);
-	
 	if (entryIndex == videoList.length) { // 전부 보여주었으면
 		lastPage = true;
 		$(".more").hide();
@@ -349,7 +351,6 @@ function renderBox(index, video, parent) {
 	$("<dd>").appendTo(dl).html(video.html_torrents + video.html_torrentFindBtn);
 	$("<dd>").appendTo(dl).html(video.overviewText);
 	$("<li>").append(dl).appendTo(parent).attr({"data-idx": video.idx});
-//	console.log(video.html_studio);
 }
 
 function renderTable(index, video, parent) {
@@ -364,11 +365,8 @@ function renderTable(index, video, parent) {
 	).css({"max-width": "300px"}).hover(
 			function(event) {
 				if ($("input:checkbox[id='viewImage']").prop("checked")) {
-					var imgWidth = windowWidth / 2;
-					var imgLeft = windowWidth / 4;
 					var imgTop = event.clientY + 40;
-					$("#cover").show(500).attr({"src": video.coverURL}).css({"left": imgLeft, "top": imgTop, "width": imgWidth, "cursor": "pointer"});
-					//var img = $("#cover"); console.log("in", "x : " + img.css("left") + "->" + event.clientX, "y : " + img.css("top") + "->" + event.clientY);
+					$("#cover").show(500).attr({"src": video.coverURL}).css({"top": imgTop});
 				}
 			}, function(event) {
 				//$("#cover").hide();
@@ -399,7 +397,6 @@ function goTorrentMove(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("moved");
 	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 }
-
 function getAllTorrents() {
 	actionFrame(videoPath + "/torrent/getAll", {}, "POST", "Torrent get all");
 }
@@ -409,6 +406,10 @@ function resizeSecondDiv() {
 		$(".shortWidth").addClass("hide");
 	else
 		$(".shortWidth").removeClass("hide");
+	
+	var imgWidth = windowWidth / 2;
+	var imgLeft = windowWidth / 4;
+	$("#cover").css({"left": imgLeft, "width": imgWidth});
 }
 </script>
 </head>
@@ -430,11 +431,11 @@ function resizeSecondDiv() {
       	
       	<div class="float-right">
 			<div class="btn-group">
-		      	<button class="btn btn-xs btn-info" data-toggle="tab" href="#table">TABLE</button>
-		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">BOX</button>
+		      	<button class="btn btn-xs btn-info" data-toggle="tab" href="#table">Table</button>
+		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-sort"></div>
-			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">Get all torrents</button>
+			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">All torrents</button>
       	</div>
 	</div>
 	
