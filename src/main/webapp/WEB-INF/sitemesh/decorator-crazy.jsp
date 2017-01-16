@@ -24,6 +24,7 @@
 	position: fixed;
 	background-color: white;
 	z-index: 588;
+	box-shadow: inset 0 0 10px 15px rgba(255,0,0,.5);
 }
 #innerSearchPage > iframe {
 	border: 0;
@@ -71,10 +72,13 @@ window.onerror = function (e) {
 
 $(document).ready(function() {
 
-	// set .box color
+/* 	// set .box color
 	$("#header_div, #content_div").each(function() {
 		$(this).css("background-color", randomColor(0.3));
 	});
+ */	
+	$("#header_div").css("background-image", "linear-gradient(to bottom, #fff 0, " + randomColor(0.3) + " 100%)");
+	$("#content_div").css("background-color", randomColor(0.3));
 	
 	//set rank color
  	$('input[type="range"].input-range').each(function() {
@@ -244,10 +248,9 @@ function loadingTimer(start) {
 var bgToggle = 0;
 function toogleBody() {
 	$(".container-fluid, .container").animate({
-		"opacity": bgToggle % 2
+		"opacity": bgToggle++ % 2
 	}, 1000);
-	++bgToggle;
-	$("#bgActionGroup").toggle({
+	$("#bgActionGroup").css({"padding-top": windowHeight - 60}).toggle({
 		duration: 1000
 	});
 }

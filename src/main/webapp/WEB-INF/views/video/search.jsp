@@ -141,10 +141,10 @@ function resizeSecondDiv() {
 	var contentDivHeight = $("#content_div").outerHeight();
 	var contentDivWidth  = $("#content_div").width();
 	var calculatedDivHeight = 0;
-	if (contentDivWidth > BOOTSTRAP_COL_LG_6) {
+	if (contentDivWidth > BOOTSTRAP_COL_LG_6) { // 가로
 		calculatedDivHeight = (contentDivHeight) - 20;	
 	}
-	else {
+	else { // 세로
 		calculatedDivHeight = (contentDivHeight) / 2 - 15;
 	}
 
@@ -152,6 +152,12 @@ function resizeSecondDiv() {
 	
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
+	
+	$("#content_div").css("background-color", "transparent");
+	$("#resultVideoDiv, #resultHistoryDiv").each(function() {
+		$(this).css("background-color", randomColor(0.3));
+	});
+
 }
 </script>
 </head>

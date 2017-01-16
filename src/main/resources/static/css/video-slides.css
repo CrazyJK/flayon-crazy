@@ -44,13 +44,15 @@
 	display: inline-block;
 	padding: 5px 14px;
 	background-color: #fff;
-	border: 1px solid #ddd;
+	/* border: 1px solid #ddd; */
 	border-radius: 15px;
 	/* display: none !important; */
 }
-.slidesjs-navigation:hover {
+.slidesjs-navigation:hover, .slidesjs-pagination-item a:hover {
 	text-decoration:none;
-	background-color: rgba(238, 238, 238, 0.5);
+	/* background-color: rgba(238, 238, 238, 0.5); */
+	background-color: rgba(136, 57, 57, 0.75);
+	color: white;
 }
 .slidesjs-navigation:focus {
 	text-decoration:none;
@@ -79,10 +81,18 @@
 	display:inline-block;
 }
 .slidesjs-pagination-item:first-child {
-	margin-right: 10px;
+	margin-right: 5px;
+}
+.slidesjs-pagination-item:first-child a {	
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
 }
 .slidesjs-pagination-item:last-child {
-	margin-left: 10px;
+	margin-left: 5px;
+}
+.slidesjs-pagination-item:last-child a {
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
 }
 /* 페이지 번호 */
 .slidesjs-pagination-item a {
@@ -104,6 +114,6 @@
 	border-color: #337ab7;
 }
 .slidesjs-pagination-item a:hover {
-	color: #337ab7;
-	background-color: rgba(238, 238, 238, 0.5);
+	/* color: #337ab7;
+	background-color: rgba(238, 238, 238, 0.5); */
 }

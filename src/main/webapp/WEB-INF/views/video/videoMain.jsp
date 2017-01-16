@@ -154,7 +154,7 @@ listViewType = '${videoSearch.listViewType}';
 		<c:when test="${videoSearch.listViewType eq 'IH'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
-				<li style="padding: 0 10px;">
+				<li style="padding: 5px 5px;">
 					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom video-box-bg" style="width:400px; height:270px;"><a href="#">
 	        			<div class="img"><img src="<c:url value="/video/${video.opus}/cover" />" alt="img"></div>
 	        			<div class="info">
@@ -416,15 +416,15 @@ listViewType = '${videoSearch.listViewType}';
 				</li>
 				<script type="text/javascript">
 				$("#aperture_${video.opus}")
-				.attr("onclick", "fnVideoDetail('${video.opus}')")
-				.aperture({
-					src:"<c:url value="/video/${video.opus}/cover" />",
-					baseColor: randomColor(0.5),
-					outerMargin: "10 auto",
-					width: "200px;",
-					height: "137px",
-					content: '${video.title}',
-					innerCirclePadding: "0"
+					.attr("onclick", "fnVideoDetail('${video.opus}')")
+					.aperture({
+						src:"<c:url value="/video/${video.opus}/cover" />",
+						baseColor: randomColor(0.5),
+						outerMargin: "10 auto",
+						width: "200px;",
+						height: "137px",
+						content: '${video.title}',
+						innerCirclePadding: "0"
 				});
 				</script>
 				</c:forEach>
