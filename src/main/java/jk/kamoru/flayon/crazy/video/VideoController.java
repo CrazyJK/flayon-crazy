@@ -719,10 +719,12 @@ public class VideoController extends CrazyController {
 	}
 
 	@RequestMapping(value="/gravia", method=RequestMethod.POST)
-	public String graviainterviewSaveCover(Model model, @RequestParam(value="title", required=true) List<String> titles) {
-		int saveCount = videoService.saveCover(titles);
-		model.addAttribute("saveCount", saveCount);
-		return "video/graviainterview";
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void graviainterviewSaveCover(Model model, @RequestParam(value="title", required=true) List<String> titles) {
+		videoService.saveCover(titles);
+//		int saveCount = 0; 
+//		model.addAttribute("saveCount", saveCount);
+//		return "video/graviainterview";
 	}
 
 	@RequestMapping("/gravia/data")

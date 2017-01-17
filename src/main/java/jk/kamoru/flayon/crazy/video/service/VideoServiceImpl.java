@@ -13,8 +13,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1402,42 +1404,56 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public int saveCover(List<String> titles) {
-		log.info("saveCover titles in {}", COVER_PATH);
-		int index = 0;
-		int count = 0;
-		int total = titles.size();
+	@Async
+	public void saveCover(List<String> titles) {
+		log.info("saveCover at {} size={}", COVER_PATH, titles.size());
+
+		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<String, CompletableFuture<File>>();
 		for (String title : titles) {
 			String opus = VideoUtils.getOpusInTitle(title);
 			
-			log.info("Save {} Cover {}/{}", opus, ++index, total);
-			
 			// check opus text
-			if (StringUtils.isBlank(opus))
+			if (StringUtils.isBlank(opus)) {
+				log.warn("saveCover opus is blank");
 				continue;
-
+			}
 			// check exists video
-			if (videoDao.contains(opus, true, false))
+			if (videoDao.contains(opus, true, false)) {
+				log.warn("saveCover {} is contains", opus);
 				continue;
-			
+			}
+			// check title valid
+			TitlePart titlePart = new TitlePart(title);
+			if (titlePart.isCheck()) {
+				log.warn("saveCover titlePart is invalid. [{}] - {}", titlePart.getCheckDescShort(), title);
+				continue;
+			}
+			// start async lookup
 			CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
+			resultMap.put(opus, result);
+		}
+
+		int foundCount = 0;
+		for (Entry<String, CompletableFuture<File>> result : resultMap.entrySet()) {
 			try {
-				File file = result.get();
+				String opus = result.getKey();
+				File file = result.getValue().get();
+
 				if (file == null) {
+					log.warn("saveCover {} file is null", opus);
 				}
 				else { // found
-					count++;
-					TitlePart titlePart = new TitlePart(title);
-					titlePart.setFiles(file);
-					videoDao.buildVideo(titlePart);
+					foundCount++;
+					String title = Utils.getNameExceptExtension(file);
+					TitlePart savedTitlePart = new TitlePart(title);
+					savedTitlePart.setFiles(file);
+					videoDao.buildVideo(savedTitlePart);
 				}
 			} catch (InterruptedException | ExecutionException e) {
-//				throw new CrazyException("fail to saveCover : " + opus, e);
-				log.error("fail to saveCover : " + opus, e);
-				break;
+				log.error("fail to saveCover", e);
 			}
 		}
-		return count;
+		log.info("saveCover {} completed", foundCount);
 	}
 
 	@Override

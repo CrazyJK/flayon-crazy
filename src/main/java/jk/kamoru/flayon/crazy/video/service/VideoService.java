@@ -443,7 +443,7 @@ public interface VideoService {
 	 * @param titles
 	 * @return
 	 */
-	int saveCover(List<String> titles);
+	void saveCover(List<String> titles);
 
 	
 	// --- for batch ----------------------------------------------------

@@ -181,10 +181,10 @@ public class ArzonLookupService implements WebFileLookupService {
 	        
 			Path target = Paths.get(imageLocation, title + ".jpg");
 			Files.copy(response.getEntity().getContent(), target, StandardCopyOption.REPLACE_EXISTING);
-			log.info("Save cover, {}", imageLocation);
+			log.info("Save cover, {}", target);
 			return CompletableFuture.completedFuture(target.toFile());
 		} catch (IOException e) {
-			log.error("Fail to look up cover", e);
+			log.error("Fail to look up cover " + title, e);
 			return CompletableFuture.completedFuture(null);
 		} catch (VideoException e) {
 			log.warn(e.getMessage());

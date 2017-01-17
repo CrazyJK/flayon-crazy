@@ -252,6 +252,7 @@ function fnToggleSubmitBtn() {
 function saveCoverAll() {
 	loading(true, 'Saving cover');
 	document.forms[0].submit();
+	loading(false);
 }
 </script>
 </head>
@@ -288,7 +289,7 @@ function saveCoverAll() {
 		<div class="col-sm-2">
 			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
 		</div>
-		<form method="post">
+		<form method="post" target="ifrm">
 		<div class="col-sm-10 gravia-content"></div>
 		</form>
 	</div>
