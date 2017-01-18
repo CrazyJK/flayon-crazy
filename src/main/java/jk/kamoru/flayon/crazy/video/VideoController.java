@@ -277,6 +277,11 @@ public class VideoController extends CrazyController {
 	public String searchJson(Model model, @RequestParam(value="q", required=false, defaultValue="") String query) {
 		model.addAttribute("videoList", videoService.findVideoList(query));
 		model.addAttribute("historyList", videoService.findHistory(query));
+
+		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
+		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
+		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
+
         return "video/search";		
 	}
 

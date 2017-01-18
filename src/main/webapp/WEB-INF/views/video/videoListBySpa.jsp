@@ -159,6 +159,7 @@ function fnAddEventListener() {
 	
 	// re-request
 	$(".count").attr({"title": "re-request"}).on('click', function() {
+		defaultSort = 'C';
 		request();
 	});
 

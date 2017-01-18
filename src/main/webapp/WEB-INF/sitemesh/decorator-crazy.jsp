@@ -24,7 +24,7 @@
 	position: fixed;
 	background-color: white;
 	z-index: 588;
-	box-shadow: inset 0 0 10px 15px rgba(255,0,0,.5);
+	box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5);
 }
 #innerSearchPage > iframe {
 	border: 0;
@@ -304,7 +304,7 @@ function viewInnerSearchPage() {
  	<nav id="deco_nav">
 		<ul class="nav nav-pills">
 			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
-			<li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a>
+			<%-- <li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a> --%>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<%-- <li><a href="<c:url value="/video/search"/>"	><s:message code="video.search"/></a> --%>
 			<li><a onclick="viewInnerSearchPage()"	            ><s:message code="video.search"/></a>

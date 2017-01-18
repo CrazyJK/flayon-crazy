@@ -157,16 +157,48 @@ function resizeSecondDiv() {
 	$("#resultVideoDiv, #resultHistoryDiv").each(function() {
 		$(this).css("background-color", randomColor(0.3));
 	});
-
 }
+
+var moveWatchedVideo = ${MOVE_WATCHED_VIDEO};
+var deleteLowerRankVideo = ${DELETE_LOWER_RANK_VIDEO};
+var deleteLowerScoreVideo = ${DELETE_LOWER_SCORE_VIDEO};
+
+function setMoveWatchedVideo() {
+	moveWatchedVideo = !moveWatchedVideo;
+	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo);
+	$("#MOVE_WATCHED_VIDEO").html("" + moveWatchedVideo);
+}
+function setDeleteLowerRankVideo() {
+	deleteLowerRankVideo = !deleteLowerRankVideo;
+	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo);
+	$("#DELETE_LOWER_RANK_VIDEO").html("" + deleteLowerRankVideo);
+}
+function setDeleteLowerScoreVideo() {
+	deleteLowerScoreVideo = !deleteLowerScoreVideo;
+	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo);
+	$("#DELETE_LOWER_SCORE_VIDEO").html("" + deleteLowerScoreVideo);
+}
+function fnMoveWatchedVideo() {
+	actionFrame(videoPath + '/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
+}
+function fnRemoveLowerRankVideo() {
+	actionFrame(videoPath + '/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
+}
+function fnRemoveLowerScoreVideo() {
+	actionFrame(videoPath + '/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
+}
+function fnStartVideoBatch(type) {
+	actionFrame(videoPath + '/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
+}
+
 </script>
 </head>
 <body>
 <div class="container-fluid">
 
-	<div id="header_div" class="box form-inline">
+	<div id="header_div" class="box form-inline" style="padding-top:10px;">
 		<label for="query" class="title">
-			<s:message code="video.video"/> <s:message code="video.search"/>
+			<s:message code="video.search"/>
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>
 		<span id="debug"     class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -177,6 +209,29 @@ function resizeSecondDiv() {
 		</div>		
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
+		
+		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(); resizeDivHeight();">Batch▼</button>
+
+		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">
+			<hr style="margin: 3px 0;"/>
+			<button class="btn btn-xs btn-danger" onclick="fnReloadVideoSource()">Reload</button>
+			<div class="btn-group">
+				<button class="btn btn-xs btn-default" onclick="fnMoveWatchedVideo()"><s:message code="video.mng.move"/></button>
+				<button class="btn btn-xs btn-default" onclick="setMoveWatchedVideo()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>
+			</div>
+			<div class="btn-group">
+				<button class="btn btn-xs btn-default" onclick="fnRemoveLowerRankVideo()"><s:message code="video.mng.rank"/></button>
+				<button class="btn btn-xs btn-default" onclick="setDeleteLowerRankVideo()" id="DELETE_LOWER_RANK_VIDEO">${DELETE_LOWER_RANK_VIDEO}</button>
+			</div>
+			<div class="btn-group">
+				<button class="btn btn-xs btn-default" onclick="fnRemoveLowerScoreVideo()"><s:message code="video.mng.score"/></button>
+				<button class="btn btn-xs btn-default" onclick="setDeleteLowerScoreVideo()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
+			</div>
+			<div class="btn-group">
+				<button class="btn btn-xs btn-default" onclick="fnStartVideoBatch('instance')">InstanceVideoBatch</button>
+				<button class="btn btn-xs btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
+			</div>
+		</div>
 	</div>
 	
 	<div id="content_div" class="row">
