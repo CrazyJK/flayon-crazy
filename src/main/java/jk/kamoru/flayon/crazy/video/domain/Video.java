@@ -1098,7 +1098,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					logger.error("move fail", e);
 				}
 			}
-			this.setVideoFileList(null);
+			videoFileList = new ArrayList<>();
 		}
 		resetScore();
 	}

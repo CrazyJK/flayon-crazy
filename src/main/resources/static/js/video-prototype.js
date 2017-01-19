@@ -98,13 +98,13 @@ Video.prototype.play = function() {
 	$("#actionIframe").attr("src", videoPath + "/" + this.opus + "/play");
 } 
 
-Video.prototype.contains = function(query) {
-	return this.studio.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+Video.prototype.contains = function(query, isCheckedFavorite) {
+	return (isCheckedFavorite === 'true' ? this.favorite : true) 
+		&& (this.studio.name.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.opus.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.title.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.actressName.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.releaseDate.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| (query.toLowerCase().indexOf('fav') > -1 ? this.favorite : false);
+		|| this.releaseDate.toLowerCase().indexOf(query.toLowerCase()) > -1);
 }
 
 function getFilename(file) {

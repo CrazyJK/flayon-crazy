@@ -809,8 +809,9 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	public List<Video> torrent(Boolean getAllTorrents) {
 		log.info("Torrent, getAllTorrents = {}", getAllTorrents);
 		
-		List<Video> list = videoDao.getVideoList(true, false).stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
-		log.debug("  need torrent videos - {}", list.size());
+		List<Video> allInstanceList = videoDao.getVideoList(true, false);
+		List<Video> nonExistVideoList = allInstanceList.stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
+		log.debug("  need torrent videos - {}", nonExistVideoList.size());
 		
 		// CANDIDATE_PATHS에서 찾은 파일들
 		List<File> foundFiles = new ArrayList<>();
@@ -834,8 +835,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
 		log.info("Scan torrents file {}, found {}", TORRENT_PATH, foundTorrent.size());
 		
-		// matching video file
-		for (Video video : list) {
+		for (Video video : allInstanceList) {
 			// candidates
 			video.resetVideoCandidates();
 			String opus = video.getOpus().toLowerCase();
@@ -850,8 +850,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					}
 				}
 			}
+		}
+		
+		// matching video file
+		for (Video video : nonExistVideoList) {
 			// torrents
 			video.resetTorrents();
+			String opus = video.getOpus().toLowerCase();
 			for (File file : foundTorrent) {
 				if (StringUtils.contains(file.getName(), video.getOpus())) {
 					video.addTorrents(file);
@@ -877,7 +882,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		Comparator<Video> byCandidates = (v2, v1) -> Integer.compare(v1.getVideoCandidates().size(), v2.getVideoCandidates().size());
 		Comparator<Video> byTorrents = (v2, v1) -> Integer.compare(v1.getTorrents().size(), v2.getTorrents().size());
 		Comparator<Video> byOpus = (v1, v2) -> v1.getOpus().compareTo(v2.getOpus());
-		return list.stream().sorted(byCandidates.thenComparing(byTorrents).thenComparing(byOpus)).collect(Collectors.toList());
+		return nonExistVideoList.stream().sorted(byCandidates.thenComparing(byTorrents).thenComparing(byOpus)).collect(Collectors.toList());
 
 	}
 

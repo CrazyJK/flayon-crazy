@@ -107,6 +107,7 @@ var videoCount = 0;
 var withTorrent = false;
 var isShortWidth = false;
 var queryFoundCount = 0;
+var isCheckedFavorite = false;
 
 (function($) {
 	$(document).ready(function() {
@@ -134,6 +135,13 @@ function fnAddEventListener() {
 		var event = window.event || e;
 		if (event.keyCode == 13)
 			render(true);
+	});
+	
+	// favorite
+	$("#checkbox-favorite").on('click', function() {
+		if ($("input:checkbox[id='favorite']").prop("checked")) {
+			console.log("favorite", true);
+		}
 	});
 	
 	// sorting & render
@@ -175,6 +183,29 @@ function fnAddEventListener() {
 		$(e.target).removeClass("btn-default").addClass("btn-info");
 	});
 
+	// custom checkbox TODO
+	$("[role='checkbox']").css("cursor", "pointer").each(function() {
+		var value = $(this).attr("role-data");
+		if (value === 'true') {
+			$(this).removeClass("label-default").addClass("label-success").data("checked", "true");
+		}
+		else {
+			$(this).removeClass("label-success").addClass("label-default").data("checked", "false");
+		}
+	}).on("click", function() {
+		var value = $(this).data("checked");
+		if (value === 'true') {
+			$(this).removeClass("label-success").addClass("label-default").data("checked", "false");
+		}
+		else {
+			$(this).removeClass("label-default").addClass("label-success").data("checked", "true");
+		}
+	});
+	
+	$("#favorite").on("click", function() {
+		isCheckedFavorite = $(this).data("checked");
+		render(true);
+	});
 }
 
 function request() {
@@ -186,6 +217,7 @@ function request() {
 	hadTorrentCount = 0;
 	candidateCount = 0;
 	videoCount = 0;
+	withTorrent = $("#withTorrent").is(":checked");
 	
 	$.getJSON({
 		method: 'GET',
@@ -245,10 +277,10 @@ function render(first) {
 		parentOfTableList.empty();
 		$(".more").show();
 		// found count by query
-		if (query != '') {
+		if (query != '' || isCheckedFavorite === 'true') {
 			queryFoundCount = 0;
 			for (var i=0; i<videoList.length; i++) {
-				if (videoList[i].contains(query)) {
+				if (videoList[i].contains(query, isCheckedFavorite)) {
 					queryFoundCount++;
 				}
 			}
@@ -256,8 +288,8 @@ function render(first) {
 	}
 	
 	while (entryIndex < videoList.length) {
-		if (query != '') { // query filtering
-			if (!videoList[entryIndex].contains(query)) {
+		if (query != '' || isCheckedFavorite === 'true') { // query filtering
+			if (!videoList[entryIndex].contains(query, isCheckedFavorite)) {
 				entryIndex++;
 				continue;
 			}
@@ -285,7 +317,7 @@ function render(first) {
 	if (fnIsScrollBottom()) // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
 		render();
 	
-	if (query != '') {
+	if (query != '' || isCheckedFavorite === 'true') {
 		$(".count").html(renderingCount + " / " + queryFoundCount);
 	}
 	else {
@@ -415,6 +447,7 @@ function setTblCoverPosition() {
       		<input type="checkbox" id="viewImage" name="viewImage" checked="checked" class="sr-only">
       		<span class="label label-success" id="checkbox-viewImage">Image</span>
       	</label>
+   		<span class="label label-default" id="favorite" role="checkbox" role-data="false">Favorite</span>
       	<span class="label label-danger status"></span>
       	
       	<div class="float-right">
