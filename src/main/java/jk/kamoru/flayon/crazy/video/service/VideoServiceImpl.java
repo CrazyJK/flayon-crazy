@@ -49,6 +49,7 @@ import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
+import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
 import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
@@ -153,6 +154,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			throw new VideoException(video, "No arguments for " + action);
 		
 		Utils.exec(ArrayUtils.addAll(new String[]{command}, argumentsArray));
+		
+		NotiQueue.pushNoti(action.toString() + " " + video.getOpus());
 	}
 
 	/* (non-Javadoc)
@@ -1459,6 +1462,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			}
 		}
 		log.info("saveCover {} completed", foundCount);
+		
+		NotiQueue.pushNoti("saveCover " + foundCount);
 	}
 
 	@Override

@@ -41,6 +41,7 @@ import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
+import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
@@ -776,5 +777,10 @@ public class VideoController extends CrazyController {
 		else
 			throw new VideoException("unknown videobatch type : " + type);
 	}
-	
+
+	@RequestMapping("/ping")
+	public void ping(Model model) {
+		model.addAttribute("noti", NotiQueue.getNoti());
+	}
+
 }

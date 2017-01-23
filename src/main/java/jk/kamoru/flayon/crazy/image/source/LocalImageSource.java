@@ -19,6 +19,7 @@ import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.IMAGE;
 import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.domain.Image;
+import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 
 /**
  * Implementation of {@link ImageSource}
@@ -59,6 +60,8 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 			}
 		});
 		loading = false;
+		
+		NotiQueue.pushNoti("Image loading " + imageList.size());
 	}
 
 	private List<Image> imageSource() {

@@ -64,6 +64,7 @@ var bgImageChange;
 var listViewType;
 var windowWidth = 0;
 var windowHeight = 0;
+var pingInterval = 5000;
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -153,6 +154,29 @@ $(document).ready(function() {
 
 	loading(false);
 
+	setInterval(() => {
+		$.getJSON({
+			method: 'GET',
+			url: '/video/ping.json',
+			data: {},
+			cache: false
+		}).done(function(data) {
+			if (data.exception) {
+				console.log("ping : error", data.exception.message);
+			}
+			else {
+				if (data.noti.length > 0) {
+					$(".noti").show().html(data.noti).fadeOut(5000);
+					console.log("ping : ", data.noti);
+				}
+			}
+		}).fail(function(jqxhr, textStatus, error) {
+			console.log("ping : fail", textStatus + ", " + error);
+		}).always(function() {
+			//console.log("ping.json", new Date());
+		});	
+	}, pingInterval);
+	
 });
 
 /**
@@ -303,6 +327,7 @@ function viewInnerSearchPage() {
 
  	<nav id="deco_nav">
 		<ul class="nav nav-pills">
+			<li><a class="noti text-danger"></a></li>
 			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
 			<%-- <li><a onclick="fnReloadVideoSource()" 	       		><s:message code="video.reload.title"/></a> --%>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>

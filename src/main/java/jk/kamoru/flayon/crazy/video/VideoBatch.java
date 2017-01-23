@@ -22,6 +22,7 @@ import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
+import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 import jk.kamoru.flayon.crazy.video.util.ZipUtils;
 
 @Component
@@ -102,6 +103,8 @@ public class VideoBatch extends CrazyProperties {
 		videoService.reload(stopWatch);
 
 		logger.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
+		
+		NotiQueue.pushNoti("Instance VideoBatch end");
 	}
 
 	// cron every 2h 13m
@@ -115,6 +118,8 @@ public class VideoBatch extends CrazyProperties {
 		videoService.reloadArchive();
 
 		logger.info("BATCH Archive VideoSource END");
+
+		NotiQueue.pushNoti("Archive VideoBatch end");
 	}
 
 	// fixedDelay per 1 min
@@ -169,6 +174,8 @@ public class VideoBatch extends CrazyProperties {
 	public synchronized void deletEmptyFolder() {
 		logger.info("BATCH - delete empty folder");
 		videoService.deletEmptyFolder();
+
+		NotiQueue.pushNoti("Delete empty folder end");
 	}
 	
 	// fixedRate per day
@@ -252,5 +259,6 @@ public class VideoBatch extends CrazyProperties {
 			logger.error("BATCH - tag file backup fail", e);
 		}
 		
+		NotiQueue.pushNoti("Backup completed");
 	}
 }
