@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import jk.kamoru.flayon.boot.security.FlayOnUser;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;
@@ -779,8 +781,8 @@ public class VideoController extends CrazyController {
 	}
 
 	@RequestMapping("/ping")
-	public void ping(Model model) {
-		model.addAttribute("noti", NotiQueue.getNoti());
+	public void ping(Model model, @AuthenticationPrincipal FlayOnUser flayonUser) {
+		model.addAttribute("noti", NotiQueue.getNoti(flayonUser.getUser().getId()));
 	}
 
 }
