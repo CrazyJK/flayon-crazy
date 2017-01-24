@@ -154,28 +154,30 @@ $(document).ready(function() {
 
 	loading(false);
 
-	setInterval(() => {
-		$.getJSON({
-			method: 'GET',
-			url: '/video/ping.json',
-			data: {},
-			cache: false
-		}).done(function(data) {
-			if (data.exception) {
-				console.log("ping : error", data.exception.message);
-			}
-			else {
-				if (data.noti.length > 0) {
-					$(".noti").show().html(data.noti).fadeOut(5000);
-					console.log("ping : ", data.noti);
+	if (locationPathname != '/video/search') {
+		setInterval(() => {
+			$.getJSON({
+				method: 'GET',
+				url: '/video/ping.json',
+				data: {},
+				cache: false
+			}).done(function(data) {
+				if (data.exception) {
+					console.log("ping : error", data.exception.message);
 				}
-			}
-		}).fail(function(jqxhr, textStatus, error) {
-			console.log("ping : fail", textStatus + ", " + error);
-		}).always(function() {
-			//console.log("ping.json", new Date());
-		});	
-	}, pingInterval);
+				else {
+					if (data.noti.length > 0) {
+						$(".noti").html(data.noti).show().fadeOut(pingInterval);
+						console.log("ping : ", data.noti);
+					}
+				}
+			}).fail(function(jqxhr, textStatus, error) {
+				console.log("ping : fail", textStatus + ", " + error);
+			}).always(function() {
+				//console.log("ping.json", new Date());
+			});	
+		}, pingInterval);
+	}
 	
 });
 
