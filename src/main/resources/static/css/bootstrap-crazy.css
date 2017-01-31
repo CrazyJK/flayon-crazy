@@ -81,7 +81,7 @@ label.title {
 .table > tfoot {
     background-color: rgba(255, 128, 0, 0.8);
 }
-.table-hover > tbody > tr:hover {
+.table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {
     background-color: rgba(255, 165, 0, 0.3);
 }
 .list-inline {

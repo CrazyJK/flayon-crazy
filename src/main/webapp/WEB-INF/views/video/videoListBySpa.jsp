@@ -29,29 +29,31 @@
 }
 */
 /* for box view */
-#box > ul {
+#box>ul {
 	padding: 3px 6px;
 	text-align: center;
 }
-#box > ul > li > dl {
+
+#box>ul>li>dl {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	transition: all 0.3s;	
-
+	transition: all 0.3s;
 	margin: 5px;
 	padding: 3px;
 	width: 285px;
 	height: 210px;
 	border-radius: 10px;
 	text-align: left;
-	box-shadow: 0 3px 9px rgba(0,0,0,.5);
+	box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
-#box > ul > li > dl:hover {
-	transform:scale(1.1, 1.1);
+
+#box>ul>li>dl:hover {
+	transform: scale(1.1, 1.1);
 	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5);
 }
-#box > ul > li > dl > dt.nowrap.text-center {
+
+#box>ul>li>dl>dt.nowrap.text-center {
 	width: 97%;
 }
 
@@ -59,15 +61,19 @@
 .found {
 	background-color: rgba(73, 153, 108, 0.5);
 }
+
 .moved {
 	background-color: rgba(206, 55, 145, 0.5);
 }
+
 .nonExist {
 	background-color: rgba(74, 60, 60, 0.3);;
 }
+
 .more {
 	display: none;
 }
+
 .search {
 	/* width: 104px; */
 	padding-bottom: 0px;
@@ -79,8 +85,11 @@
 	/* bottom: 20px;
 	left: 20px; */
 	width: 600px;
-	box-shadow: 0 0 6px rgba(255,0,0,1);
+	box-shadow: 0 0 6px rgba(255, 0, 0, 1);
 	transition: all .2s ease-in-out;
+}
+.trFocus {
+	background-color: rgba(255, 165, 0, 0.3);
 }
 </style>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
@@ -108,6 +117,8 @@ var withTorrent = false;
 var isShortWidth = false;
 var queryFoundCount = 0;
 var isCheckedFavorite = false;
+var currentView = '#box';
+var currentVideoNo = -1;
 
 (function($) {
 	$(document).ready(function() {
@@ -148,7 +159,7 @@ function fnAddEventListener() {
 	$(".btn-group-sort").children().on('click', function() {
 		$(this).parent().children().each(function() {
 			var sort = $(this).data("sort");
-			$(this).removeClass("btn-success").addClass("btn-default").attr({"title": sort.name}).html(sort.code);
+			$(this).removeClass("btn-success").addClass("btn-default").attr({"title": sort.name}).html(sort.code).css({"border-color": "#3e8f3e"});
 		});
 		var sort = $(this).data('sort');
 		if (currSort === sort.code) // 같은 정렬
@@ -179,11 +190,14 @@ function fnAddEventListener() {
 
 	// tab event
 	$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default");
+		$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default").css({"border-color": "#28a4c9"});
 		$(e.target).removeClass("btn-default").addClass("btn-info");
+		currentView = $(e.target).attr("href");
 	});
+	$(currentView).addClass("in active");
+	$('button[href="' + currentView + '"]').click();
 
-	// custom checkbox TODO
+	// custom checkbox
 	$("[role='checkbox']").css("cursor", "pointer").each(function() {
 		var value = $(this).attr("role-data");
 		if (value === 'true') {
@@ -201,11 +215,48 @@ function fnAddEventListener() {
 			$(this).removeClass("label-default").addClass("label-success").data("checked", "true");
 		}
 	});
-	
+	// for favorite checkbox
 	$("#favorite").on("click", function() {
 		isCheckedFavorite = $(this).data("checked");
 		render(true);
 	});
+	
+	$(window).on('keyup', function(e) {
+		if (currentView === '#table') {
+			if (e.keyCode == 38) { // up key
+				if (currentVideoNo > -1)
+					currentVideoNo--;
+			} else if (e.keyCode == 40) { // down key
+				if (currentVideoNo < renderingCount - 1)
+					currentVideoNo++;
+			} else {
+				// nothing			
+			}
+			if (e.keyCode == 38 || e.keyCode == 40) {
+				showCover(true);
+			}
+		}
+	});
+	
+}
+
+function showCover(isKey) {
+//	console.log("currentVideoNo", currentVideoNo);
+	if ($("input:checkbox[id='viewImage']").prop("checked")) {
+
+		$(".trFocus").removeClass("trFocus").find("img").hide();
+	
+		if (currentVideoNo > -1) {
+			var thisTr = $("tr[data-no='" + currentVideoNo + "']");
+			var imgTop = $(thisTr).offset().top + 40;
+			thisTr.addClass("trFocus").find("img").css({"top": imgTop}).show();
+			
+			if (isKey) {
+				console.log("curr scrollTop", $("#content_div").scrollTop(), "next scrollTop", currentVideoNo * 30, "imgTop", imgTop);
+				$("#content_div").scrollTop(currentVideoNo * 30);
+			}
+		}
+	}
 }
 
 function request() {
@@ -240,10 +291,9 @@ function request() {
 					videoCount++;
 				videoList.push(new Video(i, row));
 			});
-			$(".candidate").html("Candidate " + candidateCount);
-			$(".torrents").html("Torrents " + hadTorrentCount);
+			$(".candidate" ).html("Candidate " + candidateCount);
+			$(".torrents"  ).html("Torrents " + hadTorrentCount);
 			$(".videoCount").html("Video " + videoCount);
-			
 
 			// 정렬하여 보여주기 => sort
 			$(".btn-group-sort").children().each(function() {
@@ -368,7 +418,23 @@ function renderBox(index, video, parent) {
 }
 
 function renderTable(index, video, parent) {
-	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx});
+	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).hover(
+			function(event) {
+				currentVideoNo = $(this).attr("data-no");
+				showCover();
+				/* 
+				if ($("input:checkbox[id='viewImage']").prop("checked")) {
+//					var imgTop = event.clientY + 40;
+					var imgTop = $(this).offset().top + 40;
+					$(this).find("img").css({"top": imgTop}).show();
+//					console.log("tr Y", $(this).offset().top);
+				} */
+			}, function(event) {
+				//$("#tbl-cover-" + video.opus).hide();
+			}
+	).focus(function() {
+		console.log("focus", $(this).attr("data-no"));
+	});
 	$('<td>').appendTo(tr).addClass("text-right").html("<span class='label label-plain'>" + (index+1) + "</span>");
 	$("<td>").appendTo(tr).html(video.html_studio);
 	$("<td>").appendTo(tr).html(video.html_opus);
@@ -378,16 +444,7 @@ function renderTable(index, video, parent) {
 		).append(
 			$("<img>").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).addClass("img-thumbnail tbl-cover").hide()
 		)
-	).css({"max-width": "300px"}).hover(
-			function(event) {
-				if ($("input:checkbox[id='viewImage']").prop("checked")) {
-					var imgTop = event.clientY + 40;
-					$(this).find("img").css({"top": imgTop}).show();
-				}
-			}, function(event) {
-				$("#tbl-cover-" + video.opus).hide();
-			}
-	);
+	).css({"max-width": "300px"});
 	$("<td>").appendTo(tr).html(video.html_actress).css({"max-width": "100px"}).attr({"title": video.actressName});
 	$("<td>").appendTo(tr).html(video.html_release).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
 	$("<td>").appendTo(tr).html(video.html_video);
@@ -475,8 +532,8 @@ function setTblCoverPosition() {
 			<section id="box" class="tab-pane fade">
 				<ul class="list-group list-inline vbox"></ul>
 			</section>
-			<section id="table" class="tab-pane fade in active table-responsive">
-				<table class="table table-condensed table-hover table-bordered">
+			<section id="table" class="tab-pane fade table-responsive">
+				<table class="table table-condensed table-hover table-bordered" style="margin-bottom:0;">
 					<tbody></tbody>
 				</table>
 			</section>

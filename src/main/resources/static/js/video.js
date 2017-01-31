@@ -13,7 +13,7 @@ function resizeDivHeight() {
 	
 	windowWidth  = $(window).width();
 	$("#innerSearchPage").css({
-		"left": "0px", "top": "20px", "width": windowWidth - offsetMargin, "height": windowHeight - (offsetMargin * 2)
+		"left": "0px", "top": "20px", "width": windowWidth - offsetMargin*2, "height": windowHeight - (offsetMargin * 3)
 	});
 
 	

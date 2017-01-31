@@ -24,7 +24,9 @@
 	position: fixed;
 	background-color: white;
 	z-index: 588;
-	box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5);
+	padding: 5px;
+	margin: 20px;
+	/* box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5); */
 }
 #innerSearchPage > iframe {
 	border: 0;
@@ -305,7 +307,7 @@ function viewInnerSearchPage() {
 		$("#innerSearchPage > iframe").attr({"src": "<c:url value="/video/search"/>"});
 		isLoadedSearchPage = true;
 	}
-	$("#innerSearchPage").toggle();
+	$("#innerSearchPage").css({"box-shadow": "0 0 15px 10px " + randomColor(0.5)}).toggle();
 	
 }
 </script>
