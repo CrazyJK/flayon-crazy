@@ -56,7 +56,14 @@ $(document).ready(function() {
 	</div>
 
 	<c:if test="${status ne 404}">
-
+	<div class="text-right">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
+	</div>
+	<div id="webContext" class="collapse">
+	<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
+	</div>
+	
+<%-- 
 		<nav class="navbar navbar-default" data-spy="affix" data-offset-top="50">
 	  		<div class="container">
 	    		<div class="navbar-header">
@@ -191,7 +198,7 @@ $(document).ready(function() {
 		<script type="text/javascript">
 	//	$(".panel-heading").hide();
 		</script>
-
+ --%>
 	</c:if>
 
 </body>

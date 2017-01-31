@@ -1313,9 +1313,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Override
 	public List<VTag> getTagListWithVideo() {
 		List<VTag> allTags = tagDao.findAll();
+		List<Video> videoList = videoDao.getVideoList(true, false);
 		for (VTag vTag : allTags) {
 			vTag.getVideoList().clear();
-			for (Video video : videoDao.getVideoList(true, false)) {
+			for (Video video : videoList) {
 				if (video.getTags() == null)
 					continue;
 				if (video.getTags().contains(vTag)) {

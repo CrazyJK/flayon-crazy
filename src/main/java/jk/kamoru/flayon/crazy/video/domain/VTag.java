@@ -8,12 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.crazy.CrazyException;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class VTag {
 
@@ -22,11 +18,31 @@ public class VTag {
 	String description;
 	
 	@JsonIgnore
-	List<Video> videoList = new ArrayList<>();
+	List<Video> videoList;
 
+	public VTag() {
+		videoList = new ArrayList<>();
+	}
+
+	public VTag(Integer id, String name, String description, List<Video> videoList) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		if (videoList == null)
+			videoList = new ArrayList<>();
+		else
+			this.videoList = videoList;
+	}
+	
 	public void addVideo(Video video) {
 		if (!videoList.contains(video))
 			videoList.add(video);
+	}
+
+	public void validation() {
+		if (id == null || StringUtils.isBlank(name))
+			throw new CrazyException("Fail to valid. id or name is blank " + this);
 	}
 
 	@Override
@@ -52,11 +68,6 @@ public class VTag {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
-	}
-
-	public void validation() {
-		if (id == null || StringUtils.isBlank(name))
-			throw new CrazyException("Fail to valid. id or name is blank " + this);
 	}
 
 }
