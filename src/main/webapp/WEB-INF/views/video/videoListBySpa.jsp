@@ -48,9 +48,10 @@
 	box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 
-#box>ul>li>dl:hover {
+/* #box>ul>li>dl:hover { */
+.box-hover {
 	transform: scale(1.1, 1.1);
-	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5);
+	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
 }
 
 #box>ul>li>dl>dt.nowrap.text-center {
@@ -193,6 +194,16 @@ function fnAddEventListener() {
 		$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default").css({"border-color": "#28a4c9"});
 		$(e.target).removeClass("btn-default").addClass("btn-info");
 		currentView = $(e.target).attr("href");
+		if (currentView === '#box') { 	// for box
+			$("#magnify").show();
+			$("#image").hide();
+			$("#torrent").hide();
+		}
+		else {							// for table
+			$("#magnify").hide();
+			$("#image").show();
+			$("#torrent").show();
+		}
 	});
 	$(currentView).addClass("in active");
 	$('button[href="' + currentView + '"]').click();
@@ -247,14 +258,14 @@ function showCover(isKey) {
 		$(".trFocus").removeClass("trFocus").find("img").hide();
 	
 		if (currentVideoNo > -1) {
+			if (isKey) {
+				// console.log("curr scrollTop", $("#content_div").scrollTop(), "next scrollTop", currentVideoNo * 30, "imgTop", imgTop);
+				$("#content_div").scrollTop(currentVideoNo * 30);
+			}
+
 			var thisTr = $("tr[data-no='" + currentVideoNo + "']");
 			var imgTop = $(thisTr).offset().top + 40;
 			thisTr.addClass("trFocus").find("img").css({"top": imgTop}).show();
-			
-			if (isKey) {
-				console.log("curr scrollTop", $("#content_div").scrollTop(), "next scrollTop", currentVideoNo * 30, "imgTop", imgTop);
-				$("#content_div").scrollTop(currentVideoNo * 30);
-			}
 		}
 	}
 }
@@ -346,8 +357,8 @@ function render(first) {
 		}
 		
 		if (displayCount < pageSize) { // render html
-			renderBox(entryIndex, videoList[entryIndex], parentOfVideoBox);
-			renderTable(entryIndex, videoList[entryIndex], parentOfTableList);
+			renderBox(renderingCount, videoList[entryIndex], parentOfVideoBox);
+			renderTable(renderingCount, videoList[entryIndex], parentOfTableList);
 
 			renderingCount++; 	// 화면에 보여준 개수
 			displayCount++;		// 이번 메서드에서 보여준 개수
@@ -403,7 +414,15 @@ function showStatus(show, msg, isError) {
 }
 
 function renderBox(index, video, parent) {
-	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover");
+	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover").hover(function(event) {
+		if ($("#magnify").data("checked") === "true") {
+			$(this).addClass("box-hover");
+		}
+	}, function() {
+		if ($("#magnify").data("checked") === "true") {
+			$(this).removeClass("box-hover");
+		}
+	});
 	$("<dt>").appendTo(dl).html(video.html_title).addClass("nowrap text-center");
 	$("<dd>").appendTo(dl).html(video.html_studio);
 	$("<dd>").appendTo(dl).html(video.html_opus);
@@ -496,15 +515,16 @@ function setTblCoverPosition() {
 	<div id="header_div" class="box form-inline">
    		<input class="form-control input-sm search" placeholder="Search...">
 		<span class="label label-info count">Initialize...</span>
-		<label>
+		<label id="torrent">
 			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only">
-			<span class="label label-default" id="checkbox-withTorrent" data-toggle=".extraInfo">Extra info</span>
+			<span class="label label-default" id="checkbox-withTorrent" data-toggle=".extraInfo">Extra</span>
 		</label>
-     	<label>
+     	<label id="image">
       		<input type="checkbox" id="viewImage" name="viewImage" checked="checked" class="sr-only">
       		<span class="label label-success" id="checkbox-viewImage">Image</span>
       	</label>
    		<span class="label label-default" id="favorite" role="checkbox" role-data="false">Favorite</span>
+   		<span class="label label-default" id="magnify"  role="checkbox" role-data="false">Magnify</span>
       	<span class="label label-danger status"></span>
       	
       	<div class="float-right">
