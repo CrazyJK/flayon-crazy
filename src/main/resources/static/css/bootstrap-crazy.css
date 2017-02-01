@@ -68,6 +68,9 @@ label.title {
 	font-size: 12px;
 	text-align: right;
 }
+.pointer {
+	cursor: pointer;
+}
 
 /* bootstrap override */
 .table {

@@ -265,7 +265,7 @@ function fnRandomImageView() {
 }
 function fnDisplayThumbnail() {
 	var windowWidth = $(window).width();
-	var thumbnailRange = parseInt(windowWidth / 200 / 2);
+	var thumbnailRange = parseInt(windowWidth / (200 * 2));
 	$("#thumbnailUL").empty();
 	for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
 		var thumbNo = current;
@@ -285,6 +285,7 @@ function fnPlayImage() {
 	if (playSlide) {
 		playSlide = false;
 		showTimer(playInterval);
+		fnDisplayThumbnail();
 		$("#timer").html("Random Play");
 	}
 	else {

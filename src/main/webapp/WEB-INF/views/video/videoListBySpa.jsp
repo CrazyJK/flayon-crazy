@@ -76,7 +76,7 @@
 }
 
 .search {
-	/* width: 104px; */
+	width: 104px !important;
 	padding-bottom: 0px;
 }
 /* for table view */
@@ -183,25 +183,26 @@ function fnAddEventListener() {
 		request();
 	});
 
-	// image click
-	$("#cover").on("click", function() {
+	// cover click
+/* 	$("#cover").on("click", function() {
 		$("#checkbox-viewImage").click();
 		$(this).hide();
 	}).css({"cursor": "pointer"});
+ */
 
-	// tab event
+ 	// tab event
 	$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$('button[data-toggle="tab"]').removeClass("btn-info").addClass("btn-default").css({"border-color": "#28a4c9"});
 		$(e.target).removeClass("btn-default").addClass("btn-info");
 		currentView = $(e.target).attr("href");
 		if (currentView === '#box') { 	// for box
 			$("#magnify").show();
-			$("#image").hide();
+			$("#cover").hide();
 			$("#torrent").hide();
 		}
 		else {							// for table
 			$("#magnify").hide();
-			$("#image").show();
+			$("#cover").show();
 			$("#torrent").show();
 		}
 	});
@@ -231,6 +232,25 @@ function fnAddEventListener() {
 		isCheckedFavorite = $(this).data("checked");
 		render(true);
 	});
+	// for cover checkbox
+	$("#cover").on("click", function() {
+		if ($(this).data("checked") === 'true') {
+			showCover();
+		}
+		else {
+			$(".trFocus").removeClass("trFocus").find("img").hide();
+		}
+	});
+	// for torrent checkbox
+	$("#torrent").on("click", function() {
+		console.log("torrent", $(this).data("checked"));
+		if ($(this).data("checked") === 'true') {
+			$(".torrent").removeClass("hide");
+		}
+		else {
+			$(".torrent").addClass("hide");
+		}
+	});
 	
 	$(window).on('keyup', function(e) {
 		if (currentView === '#table') {
@@ -253,7 +273,7 @@ function fnAddEventListener() {
 
 function showCover(isKey) {
 //	console.log("currentVideoNo", currentVideoNo);
-	if ($("input:checkbox[id='viewImage']").prop("checked")) {
+	if ($("#cover").data("checked") === 'true') {
 
 		$(".trFocus").removeClass("trFocus").find("img").hide();
 	
@@ -279,7 +299,7 @@ function request() {
 	hadTorrentCount = 0;
 	candidateCount = 0;
 	videoCount = 0;
-	withTorrent = $("#withTorrent").is(":checked");
+	withTorrent = $("#torrent").data("checked") === 'true';
 	
 	$.getJSON({
 		method: 'GET',
@@ -302,9 +322,9 @@ function request() {
 					videoCount++;
 				videoList.push(new Video(i, row));
 			});
-			$(".candidate" ).html("Candidate " + candidateCount);
-			$(".torrents"  ).html("Torrents " + hadTorrentCount);
-			$(".videoCount").html("Video " + videoCount);
+			$(".candidate" ).html("C " + candidateCount);
+			$(".videoCount").html("V " + videoCount);
+			$("#torrent"   ).html("T " + hadTorrentCount);
 
 			// 정렬하여 보여주기 => sort
 			$(".btn-group-sort").children().each(function() {
@@ -328,7 +348,7 @@ function render(first) {
 	var query = $(".search").val();
 	var parentOfVideoBox  = $("#box > ul");
 	var parentOfTableList = $("#table > table > tbody");
-	withTorrent = $("#withTorrent").is(":checked");
+	withTorrent = $("#torrent").data("checked") === 'true';
 
 	if (first) { // initialize if first rendering 
 		entryIndex = 0;
@@ -472,7 +492,7 @@ function renderTable(index, video, parent) {
 	$("<td>").appendTo(tr).html(video.html_score).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
 	$("<td>").appendTo(tr).append(
 			$("<div>").append(video.html_videoCandidates).append(video.html_torrents).append(video.html_torrentFindBtn)
-	).addClass("extraInfo " + (withTorrent ? "" : "hide"));
+	).addClass("torrent " + (withTorrent ? "" : "hide"));
 }
 
 function fnSelectCandidateVideo(opus, idx) {
@@ -513,27 +533,23 @@ function setTblCoverPosition() {
 <div class="container-fluid" role="main">
 
 	<div id="header_div" class="box form-inline">
-   		<input class="form-control input-sm search" placeholder="Search...">
-		<span class="label label-info count">Initialize...</span>
-		<label id="torrent">
-			<input type="checkbox" id="withTorrent" name="withTorrent" class="sr-only">
-			<span class="label label-default" id="checkbox-withTorrent" data-toggle=".extraInfo">Extra</span>
-		</label>
-     	<label id="image">
-      		<input type="checkbox" id="viewImage" name="viewImage" checked="checked" class="sr-only">
-      		<span class="label label-success" id="checkbox-viewImage">Image</span>
-      	</label>
-   		<span class="label label-default" id="favorite" role="checkbox" role-data="false">Favorite</span>
-   		<span class="label label-default" id="magnify"  role="checkbox" role-data="false">Magnify</span>
+   		<input class="form-control input-sm search" placeholder="Search..."/>
+		<span class="label label-info    count pointer">Initialize...</span>
+		<span class="label label-warning videoCount" title="video count"></span>
+		<span class="label label-primary candidate" title="candidate count"></span>
+   		<span class="label label-default" id="torrent"  role="checkbox" role-data="false" title="view torrent">Torrent</span>
+   		<span class="label label-default" id="cover"    role="checkbox" role-data="false" title="view cover">Cover</span>
+   		<span class="label label-default" id="favorite" role="checkbox" role-data="false" title="only favorite">Favorite</span>
+   		<span class="label label-default" id="magnify"  role="checkbox" role-data="false" title="active magnify">Magnify</span>
       	<span class="label label-danger status"></span>
       	
       	<div class="float-right">
 			<div class="btn-group">
-		      	<button class="btn btn-xs btn-info" data-toggle="tab" href="#table">Table</button>
+		      	<button class="btn btn-xs btn-info"    data-toggle="tab" href="#table">Table</button>
 		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-sort"></div>
-			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()">All torrents</button>
+			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()" title="get all torrent">All T</button>
       	</div>
 	</div>
 	

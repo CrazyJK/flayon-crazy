@@ -52,10 +52,10 @@ function Video(idx, data) {
 	this.html_score           = wrapLabel('S ' + this.score, this.scoreDesc);
 	this.html_rank            = wrapLabel("R " + this.rank);
 	this.html_video           = wrapLabel("Video", '', this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "", this.existVideoFileList ? "exist" : "nonExist");
-	this.html_subtitles       = wrapLabel("Sub", '', this.existVideoFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
+	this.html_subtitles       = wrapLabel("Sub", '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
 	this.html_videoCandidates = this.candidatesNames();
 	this.html_torrents        = this.torrentNames();
-	this.html_torrentFindBtn  = '<button class="btn btn-xs btn-default" title="Torrent search" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</button>';
+	this.html_torrentFindBtn  = '<span class="label label-info" title="Torrent search" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</span>';
 	this.html_favorite        = this.favorite ? wrapLabel("Fav", "", "", "label-success") : "";
 
 }
@@ -70,7 +70,7 @@ Video.prototype.candidatesNames = function() {
 		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</span>';
 		html += '</form>';
 	}
-	return html + "&nbsp;";
+	return html;
 }
 
 Video.prototype.torrentNames = function() {
@@ -80,7 +80,7 @@ Video.prototype.torrentNames = function() {
 			html += "&nbsp;";
 		html += '<span class="label label-warning" onclick="goTorrentMove(\'' + this.opus + '\',' + this.idx + ')">' + getFilename(this.torrents[i]) + '</span>';
 	}
-	return html + "&nbsp;";
+	return html;
 }
 
 Video.prototype.actressHtmlNames = function() {

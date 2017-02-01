@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon-crazy.ico" />"/>
-<title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy |${profiles}|  [<%=System.getenv("COMPUTERNAME")%>]</title>
+<title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy [${profiles}] [<%=System.getenv("COMPUTERNAME")%>]</title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/video-deco.css"/>"/>
@@ -337,7 +337,6 @@ function viewInnerSearchPage() {
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.main"/></a>
 			<%-- <li><a href="<c:url value="/video/search"/>"	><s:message code="video.search"/></a> --%>
 			<li><a onclick="viewInnerSearchPage()"	            ><s:message code="video.search"/></a>
-			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
 			<%-- <li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a> --%>
 			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/></a>
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
@@ -357,6 +356,7 @@ function viewInnerSearchPage() {
 			<li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a>
 			<li><a href="<c:url value="/video/gravia"/>"		><s:message code="video.gravia"/></a>
 			<li><a href="<c:url value="/video/archive"/>"		><s:message code="video.archive"/></a>
+			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
 			<li><a href="<c:url value="/"/>"					><s:message code="default.home"/></a>
 		</ul>
 	</nav>
