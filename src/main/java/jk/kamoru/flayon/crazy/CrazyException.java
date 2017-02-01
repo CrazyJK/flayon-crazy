@@ -1,6 +1,6 @@
 package jk.kamoru.flayon.crazy;
 
-import jk.kamoru.flayon.boot.error.FlayOnException;
+import jk.kamoru.flayon.FlayOnException;
 
 public class CrazyException extends FlayOnException {
 

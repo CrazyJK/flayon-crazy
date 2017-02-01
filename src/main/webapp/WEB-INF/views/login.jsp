@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 	<div class="jumbotron">
 		<h1>
-			<b><s:message code="jk.crazy"/></b> 
+			<b>FlayOn</b> 
 			<security:authorize access="isAuthenticated()">
 				<security:authentication property="principal.username" />
 			</security:authorize>

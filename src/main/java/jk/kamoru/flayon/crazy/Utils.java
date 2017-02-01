@@ -22,7 +22,7 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Utils {
+public class Utils extends jk.kamoru.flayon.Utils {
 
 	/**
 	 * 파일의 확장자를 구한다.

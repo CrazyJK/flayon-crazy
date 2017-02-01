@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.boot.security.FlayOnUser;
+import jk.kamoru.flayon.base.security.FlayOnUser;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;

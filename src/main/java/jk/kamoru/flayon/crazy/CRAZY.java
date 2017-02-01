@@ -1,10 +1,8 @@
 package jk.kamoru.flayon.crazy;
 
-import jk.kamoru.flayon.boot.FlayOnApplication;
+import jk.kamoru.flayon.FLAYON;
 
-public interface CRAZY {
-
-	public static final long SERIAL_VERSION_UID = FlayOnApplication.SERIAL_VERSION_UID;
+public interface CRAZY extends FLAYON {
 
 	public static final String SUFFIX_VIDEO = "avi,mpg,mkv,wmv,mp4,mov,rmvb";
 

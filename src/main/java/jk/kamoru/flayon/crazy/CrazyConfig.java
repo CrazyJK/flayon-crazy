@@ -6,14 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import jk.kamoru.flayon.boot.scheduling.SimpleWatchDirectory;
+import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
-import lombok.extern.slf4j.Slf4j;
 
-@Configuration
 @EnableAsync
 @EnableAspectJAutoProxy
-@Slf4j
+@Configuration
 public class CrazyConfig {
 
 	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
@@ -43,7 +41,6 @@ public class CrazyConfig {
         	 */
 			@Override
 			protected String getPath() {
-				log.debug("WatchDirectory init");
 				return instancePaths[0] + "/_info";
 			}
         	

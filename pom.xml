@@ -5,7 +5,7 @@
 	
   	<groupId>jk.kamoru</groupId>
   	<artifactId>flayon-crazy</artifactId>
-  	<version>5.8.8-1.2</version>
+  	<version>5.8.8-1.8.1</version>
   	<packaging>jar</packaging>
 
   	<name>FlayOn Crazy</name>
@@ -20,48 +20,82 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<commons-io-version>2.4</commons-io-version>
-		<commons-lang3-version>3.1</commons-lang3-version>
-		<imgscalr-lib-version>4.2</imgscalr-lib-version>
 	</properties>
 
   	<dependencies>
-
+		<!-- spring boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId><!-- mongodb -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
-          	
-  		<dependency>
-  			<groupId>jk.kamoru</groupId>
-  			<artifactId>flayon-boot</artifactId>
-  			<version>1.1.2</version>
-  		</dependency>
+ 		<dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-devtools</artifactId><!-- devtools -->
+        	<optional>true</optional>
+    	</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId><!-- security-taglibs -->
+		</dependency>  
 
+		<!-- slf4j log -->
 		<dependency>
         	<groupId>org.slf4j</groupId>
         	<artifactId>slf4j-api</artifactId>
       	</dependency>
       
-		<!-- commons io -->
+		<!-- commons -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		<!-- commons lang3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
+			<artifactId>commons-lang3</artifactId><!-- commons lang3 -->
 			<version>3.1</version>
 		</dependency>
-		<!-- commons compress -->
 		<dependency>
     		<groupId>org.apache.commons</groupId>
-    		<artifactId>commons-compress</artifactId>
+    		<artifactId>commons-compress</artifactId><!-- commons compress -->
     		<version>1.12</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId><!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId><!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+		</dependency>
+			
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		
 		<!-- image scalar -->
 		<dependency>
 			<groupId>org.imgscalr</groupId>
@@ -76,45 +110,103 @@
 			<version>1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.webjars.bower</groupId>
-			<artifactId>amcharts</artifactId>
-			<version>3.14.5</version>
-		</dependency>
-
+		<!-- json -->
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
 		    <version>1.9.2</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<!-- jackson-dataformat-xml -->
 		<dependency>
-		    <groupId>org.apache.httpcomponents</groupId>
-		    <artifactId>httpclient</artifactId>
+    		<groupId>com.fasterxml.jackson.dataformat</groupId>
+    		<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
+		<!-- torrent -->	
   		<dependency>
       		<groupId>com.turn</groupId>
       		<artifactId>ttorrent-core</artifactId>
       		<version>1.5</version>
     	</dependency>
-
+		
 		<!-- lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- H2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
- 		<dependency>
-        	<groupId>org.springframework.boot</groupId>
-        	<artifactId>spring-boot-devtools</artifactId>
-        	<optional>true</optional>
-    	</dependency>
+		<!-- webjars -->
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>jQuery</artifactId>
+		    <version>2.2.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>bootstrap</artifactId>
+		    <version>3.3.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.webjars.bower</groupId>
+    		<artifactId>angular</artifactId>
+    		<version>1.5.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.webjars.bower</groupId>
+    		<artifactId>angular-animate</artifactId>
+    		<version>1.5.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.webjars.bower</groupId>
+    		<artifactId>datatables</artifactId>
+    		<version>1.10.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>amcharts</artifactId>
+			<version>3.14.5</version>
+		</dependency>
+
+		<!-- SiteMesh 3 -->
+		<dependency>
+		    <groupId>org.sitemesh</groupId>
+		    <artifactId>sitemesh</artifactId>
+		    <version>3.0.1</version>
+		</dependency>
+		
+		<!-- JSTL -->
+  		<dependency>
+      		<groupId>javax.servlet</groupId>
+      		<artifactId>jstl</artifactId>
+  		</dependency>
+  		
+  		<!-- servlet tagsupport -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.2</version>
+		</dependency>
     	
   	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>4.4.4</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<build>
 		<finalName>flayon-crazy</finalName>
 		<plugins>

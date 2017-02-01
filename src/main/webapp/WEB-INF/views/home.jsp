@@ -85,7 +85,7 @@ function aperture($obj, imgSrc) {
 <div class="container text-center">
 	<div class="jumbotron" style="display: inline-block;">
 		<h1>
-			<b id="hello"><s:message code="jk.crazy"/></b> 
+			<b id="hello">FlayOn</b> 
 			<security:authorize access="isAuthenticated()">
 				<span id="user"><security:authentication property="principal.username" /></span>
 			</security:authorize>
