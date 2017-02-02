@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>Aperture</title>
 <style type="text/css">
-body, .label-info, .progress, .paging {
+body, .label-info, .progress, .paging, .img-circle {
 	transition: background .5s ease, background-image .5s ease;
 }
 </style>
