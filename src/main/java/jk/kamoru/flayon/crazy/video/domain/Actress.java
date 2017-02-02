@@ -51,6 +51,9 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private Boolean favorite;
 	
 	@JsonIgnore
+	private File image;
+	
+	@JsonIgnore
 	private List<Studio> studioList;
 	@JsonIgnore
 	private List<Video>   videoList;
@@ -80,6 +83,10 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public Actress(String name) {
 		this();
 		this.name = name;
+	}
+	
+	public boolean isExistImage() {
+		return image != null;
 	}
 	
 	@Override
@@ -230,6 +237,12 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 				else {
 					info = new HashMap<>();
 				}
+				// image
+				File _image = new File(getInfoFile().getParentFile(), name + ".jpg");
+				if (_image.exists()) {
+					image = _image;
+				}
+				
 				loaded = true;
 				if (log.isDebugEnabled())
 					log.debug("loadInfo : end {}", toString());

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.domain.Action;
+import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
@@ -355,6 +357,15 @@ public class VideoController extends CrazyController {
 		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), Utils.getExtension(imageFile), response, imageFile);
 	}
 
+	@RequestMapping(value="/actress/{actressName}/cover", method=RequestMethod.GET)
+	public HttpEntity<byte[]> actressImage(@PathVariable String actressName, HttpServletResponse response) throws IOException {
+		Actress actress = videoService.getActress(actressName);
+		File imageFile = actress.getImage();
+		if(imageFile == null)
+			return null;
+		return httpEntity(FileUtils.readFileToByteArray(imageFile), Utils.getExtension(imageFile), response, imageFile);
+	}
+	
 	/**
 	 * returns image entity<br>
 	 * cache time {@link VIDEO#WEBCACHETIME_SEC}, {@link VIDEO#WEBCACHETIME_MILI}

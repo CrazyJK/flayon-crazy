@@ -12,9 +12,14 @@
 #actressForm .form-control {
 	background-color: rgba(255,255,255,.75);
 }
+body {
+    background-repeat: repeat;
+    background-position: top center;
+	background-size: initial;
+}
 </style>
 <script type="text/javascript">
-//bgContinue = false;
+bgContinue = ${!actress.existImage};
 $(document).ready(function() {
 	$("form#actressForm").submit(function(event) {
 		console.log("form submit...");
@@ -27,7 +32,15 @@ $(document).ready(function() {
 			location.href = "<s:url value="/video/actress/"/>" + $("#newName").val();
 		}, 1000);
 	});
-
+	
+<c:if test="${actress.existImage}">
+	$("body").css({
+		"background-image": "url('<c:url value="/video/actress/${actress.name}/cover" />')", 
+		"background-repeat": "repeat",
+	    "background-size": "initial"
+	});	
+</c:if>
+	
 });
 </script>
 </head>
