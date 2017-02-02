@@ -211,10 +211,10 @@ function fnStartVideoBatch(type) {
 		<span id="searchURL" class="label label-primary"></span>
 		
 		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch..▼</button>
+		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
 
 		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">
 			<hr style="margin: 3px 0;"/>
-			<button class="btn btn-xs btn-danger" onclick="fnReloadVideoSource()">Reload</button>
 			<div class="btn-group">
 				<button class="btn btn-xs btn-default" onclick="fnMoveWatchedVideo()"><s:message code="video.mng.move"/></button>
 				<button class="btn btn-xs btn-default" onclick="setMoveWatchedVideo()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>

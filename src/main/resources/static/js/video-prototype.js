@@ -49,6 +49,7 @@ function Video(idx, data) {
 	this.html_opus            = wrapLabel(this.opus);
 	this.html_actress         = this.actressHtmlNames();
 	this.html_release         = wrapLabel(this.releaseDate);
+	this.html_modified        = wrapLabel(this.videoDate);
 	this.html_score           = wrapLabel('S ' + this.score, this.scoreDesc);
 	this.html_rank            = wrapLabel("R " + this.rank);
 	this.html_video           = wrapLabel("Video", '', this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "", this.existVideoFileList ? "exist" : "nonExist");
@@ -99,7 +100,7 @@ Video.prototype.play = function() {
 } 
 
 Video.prototype.contains = function(query, isCheckedFavorite) {
-	return (isCheckedFavorite === 'true' ? this.favorite : true) 
+	return (isCheckedFavorite ? this.favorite : true) 
 		&& (this.studio.name.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.opus.toLowerCase().indexOf(query.toLowerCase()) > -1
 		|| this.title.toLowerCase().indexOf(query.toLowerCase()) > -1
@@ -128,6 +129,8 @@ function videoSort(list, sort, reverse) {
 			return compareTo(video1.actress, video2.actress, reverse); 
 		case 'D':
 			return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
+		case 'M':
+			return compareTo(video1.videoDate, video2.videoDate, reverse); 
 		case 'R':
 			return compareTo(video1.rank, video2.rank, reverse); 
 		case 'SC':

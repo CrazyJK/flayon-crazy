@@ -349,7 +349,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<Video> searchVideo(VideoSearch search) {
-		log.debug("searchVideo START : {}", search);
+		log.info("searchVideo START : {}", search);
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		

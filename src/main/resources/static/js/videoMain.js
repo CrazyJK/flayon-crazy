@@ -45,4 +45,17 @@ $(document).ready(function(){
 	});
 
 	$(".nonExist").attr("onclick", "");
+	
+	/* Add listener
+	 * custom checkbox
+	 * ex) <span class="label label-default" role="checkbox" data-role-value="false">Favorite</span> 
+	 * */
+	$("[role='checkbox']").each(function() {
+		var checked = $(this).attr("data-role-value") === 'true';
+		$(this).addClass('pointer').toggleClass("label-success", checked).data("checked", checked);
+	}).on("click", function() {
+		var checked = $(this).data("checked");
+		$(this).toggleClass("label-success", !checked).data("checked", !checked);
+	});
+
 });

@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title><s:message code="image.image-viewer"/></title>
 <style type="text/css">
+body, #navDiv, #imageDiv, #thumbnailDiv, .img-thumbnail, .active {
+	overflow: hidden;
+}
 #navDiv {
 	position:absolute; 
 	left:0px; 
@@ -48,6 +51,11 @@
 body, .label-info, .progress, .paging {
 	transition: background .5s ease, background-image .5s ease;
 }
+.effectInfo {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -61,8 +69,15 @@ var imageMap;
 var playSlide = false;
 var playInterval = 10;
 var playSec = playInterval;
+var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
+var hideEffect;
+var hideDuration;
+var showEffect;
+var showDuration;
 
-$(document).ready(function(){
+$(document).ready(function() {
+	
+	setNextEffect();
 	
 	$.getJSON(imagepath + "data.json" ,function(data) {
 		selectedNumber = data['selectedNumber'];
@@ -172,18 +187,34 @@ function resizeImage() {
 	}
 }
 
+function setNextEffect() {
+	hideEffect   = effects[Math.floor(Math.random() * effects.length)];
+	hideDuration = Math.floor(Math.random() * 1000);
+	showEffect   = effects[Math.floor(Math.random() * effects.length)];
+	showDuration = Math.floor(Math.random() * 2000);
+	$(".effectInfo").html("hide: " + hideEffect + "(" + hideDuration + "), show: " + showEffect + "(" + showDuration + ")");
+}
+
 function fnViewImage(current) {
 	var prevNumber = selectedNumber;
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 	
+	$("#imageDiv").hide(hideEffect, [], hideDuration, function() {
+		$(this).css("background-image", "url('" + selectedImgUrl + "')").show(showEffect, [], showDuration);
+		setNextEffect();
+	});
+	if (!playSlide) {
+		fnDisplayThumbnail();
+	}
+/* 
 	var imageDiv = $("#imageDiv");
 	if (playSlide) {
 		var rNoP = Math.floor(Math.random() * 3);
 		var iNoP = Math.floor(Math.random() * 1000);
 		var rNoN = Math.floor(Math.random() * 3);
 		var iNoN = Math.floor(Math.random() * 1000);
-//		console.log("rNoP", rNoP, "iNoP", iNoP, "rNoN", rNoN, "iNoN", iNoN);
+
 		switch (rNoP) { // hide prev image
 		case 0:
 			imageDiv.fadeOut(iNoP, function() {
@@ -218,10 +249,6 @@ function fnViewImage(current) {
 			imageDiv.hide(300, function() {
 				$(this).css("background-image", "url('" + selectedImgUrl + "')");
 			});
-//			imageDiv.slideUp("slow", function() {
-//				$(this).css("background-image", "url('" + selectedImgUrl + "')");
-//			});
-//			imageDiv.slideDown("slow");
 			imageDiv.fadeIn("slow");
 		}
 		else { // move backward
@@ -230,14 +257,14 @@ function fnViewImage(current) {
 			});
 			imageDiv.show(300);
 		}
-		//console.log("fnViewImage");
 		fnDisplayThumbnail();
 	}
+ */		
 
 	$("#leftNo").html(getPrevNumber());
 	$("#currNo").html(selectedNumber);
 	$("#rightNo").html(getNextNumber());
-	$("#imageTitle").html(imageMap[selectedNumber]);
+	$(".title").html(imageMap[selectedNumber]);
 }
 function fnFullyImageView() {
 	popupImage(selectedImgUrl);
@@ -281,7 +308,6 @@ function fnDisplayThumbnail() {
 	}
 }
 function fnPlayImage() {
-//	$(".container-fluid").css({'opacity':0});
 	if (playSlide) {
 		playSlide = false;
 		showTimer(playInterval);
@@ -291,7 +317,6 @@ function fnPlayImage() {
 	else {
 		playSlide = true;
 	}
-//	$(".container-fluid").css({'opacity':1});
 }
 function showTimer(sec) {
 	$("#timer").html(sec + "s");
@@ -309,7 +334,8 @@ function showTimer(sec) {
 	<span class="label label-info paging"><span id="currNo"></span></span>
 	<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
 	<span class="label label-info paging" onclick="fnEndImageView();"><span id="endNo"></span></span>
-	<span class="label label-info" id="imageTitle" onclick="fnFullyImageView();"></span>
+	<span class="label label-info title"  onclick="fnFullyImageView();"></span>
+	<span class="label label-info effectInfo" title="Next effect"></span>
 
 	<div class="progress" style="width: 100px; margin: 5px 0px; z-index: 18;" onclick="fnPlayImage();">
   		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10"

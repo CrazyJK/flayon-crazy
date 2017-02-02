@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.css"/>"/>
 <style type="text/css">
 #innerSearchPage {
 	display: none;
@@ -46,6 +47,7 @@
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
 <script type="text/javascript">
 var context = '<c:url value="/"/>';
 var videoPath = '<c:url value="/video"/>';

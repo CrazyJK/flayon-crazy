@@ -53,10 +53,12 @@ label.title {
 }
 
 .float-left {
-	float: left;
+	float: left !important;
+	margin: 0 2px;
 }
 .float-right {
 	float: right !important;
+	margin: 0 2px;
 }
 .text-red {
 	color: red;
@@ -84,7 +86,8 @@ label.title {
 .table > tfoot {
     background-color: rgba(255, 128, 0, 0.8);
 }
-.table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {
+.table-hover > tbody > tr:hover, 
+.table-hover > tbody > tr:focus {
     background-color: rgba(255, 165, 0, 0.3);
 }
 .list-inline {
@@ -141,5 +144,3 @@ select.input-sm, .input-sm {
 	border-radius: 4px;
 	word-wrap: break-word;
 }
-
-

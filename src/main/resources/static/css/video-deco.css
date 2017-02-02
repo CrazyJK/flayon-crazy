@@ -3,6 +3,7 @@ body {
 	background-color: rgba(255, 255, 255, 0);
 	background-position: center center;
 	background-size: contain;
+	background-repeat: no-repeat;
 	transition: background .5s ease, background-image .5s ease;
 }
 [onclick], [ng-click] {

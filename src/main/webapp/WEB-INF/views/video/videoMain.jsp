@@ -154,7 +154,7 @@ listViewType = '${videoSearch.listViewType}';
 		<c:when test="${videoSearch.listViewType eq 'IH'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
-				<li style="padding: 5px 5px;">
+				<li style="padding: 5px 5px; display: inline-block;">
 					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom video-box-bg" style="width:400px; height:270px;"><a href="#">
 	        			<div class="img"><img src="<c:url value="/video/${video.opus}/cover" />" alt="img"></div>
 	        			<div class="info">
@@ -409,7 +409,7 @@ listViewType = '${videoSearch.listViewType}';
 			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'A'}">
-			<ol class="list-inline text-center">
+			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
 				<li style="padding: 10px;">
 					<div id="aperture_${video.opus}" style="width:200px; height: 137px;"></div>
@@ -428,7 +428,7 @@ listViewType = '${videoSearch.listViewType}';
 				});
 				</script>
 				</c:forEach>
-			</ol>
+			</ul>
 		</c:when>
 		<c:otherwise>
 			<div class="">

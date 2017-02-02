@@ -1128,18 +1128,35 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 	
 	public boolean match(VideoSearch search) {
-		if ((matchStudio(search.getSearchText()) || 
-			 matchOpus(search.getSearchText()) || 
-			 matchTitle(search.getSearchText()) || 
-			 matchActress(search.getSearchText()) ||
-			 matchRelease(search.getSearchText())
-			) 
+		logger.debug("match : {} Query={}, Exist={}, Favorite={}, StudioList={}, ActressList={}, Rank={}, Play={}, Tag={}", opus, 
+				matchQuery(search.getSearchText()),
+				matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover()),
+				matchFavorite(search.isFavorite()),
+				matchStudioList(search.getSelectedStudio()),
+				matchActressList(search.getSelectedActress()),
+				matchRank(search.getRankRange()),
+				matchPlay(search.getPlayCount()),
+				matchTag(search.getSelectedTag()));
+		
+		if (matchQuery(search.getSearchText())
 			&& matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover())
 			&& matchFavorite(search.isFavorite())
 			&& matchStudioList(search.getSelectedStudio())
 			&& matchActressList(search.getSelectedActress())
 			&& matchRank(search.getRankRange())
 			&& matchPlay(search.getPlayCount())
+			&& matchTag(search.getSelectedTag())
+			) {
+			setSortMethod(search.getSortMethod());
+			return true;
+		}
+		return false;
+	}
+
+	public boolean matchArchive(VideoSearch search) {
+		if (matchQuery(search.getSearchText()) 
+			&& matchStudioList(search.getSelectedStudio())
+			&& matchActressList(search.getSelectedActress())
 			&& matchTag(search.getSelectedTag())
 			) {
 			setSortMethod(search.getSortMethod());
@@ -1160,24 +1177,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			return true;
 	}
 
-	public boolean matchArchive(VideoSearch search) {
-		if ((matchStudio(search.getSearchText()) 
-				|| matchOpus(search.getSearchText()) 
-				|| matchTitle(search.getSearchText()) 
-				|| matchActress(search.getSearchText())
-				|| matchRelease(search.getSearchText())) 
-			&& matchStudioList(search.getSelectedStudio())
-			&& matchActressList(search.getSelectedActress())
-			&& matchTag(search.getSelectedTag())
-			) {
-			setSortMethod(search.getSortMethod());
-			return true;
-		}
-		return false;
-	}
-
 	private boolean matchTag(List<String> selectedTag) {
-		if (selectedTag == null)
+		if (selectedTag == null || selectedTag.size() == 0)
 			return true;
 		if (getTags() == null)
 			return false;
@@ -1193,7 +1194,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean matchActressList(List<String> selectedActress) {
-		return selectedActress == null ? true : selectedActress.stream().anyMatch(s -> equalsActress(s));
+		return selectedActress == null || selectedActress.size() == 0 ? true : selectedActress.stream().anyMatch(s -> equalsActress(s));
 	}
 
 	private boolean equalsActress(String actressName) {
@@ -1201,7 +1202,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean matchStudioList(List<String> selectedStudio) {
-		return selectedStudio == null ? true : selectedStudio.contains(studio.getName());
+		return selectedStudio == null || selectedStudio.size() == 0 ? true : selectedStudio.contains(studio.getName());
 	}
 
 	private boolean matchExist(boolean existVideo, boolean existSubtitles, boolean existCover) {
@@ -1217,26 +1218,10 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		return (existVideo && matchVideo) || (existSubtitles && matchSubtitles) || (existCover && matchCover);
 	}
 
-	private boolean matchRelease(String searchText) {
-		return StringUtils.isBlank(searchText) || StringUtils.contains(releaseDate, searchText);
+	private boolean matchQuery(String query) {
+		return StringUtils.isBlank(query) || StringUtils.containsIgnoreCase(getFullname(), query);
 	}
-
-	private boolean matchActress(String searchText) {
-		return StringUtils.isBlank(searchText) || containsActress(searchText);
-	}
-
-	private boolean matchTitle(String searchText) {
-		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(title, searchText);
-	}
-
-	private boolean matchOpus(String searchText) {
-		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(opus, searchText);
-	}
-
-	private boolean matchStudio(String searchText) {
-		return StringUtils.isBlank(searchText) || StringUtils.containsIgnoreCase(studio.getName(), searchText);
-	}
-
+	
 	public void resetTorrents() {
 		torrents.clear();
 	}

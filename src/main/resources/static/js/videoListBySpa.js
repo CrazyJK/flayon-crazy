@@ -1,0 +1,386 @@
+/**
+ * for videoListBySpa.jsp
+ */
+
+"use strict";
+
+var lastPage = false;			// 마지막 페이지까지 다 보여줬는지
+var pageSize = 12;				// 한페이지에 보여줄 개수
+var defaultSort = 'M';			// 기본 정렬 방법
+var currSort = '';				// 현재 정렬 방법
+var reverse = true;				// 역정렬 여부
+var videoList = new Array(); 	// 비디오 배열
+var entryIndex = 0;				// 비디오 인덱스 
+var renderingCount = 0;			// 보여준 개수
+var sortList = [
+		{code: "S", name: "Studio"},  {code: "O", name: "Opus"},     {code: "T", name: "Title"}, 
+		{code: "A", name: "Actress"}, {code: "D", name: "Released"}, {code: "M", name: "Modified"}, 
+		{code: "R", name: "Rank"},    {code: "Sc", name: "Score"}, 
+		{code: "To", name: "Torrent"}, 
+//		{code: "F", name: "Favorite"}, 
+		{code: "C", name: "Candidates"}];
+var candidateCount = 0;			// candidate 파일 개수
+var hadTorrentCount = 0;		// torrent 파일 개수
+var videoCount = 0;				// video 파일 개수
+var queryFoundCount = 0;		// 검색으로 찾은 비디오 개수
+var withTorrent = false;		// table 뷰에서 torrent 정보 컬럼 보여줄지 여부 
+var currentVideoNo = -1;		// table 뷰에서 커서/키가 위치한 tr번호. 커버 보여주기 위해
+var isShortWidth = false;		// table 뷰에서 가로폭이 좁은지 여부
+var isCheckedFavorite = false;	// favorite 체크박스가 체크되어 있는지 여부
+var currentView = '#table';		// 현재 보여지고 있는 뷰
+
+(function($) {
+	$(document).ready(function() {
+		// init components
+		initComponent();
+		// add EventListener
+		fnAddEventListener();
+		// ajax data		
+		request();
+		
+	});
+}(jQuery));
+
+function initComponent() {
+	$.each(sortList, function(i, sort) {
+		$("<button>").addClass("btn btn-xs").data("sort", sort).html(sort.code).appendTo($(".btn-group-sort"));
+	});
+}
+
+function fnAddEventListener() {
+	// scroll
+	$("#content_div").scroll(function() {
+		if (fnIsScrollBottom())
+			render(false); // next page
+	});
+
+	// search	
+	$(".search").on('keyup', function(e) {
+		var event = window.event || e;
+		if (event.keyCode == 13)
+			render(true);
+	});
+	
+	// sorting & render
+	$(".btn-group-sort").children().on('click', function() {
+		$(this).parent().children().each(function() {
+			var sort = $(this).data("sort");
+			$(this).swapClass("btn-success", "btn-default", true).attr({"title": sort.name}).html(sort.code).css({"border-color": "#3e8f3e"});
+		});
+		var sort = $(this).data('sort');
+		if (currSort === sort.code) // 같은 정렬
+			reverse = !reverse;
+		else	// 다른 정렬
+			reverse = true;
+		currSort = sort.code;
+		
+		videoSort(videoList, sort.code, reverse);
+
+		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
+		$(this).swapClass("btn-default", "btn-success", true).html(sort.name + (reverse ? ' ▼' : ' ▲'));
+		
+		render(true);
+	});
+	
+	// re-request
+	$(".count").attr({"title": "re-request"}).on('click', function() {
+		defaultSort = 'C';
+		request();
+	});
+
+ 	// tab event
+	$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$('button[data-toggle="tab"]').swapClass("btn-info", "btn-default", true).css({"border-color": "#28a4c9"});
+		currentView = $(e.target).attr("href");
+		if (currentView === '#box') { 	// for box
+			$("#magnify").show();
+			$("#cover").hide();
+			$("#torrent").hide();
+		}
+		else {							// for table
+			$("#magnify").hide();
+			$("#cover").show();
+			$("#torrent").show();
+		}
+		$(e.target).swapClass("btn-default", "btn-info", true);
+	});
+	$(currentView).addClass("in active");
+	$('button[href="' + currentView + '"]').click();
+
+	// for favorite checkbox
+	$("#favorite").on("click", function() {
+		isCheckedFavorite = $(this).data("checked");
+		render(true);
+	});
+	// for cover checkbox
+	$("#cover").on("click", function() {
+		if ($(this).data("checked")) {
+			showCover();
+		}
+		else {
+			$(".trFocus").removeClass("trFocus").find("img").hide();
+		}
+	});
+	// for torrent checkbox
+	$("#torrent").on("click", function() {
+		$(".torrent").toggleClass("hide", !$(this).data("checked"));
+	});
+	
+	$(window).on('keyup', function(e) {
+		if (currentView === '#table') {
+			if (e.keyCode == 38) { // up key
+				if (currentVideoNo > -1)
+					currentVideoNo--;
+			} else if (e.keyCode == 40) { // down key
+				if (currentVideoNo < renderingCount - 1)
+					currentVideoNo++;
+			} else {
+				// nothing			
+			}
+			if (e.keyCode == 38 || e.keyCode == 40) {
+				showCover(true);
+			}
+		}
+	});
+	
+}
+
+function showCover(isKey) {
+	if ($("#cover").data("checked")) {
+		$(".trFocus").removeClass("trFocus").find("img").hide();
+		if (currentVideoNo > -1) {
+			if (isKey) {
+				$("#content_div").scrollTop(currentVideoNo * 30);
+			}
+			var thisTr = $("tr[data-no='" + currentVideoNo + "']");
+			var imgTop = $(thisTr).offset().top + 40;
+			thisTr.addClass("trFocus").find("img").css({"top": imgTop}).show();
+		}
+	}
+}
+
+function request() {
+	loading(true, "request...");
+	showStatus(true, "Request...");
+
+	// reset variables
+	reverse = !reverse;
+	hadTorrentCount = 0;
+	candidateCount = 0;
+	videoCount = 0;
+	withTorrent = $("#torrent").data("checked");
+	
+	$.getJSON({
+		method: 'GET',
+		url: '/video/list.json',
+		data: {"t": withTorrent},
+		cache: false,
+		timeout: 60000
+	}).done(function(data) {
+		if (data.exception) {
+			showStatus(true, data.exception.message, true);
+		}
+		else {
+			videoList = [];
+			$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
+				if (row.torrents.length > 0)
+					hadTorrentCount++;
+				if (row.videoCandidates.length > 0)
+					candidateCount++;
+				if (row.videoFileList.length > 0)
+					videoCount++;
+				videoList.push(new Video(i, row));
+			});
+			$(".candidate" ).html("C " + candidateCount);
+			$(".videoCount").html("V " + videoCount);
+			$("#torrent"   ).html("T " + hadTorrentCount);
+
+			// 정렬하여 보여주기 => sort
+			$(".btn-group-sort").children().each(function() {
+				var sort = $(this).data("sort");
+				if (sort.code === defaultSort) {
+					$(this).click();
+				}
+			});
+		}
+	}).fail(function(jqxhr, textStatus, error) {
+		showStatus(true, textStatus + ", " + error, true);
+	}).always(function() {
+		loading(false);
+	});	
+}
+
+function render(first) {
+	showStatus(true, "rendering...");
+	
+	var displayCount = 0;
+	var query = $(".search").val();
+	var parentOfVideoBox  = $("#box > ul");
+	var parentOfTableList = $("#table > table > tbody");
+	withTorrent = $("#torrent").data("checked");
+
+	if (first) { // initialize if first rendering 
+		entryIndex = 0;
+		renderingCount = 0;
+		lastPage = false;
+		parentOfVideoBox.empty();
+		parentOfTableList.empty();
+		$(".more").show();
+		// found count by query
+		if (query != '' || isCheckedFavorite) {
+			queryFoundCount = 0;
+			for (var i=0; i<videoList.length; i++) {
+				if (videoList[i].contains(query, isCheckedFavorite)) {
+					queryFoundCount++;
+				}
+			}
+		}
+	}
+	
+	while (entryIndex < videoList.length) {
+		if (query != '' || isCheckedFavorite) { // query filtering
+			if (!videoList[entryIndex].contains(query, isCheckedFavorite)) {
+				entryIndex++;
+				continue;
+			}
+		}
+		
+		if (displayCount < pageSize) { // render html
+			renderBox(renderingCount, videoList[entryIndex], parentOfVideoBox);
+			renderTable(renderingCount, videoList[entryIndex], parentOfTableList);
+
+			renderingCount++; 	// 화면에 보여준 개수
+			displayCount++;		// 이번 메서드에서 보여준 개수
+			entryIndex++;		// videoList의 현개 인덱스 증가
+		}
+		else {
+			break;
+		}
+	}
+
+//	console.log("render", first, displayCount, entryIndex, renderingCount, videoList.length);
+	if (entryIndex == videoList.length) { // 전부 보여주었으면
+		lastPage = true;
+		$(".more").hide();
+	}
+	
+	if (fnIsScrollBottom()) // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
+		render();
+	
+	if (query != '' || isCheckedFavorite) {
+		$(".count").html(renderingCount + " / " + queryFoundCount);
+	}
+	else {
+		$(".count").html(renderingCount + " / " + videoList.length);
+	}
+	
+	setTblCoverPosition();
+	
+	showStatus(false);
+}
+
+function fnIsScrollBottom() {
+	var containerHeight    = $("#content_div").height();
+	var containerScrollTop = $("#content_div").scrollTop();
+	var documentHeight     = $("ul.nav-tabs").height() + $("div.tab-content").height();
+	var scrollMargin       = $("p.more").height();
+//	console.log("fnIsScrollBottom", containerHeight, ' + ', containerScrollTop, ' = ', (containerHeight + containerScrollTop), ' > ', documentHeight, ' + ', scrollMargin, ' = ', (documentHeight - scrollMargin), lastPage);
+	return (containerHeight + containerScrollTop > documentHeight - scrollMargin) && !lastPage;
+}
+
+function showStatus(show, msg, isError) {
+	if (show) { // loading start
+		if (isError) {
+			$(".status").html(msg).show('pulsate', [], 500);
+		}
+		else {
+			$(".status").html(msg).show();
+		}
+	}
+	else { // loading complete
+//		$(".status").fadeOut(1500);
+		$(".status").hide('fade', [], 1500);
+	}
+}
+
+function renderBox(index, video, parent) {
+	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover").hover(function(event) {
+		if ($("#magnify").data("checked")) {
+			$(this).addClass("box-hover");
+		}
+	}, function() {
+		if ($("#magnify").data("checked")) {
+			$(this).removeClass("box-hover");
+		}
+	});
+	$("<dt>").appendTo(dl).html(video.html_title).addClass("nowrap text-center");
+	$("<dd>").appendTo(dl).html(video.html_studio);
+	$("<dd>").appendTo(dl).html(video.html_opus);
+	$("<dd>").appendTo(dl).html(video.html_actress);
+	$("<dd>").appendTo(dl).html(video.html_release);
+	$("<dd>").appendTo(dl).html(video.html_video);
+	$("<dd>").appendTo(dl).html(video.html_subtitles);
+	$("<dd>").appendTo(dl).html(video.html_videoCandidates);
+	$("<dd>").appendTo(dl).html(video.html_torrents + video.html_torrentFindBtn);
+	$("<dd>").appendTo(dl).html(video.overviewText);
+	$("<li>").append(dl).appendTo(parent).attr({"data-idx": video.idx});
+}
+
+function renderTable(index, video, parent) {
+	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).hover(
+			function(event) {
+				currentVideoNo = $(this).attr("data-no");
+				showCover();
+			}, function(event) {
+			}
+	);
+	$("<td>").appendTo(tr).addClass("text-right").html("<span class='label label-plain'>" + (index+1) + "</span>");
+	$("<td>").appendTo(tr).html(video.html_studio);
+	$("<td>").appendTo(tr).html(video.html_opus);
+	$("<td>").appendTo(tr).html(
+		$('<div>').addClass("nowrap").append(
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.title).attr({"title": video.title, "data-toggle": "tooltip"}) //.tooltip()
+		).append(
+			$("<img>").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).addClass("img-thumbnail tbl-cover").hide()
+		)
+	).css({"max-width": "300px"});
+	$("<td>").appendTo(tr).html(video.html_actress).css({"max-width": "100px"}).attr({"title": video.actressName});
+	$("<td>").appendTo(tr).html(video.html_release).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_modified).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_video);
+	$("<td>").appendTo(tr).html(video.html_subtitles).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_rank).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).html(video.html_score).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
+	$("<td>").appendTo(tr).append(
+			$("<div>").append(video.html_videoCandidates).append(video.html_torrents).append(video.html_torrentFindBtn)
+	).addClass("torrent " + (withTorrent ? "" : "hide"));
+}
+
+function fnSelectCandidateVideo(opus, idx) {
+	$(".candidate").html("Candidate " + --candidateCount);
+	$("[data-idx=" + idx + "]").hide();
+}
+function goTorrentSearch(opus, idx) {
+	$("[data-idx='" + idx + "']").addClass("found");
+	popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+	popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+}
+function goTorrentMove(opus, idx) {
+	$("[data-idx='" + idx + "']").addClass("moved");
+	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+}
+function getAllTorrents() {
+	actionFrame(videoPath + "/torrent/getAll", {}, "POST", "Torrent get all");
+}
+function resizeSecondDiv() {
+	isShortWidth = $(window).width() < 950;
+	$(".shortWidth").toggleClass("hide", isShortWidth);
+	setTblCoverPosition();
+}
+function setTblCoverPosition() {
+	var imgWidth = windowWidth / 2;
+	if (imgWidth > 800)
+		imgWidth = 800;
+	var imgLeft = windowWidth / 4;
+	$(".tbl-cover").css({"left": imgLeft, "width": imgWidth});
+}

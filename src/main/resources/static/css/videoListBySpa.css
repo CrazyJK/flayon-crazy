@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+*[onclick] {
+	cursor: pointer;
+}
+
+/* for navbar 
+.navbar {
+	border: 0;
+	padding-top: 20px;
+}
+.navbar-default {
+	background-image: linear-gradient(to bottom,#865050 0,#f8f8f8 100%);
+}
+.navbar-header {
+	padding-left: 5px;
+}
+.navbar-nav {
+	margin: 5px;
+}
+.nav-tabs > li > a {
+	padding: 5px 20px;
+}
+*/
+/* for box view */
+#box>ul {
+	padding: 3px 6px;
+	text-align: center;
+}
+
+#box>ul>li>dl {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	transition: all 0.3s;
+	margin: 5px;
+	padding: 3px;
+	width: 285px;
+	height: 210px;
+	border-radius: 10px;
+	text-align: left;
+	box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+
+/* #box>ul>li>dl:hover { */
+.box-hover {
+	transform: scale(1.1, 1.1);
+	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
+}
+
+#box>ul>li>dl>dt.nowrap.text-center {
+	width: 97%;
+}
+
+/* for logic */
+.found {
+	background-color: rgba(73, 153, 108, 0.5);
+}
+
+.moved {
+	background-color: rgba(206, 55, 145, 0.5);
+}
+
+.nonExist {
+	background-color: rgba(74, 60, 60, 0.3);;
+}
+
+.more {
+	display: none;
+}
+
+.search {
+	width: 104px !important;
+	padding-bottom: 0px;
+}
+/* for table view */
+.tbl-cover {
+	display: none;
+	position: fixed;
+	/* bottom: 20px;
+	left: 20px; */
+	width: 600px;
+	box-shadow: 0 0 6px rgba(255, 0, 0, 1);
+	transition: all .2s ease-in-out;
+}
+.trFocus {
+	background-color: rgba(255, 165, 0, 0.3);
+}
