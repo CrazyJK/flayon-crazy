@@ -209,9 +209,9 @@ function mw_image_window(img, w, h)
 
 }
 /**
- * startInt부터 range사이의 random 정수 반환
- * @param startInt
- * @param range
+ * start부터 end사이의 random 정수 반환
+ * @param start
+ * @param end
  * @returns
  */
 function getRandomInteger(start, end) {

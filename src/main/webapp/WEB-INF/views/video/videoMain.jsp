@@ -8,8 +8,7 @@
 <html>
 <head>
 <title><s:message code="video.video"/></title>
-<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/ihover.min.css"/>"/>
+<link rel="stylesheet"       href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
@@ -176,6 +175,7 @@ listViewType = '${videoSearch.listViewType}';
         		</li>
 				</c:forEach>
 			</ul>
+			<link rel="stylesheet" href="<c:url value="/css/ihover.min.css"/>"/>
 			<script type="text/javascript">
 			var _randomNumber = getRandomInteger(1, 15);
 			$(".ih-item").each(function() {

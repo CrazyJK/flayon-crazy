@@ -50,6 +50,7 @@ $(document).ready(function() {
 	<div class="container container-error">
 		<span class="text-info" style="float:right;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></span>
 	    <h1>${status} : ${error}</h1>
+	    <h2>보이면 위치 이동</h2>
 	    <p>${exception}</p>
 	    <pre><c:out value="${message}" escapeXml="true"/></pre>
 		<pre><c:out value="${requestScope['javax.servlet.error.exception']}" escapeXml="true"/></pre>

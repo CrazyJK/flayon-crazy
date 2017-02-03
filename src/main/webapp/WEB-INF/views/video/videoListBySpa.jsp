@@ -53,7 +53,7 @@
 				</table>
 			</section>
 		</div>
-		<p class="more text-center"><button class="btn btn-warning" onclick="render()">More...</button></p>
+		<p class="more text-center"><button class="btn btn-warning" onclick="render()">View More</button></p>
 	</div>
 
 </div>

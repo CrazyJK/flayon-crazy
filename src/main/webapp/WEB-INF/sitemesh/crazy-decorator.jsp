@@ -12,29 +12,13 @@
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy [${profiles}] [<%=System.getenv("COMPUTERNAME")%>]</title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/video-deco.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/video.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/scrollbar.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/base-scrollbar.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/crazy-deco.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/crazy-common.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/crazy-bootstrap.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.css"/>"/>
-<style type="text/css">
-#innerSearchPage {
-	display: none;
-	position: fixed;
-	background-color: white;
-	z-index: 588;
-	padding: 5px;
-	margin: 20px;
-	/* box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5); */
-}
-#innerSearchPage > iframe {
-	border: 0;
-	width: 100%;
-	height: 100%;
-}
-</style>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -77,11 +61,6 @@ window.onerror = function (e) {
 
 $(document).ready(function() {
 
-/* 	// set .box color
-	$("#header_div, #content_div").each(function() {
-		$(this).css("background-color", randomColor(0.3));
-	});
- */	
 	$("#header_div").css("background-image", "linear-gradient(to bottom, #fff 0, " + randomColor(0.3) + " 100%)");
 	$("#content_div").css("background-color", randomColor(0.3));
 	
@@ -191,7 +170,7 @@ $(document).ready(function() {
 function showNav() {
 	var found = false;
 	$("nav#deco_nav ul li a").each(function() {
-//		console.log($(this).attr("href"), locationPathname);
+		// console.log($(this).attr("href"), locationPathname);
 		if ($(this).attr("href") === locationPathname || $(this).attr("href") + '/' === locationPathname) {
 			$(this).parent().addClass("active");
 			found = true;

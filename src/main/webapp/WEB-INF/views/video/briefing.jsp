@@ -72,8 +72,8 @@ function startVideoBatch(type) {
 	<ul class="list-inline">
 		<li>
 			<div class="btn-group btn-group-viewType" data-toggle="buttons">
-				<a class="btn btn-xs btn-info" data-viewType="n"><input type="radio"/>Normal</a>
-				<a class="btn btn-xs btn-info" data-viewType="s"><input type="radio"/>Simple</a>
+				<a class="btn btn-xs btn-success" data-viewType="n"><input type="radio"/>Normal</a>
+				<a class="btn btn-xs btn-success" data-viewType="s"><input type="radio"/>Simple</a>
 			</div>
 		</li>
 		<li><span class="label label-info">Max : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span></li>

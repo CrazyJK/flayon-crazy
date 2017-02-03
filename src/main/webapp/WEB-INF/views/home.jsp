@@ -8,29 +8,37 @@
 <security:authorize access="isAuthenticated()">
 <style type="text/css">
 body {
-	background-image: url("/img/neon-bg2.png");
-	background-position: top left;	
-	background-size: contain;
 	font-family: 'clipregular';
+	background-image: url("/img/neon-bg.png");
+	background-position: center 50px;	
+	background-repeat: repeat;
+	background-size: contain;
+}
+#front {
+/*	background-image: url('/img/kamoru_crazy_artistic_t.png'); */ 
+ 	background-image: url('/img/favicon-crazy.png');
+	background-position: center top;
+	background-repeat: no-repeat;
+/*	background-size: contain; */
+ 	background-size: 625px 469px;
+	min-height: 500px;
 }
 .aperture {
 	z-index: 1;
 	display:inline-block;
+	transition: all 1.5s ease;
 }
 .jumbotron {
-	background-color: rgba(0,0,0,0);
-	z-index: 588;
-	
+	background-color: transparent;
+/* 	z-index: 588; */
 }
 </style>
 <script type="text/javascript">
-var windowWidth = $(window).innerWidth();
-var windowHeight = $(window).innerHeight();
-
 $(document).ready(function() {
 	// background-color random
-	$("body").css("background-color", randomColor(1));
-	
+	setInterval(function() {
+		$("body").css("background-color", randomColor(1));
+	}, 1000 * getRandomInteger(10, 60));
 	
 	// change inverse
 	$(".nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
@@ -42,7 +50,9 @@ $(document).ready(function() {
 		$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
 	});
 
-	// aperture
+});
+
+function startImageBall() {
 	setInterval(function() {
 		aperture($("#aperture-O1"), "/image/random");
 	}, 1000 * getRandomInteger(3, 10));
@@ -52,37 +62,34 @@ $(document).ready(function() {
 	setInterval(function() {
 		aperture($("#aperture-O3"), "/image/random");
 	}, 1000 * getRandomInteger(3, 10));
-	
-});
+}
+
 function aperture($obj, imgSrc) {
-	var _width = getRandomInteger(1, windowWidth - 200);
-	var _height = getRandomInteger(500, windowHeight - 200);
-	var _aWidth = getRandomInteger(20, 200);
-	console.log(_width, _height, _aWidth);
+	var windowWidth = $(window).innerWidth();
+	var windowHeight = $(window).innerHeight();
+	var _left = getRandomInteger(1, windowWidth - 200);
+	var _top = getRandomInteger(200, windowHeight - 200);
+	var _width = getRandomInteger(50, 200);
+	// console.log(_left, _top, _width);
 	$obj.css({
 		position: "absolute", /* relative, absolute */ 
-		left: _width + "px",
-		top: _height + "px"
+		left: _left + "px",
+		top: _top + "px"
 	}).aperture({
-		src: imgSrc,
-		baseColor: "rgba(0,0,0,.5)",
+		src: imgSrc + "?_t=" + new Date().getTime(),
+		baseColor: randomColor(.25), //"rgba(0,0,0,0)",
 		outerMargin: "0 auto",
 		timing: "ease-in-out",
-		width: _aWidth + "px",
+		width: _width + "px",
 		/* duration: "5s" */
 	});
-	
 }
 </script>
 </security:authorize>
 </head>
 <body>
 
-<div id="aperture-O1" class="aperture"></div>
-<div id="aperture-O2" class="aperture"></div>
-<div id="aperture-O3" class="aperture"></div>
-
-<div class="container text-center">
+<div class="container text-center" id="front">
 	<div class="jumbotron" style="display: inline-block;">
 		<h1>
 			<b id="hello">FlayOn</b> 
@@ -91,13 +98,16 @@ function aperture($obj, imgSrc) {
 			</security:authorize>
 		</h1>
 	</div>
-	<div class="jumbotron text-left">
+	<div class="jumbotron text-left" style="margin-top:200px;">
 		<p>
 			<span id="wording"></span>
 		</p>
 	</div>
 </div>
 
+<div id="aperture-O1" class="aperture"></div>
+<div id="aperture-O2" class="aperture"></div>
+<div id="aperture-O3" class="aperture"></div>
 
 <script type="text/javascript">
 $("#wording").typed({
@@ -111,10 +121,10 @@ $("#wording").typed({
     loopCount: false,
     callback: function(){
     	$("#wording").next(".typed-cursor").hide();
+    	startImageBall();
     }
 });
 </script>
-
 
 </body>
 </html>

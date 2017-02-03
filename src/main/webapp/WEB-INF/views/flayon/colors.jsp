@@ -6,24 +6,24 @@
 <meta charset="UTF-8"></meta>
 <title>Standard colors</title>
 <style type="text/css">
-#colors {
-	margin: 10px;
-}
 .colordvcon {
 	display: inline-block;
 	margin: 3px 1px;
 	text-align: center;
-	font-family: Courier,monospace;
-	padding: 6px;
-	/* width: 132px; */
+	padding: 5px;
 	border-radius: 5px;
-	-webkit-border-radius: 5px;
 }
 .colordva {
-	height: 110px;
-	width: 110px;
+	height: 100px;
+	width: 100px;
 	border-radius: 5px;
-	-webkit-border-radius: 5px;
+	margin-bottom: 5px;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 0 0 1px rgba(0,0,0,0.08);
+	transition: all .5s ease;
+}
+.colordva:hover {
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08);
+    transform: scale(1.1, 1.1);
 }
 </style>
 </head>
@@ -36,7 +36,7 @@
  	
  	<div class="panel panel-default">
  		<div class="panel-heading">
-	 		<h3 class="panel-title">If you want to see custom color, input parameter by <a href="?c=rgba(123,123,123,0.5)">?c=rgba(123,123,123,0.5)</a></h3>
+	 		<h3 class="panel-title">If you want to see custom color, add parameter like <a href="?c=rgba(123,123,123,0.5)">?c=rgba(123,123,123,0.5)</a></h3>
 	 	</div>
 		<div class="panel-body" id="colors">
 			<c:forEach items="aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, orange, purple, red, silver, teal, white, yellow" var="color">

@@ -1,80 +1,10 @@
 @CHARSET "UTF-8";
 
+/* bootstrap override */
+
 label {
 	margin-bottom: 0;
 }
-
-.box {
-	position: relative;
-    background-color: rgba(255, 255, 255, .5);
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.2);
-    border-radius: 6px;
-    outline: 0;
-    box-shadow: 0 3px 9px rgba(0,0,0,.5);
-    margin: 10px;
-    padding: 10px;
-}
-.box-small {
-    margin: 5px;
-    padding: 5px;
-}
-
-.label-plain {
-	background-color: rgba(255, 255, 255, .9);
-	color: #337ab7;
-	padding: .2em .3em .3em;
-	font-weight: normal;
-	/* margin-right: 3px; */
-}
-.label-pre {
-	text-align: left;
-	display: inline-block;
-	white-space: pre;
-	border: 0;
-	margin: 2px 0; 
-}
-.label-active {
-	color: red;
-}
-label.title {
-    /* border-radius: 4px; */
-    /* background-color: azure; */
-    padding: 0 5px;
-    margin-right: 5px;
-	text-shadow: 0px 0px 5px #f5f5f5;
-}
-.nowrap {
-	width: inherit;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.float-left {
-	float: left !important;
-	margin: 0 2px;
-}
-.float-right {
-	float: right !important;
-	margin: 0 2px;
-}
-.text-red {
-	color: red;
-}
-.text-bold {
-	font-weight: bold;
-}
-.number {
-	font-size: 12px;
-	text-align: right;
-}
-.pointer {
-	cursor: pointer;
-}
-
-/* bootstrap override */
 .table {
 }
 .table > thead {
@@ -117,30 +47,3 @@ select.input-sm, .input-sm {
 	background-color: #9e3737;
 }
 
-#query, #search, .search {
-	background-color: rgba(255, 255, 255, 0.5);
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 0 0 1px rgba(0,0,0,0.08);	
-	transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
-	color: #000;
-	margin-left: 5px;
-	margin-right: 5px;
-}
-#query:hover, #search:hover, .search:hover,
-#query:focus, #search:focus, .search:focus {
-	box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08);
-}
-
-.webattributes dt {
-	text-align: left;
-}
-.webattributes dd {
-	color: #337ab7;
-}
-.webattributes ul.stack-view {
-	list-style: none;
-	background-color: #111;
-	color: #eee;
-	padding: 5px;
-	border-radius: 4px;
-	word-wrap: break-word;
-}

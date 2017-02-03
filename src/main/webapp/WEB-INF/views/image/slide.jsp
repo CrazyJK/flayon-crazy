@@ -186,10 +186,10 @@ function resizeImage() {
 }
 
 function setNextEffect() {
-	hideEffect   = effects[Math.floor(Math.random() * effects.length)];
-	hideDuration = Math.floor(Math.random() * 1000);
-	showEffect   = effects[Math.floor(Math.random() * effects.length)];
-	showDuration = Math.floor(Math.random() * 2000);
+	hideEffect   = effects[getRandomInteger(0, effects.length)];
+	hideDuration = getRandomInteger(100, 1000);
+	showEffect   = effects[getRandomInteger(0, effects.length)];
+	showDuration = getRandomInteger(100, 2000);
 	$(".effectInfo").html("hide: " + hideEffect + "(" + hideDuration + "), show: " + showEffect + "(" + showDuration + ")");
 }
 

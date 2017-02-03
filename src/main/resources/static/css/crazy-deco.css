@@ -1,9 +1,9 @@
 @CHARSET "UTF-8";
 body {
 	background-color: rgba(255, 255, 255, 0);
-	background-position: center center;
+	background-position: top center;
 	background-size: contain;
-	background-repeat: no-repeat;
+	background-repeat: repeat;
 	transition: background .5s ease, background-image .5s ease;
 }
 [onclick], [ng-click] {
@@ -126,4 +126,19 @@ div#content_div {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+#innerSearchPage {
+	display: none;
+	position: fixed;
+	background-color: white;
+	z-index: 588;
+	padding: 5px;
+	margin: 20px;
+	/* box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5); */
+}
+#innerSearchPage > iframe {
+	border: 0;
+	width: 100%;
+	height: 100%;
 }

@@ -43,22 +43,26 @@
 				<header class="panel-heading">
 					<h3 class="panel-title">Request attributes</h3>
 				</header>
-				<div class="panel-body">
-					<ol>
+				<div class="panel-body table-responsive">
+					<table class="table table-condensed table-striped">
+						<tbody>
 					<%	java.util.Enumeration requestAttributeNames = request.getAttributeNames();
 						while (requestAttributeNames.hasMoreElements()) {
 							String name = (String) requestAttributeNames.nextElement();
 							Object value = request.getAttribute(name);
 							String clazz = value.getClass().getName(); %>
-						<li>
-							<dl>
-								<dt><%=name%></dt>
-								<dd class="text-nowrap"><%=value%></dd>
-								<dd><code><%=clazz%></code></dd>
-							</dl>
-						</li>
+						<tr>
+							<td>
+								<dl style="margin-bottom:0;">
+									<dt><%=name%></dt>
+									<dd><div class="nowrap"><%=value%></div></dd>
+									<dd><code><%=clazz%></code></dd>
+								</dl>
+							</td>
+						</tr>
 					<%	} %>
-					</ol>
+						</tbody>
+					</table>
 				</div>
 			</section>
 		</div>
@@ -67,18 +71,18 @@
 				<header class="panel-heading">
 					<h3 class="panel-title">System properties</h3>
 				</header>
-				<div class="panel-body">
-					<ol>
+				<div class="panel-body table-responsive">
+					<table class="table table-condensed table-striped">
+						<tbody>
 					<%	for (java.util.Map.Entry<Object, Object> entry : System.getProperties().entrySet()) { %>
-						<li>
-							<dl>
-								<dt><%=entry.getKey()%></dt>
-								<dd class="text-nowrap"><%=entry.getValue()%></dd>
-								<dd><code><%=entry.getValue().getClass().getName()%></code></dd>
-							</dl>
-						</li>
+							<tr>
+								<th><%=entry.getKey()%></th>
+								<th class="hide"><code><%=entry.getValue().getClass().getName()%></code></th>
+								<td class="text-nowrap"><%=entry.getValue()%></td>
+							</tr>
 					<%	} %>
-					</ol>
+						</tbody>
+					</table>
 				</div>
 			</section>
 		</div>
@@ -87,18 +91,18 @@
 				<header class="panel-heading">
 					<h3 class="panel-title">Environment</h3>
 				</header>
-				<div class="panel-body">
-					<ol>
+				<div class="panel-body table-responsive">
+					<table class="table table-condensed table-striped">
+						<tbody>
 					<%	java.util.Map<String, String> envMap = System.getenv();
 						for (java.util.Map.Entry<String, String> entry : envMap.entrySet()) { %>
-						<li>
-							<dl>
-								<dt><%=entry.getKey()%></dy>
-								<dd class="text-nowrap"><%=entry.getValue()%></dd>
-							</dl>
-						</li>
+						<tr>
+							<th><%=entry.getKey()%></th>
+							<td class="text-nowrap"><%=entry.getValue()%></td>
+						</tr>
 					<%	} %>
-					</ol>
+						</tbody>
+					</table>
 				</div>
 			</section>
 		</div>
@@ -112,7 +116,7 @@
 						<c:forEach items="${profiles}" var="profile">
 						<li>
 							<dl>
-								<dt>${profile}</dy>
+								<dt>${profile}</dt>
 							</dl>
 						</li>
 						</c:forEach>
@@ -140,3 +144,4 @@
 		$(".panel-heading").hide();
 		</script>
 	</div>
+	

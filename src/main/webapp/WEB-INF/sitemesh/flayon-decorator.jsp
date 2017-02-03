@@ -18,10 +18,11 @@ try {
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - FlayOn [<%=System.getProperty("os.name")%>]</title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
-<link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/default.css"/>"/>
-<link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/css/typed.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
+<link rel="stylesheet" href="<c:url value="/css/base-scrollbar.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/flayon-common.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/typed.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/aperture.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/neon.css"/>"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -34,6 +35,7 @@ try {
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
 <script type="text/javascript">
+var prevScrollTop = 0;
 $(document).ready(function() {
 	$('h1').pulse();
 	
@@ -41,17 +43,25 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip(); 
 	$('[data-toggle="popover"]').popover();
 
+	$(document).scroll(function() {
+		var currScrollTop = $(window).scrollTop();
+		if (prevScrollTop == 0 || currScrollTop == 0) {
+			$("#headerNav.navbar-default > .container").toggleClass("scrolling", currScrollTop > 0);
+			prevScrollTop = currScrollTop
+		}
+	});
+
 });
 </script>
 <sitemesh:write property="head" />
 </head>
 <body role="document">
 	
-	<%@ include file="./header.jspf" %>
+	<%@ include file="./flayon-header.jspf" %>
 
 	<sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
 
-	<%@ include file="./footer.jspf" %>
+	<%@ include file="./flayon-footer.jspf" %>
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
