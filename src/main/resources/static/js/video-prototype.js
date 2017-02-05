@@ -66,7 +66,7 @@ Video.prototype.candidatesNames = function() {
 	for (var i=0; i<this.videoCandidates.length; i++) {
 		if (i > 0)
 			html += "&nbsp;";
-		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;">';
+		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;" id="form-candidate-' + this.opus + '">';
 		html += '<input type="hidden" name="path" value="' + this.videoCandidates[i] + '"/>';
 		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</span>';
 		html += '</form>';

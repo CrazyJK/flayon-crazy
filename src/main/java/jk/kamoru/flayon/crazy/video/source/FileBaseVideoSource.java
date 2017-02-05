@@ -119,7 +119,8 @@ public class FileBaseVideoSource implements VideoSource {
 			String      ext = Utils.getExtension(file).toLowerCase();
 			try {
 				// Unnecessary file exclusion
-				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO)
+				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO) 
+						|| (VIDEO.SUFFIX_IMAGE.contains(ext) && file.getParentFile().getName().equals("_info"))
 						|| filename.equals(VIDEO.HISTORY_LOG_FILENAME) 
 						|| filename.equals(VIDEO.MAC_NETWORKSTORES)
 						|| filename.equals(VIDEO.WINDOW_DESKTOPINI)

@@ -208,15 +208,6 @@ function mw_image_window(img, w, h)
 	if(parseInt(navigator.appVersion) >= 4){win.window.focus();} 
 
 }
-/**
- * start부터 end사이의 random 정수 반환
- * @param start
- * @param end
- * @returns
- */
-function getRandomInteger(start, end) {
-	return Math.floor(Math.random() * parseInt(end - start)) + parseInt(start);
-}
 
 /**
  * @return 1 : wheel up, -1 : wheel down, 0 : undetermined
@@ -250,6 +241,24 @@ function mousewheel(event) {
 	}
 	//console.log(delta);
 	return delta;
+}
+
+/**
+ * start부터 end사이의 random 정수 반환
+ * @param start
+ * @param end
+ * @returns
+ */
+function getRandomInteger(start, end) {
+	return Math.round(getRandom(start, end));
+}
+
+function getRandomBoolean() {
+	return getRandomInteger(0, 1) == 0;
+}
+
+function getRandom(start, end) {
+	return Math.random() * parseInt(end - start) + parseInt(start);
 }
 
 function randomColor(alpha) {

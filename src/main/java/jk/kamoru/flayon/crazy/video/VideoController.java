@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -94,13 +95,18 @@ public class VideoController extends CrazyController {
 	
 	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return MAX_ENTIRE_VIDEO; }
 	
+	@RequestMapping
+	public String home() {
+		return "video/home";
+	}
+	
 	/**
 	 * display video main view
 	 * @param model
 	 * @param videoSearch
 	 * @return view name
 	 */
-	@RequestMapping
+	@RequestMapping("/main")
 	public String videoMain(Model model, @ModelAttribute VideoSearch videoSearch) {
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
 		
@@ -364,6 +370,18 @@ public class VideoController extends CrazyController {
 		if(imageFile == null)
 			return null;
 		return httpEntity(FileUtils.readFileToByteArray(imageFile), Utils.getExtension(imageFile), response, imageFile);
+	}
+	
+	@RequestMapping("/randomVideoCover")
+	public HttpEntity<byte[]> randomVideoCover(HttpServletResponse response) throws IOException {
+		List<Video> videoList = videoService.getVideoList(null, false, true, false);
+		Random random = new Random();
+		int index = random.nextInt(videoList.size());
+		String opus = videoList.get(index).getOpus();
+		File imageFile = videoService.getVideoCoverFile(opus);
+		if(imageFile == null)
+			return null;
+		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile), response, imageFile);
 	}
 	
 	/**

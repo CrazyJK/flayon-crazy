@@ -578,7 +578,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				}
 				try {
 					FileUtils.moveFileToDirectory(file, destDir, false);
-					logger.debug("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
+					logger.info("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
 				} catch (FileExistsException fe) {
 					logger.warn("File exist, then delete", fe);
 					FileUtils.deleteQuietly(file);

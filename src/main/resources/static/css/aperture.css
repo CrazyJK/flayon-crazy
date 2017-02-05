@@ -22,9 +22,9 @@
 		 106px -106px 0 rgba(0,   150, 255, 0.5); */
 }
 .circle {
-	background: #fff;
+	background: transparent;
 	border-radius: 100%;
-	cursor: pointer;
+	cursor: cell;
 	/* determine by options */
 	/* width: 300px;
 	height: 300px; */

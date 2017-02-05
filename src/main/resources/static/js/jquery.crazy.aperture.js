@@ -81,7 +81,7 @@
 						"inset 0 -" + opts.innerCirclePadding + " 0 " + opts.color4 + ";" +
 				"}" +
 			"</style>";
-		$(_style).appendTo("head");
+		$(_style).appendTo($circleWrapper);
 		if (opts.width != opts.height) {
 			var _style2 = "<style>" +
 							cssId+".circle-wrapper, " + cssId+" div.circle, " + cssId+" div.circle:before, "+cssId+" div.circle:after {" +
@@ -92,7 +92,7 @@
 									"-webkit-transform: none;" +
 							"}" +
 					"</style>";
-			$(_style2).appendTo("head");
+			$(_style2).appendTo($circleWrapper);
 		}
 		
 	};
