@@ -100,9 +100,8 @@ function neonEffect() {
 	$("ul.nav>li").removeClass("active");
 	
 	// neon effect
-	var styles = {color: "#eee", fontWeight: "bold"};
 	$("ul.nav>li>a, .neon").each(function() {
-		$(this).addClass("blink-" + getRandomInteger(1, 10)).css(styles);
+		$(this).addClass("blink-" + getRandomInteger(1, 10));
 	});
 }
 
