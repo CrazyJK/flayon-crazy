@@ -359,8 +359,9 @@ function renderTable(index, video, parent) {
 }
 
 function fnSelectCandidateVideo(opus, idx) {
+	$("#form-candidate-" + opus).hide();
 	$(".candidate").html("Candidate " + --candidateCount);
-	$("#form-candidate-" + opus + "]").hide();
+	console.log($("#form-candidate-" + opus).html());
 }
 function goTorrentSearch(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("found");
