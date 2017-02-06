@@ -58,7 +58,7 @@ function Video(idx, data) {
 	this.html_torrents        = this.torrentNames();
 	this.html_torrentFindBtn  = '<span class="label label-info" title="Torrent search" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</span>';
 	this.html_favorite        = this.favorite ? wrapLabel("Fav", "", "", "label-success") : "";
-
+	this.html_overview		  = wrapLabel(this.overviewText);
 }
 
 Video.prototype.candidatesNames = function() {
@@ -66,7 +66,7 @@ Video.prototype.candidatesNames = function() {
 	for (var i=0; i<this.videoCandidates.length; i++) {
 		if (i > 0)
 			html += "&nbsp;";
-		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;" id="form-candidate-' + this.opus + '">';
+		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;" id="formCandidate-' + this.opus + '">';
 		html += '<input type="hidden" name="path" value="' + this.videoCandidates[i] + '"/>';
 		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</span>';
 		html += '</form>';
@@ -100,12 +100,8 @@ Video.prototype.play = function() {
 } 
 
 Video.prototype.contains = function(query, isCheckedFavorite) {
-	return (isCheckedFavorite ? this.favorite : true) 
-		&& (this.studio.name.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.opus.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.title.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.actressName.toLowerCase().indexOf(query.toLowerCase()) > -1
-		|| this.releaseDate.toLowerCase().indexOf(query.toLowerCase()) > -1);
+	return (isCheckedFavorite ? this.favorite : true)
+		&& (this.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1 || this.overviewText.toLowerCase().indexOf(query.toLowerCase()) > -1);
 }
 
 function getFilename(file) {
@@ -169,6 +165,15 @@ function compareTo(data1, data2, reverse) {
 	return result * (reverse ? -1 : 1);
 }
 
+/**
+ * wrap span tag
+ * @param html
+ * @param title
+ * @param onclick
+ * @param extClass
+ * @param extCss
+ * @returns
+ */
 function wrapLabel(html, title, onclick, extClass) {
 	var span = $("<span>").addClass("label label-plain");
 	span.html(html);

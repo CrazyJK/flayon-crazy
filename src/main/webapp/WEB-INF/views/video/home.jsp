@@ -14,6 +14,7 @@ body {
 	background-position: center top;	
 	background-repeat: repeat;
  	background-size: contain;
+ 	overflow: hidden;
 }
 .jumbotron {
 	background-color: transparent;
@@ -183,6 +184,10 @@ function aperture($obj, imgSrc) {
 		top:  top  + "px", 
 		transform: "scale(" + scale + ", " + scale + ")",
 		opacity: "." + getRandomInteger(25, 50)
+	}).on("click", function() {
+		$(this).css({
+			transform: "scale(1.5, 1.5)"
+		});
 	}).aperture({
 		src: imgSrc + "?_t=" + new Date().getTime(),
 		baseColor: randomColor("." + getRandomInteger(20, 50)),

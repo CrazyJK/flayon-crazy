@@ -342,6 +342,8 @@ function renderTable(index, video, parent) {
 			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.title).attr({"title": video.title, "data-toggle": "tooltip"}) //.tooltip()
 		).append(
 			$("<img>").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).addClass("img-thumbnail tbl-cover").hide()
+		).append(
+			$('<span>').addClass('label label-plain').css({color: "#a94442 !important"}).html(video.overviewText)
 		)
 	).css({"max-width": "300px"});
 	$("<td>").appendTo(tr).html(video.html_actress).css({"max-width": "100px"}).attr({"title": video.actressName});

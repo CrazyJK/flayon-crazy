@@ -1219,7 +1219,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	private boolean matchQuery(String query) {
-		return StringUtils.isBlank(query) || StringUtils.containsIgnoreCase(getFullname(), query);
+		return StringUtils.isBlank(query) || StringUtils.containsIgnoreCase(getFullname(), query) || StringUtils.containsIgnoreCase(getOverviewText(), query);
 	}
 	
 	public void resetTorrents() {

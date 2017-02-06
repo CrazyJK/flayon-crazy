@@ -24,7 +24,7 @@
 .circle {
 	background: transparent;
 	border-radius: 100%;
-	cursor: cell;
+	cursor: crosshair;
 	/* determine by options */
 	/* width: 300px;
 	height: 300px; */
