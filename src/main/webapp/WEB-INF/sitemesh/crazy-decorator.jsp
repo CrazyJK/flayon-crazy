@@ -56,7 +56,9 @@ var pingInterval = 5000;
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
-	alert('Error: ' + e);
+	$("#error > p").html('Error: ' + e);
+	$("#error").dialog();
+	//alert('Error: ' + e);
 };
 
 $(document).ready(function() {
@@ -313,7 +315,7 @@ function viewInnerSearchPage() {
  	<nav id="deco_nav">
 		<ul class="nav nav-pills">
 			<li><a class="noti text-danger"></a></li>
-			<li><a href="<c:url value="/video"/>"        		><s:message code="video.home"/></a>
+			<li><a href="<c:url value="/video"/>"        		><s:message code="video.front"/></a>
 			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
 			<%-- <li><a onclick="fnReloadVideoSource()" 		><s:message code="video.reload.title"/></a> --%>
 			<li><a href="<c:url value="/video/main"/>"      	><s:message code="video.main"/></a>
@@ -359,6 +361,10 @@ function viewInnerSearchPage() {
 
 	<div id="innerSearchPage" class="box">
 		<iframe></iframe>
+	</div>
+
+	<div id="error" title="Error">
+		<p></p>
 	</div>
 
 </body>
