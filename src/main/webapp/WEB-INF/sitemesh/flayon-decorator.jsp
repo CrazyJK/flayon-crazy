@@ -23,6 +23,7 @@ try {
 <link rel="stylesheet" href="<c:url value="/css/typed.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.css"/>"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -34,10 +35,21 @@ try {
 <script type="text/javascript" src="<c:url value="/js/jquery.pulse.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
+<script type="text/javascript" src="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
 <script type="text/javascript">
 var prevScrollTop = 0;
+var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
+
 $(document).ready(function() {
-	$('h1').pulse();
+//	$('h1').pulse();
+	var selectedEffect = effects[getRandomInteger(0, effects.length)];
+	var options = {};
+	if ( selectedEffect === "scale" ) {
+		options = { percent: 50 };
+	} else if ( selectedEffect === "size" ) {
+		options = { to: { width: 280, height: 185 } };
+	}
+	$("h1").hide().show(selectedEffect, options, 1000);
 	
 	// bootstrap tooltip, popover initialize
 	$('[data-toggle="tooltip"]').tooltip(); 

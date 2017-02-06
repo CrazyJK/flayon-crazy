@@ -93,8 +93,6 @@ $(document).ready(function() {
 		$("#endNo").html(imageCount-1);
 
 		setInterval(function() {
-			toggleSlideView();
-			//resizeImage();
 			if (playSlide) {
 				if (playSec % playInterval == 0) {
 					fnRandomImageView();
@@ -186,9 +184,9 @@ function resizeImage() {
 }
 
 function setNextEffect() {
-	hideEffect   = effects[getRandomInteger(0, effects.length)];
+	hideEffect   = effects[getRandomInteger(0, effects.length-1)];
 	hideDuration = getRandomInteger(100, 1000);
-	showEffect   = effects[getRandomInteger(0, effects.length)];
+	showEffect   = effects[getRandomInteger(0, effects.length-1)];
 	showDuration = getRandomInteger(100, 2000);
 	$(".effectInfo").html("hide: " + hideEffect + "(" + hideDuration + "), show: " + showEffect + "(" + showDuration + ")");
 }
@@ -198,8 +196,23 @@ function fnViewImage(current) {
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 	
-	$("#imageDiv").hide(hideEffect, [], hideDuration, function() {
-		$(this).css("background-image", "url('" + selectedImgUrl + "')").show(showEffect, [], showDuration, setNextEffect);
+	var hideOptions = {};
+	if (hideEffect === "scale")
+		hideOptions = { percent: 50 };
+	else if (hideEffect === "size")
+		hideOptions = { to: { width: 280, height: 185 } };
+	var showOptions = {};
+	if (showEffect === "scale")
+		showOptions = { percent: 50 };
+	else if (showEffect === "size")
+		showOptions = { to: { width: 280, height: 185 } };
+
+	$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
+		$("#leftNo").html(getPrevNumber());
+		$("#currNo").html(selectedNumber);
+		$("#rightNo").html(getNextNumber());
+		$(".title").html(imageMap[selectedNumber]);
+		$(this).css("background-image", "url('" + selectedImgUrl + "')").show(showEffect, showOptions, showDuration, setNextEffect);
 	});
 	if (!playSlide) {
 		fnDisplayThumbnail();
@@ -257,11 +270,6 @@ function fnViewImage(current) {
 		fnDisplayThumbnail();
 	}
  */		
-
-	$("#leftNo").html(getPrevNumber());
-	$("#currNo").html(selectedNumber);
-	$("#rightNo").html(getNextNumber());
-	$(".title").html(imageMap[selectedNumber]);
 }
 function fnFullyImageView() {
 	popupImage(selectedImgUrl);
@@ -314,6 +322,7 @@ function fnPlayImage() {
 	else {
 		playSlide = true;
 	}
+	toggleSlideView();
 }
 function showTimer(sec) {
 	$("#timer").html(sec + "s");
