@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
 <title><s:message code="default.home"/></title>
@@ -10,7 +9,7 @@
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>"/>
 <style type="text/css">
 body {
-	font-family: 'clipregular';
+ 	font-family: 'clipregular';
  	background-image: url("/img/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
@@ -27,13 +26,20 @@ body {
 #front {
 	background-position: center center;
 	background-repeat: no-repeat;
+	background-size: cover;
 	width: 625px;
 	height: 419px;
 	margin: 25px auto;
 	padding: 0;
 	border-radius: 10px;
-	transition: all 1s ease 0s;
 	cursor: cell;
+	transform: scale(1, 1);
+	opacity: .4;
+	transition: all 1s ease 0s;
+}
+#front:hover {
+	transform: scale(1.1, 1.1);
+	opacity: 1;
 }
 .typed-panel {
 	font-size: x-large;
@@ -105,19 +111,7 @@ function neonEffect() {
  */
 function frontEffect() {
 	$("#front").css({
-		"background-image": "url('/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')",
-		"background-size": "cover",
-		"opacity": "." + getRandomInteger(25, 50)
-	}).hover(function() {
-		$(this).css({
-			opacity: 1, 
-			transform: "scale(1.1, 1.1)"
-		});
-	}, function() {
-		$(this).css({
-			opacity: "." + getRandomInteger(25, 50), 
-			transform: "scale(1, 1)"
-		});
+		"background-image": "url('/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')"
 	});
 	setInterval(function() {
 		var bool = getRandomBoolean();
@@ -125,7 +119,6 @@ function frontEffect() {
 			"background-image": (bool ? "url('/image/random?_t=" + new Date().getTime() + "')"  : "url('/video/randomVideoCover?_t=" + new Date().getTime() + "')"),
 			"background-size": (bool ? "contain" : "cover"),
 			"background-color": randomColor("." + getRandomInteger(20, 50)),
-			"opacity": "." + getRandomInteger(25, 50),
 			"border-top-left-radius":     getRandomInteger(10, 30) + "%",
 		    "border-top-right-radius":    getRandomInteger(10, 30) + "%",
 		    "border-bottom-right-radius": getRandomInteger(10, 30) + "%",
@@ -200,17 +193,29 @@ function aperture($obj, imgSrc) {
 	});
 }
 function imageballPosition() {
+	var offset = 50;
 	var left  = getRandomInteger(1, $(window).innerWidth()  - maxSize);
 	var top   = getRandomInteger(1, $(window).innerHeight() - maxSize);
-	var sX    = $("#front").offset().left;
-	var eX    = sX + $("#front").width();
-	var sY    = $("#front").offset().top;
-	var eY    = sY + $("#front").height();
+	var sX    = $("#front").offset().left - offset;
+	var eX    = sX + $("#front").width() + offset*2;
+	var sY    = $("#front").offset().top - offset;
+	var eY    = sY + $("#front").height() + offset*2;
 	var _left = left + (maxSize /2);
 	var _top  = top  + (maxSize /2);
 	if (sX < _left && _left < eX && sY < _top && _top < eY) {
 		return imageballPosition();
-	} 
+	}
+	/* 
+	$("<div>").css({
+		position: "absolute",
+		left: sX,
+		top: sY,
+		width: eX - sX,
+		height: eY - sY,
+		"background-color": randomColor(.5),
+		"z-index": -1
+	}).appendTo($("body"));
+	 */
 //	console.log(sX + " < " + _left + " < " + eX + " : " + sY + " < " + _top + " < " + eY);
 	return [left, top];
 }
