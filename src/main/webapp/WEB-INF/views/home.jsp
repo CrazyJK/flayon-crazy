@@ -13,7 +13,7 @@
 		<h1>
 			<b id="hello">FlayOn</b> 
 			<security:authorize access="isAuthenticated()">
-				<span id="user"><security:authentication property="principal.username" /></span>
+				<span id="user"><security:authentication property="principal.username"/></span>
 			</security:authorize>
 		</h1>
 	</div>
@@ -25,18 +25,20 @@
 </div>
 
 <script type="text/javascript">
-$("#wording").typed({
-    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
-    //stringsElement: $('#wordings'),
-    typeSpeed: 50,
-    backDelay: 500,
-    loop: false,
-    contentType: 'html', // or text
-    // defaults to false for infinite loop
-    loopCount: false,
-    callback: function() {
-    	$("#wording").next(".typed-cursor").hide();
-    }
+$(function() {
+	$("#wording").typed({
+	    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
+	    //stringsElement: $('#wordings'),
+	    typeSpeed: 50,
+	    backDelay: 500,
+	    loop: false,
+	    contentType: 'html', // or text
+	    // defaults to false for infinite loop
+	    loopCount: false,
+	    callback: function() {
+	    	$("#wording").next(".typed-cursor").hide();
+	    }
+	});
 });
 </script>
 
