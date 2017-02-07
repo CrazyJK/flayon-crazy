@@ -906,15 +906,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		Video video = videoDao.getVideo(opus);
 		int videoFileSize = video.getVideoFileList().size();
 		File candidatedVideofile = new File(path);
-		File videoFile = new File(destinationPath, 
-				String.format("%s%s.%s", 
-						video.getFullname(), 
-						videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", 
-						Utils.getExtension(candidatedVideofile)));
+		File videoFile = new File(destinationPath, String.format("%s%s.%s", video.getFullname(), videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", Utils.getExtension(candidatedVideofile)));
 		try {
 			FileUtils.moveFile(candidatedVideofile, videoFile);
 			log.info("move to {}", videoFile.getAbsoluteFile());
-		} 
+		}
 		catch (IOException e) {
 			throw new VideoException(video, "candidate file moving error", e);
 		}

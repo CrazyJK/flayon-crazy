@@ -62,15 +62,14 @@ function Video(idx, data) {
 }
 
 Video.prototype.candidatesNames = function() {
-	var html = "";
+	var html = '';
 	for (var i=0; i<this.videoCandidates.length; i++) {
 		if (i > 0)
 			html += "&nbsp;";
-		html += '<div style="display: inline-block;" id="form-candidate-' + this.opus + '">';
-		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate">';
+		html += '<form method="post" target="ifrm" action="/video/' + this.opus + '/confirmCandidate" style="display: inline-block;" data-candidate="' + this.opus + '-' + i + '">';
 		html += '<input type="hidden" name="path" value="' + this.videoCandidates[i] + '"/>';
-		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</span>';
-		html += '</form></div>';
+		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx  + ',' + i + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</button>';
+		html += '</form>';
 	}
 	return html;
 }
@@ -80,7 +79,7 @@ Video.prototype.torrentNames = function() {
 	for (var i=0; i<this.torrents.length; i++) {
 		if (i > 0)
 			html += "&nbsp;";
-		html += '<span class="label label-warning" onclick="goTorrentMove(\'' + this.opus + '\',' + this.idx + ')">' + getFilename(this.torrents[i]) + '</span>';
+		html += '<span class="label label-warning" data-torrent="' + this.opus + '-' + i + '" onclick="goTorrentMove(\'' + this.opus + '\',' + this.idx  + ',' + i + ')">' + getFilename(this.torrents[i]) + '</span>';
 	}
 	return html;
 }
