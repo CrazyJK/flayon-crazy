@@ -36,7 +36,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	private static final String COMPANY = "COMPANY";
 	
 	private String name;
+	@JsonIgnore
 	private URL    homepage;
+	@JsonIgnore
 	private String company;
 
 	@JsonIgnore
@@ -143,6 +145,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	 * sum of video scoring in studio
 	 * @return
 	 */
+	@JsonIgnore
 	public int getScore() {
 		int score = 0;
 		for (Video video : getVideoList())

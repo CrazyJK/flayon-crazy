@@ -42,11 +42,17 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private static final String DEBUT = "DEBUT";
 	
 	private String name;
+	@JsonIgnore
 	private String localName;
+	@JsonIgnore
 	private String birth;
+	@JsonIgnore
 	private String bodySize;
+	@JsonIgnore
 	private String debut;
+	@JsonIgnore
 	private String height;
+	@JsonIgnore
 	private String age;
 	private Boolean favorite;
 	
@@ -85,6 +91,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		this.name = name;
 	}
 	
+	@JsonIgnore
 	public boolean isExistImage() {
 		return image != null;
 	}
@@ -182,6 +189,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	 * sum of video scoring in actress
 	 * @return
 	 */
+	@JsonIgnore
 	public int getScore() {
 		int score  = 0;
 		for (Video video : getVideoList()) {
@@ -194,6 +202,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	 * reverse name
 	 * @return
 	 */
+	@JsonIgnore
 	public String getReverseName() {
 		String[] names = StringUtils.split(name, ' ');
 		if (names != null && names.length > 1) {
