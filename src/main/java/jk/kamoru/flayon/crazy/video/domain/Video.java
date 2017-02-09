@@ -217,6 +217,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * 커버 파일 반환
 	 * @return 커버 파일
 	 */
+	@JsonIgnore
 	public File getCoverFile() {
 		return coverFile;
 	}
@@ -307,6 +308,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * 모든 파일 list.
 	 * @return all file
 	 */
+	@JsonIgnore
 	public List<File> getFileAll() {
 		List<File> list = new ArrayList<File>();
 		for (File file : getVideoFileList())
@@ -339,6 +341,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * info 파일 반환. 없으면 대표경로에 만듬.
 	 * @return info
 	 */
+	@JsonIgnore
 	public File getInfoFile() {
 		if(infoFile == null) {
 			infoFile = new File(this.getDelegatePath(), this.getDelegateFilenameWithoutSuffix() + "." + VIDEO.EXT_INFO);
@@ -403,6 +406,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * subtitles file list
 	 * @return list of subtitles file
 	 */
+	@JsonIgnore
 	public List<File> getSubtitlesFileList() {
 		return subtitlesFileList;
 	}
@@ -453,6 +457,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * video file list
 	 * @return list of video file
 	 */
+	@JsonIgnore
 	public List<File> getVideoFileList() {
 		return videoFileList;
 	}
@@ -513,10 +518,16 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	/**
+	 * Info 파일이 존재하는지
+	 * @return
+	 */
+	public boolean isExistInfoFile() {
+		return this.infoFile != null;
+	}
+	/**
 	 * 커버 파일이 존재하는지
 	 * @return {@code true} if exist
 	 */
-	@JsonIgnore
 	public boolean isExistCoverFile() {
 		return this.coverFile != null;
 	}
@@ -543,7 +554,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * 자막 파일이 존재하는지
 	 * @return {@code true} if exist
 	 */
-	@JsonIgnore
 	public boolean isExistSubtitlesFileList() {
 		return this.subtitlesFileList != null && this.subtitlesFileList.size() > 0;
 	}
@@ -552,7 +562,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * 비디오 파일이 존재하는지
 	 * @return {@code true} if exist
 	 */
-	@JsonIgnore
 	public boolean isExistVideoFileList() {
 		return this.videoFileList != null && this.videoFileList.size() > 0;  
 	}
@@ -704,6 +713,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		return info.getTags();
 	}
 	
+	@JsonIgnore
 	public Info getInfo() {
 		return info;
 	}
@@ -865,6 +875,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	/**video full name
 	 * @return [studio][opus][title][actress][date]
 	 */
+	@JsonIgnore
 	public String getFullname() {
 		return String.format("[%s][%s][%s][%s][%s]", studio.getName(), opus, title, getActressName(), StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate);
 	}
@@ -883,6 +894,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	/**자세한 비디오 점수
 	 * @return 비디오 점수 설명 
 	 */
+	@JsonIgnore
 	public String getScoreDesc() {
 		return String.format("Rank[%s]*%s + Play[%s]*%s/10 + Actress[%s]*%s/10 + Subtitles[%s]*%s = %s", 
 				getRank(), RANK_RATIO,

@@ -9,7 +9,7 @@ function Video(idx, data) {
 	this.actressList  = data.actressList; // actress object list
 	this.releaseDate  = data.releaseDate;
 	this.etcInfo      = data.etcInfo;
-	this.info         = data.info;        // info object
+//	this.info         = data.info;        // info object
 	this.tags         = data.tags;        // tag object list
 	this.archive      = data.archive;
 	this.favorite     = data.favorite;
@@ -17,26 +17,26 @@ function Video(idx, data) {
 	this.videoDate    = data.videoDate;
 	this.playCount    = data.playCount;
 	this.rank         = data.rank;
-	this.fullname     = data.fullname;
+	this.fullname     = "" + data.studio.name + "][" + data.opus + "][" + data.title + "][" + data.actressName + "][" + data.releaseDate + "]";
 	this.actressName  = data.actressName;
 	this.score        = data.score;
-	this.scoreDesc    = data.scoreDesc;
+//	this.scoreDesc    = data.scoreDesc;
 	this.fileLength   = data.length; 
 	this.coverURL     = "/video/" + data.opus + "/cover";
 	// files
-	this.videoFileList     = data.videoFileList;     // array
-	this.subtitlesFileList = data.subtitlesFileList; // array
-	this.coverFile         = data.coverFile;
-	this.infoFile          = data.infoFile;
+//	this.videoFileList     = data.videoFileList;     // array
+//	this.subtitlesFileList = data.subtitlesFileList; // array
+//	this.coverFile         = data.coverFile;
+//	this.infoFile          = data.infoFile;
 	this.etcFileList       = data.etcFileList;       // array
 	this.videoCandidates   = data.videoCandidates;   // array
 	this.torrents          = data.torrents;          // array
 	this.fileAll           = data.fileAll;           // array
 
-	this.existVideoFileList     = data.videoFileList.length > 0;
-	this.existSubtitlesFileList = data.subtitlesFileList.length > 0;
-	this.existCoverFile         = data.coverFile != 'null';
-	this.existInfoFile          = data.infoFile != 'null';
+	this.existVideoFileList     = data.existVideoFileList;     //data.videoFileList.length > 0;
+	this.existSubtitlesFileList = data.existSubtitlesFileList; //data.subtitlesFileList.length > 0;
+	this.existCoverFile         = data.existCoverFile;         //data.coverFile != 'null';
+	this.existInfoFile          = data.existInfoFile;
 	this.existEtcFileList       = data.etcFileList.length > 0;
 	this.existCandidates        = data.videoCandidates.length > 0;
 	this.existTorrents          = data.torrents.length > 0;
@@ -50,7 +50,7 @@ function Video(idx, data) {
 	this.html_actress         = this.actressHtmlNames();
 	this.html_release         = wrapLabel(this.releaseDate);
 	this.html_modified        = wrapLabel(this.videoDate);
-	this.html_score           = wrapLabel('S ' + this.score, this.scoreDesc);
+	this.html_score           = wrapLabel('S ' + this.score);
 	this.html_rank            = wrapLabel("R " + this.rank);
 	this.html_video           = wrapLabel("Video", '', this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "", this.existVideoFileList ? "exist" : "nonExist");
 	this.html_subtitles       = wrapLabel("Sub", '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");

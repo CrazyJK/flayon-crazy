@@ -187,7 +187,7 @@ function request() {
 					hadTorrentCount++;
 				if (row.videoCandidates.length > 0)
 					candidateCount++;
-				if (row.videoFileList.length > 0)
+				if (row.existVideoFileList)
 					videoCount++;
 				videoList.push(new Video(i, row));
 			});
