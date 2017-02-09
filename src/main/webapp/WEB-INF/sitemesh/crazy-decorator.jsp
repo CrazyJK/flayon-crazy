@@ -58,7 +58,7 @@ window.onerror = function (e) {
 	console.log('Error: ', e);
 	$("#error > p").html('Error: ' + e);
 	$("#error").dialog();
-	//alert('Error: ' + e);
+	loading(false);
 };
 
 $(document).ready(function() {
@@ -363,7 +363,7 @@ function viewInnerSearchPage() {
 		<iframe></iframe>
 	</div>
 
-	<div id="error" title="Error">
+	<div id="error" title="Error" style="display:none;">
 		<p></p>
 	</div>
 
