@@ -24,6 +24,10 @@ body {
 .title-panel {
 	padding-top: 20px;
 }
+#front-wrapper {
+	margin: 25px auto;
+	height: 419px;
+}
 #front {
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -271,7 +275,8 @@ function draggableEffect() {
 			<b class="neon">Video</b>
 		</h1>
 	</div>
-	<div class="jumbotron" id="front">
+	<div id="front-wrapper">
+		<div class="jumbotron" id="front"></div>
 	</div>
 	<div class="jumbotron typed-panel">
 		<p>
