@@ -13,7 +13,8 @@ body {
 	background-image: url("/img/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
- 	background-size: contain;
+/*	background-size: contain; */
+ 	background-size: 950px 341px;
  	overflow: hidden;
 }
 .jumbotron {
