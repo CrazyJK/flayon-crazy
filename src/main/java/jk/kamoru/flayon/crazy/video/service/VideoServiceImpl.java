@@ -1475,4 +1475,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		return getVideoList(sort, reverse, instance, archive);
 	}
 
+	@Override
+	public List<String> getOpusList() {
+		List<String> list = new ArrayList<>();
+		for (Video video : getVideoList(null, false, true, false)) {
+			list.add(video.getOpus());
+		}
+		return list;
+	}
 }

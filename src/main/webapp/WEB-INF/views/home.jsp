@@ -22,6 +22,19 @@
 			<span id="wording"></span>
 		</p>
 	</div>
+	<div>
+		<div id="aperture"/>
+		<script type="text/javascript">
+		$(function() {
+			$("#aperture").aperture({
+				src:"/img/kamoru_crazy_artistic.png",
+				duration: "3s",
+				baseColor: "rgba(255, 255, 255, .9)",
+				width: "200px",
+			});
+		});
+		</script>
+	</div>
 </div>
 
 <script type="text/javascript">

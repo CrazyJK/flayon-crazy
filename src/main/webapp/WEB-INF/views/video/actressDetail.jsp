@@ -25,10 +25,10 @@ $(document).ready(function() {
 		console.log("form submit...");
 		loading(true, "save...");
 		setInterval(function() {
-			if (opener) {
-				if (opener.location.href.indexOf("video/actress") > -1) 
-					opener.location.reload();
-			}
+//			if (opener) {
+//				if (opener.location.href.indexOf("video/actress") > -1) 
+//					opener.location.reload();
+//			}
 			location.href = "<s:url value="/video/actress/"/>" + $("#newName").val();
 		}, 1000);
 	});
@@ -47,7 +47,7 @@ $(document).ready(function() {
 <body>
 <div class="container">
 
-<form id="actressForm" method="post" role="form" target="ifrm" action="<s:url value="/video/actress"/>" class="form-horizontal">
+<form id="actressForm" method="post" role="form" action="<s:url value="/video/actress"/>" class="form-horizontal">
 	<input type="hidden" name="name" value="${actress.name}"/>
 	<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
 	<br/>

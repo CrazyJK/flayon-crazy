@@ -10,7 +10,7 @@
 <style type="text/css">
 body {
  	font-family: 'clipregular';
- 	background-image: url("/img/neon-bg.png");
+	background-image: url("/img/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
  	background-size: contain;
@@ -100,35 +100,47 @@ function backgroundEffect() {
  */
 function neonEffect() {
 	// change inverse
-	$(".nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
+	$("ul.nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
+	$("ul.nav > li > a, ul.dropdown-menu > li > a").css({color: "#eee"});
 	$("ul.dropdown-menu").css("background-color", "rgba(0, 0, 0, 0.5)");
-	$("ul.nav>li").removeClass("active");
+	$("ul.nav > li").removeClass("active");
 	
 	// neon effect
-	$("ul.nav>li>a, .neon").each(function() {
+	$("ul.nav > li > a, ul.dropdown-menu > li > a, .neon").each(function() {
 		$(this).addClass("blink-" + getRandomInteger(1, 10));
 	});
 }
 
+var opusList;
 /**
  * front image
  */
 function frontEffect() {
 	$("#front").css({
 		"background-image": "url('/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')"
+	}).bind("click", function() {
+		var opus = $(this).data("opus");
+		if (opus && opus != "") {
+			fnViewVideoDetail(opus);
+		}
 	});
-	setInterval(function() {
-		var bool = getRandomBoolean();
-		$("#front").css({
-			"background-image": (bool ? "url('/image/random?_t=" + new Date().getTime() + "')"  : "url('/video/randomVideoCover?_t=" + new Date().getTime() + "')"),
-			"background-size": (bool ? "contain" : "cover"),
-			"background-color": randomColor("." + getRandomInteger(20, 50)),
-			"border-top-left-radius":     getRandomInteger(10, 30) + "%",
-		    "border-top-right-radius":    getRandomInteger(10, 30) + "%",
-		    "border-bottom-right-radius": getRandomInteger(10, 30) + "%",
-		    "border-bottom-left-radius":  getRandomInteger(10, 30) + "%"
-		});
-	}, 1000 * getRandomInteger(10, 30));
+	$.getJSON("/video/opus.json" ,function(data) {
+		opusList = data['opus'];
+		
+		setInterval(function() {
+			var bool = getRandomBoolean();
+			var opusIndex = getRandomInteger(0, opusList.length);
+			$("#front").css({
+				backgroundImage: (bool ? "url('/image/random?_t=" + new Date().getTime() + "')"  : "url('/video/" + opusList[opusIndex] + "/cover/title')"),
+				backgroundSize: (bool ? "contain" : "cover"),
+				backgroundColor: randomColor("." + getRandomInteger(20, 50)),
+				borderTopLeftRadius:     getRandomInteger(10, 30) + "%",
+			    borderTopRightRadius:    getRandomInteger(10, 30) + "%",
+			    borderBottomRightRadius: getRandomInteger(10, 30) + "%",
+			    borderBottomLeftRadius:  getRandomInteger(10, 30) + "%"
+			}).data("opus", (bool ? "" : opusList[opusIndex]));
+		}, 1000 * getRandomInteger(3, 30));
+	});
 }
 
 /**
@@ -186,15 +198,14 @@ function aperture($obj, imgSrc) {
 		position: "absolute", /* relative, absolute */ 
 		left: left + "px",
 		top:  top  + "px", 
-		transform: "scale(" + scale + ", " + scale + ")",
-		opacity: "." + getRandomInteger(25, 50)
+		transform: "scale(" + scale + ", " + scale + ")"
 	}).on("click", function() {
 		$(this).css({
 			transform: "scale(1.5, 1.5)"
 		});
 	}).aperture({
 		src: imgSrc + "?_t=" + new Date().getTime(),
-		baseColor: randomColor("." + getRandomInteger(20, 50)),
+		baseColor: randomColor("." + getRandomInteger(10, 50)),
 		outerMargin: "0 auto",
 		timing: timingProperties[getRandomInteger(1, 5)],
 		width: maxSize + "px"

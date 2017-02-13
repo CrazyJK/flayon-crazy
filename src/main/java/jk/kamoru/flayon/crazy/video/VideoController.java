@@ -100,6 +100,12 @@ public class VideoController extends CrazyController {
 		return "video/home";
 	}
 	
+	@RequestMapping("/opus")
+	public String opus(Model model) {
+		model.addAttribute("opus", 	videoService.getOpusList());
+		return "video/opus";
+	}
+	
 	/**
 	 * display video main view
 	 * @param model

@@ -42,16 +42,6 @@ $(document).ready(function(){
 		   <s:message code="home.favorites.wording2"/></p>
 	</div>
 	
-	<div id="aperture"></div>
-	<script type="text/javascript">
-	$("#aperture").aperture({
-		src:"/img/kamoru_crazy_artistic.png",
-		duration: "3s",
-		baseColor: "rgba(255, 255, 255, .9)",
-		width: "200px",
-	});
-	</script>
-
 	<div id="loginModal" class="modal fade">
 		<div class="modal-dialog modal-sm" style="margin-top:75px;">
 		
