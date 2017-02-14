@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<!-- spring-boot-1.5.1.RELEASE.jar!org/springframework/boot/logging/logback/defaults.xml -->
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/flayon}"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+      			<maxFileSize>10MB</maxFileSize>
+    		</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.springframework" level="ERROR" />
+	<logger name="org.hibernate.SQL"   level="INFO" />
+	<logger name="jk.kamoru.flayon"    level="INFO" />
+
+	<root level="ERROR">
+		<appender-ref ref="dailyRollingFileAppender"/>
+		<appender-ref ref="CONSOLE"/>
+	</root>
+
+</configuration>

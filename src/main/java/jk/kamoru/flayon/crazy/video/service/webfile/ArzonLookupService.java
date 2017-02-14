@@ -11,19 +11,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLContext;
 import javax.xml.ws.spi.http.HttpContext;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -33,7 +28,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -59,40 +53,6 @@ public class ArzonLookupService implements WebFileLookupService {
 //	public static void main(String[] args) throws IOException {
 //		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
 //	}
-
-	public static void testFlayon() {
-
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		
-		try {
-			// login
-			String url = "http://127.0.0.1:58818/login";
-			HttpPost post = new HttpPost(url);
-		    List<NameValuePair> paramList = new ArrayList<NameValuePair>();
-		    paramList.add(new BasicNameValuePair("username", "kamoru"));
-		    paramList.add(new BasicNameValuePair("password", "1"));
-		    post.setEntity(new UrlEncodedFormEntity(paramList));
-		    CloseableHttpResponse response = httpclient.execute(post);
-			
-			// req video main
-			url = "http://127.0.0.1:58818/video";
-			response = httpclient.execute(new HttpGet(url));
-	        log.debug("video main : {} - {}", url, response.getStatusLine());
-			
-			// req actress list
-			url = "http://127.0.0.1:58818/video/actress";
-			response = httpclient.execute(new HttpGet(url));
-	        log.debug("actress list : {} - {}", url, response.getStatusLine());
-	        
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-		    try {
-				httpclient.close();
-			} catch (IOException e) {
-			}
-		}
-	}
 	
 	/**
 	 * httpResponse convert to Stirng
