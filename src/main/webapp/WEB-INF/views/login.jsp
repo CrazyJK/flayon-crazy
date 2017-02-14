@@ -48,13 +48,11 @@ $(document).ready(function(){
 			<div class="modal-content">
 				<div class="modal-header">
 					<a class="close" data-dismiss="modal">&times;</a>
-					<h3 class="modal-title">Ready to crazy!</h3>
-					<c:if test="${param.error}">
-						<span id="loginMsg" class="alert-success">
-				    		${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-				    		${LAST_REQUEST_METHOD} ${authException}
-				    	</span>
+					<h3 class="modal-title">Ready to crazy!
+					<c:if test="${null ne param.error}">
+						<span class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
 					</c:if>
+					</h3>
 				</div>
 				<div class="modal-body">
 					<form method="post" class="form center-block">
@@ -84,6 +82,13 @@ $(document).ready(function(){
 		$("#loginModal").modal();
 	});
 	</script>
+
+	<div class="text-right">
+		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">.</button>
+	</div>
+	<div id="webContext" class="collapse">
+	<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
+	</div>
 
 </div>
 </body>

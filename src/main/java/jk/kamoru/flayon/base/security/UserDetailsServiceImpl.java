@@ -20,7 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("loadUserByUsername by {}", username);
 		
 		User found = null;
 
@@ -32,6 +31,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				found.setPassword("6969");
 				found.setRole(User.Role.ADMIN.name());
 				found = userRepository.save(found);
+
+				log.info("save SUPERMAN {}", found);
 			}
 			else {
 				throw new UsernameNotFoundException("User name not found");

@@ -42,5 +42,10 @@ public class User implements Serializable {
 	public String toNameCard() {
 		return name + "(" + id + ")";
 	}
+
+	@Override
+	public String toString() {
+		return String.format("User [id=%s, name=%s, password=[PROTECTED], role=%s]", id, name, role);
+	}
 	
 }
