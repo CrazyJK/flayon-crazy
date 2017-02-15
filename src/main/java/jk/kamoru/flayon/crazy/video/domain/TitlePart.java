@@ -84,7 +84,7 @@ public class TitlePart {
 	public void setStudio(String studio) {
 		this.studio = VideoUtils.trimBlank(studio);
 		// valid check
-		if (invalidStudio(studio)) {
+		if (invalidStudio(this.studio)) {
 			this.studio = "";
 			this.check = true;
 			this.checkDesc += "Studio ";
@@ -96,14 +96,12 @@ public class TitlePart {
 	 * @param opus the opus to set
 	 */
 	public void setOpus(String opus) {
+		this.opus = VideoUtils.trimBlank(opus).toUpperCase();
 		// valid check
-		if (invalidOpus(opus)) {
+		if (invalidOpus(this.opus)) {
 			this.check = true;
 			this.checkDesc += "Opus ";
 			this.checkDescShort += "O ";
-		}
-		else {
-			this.opus = VideoUtils.trimBlank(opus).toUpperCase();
 		}
 	}
 
@@ -113,7 +111,7 @@ public class TitlePart {
 	public void setTitle(String title) {
 		this.title = VideoUtils.trimBlank(Utils.removeInvalidFilename(title));
 		// valid check
-		if (invalidTitle(title) || warningTitle(title)) {
+		if (invalidTitle(this.title) || warningTitle(this.title)) {
 			this.check = true;
 			this.checkDesc += "Title ";
 			this.checkDescShort += "T ";
@@ -128,11 +126,10 @@ public class TitlePart {
 			this.actress = AMATEUR;
 		}
 		else {
-			actress = StringUtils.removeEnd(actress.trim(), "외");
-			this.actress = actress;
+			this.actress = VideoUtils.capitalizeActressName(StringUtils.remove(actress, "외"));
 		}
 		// valid check
-		if (invalidActress(actress)) {
+		if (invalidActress(this.actress)) {
 			this.check = true;
 			this.checkDesc += "Actress ";
 			this.checkDescShort += "A ";
@@ -145,7 +142,7 @@ public class TitlePart {
 	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = VideoUtils.trimBlank(releaseDate);
 		// valid check
-		if (invalidReleaseDate(releaseDate)) {
+		if (invalidReleaseDate(this.releaseDate)) {
 			this.check = true;
 			this.checkDesc += "Date ";
 			this.checkDescShort += "D ";
