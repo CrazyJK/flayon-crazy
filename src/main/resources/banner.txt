@@ -66,4 +66,4 @@ FFFFFFFFFFF           llllllll  aaaaaaaaaa  aaaa    y:::::y                OOOOO
                                                yyyyyyy                                                                                                                                      yyyyyyy                
 ${AnsiColor.RED}
   ${application.title} ${application.formatted-version} by Spring Boot ${spring-boot.formatted-version}
-${AnsiColor.BLACK}                                                                                                                                                                                                                   
+${AnsiColor.WHITE}
