@@ -5,13 +5,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 
+@Configuration
 @EnableAsync
 @EnableAspectJAutoProxy
-@Configuration
+@EnableScheduling
 public class CrazyConfig {
 
 	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
