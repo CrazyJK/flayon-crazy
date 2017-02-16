@@ -6,7 +6,7 @@
   	<groupId>jk.kamoru</groupId>
   	<artifactId>flayon-crazy</artifactId>
   	<version>5.8.8-1.8.01</version>
-  	<packaging>jar</packaging>
+  	<packaging>war</packaging>
 
   	<name>FlayOn Crazy</name>
 
