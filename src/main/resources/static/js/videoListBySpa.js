@@ -172,7 +172,7 @@ function request() {
 	
 	$.getJSON({
 		method: 'GET',
-		url: '/video/list.json',
+		url: videoPath + '/list.json',
 		data: {"t": withTorrent},
 		cache: false,
 		timeout: 60000

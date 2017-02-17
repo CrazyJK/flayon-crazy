@@ -150,12 +150,12 @@
 
 @font-face {
 	font-family: 'clipregular';
-	src: url('/fonts/clip/clip-webfont.eot');
-	src: url('/fonts/clip/clip-webfont.eot?#iefix') format('embedded-opentype'), 
-		 url('/fonts/clip/clip-webfont.woff2') format('woff2'), 
-		 url('/fonts/clip/clip-webfont.woff') format('woff'),
-		 url('/fonts/clip/clip-webfont.ttf') format('truetype'),
-		 url('/fonts/clip/clip-webfont.svg#clipregular') format('svg');
+	src: url('../fonts/clip/clip-webfont.eot');
+	src: url('../fonts/clip/clip-webfont.eot?#iefix') format('embedded-opentype'), 
+		 url('../fonts/clip/clip-webfont.woff2') format('woff2'), 
+		 url('../fonts/clip/clip-webfont.woff') format('woff'),
+		 url('../fonts/clip/clip-webfont.ttf') format('truetype'),
+		 url('../fonts/clip/clip-webfont.svg#clipregular') format('svg');
 	font-weight: normal;
 	font-style: normal
 }

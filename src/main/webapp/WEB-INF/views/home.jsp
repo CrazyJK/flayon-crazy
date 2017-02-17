@@ -21,13 +21,13 @@
 		<p>
 			<span id="wording"></span>
 		</p>
-	</div>
+	</div>	
 	<div>
-		<div id="aperture"/>
+		<div id="aperture"></div>
 		<script type="text/javascript">
 		$(function() {
 			$("#aperture").aperture({
-				src:"/img/kamoru_crazy_artistic.png",
+				src: "<c:url value="/img/kamoru_crazy_artistic.png"/>",
 				duration: "3s",
 				baseColor: "rgba(255, 255, 255, .9)",
 				width: "200px",

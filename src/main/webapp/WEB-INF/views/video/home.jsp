@@ -10,7 +10,7 @@
 <style type="text/css">
 body {
  	font-family: 'clipregular';
-	background-image: url("/img/neon-bg.png");
+	background-image: url("${PATH}/img/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
 /*	background-size: contain; */
@@ -118,21 +118,21 @@ var opusList;
  */
 function frontEffect() {
 	$("#front").css({
-		"background-image": "url('/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')"
+		"background-image": "url('${PATH}/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')"
 	}).bind("click", function() {
 		var opus = $(this).data("opus");
 		if (opus && opus != "") {
 			fnViewVideoDetail(opus);
 		}
 	});
-	$.getJSON("/video/opus.json" ,function(data) {
+	$.getJSON("${PATH}/video/opus.json" ,function(data) {
 		opusList = data['opus'];
 		
 		setInterval(function() {
 			var bool = getRandomBoolean();
 			var opusIndex = getRandomInteger(0, opusList.length);
 			$("#front").css({
-				backgroundImage: (bool ? "url('/image/random?_t=" + new Date().getTime() + "')"  : "url('/video/" + opusList[opusIndex] + "/cover/title')"),
+				backgroundImage: (bool ? "url('${PATH}/image/random?_t=" + new Date().getTime() + "')"  : "url('${PATH}/video/" + opusList[opusIndex] + "/cover/title')"),
 				backgroundSize: (bool ? "contain" : "cover"),
 				backgroundColor: randomColor("." + getRandomInteger(20, 50)),
 				borderTopLeftRadius:     getRandomInteger(10, 30) + "%",
@@ -177,13 +177,13 @@ function typed(selector, message, callbackStart) {
  */
 function imageballEffect() {
 	setInterval(function() {
-		aperture($("#aperture-O1"), "/image/random");
+		aperture($("#aperture-O1"), "${PATH}/image/random");
 	}, 1000 * getRandomInteger(10, 30));
  	setInterval(function() {
-		aperture($("#aperture-O2"), "/image/random");
+		aperture($("#aperture-O2"), "${PATH}/image/random");
 	}, 1000 * getRandomInteger(10, 30));
 	setInterval(function() {
-		aperture($("#aperture-O3"), "/image/random");
+		aperture($("#aperture-O3"), "${PATH}/image/random");
 	}, 1000 * getRandomInteger(10, 30));
 }
 var minSize = 100;
@@ -251,7 +251,7 @@ function faviconEffect() {
 		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
 		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
 		}).attr({
-			"src": "/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
+			"src": "${PATH}/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
 		});
 	}, 1000 * getRandomInteger(10, 30));
 	setInterval(function() {
@@ -261,7 +261,7 @@ function faviconEffect() {
 		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
 		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
 		}).attr({
-			"src": "/img/favicon-video-" + getRandomInteger(0, 1) + ".png"
+			"src": "${PATH}/img/favicon-video-" + getRandomInteger(0, 1) + ".png"
 		});
 	}, 1000 * getRandomInteger(10, 30));
 }

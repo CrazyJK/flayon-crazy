@@ -22,7 +22,7 @@ function Video(idx, data) {
 	this.score        = data.score;
 //	this.scoreDesc    = data.scoreDesc;
 	this.fileLength   = data.length; 
-	this.coverURL     = "/video/" + data.opus + "/cover";
+	this.coverURL     = videoPath + "/" + data.opus + "/cover";
 	// files
 //	this.videoFileList     = data.videoFileList;     // array
 //	this.subtitlesFileList = data.subtitlesFileList; // array

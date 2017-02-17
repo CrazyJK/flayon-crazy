@@ -111,7 +111,7 @@ function request() {
 	loading(true, "request...");
 	$.getJSON({
 		method: 'GET',
-		url: '/video/gravia/data.json',
+		url: '${PATH}/video/gravia/data.json',
 		data: {},
 		cache: false,
 		timeout: 60000

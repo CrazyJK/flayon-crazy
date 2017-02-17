@@ -1,5 +1,7 @@
 package jk.kamoru.flayon.crazy;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -25,6 +27,11 @@ public abstract class CrazyController extends CrazyProperties {
 		return imageService.getImageSourceSize();
 	}
 
+	@ModelAttribute("PATH")
+	public String contextPath(HttpServletRequest request) {
+		return request.getContextPath();
+	}
+	
 	@ModelAttribute("profiles")
 	public String activeProfiles() {
 		return StringUtils.join(environment.getActiveProfiles(), " ");

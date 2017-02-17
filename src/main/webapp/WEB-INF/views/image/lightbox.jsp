@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Lightbox</title>
-<link rel="stylesheet" href="/css/lightbox.css">
+<link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
 .progress {
 	position: fixed;
@@ -241,6 +241,6 @@ function fnSetOption() {
 
 	<div id="imageset"></div>
 
-	<script src="/js/lightbox.js"></script>
+	<script src="${PATH}/js/lightbox.js"></script>
 </body>
 </html>

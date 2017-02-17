@@ -139,11 +139,11 @@ $(document).ready(function() {
 
 	loading(false);
 
-	if (locationPathname != '/video/search') {
+	if (locationPathname != (videoPath + '/search')) {
 		setInterval(() => {
 			$.getJSON({
 				method: 'GET',
-				url: '/video/ping.json',
+				url: videoPath + '/ping.json',
 				data: {},
 				cache: false
 			}).done(function(data) {

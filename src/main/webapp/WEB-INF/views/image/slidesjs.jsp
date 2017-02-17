@@ -95,7 +95,7 @@ li.slidesjs-pagination-item a.active {
 	z-index: 18;
 }
 </style>
-<script src="/js/jquery.slides.min.js"></script>
+<script src="${PATH}/js/jquery.slides.min.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 var imagepath = '<s:url value="/image/" />';
