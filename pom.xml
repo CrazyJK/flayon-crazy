@@ -237,7 +237,7 @@
 		<profile>
 			<id>mac</id>
 			<properties>
-				<was.webapps.path>/home/kamoru</was.webapps.path>
+				<was.webapps.path>/Users/kamoru/DevTools</was.webapps.path>
 			</properties>
 		</profile>
 	</profiles>
