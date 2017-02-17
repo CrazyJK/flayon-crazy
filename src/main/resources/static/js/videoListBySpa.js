@@ -379,7 +379,7 @@ function getAllTorrents() {
 }
 
 function resizeSecondDiv() {
-	isShortWidth = $(window).width() < 950;
+	isShortWidth = $(window).width() < 960;
 	$(".shortWidth").toggleClass("hide", isShortWidth);
 	setTblCoverPosition();
 }
