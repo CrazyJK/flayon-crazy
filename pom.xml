@@ -219,13 +219,13 @@
 		<profile>
 			<id>home</id>
 			<properties>
-				<was.webapps.path>C:\Users\kamoru</was.webapps.path>
+				<was.webapps.path>C:\DevTools\apache-tomcat-8.5.11\webapps</was.webapps.path>
 			</properties>
 		</profile>
 		<profile>
 			<id>home-test</id>
 			<properties>
-				<was.webapps.path>C:\Users\kamoru</was.webapps.path>
+				<was.webapps.path>C:\DevTools\apache-tomcat-8.5.11\webapps</was.webapps.path>
 			</properties>
 		</profile>
 		<profile>
