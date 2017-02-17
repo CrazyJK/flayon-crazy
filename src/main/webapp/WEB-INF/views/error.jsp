@@ -33,7 +33,6 @@ response.setHeader("error.cause", "");
 	padding-top: 50px;
 }
 </style>
-</style>
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript">

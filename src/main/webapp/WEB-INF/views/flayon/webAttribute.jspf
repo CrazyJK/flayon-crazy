@@ -46,7 +46,8 @@
 				<div class="panel-body table-responsive">
 					<table class="table table-condensed table-striped">
 						<tbody>
-					<%	java.util.Enumeration requestAttributeNames = request.getAttributeNames();
+					<%	@SuppressWarnings("rawtypes")
+						java.util.Enumeration requestAttributeNames = request.getAttributeNames();
 						while (requestAttributeNames.hasMoreElements()) {
 							String name = (String) requestAttributeNames.nextElement();
 							Object value = request.getAttribute(name);
