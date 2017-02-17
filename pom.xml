@@ -20,6 +20,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<final.name>flayon-crazy</final.name>
+		<was.webapps.path>/</was.webapps.path>
 	</properties>
 
   	<dependencies>
@@ -207,13 +209,57 @@
 		</dependencies>
 	</dependencyManagement>
 	
+	<profiles>
+		<profile>
+			<id>home</id>
+			<properties>
+				<was.webapps.path>C:\Users\kamoru</was.webapps.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>home-test</id>
+			<properties>
+				<was.webapps.path>C:\Users\kamoru</was.webapps.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<properties>
+				<was.webapps.path>/home/kamoru/utilities/was/apache-tomcat-8.5.11/webapps</was.webapps.path>
+			</properties>
+		</profile>
+		<profile>
+			<id>mac</id>
+			<properties>
+				<was.webapps.path>/home/kamoru</was.webapps.path>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
-		<finalName>flayon-crazy</finalName>
+		<finalName>${final.name}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<echo message="##### copy war to webapps" />
+								<copy file="target/${final.name}.war" tofile="${was.webapps.path}/crazy.war" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 	</build>
   	
