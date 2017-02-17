@@ -32,9 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				found.setName(username);
 				found.setPassword("6969");
 				found.setRole(User.Role.ADMIN.name());
-				found = userRepository.save(found);
-
-				log.info("save SUPERMAN {}", found);
+				found.setId(0l);
+//				found = userRepository.save(found);
+//				log.info("save SUPERMAN {}", found);
 			}
 			else {
 				throw new UsernameNotFoundException("User name not found");
