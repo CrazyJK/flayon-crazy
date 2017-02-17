@@ -17,6 +17,5 @@ echo "Using FLAYON_HOME:  $FLAYON_HOME"
 echo "Using JAVA_HOME:    $JAVA_HOME"
 echo "Using JAVA_OPTS:    $JAVA_OPTS"
 
-# "$JAVA_HOME"\bin\java $JAVA_OPTS -jar "$FLAYON_HOME\target\flayon-crazy.jar"
-java $JAVA_OPTS -jar "$FLAYON_HOME/target/flayon-crazy.war"
+java $JAVA_OPTS -jar "$FLAYON_HOME/target/crazy.war"
 
