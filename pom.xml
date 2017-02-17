@@ -9,6 +9,12 @@
   	<packaging>war</packaging>
 
   	<name>FlayOn Crazy</name>
+	<url>http://localhost:58818/${final.name}</url>
+
+	<organization>
+		<name>Crazy JK</name>
+		<url>http://crazyjk.github.io/</url>
+	</organization>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -20,7 +26,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<final.name>flayon-crazy</final.name>
+		<final.name>crazy</final.name>
 		<was.webapps.path>/</was.webapps.path>
 	</properties>
 
@@ -253,8 +259,8 @@
 						</goals>
 						<configuration>
 							<target>
-								<echo message="##### copy war to webapps" />
-								<copy file="target/${final.name}.war" tofile="${was.webapps.path}/crazy.war" />
+								<echo message="Copy war file to webapps" />
+								<copy file="target/${final.name}.war" tofile="${was.webapps.path}/${final.name}.war" />
 							</target>
 						</configuration>
 					</execution>
