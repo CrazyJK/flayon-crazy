@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE xml>
 <configuration>
 
 	<!-- spring-boot-1.5.1.RELEASE.jar!org/springframework/boot/logging/logback/defaults.xml -->
