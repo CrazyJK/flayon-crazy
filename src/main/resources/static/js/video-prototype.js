@@ -99,8 +99,9 @@ Video.prototype.play = function() {
 	$("#actionIframe").attr("src", videoPath + "/" + this.opus + "/play");
 } 
 
-Video.prototype.contains = function(query, isCheckedFavorite) {
+Video.prototype.contains = function(query, isCheckedFavorite, isCheckedNoVideo) {
 	return (isCheckedFavorite ? this.favorite : true)
+		&& (isCheckedNoVideo ? !this.existVideoFileList : true)
 		&& (this.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1 || this.overviewText.toLowerCase().indexOf(query.toLowerCase()) > -1);
 }
 
