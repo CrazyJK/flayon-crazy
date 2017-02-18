@@ -577,24 +577,69 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		move(destDirFile);
 	}
 
+	/**
+	 * video 파일 이동<br>
+	 * 이동 후 video의 파일 새로 설정 
+	 * @param destDir
+	 * @throws IOException 
+	 */
 	public synchronized void move(File destDir) {
-		for (File file : getFileAll()) {
-			if (file != null && file.exists() && !file.getParent().equals(destDir.getAbsolutePath())) {
-				if (!Utils.getRootDirectory(file).equals(Utils.getRootDirectory(destDir)) &&
-						destDir.getFreeSpace() < file.length()) {
-					logger.warn("{} -> {} is small. {}mb > {}mb",file, destDir, file.length() / FileUtils.ONE_MB, destDir.getFreeSpace() / FileUtils.ONE_MB);
-					break;
-				}
-				try {
-					FileUtils.moveFileToDirectory(file, destDir, false);
-					logger.info("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
-				} catch (FileExistsException fe) {
-					logger.warn("File exist, then delete", fe);
-					FileUtils.deleteQuietly(file);
-				} catch (IOException e) {
-					logger.error("Fail move file", e);
-				}
+		
+		logger.debug("file move from [{}] to [{}]", getDelegateFile(), destDir.getAbsolutePath());
+		
+		if (isExistVideoFileList()) {
+			List<File> fileList = new ArrayList<>();
+			for (File file : getVideoFileList()) {
+				moveVideoFile(file, destDir);
+				fileList.add(new File(destDir, file.getName()));
 			}
+			setVideoFileList(fileList);
+		}
+		if (isExistSubtitlesFileList()) {
+			List<File> fileList = new ArrayList<>();
+			for (File file : getSubtitlesFileList()) {
+				moveVideoFile(file, destDir);
+				fileList.add(new File(destDir, file.getName()));
+			}
+			setSubtitlesFileList(fileList);
+		}
+		if (isExistCoverFile()) {
+			moveVideoFile(coverFile, destDir);
+			setCoverFile(new File(destDir, coverFile.getName()));
+		}
+		if (isExistInfoFile()) {
+			moveVideoFile(infoFile, destDir);
+			setInfoFile(new File(destDir, infoFile.getName()));
+		}
+		if (isExistEtcFileList()) {
+			List<File> fileList = new ArrayList<>();
+			for (File file : getEtcFileList()) {
+				moveVideoFile(file, destDir);
+				fileList.add(new File(destDir, file.getName()));
+			}
+			setEtcFileList(fileList);
+		}
+	}
+	
+	/**
+	 * 파일 이동<br>
+	 * destDir에 파일이 있으면, file 삭제
+	 * @param file 대상 파일
+	 * @param destDir 이동할 목적 폴더
+	 */
+	private void moveVideoFile(File file, File destDir) {
+		if (file.getParentFile().equals(destDir)) {
+			logger.debug("same folder {}", file);
+			return;
+		}
+		try {
+			FileUtils.moveFileToDirectory(file, destDir, false);
+			logger.info("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
+		} catch (FileExistsException fe) {
+			logger.warn("File exist, then delete", fe);
+			FileUtils.deleteQuietly(file);
+		} catch (IOException e) {
+			logger.error("Fail move file", e);
 		}
 	}
 	

@@ -170,6 +170,11 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 		instanceVideoSource.arrangeVideo(opus);
 	}
 
+	/* FIXME
+	 * 
+	 * (non-Javadoc)
+	 * @see jk.kamoru.flayon.crazy.video.dao.VideoDao#moveToInstance(java.lang.String)
+	 */
 	@Override
 	public void moveToInstance(String opus) {
 		Video archiveVideo = archiveVideoSource.getVideo(opus);
@@ -181,11 +186,11 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 			throw new VideoException(video, "this video exist both instance and archive");
 		} 
 		catch(VideoNotFoundException e) {
-			archiveVideo.resetScore();
 			archiveVideo.setArchive(false);
 			archiveVideo.move(STAGE_PATHS[0]);
+			archiveVideo.resetScore();
 			instanceVideoSource.addVideo(archiveVideo);
-			archiveVideoSource.removeVideo(archiveVideo.getOpus());
+			archiveVideoSource.removeElement(archiveVideo.getOpus());
 		}
 	}
 
