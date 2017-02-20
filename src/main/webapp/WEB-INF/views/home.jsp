@@ -5,6 +5,14 @@
 <html>
 <head>
 <title><s:message code="default.home"/></title>
+<style type="text/css">
+#wording {
+	font-family: Purisa; font-style: italic;
+	/* font-family: clipregular; */
+    /* font-family: Mathjax_fraktur; */
+    /* font-family: Comic Sans MS; */
+}
+</style>
 </head>
 <body>
 
@@ -21,6 +29,23 @@
 		<p>
 			<span id="wording"></span>
 		</p>
+		<script type="text/javascript">
+		$(function() {
+			$("#wording").typed({
+			    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
+			    //stringsElement: $('#wordings'),
+			    typeSpeed: 50,
+			    backDelay: 500,
+			    loop: false,
+			    contentType: 'html', // or text
+			    // defaults to false for infinite loop
+			    loopCount: false,
+			    callback: function() {
+			    	$("#wording").next(".typed-cursor").hide();
+			    }
+			});
+		});
+		</script>
 	</div>	
 	<div>
 		<div id="aperture"></div>
@@ -37,23 +62,6 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-$(function() {
-	$("#wording").typed({
-	    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
-	    //stringsElement: $('#wordings'),
-	    typeSpeed: 50,
-	    backDelay: 500,
-	    loop: false,
-	    contentType: 'html', // or text
-	    // defaults to false for infinite loop
-	    loopCount: false,
-	    callback: function() {
-	    	$("#wording").next(".typed-cursor").hide();
-	    }
-	});
-});
-</script>
 
 </body>
 </html>

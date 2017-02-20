@@ -6,22 +6,13 @@
 <html>
 <head>
 <title><s:message code="default.login"/></title>
-<style type="text/css">
-#sign-in {
-	margin:20px 20px 20px;
-	background-color: rgba(241, 241, 241, .75); 
-	border:1px solid #e5e5e5;
-	border-radius:10px;
-	padding:20px 25px; 
-	width:300px;
-	float:right;
-}
-</style>
 <script type="text/javascript">
 $(document).ready(function(){
 
+	$("#loginModal").modal();
+
 	if (self.innerHeight == 0) {
-		var msg = $("#loginMsg").text().trim();
+		var msg = $("#error").text().trim();
 		if (msg != '')
 			alert(msg);
 	}
@@ -50,7 +41,7 @@ $(document).ready(function(){
 					<a class="close" data-dismiss="modal">&times;</a>
 					<h3 class="modal-title">Ready to crazy!
 					<c:if test="${null ne param.error}">
-						<span class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
+						<span id="error" class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
 					</c:if>
 					</h3>
 				</div>
@@ -77,11 +68,6 @@ $(document).ready(function(){
 			
 		</div>
 	</div>
-	<script>
-	$(document).ready(function(){
-		$("#loginModal").modal();
-	});
-	</script>
 
 	<div class="text-right">
 		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">.</button>
