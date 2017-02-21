@@ -7,24 +7,23 @@
 <title><s:message code="default.home"/></title>
 <style type="text/css">
 body {
-	background: url("img/mountain.jpg") top center no-repeat fixed;
+ 	background: url("<c:url value="/img/mountain.jpg"/>") top center no-repeat fixed;
 }
 .jumbotron {
-	margin: 50px auto;
+	margin: 15px auto;
     padding: 10px;
 	width: 650px;
-    height: 250px;
+	min-height: 250px;
     color: #f0f0f0;
     line-height: 1.40em;
     text-shadow: #000 0px 1px 0px;
     background-color: rgba(0, 0, 0, 0.85);
     box-shadow: rgba(0, 0, 0, 0.8) 0px 20px 70px;
-    cursor: grab;
-    /* transition: all 0.5s ease-out; */
+    transition: height 0.5s ease-out;
 }
 .text-body {
 	text-align: left;
-	min-height:120px;
+	line-height: 27px;
 }
 .container, footer.nav, select {
 	background-color: transparent !important;
@@ -39,33 +38,45 @@ div.modal-content {
 	border: 0;
 }
 .modal-footer {
-	padding: 0;
+	padding: 0 15px;
 }
 input.form-control {
     background-color: transparent !important;
     color: #eee !important;
 }
+.modal-content .btn-link, .modal-content a {
+	color: #eee;
+}
+.modal-content .btn-link:hover, .modal-content a:hover {
+	color: #eee;
+	text-decoration: none;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#wording, h1").css({
-		fontFamily: randomFont() 
-	});
-	$(".text-body").draggable();
+	$("h1").css({fontFamily: randomFont()});
+	$("#wording").css({fontFamily: randomFont()});
+	$(".jumbotron").draggable();
 
-	$("#wording").typed({
-	    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
-	    //stringsElement: $('#wordings'),
-	    typeSpeed: 50,
-	    backDelay: 500,
-	    loop: false,
-	    contentType: 'html', // or text
-	    // defaults to false for infinite loop
-	    loopCount: false,
-	    callback: function() {
-	    	$("#wording").next(".typed-cursor").hide();
-	    }
-	});
+	setTimeout(function(){
+
+		$("#hello").html("FlayOn");
+	
+		$("#wording").typed({
+		    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
+		    //stringsElement: $('#wordings'),
+		    typeSpeed: 50,
+		    backDelay: 500,
+		    loop: false,
+		    contentType: 'html', // or text
+		    // defaults to false for infinite loop
+		    loopCount: false,
+		    callback: function() {
+		    	$("#wording").next(".typed-cursor").hide();
+		    }
+		});
+
+	}, 1000);
 
 });
 
@@ -80,7 +91,7 @@ function viewLoginForm() {
 <div class="container text-center">
 	<div class="jumbotron">
 		<h1 class="no-effect" style="height: 80px;">
-			<b id="hello">FlayOn</b> 
+			<b id="hello"></b> 
 			<security:authorize access="isAuthenticated()"><security:authentication property="principal.username"/></security:authorize>
 		</h1>
 		<p class="text-body">
@@ -90,7 +101,7 @@ function viewLoginForm() {
 </div>
 
 	<div id="loginModal" class="modal fade">
-		<div class="modal-dialog modal-sm" style="margin-top:75px;">
+		<div class="modal-dialog modal-sm" style="margin-top: 375px;">
 	
 			<div class="modal-content">
 				<div class="modal-header">
