@@ -49,7 +49,7 @@ $(document).ready(function() {
 	} else if ( selectedEffect === "size" ) {
 		options = { to: { width: 280, height: 185 } };
 	}
-	$("h1").hide().show(selectedEffect, options, 1000);
+	$("h1:not(.no-effect), .title-effect").hide().show(selectedEffect, options, 1000);
 	
 	// bootstrap tooltip, popover initialize
 	$('[data-toggle="tooltip"]').tooltip(); 

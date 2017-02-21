@@ -23,7 +23,7 @@
       		<ul class="nav navbar-nav navbar-right">
 	    		<security:authorize access="!isAuthenticated()">
         		<li>
-        			<a class="btn" href="<c:url value="/login"/>" id="loginBtn">
+        			<a class="btn" href="#" id="loginBtn" onclick="viewLoginForm()"> <%-- <c:url value="/login"/> --%>
         				<span class="glyphicon glyphicon-log-in"></span> Login
         			</a>
         		</li>
