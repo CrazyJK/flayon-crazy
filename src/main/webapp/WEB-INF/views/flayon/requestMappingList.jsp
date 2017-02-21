@@ -14,6 +14,7 @@ tbody > tr:hover {
 }
 td, td a {
 	font-family: "나눔고딕코딩";
+	font-size: 11px;
 }
 .link:hover {
 	color:orange; 
