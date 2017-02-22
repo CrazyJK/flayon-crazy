@@ -11,7 +11,7 @@ set "JAVA_OPTS=%JAVA_OPTS% -Dcom.sun.management.jmxremote.password.file=jmxremot
 set "JAVA_OPTS=%JAVA_OPTS% -Dfile.encoding=UTF-8"
 set "JAVA_OPTS=%JAVA_OPTS% -Dspring.liveBeansView.mbeanDomain"
 set "JAVA_OPTS=%JAVA_OPTS% -Dspring.application.admin.enabled=true"
-set "JAVA_OPTS=%JAVA_OPTS% -Dspring.profiles.active=crazy-home"
+rem set "JAVA_OPTS=%JAVA_OPTS% -Dspring.profiles.active=crazy-home"
 set "JAVA_OPTS=%JAVA_OPTS% -Dsun.stderr.encoding=UTF-8"
 set "JAVA_OPTS=%JAVA_OPTS% -Dsun.stdout.encoding=UTF-8"
 set "JAVA_OPTS=%JAVA_OPTS% -Dsun.jnu.encoding=UTF-8"

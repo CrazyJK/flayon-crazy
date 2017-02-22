@@ -27,7 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<final.name>crazy</final.name>
-		<was.webapps.path>/</was.webapps.path>
+		<active.profile>crazy-home</active.profile>
 	</properties>
 
   	<dependencies>
@@ -219,47 +219,88 @@
 		<profile>
 			<id>home</id>
 			<properties>
-				<was.webapps.path>C:\DevTools\apache-tomcat-8.5.11\webapps</was.webapps.path>
+				<active.profile>crazy-home</active.profile>
 			</properties>
 		</profile>
 		<profile>
 			<id>home-test</id>
 			<properties>
-				<was.webapps.path>C:\DevTools\apache-tomcat-8.5.11\webapps</was.webapps.path>
+				<active.profile>crazy-home-test</active.profile>
 			</properties>
 		</profile>
 		<profile>
 			<id>linux</id>
 			<properties>
-				<was.webapps.path>/home/kamoru/utilities/was/apache-tomcat-8.5.11/webapps</was.webapps.path>
+				<active.profile>crazy-linux</active.profile>
 			</properties>
 		</profile>
 		<profile>
 			<id>mac</id>
 			<properties>
-				<was.webapps.path>/Users/kamoru/DevTools</was.webapps.path>
+				<active.profile>crazy-mac</active.profile>
 			</properties>
 		</profile>
 	</profiles>
-	
+
 	<build>
 		<finalName>${final.name}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/application-crazy-*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>src/main/resources/application-${active.profile}.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>   
+						<id>copy-activeprofile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<echo message="Copy active profile [${active.profile}] to target" />
+								<copy file="src/main/resources/application-${active.profile}.properties" tofile="target/classes/application-crazy-active.properties" />
+							</target>
+						</configuration>
+					</execution> 
+					<execution>
+						<id>copy-war</id>
 						<phase>package</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<configuration>
 							<target>
-								<echo message="Copy war file to webapps" />
+								<echo message="Copy ${final.name}.war file to webapps" />
 								<copy file="target/${final.name}.war" tofile="${was.webapps.path}/${final.name}.war" />
 							</target>
 						</configuration>
