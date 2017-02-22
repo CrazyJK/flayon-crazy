@@ -13,7 +13,6 @@ body {
 	background-image: url("${PATH}/img/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
-/*	background-size: contain; */
  	background-size: 950px 341px;
  	overflow: hidden;
 }
@@ -23,19 +22,19 @@ body {
 	padding: 0;
 }
 .title-panel {
-	padding-top: 20px;
+	padding: 10px !important;
+	margin: 20px auto 0 !important;
+	width: 500px;
+	background-size: cover; */
+    border-radius: 10px !important;
+}
+.border-shadow {
+	box-shadow: rgba(249, 0, 0, 0.8) 0px 0px 70px, rgba(249, 0, 0, 0.8) 0px 0px 70px inset;
 }
 #front-wrapper {
-	margin: 25px auto;
-	height: 419px;
 }
 #front {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	width: 625px;
 	height: 419px;
-	margin: 25px auto;
 	padding: 0;
 	border-radius: 10px;
 	cursor: cell;
@@ -49,6 +48,12 @@ body {
 }
 .typed-panel {
 	font-size: x-large;
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    padding: 5px 140px !important;
+    margin: 0;
 }
 #favicon-crazy, #favicon-video {
 	position: absolute;
@@ -101,13 +106,13 @@ function backgroundEffect() {
  */
 function neonEffect() {
 	// change inverse
-	$("ul.nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
+/*	$("ul.nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
 	$("ul.nav > li > a, ul.dropdown-menu > li > a").css({color: "#eee"});
 	$("ul.dropdown-menu").css("background-color", "rgba(0, 0, 0, 0.5)");
+*/	
 	$("ul.nav > li").removeClass("active");
-	
 	// neon effect
-	$("ul.nav > li > a, ul.dropdown-menu > li > a, .neon").each(function() {
+	$(".neon").each(function() { // ul.nav > li > a, ul.dropdown-menu > li > a, 
 		$(this).addClass("blink-" + getRandomInteger(1, 10));
 	});
 }
@@ -117,8 +122,8 @@ var opusList;
  * front image
  */
 function frontEffect() {
-	$("#front").css({
-		"background-image": "url('${PATH}/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png')"
+	$("#front").attr({
+		src: '${PATH}/img/favicon-crazy-' + getRandomInteger(0, 4) + '.png'
 	}).bind("click", function() {
 		var opus = $(this).data("opus");
 		if (opus && opus != "") {
@@ -131,10 +136,9 @@ function frontEffect() {
 		setInterval(function() {
 			var bool = getRandomBoolean();
 			var opusIndex = getRandomInteger(0, opusList.length);
-			$("#front").css({
-				backgroundImage: (bool ? "url('${PATH}/image/random?_t=" + new Date().getTime() + "')"  : "url('${PATH}/video/" + opusList[opusIndex] + "/cover/title')"),
-				backgroundSize: (bool ? "contain" : "cover"),
-				backgroundColor: randomColor("." + getRandomInteger(20, 50)),
+			$("#front").attr({
+				src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
+			}).css({
 				borderTopLeftRadius:     getRandomInteger(10, 30) + "%",
 			    borderTopRightRadius:    getRandomInteger(10, 30) + "%",
 			    borderBottomRightRadius: getRandomInteger(10, 30) + "%",
@@ -206,8 +210,12 @@ function aperture($obj, imgSrc) {
 		});
 	}).aperture({
 		src: imgSrc + "?_t=" + new Date().getTime(),
-		baseColor: randomColor("." + getRandomInteger(10, 50)),
+		baseColor1: randomColor("." + getRandomInteger(10, 50)),
+		baseColor2: randomColor("." + getRandomInteger(10, 50)),
+		baseColor3: randomColor("." + getRandomInteger(10, 50)),
+		baseColor4: randomColor("." + getRandomInteger(10, 50)),
 		outerMargin: "0 auto",
+		outerRadius: "0",
 		timing: timingProperties[getRandomInteger(1, 5)],
 		width: maxSize + "px"
 	});
@@ -225,17 +233,6 @@ function imageballPosition() {
 	if (sX < _left && _left < eX && sY < _top && _top < eY) {
 		return imageballPosition();
 	}
-	/* 
-	$("<div>").css({
-		position: "absolute",
-		left: sX,
-		top: sY,
-		width: eX - sX,
-		height: eY - sY,
-		"background-color": randomColor(.5),
-		"z-index": -1
-	}).appendTo($("body"));
-	 */
 //	console.log(sX + " < " + _left + " < " + eX + " : " + sY + " < " + _top + " < " + eY);
 	return [left, top];
 }
@@ -288,29 +285,32 @@ function draggableEffect() {
 		</h1>
 	</div>
 	<div id="front-wrapper">
-		<div class="jumbotron" id="front"></div>
+		<img id="front" class="border-shadow"/>
 	</div>
 	<div class="jumbotron typed-panel">
 		<p>
-			<span id="wording1" class='neon'></span>
+			<span id="wording1" class="neon"></span>
 		</p>
 		<p>
-			<span id="wording2" class='neon'></span>
+			<span id="wording2" class="neon"></span>
 		</p>
+		<div class="hide">
+			<p id="wording-data-1"><s:message code="home.favorites.wording1"/></p>
+			<p id="wording-data-2"><s:message code="home.favorites.wording2"/></p>
+		</div>
 	</div>
 </div>
 
-<div class="hide">
-	<p id="wording-data-1"><s:message code="home.favorites.wording1"/></p>
-	<p id="wording-data-2"><s:message code="home.favorites.wording2"/></p>
+<div class="aperture-wrap">
+	<div id="aperture-O1" class="aperture neon border-shadow"></div>
+	<div id="aperture-O2" class="aperture neon border-shadow"></div>
+	<div id="aperture-O3" class="aperture neon border-shadow"></div>
 </div>
 
-<div id="aperture-O1" class="aperture neon"></div>
-<div id="aperture-O2" class="aperture neon"></div>
-<div id="aperture-O3" class="aperture neon"></div>
-
-<img id="favicon-crazy"/>
-<img id="favicon-video"/>
+<div class="favicon-wrap">
+	<img id="favicon-crazy" class="neon border-shadow"/>
+	<img id="favicon-video" class="neon border-shadow"/>
+</div>
 
 </body>
 </html>
