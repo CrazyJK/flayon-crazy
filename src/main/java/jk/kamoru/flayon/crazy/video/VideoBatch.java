@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -180,6 +181,7 @@ public class VideoBatch extends CrazyProperties {
 	
 	// fixedRate per day
 	@Scheduled(fixedRate = 1000 * 60 * 60 * 24) 
+	@PreDestroy
 	public synchronized void backup() {
 		
 		if (StringUtils.isBlank(BACKUP_PATH)) {
