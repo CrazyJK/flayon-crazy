@@ -23,6 +23,18 @@
 		if (!options.innerCirclePadding) { // innerCirclePadding not set
 			options.innerCirclePadding = pixelDivide(options.width, 20);
 		}
+		if (options.baseColor) {
+			options.baseColor1 = options.baseColor; 
+			options.baseColor2 = options.baseColor; 
+			options.baseColor3 = options.baseColor; 
+			options.baseColor4 = options.baseColor; 
+		}
+		if (options.color) {
+			options.color1 = options.color;
+			options.color2 = options.color;
+			options.color3 = options.color;
+			options.color4 = options.color;
+		}
 		var opts = $.extend({}, $.fn.aperture.defaults, options); // extend options
 		
 		var _radius = parsePixel(opts.outerRadius);
@@ -48,6 +60,7 @@
 					"width: "  + opts.width + ";" +
 					"height: " + opts.height + ";" +
 					"margin:"  + opts.outerMargin + ";" +
+					"background-color:"  + opts.backgroundColor + ";" +
 				"}" +
 				""+cssId+".circle-wrapper:hover {" +
 					"box-shadow: " +
@@ -67,10 +80,10 @@
 				"}" +
 				""+cssId+" div.circle:before, "+cssId+" div.circle:after {" +
 					"box-shadow: " +
-						"inset " + innerRadius + "  0 0 " + opts.baseColor + "," +
-						"inset 0  " + innerRadius + " 0 " + opts.baseColor + "," +
-						"inset -" + innerRadius + " 0 0 " + opts.baseColor + "," +
-						"inset 0 -" + innerRadius + " 0 " + opts.baseColor + ";" +
+						"inset " + innerRadius + "  0 0 " + opts.baseColor1 + "," +
+						"inset 0  " + innerRadius + " 0 " + opts.baseColor2 + "," +
+						"inset -" + innerRadius + " 0 0 " + opts.baseColor3 + "," +
+						"inset 0 -" + innerRadius + " 0 " + opts.baseColor4 + ";" +
 					"content: '" + opts.content + "';" +
 				"}" +
 				""+cssId+" div.circle:hover:after, "+cssId+" div.circle:hover:before {" +
@@ -108,11 +121,17 @@
 		height: "300px",	// circle height
 		outerRadius: "150px",		// circle outer radius
 		outerMargin: "50px auto",	// circle outer margin
-		baseColor: "rgba(255, 255, 255, .9)", // default color
-		color1: "rgba(255,   0,   0, .5)",	// 1st circle color
-		color2: "rgba(252, 150,   0, .5)",	// 2nd circle color
-		color3: "rgba(0,   255,   0, .5)", // 3th circle color
-		color4: "rgba(0,   150, 255, .5)", // 4th circle color
+		baseColor:  "rgba(255, 255, 255, .9)",   // default closed color
+		baseColor1: "rgba(255,   0,   0, .5)",	// 1st closed color
+		baseColor2: "rgba(252, 150,   0, .5)",	// 2nd closed color
+		baseColor3: "rgba(0,   255,   0, .5)",  // 3th closed color
+		baseColor4: "rgba(0,   150, 255, .5)",  // 4th closed color
+		color:  "rgba(255, 255, 255, 0)",   // default opened color
+		color1: "rgba(255,   0,   0, .5)",	// 1st opened color
+		color2: "rgba(252, 150,   0, .5)",	// 2nd opened color
+		color3: "rgba(0,   255,   0, .5)",  // 3th opened color
+		color4: "rgba(0,   150, 255, .5)",  // 4th opened color
+		backgroundColor: "rgba(0,0,0,0)",	// background-color
 		innerCirclePadding: "15px",	// inner circle padding
 		content: ""
 	};
