@@ -26,7 +26,7 @@ div.jumbotron {
     line-height: 1.40em;
     text-shadow: #000 0px 1px 0px;
     box-shadow: rgba(0, 0, 0, 0.8) 0px 20px 70px;
-    transition: height 0.5s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    transition: height 0.5s, min-height .5s;
 }
 div.jumbotron h1 {
 	height: 80px;
@@ -41,9 +41,9 @@ div.modal-dialog {
     margin-top: 360px;
 }
 div.modal-content {
-/*     background: transparent url("<c:url value="/img/chalk-bg.png"/>") repeat center top;
+/*	background: transparent url("<c:url value="/img/chalk-bg.png"/>") repeat center top;
 	background-size: cover; */
- 	background-color: rgba(0, 0 ,0 , 0);
+ 	background-color: rgba(0, 0, 0, 0);
     color: #eee;
 }
 div.modal-header, div.modal-footer {
@@ -65,20 +65,19 @@ form input.form-control {
     background-color: transparent !important;
     color: #eee !important;
 }
-form .checkbox span {
-	float: right;
-}
 form .input-group {
 	margin-bottom: 15px;
+	padding-top: 10px;
 }
 form .input-group-addon {
 	background-color: transparent;
-    color: #fff;
+    color: #eee;
 }
-div.modal-content .btn-link, div.modal-content a {
-	color: #eee;
+form button[type='submit'], form button[type='submit']:hover {
+	border: 1px solid #eee;
+	border-radius: 4px;
 }
-div.modal-content .btn-link:hover, div.modal-content a:hover {
+div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:hover, div.modal-content a:hover {
 	color: #eee;
 	text-decoration: none;
 }
@@ -103,7 +102,8 @@ div.modal-content .btn-link:hover, div.modal-content a:hover {
 			<div class="modal-content">
 				<div class="modal-header">
 					<a class="close" data-dismiss="modal">&times;</a>
-					<h3 class="modal-title">Ready to crazy!
+					<h3 class="modal-title">
+						<b id="login-welcome">Welcome to FlayOn</b>
 						<c:if test="${null ne param.error}">
 							<span id="error" class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
 						</c:if>
@@ -126,11 +126,10 @@ div.modal-content .btn-link:hover, div.modal-content a:hover {
 										<input type="password" name="password" class="form-control" placeholder="Password" required="required"/>
 									</div>
 									<div class="checkbox">
-										<span>Not a member? <a href="mailto:Crazy.4.JK@gmail.com">Contact me</a></span>
-			              				<label><input type="checkbox" name="remember-me" checked="checked"/>Remember me</label>
+			              				<label><input type="checkbox" name="remember-me"/>Remember me</label>
 			            			</div>
 									<div>
-										<button class="btn btn-link btn-block" type="submit">Log in</button>
+										<button class="btn btn-link btn-block" type="submit">Login</button>
 									</div>
 								</form>
 							</td>
@@ -143,18 +142,30 @@ div.modal-content .btn-link:hover, div.modal-content a:hover {
 	</div>
 
 <script type="text/javascript">
+var isLogin = false;
+var username = "";
+<security:authorize access="isAuthenticated()">
+	isLogin = true;
+	username = '<security:authentication property="principal.username"/>';
+</security:authorize>
+
+
 $(document).ready(function() {
 	
 	$("h1").css({fontFamily: randomFont()}).hide();
 	$("#wording").css({fontFamily: randomFont()});
+	$("#loginModal").css({fontFamily: randomFont()});
+	$("#login-welcome").css({fontFamily: randomFont()});
+	if (!isLogin)
+		$("#headerNav").css({fontFamily: randomFont()});
+	
 	$(".jumbotron").draggable();
 
 	setTimeout(function(){
 		
 		$("#hello").html("FlayOn");
-		<security:authorize access="isAuthenticated()">
-		$("#name").html('<security:authentication property="principal.username"/>');
-		</security:authorize>
+		if (isLogin)
+			$("#name").html(username);
 		$("h1").show('scale');
 		
 		$("#wording").typed({
@@ -183,6 +194,7 @@ function viewLoginForm() {
 		color: "rgba(0,0,0,0.5)",
 		backgroundColor: "transparent",
 		width: "150px",
+		outerRadius: "0"
 	});
 	$("#loginModal").modal();
 }

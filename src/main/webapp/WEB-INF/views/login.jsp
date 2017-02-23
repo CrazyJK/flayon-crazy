@@ -60,12 +60,13 @@ $(document).ready(function(){
 	</div>
 
 	<p class="text-center">
-		<s:message code="home.favorites.wording1"/><br/>
+		<s:message code="home.favorites.wording1"/>
+		<br/>
 	   	<s:message code="home.favorites.wording2"/>
 	</p>
 
 
-	<div class="text-right">
+	<div style="position: fixed; right:0; bottom:0;">
 		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">.</button>
 	</div>
 	<div id="webContext" class="collapse">
