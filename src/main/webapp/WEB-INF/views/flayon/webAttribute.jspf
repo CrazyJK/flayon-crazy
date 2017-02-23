@@ -132,11 +132,21 @@
 					<h3 class="panel-title">Exception stackTrace</h3>
 				</header>
 				<div class="panel-body">
-					<ul class="stack-view">
-						<c:forEach items="${exception.stackTrace}" var="stackTrace">
-						<li>${stackTrace}</li>
-						</c:forEach>
-					</ul>
+					<c:catch var="errorMsg">
+						${exception.stackTrace}
+					</c:catch>
+					<c:if test="${!empty errorMsg}">
+						<div class="try text-danger">
+							Exception : ${exception}
+						</div>
+					</c:if>
+					<c:if test="${empty errorMsg}">
+						<ul class="stack-view">
+							<c:forEach items="${exception.stackTrace}" var="stackTrace">
+							<li>${stackTrace}</li>
+							</c:forEach>
+						</ul>
+					</c:if>					
 				</div>
 			</section>
 		</div>
