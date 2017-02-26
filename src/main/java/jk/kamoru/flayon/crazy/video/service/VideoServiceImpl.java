@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -1260,10 +1261,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	private List<String> opusList() {
 		List<String> opusList = new ArrayList<>();
-		for (Video video : videoDao.getVideoList(true, false)) {
+		for (Video video : videoDao.getVideoList(true, true)) {
 			opusList.add(video.getOpus());
 		}
-		return opusList;
+		for (History history : historyService.getDeduplicatedList()) {
+			opusList.add(history.getOpus());
+		}
+		return new ArrayList<String>(new HashSet<String>(opusList));
 	}
 	
 	/**

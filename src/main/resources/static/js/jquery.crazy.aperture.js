@@ -47,7 +47,7 @@
 		
 		$circleWrapper.addClass("circle-wrapper").empty();
 		var circle = $("<div>").addClass("circle");
-		var image = $("<img>").addClass("img-circle").attr("src", opts.src);
+		var image = $("<div>").addClass("circle-img").css("background-image", "url('"+opts.src+"')");
 		image.appendTo(circle);
 		circle.appendTo($circleWrapper);
 		

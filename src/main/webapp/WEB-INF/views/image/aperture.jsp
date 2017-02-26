@@ -27,10 +27,11 @@ var playSec = playInterval;
 $(document).ready(function(){
 	
 	$.getJSON(imagepath + "data.json" ,function(data) {
-		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+
 		resizeImage();
 		if (selectedNumber > -1)
 			fnViewImage(selectedNumber);
@@ -129,11 +130,15 @@ function resizeImage() {
 	$("#imageDiv").height(calcDivHeight);
 	
 	$("#aperture").aperture({
+		src: selectedImgUrl,
 		outerMargin: "30px auto",
 		width: (calcDivWidth - 50) + "px",
 		height: (calcDivHeight - 50) + "px",
 		outerRadius: "0",		// circle outer radius
-		baseColor: randomColor(0.5), //"rgba(238, 238, 238, .9)", // default color
+		baseColor1: randomColor(0.5),
+		baseColor2: randomColor(0.5),
+		baseColor3: randomColor(0.5),
+		baseColor4: randomColor(0.5),
 		innerCirclePadding: "15px"
 	});
 
@@ -145,7 +150,9 @@ function fnViewImage(current) {
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 
-	$("#aperture img").attr("src", selectedImgUrl);
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
+
+	$("#aperture .circle-img").css("background-image", "url('"+selectedImgUrl+"')");
 
 	$("#leftNo").html(getPrevNumber());
 	$("#currNo").html(selectedNumber);

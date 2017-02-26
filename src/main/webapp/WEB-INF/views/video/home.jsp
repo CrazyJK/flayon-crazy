@@ -139,10 +139,7 @@ function frontEffect() {
 			$("#front").attr({
 				src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
 			}).css({
-				borderTopLeftRadius:     getRandomInteger(10, 30) + "%",
-			    borderTopRightRadius:    getRandomInteger(10, 30) + "%",
-			    borderBottomRightRadius: getRandomInteger(10, 30) + "%",
-			    borderBottomLeftRadius:  getRandomInteger(10, 30) + "%"
+				borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%"
 			}).data("opus", (bool ? "" : opusList[opusIndex]));
 		}, 1000 * getRandomInteger(3, 30));
 	});
@@ -214,6 +211,7 @@ function aperture($obj, imgSrc) {
 		baseColor2: randomColor("." + getRandomInteger(10, 50)),
 		baseColor3: randomColor("." + getRandomInteger(10, 50)),
 		baseColor4: randomColor("." + getRandomInteger(10, 50)),
+		backgroundColor: randomColor("." + getRandomInteger(10, 50)),
 		outerMargin: "0 auto",
 		outerRadius: "0",
 		timing: timingProperties[getRandomInteger(1, 5)],

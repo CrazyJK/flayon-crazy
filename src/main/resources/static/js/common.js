@@ -280,3 +280,23 @@ function randomFont() {
 
     return selectedFont;
 }
+
+function setlocalStorageItem(itemName, itemValue) {
+	if (typeof(Storage) !== "undefined") {
+		localStorage.setItem(itemName, itemValue);
+	}
+	else {
+		// do nothing
+	}
+}
+function getlocalStorageItem(itemName, notfoundDefault) {
+	if (typeof(Storage) !== "undefined") {
+		var _value = localStorage.getItem(itemName);
+		if (_value == null || _value === 'NaN')
+			return notfoundDefault;
+		return _value;
+	}
+	else {
+		return notfoundDefault;
+	}
+}

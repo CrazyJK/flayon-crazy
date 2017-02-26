@@ -114,9 +114,10 @@ var playSlide = false;
 $(document).ready(function() {
 
 	$.getJSON(imagepath + "data.json" ,function(data) {
-		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
+
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
 
 		// Pencil tool 객체를 생성 한다.
 		tool = new tool_pencil();
@@ -127,7 +128,7 @@ $(document).ready(function() {
 		canvas = document.getElementById("cv");
 		context = canvas.getContext("2d");
 
-		resizeSecondDiv();
+		imgOriginView();
 
 		setInterval(function() {
 			if (playSlide) {
@@ -136,28 +137,15 @@ $(document).ready(function() {
 		},	10*1000);
 
 	});
-	
-	
-	//$("#cv").bind("click", viewNextImage);
-	
+
 	$(window).bind("mousewheel DOMMouseScroll", function(e) {
-		var delta = 0;
-		var event = window.event || e;
-		if (event.wheelDelta) {
-			delta = event.wheelDelta/120;
-			if (window.opera) delta = -delta;
-		} 
-		else if (event.detail)  
-			delta = -event.detail/3;
-		else
-			delta = parseInt(event.originalEvent.wheelDelta || -event.originalEvent.detail);
-		if (delta) {
-			if (delta > 0) 
-				viewPrevImage(); //alert("마우스 휠 위로~");
-		    else 	
-		    	viewNextImage(); //alert("마우스 휠 아래로~");
-		}
+		var delta = mousewheel(e);
+		if (delta > 0) 
+			viewPrevImage();
+	    else 	
+	    	viewNextImage();
 	});
+	
 	$(window).bind("keyup", function(e) {
 		var event = window.event || e;
 		switch (event.keyCode) {
@@ -212,6 +200,7 @@ $(document).ready(function() {
 });	
 
 function imageURL() {
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
 	return imagepath + selectedNumber + "?_t=" + new Date().getTime();
 }
 function loadImage(nextNumber) {
@@ -361,13 +350,6 @@ function resizeSecondDiv() {
 	$("#cv").attr("height", calculatedCanvasHeight);
 	var calculatedCanvasWidth = $("#img-nav").parent().outerWidth();
 	$("#cv").attr("width", calculatedCanvasWidth);
-	
-	if (selectedNumber > -1) {
-		imgOriginView();
-	}
-	else
-		viewRandomImage();
-
 }
 function fnPopupView() {
 	popupImage(imageURL());

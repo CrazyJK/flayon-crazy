@@ -59,7 +59,6 @@
 
 </div>
 
-<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video-prototype.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/videoListBySpa.js"/>"></script>
 </body>

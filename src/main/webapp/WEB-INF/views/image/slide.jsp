@@ -80,10 +80,11 @@ $(document).ready(function() {
 	setNextEffect();
 	
 	$.getJSON(imagepath + "data.json" ,function(data) {
-		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
-		
+
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+
 		resizeImage();
 		if (selectedNumber > -1)
 			fnViewImage(selectedNumber);
@@ -196,6 +197,8 @@ function fnViewImage(current) {
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 	
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
+
 	var hideOptions = {};
 	if (hideEffect === "scale")
 		hideOptions = { percent: 50 };

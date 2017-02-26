@@ -74,6 +74,8 @@
 var graviaList = new Array();
 var foundList = new Array();
 var selectedIndex = 0;
+var previousIndex = 0;
+var isCheckedNoCover = false;
 
 (function($) {
 	$(document).ready(function() {
@@ -90,20 +92,32 @@ var selectedIndex = 0;
 				return;
 			}
 			loading(true, 'Searching');
-			var keyword = $(this).val().toLowerCase();
-			foundList = new Array();
-			for (var idx = 0; idx < graviaList.length; idx++) {
-				for (var i = 0; i < graviaList[idx].titles.length; i++) {
-					var title = graviaList[idx].titles[i];
-					if (title.styleString.toLowerCase().indexOf(keyword) > -1) {
-						foundList.push(title);
+			var keyword = $(this).val().toLowerCase().trim();
+			if (keyword != '') {
+				foundList = new Array();
+				for (var idx = 0; idx < graviaList.length; idx++) {
+					for (var i = 0; i < graviaList[idx].titles.length; i++) {
+						var title = graviaList[idx].titles[i];
+						if (title.styleString.toLowerCase().indexOf(keyword) > -1) {
+							foundList.push(title);
+						}
 					}
 				}
+				renderContent(-1, foundList);
 			}
-//			console.log(foundList);
-			renderContent(-1, foundList);
+			else {
+				renderContent(previousIndex);
+			}
 			loading(false);
 		});
+		
+		// for nocover checkbox
+		$("#nocover").on("click", function() {
+			isCheckedNoCover = $(this).data("checked");
+			console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
+			renderContent(selectedIndex);
+		});
+
 	});
 }(jQuery));
 
@@ -148,57 +162,58 @@ function render() {
 	renderContent(0);
 }
 function renderContent(idx) {
+	previousIndex = selectedIndex;
 	selectedIndex = idx;
 	
 	var contentList;
-	var guidUrl = "";
 	var headerTitle = "";
+	var displayCount = 0;
+	var mode = $("input:radio[name='mode']:checked").val();
+	var rowContainer = $(".gravia-content").empty();
+	var header = $("<div>").appendTo(rowContainer);
+
 	if (idx == -1) {
 		contentList = foundList;
 		headerTitle = "Search result " + foundList.length;
 	}
 	else {
 		contentList = graviaList[idx].titles;
-		guidUrl = graviaList[idx].guid;
 		headerTitle = graviaList[idx].title;
+		$('<a>').css({padding:0}).addClass('btn btn-link float-right').attr({'onclick': 'fnOpenSource(\'' + graviaList[idx].guid + '\')'}).html("Open source").appendTo(header);
 	}
 	
-	var mode = $("input:radio[name='mode']:checked").val();
-	// console.log("mode is ", mode);
-	var rowContainer = $(".gravia-content").empty();
-	
-	if (guidUrl != "") {
-		$('<a>').addClass('btn btn-link float-right').attr({'onclick': 'fnOpenSource(\'' + guidUrl + '\')'}).html("Open source").appendTo(rowContainer);
+	var table;
+	var tbody;
+	if(mode === 'edit') {
+		table = $("<table>").addClass("table table-condensed");
+		tbody = $("<tbody>");
 	}
-	var header = $("<div>").appendTo(rowContainer);
-	$('<h4>').html(headerTitle).appendTo(header);
-	
-	if (mode === 'text') {
-		for (var i=0; i < contentList.length; i++) {
-			var title = contentList[i];
-			$("<p>").addClass("hover_img " + (title.check ? "bg-danger" : "bg-info") + " " + (title.exist ? "exist" : "")).attr({"title": title.rowData}).append(
-				$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnViewVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
-					$('<span>').append(
-						$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-					)
-				)
-			).appendTo(rowContainer);
+	for (var i=0; i < contentList.length; i++) {
+		var title = contentList[i];
+		
+		if (isCheckedNoCover && title.exist) {
+			continue;
 		}
-	}
-	else if(mode === 'image') {
-		for (var i=0; i < contentList.length; i++) {
-			var title = contentList[i];
-			var div = $("<div>").css({"width": "210px", "height": "290px", "display": "inline-block"});
+		else {
+			displayCount++;
+		}
+		
+		if (mode === 'text') {
+			$("<p>").addClass("hover_img " + (title.check ? "bg-danger" : "bg-info") + " " + (title.exist ? "exist" : "")).attr({"title": title.rowData}).append(
+					$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnViewVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
+						$('<span>').append(
+							$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
+						)
+					)
+				).appendTo(rowContainer);
+		}
+		else if(mode === 'image') {
+			var div = $("<div>").css({"width": "210px", "height": "290px", "display": "inline-block"}).addClass((title.exist ? "exist" : ""));
 			$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail").css({"width": "210px", "height": "270px"}).appendTo(div);
 			$("<div>").addClass("nowrap").css({"padding": "0 10px"}).html(title.title).appendTo(div);
 			div.appendTo(rowContainer);
 		}
-	}
-	else if(mode === 'edit') {
-		var table = $("<table>").addClass("table table-condensed");
-		var tbody = $("<tbody>");
-		for (var i=0; i < contentList.length; i++) {
-			var title = contentList[i];
+		else if(mode === 'edit') {
 			var tr = $("<tr>").addClass((title.check ? "bg-danger" : "") + " " + (title.exist ? "exist" : ""));
 			
 			var td0 = $("<td>").css({"width": "50px"});
@@ -218,10 +233,14 @@ function renderContent(idx) {
 			
 			tr.append(td0).append(td1).append(td2).appendTo(tbody);
 		}
+	}
+	if(mode === 'edit') {
 		tbody.appendTo(table);
 		table.appendTo(rowContainer);
 	}
-	
+
+	$('<h4>').html(headerTitle + " " + displayCount).appendTo(header);
+
 	$(".hover_img a").hover(function() {
 		var src = $(this).attr("data-src");
 		// console.log(src);
@@ -250,9 +269,8 @@ function fnToggleSubmitBtn() {
 	renderContent(selectedIndex);
 }
 function saveCoverAll() {
-	loading(true, 'Saving cover');
 	document.forms[0].submit();
-	loading(false);
+	$(".label-msg").html("call saveCoverAll").show().hide("fade", {}, 3000);
 }
 </script>
 </head>
@@ -283,6 +301,9 @@ function saveCoverAll() {
 			<span id="saveCount" class="label label-info">Save ${saveCount} Cover</span>
 		</c:if>
 		
+		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
+		
+		<span class="label label-primary label-msg" style="display:none;"></span>
 	</div>
 
 	<div id="content_div" class="box row" style="overflow:auto;">
@@ -290,7 +311,7 @@ function saveCoverAll() {
 			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
 		</div>
 		<form method="post" target="ifrm">
-		<div class="col-sm-10 gravia-content"></div>
+			<div class="col-sm-10 gravia-content"></div>
 		</form>
 	</div>
 

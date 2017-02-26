@@ -114,9 +114,10 @@ $(document).ready(function(){
 	$(function() {
 		
 		$.getJSON(imagepath + "data.json" ,function(data) {
-			selectedNumber = data['selectedNumber'];
 			imageCount = data['imageCount'];
 			imageMap = data['imageNameMap'];
+
+			selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount))) + 1;
 
 			for (var i=0; i<imageCount; i++) {
 				var imageDiv = $("<div>").addClass("bg-image").height(windowHeight - topOffset - margin);
@@ -124,7 +125,7 @@ $(document).ready(function(){
 			}
 			
 			$('#slides').slidesjs({
-				start: selectedNumber == -1 ? getRandomInteger(0, imageCount) : selectedNumber,
+				start: selectedNumber,
 				width: windowWidth,
 				height: windowHeight - topOffset,
 			    navigation: {active: true},
@@ -209,12 +210,15 @@ function resizeImage() {
 function fnRandomImageView() {
 	selectedNumber = getRandomInteger(0, imageCount);
 	selectedImgUrl = imagepath + selectedNumber;
+	
 	$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 }
 function rePagination() {
     var index = parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
 	selectedImgUrl = imagepath + index;
     $("#imageTitle").html(imageMap[index]);
+
+    setlocalStorageItem("thumbnamils.currentImageIndex", index);
 
     if (false) {
     	var img = $("<img>").attr("src", selectedImgUrl);

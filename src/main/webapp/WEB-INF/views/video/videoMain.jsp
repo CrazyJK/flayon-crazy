@@ -9,7 +9,6 @@
 <head>
 <title><s:message code="video.video"/></title>
 <link rel="stylesheet"       href="<c:url value="/css/videoMain.css"/>"/>
-<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript">
 //bgContinue = false;
 var opusArray = ${opusArray};

@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript">
 var table;
 $(document).ready(function() {

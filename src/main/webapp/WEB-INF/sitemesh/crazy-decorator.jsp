@@ -29,6 +29,7 @@
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
@@ -333,6 +334,7 @@ function viewInnerSearchPage() {
 					<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
 					<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
 					<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
+					<li><a href="<c:url value="/image/thumbnails"/>"	>Thumbnails</a>
     			</ul>
   			</li>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>

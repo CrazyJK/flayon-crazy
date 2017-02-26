@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpEntity;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,10 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImageController extends CrazyController {
 
-	private static final String Cookie_LAST_IMAGE_INDEX = "lastImageNo";
-
-	private static final String Cookie_LAST_RANDOM_IMAGE_INDEX = "lastRandomImageNo";;
-
 	private static final long today = new Date().getTime();
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -42,27 +36,9 @@ public class ImageController extends CrazyController {
 	}
 	
 	@RequestMapping("/data")
-	public Map<String, Object> getData(HttpServletResponse response, 
-			@RequestParam(value = "n", required = false, defaultValue = "-1") int firstImageIndex,
-			@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex,
-			@CookieValue(value = Cookie_LAST_IMAGE_INDEX, defaultValue = "-1") int lastViewImageIndex) {
+	public Map<String, Object> getData() {
 		Map<String, Object> data = new HashMap<>();
-		int count = imageService.getImageSourceSize();
-		
-		if (firstImageIndex > -1)
-			firstImageIndex = firstImageIndex > count ? count - 1 : firstImageIndex;
-		else
-			if (deleteImageIndex > -1)
-				firstImageIndex = deleteImageIndex;
-			else if (lastViewImageIndex > -1)
-				firstImageIndex = lastViewImageIndex;
-			else
-				firstImageIndex = imageService.getRandomImageNo();
-
-		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(firstImageIndex)));
-		
-		data.put("imageCount", count);
-		data.put("selectedNumber", firstImageIndex);
+		data.put("imageCount", imageService.getImageSourceSize());
 		data.put("imageNameMap", imageService.getImageNameMap());
 		return data;
 	}
@@ -91,6 +67,11 @@ public class ImageController extends CrazyController {
 		return "image/lightbox";
 	}
 
+	@RequestMapping(value = "/thumbnails", method = RequestMethod.GET)
+	public String thumbnails() {
+		return "image/thumbnails";
+	}
+
 	@RequestMapping(value = "/{idx}/thumbnail")
 	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx, HttpServletResponse response) {
 		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF, response);
@@ -103,7 +84,6 @@ public class ImageController extends CrazyController {
 
 	@RequestMapping(value = "/{idx}")
 	public HttpEntity<byte[]> imageMaster(@PathVariable int idx, HttpServletResponse response) {
-		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(idx)));
 //		for (String name : response.getHeaderNames()) {
 //			for (String value : response.getHeaders(name)) {
 //				log.info("HEADER {}: {}", name, value);
@@ -117,8 +97,6 @@ public class ImageController extends CrazyController {
 
 		int randomNo = imageService.getRandomImageNo();
 		byte[] imageBytes = imageService.getImage(randomNo).getByteArray(ImageType.MASTER);
-
-		response.addCookie(new Cookie(Cookie_LAST_RANDOM_IMAGE_INDEX, String.valueOf(randomNo)));
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setCacheControl("max-age=1");

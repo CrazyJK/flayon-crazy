@@ -53,9 +53,11 @@ var playMode = 'R';
 $(document).ready(function() {
 	
 	$.getJSON(imagepath + "data.json" ,function(data) {
-		selectedNumber = data['selectedNumber'];
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
+		
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount))) + 1;
+
 		fnRender();
 		fnSetOption();
 		fnCurrImage();
@@ -118,15 +120,20 @@ function fnRender() {
 }
 function fnPrevImage() {
 	$("a.lb-prev").click();
+	--selectedNumber;
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
 }
 function fnNextImage() {
 	$("a.lb-next").click();
+	++selectedNumber;
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
 }
 function fnCurrImage() {
 	$("#imageset a:nth-child(" + selectedNumber + ")").click();
 }
 function fnRandomImage() {
 	selectedNumber = getRandomInteger(0, imageCount);
+	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
 	fnCurrImage();
 }
 function fnPlayImage() {
