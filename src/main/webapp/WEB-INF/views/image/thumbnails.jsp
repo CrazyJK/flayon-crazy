@@ -14,7 +14,7 @@
     text-align: center;
 }
 #thumbnailUL > li {
-	margin: 0 3px;
+	margin: 0 3px  3px 0;
 	padding: 4px;
 	width: 120px;
 	height: 100px;
@@ -139,14 +139,16 @@ function render() {
 			).css({
 				width: $("#img-width").val(),
 				height: $("#img-height").val()
+			}).attr({
+				dataIndex: i
 			})
 		);
 		displaycount++;
 		selectedNumber = i;
-		if ((selectedNumber + 1) === imageCount) {
-			console.log("approached last page");
-			selectedNumber = 0;
-			render();
+		if ((selectedNumber + 1) >= imageCount) {
+			console.log("approached last page", i);
+			selectedNumber = -1;
+			break;
 		}
 	}
 	selectedNumber++;

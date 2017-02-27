@@ -26,7 +26,7 @@ else
  * @param positionMethod if null, default is <code>Window.Center</code>. 1.<code>Window.Center</code> 화면 가운데 2.<code>Mouse</code> 마우스 위치. 
  * @param spec if null, default is <code>toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1</code>
  */
-function popup(url, name, width, height, positionMethod, spec) {
+function popup(url, name, width, height, positionMethod, specs) {
 //	alert("[common.js] Call popup : " + url + " , " + name);
 	var vUrl = url;
 	var vName = name.replace(/-/gi, '');
@@ -36,7 +36,6 @@ function popup(url, name, width, height, positionMethod, spec) {
 		height = window.screen.height/2;
 	var left = (window.screen.width  - width)/2;
 	var top  = (window.screen.height - height)/2;
-	var specs = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
 	if (positionMethod) {
 		if(positionMethod == 'Window.Center') {
 			left = (window.screen.width  - width)/2;
@@ -54,8 +53,10 @@ function popup(url, name, width, height, positionMethod, spec) {
 		left = (window.screen.width  - width)/2;
 		top  = (window.screen.height - height)/2;
 	}
-	if(spec) {
-		specs = spec;
+
+	var DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
+	if (!specs) {
+		specs = DEFAULT_SPECS;
 	}
 	specs = "width="+width+",height="+height+",top="+top+", left="+left + "," + specs;
 //	alert(vUrl + " - " + vName + " - " + specs);
@@ -73,7 +74,7 @@ function popupImage(url, name) {
 	img.onload = function() {
 		var imgWidth  = this.width;
 		var imgHeight = this.height;
-		console.log("popupImage " + imgWidth + " x " + imgHeight);
+		console.log("popupImage", url, name, imgWidth + " x " + imgHeight);
 		popup(url, name, imgWidth, imgHeight);
 	}	
 }
