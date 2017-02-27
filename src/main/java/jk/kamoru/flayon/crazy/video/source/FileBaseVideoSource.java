@@ -48,8 +48,8 @@ public class FileBaseVideoSource implements VideoSource {
 	@Inject Provider<Actress> actressProvider;
 
 	// logic variables
-	private static boolean firstLoad = false;
-	private static boolean loading = false;
+	private boolean firstLoad = false;
+	private boolean loading = false;
 	
 	// property
 	private boolean isArchive;
