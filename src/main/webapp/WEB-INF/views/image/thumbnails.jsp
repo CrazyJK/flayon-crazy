@@ -112,9 +112,9 @@ function render() {
 					{
 						backgroundImage: "url('${PATH}/image/" + i + "')"
 					}
-				).on("click", function() {
+				).on("click", function(event) {
 					// console.log("image click");
-					popupImage($(this).data("src"));
+					popupImage($(this).data("src"), $(this).data("src"), event);
 				}).append(
 					$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
 						event.stopPropagation();

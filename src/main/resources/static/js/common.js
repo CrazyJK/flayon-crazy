@@ -17,6 +17,8 @@ else if (/safari/.test(agent))
 else 
 	browser = UNKNOWN;
 
+var DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
+
 /**
  * 팝업창을 띄운다. 
  * @param url
@@ -24,13 +26,14 @@ else
  * @param width if null, 화면 절반 크기
  * @param height if null, 화면 절반 크기
  * @param positionMethod if null, default is <code>Window.Center</code>. 1.<code>Window.Center</code> 화면 가운데 2.<code>Mouse</code> 마우스 위치. 
- * @param spec if null, default is <code>toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1</code>
+ * @param specs if null, default is <code>toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1</code>
  */
-function popup(url, name, width, height, positionMethod, specs) {
-//	alert("[common.js] Call popup : " + url + " , " + name);
+function popup(url, name, width, height, positionMethod, specs, event) {
+//	console.log("[popup] Call popup : ", url, name, width, height, positionMethod, specs, event);
 	
 	var windowScreenWidth  = window.screen.width;
 	var windowScreenHeight = window.screen.height;
+//	console.log("[popup] window.screen", window.screen);
 	
 	var vUrl = url;
 	var vName = name.replace(/-/gi, '');
@@ -38,49 +41,49 @@ function popup(url, name, width, height, positionMethod, specs) {
 		width = windowScreenWidth / 2;
 	if (!height)
 		height = windowScreenHeight / 2;
-	var left, top;
+	var left = (windowScreenWidth  - width) / 2;
+	var top  = (windowScreenHeight - height) / 2;
 	if (positionMethod) {
-		if(positionMethod == 'Window.Center') {
-			left = (windowScreenWidth  - width) / 2;
-			top  = (windowScreenHeight - height) / 2;
+		if(positionMethod == 'Center') {
 		} 
 		else if (positionMethod == 'Mouse') {
 			try {
-				var event = window.event || e;
-				left = event.pageX;
-				top  = event.pageY;
-			} catch(e) {}
+				left = event.screenX;
+				top  = event.screenY;
+			} catch(e) {
+				console.log("[popup] warn event.screen", e);
+			}
 		}
 	}
-	else {
-		left = (windowScreenWidth  - width)/2;
-		top  = (windowScreenHeight - height)/2;
-	}
-
-	var DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
 	if (!specs) {
 		specs = DEFAULT_SPECS;
 	}
 	specs = "width="+width+",height="+height+",top="+top+",left="+left + "," + specs;
-//	alert(vUrl + " - " + vName + " - " + specs);
+//	console.log("[popup] open param", vUrl, vName, specs);
+	
 	var popupWindow = window.open(vUrl, vName, specs);
-//	alert("[common.js] Call window.open");
+//	console.log("[popup] open result", popupWindow);
 	try {
 		popupWindow.focus();
-	} catch (ignore_chrome) {}
+	} catch (e) {
+		console.log("[popup] error", e);
+	}
 }
-function popupImage(url, name) {
+
+function popupImage(url, name, event) {
+//	console.log("[popupImage] event", event);
 	if (!name)
 		name = url;
 	var img = new Image();
 	img.src = url;
 	img.onload = function() {
-		var imgWidth  = this.width;
-		var imgHeight = this.height;
-		console.log("popupImage", url, name, imgWidth + " x " + imgHeight);
-		popup(url, name, imgWidth, imgHeight);
-	}	
+		var imgWidth  = this.width + 20;
+		var imgHeight = this.height + 20;
+//		console.log("[popupImage] popupImage", url, name, imgWidth + " x " + imgHeight);
+		popup(url, name, imgWidth, imgHeight, 'Center', DEFAULT_SPECS, event);
+	}
 }
+
 function fnViewFullImage(image) {
 	var img = $("<img />");
 	img.hide();
@@ -88,7 +91,7 @@ function fnViewFullImage(image) {
 	img.bind('load', function(){
 		var imgWidth  = $(this).width() + 20;
 		var imgHeight = $(this).height() + 20;
-		console.log("popupImage " + imgWidth + " x " + imgHeight);
+		console.log("[fnViewFullImage] size : " + imgWidth + " x " + imgHeight);
 		mw_image_window(image, imgWidth, imgHeight);
 	});
 }
