@@ -28,18 +28,21 @@ else
  */
 function popup(url, name, width, height, positionMethod, specs) {
 //	alert("[common.js] Call popup : " + url + " , " + name);
+	
+	var windowScreenWidth  = window.screen.width;
+	var windowScreenHeight = window.screen.height;
+	
 	var vUrl = url;
 	var vName = name.replace(/-/gi, '');
 	if (!width)
-		width = window.screen.width/2;
+		width = windowScreenWidth / 2;
 	if (!height)
-		height = window.screen.height/2;
-	var left = (window.screen.width  - width)/2;
-	var top  = (window.screen.height - height)/2;
+		height = windowScreenHeight / 2;
+	var left, top;
 	if (positionMethod) {
 		if(positionMethod == 'Window.Center') {
-			left = (window.screen.width  - width)/2;
-			top  = (window.screen.height - height)/2;
+			left = (windowScreenWidth  - width) / 2;
+			top  = (windowScreenHeight - height) / 2;
 		} 
 		else if (positionMethod == 'Mouse') {
 			try {
@@ -50,8 +53,8 @@ function popup(url, name, width, height, positionMethod, specs) {
 		}
 	}
 	else {
-		left = (window.screen.width  - width)/2;
-		top  = (window.screen.height - height)/2;
+		left = (windowScreenWidth  - width)/2;
+		top  = (windowScreenHeight - height)/2;
 	}
 
 	var DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
