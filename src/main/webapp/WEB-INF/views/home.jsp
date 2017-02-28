@@ -102,6 +102,9 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 .hour-timer, .minute-timer, .second-timer {
 	width: 40px;
 }
+.timer-delimiter {
+	color: #eee;
+}
 </style>
 </head>
 <body>
@@ -119,7 +122,12 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	</div>
 
 	<div class="life-timer">
-		<div class="day-timer"></div>D<div class="hour-timer"></div>:<div class="minute-timer"></div>:<div class="second-timer"></div>
+		<div class="day-timer"></div><span class="timer-delimiter">D</span>
+		<div class="hour-timer"></div>
+		<span class="timer-delimiter">:</span>
+		<div class="minute-timer"></div>
+		<span class="timer-delimiter">:</span>
+		<div class="second-timer"></div>
 	</div>
 
 	<div id="loginModal" class="modal fade">
@@ -176,19 +184,14 @@ var username = "";
 
 
 $(document).ready(function() {
-	
-	$("h1").css({fontFamily: randomFont()}).hide();
-	$("#wording").css({fontFamily: randomFont()});
-	$("#loginModal").css({fontFamily: randomFont()});
-	$("#login-welcome").css({fontFamily: randomFont()});
-	$(".life-timer").css({fontFamily: randomFont()});
-	
-	if (!isLogin)
-		$("#headerNav").css({fontFamily: randomFont()});
+
+	setFonts();
+
+	showTimer();
 	
 	$(".jumbotron").draggable();
 
-	setTimeout(function(){
+	setTimeout(function() {
 		
 		$("#hello").html("FlayOn");
 		if (isLogin)
@@ -226,28 +229,45 @@ function viewLoginForm() {
 	$("#loginModal").modal();
 }
 
-var countDownDate = new Date("Apr 28 2031 00:00:00 GMT+0900").getTime();
+function showTimer() {
+	var countDownDate = new Date("Apr 28 2031 00:00:00 GMT+0900").getTime();
 
-var lifeTimer = setInterval(function() {
-	var now = new Date().getTime();
-	var distance = countDownDate - now;
-	
-	var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-	var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-	
-	$(".day-timer").html(days);
-	$(".hour-timer").html(hours);
-	$(".minute-timer").html(minutes);
-	$(".second-timer").html(seconds);
-	
-	if (distance < 0) {
-	 	clearInterval(lifeTimer);
-	 	$(".life-timer").html("EXPIRED");
-	}
-}, 1000);
+	var lifeTimer = setInterval(function() {
+		var now = new Date().getTime();
+		var distance = countDownDate - now;
+		
+		var days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+		var hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+		
+		if (seconds == 0) {
+			setFonts();
+			$(".life-timer").effect("fade", {}, 300);
+		}
+		
+		$(".day-timer").html(days);
+		$(".hour-timer").html(hours);
+		$(".minute-timer").html(minutes);
+		$(".second-timer").html(seconds);
+		
+		if (distance < 0) {
+		 	clearInterval(lifeTimer);
+		 	$(".life-timer").html("EXPIRED");
+		}
+	}, 1000);
+}
 
+function setFonts() {
+	$("h1").css({fontFamily: randomFont()});
+	$("#wording").css({fontFamily: randomFont()});
+	$("#loginModal").css({fontFamily: randomFont()});
+	$("#login-welcome").css({fontFamily: randomFont()});
+	$(".life-timer").css({fontFamily: randomFont()});
+	
+	if (!isLogin)
+		$("#headerNav").css({fontFamily: randomFont()});
+}
 </script>
 </body>
 </html>
