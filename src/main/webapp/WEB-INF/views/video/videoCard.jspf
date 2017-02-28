@@ -16,7 +16,7 @@
 				&nbsp;
 			</td>
 			<td>
-				<dl>
+				<dl style="margin:0;">
 					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="actress"   mode="s"/></div></dd>
 					<dd><div class="nowrap" style="width:110px;"><jk:video video="${video}" view="studio"    mode="s"/></div></dd> 
 					<dd><jk:video video="${video}" view="opus"      mode="s"/></dd>

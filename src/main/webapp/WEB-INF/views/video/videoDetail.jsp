@@ -11,17 +11,28 @@
 <title>[${video.opus}] ${video.title}</title>
 <link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <style type="text/css">
-#fileinfoDiv .label {
+dt, dd {
+	padding: 2px;
+}
+.fileinfoDiv {
 	font-family: '나눔고딕코딩';
+	background-color:rgba(255, 255, 255, 0.75); 
+	border-radius: 10px;
+}
+.fileinfoDiv p {
+	margin-bottom: 5px;
 }
 </style>
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	$("body")
-		.css("background-image","url('<c:url value="/video/${video.opus}/cover" />')")
-		.css("background-size", "100%")
-		.css("background-position", "left top");
+	$("body").css({
+		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
+		backgroundSize: "contain",
+		backgroundPosition: "center top",
+		backgroundAttachment: "fixed",
+		backgroundRepeat: "repeat"
+	});
 
 	$("form#renameForm").submit(function(event) {
 		console.log("form submit...");
@@ -32,11 +43,8 @@ $(document).ready(function() {
 	});
 
 });
-function fnToggleRenameForm() {
-	$("#renameForm").toggle();
-}
-function fnToggleFileinfo() {
-	$("#fileinfoDiv").toggle();
+function fnVideoToggle(dom) {
+	$(dom).next().next().toggleClass("hide");
 }
 </script>
 </head>
@@ -57,12 +65,13 @@ function fnToggleFileinfo() {
 	<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 	<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
 
-	<c:if test="${video.etcInfo ne ''}">
+	<c:if test="${!empty video.etcInfo}">
 	<dd><span class="label label-plain">ETC info : ${video.etcInfo}</span></dd>
 	</c:if>
 
-	<dd><span class="label label-plain" onclick="fnToggleFileinfo()">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
-		<div id="fileinfoDiv" style="display:none; background-color:rgba(255, 255, 255, 0.75); border-radius: 10px;" class="box">
+	<dd>
+		<span class="label label-plain" onclick="$(this).next().toggleClass('hide')">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
+		<div class="box fileinfoDiv hide">
 			<c:forEach items="${video.videoFileList}" var="file">
 			<p><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file}</span></p>
 			</c:forEach>
@@ -80,20 +89,18 @@ function fnToggleFileinfo() {
 						<input type="text" name="newname" value="${video.fullname}" class="form-control input-sm"/>
 					</div>
 					<div class="col-sm-2">
-						<input type="submit" value="rename" class="btn btn-default btn-sm"/>
+						<input type="submit" value="rename" class="btn btn-default btn-block btn-xs"/>
 					</div>
 				</div>
 			</form>
 		</div>
 	</dd>
-
-	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 	
 	<c:forEach items="${video.actressList}" var="actress">
 		<c:if test="${actress.name ne 'Amateur'}">
-			<dd class="box">
+			<dd>
 				<jk:actress actress="${actress}" view="detail"/>
-				<div class="form-group text-center">
+				<div class="form-group text-center box hide">
 					<ul class="list-inline">
 						<c:forEach items="${actress.videoList}" var="video">
 							<c:choose>
@@ -107,6 +114,9 @@ function fnToggleFileinfo() {
 			</dd>
 		</c:if>
 	</c:forEach>
+	
+	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+	
 </dl>
 
 </div>

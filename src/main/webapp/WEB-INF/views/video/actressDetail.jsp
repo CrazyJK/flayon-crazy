@@ -35,9 +35,10 @@ $(document).ready(function() {
 	
 <c:if test="${actress.existImage}">
 	$("body").css({
-		"background-image": "url('<c:url value="/video/actress/${actress.name}/cover" />')", 
-		"background-repeat": "repeat",
-	    "background-size": "initial"
+		backgroundImage: "url('<c:url value="/video/actress/${actress.name}/cover" />')", 
+		backgroundRepeat: "repeat",
+	    backgroundSize: "initial",
+		backgroundAttachment: "fixed"
 	});	
 </c:if>
 	

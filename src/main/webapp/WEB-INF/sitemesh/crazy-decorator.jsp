@@ -141,7 +141,7 @@ $(document).ready(function() {
 	loading(false);
 
 	if (locationPathname != (videoPath + '/search')) {
-		setInterval(() => {
+		setInterval(function() {
 			$.getJSON({
 				method: 'GET',
 				url: videoPath + '/ping.json',
@@ -201,7 +201,9 @@ function actionFrame(reqUrl, reqData, method, msg, interval) {
 			loading(true, 'Fail : ' + errorMessge, 10000);
 		}
 		else {
-			loading(true, msg + " Done", interval ? interval : 2000);
+//			loading(true, msg + " Done", interval ? interval : 2000);
+			loading(false);
+			showSnackbar(msg + " Done", interval ? interval : 2000);
 		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		errorHtml = $.parseHTML(jqXHR.responseText);
@@ -294,6 +296,13 @@ function viewInnerSearchPage() {
 	$("#innerSearchPage").css({"box-shadow": "0 0 15px 10px " + randomColor(0.5)}).toggle();
 	
 }
+
+function showSnackbar(message, time) {
+	var x = document.getElementById("snackbar")
+	x.innerHTML = message;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 </script>
 
 <sitemesh:write property="head" />
@@ -368,6 +377,8 @@ function viewInnerSearchPage() {
 	<div id="error" title="Error" style="display:none;">
 		<p></p>
 	</div>
+
+	<div id="snackbar">Some text some message..</div>
 
 </body>
 </html>

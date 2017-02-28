@@ -176,7 +176,7 @@ function fnEditOverview(opus) {
  * @param opus
  */
 function fnVideoDetail(opus) {
-    popup(videoPath + "/" + opus, "detailview-"+opus, 850, 800);
+    popup(videoPath + "/" + opus, "detailview-"+opus, 800, 550);
 }
 /**
  * save video rank

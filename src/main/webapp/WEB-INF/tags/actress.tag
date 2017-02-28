@@ -48,7 +48,7 @@
 	<span class="label label-plain" title="age">${actress.age}</span> 
 	<span class="label label-plain" title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 	<span class="label label-plain" title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
-	<span class="label label-plain">${fn:length(actress.videoList)}</span>
+	<span class="label label-plain" onclick="fnVideoToggle(this)">Video ${fn:length(actress.videoList)}</span>
 	<span class="label label-plain">Score ${actress.score}</span>
 <%
 	} else {

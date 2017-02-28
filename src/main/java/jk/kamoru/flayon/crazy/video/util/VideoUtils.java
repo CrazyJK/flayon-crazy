@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
 /**
@@ -420,6 +421,14 @@ public class VideoUtils {
 			actress = VideoUtils.trimBlank(actress);
 		}
 		return actress;
+	}
+
+	public static Object getTagNames(List<VTag> tags) {
+		StringBuilder names = new StringBuilder();
+		for (VTag tag : tags) {
+			names.append(tag.getName()).append(" ");
+		}
+		return names.toString();
 	}
 	
 }

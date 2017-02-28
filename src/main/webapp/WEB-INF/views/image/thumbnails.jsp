@@ -157,14 +157,15 @@ function render() {
 }
 
 function resize() {
+	var imgWidth  = $("#img-width").val();
+	var imgHeight = $("#img-height").val();
 	$("#thumbnailUL > li").css({
-		width: $("#img-width").val(),
-		height: $("#img-height").val()
+		width: imgWidth,
+		height: imgHeight
 	});
-
-	setlocalStorageItem("thumbnamils.img-width",  $("#img-width").val());
-	setlocalStorageItem("thumbnamils.img-height", $("#img-height").val());
-	
+	setlocalStorageItem("thumbnamils.img-width",  imgWidth);
+	setlocalStorageItem("thumbnamils.img-height", imgHeight);
+	$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);	
 }
 
 </script>
@@ -174,9 +175,9 @@ function resize() {
 	<div id="header_div" class="box form-inline">
 
 		<span class="label label-info">Width</span>
-		<input type="range" id="img-width"  class="form-control input-sm input-range" min="100" max="400" value="120" onmouseup="resize()"/>
+		<input type="range" id="img-width"  class="form-control input-sm input-range" min="100" max="400" value="120" step="10" onmouseup="resize()"/>
 		<span class="label label-info">Height</span>
-		<input type="range" id="img-height" class="form-control input-sm input-range" min="100" max="400" value="100" onmouseup="resize()"/>
+		<input type="range" id="img-height" class="form-control input-sm input-range" min="100" max="400" value="100" step="10" onmouseup="resize()"/>
 	
 		<span class="label label-primary total-count"></span>
 		<span class="label label-primary display-count"></span>

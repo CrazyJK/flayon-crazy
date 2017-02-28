@@ -38,7 +38,7 @@ p.text-body {
 div.modal-dialog {
 	width: 650px;
     height: 250px;
-    margin-top: 360px;
+    margin-top: 380px;
 }
 div.modal-content {
 /*	background: transparent url("<c:url value="/img/chalk-bg.png"/>") repeat center top;
@@ -64,6 +64,7 @@ div.modal-footer {
 form input.form-control {
     background-color: transparent !important;
     color: #eee !important;
+    border: 0;
 }
 form .input-group {
 	margin-bottom: 15px;
@@ -72,14 +73,34 @@ form .input-group {
 form .input-group-addon {
 	background-color: transparent;
     color: #eee;
+    border: 0;
 }
 form button[type='submit'], form button[type='submit']:hover {
-	border: 1px solid #eee;
+/* 	border: 1px solid #eee; */
+    border: 0;
 	border-radius: 4px;
 }
 div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:hover, div.modal-content a:hover {
 	color: #eee;
 	text-decoration: none;
+}
+.life-timer {
+	font-weight: bold;
+	font-size: 34px;
+	color: #4d6371;
+    text-shadow: #000 0px 1px 0px;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    padding-bottom: 20px;
+    width: 100%;
+}
+.life-timer div {
+	display: inline-block;
+	margin: 0 3px;
+}
+.hour-timer, .minute-timer, .second-timer {
+	width: 40px;
 }
 </style>
 </head>
@@ -95,6 +116,10 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 				<span id="wording"></span>
 			</p>
 		</div>
+	</div>
+
+	<div class="life-timer">
+		<div class="day-timer"></div>D<div class="hour-timer"></div>:<div class="minute-timer"></div>:<div class="second-timer"></div>
 	</div>
 
 	<div id="loginModal" class="modal fade">
@@ -156,6 +181,8 @@ $(document).ready(function() {
 	$("#wording").css({fontFamily: randomFont()});
 	$("#loginModal").css({fontFamily: randomFont()});
 	$("#login-welcome").css({fontFamily: randomFont()});
+	$(".life-timer").css({fontFamily: randomFont()});
+	
 	if (!isLogin)
 		$("#headerNav").css({fontFamily: randomFont()});
 	
@@ -198,6 +225,29 @@ function viewLoginForm() {
 	});
 	$("#loginModal").modal();
 }
+
+var countDownDate = new Date("Apr 28 2031 00:00:00 GMT+0900").getTime();
+
+var lifeTimer = setInterval(function() {
+	var now = new Date().getTime();
+	var distance = countDownDate - now;
+	
+	var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	
+	$(".day-timer").html(days);
+	$(".hour-timer").html(hours);
+	$(".minute-timer").html(minutes);
+	$(".second-timer").html(seconds);
+	
+	if (distance < 0) {
+	 	clearInterval(lifeTimer);
+	 	$(".life-timer").html("EXPIRED");
+	}
+}, 1000);
+
 </script>
 </body>
 </html>
