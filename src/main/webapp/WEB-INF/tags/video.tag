@@ -23,7 +23,7 @@
 <%  } else if (view.equalsIgnoreCase("subtitles")) { %>
 	<span class="${cssClass} ${video.existSubtitlesFileList ? 'exist' : 'nonExist'}" onclick="fnEditSubtitles('${video.opus}')">${mode eq 's' ? 's' : 'smi'}</span>
 <%  } else if (view.equalsIgnoreCase("overview")) { %>
-	<span class="${cssClass}" title="${video.overviewText}" id="overview-${video.opus}" style="${video.existOverview ? 'color:red' : ''}" onclick="fnEditOverview('${video.opus}')">${mode eq 's' ? 'O' : (video.existOverview ? video.overviewText : 'Overview')}</span>
+	<span class="${cssClass}" title="${video.overviewText}" id="overview-${video.opus}" style="${video.existOverview ? 'color:red' : ''}" onclick="fnEditOverview('${video.opus}', event)">${mode eq 's' ? 'O' : (video.existOverview ? video.overviewText : 'Overview')}</span>
 <%  } else if (view.equalsIgnoreCase("download")) { %>
 	<span class="${cssClass}" title="download date">${video.videoDate}</span>
 <%  } else if (view.equalsIgnoreCase("release")) { %>
@@ -48,7 +48,7 @@
 	</c:forEach>
 	</div>
 <%  } else if (view.equalsIgnoreCase("opus")) { %>
-	<span class="${cssClass}" title="${video.fullname}" onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</span>
+	<span class="${cssClass}" title="${video.fullname}" onclick="fnVideoDetail('${video.opus}')">${video.opus}</span>
 	<c:if test="${mode eq 'l'}">
 		<span class="${cssClass}" title="<s:message code="video.find-info.opus"/>" onclick="fnSearchOpus('${video.opus}')"><span class="glyphicon glyphicon-picture"></span></span>
 		<span class="${cssClass}" title="<s:message code="video.find-info.torrent"/>" onclick="fnSearchTorrent('${video.opus}'); this.style.backgroundColor='red';"><span class="glyphicon glyphicon-magnet"></span></span>

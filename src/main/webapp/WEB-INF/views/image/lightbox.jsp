@@ -8,13 +8,16 @@
 <title>Lightbox</title>
 <link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
+body {
+	overflow: hidden;
+}
 .progress {
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	width: 100px;
 	margin: 5px;
-	z-index: 1000;
+	z-index: 2000;
 	float: right;
 	background-image: linear-gradient(to bottom,#403a3a 0,#2f2626 100%);
 }
@@ -56,8 +59,10 @@ $(document).ready(function() {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount))) + 1;
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
 
+		$(".imageCount").html(imageCount);
+		
 		fnRender();
 		fnSetOption();
 		fnCurrImage();
@@ -91,19 +96,9 @@ $(document).ready(function() {
 	    else 	
 	    	fnNextImage();
 	});
-
-	$(window).bind("keyup", function(e) {
-		var event = window.event || e;
-		switch(event.keyCode) {
-		case 32: // space
-			fnRandomImage();
-			break;
-		case 13: // enter
-			break;
-		};
-	});
 	
-	$("#albumLabel, #showImageNumberLabel, #resizeDuration, #fadeDuration, #wrapAround, #playInterval, #positionFromTop, input:radio[name='playMode']").on("change", function() {
+	$("#albumLabel, #showDataLabel, #showImageNumberLabel, #resizeDuration, #fadeDuration, #imageFadeDuration, #wrapAround, #playInterval, #positionFromTop, input:radio[name='playMode']").on("change", function() {
+		console.log("change", $(this));
 		fnSetOption();
 	});
 });
@@ -114,26 +109,22 @@ function fnRender() {
 		$("<a>").attr({
 			'href': imagepath + i,
 			'data-lightbox': 'lightbox-set',
-			'data-title': imageMap[i]
+			'data-title': "<a href='" + imagepath + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
+			"data-index": i
 		}).appendTo(imageset);
 	}
 }
 function fnPrevImage() {
 	$("a.lb-prev").click();
-	--selectedNumber;
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
 }
 function fnNextImage() {
 	$("a.lb-next").click();
-	++selectedNumber;
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
 }
 function fnCurrImage() {
 	$("#imageset a:nth-child(" + selectedNumber + ")").click();
 }
 function fnRandomImage() {
-	selectedNumber = getRandomInteger(0, imageCount);
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber-1);
+	selectedNumber = getRandomInteger(0, imageCount-1);
 	fnCurrImage();
 }
 function fnPlayImage() {
@@ -153,88 +144,105 @@ function showTimer(sec) {
 }
 function fnSetOption() {
 	var albumLabel           = $("#albumLabel").val();
+	var showDataLabel        = $("#showDataLabel").is(":checked");
 	var showImageNumberLabel = $("#showImageNumberLabel").is(":checked");
 	var resizeDuration       = parseInt($("#resizeDuration").val());
 	var fadeDuration         = parseInt($("#fadeDuration").val());
+	var imageFadeDuration	 = parseInt($("#imageFadeDuration").val());
 	var wrapAround           = $("#wrapAround").is(":checked");
 	var positionFromTop      = parseInt($("#positionFromTop").val());
 	lightbox.option({
 		'albumLabel': albumLabel,
+		'showDataLabel': showDataLabel,
 		'showImageNumberLabel': showImageNumberLabel,
 		'resizeDuration': resizeDuration,
       	'fadeDuration': fadeDuration,
+      	'imageFadeDuration': imageFadeDuration,
       	'wrapAround': wrapAround,
-      	'positionFromTop': positionFromTop
+      	'positionFromTop': positionFromTop,
+      	'sanitizeTitle': false
     });
 	playInterval = parseInt($("#playInterval").val());
 	playMode = $('input:radio[name="playMode"]:checked').val();
 	$("#timerBar").attr("aria-valuemax", playInterval);
-	
-	console.log(albumLabel, showImageNumberLabel, resizeDuration, fadeDuration, wrapAround, positionFromTop, playInterval, playMode);
-	
+
 }
 </script>
 </head>
 <body>
 	<div class="container">
 		<div class="page-header">
-			<h1>Lightbox</h1>
+			<h1>Lightbox
+				<small class="badge imageCount"></small>
+			</h1>
 		</div>
 	
 		<div class="form-horizontal box">
-			<h2 class="text-center">Options</h2>
+			<h1 class="text-center">Options</h1>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="albumLabel">albumLabel:</label>
-				<div class="col-sm-9">
+				<label class="control-label col-xs-6" for="albumLabel">albumLabel:</label>
+				<div class="col-xs-6">
 					<input class="form-control" id="albumLabel" value="Image %1 of %2" placeholder="%1 of %2"/>
 				</div>
 			</div>
 			<div class="form-group">        
-				<label class="control-label col-sm-3" for="showImageNumberLabel">showImageNumberLabel:</label>
-      			<div class="col-sm-9">
+				<label class="control-label col-xs-6" for="showDataLabel">showDataLabel:</label>
+      			<div class="col-xs-6">
+					<label class="checkbox-inline"><input type="checkbox" checked="checked" id="showDataLabel">showDataLabel</label>
+				</div>
+			</div>
+			<div class="form-group">        
+				<label class="control-label col-xs-6" for="showImageNumberLabel">showImageNumberLabel:</label>
+      			<div class="col-xs-6">
 					<label class="checkbox-inline"><input type="checkbox" checked="checked" id="showImageNumberLabel">showImageNumberLabel</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="resizeDuration">resizeDuration:</label>
-				<div class="col-sm-9">
+				<label class="control-label col-xs-6" for="resizeDuration">resizeDuration:</label>
+				<div class="col-xs-6">
 					<input type="number" class="form-control" id="resizeDuration" value="700" placeholder="700"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="fadeDuration">fadeDuration:</label>
-				<div class="col-sm-9"> 
-					<input type="number" class="form-control" id="fadeDuration" value="700" placeholder="700"/>
+				<label class="control-label col-xs-6" for="fadeDuration">fadeDuration:</label>
+				<div class="col-xs-6"> 
+					<input type="number" class="form-control" id="fadeDuration" value="600" placeholder="600"/>
 				</div>
 			</div>
-			<div class="form-group">        
-				<label class="control-label col-sm-3" for="wrapAround">wrapAround:</label>
-      			<div class="col-sm-9">
+			<div class="form-group">
+				<label class="control-label col-xs-6" for="imageFadeDuration">imageFadeDuration:</label>
+				<div class="col-xs-6"> 
+					<input type="number" class="form-control" id="imageFadeDuration" value="600" placeholder="600"/>
+				</div>
+			</div>
+			<div class="form-group"> 
+				<label class="control-label col-xs-6" for="wrapAround">wrapAround:</label>
+      			<div class="col-xs-6">
 					<label class="checkbox-inline"><input type="checkbox" checked="checked" id="wrapAround">wrapAround</label>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="playInterval">playInterval:</label>
-				<div class="col-sm-9"> 
+				<label class="control-label col-xs-6" for="playInterval">playInterval:</label>
+				<div class="col-xs-6"> 
 					<input type="number" class="form-control" id="playInterval" value="5" placeholder="second"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="positionFromTop">positionFromTop:</label>
-				<div class="col-sm-9"> 
-					<input type="number" class="form-control" id="positionFromTop" value="50" placeholder="px"/>
+				<label class="control-label col-xs-6" for="positionFromTop">positionFromTop:</label>
+				<div class="col-xs-6"> 
+					<input type="number" class="form-control" id="positionFromTop" value="30" placeholder="px"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3">playMode</label>
-				<div class="col-sm-9">
+				<label class="control-label col-xs-6">playMode</label>
+				<div class="col-xs-6">
 					<label class="radio-inline"><input type="radio" name="playMode" value="r" checked="checked">Random</label>
 					<label class="radio-inline"><input type="radio" name="playMode" value="s">Sequential</label>
 				</div>
 			</div>
 			<div class="form-group">
-      			<div class="col-sm-offset-3 col-sm-9">
-					<button class="btn btn-info" onclick="fnCurrImage()">View</button>
+      			<div class="col-xs-12">
+					<button class="btn btn-default btn-block btn-lg" onclick="fnCurrImage()">View</button>
 				</div>
 			</div>
 		</div>

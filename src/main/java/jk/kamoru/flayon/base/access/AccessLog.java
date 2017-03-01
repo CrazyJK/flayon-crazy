@@ -21,15 +21,15 @@ public class AccessLog implements Serializable {
     public String method;
     public String requestURI;
     public String contentType;
-    public long elapsedTime;
+    public Long elapsedTime;
     public String handlerInfo;
     public String exceptionInfo;
     public String modelAndViewInfo;
     public User user;
-    public int status;
+    public Integer status;
     
-	public AccessLog(Date accessDate, String remoteAddr, String method, String requestURI, String contentType, long elapsedTime,
-			String handlerInfo, String exceptionInfo, String modelAndViewInfo, User user, int status) {
+	public AccessLog(Date accessDate, String remoteAddr, String method, String requestURI, String contentType, Long elapsedTime,
+			String handlerInfo, String exceptionInfo, String modelAndViewInfo, User user, Integer status) {
 		super();
 		this.accessDate = accessDate;
 		this.remoteAddr = remoteAddr;

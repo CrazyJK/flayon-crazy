@@ -66,7 +66,7 @@ $(document).ready(function(){
 				var div = $("<div>");
 
 				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
-				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
 				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
 				var actressDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewActressDetail('" + actress +"')").html(actress);
 				var existVideoDom 	  = $("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V");
@@ -97,7 +97,7 @@ $(document).ready(function(){
 				var div = $("<div>");
 
 				var dateDom 		  = $("<span>").addClass("label label-plain").html(date);
-				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
 				var actDom	 		  = $("<span>").addClass("label label-plain").html(act);
 				var descDom 		  = $("<span>").addClass("label label-plain").html(desc);
 

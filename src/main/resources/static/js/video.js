@@ -31,7 +31,7 @@ function setBackgroundImage(imgIdx) {
 	if (imgIdx)
 		currBGImageNo = imgIdx;
 	else 
-		currBGImageNo = getRandomInteger(0, bgImageCount);
+		currBGImageNo = getRandomInteger(0, bgImageCount-1);
 	
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
 //	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
@@ -167,17 +167,32 @@ function fnCoverView(opus) {
  * popup overview editer
  * @param opus
  */
-function fnEditOverview(opus) {
+function fnEditOverview(opus, event) {
 	console.log("Overview Popup : " + opus);
-    popup(videoPath + "/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse');
+    popup(videoPath + "/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse', DEFAULT_SPECS, event);
 }
 /**
  * popup video detail info
  * @param opus
  */
 function fnVideoDetail(opus) {
-    popup(videoPath + "/" + opus, "detailview-"+opus, 800, 550);
+    popup(videoPath + "/" + opus, "videoDetail-"+opus, 800, 640);
 }
+/**
+ * popup view actress detail
+ * @param name
+ */
+function fnViewActressDetail(name) {
+	popup(videoPath + "/actress/" + name, "actressDetail-" + name, 850, 600);
+}
+/**
+ * popup view studio detail
+ * @param name
+ */
+function fnViewStudioDetail(name) {
+	popup(videoPath + "/studio/" + name, "studioDetail-" + name, 850, 600);
+}
+
 /**
  * save video rank
  * @param opus
@@ -223,27 +238,6 @@ function fnRankColor(rank, rankLabel) {
 			rankLabel.css("color", "blue");
 		}
 	} catch(e) {}
-}
-/**
- * popup view actress detail
- * @param name
- */
-function fnViewActressDetail(name) {
-	popup(videoPath + "/actress/" + name, "actressDetail-" + name, 850, 600);
-}
-/**
- * popup view studio detail
- * @param name
- */
-function fnViewStudioDetail(name) {
-	popup(videoPath + "/studio/" + name, "studioDetail-" + name, 850, 600);
-}
-/**
- * popup view video datail
- * @param opus
- */
-function fnViewVideoDetail(opus) {
-	popup(videoPath + "/" + opus, "videoDetail-" + opus, 850, 600);
 }
 /**
  * set, mark favorite actress

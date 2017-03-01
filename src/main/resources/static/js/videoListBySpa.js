@@ -167,7 +167,8 @@ function showCover(isKey) {
 
 function request() {
 	loading(true, "request...");
-	showStatus(true, "Request...");
+//	showStatus(true, "Request...");
+//	showSnackbar("Request...");
 
 	// reset variables
 	reverse = !reverse;
@@ -184,7 +185,8 @@ function request() {
 		timeout: 60000
 	}).done(function(data) {
 		if (data.exception) {
-			showStatus(true, data.exception.message);
+//			showStatus(true, data.exception.message);
+			showSnackbar("Error.. " + data.exception.message);
 		}
 		else {
 			videoList = [];
@@ -210,14 +212,16 @@ function request() {
 			});
 		}
 	}).fail(function(jqxhr, textStatus, error) {
-		showStatus(true, textStatus + ", " + error);
+//		showStatus(true, textStatus + ", " + error);
+		showSnackbar("Error "+ textStatus + ", " + error);
 	}).always(function() {
 		loading(false);
 	});	
 }
 
 function render(first) {
-	showStatus(true, "rendering...");
+//	showStatus(true, "rendering...");
+	showSnackbar("Rendering...", 1000);
 	
 	var displayCount = 0;
 	var query = $(".search").val();
@@ -282,7 +286,7 @@ function render(first) {
 	
 	setTblCoverPosition();
 	
-	showStatus(false);
+//	showStatus(false);
 }
 
 function fnIsScrollBottom() {
@@ -344,7 +348,7 @@ function renderTable(index, video, parent) {
 	$("<td>").appendTo(tr).html(video.html_opus);
 	$("<td>").appendTo(tr).html(
 		$('<div>').addClass("nowrap").append(
-			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.title).attr({"title": video.title, "data-toggle": "tooltip"}) //.tooltip()
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnVideoDetail('" + video.opus + "')"}).html(video.title).attr({"title": video.title, "data-toggle": "tooltip"}) //.tooltip()
 		).append(
 			$("<img>").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).addClass("img-thumbnail tbl-cover").hide()
 		).append(
@@ -366,13 +370,15 @@ function renderTable(index, video, parent) {
 function fnSelectCandidateVideo(opus, idx, i) {
 	$("[data-candidate='" + opus + "-" + i + "']").hide();
 	$(".candidate").html("Candidate " + --candidateCount);
-	showStatus(true, "accept file", true);
+//	showStatus(true, "accept file", true);
+	showSnackbar("accept file " + opus);
 }
 function goTorrentMove(opus, idx, i) {
 	$("[data-torrent='" + opus + "-" + i + "']").hide();
 	$("[data-idx='" + idx + "']").addClass("moved");
 	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
-	showStatus(true, ",move torrent", true);
+//	showStatus(true, ",move torrent", true);
+	showSnackbar("move torrent " + opus);
 }
 function goTorrentSearch(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("found");

@@ -194,7 +194,7 @@ function startVideoBatch(type) {
 								var vItem = $("<span>");
 								vItem.addClass("label label-plain");
 								vItem.attr("data-opus", "${video.opus}");
-								vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
+								vItem.attr("onclick", "fnVideoDetail('${video.opus}')");
 								vItem.attr("title", "${video.fullname}");
 								$("#rank${video.rank}-${date.key}").append(vItem).append("&nbsp;");
 							</script>
@@ -245,7 +245,7 @@ function startVideoBatch(type) {
 								var vItem = $("<span>");
 								vItem.addClass("label label-plain");
 								vItem.attr("data-opus", "${video.opus}");
-								vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
+								vItem.attr("onclick", "fnVideoDetail('${video.opus}')");
 								vItem.attr("title", "${video.fullname}");
 								$("#rank${video.rank}-${play.key}").append(vItem).append("&nbsp;");
 							</script>

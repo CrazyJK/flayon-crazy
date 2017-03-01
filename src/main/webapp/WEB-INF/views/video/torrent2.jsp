@@ -130,7 +130,7 @@ function fnChangeMode(mode) {
 					</td>
 					<td style="min-width:450px; width:500px; max-width:600px;">
 						<div class="nowrap">
-							<small id="fullname-${video.opus}" class="text-primary" onclick="fnViewVideoDetail('${video.opus}')">${video.fullname}</small>
+							<small id="fullname-${video.opus}" class="text-primary" onclick="fnVideoDetail('${video.opus}')">${video.fullname}</small>
 						</div>
 					</td>
 					<td>

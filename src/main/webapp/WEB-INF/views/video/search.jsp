@@ -72,7 +72,7 @@ $(document).ready(function(){
 				var existSubtitles = entry['existSubtitles'];
 				
 				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
-				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
 				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
 				var actressTD = $("<td>");
 				var actor = actress.split(",");
@@ -109,7 +109,7 @@ $(document).ready(function(){
 				var desc = entry['desc'];
 				
 				var dateDom = $("<span>").addClass("label label-plain").html(date);
-				var opusDom = $("<span>").addClass("label label-plain").html(opus).attr("onclick", "fnViewVideoDetail('" + opus +"')");
+				var opusDom = $("<span>").addClass("label label-plain").html(opus).attr("onclick", "fnVideoDetail('" + opus +"')");
 				var actDom	= $("<span>").addClass("label label-plain").html(act);
 				var descDom = $("<span>").addClass("label label-plain").html(desc);
 

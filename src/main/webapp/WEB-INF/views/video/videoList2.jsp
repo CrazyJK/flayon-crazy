@@ -55,7 +55,7 @@ function sort(selectedSort) {
 						</div>
 					</td>
 					<td>
-						<a onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</a>
+						<a onclick="fnVideoDetail('${video.opus}')">${video.opus}</a>
 					</td>
 					<td style="max-width: 180px;">
 						<div class="nowrap" title="${video.title}">${video.title}</div>

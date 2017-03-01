@@ -22,18 +22,30 @@ dt, dd {
 .fileinfoDiv p {
 	margin-bottom: 5px;
 }
+.dl-detail {
+	overflow: auto; 
+	margin: 0;
+}
+.tag-wrapper {
+	position: fixed; 
+	bottom: 0; 
+	text-align: center;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
+var thisWidth = $(this).width();
 $(document).ready(function() {
+
 	$("body").css({
 		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
-		backgroundSize: "contain",
+		backgroundSize: thisWidth + "px",
 		backgroundPosition: "center top",
 		backgroundAttachment: "fixed",
-		backgroundRepeat: "repeat"
+		backgroundRepeat: "no-repeat",
+		backgroundColor: randomColor(0.5)
 	});
-
+	
 	$("form#renameForm").submit(function(event) {
 		console.log("form submit...");
 		loading(true, "rename...");
@@ -45,6 +57,14 @@ $(document).ready(function() {
 });
 function fnVideoToggle(dom) {
 	$(dom).next().next().toggleClass("hide");
+}
+function resizeSecondDiv() {
+	var _offsetMargin = 10;
+	var _tagWrapperHeight = $(".tag-wrapper").outerHeight();
+	var _windowOuterHeight = $(window).outerHeight();
+	var _calculatedDivHeight = _windowOuterHeight - _tagWrapperHeight - _offsetMargin;
+	console.log(_windowOuterHeight, _offsetMargin, _tagWrapperHeight, _calculatedDivHeight);
+	$(".dl-detail").outerHeight(_calculatedDivHeight);
 }
 </script>
 </head>
@@ -115,7 +135,7 @@ function fnVideoToggle(dom) {
 		</c:if>
 	</c:forEach>
 	
-	<dd><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+	<dd class="tag-wrapper"><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 	
 </dl>
 

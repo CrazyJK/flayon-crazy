@@ -38,7 +38,7 @@ public class Info {
 	@Override
 	public String toString() {
 		return String.format("Info [opus=%s, playCount=%s, rank=%s, lastAccess=%s, overview=%s, tags=%s]", 
-				opus, playCount, rank, format.format(lastAccess), overview, VideoUtils.getTagNames(tags));
+				opus, playCount, rank, lastAccess == null ?  "" : format.format(lastAccess), overview, VideoUtils.getTagNames(tags));
 	}
 	
 	

@@ -31,7 +31,7 @@ $(document).ready(function(){
 				var div = $("<div>");
 
 				var dateDom 		  = $("<span>").addClass("history-item").html(date);
-				var opusDom 		  = $("<span>").addClass("history-item").attr("onclick", "fnViewVideoDetail('" + opus +"')").html(opus);
+				var opusDom 		  = $("<span>").addClass("history-item").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
 				var actDom	 		  = $("<span>").addClass("history-item").html(act);
 				var descDom 		  = $("<span>").addClass("history-item").html(desc);
 

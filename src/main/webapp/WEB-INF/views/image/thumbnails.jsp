@@ -6,7 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Thumbnails</title>
+<link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
+body {
+	overflow: hidden;
+}
 #content_div {
 	
 }
@@ -20,7 +24,7 @@
 	height: 100px;
 	transition: all .5s;
 }
-#thumbnailUL > li > div {
+#thumbnailUL > li > a > div {
 	width: 100%;
 	height: 100%;
 	background-repeat: no-repeat;
@@ -55,7 +59,7 @@ $(document).ready(function() {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1)));
 		
 		render();
 		
@@ -84,6 +88,10 @@ $(document).ready(function() {
 		$("#magnify").click();	
 	}
 	
+	lightbox.option({
+		'showImageNumberLabel': false,
+    });
+
 });
 
 function fnIsScrollBottom() {
@@ -108,22 +116,24 @@ function render() {
 	for (var i=start; i<end; i++) {
 		$("ul#thumbnailUL").append(
 			$("<li>").addClass("img-thumbnail").append(
-				$("<div>").data("src", "${PATH}/image/" + i).css(
-					{
-						backgroundImage: "url('${PATH}/image/" + i + "')"
+				$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
+					event.stopPropagation();
+					// console.log("delete ", $(this).parent().data("src"));
+					var imgSrc = $(this).parent().data("src");
+					if (confirm('Delete this image\n' + imgSrc)) {
+						$(this).parent().parent().parent().hide("fade", {}, 500);
+						actionFrame(imgSrc, {}, "DELETE", "this image delete");
 					}
-				).on("click", function(event) {
-					// console.log("image click");
-					popupImage($(this).data("src"), $(this).data("src"), event);
+				})
+			).append(
+				$("<a>").attr({
+					'href': "${PATH}/image/" + i,
+					'data-lightbox': 'lightbox-set',
+					'data-title': "<a href='${PATH}/image/" + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
+					'data-index': i
 				}).append(
-					$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
-						event.stopPropagation();
-						// console.log("delete ", $(this).parent().data("src"));
-						var imgSrc = $(this).parent().data("src");
-						if (confirm('Delete this image\n' + imgSrc)) {
-							$(this).parent().parent().hide("fade", {}, 500);
-							actionFrame(imgSrc, {}, "DELETE", "this image delete");
-						}
+					$("<div>").data("src", "${PATH}/image/" + i).css({
+						backgroundImage: "url('${PATH}/image/" + i + "')"
 					})
 				)
 			).hover(
@@ -195,5 +205,6 @@ function resize() {
 		</div>
 	</div>
 
+	<script src="${PATH}/js/lightbox.js"></script>
 </body>
 </html>

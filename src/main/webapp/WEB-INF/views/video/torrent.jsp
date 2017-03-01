@@ -325,7 +325,7 @@ function renderTable(index, video, parent) {
 	$("<td>").appendTo(tr).html(video.html_opus);
 	$('<td>').appendTo(tr).html(
 		$('<div>').addClass("nowrap hover_img").attr({"title": video.fullname}).append(
-			$('<span>').addClass('label label-plain').attr({"onclick": "fnViewVideoDetail('" + video.opus + "')"}).html(video.title).append(
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnVideoDetail('" + video.opus + "')"}).html(video.title).append(
 				$('<a>').append(
 					$('<img>').css({"width": "600px"}).attr({"src": video.coverURL + "/title"}).addClass("img-thumbnail")	
 				)	

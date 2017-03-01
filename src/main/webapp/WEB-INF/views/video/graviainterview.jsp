@@ -200,7 +200,7 @@ function renderContent(idx) {
 		
 		if (mode === 'text') {
 			$("<p>").addClass("hover_img " + (title.check ? "bg-danger" : "bg-info") + " " + (title.exist ? "exist" : "")).attr({"title": title.rowData}).append(
-					$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnViewVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
+					$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
 						$('<span>').append(
 							$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
 						)
@@ -220,7 +220,7 @@ function renderContent(idx) {
 			$("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find").appendTo(td0);
 
 			var td1 = $("<td>").css({"width": "80px"}).addClass("hover_img");
-			$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnViewVideoDetail('" + title.opus + "')" : "")}).addClass("label label-info").html("Image").append(
+			$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).addClass("label label-info").html("Image").append(
 				$('<span>').append(
 					$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
 				)

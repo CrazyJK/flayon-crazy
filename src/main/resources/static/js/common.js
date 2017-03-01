@@ -59,13 +59,14 @@ function popup(url, name, width, height, positionMethod, specs, event) {
 		specs = DEFAULT_SPECS;
 	}
 	specs = "width="+width+",height="+height+",top="+top+",left="+left + "," + specs;
-//	console.log("[popup] open param", vUrl, vName, specs);
-	
-	var popupWindow = window.open(vUrl, vName, specs);
-//	console.log("[popup] open result", popupWindow);
+
 	try {
+//		console.log("[popup] open param", vUrl, vName, specs);
+		var popupWindow = window.open(vUrl, vName, specs);
+//		console.log("[popup] open result", popupWindow);
 		popupWindow.focus();
 	} catch (e) {
+		window.open(vUrl, vName, specs);
 		console.log("[popup] error", e);
 	}
 }

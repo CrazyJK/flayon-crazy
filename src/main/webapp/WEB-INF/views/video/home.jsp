@@ -127,7 +127,7 @@ function frontEffect() {
 	}).bind("click", function() {
 		var opus = $(this).data("opus");
 		if (opus && opus != "") {
-			fnViewVideoDetail(opus);
+			fnVideoDetail(opus);
 		}
 	});
 	$.getJSON("${PATH}/video/opus.json" ,function(data) {
