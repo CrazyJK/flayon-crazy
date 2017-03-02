@@ -29,9 +29,18 @@ body {
     box-shadow: none;
     min-height: 40px;
 }
+.form-group {
+    margin-bottom: 5px;
+}
 .form-group:not(:last-child) {
 	border-bottom: 1px dashed #ddd;
     padding-bottom: 5px;
+}
+.form-group input[type='range'],.form-group input[type='text'] {
+	font-size: 12px;
+	padding: 0 6px;
+	height: 27px;
+	min-height: 27px;
 }
 .control-label {
 	text-transform: capitalize;
@@ -42,37 +51,37 @@ body {
 
 bgContinue = false;
 var imagepath = '<s:url value="/image/"/>';
-var selectedNumber;
-var selectedImgUrl;
 var imageCount;
-var windowWidth  = $(window).width();
-var windowHeight = $(window).height();
 var imageMap;
-var playSlide = false;
-var playInterval = 10;
-var playSec = playInterval;
-var playMode = 'R';
+
+var playInterval, playSec, playMode, playSlide = false;
 
 $(document).ready(function() {
-	
+
 	$.getJSON(imagepath + "data.json" ,function(data) {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
+		var selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
 
 		$(".imageCount").html(imageCount);
 		
-		fnRender();
-		fnSetOption();
-		fnCurrImage();
+		var $imageset = $('#imageset');
+		for (var i=0; i<imageCount; i++) {
+			$("<a>").attr({
+				'href': imagepath + i,
+				'data-lightbox': 'lightbox-set',
+				'data-title': "<a href='" + imagepath + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
+				"data-index": i
+			}).appendTo($imageset);
+		}
+	
+		fnCurrImage(selectedNumber);
 	});
 
-	$("#playInterval").val(playInterval); // set default
-	
-	setInterval(function() {
+	var playTimer = setInterval(function() {
 		if (playSlide) {
-			if (playSec % playInterval == 0) {
+			if (--playSec % playInterval == 0) {
 				if (playMode === 'r') {
 					fnRandomImage();
 				}
@@ -83,89 +92,70 @@ $(document).ready(function() {
 			}
 			showTimer(playSec);
 		}
-		playSec--;
-		if (playSec % playInterval == 0) {
-			playSec = playInterval;
-		}
 	},	1000);
-	
-	$(window).bind("mousewheel DOMMouseScroll", function(e) {
-		var delta = mousewheel(e);
-		if (delta > 0) 
-			fnPrevImage();
-	    else 	
-	    	fnNextImage();
-	});
-	
-	$("#albumLabel, #showDataLabel, #showImageNumberLabel, #resizeDuration, #fadeDuration, #imageFadeDuration, #wrapAround, #playInterval, #positionFromTop, input:radio[name='playMode']").on("change", function() {
-		console.log("change", $(this));
+
+	fnSetOption();
+	$(".form-control, .checkbox-inline, .radio-inline").on("change", function() {
+		var changeOptionText;
+		if (this.nodeName === 'LABEL')
+			if (this.control.type === 'radio')
+				changeOptionText = $(this.control).attr("name") + " = " + $('input:radio[name="' + $(this.control).attr("name") + '"]:checked').val();
+			else if (this.control.type === 'checkbox')
+				changeOptionText = $(this.control).attr("id") + " = " + $(this.control).is(":checked");
+			else
+				changeOptionText = "unknown change";
+		else
+			changeOptionText = $(this).attr("id") + " = " + $(this).val();
+
+		showSnackbar(changeOptionText, 1000);
 		fnSetOption();
 	});
 });
 
-function fnRender() {
-	var imageset = $('#imageset');
-	for (var i=0; i<imageCount; i++) {
-		$("<a>").attr({
-			'href': imagepath + i,
-			'data-lightbox': 'lightbox-set',
-			'data-title': "<a href='" + imagepath + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
-			"data-index": i
-		}).appendTo(imageset);
-	}
-}
 function fnPrevImage() {
 	$("a.lb-prev").click();
 }
 function fnNextImage() {
 	$("a.lb-next").click();
 }
-function fnCurrImage() {
+function fnCurrImage(selectedNumber) {
 	$("#imageset a:nth-child(" + selectedNumber + ")").click();
 }
 function fnRandomImage() {
-	selectedNumber = getRandomInteger(0, imageCount-1);
-	fnCurrImage();
+	fnCurrImage(getRandomInteger(0, imageCount-1));
 }
 function fnPlayImage() {
-	if (playSlide) { // stop
-		playSlide = false;
-		showTimer(playInterval);
-		$("#timer").html("Play");
+	playSlide = !playSlide;
+	if (playSlide) { // start
+		playSec = playInterval;
 	}
-	else { // start
-		playSlide = true;
+	else { // stop
+		showTimer(playInterval, "Play");
 	}
 }
-function showTimer(sec) {
-	$("#timer").html(sec + "s");
-	$("#timerBar").attr("aria-valuenow", sec);
-	$("#timerBar").css("width", sec/playInterval*100 + "%");
+function showTimer(sec, text) {
+	if (text)
+		$("#timer").html(text);
+	else
+		$("#timer").html(sec + "s");
+	$("#timerBar").attr("aria-valuenow", sec).css("width", sec/playInterval*100 + "%");
 }
 function fnSetOption() {
-	var albumLabel           = $("#albumLabel").val();
-	var showDataLabel        = $("#showDataLabel").is(":checked");
-	var showImageNumberLabel = $("#showImageNumberLabel").is(":checked");
-	var resizeDuration       = parseInt($("#resizeDuration").val());
-	var fadeDuration         = parseInt($("#fadeDuration").val());
-	var imageFadeDuration	 = parseInt($("#imageFadeDuration").val());
-	var wrapAround           = $("#wrapAround").is(":checked");
-	var positionFromTop      = parseInt($("#positionFromTop").val());
 	lightbox.option({
-		'albumLabel': albumLabel,
-		'showDataLabel': showDataLabel,
-		'showImageNumberLabel': showImageNumberLabel,
-		'resizeDuration': resizeDuration,
-      	'fadeDuration': fadeDuration,
-      	'imageFadeDuration': imageFadeDuration,
-      	'wrapAround': wrapAround,
-      	'positionFromTop': positionFromTop,
+		'albumLabel': 				  $("#albumLabel").val(),
+		'showDataLabel': 			  $("#showDataLabel").is(":checked"),
+		'showImageNumberLabel': 	  $("#showImageNumberLabel").is(":checked"),
+		'resizeDuration':	 parseInt($("#resizeDuration").val()),
+      	'fadeDuration': 	 parseInt($("#fadeDuration").val()),
+      	'imageFadeDuration': parseInt($("#imageFadeDuration").val()),
+      	'wrapAround': 				  $("#wrapAround").is(":checked"),
+      	'positionFromTop': 	 parseInt($("#positionFromTop").val()),
+      	'randomImageEffect':    	  $("#randomImageEffect").is(":checked"),
       	'sanitizeTitle': false
     });
 	playInterval = parseInt($("#playInterval").val());
 	playMode = $('input:radio[name="playMode"]:checked').val();
 	$("#timerBar").attr("aria-valuemax", playInterval);
-
 }
 </script>
 </head>
@@ -182,7 +172,7 @@ function fnSetOption() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="albumLabel">albumLabel:</label>
 				<div class="col-xs-6">
-					<input class="form-control" id="albumLabel" value="Image %1 of %2" placeholder="%1 of %2"/>
+					<input type="text" class="form-control" id="albumLabel" value="Image %1 of %2" placeholder="%1 of %2"/>
 				</div>
 			</div>
 			<div class="form-group">        
@@ -200,19 +190,25 @@ function fnSetOption() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="resizeDuration">resizeDuration:</label>
 				<div class="col-xs-6">
-					<input type="number" class="form-control" id="resizeDuration" value="700" placeholder="700"/>
+					<input type="range" class="form-control" id="resizeDuration" value="700" min="100" max="1000" step="100"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="fadeDuration">fadeDuration:</label>
 				<div class="col-xs-6"> 
-					<input type="number" class="form-control" id="fadeDuration" value="600" placeholder="600"/>
+					<input type="range" class="form-control" id="fadeDuration" value="600" min="100" max="1000" step="100"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="imageFadeDuration">imageFadeDuration:</label>
 				<div class="col-xs-6"> 
-					<input type="number" class="form-control" id="imageFadeDuration" value="600" placeholder="600"/>
+					<input type="range" class="form-control" id="imageFadeDuration" value="600" min="100" max="1000" step="100"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-6" for="randomImageEffect">randomImageEffect:</label>
+				<div class="col-xs-6"> 
+					<label class="checkbox-inline"><input type="checkbox" id="randomImageEffect">randomImageEffect</label>
 				</div>
 			</div>
 			<div class="form-group"> 
@@ -224,13 +220,13 @@ function fnSetOption() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="playInterval">playInterval:</label>
 				<div class="col-xs-6"> 
-					<input type="number" class="form-control" id="playInterval" value="5" placeholder="second"/>
+					<input type="range" class="form-control" id="playInterval" value="10" min="5" max="20" step="1"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="positionFromTop">positionFromTop:</label>
 				<div class="col-xs-6"> 
-					<input type="number" class="form-control" id="positionFromTop" value="30" placeholder="px"/>
+					<input type="range" class="form-control" id="positionFromTop" value="30" min="30" max="100" step="10"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -246,13 +242,12 @@ function fnSetOption() {
 				</div>
 			</div>
 		</div>
+		<div class="debug"></div>
 	</div>
 
-	
 	<div class="progress" onclick="fnPlayImage();">
   		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10"
   			aria-valuemin="0" aria-valuemax="10" style="width:100%"><span id="timer">Play</span></div></div>
-
 
 	<div id="imageset"></div>
 
