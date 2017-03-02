@@ -8,9 +8,6 @@
 <title>Lightbox</title>
 <link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
-body {
-	overflow: hidden;
-}
 .progress {
 	position: fixed;
 	top: 0px;
@@ -30,7 +27,7 @@ body {
     min-height: 40px;
 }
 .form-group {
-    margin-bottom: 5px;
+    margin: auto 5px 5px 5px !important;
 }
 .form-group:not(:last-child) {
 	border-bottom: 1px dashed #ddd;
@@ -62,8 +59,6 @@ $(document).ready(function() {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
-		var selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
-
 		$(".imageCount").html(imageCount);
 		
 		var $imageset = $('#imageset');
@@ -76,7 +71,7 @@ $(document).ready(function() {
 			}).appendTo($imageset);
 		}
 	
-		fnCurrImage(selectedNumber);
+		fnCurrImage();
 	});
 
 	var playTimer = setInterval(function() {
@@ -119,6 +114,8 @@ function fnNextImage() {
 	$("a.lb-next").click();
 }
 function fnCurrImage(selectedNumber) {
+	if (!selectedNumber)
+		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
 	$("#imageset a:nth-child(" + selectedNumber + ")").click();
 }
 function fnRandomImage() {
@@ -128,6 +125,7 @@ function fnPlayImage() {
 	playSlide = !playSlide;
 	if (playSlide) { // start
 		playSec = playInterval;
+		fnRandomImage();
 	}
 	else { // stop
 		showTimer(playInterval, "Play");
@@ -151,7 +149,8 @@ function fnSetOption() {
       	'wrapAround': 				  $("#wrapAround").is(":checked"),
       	'positionFromTop': 	 parseInt($("#positionFromTop").val()),
       	'randomImageEffect':    	  $("#randomImageEffect").is(":checked"),
-      	'sanitizeTitle': false
+      	'sanitizeTitle': false,
+      	disableScrolling: true
     });
 	playInterval = parseInt($("#playInterval").val());
 	playMode = $('input:radio[name="playMode"]:checked').val();
@@ -202,7 +201,7 @@ function fnSetOption() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="imageFadeDuration">imageFadeDuration:</label>
 				<div class="col-xs-6"> 
-					<input type="range" class="form-control" id="imageFadeDuration" value="600" min="100" max="1000" step="100"/>
+					<input type="range" class="form-control" id="imageFadeDuration" value="700" min="100" max="1000" step="100"/>
 				</div>
 			</div>
 			<div class="form-group">

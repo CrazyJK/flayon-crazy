@@ -310,7 +310,7 @@
 				// Fit image inside the viewport.
 				// Take into account the border around the image and an additional 10px gutter on each side.
 
-				var heightMargin = self.options.positionFromTop + 40;
+				var heightMargin = self.options.positionFromTop + 50;
 				if (!self.options.showDataLabel) {
 					heightMargin -=  30;
 				}

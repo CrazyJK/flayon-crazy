@@ -87,11 +87,8 @@ $(document).ready(function() {
 	if (magnifyValue) {
 		$("#magnify").click();	
 	}
-	
-	lightbox.option({
-		'showImageNumberLabel': false,
-    });
 
+	fnSetOption();
 });
 
 function fnIsScrollBottom() {
@@ -177,7 +174,19 @@ function resize() {
 	setlocalStorageItem("thumbnamils.img-height", imgHeight);
 	$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);	
 }
-
+function fnSetOption() {
+	lightbox.option({
+		showImageNumberLabel: false,
+		resizeDuration: 300,
+      	fadeDuration: 300,
+      	imageFadeDuration: 300,
+      	randomImageEffect: true,
+      	disableScrolling: true
+    });
+	playInterval = parseInt($("#playInterval").val());
+	playMode = $('input:radio[name="playMode"]:checked').val();
+	$("#timerBar").attr("aria-valuemax", playInterval);
+}
 </script>
 </head>
 <body>
