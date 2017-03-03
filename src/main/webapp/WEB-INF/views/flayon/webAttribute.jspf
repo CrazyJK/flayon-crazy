@@ -56,7 +56,16 @@
 							<td>
 								<dl style="margin-bottom:0;">
 									<dt><%=name%></dt>
-									<dd><div class="nowrap"><%=value%></div></dd>
+									<dd>
+										<div class="nowrap">
+											<c:catch var="valueErrorMsg">
+												<c:out value="<%=value%>" escapeXml="true"/>
+											</c:catch>
+											<c:if test="${!empty valueErrorMsg}">
+												value error : ${valueErrorMsg}
+											</c:if>
+										</div>
+									</dd>
 									<dd><code><%=clazz%></code></dd>
 								</dl>
 							</td>
@@ -133,20 +142,17 @@
 				</header>
 				<div class="panel-body">
 					<c:catch var="errorMsg">
-						${exception.stackTrace}
+						<ul class="stack-view">
+							<c:forEach items="${exception.stackTrace}" var="stackTrace">
+							<li>${stackTrace}</li>
+							</c:forEach>
+						</ul>
 					</c:catch>
 					<c:if test="${!empty errorMsg}">
 						<div class="try text-danger">
 							Exception : ${exception}
 						</div>
 					</c:if>
-					<c:if test="${empty errorMsg}">
-						<ul class="stack-view">
-							<c:forEach items="${exception.stackTrace}" var="stackTrace">
-							<li>${stackTrace}</li>
-							</c:forEach>
-						</ul>
-					</c:if>					
 				</div>
 			</section>
 		</div>

@@ -29,8 +29,10 @@ response.setHeader("error.cause", "");
 	 		</h1>
 		</div>
 		<p>
-	    	<code><c:out value="${message}" escapeXml="true"/></code>
-	    </p>
+			<code>${exception}</code>
+		</p>
+		<pre><c:out value="${message}" escapeXml="true"/></pre>
+	    
 	    <c:if test="${!empty requestScope['javax.servlet.error.exception']}}">
 		<pre><c:out value="${requestScope['javax.servlet.error.exception']}" escapeXml="true"/></pre>
 	    </c:if>
