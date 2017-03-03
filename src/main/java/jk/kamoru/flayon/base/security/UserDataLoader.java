@@ -9,10 +9,17 @@ public class UserDataLoader {
 	@Autowired private UserRepository userRepository;
 
 	public void loadInitData() {
-		User user = new User();
-		user.setName("kamoru");
-		user.setPassword("crazyjk");
-		user.setRole("USER");
-		userRepository.save(user);
+		
+		User admin = new User();
+		admin.setName("admin");
+		admin.setPassword("6969");
+		admin.setRole(User.Role.ADMIN.name());
+		userRepository.save(admin);
+
+		User kamoru = new User();
+		kamoru.setName("kamoru");
+		kamoru.setPassword("crazyjk");
+		kamoru.setRole(User.Role.USER.name());
+		userRepository.save(kamoru);
 	}
 }
