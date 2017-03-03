@@ -139,6 +139,7 @@ function showTimer(sec, text) {
 	$("#timerBar").attr("aria-valuenow", sec).css("width", sec/playInterval*100 + "%");
 }
 function fnSetOption() {
+	console.log("fnSetOption");
 	lightbox.option({
 		'albumLabel': 				  $("#albumLabel").val(),
 		'showDataLabel': 			  $("#showDataLabel").is(":checked"),
@@ -146,15 +147,40 @@ function fnSetOption() {
 		'resizeDuration':	 parseInt($("#resizeDuration").val()),
       	'fadeDuration': 	 parseInt($("#fadeDuration").val()),
       	'imageFadeDuration': parseInt($("#imageFadeDuration").val()),
+      	'randomImageEffect':    	  $("#randomImageEffect").is(":checked"),
       	'wrapAround': 				  $("#wrapAround").is(":checked"),
       	'positionFromTop': 	 parseInt($("#positionFromTop").val()),
-      	'randomImageEffect':    	  $("#randomImageEffect").is(":checked"),
       	'sanitizeTitle': false,
       	disableScrolling: true
     });
 	playInterval = parseInt($("#playInterval").val());
 	playMode = $('input:radio[name="playMode"]:checked').val();
 	$("#timerBar").attr("aria-valuemax", playInterval);
+}
+function shuffleOnce() {
+	console.log("try shuffle");
+	$("#showDataLabel").prop("checked", getRandomBoolean());
+	$("#showImageNumberLabel").prop("checked", getRandomBoolean());
+	$("#resizeDuration").val(getRandomInteger(1, 10)*100);
+	$("#fadeDuration").val(getRandomInteger(1, 10)*100);
+	$("#imageFadeDuration").val(getRandomInteger(1, 10)*100);
+	$("#randomImageEffect").prop("checked", getRandomBoolean());
+	$("#wrapAround").prop("checked", getRandomBoolean());
+	$("#playInterval").val(getRandomInteger(5, 20));
+	$($("input:radio[name='playMode']")[getRandomInteger(0, 1)]).prop("checked", true);
+}
+function shuffle() {
+	var count = 0;
+	var maxShuffle = getRandomInteger(3, 9);
+ 	showSnackbar("shuffle start", 1000);
+	var shuffler = setInterval(function() {
+		shuffleOnce();
+		if (++count > maxShuffle) {
+		 	clearInterval(shuffler);
+		 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
+		 	fnSetOption();
+		}
+	}, 500);
 }
 </script>
 </head>
@@ -167,7 +193,10 @@ function fnSetOption() {
 		</div>
 	
 		<div class="form-horizontal box">
-			<h1 class="text-center">Options</h1>
+			<h1 class="text-center">
+				<button class="btn btn-plain btn-sm float-right" onclick="shuffle()">Shuffle</button>
+				Options
+			</h1>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="albumLabel">albumLabel:</label>
 				<div class="col-xs-6">
