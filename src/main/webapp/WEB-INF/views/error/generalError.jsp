@@ -14,13 +14,11 @@ bgContinue = false;
 <div class="container">
 
  	<div class="page-header">
- 		<h1>Opps.. Sorry!
+ 		<h1>Opps.. Sorry! ${exception.message}
 	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
  		</h1>
 	</div>
     <code>
-    	${exception.message}
-    	<hr/>
     	${exception.cause}
     </code>
 

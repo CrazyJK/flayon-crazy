@@ -26,6 +26,7 @@
 	<div class="page-header">
 		<h1>Occur Error</h1>
 		<ul class="list-inline">
+			<li><a class="text-primary" target="errorFrame" href="/UnknownPage">general</a>
 			<li><a class="text-danger" target="errorFrame" href="?k=default">default</a>
 			<li><a class="text-danger" target="errorFrame" href="?k=falyon">falyon</a>
 			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=crazy">crazy</a>
