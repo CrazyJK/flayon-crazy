@@ -181,6 +181,11 @@ function showNav() {
 	});
 	if(!found)
 		$("nav#deco_nav").hide();
+	
+	if (locationPathname.startsWith("/image")) {
+		$("#backMenu").hide();
+	}
+	
 }
 /**
  * post 액션
@@ -327,7 +332,7 @@ function showSnackbar(message, time) {
 		<ul class="nav nav-pills">
 			<li><a class="noti text-danger"></a></li>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.front"/></a>
-			<li><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
+			<li id="backMenu"><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
 			<%-- <li><a onclick="fnReloadVideoSource()" 		><s:message code="video.reload.title"/></a> --%>
 			<li><a href="<c:url value="/video/main"/>"      	><s:message code="video.main"/></a>
 			<%-- <li><a href="<c:url value="/video/search"/>"	><s:message code="video.search"/></a> --%>
@@ -349,7 +354,7 @@ function showSnackbar(message, time) {
   			</li>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
 			<%-- <li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a> --%>
-			<li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a>
+			<%-- <li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a> --%>
 			<li><a href="<c:url value="/video/gravia"/>"		><s:message code="video.gravia"/></a>
 			<li><a href="<c:url value="/video/archive"/>"		><s:message code="video.archive"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>

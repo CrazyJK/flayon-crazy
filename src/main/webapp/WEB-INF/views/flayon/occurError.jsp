@@ -25,6 +25,9 @@
 
 	<div class="page-header">
 		<h1>Occur Error</h1>
+	</div>
+
+	<div class="text-center">
 		<ul class="list-inline">
 			<li><a class="text-primary" target="errorFrame" href="/UnknownPage">general</a>
 			<li><a class="text-danger" target="errorFrame" href="?k=default">default</a>

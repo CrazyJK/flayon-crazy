@@ -8,6 +8,9 @@
 <title>Lightbox</title>
 <link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
+body {
+	transition: background .5s ease
+}
 .progress {
 	position: fixed;
 	top: 0px;
@@ -20,6 +23,7 @@
 }
 #timerBar {
 	background: #000;
+	transition: all .5s ease
 }
 .form-control {
 	border: 0;
@@ -88,7 +92,7 @@ $(document).ready(function() {
 			showTimer(playSec);
 		}
 	},	1000);
-
+	
 	fnSetOption();
 	$(".form-control, .checkbox-inline, .radio-inline").on("change", function() {
 		var changeOptionText;
@@ -123,12 +127,31 @@ function fnRandomImage() {
 }
 function fnPlayImage() {
 	playSlide = !playSlide;
+	toggleBase();
 	if (playSlide) { // start
 		playSec = playInterval;
 		fnRandomImage();
 	}
 	else { // stop
 		showTimer(playInterval, "Play");
+	}
+}
+function toggleBase() {
+	if (playSlide) { // start
+		$("body").css({
+			backgroundColor: randomColor('r')
+		});
+		$(".lightboxOverlay").css({
+			opacity: 1
+		});
+	}
+	else { // stop
+		$("body").css({
+			backgroundColor: "#fff"
+		});
+		$(".lightboxOverlay").css({
+			opacity: 0.8
+		});
 	}
 }
 function showTimer(sec, text) {

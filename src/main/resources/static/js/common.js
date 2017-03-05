@@ -272,6 +272,8 @@ function getRandom(start, end) {
 function randomColor(alpha) {
 	if (!alpha)
 		alpha = 1;
+	else if (alpha === 'r')
+		alpha = getRandomInteger(1, 100)/100;
 	return "rgba(" + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + alpha + ")";
 }
 
