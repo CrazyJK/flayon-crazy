@@ -158,6 +158,11 @@
 		    <version>2.2.3</version>
 		</dependency>
 		<dependency>
+    		<groupId>org.webjars.bower</groupId>
+    		<artifactId>jquery-ui</artifactId>
+    		<version>1.12.1</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.webjars.bower</groupId>
 		    <artifactId>bootstrap</artifactId>
 		    <version>3.3.6</version>
@@ -180,7 +185,7 @@
 		<dependency>
 			<groupId>org.webjars.bower</groupId>
 			<artifactId>amcharts</artifactId>
-			<version>3.14.5</version>
+			<version>3.15.2</version>
 		</dependency>
 
 		<!-- SiteMesh 3 -->

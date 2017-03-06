@@ -12,13 +12,13 @@
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy [${profiles}] [<%=System.getenv("COMPUTERNAME")%>]</title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/webjars/jquery-ui/1.12.1/themes/base/jquery-ui.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/base-scrollbar.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/crazy-deco.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/crazy-common.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/crazy-bootstrap.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.css"/>"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -26,13 +26,13 @@
 <![endif]-->
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/video.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/videoMain.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/zeroclipboard/ZeroClipboard.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
 <script type="text/javascript">
 var context = '<c:url value="/"/>';
 var videoPath = '<c:url value="/video"/>';
