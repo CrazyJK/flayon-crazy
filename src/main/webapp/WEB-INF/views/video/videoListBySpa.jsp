@@ -49,9 +49,11 @@
 				<ul class="list-group list-inline vbox"></ul>
 			</section>
 			<section id="table" class="tab-pane fade table-responsive">
+				<form>
 				<table class="table table-condensed table-hover table-bordered" style="margin-bottom:0;">
 					<tbody></tbody>
 				</table>
+				</form>
 			</section>
 		</div>
 		<p class="more text-center"><button class="btn btn-warning" onclick="render()">View More</button></p>

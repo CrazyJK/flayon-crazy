@@ -226,7 +226,7 @@ function render(first) {
 	var displayCount = 0;
 	var query = $(".search").val();
 	var parentOfVideoBox  = $("#box > ul");
-	var parentOfTableList = $("#table > table > tbody");
+	var parentOfTableList = $("#table tbody");
 	withTorrent = $("#torrent").data("checked");
 
 	if (first) { // initialize if first rendering 
@@ -343,7 +343,11 @@ function renderTable(index, video, parent) {
 			}, function(event) {
 			}
 	);
-	$("<td>").appendTo(tr).addClass("text-right").html("<span class='label label-plain'>" + (index+1) + "</span>");
+	$("<td>").appendTo(tr).addClass("text-right").append(
+			$("<span>").addClass('label label-plain').html(index+1)
+	).append(
+			$("<input>").attr({name: "opus", type: "hidden"}).val(video.opus)
+	);
 	$("<td>").appendTo(tr).html(video.html_studio);
 	$("<td>").appendTo(tr).html(video.html_opus);
 	$("<td>").appendTo(tr).html(
@@ -387,7 +391,7 @@ function goTorrentSearch(opus, idx) {
 }
 
 function getAllTorrents() {
-	actionFrame(videoPath + "/torrent/getAll", {}, "POST", "Torrent get all");
+	actionFrame(videoPath + "/torrent/get", $("#table form").serialize(), "POST", "Get torrent in list");
 }
 
 function resizeSecondDiv() {

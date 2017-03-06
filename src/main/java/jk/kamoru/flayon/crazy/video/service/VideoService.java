@@ -454,5 +454,7 @@ public interface VideoService {
 	void deletEmptyFolder();
 
 	List<String> getOpusList();
+
+	int getTorrents(String[] opusArr);
 	
 }

@@ -278,6 +278,12 @@ public class VideoController extends CrazyController {
 		videoService.torrent(true);
 	}
 	
+	@RequestMapping(value="/torrent/get", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void torrentGet(@RequestParam("opus") String[] opusArr) {
+		videoService.getTorrents(opusArr);
+	}
+	
 	@RequestMapping(value="/torrent2", method=RequestMethod.GET)
 	public String torrent2(Model model, 
 			@RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
