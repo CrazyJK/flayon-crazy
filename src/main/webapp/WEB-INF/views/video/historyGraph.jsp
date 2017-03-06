@@ -18,17 +18,17 @@
 	border-radius: 10px;
 }
 </style>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/amcharts.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/serial.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/themes/chalk.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/themes/black.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/themes/dark.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/themes/light.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/themes/patterns.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/amcharts.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/serial.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/themes/chalk.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/themes/black.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/themes/dark.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/themes/light.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/themes/patterns.js"/>"></script>
 <script type="text/javascript">
 var chart;
 var chartData;
-var pathToImages = '<c:url value="/webjars/amcharts/3.14.5/dist/amcharts/images/"/>';
+var pathToImages = '<c:url value="/webjars/amcharts/3.15.2/dist/amcharts/images/"/>';
 var historyFormat = 'yyyy-MM-dd';
 var chartFormat = historyFormat.toUpperCase();
 var currentStartIndex = 3;
@@ -61,9 +61,7 @@ function renderChart() {
 		    "autoMarginOffset": 20,
 		    "mouseWheelZoomEnabled":true,
 		    "dataDateFormat": chartFormat,
-		    
-		    startDuration: 2,
-		    
+		    "startDuration": 0,
 		    "legend": {
 		        "equalWidths": false,
 		        "useGraphSettings": true,
@@ -90,6 +88,11 @@ function renderChart() {
 		        "legendPeriodValueText": "total: [[value.sum]] played",
 		        "legendValueText": "[[value]] played",
 		        "valueField": "play",
+		        "balloon":{
+		            "drop":true,
+		            "adjustBorderColor":false,
+		            "color":"#ffff00"
+		          },
 		        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
 		    }
 /* 		    ,{
@@ -166,25 +169,19 @@ function renderChart() {
 
 		chart.addListener("rendered", zoomChart);
 
-		zoomChart();
-
 		loading(false);
 	});
 	
 }
 
 function zoomChart(month) {
-	// hide amcharts. sorry!
-	$("div.amcharts-chart-div > a").html("History chart by amCharts");
-	
-	
     // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
 	//	chart.zoomToIndexes(chartData.length - 10, chartData.length - 1);
-    console.log("zoomChart : month = " + month);
+    console.log("zoomChart : month = ", month);
     if (month) {
     	if (typeof month === 'object') {
         	if (chartFormat == 'YYYY-MM-DD')
-        		currentStartIndex = 1;
+        		currentStartIndex = 3;
         	else if (chartFormat == 'YYYY-MM')
         		currentStartIndex = 12;
         	else
@@ -204,6 +201,10 @@ function zoomChart(month) {
 	chart.zoomToDates(fromDay, toDay);
 	$("[id^=zoom]").removeClass("active");
 	$("#zoom" + currentStartIndex).addClass("active");
+
+	// hide amcharts. sorry!
+	$("div.amcharts-chart-div > a").html("History chart by amCharts");
+
 }
 
 function changeFormat(format) {
