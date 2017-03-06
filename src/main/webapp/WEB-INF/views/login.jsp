@@ -16,6 +16,15 @@ $(document).ready(function(){
 		if (msg != '')
 			alert(msg);
 	}
+	
+	$("input[name='username']").on("change, keyup, click", function() {
+		$("#name").html($(this).val());
+	});
+	
+	setTimeout(function() {
+		$("input[name='username']").click();	
+	}, 1000);
+	
 });
 </script>
 </head>
@@ -31,7 +40,7 @@ $(document).ready(function(){
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title title-effect">Ready to crazy!
+				<h3 class="modal-title title-effect">Welcome to <span id="name"></span>
 				<c:if test="${null ne param.error}">
 					<span id="error" class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
 				</c:if>
@@ -46,7 +55,7 @@ $(document).ready(function(){
 						<input type="password" name="password" class="form-control" placeholder="Password" required="required"/>
 					</div>
 					<div class="checkbox">
-             				<label><input type="checkbox" name="remember-me" checked="checked"/>Remember me</label>
+             			<label><input type="checkbox" name="remember-me" checked="checked"/>Remember me</label>
            			</div>
 					<div>
 						<button class="btn btn-primary btn-block" type="submit">Log in</button>
