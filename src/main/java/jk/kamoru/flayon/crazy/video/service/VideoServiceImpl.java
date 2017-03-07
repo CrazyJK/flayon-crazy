@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
@@ -304,6 +305,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
+	@Cacheable(value="flayon-cover-cache", key="#opus")
 	public byte[] getVideoCoverByteArray(String opus) {
 		return videoDao.getVideo(opus).getCoverByteArray();
 	}

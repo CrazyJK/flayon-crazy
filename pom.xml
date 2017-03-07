@@ -48,6 +48,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId><!-- mongodb -->
 		</dependency>
+ 		<dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-cache</artifactId><!-- cache -->
+    	</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -67,6 +71,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId><!-- security-taglibs -->
 		</dependency>  
+
+		<!-- ehcache -->
+		<dependency>
+        	<groupId>net.sf.ehcache</groupId>
+        	<artifactId>ehcache</artifactId>
+      	</dependency>
 
 		<!-- slf4j log -->
 		<dependency>

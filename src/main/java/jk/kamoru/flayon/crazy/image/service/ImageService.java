@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
+import jk.kamoru.flayon.crazy.image.domain.ImageType;
 
 /**
  * Image Service
@@ -43,7 +44,7 @@ public interface ImageService {
 	List<Image> getImageList();
 
 	/**
-	 * json expression of total image by idx : name
+	 * json expression of whole image by idx : name
 	 * @return
 	 */
 	String getImageNameJSON();
@@ -55,10 +56,13 @@ public interface ImageService {
 	void delete(int idx);
 
 	/**
-	 * random image no
+	 * map of whole image by idx, name
 	 * @return
 	 */
-	int getRandomImageNo();
-
 	Map<Integer, String> getImageNameMap();
+	
+	byte[] getBytes(int idx, ImageType imageType);
+
+	int getRandomImageNo();
+	
 }

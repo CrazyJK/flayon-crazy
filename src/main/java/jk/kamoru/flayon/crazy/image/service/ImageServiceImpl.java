@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
+import jk.kamoru.flayon.crazy.image.domain.ImageType;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link ImageService}
@@ -19,6 +22,7 @@ import jk.kamoru.flayon.crazy.image.source.ImageSource;
  *
  */
 @Service
+@Slf4j
 public class ImageServiceImpl implements ImageService {
 
 	@Autowired
@@ -51,17 +55,12 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public String getImageNameJSON() {
-		Map<Integer, String> nameMap = new HashMap<>();
-		int index = 0;
-		for (Image image : imageSource.getImageList()) {
-			nameMap.put(index++, image.getName());
-		}
 		ObjectMapper mapper = new ObjectMapper();
-		
+		Map<Integer, String> nameMap = getImageNameMap();
 		try {
 			return mapper.writeValueAsString(nameMap);
 		} catch (JsonProcessingException e) {
-			return "";
+			return "{error: \"" + e.getMessage() + "\"}";
 		}
 	}
 
@@ -83,5 +82,12 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public int getRandomImageNo() {
 		return (int)(Math.random() * imageSource.getImageSourceSize());
+	}
+
+	@Override
+	@Cacheable(value="flayon-image-cache")
+	public byte[] getBytes(int idx, ImageType imageType) {
+		log.debug("getBytes {}, {}", idx, imageType);
+		return imageSource.getImage(idx).getByteArray(imageType);
 	}
 }

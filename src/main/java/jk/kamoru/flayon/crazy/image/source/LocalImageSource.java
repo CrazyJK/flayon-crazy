@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
 				log.info("Image scanning ... {}", dir);
-				for (File file : FileUtils.listFiles(dir, IMAGE.imageSuffix, true))
+				for (File file : FileUtils.listFiles(dir, IMAGE.IMAGE_SUFFIX, true))
 					imageList.add(new Image(file, idx++));
 			}
 		}
@@ -109,6 +110,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 	@Override
 	@PostConstruct
 	@Scheduled(cron = "0 */17 * * * *")
+	@CacheEvict(value = "flayon-image-cache", allEntries=true)
 	public void reload() {
 		load();
 	}

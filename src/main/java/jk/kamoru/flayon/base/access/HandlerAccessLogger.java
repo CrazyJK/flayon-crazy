@@ -102,7 +102,7 @@ public class HandlerAccessLogger implements HandlerInterceptor {
 			FlayOnUser flayOnUser = (FlayOnUser)securityContext.getAuthentication().getPrincipal();
 			user = flayOnUser.getUser();
 		}
-		String contentType = response.getContentType();
+		String contentType = trim(response.getContentType());
 		String requestUri = request.getRequestURI();
 		int status = response.getStatus();
 		AccessLog accessLog = new AccessLog(
@@ -110,7 +110,7 @@ public class HandlerAccessLogger implements HandlerInterceptor {
 				request.getRemoteAddr(),
 				request.getMethod(), 
 				requestUri,
-				StringUtils.trimWhitespace(contentType), 
+				contentType,
 				elapsedtime,
 				handlerlInfo,
 				exceptionInfo,
@@ -121,8 +121,11 @@ public class HandlerAccessLogger implements HandlerInterceptor {
 		if (useAccesslogRepository)
 			accessLogRepository.save(accessLog);
 		
-		if (contentType == null || !(contentType.startsWith("image") || requestUri.contains("ping.json")))
+		if (!(contentType.startsWith("image") || requestUri.contains("ping.json") || handlerlInfo.startsWith("ImageController.image")))
 			log.info(accessLog.toLogString());
 	}
 
+	private String trim(String str) {
+		return str == null ? "" : StringUtils.trimWhitespace(str);
+	}
 }

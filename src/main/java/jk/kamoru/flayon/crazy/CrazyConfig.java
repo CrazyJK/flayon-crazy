@@ -1,6 +1,7 @@
 package jk.kamoru.flayon.crazy;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -15,6 +16,7 @@ import jk.kamoru.flayon.crazy.video.source.VideoSource;
 @EnableAsync
 @EnableAspectJAutoProxy
 @EnableScheduling
+@EnableCaching
 public class CrazyConfig {
 
 	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
