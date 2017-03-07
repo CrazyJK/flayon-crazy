@@ -8,6 +8,7 @@ JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=true"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.access.file=jmxremote.access"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.password.file=jmxremote.password"
+JAVA_OPTS="$JAVA_OPTS -Xmx256m"
 
 CURRENT_DIR=`cd . >/dev/null; pwd`
 FLAYON_HOME=$CURRENT_DIR
