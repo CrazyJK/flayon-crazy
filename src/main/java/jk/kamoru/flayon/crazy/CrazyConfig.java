@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
+import jk.kamoru.flayon.crazy.video.source.VideoSource;
 
 @Configuration
 @EnableAsync
@@ -21,12 +22,12 @@ public class CrazyConfig {
 	@Value("${path.video.torrent}") String torrentPath;
 
 	@Bean
-	public FileBaseVideoSource instanceVideoSource() {
+	public VideoSource instanceVideoSource() {
 		return new FileBaseVideoSource(false, torrentPath, instancePaths);
 	}
 	
 	@Bean
-	public FileBaseVideoSource archiveVideoSource() {
+	public VideoSource archiveVideoSource() {
 		return new FileBaseVideoSource(true, null, archivePath);
 	}
 

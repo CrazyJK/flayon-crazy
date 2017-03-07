@@ -14,6 +14,8 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.concurrent.Future;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 
@@ -41,8 +43,8 @@ public abstract class SimpleWatchDirectory {
 	public Future<Object> start() throws IOException {
 		WatchService watcher = FileSystems.getDefault().newWatchService();
 		Path path = Paths.get(getPath());
-		log.info("Start watch service : {}", path.toAbsolutePath());
 		path.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		log.info("Start watch service : {}", path.toAbsolutePath());
 		
 		while (true) {
 			WatchKey key = null;
@@ -54,11 +56,11 @@ public abstract class SimpleWatchDirectory {
 			
 			for (WatchEvent<?> _event : key.pollEvents()) {
 				Kind<?> kind = _event.kind();
+
 				@SuppressWarnings("unchecked")
 				WatchEvent<Path> event = (WatchEvent<Path>) _event;
 				Path filename = event.context();
 				log.info("{} : {}", kind.name(), filename);
-				
 			}
 			if (!key.reset()) {
 				break;

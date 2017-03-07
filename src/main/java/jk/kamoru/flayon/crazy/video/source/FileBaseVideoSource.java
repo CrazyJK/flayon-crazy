@@ -33,6 +33,11 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 	
 
+/**
+ * implementations VideoSource
+ * 
+ * @author kamoru
+ */
 public class FileBaseVideoSource implements VideoSource {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FileBaseVideoSource.class);
@@ -56,6 +61,11 @@ public class FileBaseVideoSource implements VideoSource {
 	private String torrentPath;
 	private String[] paths;
 
+	/**
+	 * @param isArchive
+	 * @param torrentPath
+	 * @param paths
+	 */
 	public FileBaseVideoSource(boolean isArchive, String torrentPath, String...paths) {
 		this.isArchive = isArchive;
 		this.torrentPath = torrentPath;
