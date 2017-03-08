@@ -170,8 +170,7 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 		instanceVideoSource.arrangeVideo(opus);
 	}
 
-	/* FIXME
-	 * 
+	/* 
 	 * (non-Javadoc)
 	 * @see jk.kamoru.flayon.crazy.video.dao.VideoDao#moveToInstance(java.lang.String)
 	 */
