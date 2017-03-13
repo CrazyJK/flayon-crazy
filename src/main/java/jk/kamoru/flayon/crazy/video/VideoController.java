@@ -245,6 +245,7 @@ public class VideoController extends CrazyController {
 		model.addAttribute("reverse", reverse);
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
+		model.addAttribute("tagList", videoService.getTagList());
 		return "video/videoList";
 	}
 

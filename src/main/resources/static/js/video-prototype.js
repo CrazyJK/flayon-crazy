@@ -99,10 +99,23 @@ Video.prototype.play = function() {
 	$("#actionIframe").attr("src", videoPath + "/" + this.opus + "/play");
 } 
 
-Video.prototype.contains = function(query, isCheckedFavorite, isCheckedNoVideo) {
-	return (isCheckedFavorite ? this.favorite : true)
-		&& (isCheckedNoVideo ? !this.existVideoFileList : true)
-		&& (this.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1 || this.overviewText.toLowerCase().indexOf(query.toLowerCase()) > -1);
+Video.prototype.contains = function(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags) {
+	return (this.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1 || this.overviewText.toLowerCase().indexOf(query.toLowerCase()) > -1)
+		&& (isCheckedFavorite ?  this.favorite             : true)
+		&& (isCheckedNoVideo  ? !this.existVideoFileList   : true)
+		&& (isCheckedTags     ? containsTag(this) : true);
+}
+
+function containsTag(video) {
+	if (video.tags.length > 0)
+		return true;
+	for (var i=0; i<tagList.length; i++) {
+		var tag = tagList[i];
+		if (video.fullname.toLowerCase().indexOf(tag.name.toLowerCase()) > -1) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function getFilename(file) {

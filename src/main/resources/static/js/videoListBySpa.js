@@ -28,7 +28,9 @@ var currentVideoNo = -1;		// table 뷰에서 커서/키가 위치한 tr번호. �
 var isShortWidth = false;		// table 뷰에서 가로폭이 좁은지 여부
 var isCheckedFavorite = false;	// favorite 체크박스가 체크되어 있는지 여부
 var isCheckedNoVideo  = false;	// novideo  체크박스가 체크되어 있는지 여부
+var isCheckedTags = false;
 var currentView = '#table';		// 현재 보여지고 있는 뷰
+var tagList;
 
 (function($) {
 	$(document).ready(function() {
@@ -108,6 +110,11 @@ function fnAddEventListener() {
 	$(currentView).addClass("in active");
 	$('button[href="' + currentView + '"]').click();
 
+	// for tags checkbox
+	$("#tags").on("click", function() {
+		isCheckedTags = $(this).data("checked");
+		render(true);
+	});
 	// for favorite checkbox
 	$("#favorite").on("click", function() {
 		isCheckedFavorite = $(this).data("checked");
@@ -190,6 +197,7 @@ function request() {
 		}
 		else {
 			videoList = [];
+			tagList = data.tagList;
 			$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
 				if (row.torrents.length > 0)
 					hadTorrentCount++;
@@ -229,6 +237,9 @@ function render(first) {
 	var parentOfTableList = $("#table tbody");
 	withTorrent = $("#torrent").data("checked");
 
+	var isFilter = query != '' || isCheckedFavorite || isCheckedNoVideo || isCheckedTags;
+	// console.log("isFilter", query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags, " = " + isFilter);
+	
 	if (first) { // initialize if first rendering 
 		entryIndex = 0;
 		renderingCount = 0;
@@ -237,10 +248,10 @@ function render(first) {
 		parentOfTableList.empty();
 		$(".more").show();
 		// found count by query
-		if (query != '' || isCheckedFavorite || isCheckedNoVideo) {
+		if (isFilter) {
 			queryFoundCount = 0;
 			for (var i=0; i<videoList.length; i++) {
-				if (videoList[i].contains(query, isCheckedFavorite, isCheckedNoVideo)) {
+				if (videoList[i].contains(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
 					queryFoundCount++;
 				}
 			}
@@ -248,8 +259,8 @@ function render(first) {
 	}
 	
 	while (entryIndex < videoList.length) {
-		if (query != '' || isCheckedFavorite || isCheckedNoVideo) { // query filtering
-			if (!videoList[entryIndex].contains(query, isCheckedFavorite, isCheckedNoVideo)) {
+		if (isFilter) { // query filtering
+			if (!videoList[entryIndex].contains(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
 				entryIndex++;
 				continue;
 			}
@@ -277,7 +288,7 @@ function render(first) {
 	if (fnIsScrollBottom()) // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
 		render();
 	
-	if (query != '' || isCheckedFavorite || isCheckedNoVideo) {
+	if (isFilter) {
 		$(".count").html(renderingCount + " / " + queryFoundCount);
 	}
 	else {

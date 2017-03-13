@@ -18,6 +18,7 @@
 			<span class="label label-primary candidate" title="candidate count"></span>
 	   		<span class="label label-default" id="favorite" role="checkbox" data-role-value="false" title="only favorite">Favorite</span>
 	   		<span class="label label-default" id="novideo"  role="checkbox" data-role-value="false" title="only no video">NoVideo</span>
+	   		<span class="label label-default" id="tags"     role="checkbox" data-role-value="false" title="filter by tags">Filter Tags</span>
 	      	<span class="label label-danger status"></span>
 		</div>
       	<div class="float-right">
