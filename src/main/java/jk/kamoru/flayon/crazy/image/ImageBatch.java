@@ -34,7 +34,7 @@ public class ImageBatch extends CrazyProperties {
 				continue;
 			}
 			
-			for (File file : FileUtils.listFiles(directory, IMAGE.IMAGE_SUFFIX, false)) {
+			for (File file : FileUtils.listFiles(directory, IMAGE.SUFFIX_IMAGE_ARRAY, false)) {
 				if (StringUtils.startsWith(file.getName(), directory.getName()))
 					continue;
 

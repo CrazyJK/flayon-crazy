@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -129,13 +128,14 @@ public class FileBaseVideoSource implements VideoSource {
 			String      ext = Utils.getExtension(file).toLowerCase();
 			try {
 				// Unnecessary file exclusion
-				if (ext.equals(VIDEO.EXT_ACTRESS) || ext.equals(VIDEO.EXT_STUDIO) 
+				if (VIDEO.OS_SYSTEM_FILENAMES.contains(filename) 
 						|| (VIDEO.SUFFIX_IMAGE.contains(ext) && file.getParentFile().getName().equals("_info"))
-						|| filename.equals(VIDEO.HISTORY_LOG_FILENAME) 
-						|| filename.equals(VIDEO.MAC_NETWORKSTORES)
-						|| filename.equals(VIDEO.WINDOW_DESKTOPINI)
-						|| filename.equals(VIDEO.TAG_DATA_FILENAME)
-						|| filename.equals(VIDEO.WRONG_FILENAME)) {
+						|| VIDEO.EXT_ACTRESS.equals(ext) 
+						|| VIDEO.EXT_STUDIO.equals(ext) 
+						|| VIDEO.HISTORY_LOG_FILENAME.equals(filename)
+						|| VIDEO.TAG_DATA_FILENAME.equals(filename)
+						|| VIDEO.WRONG_FILENAME.equals(filename)
+						) {
 					continue;
 				}
 				
@@ -175,11 +175,12 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public void reload(StopWatch stopWatch) {
 		load(stopWatch);
-		matchTorrent();
+		if (!isArchive)
+			matchTorrent();
 	}
 
 	@Override
-	@PostConstruct
+//	@PostConstruct
 	public void reload() {
 		reload(null);
 	}

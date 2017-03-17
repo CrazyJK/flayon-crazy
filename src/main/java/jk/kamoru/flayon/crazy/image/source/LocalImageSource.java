@@ -48,7 +48,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
 				log.info("Image scanning ... {}", dir);
-				for (File file : FileUtils.listFiles(dir, IMAGE.IMAGE_SUFFIX, true))
+				for (File file : FileUtils.listFiles(dir, IMAGE.SUFFIX_IMAGE_ARRAY, true))
 					imageList.add(new Image(file, idx++));
 			}
 		}

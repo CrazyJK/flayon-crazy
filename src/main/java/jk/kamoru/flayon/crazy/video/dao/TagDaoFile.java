@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 // file dao implementation
 @Slf4j
 @Repository
-public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
+public class TagDaoFile extends CrazyProperties implements TagDao {
 	
 	private Path tagDataPath;
 	
@@ -35,7 +35,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao, VIDEO {
 
 	@PostConstruct
 	public void init() {
-		tagDataPath = Paths.get(STORAGE_PATH, TAG_DATA_FILENAME);
+		tagDataPath = Paths.get(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME);
 		log.info("load data... {}", tagDataPath);
 		try {
 			if (!Files.exists(tagDataPath)) {

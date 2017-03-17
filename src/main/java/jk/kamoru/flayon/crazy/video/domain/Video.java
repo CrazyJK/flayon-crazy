@@ -88,8 +88,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	
 	/** 
 	 * 파일 위치 정렬<br>
-	 * 비디오 파일이 있고, {@link #STAGE} 폴더에 위치해 있거나<br>
-	 * 커버 파일만 있고, {@link #COVER} 폴더에 위치해 있거나<br>
+	 * 비디오 파일이 있고, {@link #PATH_STAGE} 폴더에 위치해 있거나<br>
+	 * 커버 파일만 있고, {@link #PATH_COVER} 폴더에 위치해 있거나<br>
 	 * 아카이브 비디오면, 월별로 구분해 이동
 	 */
 	public void arrange() {
@@ -105,18 +105,18 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		}
 		else {
 			if (isArchive) {
-				if (StringUtils.endsWith(this.getDelegatePath(), ARCHIVE))
+				if (StringUtils.endsWith(this.getDelegatePath(), PATH_ARCHIVE))
 					move(VideoUtils.makeSubPathByReleaseDate(this));
 			}
 			else {
 				if (this.isExistVideoFileList()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), STAGE))
+					if (StringUtils.endsWith(this.getDelegatePath(), PATH_STAGE))
 						move(VideoUtils.makeSubPathByReleaseDate(this));
 					else
 						move(this.getDelegatePath());
 				}
 				else if (this.isExistCoverFile()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), COVER))
+					if (StringUtils.endsWith(this.getDelegatePath(), PATH_COVER))
 						move(VideoUtils.makeSubPathByReleaseDate(this));
 					else
 						move(this.getDelegatePath());

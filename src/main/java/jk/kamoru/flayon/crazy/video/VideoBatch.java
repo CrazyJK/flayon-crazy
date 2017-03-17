@@ -181,8 +181,7 @@ public class VideoBatch extends CrazyProperties {
 		NotiQueue.pushNoti("Delete empty folder end");
 	}
 	
-	// fixedRate per day
-	@Scheduled(fixedRate = 1000 * 60 * 60 * 24) 
+//	@Scheduled(fixedDelay = 1000 * 60 * 60 * 24) // fixedDelay per day 
 	@PreDestroy
 	public synchronized void backup() {
 		
