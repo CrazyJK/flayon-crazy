@@ -38,7 +38,7 @@ import jk.kamoru.flayon.crazy.video.util.VideoUtils;
  */
 @Component
 @Scope("prototype")
-public class Video extends CrazyProperties implements Comparable<Video>, Serializable, CRAZY {
+public class Video extends CrazyProperties implements Comparable<Video>, Serializable {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
@@ -99,24 +99,24 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				|| StringUtils.isEmpty(opus)
 				|| StringUtils.isEmpty(title)
 				|| StringUtils.isEmpty(releaseDate)
-				|| !Pattern.matches(REGEX_DATE, releaseDate)
+				|| !Pattern.matches(CRAZY.REGEX_DATE, releaseDate)
 				) {
 			logger.warn("Check video : [{}] [{}] archive={} [{}]", opus, releaseDate, isArchive, getDelegatePath());
 		}
 		else {
 			if (isArchive) {
-				if (StringUtils.endsWith(this.getDelegatePath(), PATH_ARCHIVE))
+				if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_ARCHIVE))
 					move(VideoUtils.makeSubPathByReleaseDate(this));
 			}
 			else {
 				if (this.isExistVideoFileList()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), PATH_STAGE))
+					if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_STAGE))
 						move(VideoUtils.makeSubPathByReleaseDate(this));
 					else
 						move(this.getDelegatePath());
 				}
 				else if (this.isExistCoverFile()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), PATH_COVER))
+					if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_COVER))
 						move(VideoUtils.makeSubPathByReleaseDate(this));
 					else
 						move(this.getDelegatePath());

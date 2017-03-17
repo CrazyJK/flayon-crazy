@@ -5,9 +5,9 @@ import jk.kamoru.flayon.crazy.video.domain.Sort;
 
 public interface VIDEO extends CRAZY {
 	
-	public static final long WEBCACHETIME_SEC  = 86400*7l;
+	public static final long WEBCACHETIME_SEC  = 86400 * 7l;
 
-	public static final long WEBCACHETIME_MILI = WEBCACHETIME_SEC*1000l;
+	public static final long WEBCACHETIME_MILI = WEBCACHETIME_SEC * 1000l;
 
 	public static final Sort DEFAULT_SORTMETHOD = Sort.T;
 
