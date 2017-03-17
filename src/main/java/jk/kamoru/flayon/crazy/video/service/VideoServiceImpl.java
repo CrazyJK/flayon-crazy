@@ -725,7 +725,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 	
 	@Override
-	
 	public void moveWatchedVideo() {
 		/// 폴더의 최대 크기
 		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
@@ -763,8 +762,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			}
 			
-			// 플레이 한적이 없는 비디오는 pass
-			if (video.getPlayCount() < 1)
+			// 플레이 한적이 없거나 rank 설정안한 비디오는 pass
+			if (video.getPlayCount() < 1 || video.getRank() < 1)
 				continue;
 			// Watched 폴더에 있는 파일도 pass
 			if (video.getDelegatePath().contains(mainBaseFile.getAbsolutePath()))
