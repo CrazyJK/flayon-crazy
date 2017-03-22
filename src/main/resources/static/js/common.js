@@ -1,13 +1,12 @@
 var browser;
-var IE = "IE";
-var CHROME = "Chrome";
-var FIREFOX = "Firefox";
-var SAFARI = "Safari";
-var UNKNOWN = "Unknown";
+var MSIE    = 'MSIE';
+var CHROME  = 'Chrome';
+var FIREFOX = 'Firefox';
+var SAFARI  = 'Safari';
 
 var agent = navigator.userAgent.toLowerCase();
-if (/trident/.test(agent))
-	browser = IE;
+if (/trident/.test(agent) || /msie/.test(agent))
+	browser = MSIE;
 else if (/chrome/.test(agent))
 	browser = CHROME;
 else if (/firefox/.test(agent))
@@ -15,7 +14,33 @@ else if (/firefox/.test(agent))
 else if (/safari/.test(agent))
 	browser = SAFARI;
 else 
-	browser = UNKNOWN;
+	browser = 'Unknown';
+
+var system;
+var WINDOWS = 'Windows';
+var LINUX   = 'Linux';
+var MAC     = 'Macintosh';
+var IPHONE  = 'iPhone';
+var IPAD    = 'iPad';
+var ANDROID = 'Android';
+
+if (/Windows/.test(agent))
+	system = WINDOWS;
+else if (/windows/.test(agent))
+	system = WINDOWS;
+else if (/linux/.test(agent))
+	system = LINUX;
+else if (/macintosh/.test(agent))
+	system = MAC;
+else if (/iphone/.test(agent))
+	system = IPHONE;
+else if (/ipad/.test(agent))
+	system = IPAD;
+else if (/android/.test(agent))
+	system = ANDROID;
+else
+	system = 'Unknown';
+
 
 var DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1";
 
