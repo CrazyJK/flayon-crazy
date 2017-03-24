@@ -19,6 +19,7 @@ import javax.xml.ws.spi.http.HttpContext;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -49,40 +50,61 @@ public class ArzonLookupService implements WebFileLookupService {
 	private static String ARZON_HOST = "https://www.arzon.jp";
 	private static String ARZON_SEARCH = ARZON_HOST + "/index.php?action=adult_customer_agecheck&agecheck=1&redirect=https%3A%2F%2Fwww.arzon.jp%2Fitemlist.html%3Ft%3D%26m%3Dall%26s%3D%26q%3D";
 
-	PoolingHttpClientConnectionManager cm;
+//	public static void main(String[] args) throws IOException {
+//		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
+//	}
 	
-	public static void main(String[] args) throws IOException {
-		new ArzonLookupService().get("CND-161", "제목1", "/home/kamoru/workspace");
+	/**
+	 * httpResponse convert to Stirng
+	 * traditional method
+	 * @param response
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unused")
+	private static String readResponse2(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
+		BufferedReader bin = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = bin.readLine()) != null) {
+			sb.append(line);
+		}
+		return sb.toString();
 	}
 
-	static class TorConnectionSocketFactory extends SSLConnectionSocketFactory {
-
-	    public TorConnectionSocketFactory(final SSLContext sslContext) {
-	        super(sslContext);
-	    }
-
-	    public Socket createSocket(final HttpContext context) throws IOException {
-	        Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 9150));
-	        return new Socket(proxy);
-	    }
+	/**
+	 * httpResponse convert to string
+	 * JAVA 8 over
+	 * @param response
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * @throws IOException
+	 */
+	private static String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		return reader.lines().collect(Collectors.joining("\n"));
 	}
 
-	public ArzonLookupService() {
-	    Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-		        .register("http", PlainConnectionSocketFactory.INSTANCE)
-		        .register("https", new TorConnectionSocketFactory(SSLContexts.createSystemDefault()))
-		        .build();
-		cm = new PoolingHttpClientConnectionManager(registry);
-	}
-	
 	@Override
 	@Async
 	public CompletableFuture<File> get(String opus, String title, String imageLocation) {
 		log.info("Look up {} cover at arzon.jp", opus);
+		
+		HttpClientContext context = HttpClientContext.create();
+	    InetSocketAddress torSocksAddr = new InetSocketAddress("127.0.0.1", 9150);
+	    context.setAttribute("socks.address", torSocksAddr);
 
+	    Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+		        .register("http", PlainConnectionSocketFactory.INSTANCE)
+		        .register("https", new TorConnectionSocketFactory(SSLContexts.createSystemDefault()))
+		        .build();
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registry);
 		CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build();
 
 		try {
+			
 		    // search
 			String url = ARZON_SEARCH + opus;
 		    CloseableHttpResponse response = httpclient.execute(new HttpGet(url));
@@ -134,36 +156,20 @@ public class ArzonLookupService implements WebFileLookupService {
 		}
 	}
 
-	/**
-	 * httpResponse convert to Stirng
-	 * traditional method
-	 * @param response
-	 * @return
-	 * @throws UnsupportedOperationException
-	 * @throws IOException
-	 */
-	@SuppressWarnings("unused")
-	private String readResponse2(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
-		BufferedReader bin = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = bin.readLine()) != null) {
-			sb.append(line);
-		}
-		return sb.toString();
-	}
+	@Slf4j
+	static class TorConnectionSocketFactory extends SSLConnectionSocketFactory {
 
-	/**
-	 * httpResponse convert to string
-	 * JAVA 8 over
-	 * @param response
-	 * @return
-	 * @throws UnsupportedOperationException
-	 * @throws IOException
-	 */
-	private String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		return reader.lines().collect(Collectors.joining("\n"));
-	}
+	    public TorConnectionSocketFactory(final SSLContext sslContext) {
+	        super(sslContext);
+	        log.debug("init");
+	    }
 
+	    public Socket createSocket(final HttpContext context) throws IOException {
+	        InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+	        Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+	        log.debug("createSocket : {}", proxy);
+	        return new Socket(proxy);
+	    }
+
+	}
 }
