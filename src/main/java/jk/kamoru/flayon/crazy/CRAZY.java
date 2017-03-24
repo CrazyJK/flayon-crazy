@@ -4,13 +4,13 @@ import jk.kamoru.flayon.FLAYON;
 
 public interface CRAZY extends FLAYON {
 
-	public static final String SUFFIX_VIDEO 	 = "avi,mpg,mkv,wmv,mp4,mov,rmvb".toLowerCase();
+	public static final String SUFFIX_VIDEO 	 = "avi,mpg,mkv,wmv,mp4,mov,rmvb";
 
-	public static final String SUFFIX_IMAGE 	 = "jpg,jpeg,png,gif".toLowerCase();
+	public static final String SUFFIX_IMAGE 	 = "jpg,jpeg,png,gif";
 	
-	public static final String SUFFIX_SUBTITLES  = "smi,srt,ass,smil".toLowerCase();
+	public static final String SUFFIX_SUBTITLES  = "smi,srt,ass,smil";
 
-	public static final String SUFFIX_TORRENT 	 = "torrent".toLowerCase();
+	public static final String SUFFIX_TORRENT 	 = "torrent";
 
 	public static final String PATH_STAGE 		 = "Stage";
 	

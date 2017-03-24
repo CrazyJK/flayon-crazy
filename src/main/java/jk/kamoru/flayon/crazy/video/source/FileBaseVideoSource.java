@@ -52,7 +52,7 @@ public class FileBaseVideoSource implements VideoSource {
 	@Inject Provider<Actress> actressProvider;
 
 	// logic variables
-	private boolean firstLoad = false;
+	private boolean firstLoaded = false;
 	private boolean loading = false;
 	
 	// property
@@ -80,17 +80,15 @@ public class FileBaseVideoSource implements VideoSource {
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
 	private final void videoSource() {
-		if (firstLoad) {
-			if (loading) {
-				do {
-					try {
-						logger.warn("loading...");
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						logger.error("sleep error", e);
-						break;
-					}
-				} while(loading);
+		if (firstLoaded) {
+			while(loading) {
+				try {
+					logger.warn("loading... {}", toTypeString());
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					logger.error("sleep error", e);
+					break;
+				}
 			}
 		}
 		else {
@@ -106,7 +104,7 @@ public class FileBaseVideoSource implements VideoSource {
 			stopWatch = new StopWatch(toTypeString() + " VideoSource load");
 		}
 		
-		firstLoad = true;
+		firstLoaded = true;
 		loading = true;
 
 		List<String> wrongFileNames = new ArrayList<>();
@@ -180,7 +178,6 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 
 	@Override
-//	@PostConstruct
 	public void reload() {
 		reload(null);
 	}

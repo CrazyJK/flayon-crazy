@@ -14,7 +14,7 @@ public class NotiQueue {
 	private static final long TIME_OFFSET = 5000l;
 	
 	private static List<Noti> notiList = new ArrayList<>();
-	private static Map<Long, Integer> lastNotiIndexMap = new HashMap<>();
+	private static Map<Long, Integer> lastNotiIndexByUseridMap = new HashMap<>();
 	
 	public static void pushNoti(String message) {
 		Noti noti = new Noti(System.currentTimeMillis(), message);
@@ -22,23 +22,23 @@ public class NotiQueue {
 		log.info("push Noti : {}th {}", notiList.size(), noti);
 	}
 	
-	public static String getNoti(Long id) {
-		if (!lastNotiIndexMap.containsKey(id)) {
-			lastNotiIndexMap.put(id, -1); // init
+	public static String getNoti(Long userid) {
+		if (!lastNotiIndexByUseridMap.containsKey(userid)) {
+			lastNotiIndexByUseridMap.put(userid, -1); // init
 		}
 		String msg = "";
-		int nextNotiIndex = lastNotiIndexMap.get(id) + 1;
+		int nextNotiIndex = lastNotiIndexByUseridMap.get(userid) + 1;
 		if (notiList.size() > nextNotiIndex) {
 			Noti noti = notiList.get(nextNotiIndex);
-			lastNotiIndexMap.put(id, nextNotiIndex);
+			lastNotiIndexByUseridMap.put(userid, nextNotiIndex);
 			
 			// past 5s      > 53000                      - 51000 = 2000
 			if (TIME_OFFSET > System.currentTimeMillis() - noti.getTimeMillis()) {
 				msg = noti.getMessage();
-				log.info("get Noti : userid {}, {}th [{}]", id, nextNotiIndex+1, msg);
+				log.info("get Noti : userid {}, {}th [{}]", userid, nextNotiIndex+1, msg);
 			}
 			else {
-				return getNoti(id);
+				return getNoti(userid);
 			}
 		}
 		return msg;
