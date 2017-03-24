@@ -272,7 +272,7 @@ function mousewheel(event) {
 */
 	var E = event.originalEvent;
 	var delta = 0;
-	if (browser == IE || browser == CHROME) {
+	if (browser == MSIE || browser == CHROME) {
 		delta = E.wheelDelta / 120;
 	} else if (browser == SAFARI) {
 		delta = E.wheelDelta / -12;
