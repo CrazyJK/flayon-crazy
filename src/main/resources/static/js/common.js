@@ -342,3 +342,16 @@ function getlocalStorageItem(itemName, notfoundDefault) {
 		return notfoundDefault;
 	}
 }
+
+/**
+ * ref. http://ohgyun.com/340
+  1. 'f' + : 'f' 문자열에 뒤의 것을 더할 건데, // f
+  2. Math.random() : 0~1 사이의 랜덤한 수 생성에  //  0.13190673617646098 
+  3. * (1 << 30) : 2의 30승을 곱하고, //  0.13190673617646098  *  1073741824  = 141633779.5
+  4. .toString(16) : 16진수로 문자열로 표현한 후에, // Number(141633779.9).toString(16) = 87128f3.8
+  5. .replace('.', '') : 문자열에서 닷(소수점)을 제거한다. // 'f' + 87128f38 = f87128f38
+ * @returns
+ */
+function guid() {
+	return 'f' + (Math.random() * (1<<30)).toString(16).replace('.', '');
+}
