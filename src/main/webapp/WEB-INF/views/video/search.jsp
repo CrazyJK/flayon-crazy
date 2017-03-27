@@ -210,7 +210,7 @@ function fnStartVideoBatch(type) {
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
 		
-		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch..▼</button>
+		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch <span class="caret"></span></button>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
 
 		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">

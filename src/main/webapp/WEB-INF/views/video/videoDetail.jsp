@@ -31,6 +31,10 @@ dt, dd {
 	bottom: 0; 
 	text-align: center;
 }
+.popover {
+	max-width: 700px;
+}
+
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -54,6 +58,8 @@ $(document).ready(function() {
 		}, 1000);
 	});
 
+	$('[data-toggle="popover"]').popover(); 
+		
 });
 function fnVideoToggle(dom) {
 	$(dom).next().next().toggleClass("hide");
@@ -99,7 +105,7 @@ function resizeSecondDiv() {
 			<p><span class="label label-danger" onclick="opener.fnEditSubtitles('${video.opus}')">${file}</span></p>
 			</c:forEach>
 			<p><span class="label label-success" onclick="opener.fnCoverView('${video.opus}')">${video.coverFilePath}</span></p>
-			<p><span class="label label-warning" title="${video.info}" data-toggle="tooltip">${video.infoFilePath}</span></p>
+			<p><span class="label label-warning" title="${video.title}" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="${video.info}">${video.infoFilePath}</span></p>
 			<c:forEach items="${video.etcFileList}" var="file">
 			<p><span class="label label-primary">${file}</span></p>
 			</c:forEach>
