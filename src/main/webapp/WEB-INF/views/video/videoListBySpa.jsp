@@ -35,16 +35,6 @@
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<%-- <ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#table">TABLE</a></li>
-			<li class=""><a data-toggle="tab" href="#box">BOX</a></li>
-			<li class="float-right">
-				<span class="label label-info videoCount"></span>
-				<span class="label label-primary candidate"></span>
-				<span class="label label-warning torrents"></span>
-				<span class="label label-success sorted hide"></span>
-			</li>
-		</ul> --%>
 		<div class="tab-content">
 			<section id="box" class="tab-pane fade">
 				<ul class="list-group list-inline vbox"></ul>
