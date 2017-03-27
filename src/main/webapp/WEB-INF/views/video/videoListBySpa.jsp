@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="<c:url value="/css/videoListBySpa.css"/>"/>
 </head>
 <body>
+<div class="hide" id="cover-size-style"></div>
 <div class="container-fluid" role="main">
 
 	<div id="header_div" class="box form-inline">
@@ -25,6 +26,7 @@
 	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>
 	   		<span class="label label-default" id="cover"    role="checkbox" data-role-value="false" title="view cover">Cover</span>
 	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
+	   		<input type="range" id="img-width" class="form-control input-sm input-range" min="290" max="790" value="290" step="100" onchange="resizeCover()" style="width:100px;"/>
 			<div class="btn-group">
 		      	<button class="btn btn-xs btn-info"    data-toggle="tab" href="#table">Table</button>
 		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">Box</button>

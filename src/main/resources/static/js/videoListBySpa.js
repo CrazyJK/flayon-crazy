@@ -99,11 +99,13 @@ function fnAddEventListener() {
 			$("#magnify").show();
 			$("#cover").hide();
 			$("#torrent").hide();
+			$('#img-width').show();
 		}
 		else {							// for table
 			$("#magnify").hide();
 			$("#cover").show();
 			$("#torrent").show();
+			$('#img-width').hide();
 		}
 		$(e.target).swapClass("btn-default", "btn-info", true);
 	});
@@ -417,4 +419,12 @@ function setTblCoverPosition() {
 		imgWidth = 800;
 	var imgLeft = windowWidth / 4;
 	$(".tbl-cover").css({"left": imgLeft, "width": imgWidth});
+}
+
+function resizeCover() {
+	var imgWidth = parseInt($('#img-width').val());
+	var imgHeight = imgWidth * 0.6725;
+	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
+	$("#cover-size-style").empty().append(coverSizeStyle);
+	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }

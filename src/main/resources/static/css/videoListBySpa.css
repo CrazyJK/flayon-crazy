@@ -31,14 +31,14 @@
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	transition: all 0.3s;
 	margin: 5px;
 	padding: 3px;
-	width: 285px;
-	height: 210px;
+	width: 290px;
+	height: 195.025px;
 	border-radius: 10px;
 	text-align: left;
 	box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+	transition: height .5s, transform 0.3s;
 }
 
 /* #box>ul>li>dl:hover { */
