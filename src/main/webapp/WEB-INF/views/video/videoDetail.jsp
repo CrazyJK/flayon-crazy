@@ -9,7 +9,6 @@
 <html>
 <head>
 <title>[${video.opus}] ${video.title}</title>
-<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <style type="text/css">
 dt, dd {
 	padding: 2px;

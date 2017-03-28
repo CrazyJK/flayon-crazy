@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="<c:url value="/css/crazy-deco.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/crazy-common.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/crazy-bootstrap.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/css/neon.css"/>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="<c:url value="/css/aperture.css"/>" type="text/css" media="screen"/>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -306,7 +307,8 @@ function showSnackbar(message, time) {
 	x.innerHTML = message;
     x.className = "show";
     if (!time) time = 3000; 
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
+	setTimeout(function(){ x.className = x.className.replace("show", ""); }, time);
+//	console.log('showSnackbar', message, time);
 }
 </script>
 
@@ -331,12 +333,9 @@ function showSnackbar(message, time) {
 		<ul class="nav nav-pills">
 			<li><a class="noti text-danger"></a></li>
 			<li><a href="<c:url value="/video"/>"        		><s:message code="video.front"/></a>
-			<li id="backMenu"><a onclick="toogleBody()" 			       		><s:message code="video.background.title"/></a>
-			<%-- <li><a onclick="fnReloadVideoSource()" 		><s:message code="video.reload.title"/></a> --%>
+			<li id="backMenu"><a onclick="toogleBody()" 		><s:message code="video.background.title"/></a>
 			<li><a href="<c:url value="/video/main"/>"      	><s:message code="video.main"/></a>
-			<%-- <li><a href="<c:url value="/video/search"/>"	><s:message code="video.search"/></a> --%>
 			<li><a onclick="viewInnerSearchPage()"	            ><s:message code="video.search"/></a>
-			<%-- <li><a href="<c:url value="/video/list"/>"			><s:message code="video.video"/></a> --%>
 			<li><a href="<c:url value="/video/list_spa"/>"		><s:message code="video.video"/></a>
 			<li><a href="<c:url value="/video/actress"/>"		><s:message code="video.actress"/></a>
 			<li><a href="<c:url value="/video/studio"/>"		><s:message code="video.studio"/></a>
@@ -344,16 +343,14 @@ function showSnackbar(message, time) {
     			<a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">Image<span class="caret"></span></a>
     			<ul class="dropdown-menu">
 					<li><a href="<c:url value="/image"/>"				><s:message code="video.image"/></a>
-					<li><a href="<c:url value="/image/aperture"/>"		>Aperture</a>
+					<li><a href="<c:url value="/image/aperture"/>"		><s:message code="video.aperture"/></a>
 					<li><a href="<c:url value="/image/canvas"/>"		><s:message code="video.canvas"/></a>
 					<li><a href="<c:url value="/image/slides"/>"		><s:message code="video.slides"/></a>
-					<li><a href="<c:url value="/image/lightbox"/>"		>Lightbox</a>
-					<li><a href="<c:url value="/image/thumbnails"/>"	>Thumbnails</a>
+					<li><a href="<c:url value="/image/lightbox"/>"		><s:message code="video.lightbox"/></a>
+					<li><a href="<c:url value="/image/thumbnails"/>"	><s:message code="video.thumbnails"/></a>
     			</ul>
   			</li>
 			<li><a href="<c:url value="/video/briefing"/>"		><s:message code="video.briefing"/></a>
-			<%-- <li><a href="<c:url value="/video/torrent"/>"		><s:message code="video.torrent"/></a> --%>
-			<%-- <li><a href="<c:url value="/video/parseToTitle"/>"	><s:message code="video.parseToTitle"/></a> --%>
 			<li><a href="<c:url value="/video/gravia"/>"		><s:message code="video.gravia"/></a>
 			<li><a href="<c:url value="/video/archive"/>"		><s:message code="video.archive"/></a>
 			<li><a href="<c:url value="/video/history/graph"/>"	><s:message code="video.history"/></a>
@@ -363,16 +360,16 @@ function showSnackbar(message, time) {
 
 	<sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
 	
-	<form id="actionFrm" name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
-	<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
+	<div class="hide">
+		<form id="actionFrm" name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
+		<iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
+	</div>
 
 	<div id="bgActionGroup" class="text-center" style="display:none; position: fixed; bottom: 0px; width:100%; padding: 10px; margin: 0 auto;">
-		<span class="blink-1 float-right" onclick="setBackgroundImage();">NEXT</span>
-		<span class="blink-2 text-center" onclick="fnBGImageView();">VIEW</span>
-		<span class="blink-4">
-			<input id="bgChangeInterval" style="background-color: rgba(0,0,0,0); border: 0; width: 20px; text-align: right; color: cyan;"/>s
-		</span>
-		<span class="blink-3 float-left" onclick="fnBGImageDELETE();">DELETE</span>
+		<span class="blink-1 float-left"  onclick="fnBGImageDELETE();">DELETE</span>
+		<span class="blink-2 float-right" onclick="setBackgroundImage();">NEXT</span>
+		<span class="blink-3" onclick="fnBGImageView();">VIEW</span>
+		<span class="blink-4"><input id="bgChangeInterval" style="background-color: rgba(0,0,0,0); border: 0; width: 20px; text-align: right; color: cyan;"/>s</span>
 	</div>
 
 	<div id="innerSearchPage" class="box">

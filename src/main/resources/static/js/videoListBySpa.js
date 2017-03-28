@@ -16,8 +16,8 @@ var sortList = [
 		{code: "S", name: "Studio"},  {code: "O", name: "Opus"},     {code: "T", name: "Title"}, 
 		{code: "A", name: "Actress"}, {code: "D", name: "Rel"}, {code: "M", name: "Mod"}, 
 		{code: "R", name: "Rank"},    {code: "Sc", name: "Score"}, 
-		{code: "To", name: "Torrent"}, 
-//		{code: "F", name: "Favorite"}, 
+		{code: "To", name: "Tor"}, 
+//		{code: "F", name: "Fav"}, 
 		{code: "C", name: "Candi"}];
 var candidateCount = 0;			// candidate 파일 개수
 var hadTorrentCount = 0;		// torrent 파일 개수
@@ -94,23 +94,18 @@ function fnAddEventListener() {
  	// tab event
 	$('button[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		$('button[data-toggle="tab"]').swapClass("btn-info", "btn-default", true).css({"border-color": "#28a4c9"});
-		currentView = $(e.target).attr("href");
+		currentView = $(e.target).attr("data-target");
 		if (currentView === '#box') { 	// for box
-			$("#magnify").show();
-			$("#cover").hide();
-			$("#torrent").hide();
-			$('#img-width').show();
+			$(".forBox").show();
+			$(".forTable").hide();
 		}
 		else {							// for table
-			$("#magnify").hide();
-			$("#cover").show();
-			$("#torrent").show();
-			$('#img-width').hide();
+			$(".forBox").hide();
+			$(".forTable").show();
 		}
 		$(e.target).swapClass("btn-default", "btn-info", true);
 	});
-	$(currentView).addClass("in active");
-	$('button[href="' + currentView + '"]').click();
+	$('button[data-target="' + currentView + '"]').click();
 
 	// for tags checkbox
 	$("#tags").on("click", function() {
@@ -176,8 +171,6 @@ function showCover(isKey) {
 
 function request() {
 	loading(true, "request...");
-//	showStatus(true, "Request...");
-//	showSnackbar("Request...");
 
 	// reset variables
 	reverse = !reverse;
@@ -194,7 +187,6 @@ function request() {
 		timeout: 60000
 	}).done(function(data) {
 		if (data.exception) {
-//			showStatus(true, data.exception.message);
 			showSnackbar("Error.. " + data.exception.message);
 		}
 		else {
@@ -222,7 +214,6 @@ function request() {
 			});
 		}
 	}).fail(function(jqxhr, textStatus, error) {
-//		showStatus(true, textStatus + ", " + error);
 		showSnackbar("Error "+ textStatus + ", " + error);
 	}).always(function() {
 		loading(false);
@@ -230,7 +221,6 @@ function request() {
 }
 
 function render(first) {
-//	showStatus(true, "rendering...");
 	showSnackbar("Rendering...", 1000);
 	
 	var displayCount = 0;
@@ -298,8 +288,6 @@ function render(first) {
 	}
 	
 	setTblCoverPosition();
-	
-//	showStatus(false);
 }
 
 function fnIsScrollBottom() {
@@ -387,14 +375,12 @@ function renderTable(index, video, parent) {
 function fnSelectCandidateVideo(opus, idx, i) {
 	$("[data-candidate='" + opus + "-" + i + "']").hide();
 	$(".candidate").html("C " + --candidateCount);
-//	showStatus(true, "accept file", true);
 	showSnackbar("accept file " + opus);
 }
 function goTorrentMove(opus, idx, i) {
 	$("[data-torrent='" + opus + "-" + i + "']").hide();
 	$("[data-idx='" + idx + "']").addClass("moved");
 	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
-//	showStatus(true, ",move torrent", true);
 	showSnackbar("move torrent " + opus);
 }
 function goTorrentSearch(opus, idx) {
@@ -426,5 +412,5 @@ function resizeCover() {
 	var imgHeight = imgWidth * 0.6725;
 	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
-	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
+//	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }

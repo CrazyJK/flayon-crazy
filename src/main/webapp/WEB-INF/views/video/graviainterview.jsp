@@ -269,8 +269,7 @@ function fnToggleSubmitBtn() {
 	renderContent(selectedIndex);
 }
 function saveCoverAll() {
-	document.forms[0].submit();
-	$(".label-msg").html("call saveCoverAll").show().hide("fade", {}, 3000);
+	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
 }
 </script>
 </head>
@@ -282,35 +281,26 @@ function saveCoverAll() {
 		<label class="title">
 			GraviaInterview
 		</label>
-		<input type="search" id="query" class="form-control input-sm" placeholder="Opus Actress Torrent"/>
-		<div class="btn-group">
-			<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"><s:message code="video.opus"/></a>
-			<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
-			<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
-		</div>
+		<input type="search" id="query" class="form-control input-sm" placeholder="Search"/>
 	
 		<div class="btn-group btn-mode" data-toggle="buttons">
 			<a class="btn btn-xs btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
 			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="image">Image</a>
 			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="edit">Editable</a>
 		</div>
-	
-		<a class="btn btn-xs btn-primary" style="display:none;" id="submitBtn" onclick="saveCoverAll()">All Save</a>
-		
-		<c:if test="${pageContext.request.method == 'POST'}">
-			<span id="saveCount" class="label label-info">Save ${saveCount} Cover</span>
-		</c:if>
 		
 		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
 		
-		<span class="label label-primary label-msg" style="display:none;"></span>
+		<div class="float-right">
+			<button class="btn btn-xs btn-primary" style="display:none;" id="submitBtn" onclick="saveCoverAll()">All Save</button>
+		</div>
 	</div>
 
 	<div id="content_div" class="box row" style="overflow:auto;">
 		<div class="col-sm-2">
 			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
 		</div>
-		<form method="post" target="ifrm">
+		<form id="graviaForm">
 			<div class="col-sm-10 gravia-content"></div>
 		</form>
 	</div>

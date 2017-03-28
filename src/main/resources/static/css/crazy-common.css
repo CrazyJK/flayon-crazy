@@ -105,19 +105,20 @@ label.title {
 
 #snackbar {
     visibility: hidden;
+    position: fixed;
+    left: 50%;
+    top: 20px;
     min-width: 250px;
     margin-left: -125px;
-    background-color: #333;
+    padding: 6px;
+    background-color: #c32424;
     color: #fff;
     text-align: center;
-    border-radius: 2px;
-    padding: 16px;
-    position: fixed;
-    z-index: 1999;
-    left: 50%;
-    top: 30px;
-    font-size: 17px;
+    border-radius: 1em;
+    border: 10px solid #333;
     box-shadow: #fff 0px 0px 10px;
+    font: bold 1.5em 'clipregular';
+    z-index: 1999;
 }
 
 #snackbar.show {
@@ -128,10 +129,10 @@ label.title {
 
 @keyframes fadein {
     from {top: 0; opacity: 0;}
-    to {top: 30px; opacity: 1;}
+    to {top: 20px; opacity: 1;}
 }
 
 @keyframes fadeout {
-    from {top: 30px; opacity: 1;}
+    from {top: 20px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }

@@ -14,26 +14,30 @@
 	<div id="header_div" class="box form-inline">
 		<div style="display: inline-block;">
 	   		<input class="form-control input-sm search" placeholder="Search..."/>
-			<span class="label label-info count pointer">Initialize...</span>
-			<span class="label label-warning videoCount" title="video count"></span>
-			<span class="label label-primary candidate" title="candidate count"></span>
 	   		<span class="label label-default" id="favorite" role="checkbox" data-role-value="false" title="only favorite">Fav</span>
 	   		<span class="label label-default" id="novideo"  role="checkbox" data-role-value="false" title="only no video">NoV</span>
 	   		<span class="label label-default" id="tags"     role="checkbox" data-role-value="false" title="filter by tags">Tags</span>
+			<span class="label label-info count pointer">Initialize...</span>
+			<span class="label label-warning videoCount" title="video count"></span>
+			<span class="label label-primary candidate" title="candidate count"></span>
 	      	<span class="label label-danger status"></span>
 		</div>
       	<div class="float-right">
-	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>
-	   		<span class="label label-default" id="cover"    role="checkbox" data-role-value="false" title="view cover">Cover</span>
-	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
-	   		<input type="range" id="img-width" class="form-control input-sm input-range" min="290" max="790" value="290" step="100" onchange="resizeCover()" style="width:100px;"/>
 			<div class="btn-group">
-		      	<button class="btn btn-xs btn-info"    data-toggle="tab" href="#table">Table</button>
-		      	<button class="btn btn-xs btn-default" data-toggle="tab" href="#box">Box</button>
+		      	<button class="btn btn-xs btn-info"    data-toggle="tab" data-target="#table">Table</button>
+		      	<button class="btn btn-xs btn-default" data-toggle="tab" data-target="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-sort"></div>
 			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()" title="get all torrent">All T</button>
       	</div>
+      	<div class="float-right forTable">
+	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>
+	   		<span class="label label-default" id="cover"    role="checkbox" data-role-value="false" title="view cover">Cover</span>
+      	</div>
+      	<div class="float-right forBox">
+	   		<input type="range" id="img-width" class="form-control input-sm" min="290" max="790" value="290" step="100" onchange="resizeCover()"/>
+	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
+	   	</div>
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">

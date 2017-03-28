@@ -8,7 +8,6 @@
 <html>
 <head>
 <title><s:message code="video.archive"/></title>
-<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <script type="text/javascript">
 //var opusArray = ${opusArray};
 var bgImageCount = ${bgImageCount};
@@ -242,10 +241,8 @@ function fnViewBGImage() {
 					<c:forEach items="${videoList}" var="video">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
 							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 520px;">
-								<dt style="margin-top: 479px;">
-									<div class="nowrap">
-										<jk:video video="${video}" view="title" mode="l"/>
-									</div>
+								<dt style="margin-top: 479px;" class="nowrap">
+									<jk:video video="${video}" view="title" mode="l"/>
 								</dt>
 							</dl>
 							<div class="box box-small" style="background-color: rgba(218, 18, 18, 0.5);">

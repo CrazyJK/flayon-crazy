@@ -8,13 +8,13 @@ label {
 .table {
 }
 .table > thead {
-    background-color: rgba(255, 128, 0, 0.8);
+    background-color: rgba(255, 128, 0, 0.5);
 }
 .table > tbody {
     background-color: rgba(255, 255, 255,0.75);
 }
 .table > tfoot {
-    background-color: rgba(255, 128, 0, 0.8);
+    background-color: rgba(255, 128, 0, 0.5);
 }
 .table-hover > tbody > tr:hover, 
 .table-hover > tbody > tr:focus {

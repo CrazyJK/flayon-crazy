@@ -10,7 +10,11 @@
 <html>
 <head>
 <title><s:message code="video.briefing"/></title>
-<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
+<style type="text/css">
+.btn-warning.active, .btn-warning.active.focus {
+	background-color: rgba(22, 147, 235, 1);
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -26,98 +30,48 @@ $(document).ready(function(){
 		});
 	});
 	// set initial view
-	$('.btn-group-viewType > :nth-child(2)').click();
+	$('[data-viewType="s"]').click();
+	$('[href="#${tab}"]').click();
 	
 });
-var MOVE_WATCHED_VIDEO = ${MOVE_WATCHED_VIDEO};
-var DELETE_LOWER_RANK_VIDEO = ${DELETE_LOWER_RANK_VIDEO};
-var DELETE_LOWER_SCORE_VIDEO = ${DELETE_LOWER_SCORE_VIDEO};
 
-function setMOVE_WATCHED_VIDEO() {
-	MOVE_WATCHED_VIDEO = !MOVE_WATCHED_VIDEO;
-	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + MOVE_WATCHED_VIDEO, {}, "POST", "Set Watched Video to " + MOVE_WATCHED_VIDEO);
-	$("#MOVE_WATCHED_VIDEO").html("" + MOVE_WATCHED_VIDEO);
-}
-function setDELETE_LOWER_RANK_VIDEO() {
-	DELETE_LOWER_RANK_VIDEO = !DELETE_LOWER_RANK_VIDEO;
-	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + DELETE_LOWER_RANK_VIDEO, {}, "POST", "Set Lower Rank to " + MOVE_WATCHED_VIDEO);
-	$("#DELETE_LOWER_RANK_VIDEO").html("" + DELETE_LOWER_RANK_VIDEO);
-}
-function setDELETE_LOWER_SCORE_VIDEO() {
-	DELETE_LOWER_SCORE_VIDEO = !DELETE_LOWER_SCORE_VIDEO;
-	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + DELETE_LOWER_SCORE_VIDEO, {}, "POST", "Set Lower Score to " + MOVE_WATCHED_VIDEO);
-	$("#DELETE_LOWER_SCORE_VIDEO").html("" + DELETE_LOWER_SCORE_VIDEO);
-}
-function moveWatchedVideo() {
-	actionFrame(videoPath + '/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
-}
-function removeLowerRankVideo() {
-	actionFrame(videoPath + '/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
-}
-function removeLowerScoreVideo() {
-	actionFrame(videoPath + '/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
-}
 function fsOpen(folder) {
 	actionFrame('/flayon/openFolder', {'folder' : folder}, 'POST', 'Open folder ' + folder);
-}
-function startVideoBatch(type) {
-	actionFrame(videoPath + '/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
 }
 </script>
 </head>
 <body>
 <div class="container-fluid">
 
-<div id="header_div" class="box">
-	<ul class="list-inline">
-		<li>
-			<div class="btn-group btn-group-viewType" data-toggle="buttons">
-				<a class="btn btn-xs btn-success" data-viewType="n"><input type="radio"/>Normal</a>
-				<a class="btn btn-xs btn-success" data-viewType="s"><input type="radio"/>Simple</a>
-			</div>
-		</li>
-		<li><span class="label label-info">Max : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span></li>
-		<li>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="moveWatchedVideo()"><s:message code="video.mng.move"/></button>
-				<button class="btn btn-xs btn-default" onclick="setMOVE_WATCHED_VIDEO()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>
-			</div>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="removeLowerRankVideo()"><s:message code="video.mng.rank"/></button>
-				<button class="btn btn-xs btn-default" onclick="setDELETE_LOWER_RANK_VIDEO()" id="DELETE_LOWER_RANK_VIDEO">${DELETE_LOWER_RANK_VIDEO}</button>
-			</div>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="removeLowerScoreVideo()"><s:message code="video.mng.score"/></button>
-				<button class="btn btn-xs btn-default" onclick="setDELETE_LOWER_SCORE_VIDEO()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
-			</div>
-		</li>
-		<li>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="startVideoBatch('instance')">InstanceVideoBatch</button>
-				<button class="btn btn-xs btn-default" onclick="startVideoBatch('archive')">ArchiveVideoBatch</button>
-			</div>
-		</li>
-	</ul>
+<div id="header_div" class="box form-inline text-center">
+
+	<div class="btn-group btn-group-viewType float-left" data-toggle="buttons">
+		<a class="btn btn-xs btn-default" data-viewType="n"><input type="radio"/>Normal</a>
+		<a class="btn btn-xs btn-default" data-viewType="s"><input type="radio"/>Simple</a>
+	</div>
+
+	<div class="btn-group" data-toggle="buttons">
+	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#folder"    ><input type="radio"/><s:message code="video.video-by-folder"/></a>
+	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#date"	  ><input type="radio"/><s:message code="video.video-by-date"/></a>
+	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#play"	  ><input type="radio"/><s:message code="video.video-by-play"/></a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#rank"	  ><input type="radio"/><s:message code="video.video-by-rank"/></a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#score"	  ><input type="radio"/><s:message code="video.video-by-score"/></a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#length"	  ><input type="radio"/><s:message code="video.video-by-length"/></a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#studio"	  ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#actress"	  ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
+		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#tags"	  ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
+	</div>
+
+	<div class="float-right">
+		<span class="label label-default">Max : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span>
+	</div>
+
 </div>
 
 <div id="content_div" class="box" style="overflow:auto;">
-
- 	<ul class="nav nav-tabs">
-	    <li class="${tab eq 'folder'    ? 'active' : ''}"><a data-toggle="tab" href="#folder"     ><s:message code="video.video-by-folder"/></a></li>
-	    <li class="${tab eq 'date'      ? 'active' : ''}"><a data-toggle="tab" href="#date"		><s:message code="video.video-by-date"/></a></li>
-	    <li class="${tab eq 'play'      ? 'active' : ''}"><a data-toggle="tab" href="#play"		><s:message code="video.video-by-play"/></a></li>
-		<li class="${tab eq 'rank'      ? 'active' : ''}"><a data-toggle="tab" href="#rank"		><s:message code="video.video-by-rank"/></a></li>
-		<li class="${tab eq 'score'     ? 'active' : ''}"><a data-toggle="tab" href="#score"		><s:message code="video.video-by-score"/></a></li>
-		<li class="${tab eq 'length'    ? 'active' : ''}"><a data-toggle="tab" href="#length"		><s:message code="video.video-by-length"/></a></li>
-		<li class="${tab eq 'extension' ? 'active' : ''}"><a data-toggle="tab" href="#extension"	><s:message code="video.video-by-extension"/></a></li>
-		<%-- <li><a data-toggle="tab" href="#video"		><s:message code="video.video"/>   <span class="badge">${videoList.size()}</span></a></li> --%>
-		<li class="${tab eq 'studio'    ? 'active' : ''}"><a data-toggle="tab" href="#studio"		><s:message code="video.studio"/>  <span class="badge">${studioList.size()}</span></a></li>
-		<li class="${tab eq 'actress'   ? 'active' : ''}"><a data-toggle="tab" href="#actress"	><s:message code="video.actress"/> <span class="badge">${actressList.size()}</span></a></li>
-		<li class="${tab eq 'tags'      ? 'active' : ''}"><a data-toggle="tab" href="#tags"		><s:message code="video.tags"/>    <span class="badge">${tagList.size()}</span></a></li>
-  	</ul>
-
 	<div class="tab-content">
-		<section id="folder" class="tab-pane fade ${tab eq 'folder' ? 'in active' : ''}">
+		<section id="folder" class="tab-pane fade">
 			<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
@@ -153,7 +107,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="date" class="tab-pane fade ${tab eq 'date' ? 'in active' : ''}">
+		<section id="date" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -204,7 +158,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="play" class="tab-pane fade ${tab eq 'play' ? 'in active' : ''}">
+		<section id="play" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -255,7 +209,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="rank" class="tab-pane fade ${tab eq 'rank' ? 'in active' : ''}">
+		<section id="rank" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -288,7 +242,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="score" class="tab-pane fade ${tab eq 'score' ? 'in active' : ''}">
+		<section id="score" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -327,7 +281,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="length" class="tab-pane fade ${tab eq 'length' ? 'in active' : ''}">
+		<section id="length" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -361,7 +315,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
 
-		<section id="extension" class="tab-pane fade ${tab eq 'extension' ? 'in active' : ''}">
+		<section id="extension" class="tab-pane fade">
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
@@ -407,7 +361,7 @@ function startVideoBatch(type) {
 			</table>
 		</section>
  --%>
-		<section id="studio" class="tab-pane fade ${tab eq 'studio' ? 'in active' : ''}">
+		<section id="studio" class="tab-pane fade">
 			<ul class="list-inline">
 				<c:forEach var="studio" items="${studioList}">
 					<li><jk:studio studio="${studio}" view="span"/></li>
@@ -415,7 +369,7 @@ function startVideoBatch(type) {
 			</ul>
 		</section>
 
-		<section id="actress" class="tab-pane fade ${tab eq 'actress' ? 'in active' : ''}">
+		<section id="actress" class="tab-pane fade">
 			<ul class="list-inline">
 				<c:forEach items="${actressList}" var="actress">
 					<li><jk:actress actress="${actress}" view="span"/></li>
@@ -423,7 +377,7 @@ function startVideoBatch(type) {
 			</ul>
 		</section>
 
-		<section id="tags" class="tab-pane fade ${tab eq 'tags' ? 'in active' : ''}">
+		<section id="tags" class="tab-pane fade">
 			<ul class="list-inline" id="taglist">
 				<c:forEach items="${tagList}" var="tag">
 					<li><jk:tags tag="${tag}" view="span"/></li>
@@ -446,10 +400,9 @@ function startVideoBatch(type) {
 			}
 			</script>
 		</section>
-
 	</div>
-
 </div>
+
 </div>
 </body>
 </html>

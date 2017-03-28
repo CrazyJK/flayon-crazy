@@ -193,7 +193,6 @@ public class VideoController extends CrazyController {
 	@RequestMapping(value="/briefing", method=RequestMethod.GET)
 	public String briefing(Model model) {
 
-//		videoService.reload();
 		model.addAttribute("pathMap", 		videoService.groupByPath());
 		model.addAttribute("dateMap", 		videoService.groupByDate());
 		model.addAttribute("rankMap", 		videoService.groupByRank());
@@ -208,10 +207,6 @@ public class VideoController extends CrazyController {
 
 		model.addAttribute("tagList", videoService.getTagListWithVideo());
 
-		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
-		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
-		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
-		
 		return "video/briefing";
 	}
 
@@ -772,9 +767,6 @@ public class VideoController extends CrazyController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void graviainterviewSaveCover(Model model, @RequestParam(value="title", required=true) List<String> titles) {
 		videoService.saveCover(titles);
-//		int saveCount = 0; 
-//		model.addAttribute("saveCount", saveCount);
-//		return "video/graviainterview";
 	}
 
 	@RequestMapping("/gravia/data")

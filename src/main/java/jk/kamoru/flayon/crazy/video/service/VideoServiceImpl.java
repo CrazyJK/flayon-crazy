@@ -1495,7 +1495,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		for (String opus : opusArr) {
 			Video video = videoDao.getVideo(opus);
 			video.getTorrents().clear();
-			CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
+			sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
+/*			CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
 			try {
 				File file = completableFuture.get();
 				if (file != null) {
@@ -1504,7 +1505,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			} catch (InterruptedException | ExecutionException e) {
 				log.error("sukebeiNyaaLookupService : completableFuture.get()", e);
-			}
+			}*/
 		}
 		return found;
 	}

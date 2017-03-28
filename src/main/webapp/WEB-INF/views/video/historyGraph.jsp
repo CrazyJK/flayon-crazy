@@ -43,135 +43,141 @@ function toggleBG() {
 
 $(document).ready(function() {
 	$("#zoom" + currentStartIndex).addClass("active");
-	renderChart();
+	requestData();
 });
 
-function renderChart() {
+function requestData() {
 	loading(true, "Loading...");
 	$.getJSON("<c:url value="/video/history/"/>" + historyFormat + ".json" ,function(data) {
-
-		var row = data['data'];
-		chartData = row;
-
-		chart = AmCharts.makeChart("chartDiv", {
-		    "type": "serial",
-		    "theme": theme,
-		    "marginRight": 40,
-		    "marginLeft": 40,
-		    "autoMarginOffset": 20,
-		    "mouseWheelZoomEnabled":true,
-		    "dataDateFormat": chartFormat,
-		    "startDuration": 0,
-		    "legend": {
-		        "equalWidths": false,
-		        "useGraphSettings": true,
-		        "valueAlign": "left",
-		        "valueWidth": 120
-		    },
-		    "valueAxes": [{
-		        "id": "v1",
-		        "axisAlpha": 0,
-		        "position": "left",
-		        "ignoreAxisWidth":true
-		    }],
-		    "balloon": {
-		        "borderThickness": 1,
-		        "shadowAlpha": 0
-		    },
-		    "graphs": [{
-		        "id": "g1",
-		        "type" : "column",
-		        "lineThickness": 2,
-		        "fillAlphas": 0.8,
-		        "title": "Play video",
-		        "useLineColorForBulletBorder": true,
-		        "legendPeriodValueText": "total: [[value.sum]] played",
-		        "legendValueText": "[[value]] played",
-		        "valueField": "play",
-		        "balloon":{
-		            "drop":true,
-		            "adjustBorderColor":false,
-		            "color":"#ffff00"
-		          },
-		        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
-		    }
-/* 		    ,{
-		        "id": "g2",
-		        "type" : "column",
-		        "clustered":false,
-		        "columnWidth":0.5,
-		        "fillAlphas": 0.8,
-		        "lineAlpha": 0,
-		        "title": "Remove video",
-		        "useLineColorForBulletBorder": true,
-		        "legendPeriodValueText": "total: [[value.sum]] removed",
-		        "legendValueText": "[[value]] removed",
-		        "valueField": "remove",
-		        "balloonText": "<span style='font-size:15px;'>Remove : [[value]]</span>"
-		    } */
-		    ],
-		    "chartScrollbar": {
-		    	updateOnReleaseOnly : true,
-		        "graph": "g1",
-		        "oppositeAxis": true,
-		        "offset":30,
-		        "scrollbarHeight": 50,
- 		                "backgroundAlpha": 0,
-		        "selectedBackgroundAlpha": 0.1,
-		        "selectedBackgroundColor": "#888888",
-		                "graphFillAlpha": 0,
-		        "selectedGraphFillAlpha": 0,
-		                "graphLineAlpha": 0.5,
-		        "selectedGraphLineAlpha": 1,
-		        "autoGridCount":true,
-		        "color":"#AAAAAA"
-		    },
-		    "chartCursor": {
-		        "pan": true,
-		        "fullWidth" : true,
-		        "valueLineEnabled": false,
-		        "valueLineBalloonEnabled": false,
-		        "cursorAlpha": 0.1,
-		        "cursorColor":"#258cbb",
-		        "limitToGraph":"g1",
-		        "valueLineAlpha":0.2,
-		        "valueZoomable":true
-		    },
-		    "valueScrollbar":{
-		      "oppositeAxis":false,
-		      "offset":50,
-		      "scrollbarHeight":5
-		    },
-		    "categoryField": "date",
-		    "categoryAxis": {
-		    	"dateFormats": [{
-		            "period": "DD",
-		            "format": "DD"
-		        }, {
-		            "period": "WW",
-		            "format": "MMM DD"
-		        }, {
-		            "period": "MM",
-		            "format": "MMM"
-		        }, {
-		            "period": "YYYY",
-		            "format": "YYYY"
-		        }],
-		        "parseDates": true,
-		        "dashLength": 1,
-		        "minorGridEnabled": true
-		    },
-		    "export": {
-		        "enabled": true
-		    },
-		    "dataProvider": chartData
-		});
-
-		chart.addListener("rendered", zoomChart);
-
+		chartData = data['data'];
+		renderChart();
 		loading(false);
 	});
+}
+
+function renderChart() {
+
+	chart = AmCharts.makeChart("chartDiv", {
+	    "type": "serial",
+	    "theme": theme,
+	    "marginRight": 40,
+	    "marginLeft": 40,
+	    "autoMarginOffset": 20,
+	    "mouseWheelZoomEnabled":true,
+	    "dataDateFormat": chartFormat,
+	    "startDuration": 0,
+	    "legend": {
+	        "equalWidths": false,
+	        "useGraphSettings": true,
+	        "valueAlign": "left",
+	        "valueWidth": 120
+	    },
+	    "valueAxes": [{
+	        "id": "v1",
+	        "axisAlpha": 0,
+	        "position": "left",
+	        "ignoreAxisWidth":true
+	    }],
+	    "balloon": {
+	        "borderThickness": 1,
+	        "shadowAlpha": 0
+	    },
+	    "graphs": [{
+	        "id": "g1",
+	        "type" : "column",
+	        "lineThickness": 2,
+	        "fillAlphas": 0.8,
+	        "title": "Play video",
+	        "useLineColorForBulletBorder": true,
+	        "legendPeriodValueText": "total: [[value.sum]] played",
+	        "legendValueText": "[[value]] played",
+	        "valueField": "play",
+	        "balloon":{
+	            "drop":true,
+	            "adjustBorderColor":false,
+	            "color":"#ffff00"
+	          },
+	        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
+	    }
+	    /*,{
+	        "id": "g2",
+	        "type" : "column",
+	        "clustered":false,
+	        "columnWidth":0.5,
+	        "fillAlphas": 0.8,
+	        "lineAlpha": 0,
+	        "title": "Remove video",
+	        "useLineColorForBulletBorder": true,
+	        "legendPeriodValueText": "total: [[value.sum]] removed",
+	        "legendValueText": "[[value]] removed",
+	        "valueField": "remove",
+	        "balloonText": "<span style='font-size:15px;'>Remove : [[value]]</span>"
+	    } */
+	    ],
+	    "chartScrollbar": {
+	    	updateOnReleaseOnly : true,
+	        "graph": "g1",
+	        "oppositeAxis": true,
+	        "offset":30,
+	        "scrollbarHeight": 50,
+		            "backgroundAlpha": 0,
+	        "selectedBackgroundAlpha": 0.1,
+	        "selectedBackgroundColor": "#888888",
+	                "graphFillAlpha": 0,
+	        "selectedGraphFillAlpha": 0,
+	                "graphLineAlpha": 0.5,
+	        "selectedGraphLineAlpha": 1,
+	        "autoGridCount":true,
+	        "color":"#AAAAAA"
+	    },
+	    "chartCursor": {
+	        "pan": true,
+	        "fullWidth" : true,
+	        "valueLineEnabled": false,
+	        "valueLineBalloonEnabled": false,
+	        "cursorAlpha": 0.1,
+	        "cursorColor":"#258cbb",
+	        "limitToGraph":"g1",
+	        "valueLineAlpha":0.2,
+	        "valueZoomable":true
+	    },
+	    "valueScrollbar":{
+	      "oppositeAxis":false,
+	      "offset":50,
+	      "scrollbarHeight":5
+	    },
+	    "categoryField": "date",
+	    "categoryAxis": {
+	    	"dateFormats": [{
+	            "period": "DD",
+	            "format": "DD"
+	        }, {
+	            "period": "WW",
+	            "format": "MMM DD"
+	        }, {
+	            "period": "MM",
+	            "format": "MMM"
+	        }, {
+	            "period": "YYYY",
+	            "format": "YYYY"
+	        }],
+	        "parseDates": true,
+	        "dashLength": 1,
+	        "minorGridEnabled": true
+	    },
+	    "export": {
+	        "enabled": true
+	    },
+	    "dataProvider": chartData
+	});
 	
+	chart.addListener("rendered", zoomChart);
+	
+	try {
+		zoomChart(currentStartIndex);
+	} catch (e) {
+		console.log('zoomChart error', e);
+	}
 }
 
 function zoomChart(month) {
@@ -193,7 +199,6 @@ function zoomChart(month) {
 	        console.log("zoomChart : month => currentStartIndex = " + currentStartIndex);
     	}
     }
-    console.log("zoomChart : final currentStartIndex = " + currentStartIndex);
 
     var toDay = new Date();
     var fromDay = new Date();
@@ -202,6 +207,8 @@ function zoomChart(month) {
 	$("[id^=zoom]").removeClass("active");
 	$("#zoom" + currentStartIndex).addClass("active");
 
+    console.log("zoomChart : currentStartIndex = " + currentStartIndex, "[" + fromDay,"] -> [" + toDay + "]");
+	
 	// hide amcharts. sorry!
 	$("div.amcharts-chart-div > a").html("History chart by amCharts");
 
@@ -210,7 +217,7 @@ function zoomChart(month) {
 function changeFormat(format) {
 	historyFormat = format;
 	chartFormat = format.toUpperCase();
-	renderChart();
+	requestData();
 	console.log("changeFormat : historyFormat=" + historyFormat + ", chartFormat=" + chartFormat);
 }
 
@@ -219,8 +226,6 @@ function changeTheme(_theme) {
 	renderChart();
 	console.log("changeTheme : theme=" + theme);
 }
-
-/*]]>*/
 </script>
 </head>
 <body>
@@ -232,7 +237,7 @@ function changeTheme(_theme) {
 	<div class="btn-group" data-toggle="buttons">
 		<a id="zoom1"  class="btn btn-xs btn-default" onclick="zoomChart(1)"><input type="radio"/>M-1</a>
 		<a id="zoom2"  class="btn btn-xs btn-default" onclick="zoomChart(2)"><input type="radio"/>M-2</a>
-		<a id="zoom3"  class="btn btn-xs btn-default" onclick="zoomChart(3)"><input type="radio"/>M-3</a>
+		<a id="zoom3"  class="btn btn-xs btn-default active" onclick="zoomChart(3)"><input type="radio"/>M-3</a>
 		<a id="zoom6"  class="btn btn-xs btn-default" onclick="zoomChart(6)"><input type="radio"/>M-6</a>
 		<a id="zoom12" class="btn btn-xs btn-default" onclick="zoomChart(12)"><input type="radio"/>Y-1</a>
 		<a id="zoom48" class="btn btn-xs btn-default" onclick="zoomChart(48)"><input type="radio"/>Y-4</a>

@@ -121,9 +121,3 @@
 .item:hover {
 	z-index: 3;
 }
-
-/* aperture */
-.circle-wrapper:hover {
-	transform: scale(1.2, 1.2);
-	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5);
-}

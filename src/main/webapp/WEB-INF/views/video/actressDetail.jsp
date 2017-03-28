@@ -7,7 +7,6 @@
 <html>
 <head>
 <title>${actress.name}</title>
-<link rel="stylesheet" href="<c:url value="/css/videoMain.css"/>"/>
 <style type="text/css">
 #actressForm .form-control {
 	background-color: rgba(255,255,255,.75);
