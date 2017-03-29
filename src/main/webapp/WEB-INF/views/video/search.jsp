@@ -202,10 +202,10 @@ function fnStartVideoBatch(type) {
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>
 		<span id="debug"     class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-		<div class="btn-group">
-				<a class="btn btn-xs btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
-				<a class="btn btn-xs btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
-				<a class="btn btn-xs btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+		<div class="btn-group btn-group-xs">
+				<a class="btn btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+				<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+				<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>		
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
@@ -215,21 +215,21 @@ function fnStartVideoBatch(type) {
 
 		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">
 			<hr style="margin: 3px 0;"/>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="fnMoveWatchedVideo()"><s:message code="video.mng.move"/></button>
-				<button class="btn btn-xs btn-default" onclick="setMoveWatchedVideo()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnMoveWatchedVideo()"><s:message code="video.mng.move"/></button>
+				<button class="btn btn-default" onclick="setMoveWatchedVideo()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>
 			</div>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="fnRemoveLowerRankVideo()"><s:message code="video.mng.rank"/></button>
-				<button class="btn btn-xs btn-default" onclick="setDeleteLowerRankVideo()" id="DELETE_LOWER_RANK_VIDEO">${DELETE_LOWER_RANK_VIDEO}</button>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnRemoveLowerRankVideo()"><s:message code="video.mng.rank"/></button>
+				<button class="btn btn-default" onclick="setDeleteLowerRankVideo()" id="DELETE_LOWER_RANK_VIDEO">${DELETE_LOWER_RANK_VIDEO}</button>
 			</div>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="fnRemoveLowerScoreVideo()"><s:message code="video.mng.score"/></button>
-				<button class="btn btn-xs btn-default" onclick="setDeleteLowerScoreVideo()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnRemoveLowerScoreVideo()"><s:message code="video.mng.score"/></button>
+				<button class="btn btn-default" onclick="setDeleteLowerScoreVideo()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
 			</div>
-			<div class="btn-group">
-				<button class="btn btn-xs btn-default" onclick="fnStartVideoBatch('instance')">InstanceVideoBatch</button>
-				<button class="btn btn-xs btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnStartVideoBatch('instance')">InstanceVideoBatch</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
 			</div>
 		</div>
 	</div>

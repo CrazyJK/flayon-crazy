@@ -125,21 +125,26 @@ function toggleSlideView() {
 
 function resizeImage() {
 	windowHeight = $(window).height();
-	calcDivHeight = windowHeight - 80;
+	var navHeight = $('div#navDiv').height();
+	var imgDivPadding = 15;
+	var progressMarginBottom = 5;
+	calcDivHeight = windowHeight - navHeight - imgDivPadding * 2 - progressMarginBottom;
+	$("#imageDiv").height(calcDivHeight).css({padding: imgDivPadding});
 	calcDivWidth  = $(window).width();
-	$("#imageDiv").height(calcDivHeight);
 	
 	$("#aperture").aperture({
 		src: selectedImgUrl,
-		outerMargin: "30px auto",
-		width: (calcDivWidth - 50) + "px",
-		height: (calcDivHeight - 50) + "px",
-		outerRadius: "0",		// circle outer radius
-		baseColor1: randomColor(0.5),
-		baseColor2: randomColor(0.5),
-		baseColor3: randomColor(0.5),
-		baseColor4: randomColor(0.5),
-		innerCirclePadding: "15px"
+		outerMargin: "auto",
+		width: (calcDivWidth - imgDivPadding * 2) + "px",
+		height: (calcDivHeight) + "px",
+		outerRadius: "0",
+		baseColor: (playSlide ? "#000" : "#fff"),
+		color1: randomColor(0.5),
+		color2: randomColor(0.5),
+		color3: randomColor(0.5),
+		color4: randomColor(0.5),
+		innerCirclePadding: "0px",
+		borderRadius: "50%"
 	});
 
 }
@@ -192,6 +197,7 @@ function fnPlayImage() {
 	else {
 		playSlide = true;
 	}
+	resizeImage();
 }
 function showTimer(sec) {
 	$("#timer").html(sec + "s");

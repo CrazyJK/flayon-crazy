@@ -98,7 +98,7 @@
 		if (opts.width != opts.height) {
 			var _style2 = "<style>" +
 							cssId+".circle-wrapper, " + cssId+" div.circle, " + cssId+" div.circle:before, "+cssId+" div.circle:after {" +
-									"border-radius: 25%;" +
+									"border-radius: " + opts.borderRadius + ";" +
 							"}" +
 							cssId+" div.circle:after {" +
 									"transform: none;" +
@@ -132,8 +132,9 @@
 		color3: "rgba(0,   255,   0, .5)",  // 3th opened color
 		color4: "rgba(0,   150, 255, .5)",  // 4th opened color
 		backgroundColor: "rgba(0,0,0,0)",	// background-color
-		innerCirclePadding: "15px",	// inner circle padding
-		content: ""
+		innerCirclePadding: "15px",		// inner circle padding
+		content: "",					// content
+		borderRadius: "25%"				// border-radius if not square
 	};
 
 	/*

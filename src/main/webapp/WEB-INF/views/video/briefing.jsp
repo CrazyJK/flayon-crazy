@@ -10,11 +10,6 @@
 <html>
 <head>
 <title><s:message code="video.briefing"/></title>
-<style type="text/css">
-.btn-warning.active, .btn-warning.active.focus {
-	background-color: rgba(22, 147, 235, 1);
-}
-</style>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -33,6 +28,7 @@ $(document).ready(function(){
 	$('[data-viewType="s"]').click();
 	$('[href="#${tab}"]').click();
 	
+	$('.btn-group-tabs > .btn').addClass('btn-primary');
 });
 
 function fsOpen(folder) {
@@ -44,23 +40,26 @@ function fsOpen(folder) {
 <div class="container-fluid">
 
 <div id="header_div" class="box form-inline text-center">
+	<label class="title float-left">
+		<s:message code="video.briefing"/>
+	</label>
 
-	<div class="btn-group btn-group-viewType float-left" data-toggle="buttons">
-		<a class="btn btn-xs btn-default" data-viewType="n"><input type="radio"/>Normal</a>
-		<a class="btn btn-xs btn-default" data-viewType="s"><input type="radio"/>Simple</a>
+	<div class="btn-group btn-group-xs btn-group-viewType float-left" data-toggle="buttons">
+		<a role="button" class="btn btn-default" data-viewType="n"><input type="radio"/>Normal</a>
+		<a role="button" class="btn btn-default" data-viewType="s"><input type="radio"/>Simple</a>
 	</div>
 
-	<div class="btn-group" data-toggle="buttons">
-	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#folder"    ><input type="radio"/><s:message code="video.video-by-folder"/></a>
-	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#date"	  ><input type="radio"/><s:message code="video.video-by-date"/></a>
-	    <a class="btn btn-xs btn-warning" data-toggle="tab" href="#play"	  ><input type="radio"/><s:message code="video.video-by-play"/></a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#rank"	  ><input type="radio"/><s:message code="video.video-by-rank"/></a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#score"	  ><input type="radio"/><s:message code="video.video-by-score"/></a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#length"	  ><input type="radio"/><s:message code="video.video-by-length"/></a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#studio"	  ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#actress"	  ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
-		<a class="btn btn-xs btn-warning" data-toggle="tab" href="#tags"	  ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
+	<div role="group" class="btn-group btn-group-xs btn-group-tabs" data-toggle="buttons">
+	    <a role="button" class="btn" data-toggle="tab" href="#folder"    ><input type="radio"/><s:message code="video.video-by-folder"/></a>
+	    <a role="button" class="btn" data-toggle="tab" href="#date"	     ><input type="radio"/><s:message code="video.video-by-date"/></a>
+	    <a role="button" class="btn" data-toggle="tab" href="#play"	     ><input type="radio"/><s:message code="video.video-by-play"/></a>
+		<a role="button" class="btn" data-toggle="tab" href="#rank"	     ><input type="radio"/><s:message code="video.video-by-rank"/></a>
+		<a role="button" class="btn" data-toggle="tab" href="#score"     ><input type="radio"/><s:message code="video.video-by-score"/></a>
+		<a role="button" class="btn" data-toggle="tab" href="#length"    ><input type="radio"/><s:message code="video.video-by-length"/></a>
+		<a role="button" class="btn" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
+		<a role="button" class="btn" data-toggle="tab" href="#studio"    ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
+		<a role="button" class="btn" data-toggle="tab" href="#actress"   ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
+		<a role="button" class="btn" data-toggle="tab" href="#tags"      ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
 	</div>
 
 	<div class="float-right">
@@ -348,7 +347,7 @@ function fsOpen(folder) {
 				</tbody>
 			</table>
 		</section>
-<%-- 
+		<%-- 
 		<section id="video" class="tab-pane fade">
 			<table class="table table-condensed table-bordered">
 				<tr>
@@ -360,7 +359,7 @@ function fsOpen(folder) {
 				</tr>
 			</table>
 		</section>
- --%>
+		 --%>
 		<section id="studio" class="tab-pane fade">
 			<ul class="list-inline">
 				<c:forEach var="studio" items="${studioList}">

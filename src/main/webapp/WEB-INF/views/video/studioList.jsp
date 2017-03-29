@@ -37,7 +37,7 @@ function view() {
 
 	<div id="header_div" class="box form-inline">
 		<label for="search" class="title">
-			<s:message code="video.total"/> <s:message code="video.studio"/> <span class="badge">${fn:length(studioList)}</span>
+			<s:message code="video.studio"/> <span class="badge">${fn:length(studioList)}</span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 

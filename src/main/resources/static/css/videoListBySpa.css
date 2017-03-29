@@ -2,25 +2,6 @@
 *[onclick] {
 	cursor: pointer;
 }
-
-/* for navbar 
-.navbar {
-	border: 0;
-	padding-top: 20px;
-}
-.navbar-default {
-	background-image: linear-gradient(to bottom,#865050 0,#f8f8f8 100%);
-}
-.navbar-header {
-	padding-left: 5px;
-}
-.navbar-nav {
-	margin: 5px;
-}
-.nav-tabs > li > a {
-	padding: 5px 20px;
-}
-*/
 /* for box view */
 #box>ul {
 	padding: 3px 6px;
@@ -41,7 +22,6 @@
 	transition: height .5s, transform 0.3s;
 }
 
-/* #box>ul>li>dl:hover { */
 .box-hover {
 	transform: scale(1.1, 1.1);
 	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;

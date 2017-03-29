@@ -408,7 +408,7 @@ listViewType = '${videoSearch.listViewType}';
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
 				<li style="padding: 10px;">
-					<div id="aperture_${video.opus}" style="width:200px; height: 137px;"></div>
+					<div id="aperture_${video.opus}"></div>
 				</li>
 				<script type="text/javascript">
 				$("#aperture_${video.opus}")
@@ -416,12 +416,14 @@ listViewType = '${videoSearch.listViewType}';
 					.aperture({
 						src:"<c:url value="/video/${video.opus}/cover" />",
 						baseColor: randomColor(0.5),
-						outerMargin: "10 auto",
-						width: "200px;",
-						height: "137px",
+						outerMargin: "0 auto",
+						width: "200px",
+						height: "134px",
 						content: '${video.title}',
-						innerCirclePadding: "0"
-				});
+						innerCirclePadding: "5px",
+						outerRadius: "0",
+						//borderRadius: "50%"
+					});
 				</script>
 				</c:forEach>
 			</ul>

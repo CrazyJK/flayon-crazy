@@ -46,8 +46,9 @@ var tagList;
 
 function initComponent() {
 	$.each(sortList, function(i, sort) {
-		$("<button>").addClass("btn btn-xs").data("sort", sort).html(sort.code).appendTo($(".btn-group-sort"));
+		$("<button>").addClass("btn").data("sort", sort).html(sort.code).appendTo($(".btn-group-sort"));
 	});
+	resizeCover(true);
 }
 
 function fnAddEventListener() {
@@ -221,7 +222,7 @@ function request() {
 }
 
 function render(first) {
-	showSnackbar("Rendering...", 1000);
+	showSnackbar("Rendering...", 3000);
 	
 	var displayCount = 0;
 	var query = $(".search").val();
@@ -297,20 +298,6 @@ function fnIsScrollBottom() {
 	var scrollMargin       = $("p.more").height();
 //	console.log("fnIsScrollBottom", containerHeight, ' + ', containerScrollTop, ' = ', (containerHeight + containerScrollTop), ' > ', documentHeight, ' + ', scrollMargin, ' = ', (documentHeight - scrollMargin), lastPage);
 	return (containerHeight + containerScrollTop > documentHeight - scrollMargin) && !lastPage;
-}
-
-function showStatus(show, msg, autoClose) {
-	if (show) {
-		$(".status").html(msg).show(); // loading start
-	}
-	else { 
-		$(".status").hide('fade', [], 1500); // loading complete
-	}
-	if (autoClose) {
-		setTimeout(function() {
-			$(".status").hide('fade', [], 1500); // auto complete
-		}, 1000);
-	}
 }
 
 function renderBox(index, video, parent) {
@@ -407,10 +394,18 @@ function setTblCoverPosition() {
 	$(".tbl-cover").css({"left": imgLeft, "width": imgWidth});
 }
 
-function resizeCover() {
-	var imgWidth = parseInt($('#img-width').val());
-	var imgHeight = imgWidth * 0.6725;
+function resizeCover(first) {
+	var imgWidth;
+	if (first) {
+		imgWidth = getlocalStorageItem("videolistbyspa.coverImageSize", 290);
+		$('#img-width').val(imgWidth);
+	}else {
+		imgWidth = $('#img-width').val();
+	}
+	var imgHeight = parseInt(imgWidth) * 0.6725;
 	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
+	setlocalStorageItem("videolistbyspa.coverImageSize", imgWidth);
+	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 //	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }

@@ -5,7 +5,7 @@
 <html> 
 <head>
 <meta charset="UTF-8">
-<title>Thumbnails</title>
+<title><s:message code="video.thumbnails"/></title>
 <link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <style type="text/css">
 body {
@@ -22,7 +22,13 @@ body {
 	padding: 4px;
 	width: 120px;
 	height: 100px;
+	background-color: transparent;
 	transition: all .5s;
+}
+#thumbnailUL > li > a {
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
 }
 #thumbnailUL > li > a > div {
 	width: 100%;
@@ -30,11 +36,20 @@ body {
 	background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
-    background-color: rgba(255,255,255,.5);
+    background-color: rgba(255,255,255,.25);
 }
 .box-hover {
 	transform: scale(1.5, 1.5);
 	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
+}
+input[type='range'] {
+	box-shadow: rgba(255, 255, 255, 0) 0px 0px 5px 1px inset;
+}
+span.input-group-addon {
+    background-color: transparent;
+    border: 0;
+    color: #337ab7 !important;
+    font-weight: bold;
 }
 </style>
 <script type="text/javascript">
@@ -47,14 +62,13 @@ var imageSizePerPage = 50;
 var displaycount = 0;
 
 $(document).ready(function() {
-	
-	$("input[type='range']").css({
-		boxShadow: "rgba(255, 255, 255, 0.5) 0px 0px 5px 1px inset"	
-	});
-	
-	$("#img-width").val(getlocalStorageItem("thumbnamils.img-width", 120));
-	$("#img-height").val(getlocalStorageItem("thumbnamils.img-height", 100));
-	
+	var imgWidth  = getlocalStorageItem("thumbnamils.img-width", 120);
+	var imgHeight = getlocalStorageItem("thumbnamils.img-height", 100);
+	$("#img-width").val(imgWidth);
+	$("#img-height").val(imgHeight);
+	$(".addon-width" ).html("W " + imgWidth);
+	$(".addon-height").html("H " + imgHeight);
+
 	$.getJSON("${PATH}/image/data.json" ,function(data) {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
@@ -78,6 +92,7 @@ $(document).ready(function() {
 		var thisValue = $(this).data("checked");
 		setlocalStorageItem("thumbnamils.close", thisValue);
 		$(".close").toggleClass("hide", !thisValue);
+		$(".img-title").toggleClass("hide", !thisValue);
 	});
 	
 	$("#magnify").on("click", function() {
@@ -113,25 +128,28 @@ function render() {
 	for (var i=start; i<end; i++) {
 		$("ul#thumbnailUL").append(
 			$("<li>").addClass("img-thumbnail").append(
-				$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
-					event.stopPropagation();
-					// console.log("delete ", $(this).parent().data("src"));
-					var imgSrc = $(this).parent().data("src");
-					if (confirm('Delete this image\n' + imgSrc)) {
-						$(this).parent().parent().parent().hide("fade", {}, 500);
-						actionFrame(imgSrc, {}, "DELETE", "this image delete");
-					}
-				})
-			).append(
 				$("<a>").attr({
 					'href': "${PATH}/image/" + i,
 					'data-lightbox': 'lightbox-set',
 					'data-title': "<a href='${PATH}/image/" + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
 					'data-index': i
 				}).append(
-					$("<div>").data("src", "${PATH}/image/" + i).css({
+					$("<div>").addClass("nowrap").data("src", "${PATH}/image/" + i).css({
 						backgroundImage: "url('${PATH}/image/" + i + "')"
-					})
+					}).append(
+						$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
+							event.stopPropagation();
+							// console.log("delete ", $(this).parent().data("src"));
+							var imgSrc = $(this).parent().data("src");
+							if (confirm('Delete this image\n' + imgSrc)) {
+								$(this).parent().parent().parent().hide("fade", {}, 500);
+								actionFrame(imgSrc, {}, "DELETE", "this image delete");
+							}
+							return false;
+						})
+					).append(
+						$("<small>").addClass("img-title hide").html(imageMap[i])
+					)
 				)
 			).hover(
 				function(event) {
@@ -172,7 +190,9 @@ function resize() {
 	});
 	setlocalStorageItem("thumbnamils.img-width",  imgWidth);
 	setlocalStorageItem("thumbnamils.img-height", imgHeight);
-	$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);	
+	$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);
+	$(".addon-width" ).html("W " + imgWidth);
+	$(".addon-height").html("H " + imgHeight);
 }
 function fnSetOption() {
 	lightbox.option({
@@ -192,12 +212,17 @@ function fnSetOption() {
 <body>
 
 	<div id="header_div" class="box form-inline">
-
-		<span class="label label-info">Width</span>
-		<input type="range" id="img-width"  class="form-control input-sm input-range" min="100" max="400" value="120" step="10" onmouseup="resize()"/>
-		<span class="label label-info">Height</span>
-		<input type="range" id="img-height" class="form-control input-sm input-range" min="100" max="400" value="100" step="10" onmouseup="resize()"/>
-	
+		<label class="title">
+			<s:message code="video.thumbnails"/>
+		</label>
+		<div class="input-group input-group-xs">
+			<span class="input-group-addon addon-width">Width</span>
+			<input type="range" id="img-width"  class="form-control" min="100" max="400" value="120" step="10" onmouseup="resize()"/>
+		</div>
+		<div class="input-group input-group-xs">
+			<span class="input-group-addon addon-height">Height</span>
+			<input type="range" id="img-height" class="form-control" min="100" max="400" value="100" step="10" onmouseup="resize()"/>
+		</div>
 		<span class="label label-primary total-count"></span>
 		<span class="label label-primary display-count"></span>
 		<span class="label label-primary current-index"></span>

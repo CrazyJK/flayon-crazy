@@ -20,14 +20,13 @@
 			<span class="label label-info count pointer">Initialize...</span>
 			<span class="label label-warning videoCount" title="video count"></span>
 			<span class="label label-primary candidate" title="candidate count"></span>
-	      	<span class="label label-danger status"></span>
 		</div>
       	<div class="float-right">
-			<div class="btn-group">
-		      	<button class="btn btn-xs btn-info"    data-toggle="tab" data-target="#table">Table</button>
-		      	<button class="btn btn-xs btn-default" data-toggle="tab" data-target="#box">Box</button>
+			<div class="btn-group btn-group-xs">
+		      	<button class="btn btn-info"    data-toggle="tab" data-target="#table">Table</button>
+		      	<button class="btn btn-default" data-toggle="tab" data-target="#box">Box</button>
 			</div>
-			<div class="btn-group btn-group-sort"></div>
+			<div class="btn-group btn-group-xs btn-group-sort"></div>
 			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()" title="get all torrent">All T</button>
       	</div>
       	<div class="float-right forTable">

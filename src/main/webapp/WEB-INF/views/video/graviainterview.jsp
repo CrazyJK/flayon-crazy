@@ -11,7 +11,7 @@
 	top: 80px;
 }
 .gravia-item.nav-pills > li {
-	max-width: 130px;
+	max-width: 150px;
 }
 .gravia-item.nav-pills > li > a {
     background-color: rgba(51, 122, 183, 0.3);
@@ -29,6 +29,7 @@
 	font-size: 12px;
 	background-color: rgba(255, 255, 255, 0.5);
 	border-radius: 9px;
+	padding: 10px;
 }
 .gravia-content p {
     margin: 0 0 5px;
@@ -151,15 +152,25 @@ function request() {
 }
 
 function render() {
+	renderNav();
+	renderContent(0);
+}
+function renderNav() {
 	var titleNavContainer = $(".gravia-item");
 	for (var i=0; i<graviaList.length; i++) {
-		graviaList[i].itemTitle;
-		var link = $("<a>").addClass("nowrap").attr({"href": "#item-" + graviaList[i].itemIndex, "onclick": "renderContent(" + i + ")", "data-toggle": "pill"}).html(graviaList[i].title.replace('출시작', ''));
-		var count = $("<code>").addClass("float-right").html(graviaList[i].titles.length).appendTo(link);
-		$("<li>").append(link).appendTo(titleNavContainer);
+		var title = graviaList[i].title.replace('출시작', '');
+		var idx = title.indexOf("(");
+		if (idx > -1)
+			title = title.substring(0, idx);
+		$("<li>").append(
+				$("<a>").addClass("nowrap").attr({"href": "#item-" + graviaList[i].itemIndex, "onclick": "renderContent(" + i + ")", "data-toggle": "pill"}).append(
+						$("<span>").addClass("badge float-right").html(graviaList[i].titles.length)
+				).append(
+						$("<span>").html(title)
+				)
+		).appendTo(titleNavContainer);
 	}
 	titleNavContainer.children().first().addClass("active");
-	renderContent(0);
 }
 function renderContent(idx) {
 	previousIndex = selectedIndex;
@@ -174,7 +185,7 @@ function renderContent(idx) {
 
 	if (idx == -1) {
 		contentList = foundList;
-		headerTitle = "Search result " + foundList.length;
+		headerTitle = "Search result";
 	}
 	else {
 		contentList = graviaList[idx].titles;
@@ -239,7 +250,7 @@ function renderContent(idx) {
 		table.appendTo(rowContainer);
 	}
 
-	$('<h4>').html(headerTitle + " " + displayCount).appendTo(header);
+	$('<h4>').html(headerTitle + " <span class='badge'>" + displayCount + "</span>").appendTo(header);
 
 	$(".hover_img a").hover(function() {
 		var src = $(this).attr("data-src");
@@ -283,10 +294,10 @@ function saveCoverAll() {
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeholder="Search"/>
 	
-		<div class="btn-group btn-mode" data-toggle="buttons">
-			<a class="btn btn-xs btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
-			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="image">Image</a>
-			<a class="btn btn-xs btn-default"><input type="radio" name="mode" value="edit">Editable</a>
+		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
+			<a class="btn btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
+			<a class="btn btn-default"><input type="radio" name="mode" value="image">Image</a>
+			<a class="btn btn-default"><input type="radio" name="mode" value="edit">Editable</a>
 		</div>
 		
 		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
@@ -300,9 +311,9 @@ function saveCoverAll() {
 		<div class="col-sm-2">
 			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
 		</div>
-		<form id="graviaForm">
-			<div class="col-sm-10 gravia-content"></div>
-		</form>
+		<div class="col-sm-10">
+			<form id="graviaForm" class="gravia-content"></form>
+		</div>
 	</div>
 
 </div>
