@@ -211,18 +211,21 @@ function renderContent(idx) {
 		
 		if (mode === 'text') {
 			$("<p>").addClass("hover_img " + (title.check ? "bg-danger" : "bg-info") + " " + (title.exist ? "exist" : "")).attr({"title": title.rowData}).append(
-					$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
-						$('<span>').append(
-							$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-						)
+				$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
+					$('<span>').append(
+						$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
 					)
-				).appendTo(rowContainer);
+				)
+			).appendTo(rowContainer);
 		}
 		else if(mode === 'image') {
-			var div = $("<div>").css({"width": "210px", "height": "290px", "display": "inline-block"}).addClass((title.exist ? "exist" : ""));
-			$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail").css({"width": "210px", "height": "270px"}).appendTo(div);
-			$("<div>").addClass("nowrap").css({"padding": "0 10px"}).html(title.title).appendTo(div);
-			div.appendTo(rowContainer);
+			$("<div>").css({"width": "210px", "height": "290px", "display": "inline-block"}).addClass((title.exist ? "exist" : "")).append(
+				$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail").css({"width": "210px", "height": "270px"})
+			).append(
+				$("<div>").addClass("nowrap text-center").css({"padding": "0 10px"}).append(
+					$("<span>").addClass("label label-plain").html(title.title)		
+				)
+			).appendTo(rowContainer);
 		}
 		else if(mode === 'edit') {
 			var tr = $("<tr>").addClass((title.check ? "bg-danger" : "") + " " + (title.exist ? "exist" : ""));
