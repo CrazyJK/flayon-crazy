@@ -121,3 +121,28 @@
 .item:hover {
 	z-index: 3;
 }
+
+.rank-group {
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+.rank-range {
+	margin: 3px !important;
+	width: 140px !important; 
+	height: 18px;
+	padding: 0;
+	border: 0;
+	background-color: transparent;
+}
+.rank-range:focus {
+	border-color: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+.rank-range-addon {
+    background-color: transparent;
+    border: 0;
+    color: #fff !important;
+    font: 16px bold;
+    padding: 3px 6px;
+}

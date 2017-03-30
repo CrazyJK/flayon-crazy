@@ -264,7 +264,7 @@ listViewType = '${videoSearch.listViewType}';
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
 							<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 								<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-								<dt style="margin: 5px 0px 0px 0px; display: inline-flex;"><jk:video video="${video}" view="rank" mode="l"/></dt>
+								<dd><jk:video video="${video}" view="rank"      mode="l"/></dd>
 								<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
 								<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
 								<dd><jk:video video="${video}" view="opus"      mode="l"/></dd>
@@ -372,11 +372,7 @@ listViewType = '${videoSearch.listViewType}';
 								</dt>
 							</dl>
 							<div class="box box-small" style="background-color: rgba(218, 18, 18, 0.5);">
-								<!-- <h4 style="margin:0;" class="form-inline"> -->
-								<div style="margin:0;" class="form-inline">
 									<jk:video video="${video}" view="rank"      mode="l"/>
-								</div>
-								<!-- </h4> -->
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>
 									<jk:video video="${video}" view="release"   mode="l"/>

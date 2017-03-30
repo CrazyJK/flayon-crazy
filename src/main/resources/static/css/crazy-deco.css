@@ -71,6 +71,7 @@ div#header_div {
 	border-radius: 0 0 6px 6px;
 	border-top: 0;
 	box-shadow: 0 0 9px rgba(0,0,0,.5);
+	transition: background .5s, box-shadow .5s .5s, border .5s 1s;
 }
 div#header_div > ul.list-inline {
 	margin-left: 0;
@@ -78,11 +79,13 @@ div#header_div > ul.list-inline {
 
 div#content_div {
 	overflow:auto; 
-	/* text-align:center; */ 
 	background-position:center center; 
 	background-size:contain;
+	transition: background .5s, box-shadow .5s .5s, border .5s 1s;
 }
-
+.btn {
+	transition: border .5s;
+}
 #loading {
 	background-color: rgba(255, 255, 255, .25); 
 	box-shadow: 0px 0px 100px rgba(0, 0, 255, 0.5) inset;

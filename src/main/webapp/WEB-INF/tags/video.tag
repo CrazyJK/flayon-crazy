@@ -70,9 +70,11 @@
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("rank")) { %>
 	<c:if test="${mode ne 's'}">
-		<div class="form-group has-feedback">
-			<input type="range" id="Rank-${video.opus}" name="rankPoints" class="form-control input-range" data-opus="${video.opus}" min="${minRank}" max="${maxRank}" value="${video.rank}" onmouseup="fnRank('${video.opus}')" />
-			<span id="Rank-${video.opus}-label" class="form-control-feedback text-bold" style="font-size:16px;">${video.rank}</span>
+		<div style="margin:0;" class="form-inline">
+			<div class="input-group rank-group">
+				<input type="range" id="Rank-${video.opus}" name="rankPoints" class="form-control rank-range" data-opus="${video.opus}" min="${minRank}" max="${maxRank}" value="${video.rank}" onmouseup="fnRank('${video.opus}')" />
+				<span id="Rank-${video.opus}-label" class="input-group-addon rank-range-addon">${video.rank}</span>
+			</div>
 		</div>
 	</c:if>
 	<c:if test="${mode eq 's'}">

@@ -45,7 +45,7 @@ function toggleInputDiv() {
 }
 function saveCover(opus) {
 	fnMarkChoice(opus);
-	var url = context + "video/" + opus + "/saveCover";
+	var url = videoPath + "/" + opus + "/saveCover";
 	var resultStatus = actionFrame(url, {title: $("#dataTitle_" + opus).val()}, "POST", 'save cover ' + opus, 1000);
 	if (resultStatus == 200) {
 		loading(true, 'Fail to save cover');

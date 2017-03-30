@@ -402,7 +402,7 @@ function resizeCover(first) {
 	}else {
 		imgWidth = $('#img-width').val();
 	}
-	var imgHeight = parseInt(imgWidth) * 0.6725;
+	var imgHeight = Math.round(parseInt(imgWidth) * 0.6725);
 	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
 	setlocalStorageItem("videolistbyspa.coverImageSize", imgWidth);

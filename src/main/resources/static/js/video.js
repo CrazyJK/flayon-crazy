@@ -226,16 +226,13 @@ function fnRankColor(rank, rankLabel) {
 	try {
 		rankLabel.html(rank.val());
 		if(rank.val() == 0) {
-			rank.css({"background-color": "rgba(255, 255, 255, 0.5)", "box-shadow": "0 0 5px 1px rgba(255, 255, 255, 0.5)"});
-			rankLabel.css("color", "white");
+			rank.parent().css({"background-color": "rgba(255, 255, 255, 0.5)"});
 		}
 		else if(rank.val() > 0) {
-			rank.css({"background-color": "rgba(255, 0, 0, 0.5)", "box-shadow": "0 0 5px 1px rgba(255, 0, 0, 0.5)"});
-			rankLabel.css("color", "red");
+			rank.parent().css({"background-color": "rgba(255, 0, 0, 0.5)"});
 		}
 		else {
-			rank.css({"background-color": "rgba(0, 0, 255, 0.5)", "box-shadow": "0 0 5px 1px rgba(0, 0, 255, 0.5)"});
-			rankLabel.css("color", "blue");
+			rank.parent().css({"background-color": "rgba(0, 0, 255, 0.5)"});
 		}
 	} catch(e) {}
 }
@@ -347,7 +344,7 @@ function addTag(frm) {
  * @param name
  */
 function fnViewTagDetail(name) {
-	popup(context + "video/tag/" + name, "tagDetail-" + name, 850, 600);
+	popup(videoPath + "/tag/" + name, "tagDetail-" + name, 850, 600);
 }
 /**
  * 태그 삭제

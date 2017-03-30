@@ -12,10 +12,9 @@ try {
 <html lang="<%=lang%>">
 <head>
 <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon-kamoru.ico"/>">
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - FlayOn [<%=System.getProperty("os.name")%>]</title>
+<link rel="shortcut icon" type="image/x-icon" href="<c:url value="/img/favicon-kamoru.ico"/>">
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>"/>
 <link rel="stylesheet" href="<c:url value="/webjars/jquery-ui/1.12.1/themes/base/jquery-ui.min.css"/>"/>

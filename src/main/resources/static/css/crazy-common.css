@@ -24,9 +24,8 @@
 .label-plain {
 	background-color: rgba(255, 255, 255, .9);
 	color: #337ab7;
-	padding: .2em .3em .3em;
+	padding: .2em .3em;
 	font-weight: normal;
-	/* margin-right: 3px; */
 }
 .label-pre {
 	text-align: left;
@@ -104,24 +103,19 @@ label.title {
 }
 
 #snackbar {
-    visibility: hidden;
+ 	visibility: hidden;
     position: fixed;
     left: 50%;
     top: 20px;
     min-width: 250px;
     margin-left: -125px;
-    padding: 6px;
-    background-color: #c32424;
-    color: #fff;
+    padding: 16px;
     text-align: center;
-    border-radius: 1em;
-    border: 10px solid #333;
-    box-shadow: #fff 0px 0px 10px;
-    font: bold 1.5em 'clipregular';
     z-index: 1999;
+	background-color: #f1f1f1;
 }
 #snackbar.show {
-    visibility: visible;
+ 	visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }

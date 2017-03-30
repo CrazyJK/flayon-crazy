@@ -69,6 +69,37 @@
     float: right; */
 	/* content: url(/img/yes_check_mini.png); */
 }
+.cover-wrapper {
+	display: inline-block;
+/* 	width: 210px;
+	height: 293px; */
+	margin: 3px;
+    padding: 3px;
+	border-radius: 4px;
+	transition: height .5s, transform 0.3s;
+}
+.cover-image {
+	width: 204px;
+	height: 270px;
+}
+.cover-title {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+.box-hover {
+	transform: scale(1.1, 1.1);
+	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
+}
+.forImage {
+    display: inline-block;
+}
+span.input-group-addon {
+    background-color: transparent;
+    border: 0;
+    color: #337ab7 !important;
+    font-weight: bold;
+}
 </style>
 <script type="text/javascript">
 //bgContinue = false;
@@ -118,7 +149,8 @@ var isCheckedNoCover = false;
 			console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
 			renderContent(selectedIndex);
 		});
-
+	
+		resizeCover(true);
 	});
 }(jQuery));
 
@@ -195,10 +227,18 @@ function renderContent(idx) {
 	
 	var table;
 	var tbody;
-	if(mode === 'edit') {
+	if (mode === 'text') {
+		$(".forImage").addClass("hide");
+	}
+	else if(mode === 'image') {
+		$(".forImage").removeClass("hide");
+	}
+	else if (mode === 'edit') {
 		table = $("<table>").addClass("table table-condensed");
 		tbody = $("<tbody>");
+		$(".forImage").addClass("hide");
 	}
+	
 	for (var i=0; i < contentList.length; i++) {
 		var title = contentList[i];
 		
@@ -209,8 +249,10 @@ function renderContent(idx) {
 			displayCount++;
 		}
 		
+		var existClass = title.exist ? " exist" : "";
+		var checkClass = title.check ? " bg-danger" : " bg-info";
 		if (mode === 'text') {
-			$("<p>").addClass("hover_img " + (title.check ? "bg-danger" : "bg-info") + " " + (title.exist ? "exist" : "")).attr({"title": title.rowData}).append(
+			$("<p>").addClass("hover_img" + checkClass + existClass).attr({"title": title.rowData}).append(
 				$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
 					$('<span>').append(
 						$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
@@ -219,16 +261,24 @@ function renderContent(idx) {
 			).appendTo(rowContainer);
 		}
 		else if(mode === 'image') {
-			$("<div>").css({"width": "210px", "height": "290px", "display": "inline-block"}).addClass((title.exist ? "exist" : "")).append(
-				$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail").css({"width": "210px", "height": "270px"})
+			$("<div>").addClass("cover-wrapper" + checkClass + existClass).append(
+				$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail cover-image")
 			).append(
-				$("<div>").addClass("nowrap text-center").css({"padding": "0 10px"}).append(
+				$("<div>").addClass("nowrap text-center cover-title").append(
 					$("<span>").addClass("label label-plain").html(title.title)		
 				)
-			).appendTo(rowContainer);
+			).hover(function(event) {
+				if ($("#magnify").data("checked")) {
+					$(this).addClass("box-hover");
+				}
+			}, function() {
+				if ($("#magnify").data("checked")) {
+					$(this).removeClass("box-hover");
+				}
+			}).appendTo(rowContainer);
 		}
 		else if(mode === 'edit') {
-			var tr = $("<tr>").addClass((title.check ? "bg-danger" : "") + " " + (title.exist ? "exist" : ""));
+			var tr = $("<tr>").addClass(checkClass + existClass);
 			
 			var td0 = $("<td>").css({"width": "50px"});
 			$("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find").appendTo(td0);
@@ -285,9 +335,26 @@ function fnToggleSubmitBtn() {
 function saveCoverAll() {
 	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
 }
+function resizeCover(first) {
+	var imgWidth;
+	if (first) {
+		imgWidth = getlocalStorageItem("graviainterview.coverImageSize", 200);
+		$('#img-width').val(imgWidth);
+	}else {
+		imgWidth = $('#img-width').val();
+	}
+	var imgHeight = Math.round(parseInt(imgWidth) * 1.3235);
+	var coverSizeStyle = "<style>.cover-image {width:" + imgWidth + "px; height:" + imgHeight + "px;} .cover-title {width:" + imgWidth + "px;}</style>";
+	$("#cover-size-style").empty().append(coverSizeStyle);
+	setlocalStorageItem("graviainterview.coverImageSize", imgWidth);
+	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
+	$('.addon-width').html(imgWidth + " x " + imgHeight);
+//	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
+}
 </script>
 </head>
 <body>
+<div class="hide" id="cover-size-style"></div>
 
 <div class="container-fluid" role="main">
 
@@ -296,6 +363,8 @@ function saveCoverAll() {
 			GraviaInterview
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeholder="Search"/>
+
+		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
 	
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
 			<a class="btn btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
@@ -303,7 +372,14 @@ function saveCoverAll() {
 			<a class="btn btn-default"><input type="radio" name="mode" value="edit">Editable</a>
 		</div>
 		
-		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
+		<div class="forImage hide">
+	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
+	   		
+	   		<div class="input-group input-group-xs">
+				<input type="range" id="img-width" class="form-control input-sm" min="100" max="700" value="200" step="50" onchange="resizeCover()"/>
+				<span class="input-group-addon addon-width">Width</span>
+			</div>
+		</div>
 		
 		<div class="float-right">
 			<button class="btn btn-xs btn-primary" style="display:none;" id="submitBtn" onclick="saveCoverAll()">All Save</button>

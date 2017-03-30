@@ -78,8 +78,8 @@ function resizeSecondDiv() {
 <c:set var="opus" value="${video.opus}"/>
 
 <dl class="dl-detail">
-	<dt style="font-size: x-large;"><jk:video video="${video}" view="title"     mode="l"/></dt>
-	<dt class="form-inline"><jk:video video="${video}" view="rank" mode="l"/></dt>
+	<dt style="font-size: x-large;" class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+	<dd><jk:video video="${video}" view="rank"      mode="l"/></dd>
 	<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
 	<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
 	<dd><jk:video video="${video}" view="opus" 	    mode="l"/></dd>

@@ -24,7 +24,7 @@ $(document).ready(function(){
 		}
 		
 		var keyword = $(this).val();
-		var queryUrl = context + 'image/google.json?q=' + keyword; 
+		var queryUrl = imagePath + '/google.json?q=' + keyword; 
 		$("#url").html(queryUrl);
 
 		$.getJSON(queryUrl ,function(data) {
