@@ -217,11 +217,11 @@ function fnSetOption() {
 		</label>
 		<div class="input-group input-group-xs">
 			<span class="input-group-addon addon-width">Width</span>
-			<input type="range" id="img-width"  class="form-control" min="100" max="400" value="120" step="10" onmouseup="resize()"/>
+			<input type="range" id="img-width"  class="form-control" min="100" max="400" value="120" step="10" onchange="resize()"/>
 		</div>
 		<div class="input-group input-group-xs">
 			<span class="input-group-addon addon-height">Height</span>
-			<input type="range" id="img-height" class="form-control" min="100" max="400" value="100" step="10" onmouseup="resize()"/>
+			<input type="range" id="img-height" class="form-control" min="100" max="400" value="100" step="10" onchange="resize()"/>
 		</div>
 		<span class="label label-primary total-count"></span>
 		<span class="label label-primary display-count"></span>

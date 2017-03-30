@@ -305,12 +305,12 @@ function toogleTheme(themeName) {
 		$("#plainStyle").empty().append(
 			'<style>' +
 				'body         {background-image: none !important;} ' +
-				'#header_div  {background-image: none !important; box-shadow: none !important; border-color: transparent !important;} ' +
-				'#content_div {background-image: none !important; box-shadow: none !important; border-color: transparent !important; background-color: transparent !important;} ' +
-				'dl.box.box-small                                {box-shadow: none !important; border-color: transparent !important; background-color: transparent !important;} ' +
-				'div.box.box-small                               {box-shadow: none !important; border-color: transparent !important; background-color: transparent !important;} ' +
+				'#header_div  {background-image: none !important; box-shadow: none !important; border-colorX: transparent !important;} ' +
+				'#content_div {background-image: none !important; box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
+				'dl.box.box-small                                {box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
+				'div.box.box-small                               {box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
 				'.btn {border-color: transparent !important;}' +
-				'.table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(255, 165, 0, 0.1);}' +
+				'.table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}' +
 			'</style>'
 		);
 		$("#backMenu").hide();

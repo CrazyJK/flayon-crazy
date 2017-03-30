@@ -222,7 +222,7 @@ function request() {
 }
 
 function render(first) {
-	showSnackbar("Rendering...", 3000);
+	showSnackbar("Rendering...", 1000);
 	
 	var displayCount = 0;
 	var query = $(".search").val();
