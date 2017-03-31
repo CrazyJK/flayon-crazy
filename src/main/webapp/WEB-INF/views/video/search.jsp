@@ -190,7 +190,6 @@ function fnRemoveLowerScoreVideo() {
 function fnStartVideoBatch(type) {
 	actionFrame(videoPath + '/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
 }
-
 </script>
 </head>
 <body>
@@ -203,12 +202,14 @@ function fnStartVideoBatch(type) {
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>
 		<span id="debug"     class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 		<div class="btn-group btn-group-xs">
-				<a class="btn btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
-				<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
-				<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+			<a class="btn btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+			<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+			<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>		
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
+
+		<span class="close" style="margin-left:10px;" onclick="parent.viewInnerSearchPage()">&times;</span>
 		
 		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch <span class="caret"></span></button>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
@@ -232,8 +233,9 @@ function fnStartVideoBatch(type) {
 				<button class="btn btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
 			</div>
 		</div>
+		
 	</div>
-	
+
 	<div id="content_div" class="row">
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">

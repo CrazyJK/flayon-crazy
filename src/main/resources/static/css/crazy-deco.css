@@ -135,11 +135,12 @@ div#header_div, div#content_div, dl.box.box-small, div.box.box-small {
 #innerSearchPage {
 	display: none;
 	position: fixed;
+	left: 0px;
+	top: 0px; 
 	background-color: white;
 	z-index: 588;
 	padding: 5px;
 	margin: 20px;
-	/* box-shadow: inset 0 0 15px 10px rgba(128,128,255,.5); */
 }
 #innerSearchPage > iframe {
 	border: 0;

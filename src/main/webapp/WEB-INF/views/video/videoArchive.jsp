@@ -132,7 +132,7 @@ function fnViewBGImage() {
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 			<li>
 				<div id="opus-${video.opus}" class="video-box">
-					<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+					<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
 						<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 						<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="s"/></dd>

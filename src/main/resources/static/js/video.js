@@ -4,19 +4,19 @@ var calculatedDivHeight = 0;
  * div container 높이 조정
  */
 function resizeDivHeight() {
-	var offsetMargin = 20;
 	windowHeight = $(window).outerHeight();
-	var header = $("#header_div").outerHeight();
-	calculatedDivHeight = windowHeight - header - offsetMargin;
+	windowWidth  = $(window).width();
+	var offsetMargin = 20;
+	var headerHeight = $("#header_div").outerHeight();
+	calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
 	$("#content_div").outerHeight(calculatedDivHeight);
 	//console.log("resizeDivHeight", calculatedDivHeight);
 	
-	windowWidth  = $(window).width();
 	$("#innerSearchPage").css({
-		"left": "0px", "top": "20px", "width": windowWidth - offsetMargin*2, "height": windowHeight - (offsetMargin * 3)
+		width: windowWidth - offsetMargin * 2, 
+		height: windowHeight - offsetMargin * 2
 	});
 
-	
 	try {
 		resizeSecondDiv(); // if it exist
 	} catch (e) {

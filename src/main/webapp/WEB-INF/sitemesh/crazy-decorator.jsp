@@ -39,9 +39,8 @@ var imagePath = '${PATH}/image';
 var locationPathname = window.location.pathname;
 var currBGImageNo = 0;
 var bgImageCount = parseInt('${bgImageCount}');
-/** content_div에 이미지를 보여줄지 여부 */
-var bgContinue = true;
-var urlSearchVideo = '${urlSearchVideo}';
+var bgContinue = true;	/** content_div에 이미지를 보여줄지 여부 */
+var urlSearchVideo   = '${urlSearchVideo}';
 var urlSearchActress = '${urlSearchActress}';
 var urlSearchTorrent = '${urlSearchTorrent}';
 var tSec = 1;
@@ -55,6 +54,7 @@ var pingInterval = 5000;
 var themeSwitch = getlocalStorageItem("crazy-decorator.theme-switch",  'normal');
 var bgToggle = 0;
 var isLoadedSearchPage = false;
+var loadingText = 'Loading...';
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -64,35 +64,35 @@ window.onerror = function (e) {
 };
 
 $(document).ready(function() {
+ 	addLinkListener();
+	addBGChangerListener();
+	addResizeListener();
 
-	$("#header_div").css("background-image", "linear-gradient(to bottom, #fff 0, " + randomColor(0.3) + " 100%)");
-	$("#content_div").css("background-color", randomColor(0.3));
-	
-	//set rank color
- 	$('input[type="range"].rank-range').each(function() {
-		var opus = $(this).attr("data-opus");
-		fnRankColor($(this), $("#Rank-"+opus+"-label"));
- 	});
+	ping();
 
-	// Add listener : if labal click, empty input text value
-	$("label").bind("click", function(){
-		var id = $(this).attr("for");
-		$("#" + id).val("");
-	});
-
+	setRankColor();
  	showNav();
- 	
+	resizeDivHeight();
+	$('[data-toggle="tooltip"]').tooltip(); // bootstrap tooltip initialize 
+	toogleTheme(themeSwitch);
+	loading(false);
+});
+
+function addResizeListener() {
+	$(window).bind("resize", resizeDivHeight);
+}
+
+function addLinkListener() {
 	$("#deco_nav a[href]").on("click", function() {
-		loading(true, "Loading");
+		loading(true, loadingText);
 	});
 	$("#header_div form").submit(function(event) {
 		console.log("form submit...");
 		loading(true, "form submit");
 	});
-	
-	$(window).bind("resize", resizeDivHeight);
-	resizeDivHeight();
+}
 
+function addBGChangerListener() {
 	$("#bgChangeInterval").on("keyup", function() {
 		bgChangeInterval = parseInt($(this).val());
 		clearInterval(bgImageChanger);
@@ -100,13 +100,19 @@ $(document).ready(function() {
 		bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 		console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
 	});
-	
-	// bootstrap tooltip initialize
-	$('[data-toggle="tooltip"]').tooltip(); 
+}
 
-	loading(false);
+function setRankColor() {
+ 	$('input[type="range"].rank-range').each(function() {
+		var opus = $(this).attr("data-opus");
+		fnRankColor($(this), $("#Rank-"+opus+"-label"));
+ 	});
+}
 
-	// ping
+/**
+ * start ping
+ */
+function ping() {
 	if (locationPathname != (videoPath + '/search')) {
 		setInterval(function() {
 			$.getJSON({
@@ -131,9 +137,7 @@ $(document).ready(function() {
 			});	
 		}, pingInterval);
 	}
-	
-	toogleTheme(themeSwitch);
-});
+}
 
 /**
  * 현재 url비교하여 메뉴 선택 효과를 주고, 메뉴 이외의 창에서는 nav를 보이지 않게
@@ -152,11 +156,6 @@ function showNav() {
 	
 	if (locationPathname.startsWith(imagePath)) {
 		$("#backMenu").hide();
-		$("#toPlain").hide();
-	}
-
-	if (locationPathname === videoPath) {
-		$("#toPlain").hide();
 	}
 }
 
@@ -170,7 +169,7 @@ function actionFrame(reqUrl, reqData, method, msg, interval) {
 		url: reqUrl,
 		data: reqData,
 		beforeSend : function() {
-			loading(true, msg ? msg : "Loading...");
+			loading(true, msg ? msg : loadingText);
 		}
 	}).done(function(data, textStatus, jqXHR) {
 		loading(false);
@@ -241,7 +240,6 @@ function loading(show, msg, interval, detail) {
 	}
 }
 
-
 /**
  * toggle body background image
  */
@@ -281,7 +279,10 @@ function viewInnerSearchPage() {
 		$("#innerSearchPage > iframe").attr({"src": "${PATH}/video/search"});
 		isLoadedSearchPage = true;
 	}
-	$("#innerSearchPage").css({"box-shadow": "0 0 15px 10px " + randomColor(0.5)}).toggle();
+	if (themeSwitch === 'plain')
+		$("#innerSearchPage").css({boxShadow: "0 0 15px 10px rgba(0,0,0,.5)"}).toggle();
+	else
+		$("#innerSearchPage").css({boxShadow: "0 0 15px 10px " + randomColor(0.5)}).toggle();
 }
 
 /**
@@ -299,20 +300,20 @@ function showSnackbar(message, time) {
  * toggle theme
  */
 function toogleTheme(themeName) {
- 	var neonSelectors = "#deco_nav a, .title, #loading-msg, #loading-timer, .label, .btn, label, .item, th, td, .rank-group, .slidesjs-navigation, .slidesjs-pagination-item>a, select, input[type=text], input[type=search]";
-	if (themeName === 'plain') { // for plain
+ 	var neonSelectors = "#deco_nav a, .title, #loading-msg, #loading-timer, .label, .btn, label, .neon, .item, th, td, .rank-group, .slidesjs-navigation, .slidesjs-pagination-item>a, select, input[type=text], input[type=search]";
+	if (themeName === 'plain') {
 		clearInterval(bgImageChanger);
 		$("#plainStyle").empty().append(
-			'<style>' +
-				'body         {background-image: none !important;} ' +
-				'#header_div  {background-image: none !important; box-shadow: none !important; border-colorX: transparent !important;} ' +
-				'#content_div {background-image: none !important; box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
-				'dl.box.box-small                                {box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
-				'div.box.box-small                               {box-shadow: none !important; border-colorX: transparent !important; background-color: transparent !important;} ' +
-				'.btn {border-color: transparent !important;}' +
-				'.table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}' +
-			'</style>'
+			'<style>'
+				+ ' body {background: transparent none !important;}'
+				+ ' #header_div, #content_div {background: transparent none !important; box-shadow: none !important;}'
+				+ ' dl.box.box-small, div.box.box-small, #resultVideoDiv, #resultHistoryDiv {box-shadow: none !important; background-color: transparent !important;}'
+				+ ' .btn {background: transparent none !important; color: #333;}'
+			 	+ ' .table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}'
+			 	+ ' .border-shadow {box-shadow: none;}'
+			+ '</style>'
 		);
+		$(".neon").css({color: '#222'}); // for front
 		$("#backMenu").hide();
 		$("#neonStyle").empty();
 		$(neonSelectors).removeClass("blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10");
@@ -323,25 +324,36 @@ function toogleTheme(themeName) {
 			setBackgroundImage();
 			bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 		}
+		$("#header_div" ).css({backgroundImage: 'linear-gradient(to bottom, #fff 0, ' + randomColor(0.3) + ' 100%)'});
+		$("#content_div").css({backgroundColor: randomColor(0.3)});
 		$("#plainStyle").empty();
 		$("#neonStyle").empty();
 		$(neonSelectors).removeClass("blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10");
 		$("#backMenu").show();
+		$(".neon").css({color: '#eee'}).each(function() {
+			$(this).addClass("blink-" + getRandomInteger(1, 10));
+		}); // for front
 	}
 	if (themeName === 'neon') {
 		$("#neonStyle").empty().append(
-			'<style>' +
-				'#deco_nav, #header_div, #content_div, div.box.box-small {background-color: rgba(0, 0, 0, .5); background-image: none;} ' +
-				neonSelectors + ' {color: #eee; font-weight: bold; background-color: rgba(0, 0, 0, .5); background-image: none} ' +
-			'</style>'
+			'<style>'
+				+ '#deco_nav, #header_div, #content_div, div.box.box-small {background-color: rgba(0, 0, 0, .5); background-image: none;} '
+				+ neonSelectors + ' {color: #eee; font-weight: bold; background-color: rgba(0, 0, 0, .5); background-image: none}'
+			+ '</style>'
 		);
-		
 		$(neonSelectors).each(function() {
 			$(this).addClass("blink-" + getRandomInteger(1, 10));
 		});
-	}	
+	}
+	themeSwitch = themeName;
+	propagateTheme();
+	setlocalStorageItem("crazy-decorator.theme-switch", themeSwitch);
+}
 
-	setlocalStorageItem("crazy-decorator.theme-switch",  themeName);
+function propagateTheme() {
+	if (isLoadedSearchPage) {
+		$("#innerSearchPage > iframe").get(0).contentWindow.toogleTheme(themeSwitch);
+	}
 }
 </script>
 
@@ -357,10 +369,10 @@ function toogleTheme(themeName) {
 			</div>
 			<span id="loading-msg" class="label" onclick="loading(false);">Loading</span>
 		</div>
+		<script type="text/javascript">
+		loading(true, loadingText);
+		</script> 
 	</div>
-	<script type="text/javascript">
-	loading(true, "Loading...");
-	</script> 
 
  	<nav id="deco_nav">
 		<ul class="nav nav-pills">
@@ -420,9 +432,10 @@ function toogleTheme(themeName) {
 	<div id="snackbar">
 		<strong>message...</strong>
 	</div>
-	<div id="dynamicStyle" class="hide">
+	<div role="dynamicStyleWrapper" class="hide">
 		<div id="plainStyle"></div>
 		<div id="neonStyle"></div>
+		<div id="cover-size-style"></div>
 	</div>
 
 </body>

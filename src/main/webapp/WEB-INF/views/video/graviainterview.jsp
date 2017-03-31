@@ -354,8 +354,6 @@ function resizeCover(first) {
 </script>
 </head>
 <body>
-<div class="hide" id="cover-size-style"></div>
-
 <div class="container-fluid" role="main">
 
 	<div id="header_div" class="box form-inline">

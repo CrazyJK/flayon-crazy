@@ -23,7 +23,7 @@
 /* 뷰 구성요소 */
 .slidesjs-slide > dl {
 	height: 100%; 
-	border-radius:10px;
+	border-radius: 6px;
 	border: 0;
 	background-repeat: no-repeat; 
 	background-position: center center; 

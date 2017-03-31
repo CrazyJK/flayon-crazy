@@ -63,9 +63,12 @@
 				
 				var item = $("<div class='video-box' style='display:inline-block;'>");
 				item.append($("div[tabindex='" + previewIndex + "']").html());
-				item.children("dl").removeClass("video-slide-bg").addClass("video-box-bg");
-				$("#video_slide_bar").append(item);
+				item.find("dd").hide();
+				item.appendTo($("#video_slide_bar"));
 			}
+			var centerIndex = Math.round($("#video_slide_bar").children().length / 2);
+			$("#video_slide_bar div.video-box:nth-child(" + centerIndex + ")").css({visibility: 'hidden'});
+			
 		},
 		focusVideo: function(opus) {
 			var idx = $("#opus-" + opus).attr("tabindex");

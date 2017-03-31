@@ -5,14 +5,14 @@
 <div id="opus-${video.opus}" class="video-card box" style="width:195px;">
 	<table>
 		<tr>
-			<td colspan="2" class="text-center">
-				<div class="nowrap" style="width:170px;">
-					<jk:video video="${video}" view="title" mode="l"/>
+			<th colspan="2" class="text-center">
+				<div class="nowrap" style="width:185px;">
+					<jk:video video="${video}" view="title" mode="s"/>
 				</div>
-			</td>
+			</th>
 		</tr>
-		<tr valign="top" style="height:120px">
-			<td class="video-card-bg" style="width:70px; background-image:url('<c:url value="/video/${video.opus}/cover" />')">
+		<tr valign="top" style="height:95px">
+			<td class="video-card-bg" style="width:75px; background-image:url('${PATH}/video/${video.opus}/cover')">
 				&nbsp;
 			</td>
 			<td>

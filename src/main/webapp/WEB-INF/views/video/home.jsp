@@ -4,9 +4,9 @@
 <html>
 <head>
 <title><s:message code="default.home"/></title>
-<link rel="stylesheet" href="<c:url value="/css/typed.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/aperture.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/neon.css"/>"/>
+<link rel="stylesheet" href="${PATH}/css/typed.css"/>
+<link rel="stylesheet" href="${PATH}/css/aperture.css"/>
+<link rel="stylesheet" href="${PATH}/css/neon.css"/>
 <style type="text/css">
 body {
  	font-family: 'clipregular';
@@ -69,8 +69,8 @@ body {
 	right: 5px;
 }
 </style>
-<script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
+<script type="text/javascript" src="${PATH}/js/jquery.crazy.aperture.js"></script>
+<script type="text/javascript" src="${PATH}/js/typed.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 var timingProperties = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	
 	backgroundEffect();
 	
-	neonEffect();
+//	neonEffect();
 
 	frontEffect();
 	

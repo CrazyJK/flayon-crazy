@@ -229,7 +229,6 @@ function fnSetOption() {
    		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
    		<span class="label label-default" id="delete"   role="checkbox" data-role-value="false" title="active delete mode">Delete</span>
 		<span class="label label-warning debug"></span>
-	
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
