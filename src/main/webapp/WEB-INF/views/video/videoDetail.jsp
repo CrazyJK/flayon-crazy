@@ -24,6 +24,10 @@ dt, dd {
 .dl-detail {
 	overflow: auto; 
 	margin: 0;
+	background-position: center top;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: 100%;
 }
 .tag-wrapper {
 	position: fixed; 
@@ -40,13 +44,10 @@ bgContinue = false;
 var thisWidth = $(this).width();
 $(document).ready(function() {
 
-	$("body").css({
+	$("dl.dl-detail").css({
 		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
-		backgroundSize: thisWidth + "px",
-		backgroundPosition: "center top",
-		backgroundAttachment: "fixed",
-		backgroundRepeat: "no-repeat",
-		backgroundColor: randomColor(0.5)
+//		backgroundSize: thisWidth + "px",
+//		backgroundColor: randomColor(0.5)
 	});
 	
 	$("form#renameForm").submit(function(event) {

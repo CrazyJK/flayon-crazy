@@ -20,7 +20,7 @@ $(document).ready(function() {
         searching: false,
         processing: true,
         info: false,
-        order: [[7, 'desc']]
+        order: [[2, 'desc']]
     });
 });
 function resizeSecondDiv() {

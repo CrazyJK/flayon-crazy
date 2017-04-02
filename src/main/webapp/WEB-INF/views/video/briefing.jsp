@@ -122,7 +122,7 @@ function fsOpen(folder) {
 				<tbody>
 					<c:forEach items="${dateMap}" var="date" varStatus="status">
 					<tr>
-						<td style="width:100px;">${date.key} <span class="badge float-right">${fn:length(date.value)}</span></td>
+						<td style="width:120px;">${date.key} <span class="badge float-right">${fn:length(date.value)}</span></td>
 						<td style="max-width:130px;">
 							<div id="rank0-${date.key}" class="nowrap"></div>
 						</td>
@@ -361,7 +361,7 @@ function fsOpen(folder) {
 		</section>
 		 --%>
 		<section id="studio" class="tab-pane fade">
-			<ul class="list-inline">
+			<ul class="cloud">
 				<c:forEach var="studio" items="${studioList}">
 					<li><jk:studio studio="${studio}" view="span"/></li>
 				</c:forEach>
@@ -369,7 +369,7 @@ function fsOpen(folder) {
 		</section>
 
 		<section id="actress" class="tab-pane fade">
-			<ul class="list-inline">
+			<ul class="cloud">
 				<c:forEach items="${actressList}" var="actress">
 					<li><jk:actress actress="${actress}" view="span"/></li>
 				</c:forEach>
@@ -377,7 +377,7 @@ function fsOpen(folder) {
 		</section>
 
 		<section id="tags" class="tab-pane fade">
-			<ul class="list-inline" id="taglist">
+			<ul class="cloud" id="taglist">
 				<c:forEach items="${tagList}" var="tag">
 					<li><jk:tags tag="${tag}" view="span"/></li>
 				</c:forEach>

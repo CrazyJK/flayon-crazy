@@ -6,8 +6,8 @@
 	margin:0 auto;
 	text-align: center;
 }
-#slides h4 {
-	margin-top: 0;
+#slides h3, #slides h4, #slides h5 {
+	margin: 0 0 5px;
 }
 /* 뷰를 싸는 외곽 */
 .slidesjs-container {
@@ -44,14 +44,13 @@
 	display: inline-block;
 	padding: 5px 14px;
 	background-color: #fff;
-	/* border: 1px solid #ddd; */
+/* 	border: 1px solid #ddd; */
 	border-radius: 15px;
-	/* display: none !important; */
 }
 .slidesjs-navigation:hover, .slidesjs-pagination-item a:hover {
 	text-decoration:none;
-	/* background-color: rgba(238, 238, 238, 0.5); */
-	background-color: rgba(136, 57, 57, 0.75);
+	background-color: rgba(38, 90, 136, .5);
+/* 	background-color: rgba(136, 57, 57, 0.75); */
 	color: white;
 }
 .slidesjs-navigation:focus {
@@ -65,8 +64,8 @@
 }
 .slidesjs-play,
 .slidesjs-stop {
-	margin-left:20px;
-	margin-right:20px;
+/* 	margin-left:20px;
+	margin-right:20px; */
 }
 
 /* 페이징 UL */
@@ -106,7 +105,7 @@
 	text-decoration: none;
 	border-radius: .25em;
 	background-color: #fff;
-	border: 1px solid #ddd;
+/* 	border: 1px solid #ddd; */
 }
 .slidesjs-pagination-item a.active {
 	color: #fff;

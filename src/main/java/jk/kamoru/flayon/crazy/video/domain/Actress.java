@@ -40,6 +40,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private static final String BODYSIZE = "BODYSIZE";
 	private static final String HEIGHT = "HEIGHT";
 	private static final String DEBUT = "DEBUT";
+	private static final String COMMENT = "COMMENT";
 	
 	private String name;
 	@JsonIgnore
@@ -54,6 +55,8 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private String height;
 	@JsonIgnore
 	private String age;
+	@JsonIgnore
+	private String comment;
 	private Boolean favorite;
 	
 	@JsonIgnore
@@ -82,6 +85,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		debut = "";
 		height = "";
 		age = "";
+		comment = "";
 		favorite = new Boolean(false);
 		studioList = new ArrayList<Studio>();
 		videoList = new ArrayList<Video>();
@@ -153,6 +157,10 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public String getAge() {
 		loadInfo();
 		return age;
+	}
+	public String getComment() {
+		loadInfo();
+		return comment;
 	}
 	public Boolean getFavorite() {
 		loadInfo();
@@ -235,6 +243,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 					this.bodySize  = Utils.trimToDefault(info.get(BODYSIZE), bodySize);
 					this.debut     = Utils.trimToDefault(info.get(DEBUT), debut);
 					this.favorite  = Boolean.valueOf(info.get(FAVORITE));
+					this.comment   = Utils.trimToDefault(info.get(COMMENT), comment);
 					if (!StringUtils.isEmpty(birth))
 						try {
 							Calendar cal = Calendar.getInstance();

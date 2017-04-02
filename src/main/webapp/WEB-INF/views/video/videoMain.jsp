@@ -175,8 +175,8 @@ listViewType = '${videoSearch.listViewType}';
 			</ul>
 			<link rel="stylesheet" href="${PATH}/css/ihover.min.css"/>
 			<script type="text/javascript">
-			var _randomNumber = getRandomInteger(1, 15);
 			$(".ih-item").each(function() {
+				var _randomNumber = getRandomInteger(1, 15);
 				$(this).addClass("effect" + _randomNumber);
 			});
 			</script>
@@ -295,7 +295,7 @@ listViewType = '${videoSearch.listViewType}';
 				<c:forEach items="${videoList}" var="video">
 					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">    
 						<video poster="${PATH}/video/${video.opus}/cover" src="<c:url value="${video.videoURL}" />"
-							preload="none" width="800" height="480" controls="controls" class="video-js vjs-default-skin" data-setup="{}"
+							preload="none" width="800" height="540" controls="controls" class="video-js vjs-default-skin" data-setup="{}"
 							><%-- <source src="<c:url value="${video.videoURL}" />" type="video/mp4" ></source> --%>
 						</video>
 						<div class="box box-small">
@@ -374,22 +374,25 @@ listViewType = '${videoSearch.listViewType}';
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
 							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px;">
-								<dt style="margin-top: 479px;" class="nowrap">
-									<jk:video video="${video}" view="title"     mode="l"/>
-								</dt>
+								<%-- <dt style="margin-top: 479px;" class="nowrap">
+									<jk:video video="${video}" view="title"/>
+								</dt> --%>
 							</dl>
 							<div class="box box-small">
+								<h3 class="nowrap" style="margin:0 0 5px; height:30px;">
+									<jk:video video="${video}" view="title"/>
+								</h3>
 									<jk:video video="${video}" view="rank"      mode="l"/>
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>
 									<jk:video video="${video}" view="release"   mode="l"/>
 									<jk:video video="${video}" view="download"  mode="l"/></h4>
-								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
 								<h5><jk:video video="${video}" view="score"     mode="l"/>
 									<jk:video video="${video}" view="video"     mode="l"/>
 									<jk:video video="${video}" view="cover"     mode="l"/>
 									<jk:video video="${video}" view="subtitles" mode="l"/>
 									<jk:video video="${video}" view="overview"  mode="l"/></h5>
+								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
 								<div><jk:video video="${video}" view="tags"     mode="l" tagList="${tagList}"/></div>
 							</div>
 						</div>
@@ -403,7 +406,8 @@ listViewType = '${videoSearch.listViewType}';
 			<script type="text/javascript">
 			$("#slides").slideview({width:800, height:700});
 			function resizeSecondDiv() {
-				var flayonSlideHeight = calculatedDivHeight - 100;
+				var slidesjsPaginationHeight = $(".slidesjs-pagination").outerHeight();
+				var flayonSlideHeight = calculatedDivHeight - slidesjsPaginationHeight;
 				$("#slides > .slidesjs-container").height(flayonSlideHeight);
 			}
 			</script>

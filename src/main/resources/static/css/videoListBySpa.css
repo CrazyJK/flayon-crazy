@@ -24,7 +24,6 @@
 
 .box-hover {
 	transform: scale(1.1, 1.1);
-	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
 }
 
 #box>ul>li>dl>dt.nowrap.text-center {
@@ -60,7 +59,7 @@
 	/* bottom: 20px;
 	left: 20px; */
 	width: 600px;
-	box-shadow: 0 0 6px rgba(255, 0, 0, 1);
+ 	box-shadow: 0 0 6px rgba(255, 0, 0, 1) inset;
 	transition: all .2s ease-in-out;
 }
 .trFocus {

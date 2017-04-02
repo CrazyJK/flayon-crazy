@@ -59,3 +59,11 @@ select.input-sm, .input-sm {
     line-height: 1.5;
 }
 
+.cloud {
+	list-style: none;
+	padding: 0;
+}
+.cloud li {
+	margin: 3px 0;
+	display: inline-block;
+}

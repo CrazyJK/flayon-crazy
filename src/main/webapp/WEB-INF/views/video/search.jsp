@@ -70,10 +70,12 @@ $(document).ready(function(){
 				var existVideo 	   = entry['existVideo'];
 				var existCover 	   = entry['existCover'];
 				var existSubtitles = entry['existSubtitles'];
+				var releaseDate    = entry['releaseDate'];
 				
 				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
 				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
 				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
+				var releaseDom 		  = $("<span>").addClass("label label-plain").html(releaseDate);
 				var actressTD = $("<td>");
 				var actor = actress.split(",");
 				if (actor.length > 0) {
@@ -91,6 +93,7 @@ $(document).ready(function(){
 				tr.append($("<td>").append(opusDom));
 				tr.append(infoTD);
 				tr.append(actressTD);
+				tr.append($("<td>").append(releaseDom));
 				tr.append($("<td>").append(titleDom));
 				$('#foundVideoList').append(tr);
 			});
@@ -247,6 +250,7 @@ function fnStartVideoBatch(type) {
 							<th>Opus</th>
 							<th>Info</th>
 							<th>Actress</th>
+							<th>Release</th>
 							<th>Title</th>
 						</tr>
 					</thead>

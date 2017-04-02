@@ -300,52 +300,53 @@ function showSnackbar(message, time) {
  * toggle theme
  */
 function toogleTheme(themeName) {
- 	var neonSelectors = "#deco_nav a, .title, #loading-msg, #loading-timer, .label, .btn, label, .neon, .item, th, td, .rank-group, .slidesjs-navigation, .slidesjs-pagination-item>a, select, input[type=text], input[type=search]";
-	if (themeName === 'plain') {
-		clearInterval(bgImageChanger);
-		$("#plainStyle").empty().append(
-			'<style>'
-				+ ' body {background: transparent none !important;}'
-				+ ' #header_div, #content_div {background: transparent none !important; box-shadow: none !important;}'
-				+ ' dl.box.box-small, div.box.box-small, #resultVideoDiv, #resultHistoryDiv {box-shadow: none !important; background-color: transparent !important;}'
-				+ ' .btn {background: transparent none !important; color: #333;}'
-			 	+ ' .table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}'
-			 	+ ' .border-shadow {box-shadow: none;}'
-			+ '</style>'
-		);
-		$(".neon").css({color: '#222'}); // for front
-		$("#backMenu").hide();
-		$("#neonStyle").empty();
-		$(neonSelectors).removeClass("blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10");
-	}
-	if (themeName === 'normal' || themeName === 'neon') {
-		if (bgContinue) {
-			$("#bgChangeInterval").val(bgChangeInterval);
-			setBackgroundImage();
-			bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
+	if (locationPathname.startsWith(imagePath)) {
+		if (locationPathname === imagePath + '/thumbnails') {
+			if (themeName === 'normal') {
+				$("#plainStyle").empty();
+				$("#header_div" ).css({backgroundImage: 'linear-gradient(to bottom, #fff 0, ' + randomColor(0.3) + ' 100%)'});
+				$("#content_div").css({backgroundColor: randomColor(0.3)});
+			}
+			if (themeName === 'plain') {
+				$("#plainStyle").empty().append(
+					'<style>'
+						+ ' #header_div, #content_div {background: transparent none !important; box-shadow: none !important;}'
+					+ '</style>'
+				);
+			}
 		}
-		$("#header_div" ).css({backgroundImage: 'linear-gradient(to bottom, #fff 0, ' + randomColor(0.3) + ' 100%)'});
-		$("#content_div").css({backgroundColor: randomColor(0.3)});
-		$("#plainStyle").empty();
-		$("#neonStyle").empty();
-		$(neonSelectors).removeClass("blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10");
-		$("#backMenu").show();
-		$(".neon").css({color: '#eee'}).each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 10));
-		}); // for front
+		return;
 	}
-	if (themeName === 'neon') {
-		$("#neonStyle").empty().append(
-			'<style>'
-				+ '#deco_nav, #header_div, #content_div, div.box.box-small {background-color: rgba(0, 0, 0, .5); background-image: none;} '
-				+ neonSelectors + ' {color: #eee; font-weight: bold; background-color: rgba(0, 0, 0, .5); background-image: none}'
-			+ '</style>'
-		);
-		$(neonSelectors).each(function() {
-			$(this).addClass("blink-" + getRandomInteger(1, 10));
-		});
+	else {
+		if (themeName === 'normal') {
+			if (bgContinue) {
+				$("#bgChangeInterval").val(bgChangeInterval);
+				setBackgroundImage();
+				bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
+			}
+			$("#header_div" ).css({backgroundImage: 'linear-gradient(to bottom, #fff 0, ' + randomColor(0.3) + ' 100%)'});
+			$("#content_div").css({backgroundColor: randomColor(0.3)});
+			$("#plainStyle").empty();
+			$("#backMenu").show();
+		}
+		if (themeName === 'plain') {
+			clearInterval(bgImageChanger);
+			$("#plainStyle").empty().append(
+				'<style>'
+					+ ' body {background: transparent none !important;}'
+					+ ' #header_div, #content_div {background: transparent none !important; box-shadow: none !important;}'
+					+ ' dl.box.box-small, div.box.box-small, #resultVideoDiv, #resultHistoryDiv {box-shadow: none !important; background-color: transparent !important;}'
+					+ ' .btn {background: transparent none !important; color: #333;}'
+				 	+ ' .table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}'
+				 	+ ' .border-shadow {box-shadow: none;}'
+				 	+ ' .btn:focus, .btn:hover {background-color: lightgray !important;}'
+				+ '</style>'
+			);
+			$("#backMenu").hide();
+		}
 	}
 	themeSwitch = themeName;
+	try {neonEffect()} catch(e) {}
 	propagateTheme();
 	setlocalStorageItem("crazy-decorator.theme-switch", themeSwitch);
 }
@@ -405,7 +406,6 @@ function propagateTheme() {
     			<ul class="dropdown-menu">
 					<li><a onclick="toogleTheme('normal')">Normal</a></li>
 					<li><a onclick="toogleTheme('plain')">Plain</a></li>
-					<li><a onclick="toogleTheme('neon')">Neon</a></li>
     			</ul>
   			</li>
 		</ul>
@@ -434,7 +434,6 @@ function propagateTheme() {
 	</div>
 	<div role="dynamicStyleWrapper" class="hide">
 		<div id="plainStyle"></div>
-		<div id="neonStyle"></div>
 		<div id="cover-size-style"></div>
 	</div>
 

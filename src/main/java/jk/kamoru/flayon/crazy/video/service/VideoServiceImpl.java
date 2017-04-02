@@ -228,22 +228,17 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				map.put("existVideo", String.valueOf(video.isExistVideoFileList()));
 				map.put("existCover", String.valueOf(video.isExistCoverFile()));
 				map.put("existSubtitles", String.valueOf(video.isExistSubtitlesFileList()));
+				map.put("releaseDate", video.getReleaseDate());
 				foundMapList.add(map);
 			} 
 		}
 		log.debug("q={} foundLength={}", query, foundMapList.size());
 		Collections.sort(foundMapList, new Comparator<Map<String, String>>() {
-
 			@Override
 			public int compare(Map<String, String> o1, Map<String, String> o2) {
-				return Utils.compareTo(o2.get("date"), o1.get("date"));
-//				String thisStr = o1.get("opus");
-//				String compStr = o2.get("opus");
-//
-//				String[] s = {thisStr, compStr};
-//				Arrays.sort(s);
-//				return s[0].equals(thisStr) ? 1 : -1;
-			}});
+				return Utils.compareTo(o2.get("releaseDate"), o1.get("releaseDate"));
+			}
+		});
 		return foundMapList;
 	}
 

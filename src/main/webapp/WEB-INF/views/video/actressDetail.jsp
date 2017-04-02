@@ -86,6 +86,11 @@ $(document).ready(function() {
 			<button type="submit" class="btn btn-default">Save</button>
 		</div>
 	</div>
+	<div class="form-group">
+		<div class="col-sm-12">
+			<textarea class="form-control" rows="3" name="comment">${actress.comment}</textarea>
+		</div>
+	</div>
 </form>
 	
 	<div class="form-group">

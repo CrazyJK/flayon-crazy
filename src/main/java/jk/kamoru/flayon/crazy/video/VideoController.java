@@ -96,8 +96,8 @@ public class VideoController extends CrazyController {
 	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return MAX_ENTIRE_VIDEO; }
 	
 	@RequestMapping
-	public String home() {
-		return "video/home";
+	public String front() {
+		return "video/front";
 	}
 	
 	@RequestMapping("/opus")

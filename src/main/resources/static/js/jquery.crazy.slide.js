@@ -9,7 +9,7 @@
 	        height: opts.height,
 	        navigation: {active: true, effect: "slide"},
 	        pagination: {active: true, effect: "fade"},
-	        play: {active: true, interval:5000, auto: false, effect: "fade"},
+	        play: {active: true, interval:5000, auto: false, effect: "slide"},
 	        callback: {
 	        	loaded: function(number) {
 	        		$.fn.rePagination();
@@ -29,8 +29,15 @@
 	            }
 	        }
 		});
-	    $(".slidesjs-previous").html("Prev");
-	    $(".slidesjs-random").click(function() {
+		$(".slidesjs-navigation").hide();
+//	    $(".slidesjs-previous").html("Prev");
+		$(".slidesjs-play, .slidesjs-stop").css({
+		    position: 'fixed',
+	    	left: '20px',
+	    	bottom: '15px'
+		});
+		$(".slidesjs-play").show();
+	    $(".slidesjs-random").show().click(function() {
 			var selectedNumber = getRandomInteger(0, totalVideoSize);
 			$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 		});

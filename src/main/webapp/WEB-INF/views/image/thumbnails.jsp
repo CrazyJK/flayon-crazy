@@ -40,7 +40,6 @@ body {
 }
 .box-hover {
 	transform: scale(1.5, 1.5);
-	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
 }
 input[type='range'] {
 	box-shadow: rgba(255, 255, 255, 0) 0px 0px 5px 1px inset;
@@ -200,12 +199,9 @@ function fnSetOption() {
 		resizeDuration: 300,
       	fadeDuration: 300,
       	imageFadeDuration: 300,
-      	randomImageEffect: true,
+      	randomImageEffect: false,
       	disableScrolling: true
     });
-	playInterval = parseInt($("#playInterval").val());
-	playMode = $('input:radio[name="playMode"]:checked').val();
-	$("#timerBar").attr("aria-valuemax", playInterval);
 }
 </script>
 </head>
@@ -217,11 +213,11 @@ function fnSetOption() {
 		</label>
 		<div class="input-group input-group-xs">
 			<span class="input-group-addon addon-width">Width</span>
-			<input type="range" id="img-width"  class="form-control" min="100" max="400" value="120" step="10" onchange="resize()"/>
+			<input type="range" id="img-width"  class="form-control" min="100" max="800" value="120" step="50" onchange="resize()"/>
 		</div>
 		<div class="input-group input-group-xs">
 			<span class="input-group-addon addon-height">Height</span>
-			<input type="range" id="img-height" class="form-control" min="100" max="400" value="100" step="10" onchange="resize()"/>
+			<input type="range" id="img-height" class="form-control" min="100" max="800" value="100" step="50" onchange="resize()"/>
 		</div>
 		<span class="label label-primary total-count"></span>
 		<span class="label label-primary display-count"></span>
