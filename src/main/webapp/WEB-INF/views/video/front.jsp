@@ -79,7 +79,7 @@ $(document).ready(function() {
 	
 	backgroundEffect();
 	
-//	neonEffect();
+	neonEffect();
 
 	frontEffect();
 	
@@ -105,16 +105,16 @@ function backgroundEffect() {
  * neon sign
  */
 function neonEffect() {
-	// change inverse
-/*	$("ul.nav, #lang").removeClass("navbar-default").addClass("navbar-inverse");
-	$("ul.nav > li > a, ul.dropdown-menu > li > a").css({color: "#eee"});
-	$("ul.dropdown-menu").css("background-color", "rgba(0, 0, 0, 0.5)");
-*/	
-	$("ul.nav > li").removeClass("active");
-	// neon effect
-	$(".neon").each(function() { // ul.nav > li > a, ul.dropdown-menu > li > a, 
-		$(this).addClass("blink-" + getRandomInteger(1, 10));
-	});
+	if (themeSwitch === 'normal') {
+		$("ul.nav > li").removeClass("active");
+		// neon effect
+		$(".neon").css({color: '#eee'}).each(function() { // ul.nav > li > a, ul.dropdown-menu > li > a, 
+			$(this).addClass("blink-" + getRandomInteger(1, 10));
+		});
+	}
+	if (themeSwitch === 'plain') {
+		$(".neon").css({color: '#333'}).removeClass('blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10'); // for front
+	}
 }
 
 var opusList;
