@@ -25,57 +25,46 @@
 	color: #fff;
     background-color: #337ab7;
 }
-.gravia-content {
+
+#gravia-content {
 	font-size: 12px;
 	background-color: rgba(255, 255, 255, 0.5);
 	border-radius: 9px;
 	padding: 10px;
+	margin-left: 132px;
 }
-.gravia-content > div {
+#graviaForm > div {
     margin: 0 3px 5px;
     padding: 2px;
     border-radius: 4px;
     line-height: 24px;
 }
-
+#content-title, #content-length {
+	font-weight: bold; 
+	color: #fff; 
+	text-shadow: 0px 0px 5px #0c0c0c;
+}
 .hover_img > a { 
-	position:relative;
 	text-decoration: none;
 	padding-left: 5px;
 }
 .hover_img > a > span { 
-	position:absolute; 
 	display:none; 
 	z-index:99; 
 }
 .hover_img > a:hover > span { 
-	display:block; 
+ 	display:block;
 }
 .hover_img > a:hover > span > img {
 	position: fixed;
-	right: 30px;
-	top: 125px;
+	right: 42px;
+	top: 128px;
+	z-index: 3;
 }
 
-.exist {
-    background-color: #dff0d8;
-}
-.exist::after {
- 	/* display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin-left: 5px;
-    content: "";
-    background: url("/img/yes_check_mini.png") no-repeat 0 0;
-    background-size: 100%;
-    float: right; */
-	/* content: url(/img/yes_check_mini.png); */
-}
 .cover-wrapper {
 	display: inline-block;
-/* 	width: 210px;
-	height: 293px; */
-	margin: 3px;
+	margin: 1px;
     padding: 3px;
 	border-radius: 4px;
 	transition: height .5s, transform 0.3s;
@@ -96,10 +85,7 @@
 .forImage {
     display: inline-block;
 }
-.input-group > input {
-	background-color: transparent;
-}
-span.input-group-addon {
+.input-group-addon {
     background-color: transparent;
     border: 0;
     color: #337ab7 !important;
@@ -151,7 +137,7 @@ var isCheckedNoCover = false;
 		// for nocover checkbox
 		$("#nocover").on("click", function() {
 			isCheckedNoCover = $(this).data("checked");
-			console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
+			//console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
 			renderContent(selectedIndex);
 		});
 	
@@ -214,9 +200,9 @@ function renderContent(idx) {
 	var contentList;
 	var headerTitle = "";
 	var displayCount = 0;
-	var mode = $("input:radio[name='mode']:checked").val();
-	var rowContainer = $(".gravia-content").empty();
-	var header = $("<div>").appendTo(rowContainer);
+	var novideoCount = 0;
+	var existCount = 0;
+	var checkCount = 0;
 
 	if (idx == -1) {
 		contentList = foundList;
@@ -225,23 +211,10 @@ function renderContent(idx) {
 	else {
 		contentList = graviaList[idx].titles;
 		headerTitle = graviaList[idx].title;
-		$('<a>').css({padding:0}).addClass('btn btn-link float-right').attr({'onclick': 'fnOpenSource(\'' + graviaList[idx].guid + '\')'}).html("Open source").appendTo(header);
 	}
 	
-	var table;
-	var tbody;
-	if (mode === 'text') {
-		$(".forImage").addClass("hide");
-	}
-	else if(mode === 'image') {
-		$(".forImage").removeClass("hide");
-	}
-//	else if (mode === 'edit') {
-		table = $("<table>").addClass("table table-condensed");
-		tbody = $("<tbody>");
-		$(".forImage").addClass("hide");
-//	}
-	
+	var imageWrapper = $("#imageWrapper").empty();
+	var graviaForm  = $("#graviaForm").empty();
 	for (var i=0; i < contentList.length; i++) {
 		var title = contentList[i];
 		
@@ -252,26 +225,30 @@ function renderContent(idx) {
 			displayCount++;
 		}
 		
-		var existClass = title.exist ? " exist" : "";
-		var checkClass = title.check ? " bg-danger" : " bg-info";
+		var stateClass = " ";
+		if (title.exist) {
+			stateClass += "bg-info";
+			existCount++;
+		}
+		else {
+			stateClass += "bg-success";
+			novideoCount++;
+		}
+		if (title.check) {
+			stateClass += " bg-danger";
+			checkCount++;
+		}
 		
-//		if (mode === 'text') {
-			$("<div>").addClass("text-mode hide hover_img" + checkClass + existClass).attr({"title": title.rowData}).append(
-				$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
-					$('<span>').append(
-						$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-					)
+		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc)};
+				
+		$("<div>").addClass("cover-wrapper" + stateClass).append(
+				$("<img>").addClass("img-thumbnail cover-image").attr({src: title.imgSrc}).attr(onClick)
+		).append(
+				$("<div>").addClass("nowrap text-center cover-title").attr({title: title.styleString}).append(
+						$("<span>").addClass("label label-plain").html(title.title)		
 				)
-			).appendTo(rowContainer);
-//		}
-//		else if(mode === 'image') {
-			$("<div>").addClass("image-mode hide cover-wrapper" + checkClass + existClass).append(
-				$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail cover-image")
-			).append(
-				$("<div>").addClass("nowrap text-center cover-title").append(
-					$("<span>").addClass("label label-plain").html(title.title)		
-				)
-			).hover(function(event) {
+		).hover(
+			function(event) {
 				if ($("#magnify").data("checked")) {
 					$(this).addClass("box-hover");
 				}
@@ -279,78 +256,43 @@ function renderContent(idx) {
 				if ($("#magnify").data("checked")) {
 					$(this).removeClass("box-hover");
 				}
-			}).appendTo(rowContainer);
-//		}
-//		else if(mode === 'edit') {
-/*	
-			$("<tr>").addClass("edit-mode " + checkClass + existClass).append(
-					$("<td>").css({"width": "50px"}).append(
-							$("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find")
-					)
-			).append(
-					$("<td>").css({"width": "80px"}).addClass("hover_img").append(
-							$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).addClass("label label-info").html("Image").append(
-									$('<span>').append(
-											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-									)
-							)
-					)
-			).append(
-					$("<td>").append(
-							$("<div>").addClass("input-group").append(
-									$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px"}).val(title.styleString)
-							).append(
-									$("<div>").addClass("input-group-btn").append(
-											$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
-												$(this).parent().parent().parent().find('kbd').toggle();
-												$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
-											}).append(
-													$("<i>").addClass("glyphicon glyphicon-plus-sign")
-											)
-									)		
-							)
-					).append(
-							$("<kbd>").css({"display": "none"}).html(title.rowData)
-					)
-			).appendTo(tbody);
-*/
-			$("<div>").addClass("input-group edit-mode hide" + checkClass + existClass).append(
-					$("<div>").addClass('input-group-btn hover_img').append(
-							$("<a>").addClass("btn btn-link btn-xs").attr({"onclick": "fnFindVideo('" + title.opus + "') " + (title.exist ? "fnVideoDetail('" + title.opus + "')" : ""), "data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc)}).html("Find").append(
-									$('<span>').append(
-											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-									)
-							)
-					)
-/*			).append(
-					$("<span>").addClass("input-group-addon hover_img").css({"width": "80px"}).append(
-							$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html("Image").append(
-									$('<span>').append(
-											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-									)
-							)
-					)
-*/			).append(
-					$("<span>").addClass("input-group-addon row-data hide").html(title.rowData)
-			).append(
-					$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px", marginTop: "2px"}).val(title.styleString)
-			).append(
-					$("<div>").addClass("input-group-btn").append(
-							$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
-								$(this).parent().parent().find('.row-data').toggleClass("hide");
-								$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
-							}).append(
-									$("<i>").addClass("glyphicon glyphicon-plus-sign")
-							)
-					)
-			).appendTo(rowContainer);
-//		}
+			}
+		).appendTo(imageWrapper);
+
+		$("<div>").addClass("input-group" + stateClass).append(
+				$("<div>").addClass('input-group-btn hover_img').append(
+						$("<a>").addClass("btn btn-link btn-xs").attr(onClick).html("Find").append(
+								$('<span>').append(
+										$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
+								)
+						)
+				)
+		).append(
+				$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px", marginTop: "2px"}).val(title.styleString)
+		).append(
+				$("<span>").addClass("input-group-addon row-data hide").html(title.rowData)
+		).append(
+				$("<div>").addClass("input-group-btn").append(
+						$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
+							$(this).parent().parent().find('.row-data').toggleClass("hide");
+							$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+						}).append(
+								$("<i>").addClass("glyphicon glyphicon-plus-sign")
+						)
+				)
+		).appendTo(graviaForm);
 	}
 
-	$('.' + mode + '-mode').toggleClass('hide');
-	console.log('.' + mode + '-mode', 'toggleClass', 'hide');
-	$('<h4>').html(headerTitle + " <span class='badge'>" + displayCount + "</span>").appendTo(header);
-
+	$("#content-title").html(headerTitle);
+	$("#content-length").html(displayCount);
+	if (idx > -1) {
+		$("#content-source").attr({'onclick': 'fnOpenSource(\'' + graviaList[idx].guid + '\')'}).html("Open source");
+	}
+	$("#nocover").html("NoVideo " + novideoCount);
+	$("#exist").html("Exist " + existCount);
+	$("#check").html("Check " + checkCount);
+	fnToggleSubmitBtn();
+	
 	$(".hover_img a").hover(function() {
 		var src = $(this).attr("data-src");
 		// console.log(src);
@@ -367,28 +309,14 @@ function fnOpenSource(url) {
 }
 function fnToggleSubmitBtn() {
 	var mode = $("input:radio[name='mode']:checked").val();
-	if (mode === 'text') {
-		$("#submitBtn").hide();
-		$(".forImage").addClass("hide");
-		$(".text-mode").removeClass('hide');
-		$(".image-mode").addClass('hide');
-		$(".edit-mode").addClass('hide');
-	} 
-	else if (mode === 'image') {
+	if (mode === 'image') {
 		$("#submitBtn").hide();
 		$(".forImage").removeClass("hide");
-		$(".text-mode").addClass('hide');
-		$(".image-mode").removeClass('hide');
-		$(".edit-mode").addClass('hide');
 	} 
 	else if (mode === 'edit') {
 		$("#submitBtn").show();
 		$(".forImage").addClass("hide");
-		$(".text-mode").addClass('hide');
-		$(".image-mode").addClass('hide');
-		$(".edit-mode").removeClass('hide');
 	} 
-//	renderContent(selectedIndex);
 }
 function saveCoverAll() {
 	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
@@ -421,13 +349,14 @@ function resizeCover(first) {
 		<input type="search" id="query" class="form-control input-sm" placeholder="Search"/>
 
 		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
+		<span class="label label-info"    id="exist">Exist</span>
+		<span class="label label-danger"  id="check">Check</span>
 	
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
-			<a class="btn btn-default"><input type="radio" name="mode" value="text" checked="checked">Text</a>
-			<a class="btn btn-default"><input type="radio" name="mode" value="image">Image</a>
-			<a class="btn btn-default active"><input type="radio" name="mode" value="edit" checked="checked">Editable</a>
+			<a class="btn btn-default" data-toggle="tab" data-target="#imageTab"><input type="radio" name="mode" value="image">Image</a>
+			<a class="btn btn-default active" data-toggle="tab" data-target="#editTab"><input type="radio" name="mode" value="edit" checked="checked">Editable</a>
 		</div>
-		
+	
 		<div class="forImage hide">
 	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
 	   		
@@ -442,12 +371,20 @@ function resizeCover(first) {
 		</div>
 	</div>
 
-	<div id="content_div" class="box row" style="overflow:auto;">
-		<div class="col-sm-2">
-			<ul class="nav nav-pills nav-stacked gravia-item"></ul>
-		</div>
-		<div class="col-sm-10">
-			<form id="graviaForm" class="gravia-content"></form>
+	<div id="content_div" class="box" style="overflow:auto;">
+		<ul class="nav nav-pills nav-stacked gravia-item"></ul>
+		<div class="tab-content" id="gravia-content">
+			<h4>
+				<span id="content-title"></span>
+				<span id="content-length"></span>
+				<a id="content-source" class="float-right"></a>
+			</h4>
+			<section id="imageTab" class="tab-pane fade">
+				<div id="imageWrapper"></div>
+			</section>
+			<section id="editTab"  class="tab-pane fade active in">
+				<form id="graviaForm"></form>
+			</section>
 		</div>
 	</div>
 

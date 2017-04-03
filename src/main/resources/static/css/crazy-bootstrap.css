@@ -69,3 +69,6 @@ select.input-sm, .input-sm {
 	margin: 3px 0;
 	display: inline-block;
 }
+.btn-link:focus, .btn-link:hover, a:active, a:hover {
+    text-decoration: none;
+}

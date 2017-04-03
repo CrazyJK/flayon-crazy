@@ -59,9 +59,9 @@ function view() {
 				<tr>
 					<th style="max-width: 20px;">#</th>
 					<c:forEach items="${sorts}" var="s">
-					<th style="max-width: 30px;" title="<s:message code="actress.sort.${s}"/>"><s:message code="actress.sort.short.${s}"/></th>
+					<th style="max-width: 50px;" title="<s:message code="actress.sort.${s}"/>"><s:message code="actress.sort.short.${s}"/></th>
 					</c:forEach>
-					<th style="max-width: 30px;">Age</th>
+					<th style="max-width: 50px;">Age</th>
 					<th>Video</th>
 				</tr>
 			</thead>
