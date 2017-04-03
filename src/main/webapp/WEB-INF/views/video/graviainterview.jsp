@@ -32,11 +32,10 @@
 	padding: 10px;
 }
 .gravia-content > div {
-    margin: 0 0 5px;
+    margin: 0 3px 5px;
     padding: 2px;
     border-radius: 4px;
     line-height: 24px;
-	transition: display 1s;
 }
 
 .hover_img > a { 
@@ -97,11 +96,13 @@
 .forImage {
     display: inline-block;
 }
+.input-group > input {
+	background-color: transparent;
+}
 span.input-group-addon {
     background-color: transparent;
     border: 0;
     color: #337ab7 !important;
-    font-weight: bold;
     font-size: 12px;
 }
 </style>
@@ -422,9 +423,9 @@ function resizeCover(first) {
 		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
 	
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
-			<a class="btn btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
+			<a class="btn btn-default"><input type="radio" name="mode" value="text" checked="checked">Text</a>
 			<a class="btn btn-default"><input type="radio" name="mode" value="image">Image</a>
-			<a class="btn btn-default"><input type="radio" name="mode" value="edit" >Editable</a>
+			<a class="btn btn-default active"><input type="radio" name="mode" value="edit" checked="checked">Editable</a>
 		</div>
 		
 		<div class="forImage hide">
