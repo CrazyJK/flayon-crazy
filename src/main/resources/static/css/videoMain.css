@@ -124,6 +124,7 @@
 	padding: 0;
 	border: 0;
 	background-color: transparent;
+	box-shadow: none;
 }
 .rank-range:focus {
 	border-color: none;
