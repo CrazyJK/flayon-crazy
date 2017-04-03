@@ -58,9 +58,9 @@ function view() {
 		<table id="list" class="table table-condensed table-hover">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th style="max-width: 20px;">#</th>
 					<c:forEach items="${sorts}" var="s">
-					<th title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
+					<th style="max-width: 30px;" title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
 					</c:forEach>
 					<th>Video</th>
 				</tr>

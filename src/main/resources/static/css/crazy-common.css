@@ -1,7 +1,6 @@
 @CHARSET "UTF-8";
 
 .favorite {
-	/* box-shadow: 0 0px 5px 3px rgba(250, 0, 0, 0.5) inset; */
 	box-shadow: 0 0px 10px 0px rgba(250, 0, 230, 0.5) inset;
 }
 
@@ -69,6 +68,7 @@ label.title {
 .number {
 	font-size: 12px;
 	text-align: right;
+	padding-right: 20px !important;
 }
 .pointer {
 	cursor: pointer;

@@ -13,8 +13,11 @@
 }
 body {
     background-repeat: repeat;
-    background-position: top center;
+    background-position: center top;
 	background-size: initial;
+}
+input[type='text'].form-control {
+	text-align: center;
 }
 </style>
 <script type="text/javascript">
@@ -28,16 +31,13 @@ $(document).ready(function() {
 //				if (opener.location.href.indexOf("video/actress") > -1) 
 //					opener.location.reload();
 //			}
-			location.href = "<s:url value="/video/actress/"/>" + $("#newName").val();
+			location.href = "${PATH}/video/actress/" + $("#newName").val();
 		}, 1000);
 	});
 	
 <c:if test="${actress.existImage}">
 	$("body").css({
-		backgroundImage: "url('<c:url value="/video/actress/${actress.name}/cover" />')", 
-		backgroundRepeat: "repeat",
-	    backgroundSize: "initial",
-		backgroundAttachment: "fixed"
+		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
 	});	
 </c:if>
 	
@@ -47,7 +47,7 @@ $(document).ready(function() {
 <body>
 <div class="container">
 
-<form id="actressForm" method="post" role="form" action="<s:url value="/video/actress"/>" class="form-horizontal">
+<form id="actressForm" method="post" role="form" action="${PATH}/video/actress" class="form-horizontal">
 	<input type="hidden" name="name" value="${actress.name}"/>
 	<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
 	<br/>
@@ -62,11 +62,11 @@ $(document).ready(function() {
 			<input class="form-control" type="text" name="localname" value="${actress.localName}" placeholder="local name"/>
 		</div>
 		<div class="col-sm-1">
-			<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
+			<img src="${PATH}/img/magnify${status.count%2}.png" width="12px" title="<s:message code="video.find-info.actress"/>"
 				onclick="popup('<c:url value="${urlSearchActress}"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
 		</div>
 		<div class="col-sm-1">
-			<span class="label label-info">Score ${actress.score}</span>
+			<span class="label label-plain float-right">Score ${actress.score}</span>
 		</div>		
 	</div>
 	<div class="form-group">
@@ -82,20 +82,20 @@ $(document).ready(function() {
 		<div class="col-sm-2">
 			<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
 		</div>
-		<div class="col-sm-2">
+		<div class="col-sm-2 text-right">
 			<button type="submit" class="btn btn-default">Save</button>
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-12">
-			<textarea class="form-control" rows="3" name="comment">${actress.comment}</textarea>
+			<textarea class="form-control" rows="1" name="comment">${actress.comment}</textarea>
 		</div>
 	</div>
 </form>
 	
-	<div class="form-group">
-		<span class="label label-info">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
-	</div>
+	<h3>
+		<span class="label label-plain">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
+	</h3>
 	<div class="form-group" style="padding-left:60px;">
 		<ul class="list-inline">
 			<c:forEach items="${actress.studioList}" var="studio">
@@ -107,9 +107,9 @@ $(document).ready(function() {
 			</c:forEach>
 		</ul>
 	</div>
-	<div class="form-group">
-		<span class="label label-info">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
-	</div>
+	<h3>
+		<span class="label label-plain">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
+	</h3>
 	<div class="form-group text-center">
 		<c:if test="${actress.name ne 'Amateur'}">
 			<ul class="list-inline">

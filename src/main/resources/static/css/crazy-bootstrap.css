@@ -58,7 +58,9 @@ select.input-sm, .input-sm {
     font-size: 11px;
     line-height: 1.5;
 }
-
+.label {
+	transition: box-shadow 0.3s;
+}
 .cloud {
 	list-style: none;
 	padding: 0;

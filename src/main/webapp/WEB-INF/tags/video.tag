@@ -35,7 +35,9 @@
 		<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
 			<c:if test="${mode ne 'f'}">
 				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+				<c:if test="${mode eq 's'}">
 				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				</c:if>
 			</c:if>
 			<c:if test="${mode eq 'f'}">
 				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>

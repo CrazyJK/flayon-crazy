@@ -31,15 +31,18 @@
 	border-radius: 9px;
 	padding: 10px;
 }
-.gravia-content p {
+.gravia-content > div {
     margin: 0 0 5px;
-    padding: 3px;
+    padding: 2px;
     border-radius: 4px;
+    line-height: 24px;
+	transition: display 1s;
 }
 
 .hover_img > a { 
 	position:relative;
 	text-decoration: none;
+	padding-left: 5px;
 }
 .hover_img > a > span { 
 	position:absolute; 
@@ -99,6 +102,7 @@ span.input-group-addon {
     border: 0;
     color: #337ab7 !important;
     font-weight: bold;
+    font-size: 12px;
 }
 </style>
 <script type="text/javascript">
@@ -170,12 +174,10 @@ function request() {
 			$.each(data.tistoryGraviaItemList, function(i, row) { // 응답 json을 List 배열로 변환
 				var itemTitle = row.title;
 				var titles = row.titles;
-//				graviaList.push({"itemIndex": i, "itemTitle": itemTitle, "itemList": titles});
 				graviaList.push(row);
 			});
+			render();
 		}
-//		console.log(graviaList[0]);
-		render();
 	}).fail(function(jqxhr, textStatus, error) {
 		loading(true, textStatus + ", " + error);
 	}).always(function() {
@@ -233,11 +235,11 @@ function renderContent(idx) {
 	else if(mode === 'image') {
 		$(".forImage").removeClass("hide");
 	}
-	else if (mode === 'edit') {
+//	else if (mode === 'edit') {
 		table = $("<table>").addClass("table table-condensed");
 		tbody = $("<tbody>");
 		$(".forImage").addClass("hide");
-	}
+//	}
 	
 	for (var i=0; i < contentList.length; i++) {
 		var title = contentList[i];
@@ -251,17 +253,18 @@ function renderContent(idx) {
 		
 		var existClass = title.exist ? " exist" : "";
 		var checkClass = title.check ? " bg-danger" : " bg-info";
-		if (mode === 'text') {
-			$("<p>").addClass("hover_img" + checkClass + existClass).attr({"title": title.rowData}).append(
+		
+//		if (mode === 'text') {
+			$("<div>").addClass("text-mode hide hover_img" + checkClass + existClass).attr({"title": title.rowData}).append(
 				$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html(title.rowData).append(
 					$('<span>').append(
 						$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
 					)
 				)
 			).appendTo(rowContainer);
-		}
-		else if(mode === 'image') {
-			$("<div>").addClass("cover-wrapper" + checkClass + existClass).append(
+//		}
+//		else if(mode === 'image') {
+			$("<div>").addClass("image-mode hide cover-wrapper" + checkClass + existClass).append(
 				$("<img>").attr({"src": title.imgSrc, "title": title.styleString}).addClass("img-thumbnail cover-image")
 			).append(
 				$("<div>").addClass("nowrap text-center cover-title").append(
@@ -276,33 +279,75 @@ function renderContent(idx) {
 					$(this).removeClass("box-hover");
 				}
 			}).appendTo(rowContainer);
-		}
-		else if(mode === 'edit') {
-			var tr = $("<tr>").addClass(checkClass + existClass);
-			
-			var td0 = $("<td>").css({"width": "50px"});
-			$("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find").appendTo(td0);
-
-			var td1 = $("<td>").css({"width": "80px"}).addClass("hover_img");
-			$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).addClass("label label-info").html("Image").append(
-				$('<span>').append(
-					$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
-				)
-			).appendTo(td1);
-			$("<span>").addClass("label label-warning").html(title.checkDescShort).attr({"onclick": "fnToggleRowdata('#title-rowdata-" + i + "')"}).appendTo(td1);
-			
-			var td2 = $("<td>");
-			$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px"}).val(title.styleString).appendTo(td2);
-			$("<p>").addClass("label label-info").css({"display": "none"}).attr({"id": "title-rowdata-" + i}).html(title.rowData).appendTo(td2);
-			
-			tr.append(td0).append(td1).append(td2).appendTo(tbody);
-		}
+//		}
+//		else if(mode === 'edit') {
+/*	
+			$("<tr>").addClass("edit-mode " + checkClass + existClass).append(
+					$("<td>").css({"width": "50px"}).append(
+							$("<a>").addClass("btn btn-xs btn-default").attr({"onclick": "fnFindVideo('" + title.opus + "')"}).html("Find")
+					)
+			).append(
+					$("<td>").css({"width": "80px"}).addClass("hover_img").append(
+							$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).addClass("label label-info").html("Image").append(
+									$('<span>').append(
+											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
+									)
+							)
+					)
+			).append(
+					$("<td>").append(
+							$("<div>").addClass("input-group").append(
+									$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px"}).val(title.styleString)
+							).append(
+									$("<div>").addClass("input-group-btn").append(
+											$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
+												$(this).parent().parent().parent().find('kbd').toggle();
+												$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+											}).append(
+													$("<i>").addClass("glyphicon glyphicon-plus-sign")
+											)
+									)		
+							)
+					).append(
+							$("<kbd>").css({"display": "none"}).html(title.rowData)
+					)
+			).appendTo(tbody);
+*/
+			$("<div>").addClass("input-group edit-mode hide" + checkClass + existClass).append(
+					$("<div>").addClass('input-group-btn hover_img').append(
+							$("<a>").addClass("btn btn-link btn-xs").attr({"onclick": "fnFindVideo('" + title.opus + "') " + (title.exist ? "fnVideoDetail('" + title.opus + "')" : ""), "data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc)}).html("Find").append(
+									$('<span>').append(
+											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
+									)
+							)
+					)
+/*			).append(
+					$("<span>").addClass("input-group-addon hover_img").css({"width": "80px"}).append(
+							$('<a>').attr({"data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc), "onclick": (title.exist ? "fnVideoDetail('" + title.opus + "')" : "")}).html("Image").append(
+									$('<span>').append(
+											$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
+									)
+							)
+					)
+*/			).append(
+					$("<span>").addClass("input-group-addon row-data hide").html(title.rowData)
+			).append(
+					$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px", marginTop: "2px"}).val(title.styleString)
+			).append(
+					$("<div>").addClass("input-group-btn").append(
+							$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
+								$(this).parent().parent().find('.row-data').toggleClass("hide");
+								$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+							}).append(
+									$("<i>").addClass("glyphicon glyphicon-plus-sign")
+							)
+					)
+			).appendTo(rowContainer);
+//		}
 	}
-	if(mode === 'edit') {
-		tbody.appendTo(table);
-		table.appendTo(rowContainer);
-	}
 
+	$('.' + mode + '-mode').toggleClass('hide');
+	console.log('.' + mode + '-mode', 'toggleClass', 'hide');
 	$('<h4>').html(headerTitle + " <span class='badge'>" + displayCount + "</span>").appendTo(header);
 
 	$(".hover_img a").hover(function() {
@@ -319,18 +364,30 @@ function fnFindVideo(opus) {
 function fnOpenSource(url) {
 	popup(url, 'gravia', 900, 950);
 }
-function fnToggleRowdata(id) {
-	$(id).toggle();
-}
 function fnToggleSubmitBtn() {
 	var mode = $("input:radio[name='mode']:checked").val();
-	if (mode === 'edit') {
-		$("#submitBtn").show();
-	}
-	else {
+	if (mode === 'text') {
 		$("#submitBtn").hide();
-	}
-	renderContent(selectedIndex);
+		$(".forImage").addClass("hide");
+		$(".text-mode").removeClass('hide');
+		$(".image-mode").addClass('hide');
+		$(".edit-mode").addClass('hide');
+	} 
+	else if (mode === 'image') {
+		$("#submitBtn").hide();
+		$(".forImage").removeClass("hide");
+		$(".text-mode").addClass('hide');
+		$(".image-mode").removeClass('hide');
+		$(".edit-mode").addClass('hide');
+	} 
+	else if (mode === 'edit') {
+		$("#submitBtn").show();
+		$(".forImage").addClass("hide");
+		$(".text-mode").addClass('hide');
+		$(".image-mode").addClass('hide');
+		$(".edit-mode").removeClass('hide');
+	} 
+//	renderContent(selectedIndex);
 }
 function saveCoverAll() {
 	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
@@ -367,7 +424,7 @@ function resizeCover(first) {
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
 			<a class="btn btn-default active"><input type="radio" name="mode" value="text" checked="checked">Text</a>
 			<a class="btn btn-default"><input type="radio" name="mode" value="image">Image</a>
-			<a class="btn btn-default"><input type="radio" name="mode" value="edit">Editable</a>
+			<a class="btn btn-default"><input type="radio" name="mode" value="edit" >Editable</a>
 		</div>
 		
 		<div class="forImage hide">

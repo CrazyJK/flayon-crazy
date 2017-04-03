@@ -1,10 +1,10 @@
 @CHARSET "UTF-8";
 body {
 	background-color: rgba(255, 255, 255, 0);
-	background-position: top center;
+	background-position: center top;
 	background-size: contain;
 	background-repeat: repeat;
-	transition: background .5s ease, background-image .5s ease;
+	transition: background .5s ease;
 }
 [onclick], [ng-click] {
 	cursor: pointer;

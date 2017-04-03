@@ -340,6 +340,7 @@ function toogleTheme(themeName) {
 				 	+ ' .table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}'
 				 	+ ' .border-shadow {box-shadow: none;}'
 				 	+ ' .btn:focus, .btn:hover {background-color: lightgray !important;}'
+				 	+ ' .favorite {box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
 				+ '</style>'
 			);
 			$("#backMenu").hide();
