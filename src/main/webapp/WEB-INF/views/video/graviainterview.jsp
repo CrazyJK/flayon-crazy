@@ -6,90 +6,104 @@
 <head>
 <title>Gravia Source RSS</title>
 <style type="text/css">
-.gravia-item {
+.forImage, .forEdit {
+    display: inline-block;
+}
+
+.nav-gravia {
 	position: fixed;
 	top: 80px;
+	margin-top: 10px;
 }
-.gravia-item.nav-pills > li {
+.nav-gravia.nav-pills > li {
 	max-width: 150px;
 }
-.gravia-item.nav-pills > li > a {
-    background-color: rgba(51, 122, 183, 0.3);
+.nav-gravia.nav-pills > li > a {
+	background-color: rgba(51, 122, 183, 0.3);
 	font-size: 12px;
     padding: 5px;
     margin: 0 3px 5px;
     border: 1px solid rgb(51, 122, 183);
     color: #eee;
+	transition: all .2s;
 }
-.gravia-item.nav-pills > li.active > a {
+.nav-gravia.nav-pills > li.active > a {
 	color: #fff;
-    background-color: #337ab7;
+	background-color: #337ab7;
+}
+.nav-gravia.nav-pills > li:hover > a {
+	background-color: rgba(51, 122, 183, 0.8);
 }
 
-#gravia-content {
+.tab-content.tab-gravia {
 	font-size: 12px;
 	background-color: rgba(255, 255, 255, 0.5);
 	border-radius: 9px;
 	padding: 10px;
 	margin-left: 132px;
 }
+.tab-content.tab-gravia > h4 {
+	margin-top: 0;
+}
+#content-title, #content-length {
+	font-weight: bold; 
+	color: #fff; 
+	text-shadow: 0px 0px 5px #0c0c0c;
+	margin-left: 10px;
+}
+
 #graviaForm > div {
     margin: 0 3px 5px;
     padding: 2px;
     border-radius: 4px;
     line-height: 24px;
 }
-#content-title, #content-length {
-	font-weight: bold; 
-	color: #fff; 
-	text-shadow: 0px 0px 5px #0c0c0c;
-}
-.hover_img > a { 
+#graviaForm > div > .hover_img > a { 
 	text-decoration: none;
 	padding-left: 5px;
 }
-.hover_img > a > span { 
+#graviaForm > div > .hover_img > a > span { 
 	display:none; 
-	z-index:99; 
 }
-.hover_img > a:hover > span { 
+#graviaForm > div > .hover_img > a:hover > span { 
  	display:block;
 }
-.hover_img > a:hover > span > img {
+#graviaForm > div > .hover_img > a:hover > span > img {
 	position: fixed;
 	right: 42px;
-	top: 128px;
+	top: 118px;
 	z-index: 3;
 }
 
-.cover-wrapper {
-	display: inline-block;
-	margin: 1px;
-    padding: 3px;
-	border-radius: 4px;
-	transition: height .5s, transform 0.3s;
-}
-.cover-image {
-	width: 204px;
-	height: 270px;
-}
-.cover-title {
-	width: 100%;
-	padding: 0;
-	margin: 0;
-}
-.box-hover {
-	transform: scale(1.1, 1.1);
-	box-shadow: 0 0 9px 6px rgba(255, 0, 0, 0.5) !important;
-}
-.forImage {
-    display: inline-block;
+.btn, .form-control {
+	z-index: initial !important;
 }
 .input-group-addon {
     background-color: transparent;
     border: 0;
-    color: #337ab7 !important;
+    color: #337ab7;
     font-size: 12px;
+}
+
+#imageWrapper > .cover-wrapper {
+	display: inline-block;
+	margin: 1px;
+    padding: 3px;
+	border-radius: 4px;
+	transition: transform 0.3s;
+}
+#imageWrapper > .cover-wrapper.cover-hover {
+	transform: scale(1.1, 1.1);
+}
+#imageWrapper > .cover-wrapper > .cover-image {
+	width: 204px;
+	height: 270px;
+	transition: height .5s, height .5s;
+}
+#imageWrapper > .cover-wrapper > .cover-title {
+	width: 100%;
+	padding: 0;
+	margin: 0;
 }
 </style>
 <script type="text/javascript">
@@ -104,9 +118,15 @@ var isCheckedNoCover = false;
 	$(document).ready(function() {
 	
 		request();
+
+		resizeCover(true);
 	
-		$("input:radio[name='mode']").on('change', function() {
-			fnToggleSubmitBtn();
+		$("input:radio[name='mode']").on('change', fnToggleBtnMode);
+		// for nocover checkbox
+		$("#nocover").on("click", function() {
+			isCheckedNoCover = $(this).data("checked");
+			//console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
+			renderContent(selectedIndex);
 		});
 		
 		$("#query").bind("keyup", function(e) {
@@ -134,14 +154,6 @@ var isCheckedNoCover = false;
 			loading(false);
 		});
 		
-		// for nocover checkbox
-		$("#nocover").on("click", function() {
-			isCheckedNoCover = $(this).data("checked");
-			//console.log("isCheckedNoCover", isCheckedNoCover, selectedIndex);
-			renderContent(selectedIndex);
-		});
-	
-		resizeCover(true);
 	});
 }(jQuery));
 
@@ -155,44 +167,42 @@ function request() {
 		timeout: 60000
 	}).done(function(data) {
 		if (data.exception) {
-			showStatus(true, data.exception.message, true);
+			loading(true, data.exception.message);
 		}
 		else {
 			$.each(data.tistoryGraviaItemList, function(i, row) { // 응답 json을 List 배열로 변환
-				var itemTitle = row.title;
-				var titles = row.titles;
+			//	var itemTitle = row.title;
+			//	var titles = row.titles;
+			//	console.log(itemTitle, titles);
 				graviaList.push(row);
 			});
-			render();
+			renderNav();
+			renderContent(0);
+			loading(false);
 		}
 	}).fail(function(jqxhr, textStatus, error) {
 		loading(true, textStatus + ", " + error);
-	}).always(function() {
-		loading(false);
-	});	
+	}).always(function() {});
 }
 
-function render() {
-	renderNav();
-	renderContent(0);
-}
 function renderNav() {
-	var titleNavContainer = $(".gravia-item");
+	var navGravia = $(".nav-gravia");
 	for (var i=0; i<graviaList.length; i++) {
 		var title = graviaList[i].title.replace('출시작', '');
 		var idx = title.indexOf("(");
 		if (idx > -1)
 			title = title.substring(0, idx);
 		$("<li>").append(
-				$("<a>").addClass("nowrap").attr({"href": "#item-" + graviaList[i].itemIndex, "onclick": "renderContent(" + i + ")", "data-toggle": "pill"}).append(
+				$("<a>").addClass("nowrap").attr({"onclick": "renderContent(" + i + ")", "data-toggle": "pill"}).append(
 						$("<span>").addClass("badge float-right").html(graviaList[i].titles.length)
 				).append(
 						$("<span>").html(title)
 				)
-		).appendTo(titleNavContainer);
+		).appendTo(navGravia);
 	}
-	titleNavContainer.children().first().addClass("active");
+	navGravia.children().first().addClass("active");
 }
+
 function renderContent(idx) {
 	previousIndex = selectedIndex;
 	selectedIndex = idx;
@@ -250,22 +260,27 @@ function renderContent(idx) {
 		).hover(
 			function(event) {
 				if ($("#magnify").data("checked")) {
-					$(this).addClass("box-hover");
+					$(this).addClass("cover-hover");
 				}
 			}, function() {
 				if ($("#magnify").data("checked")) {
-					$(this).removeClass("box-hover");
+					$(this).removeClass("cover-hover");
 				}
 			}
 		).appendTo(imageWrapper);
 
 		$("<div>").addClass("input-group" + stateClass).append(
 				$("<div>").addClass('input-group-btn hover_img').append(
-						$("<a>").addClass("btn btn-link btn-xs").attr(onClick).html("Find").append(
+						$("<a>").addClass("btn btn-link btn-xs btn-img").attr(onClick).html("Find").append(
 								$('<span>').append(
 										$('<img>').css({"width": (title.exist ? "400px" : "200px")}).addClass("img-thumbnail")		
 								)
-						)
+						).hover(function() {
+							var src = $(this).attr("data-src");
+							var top = $(this).offset().top - 2;
+						//	console.log("top", top);
+						    $(this).find("img").attr("src", src).css({top: top});
+						}, function() {})
 				)
 		).append(
 				$("<input>").attr({"name": "title"}).addClass("form-control input-sm").css({"font-size": "12px", marginTop: "2px"}).val(title.styleString)
@@ -273,7 +288,7 @@ function renderContent(idx) {
 				$("<span>").addClass("input-group-addon row-data hide").html(title.rowData)
 		).append(
 				$("<div>").addClass("input-group-btn").append(
-						$("<a>").addClass("btn btn-link btn-xs").on('click', function() {
+						$("<a>").addClass("btn btn-link btn-xs btn-row").on('click', function() {
 							$(this).parent().parent().find('.row-data').toggleClass("hide");
 							$(this).find('i').toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
 						}).append(
@@ -291,36 +306,34 @@ function renderContent(idx) {
 	$("#nocover").html("NoVideo " + novideoCount);
 	$("#exist").html("Exist " + existCount);
 	$("#check").html("Check " + checkCount);
-	fnToggleSubmitBtn();
-	
-	$(".hover_img a").hover(function() {
-		var src = $(this).attr("data-src");
-		// console.log(src);
-	    $(this).find("img").attr("src", src);
-	}, function() {});
-	
+	fnToggleBtnMode();
 }
+
 function fnFindVideo(opus) {
 	fnMarkChoice(opus);
 	popup('${urlSearchVideo}' + opus, 'videoSearch', 900, 950);
 }
+
 function fnOpenSource(url) {
 	popup(url, 'gravia', 900, 950);
 }
-function fnToggleSubmitBtn() {
+
+function fnToggleBtnMode() {
 	var mode = $("input:radio[name='mode']:checked").val();
 	if (mode === 'image') {
-		$("#submitBtn").hide();
 		$(".forImage").removeClass("hide");
+		$(".forEdit").addClass("hide");
 	} 
 	else if (mode === 'edit') {
-		$("#submitBtn").show();
 		$(".forImage").addClass("hide");
+		$(".forEdit").removeClass("hide");
 	} 
 }
+
 function saveCoverAll() {
 	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
 }
+
 function resizeCover(first) {
 	var imgWidth;
 	if (first) {
@@ -330,11 +343,11 @@ function resizeCover(first) {
 		imgWidth = $('#img-width').val();
 	}
 	var imgHeight = Math.round(parseInt(imgWidth) * 1.3235);
-	var coverSizeStyle = "<style>.cover-image {width:" + imgWidth + "px; height:" + imgHeight + "px;} .cover-title {width:" + imgWidth + "px;}</style>";
+	var coverSizeStyle = "<style>#imageWrapper>.cover-wrapper>.cover-image {width:" + imgWidth + "px; height:" + imgHeight + "px;} #imageWrapper>.cover-wrapper>.cover-title {width:" + imgWidth + "px;}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
-	setlocalStorageItem("graviainterview.coverImageSize", imgWidth);
 	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 	$('.addon-width').html(imgWidth + " x " + imgHeight);
+	setlocalStorageItem("graviainterview.coverImageSize", imgWidth);
 //	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }
 </script>
@@ -348,36 +361,38 @@ function resizeCover(first) {
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeholder="Search"/>
 
-		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
-		<span class="label label-info"    id="exist">Exist</span>
-		<span class="label label-danger"  id="check">Check</span>
-	
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
 			<a class="btn btn-default" data-toggle="tab" data-target="#imageTab"><input type="radio" name="mode" value="image">Image</a>
 			<a class="btn btn-default active" data-toggle="tab" data-target="#editTab"><input type="radio" name="mode" value="edit" checked="checked">Editable</a>
 		</div>
 	
+		<span class="label label-default" id="nocover"  role="checkbox" data-role-value="false" title="only no cover">NoCover</span>
+		<span class="label label-info"    id="exist">Exist</span>
+		<span class="label label-danger"  id="check">Check</span>
+	
 		<div class="forImage hide">
 	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
-	   		
 	   		<div class="input-group input-group-xs">
 				<input type="range" id="img-width" class="form-control input-sm" min="100" max="700" value="200" step="50" onchange="resizeCover()"/>
-				<span class="input-group-addon addon-width">Width</span>
+				<span class="input-group-addon addon-width">Size</span>
 			</div>
 		</div>
 		
-		<div class="float-right">
-			<button class="btn btn-xs btn-primary" style="display:none;" id="submitBtn" onclick="saveCoverAll()">All Save</button>
+		<div class="forEdit hide">
+			<span class="label label-default" id="showrowdata"  role="checkbox" data-role-value="false" title="show row data" onclick="$('#graviaForm>div>div>a.btn.btn-row').click();">Row Data</span>
+		</div>
+		<div class="forEdit hide float-right">
+			<button class="btn btn-xs btn-primary" onclick="saveCoverAll()">All Save</button>
 		</div>
 	</div>
 
 	<div id="content_div" class="box" style="overflow:auto;">
-		<ul class="nav nav-pills nav-stacked gravia-item"></ul>
-		<div class="tab-content" id="gravia-content">
+		<ul class="nav nav-pills nav-stacked nav-gravia"></ul>
+		<div class="tab-content tab-gravia">
 			<h4>
 				<span id="content-title"></span>
 				<span id="content-length"></span>
-				<a id="content-source" class="float-right"></a>
+				<a id="content-source" class="float-right small"></a>
 			</h4>
 			<section id="imageTab" class="tab-pane fade">
 				<div id="imageWrapper"></div>
