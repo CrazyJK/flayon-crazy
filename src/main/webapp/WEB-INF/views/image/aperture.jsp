@@ -30,7 +30,7 @@ $(document).ready(function(){
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 		
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+		selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
 
 		resizeImage();
 		if (selectedNumber > -1)
@@ -155,7 +155,7 @@ function fnViewImage(current) {
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
+	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
 
 	$("#aperture .circle-img").css("background-image", "url('"+selectedImgUrl+"')");
 

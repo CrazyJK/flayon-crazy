@@ -337,7 +337,7 @@ function saveCoverAll() {
 function resizeCover(first) {
 	var imgWidth;
 	if (first) {
-		imgWidth = getlocalStorageItem("graviainterview.coverImageSize", 200);
+		imgWidth = getLocalStorageItem(GRAVIAINTERVIEW_IMAGE_WIDTH, 200);
 		$('#img-width').val(imgWidth);
 	}else {
 		imgWidth = $('#img-width').val();
@@ -347,7 +347,7 @@ function resizeCover(first) {
 	$("#cover-size-style").empty().append(coverSizeStyle);
 	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 	$('.addon-width').html(imgWidth + " x " + imgHeight);
-	setlocalStorageItem("graviainterview.coverImageSize", imgWidth);
+	setLocalStorageItem(GRAVIAINTERVIEW_IMAGE_WIDTH, imgWidth);
 //	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }
 </script>
@@ -373,7 +373,7 @@ function resizeCover(first) {
 		<div class="forImage hide">
 	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
 	   		<div class="input-group input-group-xs">
-				<input type="range" id="img-width" class="form-control input-sm" min="100" max="700" value="200" step="50" onchange="resizeCover()"/>
+				<input type="range" id="img-width" class="form-control" min="100" max="700" value="200" step="50" onchange="resizeCover()"/>
 				<span class="input-group-addon addon-width">Size</span>
 			</div>
 		</div>

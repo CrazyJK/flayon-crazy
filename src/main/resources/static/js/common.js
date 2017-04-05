@@ -323,7 +323,7 @@ function randomFont() {
     return selectedFont;
 }
 
-function setlocalStorageItem(itemName, itemValue) {
+function setLocalStorageItem(itemName, itemValue) {
 	if (typeof(Storage) !== "undefined") {
 		localStorage.setItem(itemName, itemValue);
 	}
@@ -331,7 +331,7 @@ function setlocalStorageItem(itemName, itemValue) {
 		// do nothing
 	}
 }
-function getlocalStorageItem(itemName, notfoundDefault) {
+function getLocalStorageItem(itemName, notfoundDefault) {
 	if (typeof(Storage) !== "undefined") {
 		var _value = localStorage.getItem(itemName);
 		if (_value == null || _value === 'NaN')

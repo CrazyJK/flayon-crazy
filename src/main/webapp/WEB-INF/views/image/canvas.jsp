@@ -117,7 +117,7 @@ $(document).ready(function() {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+		selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
 
 		// Pencil tool 객체를 생성 한다.
 		tool = new tool_pencil();
@@ -200,7 +200,7 @@ $(document).ready(function() {
 });	
 
 function imageURL() {
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
+	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
 	return imagepath + selectedNumber + "?_t=" + new Date().getTime();
 }
 function loadImage(nextNumber) {

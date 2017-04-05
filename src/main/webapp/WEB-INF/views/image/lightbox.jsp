@@ -119,7 +119,7 @@ function fnNextImage() {
 }
 function fnCurrImage(selectedNumber) {
 	if (!selectedNumber)
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1))) + 1;
+		selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount-1))) + 1;
 	$("#imageset a:nth-child(" + selectedNumber + ")").click();
 }
 function fnRandomImage() {

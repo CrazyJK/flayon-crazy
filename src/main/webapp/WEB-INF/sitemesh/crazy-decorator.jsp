@@ -51,7 +51,7 @@ var listViewType;
 var windowWidth = 0;
 var windowHeight = 0;
 var pingInterval = 5000;
-var themeSwitch = getlocalStorageItem("crazy-decorator.theme-switch",  'normal');
+var themeSwitch = getLocalStorageItem(CRAZY_DECORATOR_THEME,  'normal');
 var bgToggle = 0;
 var isLoadedSearchPage = false;
 var loadingText = 'Loading...';
@@ -350,7 +350,7 @@ function toogleTheme(themeName) {
 	themeSwitch = themeName;
 	try {neonEffect()} catch(e) {}
 	propagateTheme();
-	setlocalStorageItem("crazy-decorator.theme-switch", themeSwitch);
+	setLocalStorageItem(CRAZY_DECORATOR_THEME, themeSwitch);
 }
 
 function propagateTheme() {

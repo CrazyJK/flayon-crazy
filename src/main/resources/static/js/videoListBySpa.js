@@ -397,7 +397,7 @@ function setTblCoverPosition() {
 function resizeCover(first) {
 	var imgWidth;
 	if (first) {
-		imgWidth = getlocalStorageItem("videolistbyspa.coverImageSize", 290);
+		imgWidth = getLocalStorageItem(VIDEOLISTBYSPA_IMAGE_WIDTH, 290);
 		$('#img-width').val(imgWidth);
 	}else {
 		imgWidth = $('#img-width').val();
@@ -405,7 +405,7 @@ function resizeCover(first) {
 	var imgHeight = Math.round(parseInt(imgWidth) * 0.6725);
 	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
-	setlocalStorageItem("videolistbyspa.coverImageSize", imgWidth);
+	setLocalStorageItem(VIDEOLISTBYSPA_IMAGE_WIDTH, imgWidth);
 	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 //	showSnackbar("width:" + imgWidth + "px; height:" + imgHeight + "px;", 1000);
 }

@@ -1,5 +1,17 @@
 var calculatedDivHeight = 0;
 
+var CRAZY_DECORATOR_THEME    = 'crazy-decorator.theme';
+var THUMBNAMILS_COVER_INDEX  = 'thumbnamils.cover.index';
+var THUMBNAMILS_COVER_WIDTH  = 'thumbnamils.cover.width';
+var THUMBNAMILS_COVER_HEIGHT = 'thumbnamils.cover.height';
+var THUMBNAMILS_IMAGE_INDEX  = 'thumbnamils.image.index';
+var THUMBNAMILS_IMAGE_WIDTH  = 'thumbnamils.image.width';
+var THUMBNAMILS_IMAGE_HEIGHT = 'thumbnamils.image.height';
+var THUMBNAMILS_MODE         = 'thumbnamils.mode';
+var THUMBNAMILS_BTN_DELETE   = 'thumbnamils.btn.delete';
+var THUMBNAMILS_BTN_MAGNIFY  = 'thumbnamils.btn.magnify';
+var GRAVIAINTERVIEW_IMAGE_WIDTH = 'graviainterview.image.width';
+var VIDEOLISTBYSPA_IMAGE_WIDTH  = 'videolistbyspa.image.width';
 /**
  * div container 높이 조정
  */

@@ -12,7 +12,7 @@
 
 	<div id="header_div" class="box form-inline">
 		<div style="display: inline-block;">
-	   		<input class="form-control input-sm search" placeholder="Search..."/>
+	   		<input class="form-control input-sm search" placeholder="Search..." style="width:100px !important;"/>
 	   		<span class="label label-default" id="favorite" role="checkbox" data-role-value="false" title="only favorite">Fav</span>
 	   		<span class="label label-default" id="novideo"  role="checkbox" data-role-value="false" title="only no video">NoV</span>
 	   		<span class="label label-default" id="tags"     role="checkbox" data-role-value="false" title="filter by tags">Tags</span>

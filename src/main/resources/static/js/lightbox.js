@@ -226,7 +226,8 @@
 			self.album.push({
 				link: $link.attr('href'),
 				title: $link.attr('data-title') || $link.attr('title'),
-				index: $link.attr('data-index')
+				index: $link.attr('data-index'),
+				type: $link.attr('data-type')
 			});
 		}
 
@@ -348,7 +349,8 @@
 		preloader.src          = this.album[imageNumber].link;
 		this.currentImageIndex = imageNumber;
 		// SAVE image index
-		setlocalStorageItem("thumbnamils.currentImageIndex", this.album[imageNumber].index);
+		if (this.album[imageNumber].type != 'cover')
+			setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, this.album[imageNumber].index);
 	};
 
 	// Stretch overlay to fit the viewport

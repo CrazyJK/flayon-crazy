@@ -117,7 +117,7 @@ $(document).ready(function(){
 			imageCount = data['imageCount'];
 			imageMap = data['imageNameMap'];
 
-			selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount))) + 1;
+			selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount))) + 1;
 
 			for (var i=0; i<imageCount; i++) {
 				var imageDiv = $("<div>").addClass("bg-image").height(windowHeight - topOffset - margin);
@@ -218,7 +218,7 @@ function rePagination() {
 	selectedImgUrl = imagepath + index;
     $("#imageTitle").html(imageMap[index]);
 
-    setlocalStorageItem("thumbnamils.currentImageIndex", index);
+    setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, index);
 
     if (false) {
     	var img = $("<img>").attr("src", selectedImgUrl);

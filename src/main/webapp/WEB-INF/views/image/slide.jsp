@@ -113,7 +113,7 @@ $(document).ready(function() {
 
 		$("#firstNo").html(0);
 		$("#endNo").html(imageCount-1);
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount)));
+		selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
 
 		resizeImage();
 		setNextEffect();
@@ -248,7 +248,7 @@ function fnViewImage(current) {
 	selectedNumber = current;
 	selectedImgUrl = imagepath + selectedNumber;
 	
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
+	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
 
 	$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
 		$("#leftNo").html(getPrevNumber());

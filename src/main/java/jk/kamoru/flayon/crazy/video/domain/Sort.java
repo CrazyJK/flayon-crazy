@@ -26,7 +26,7 @@ public enum Sort {
 	/** score sort */
 	SC("Score"),
 	/** videoCandidates */
-	VC("VideoCandidates");
+	VC("Candidates");
 	
 	private String sortString;
 	

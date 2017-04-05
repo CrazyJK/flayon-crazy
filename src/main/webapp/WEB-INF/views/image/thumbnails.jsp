@@ -51,29 +51,36 @@ span.input-group-addon {
     font-weight: bold;
 	text-shadow: 0px 0px 5px #0c0c0c;
 }
+.img-title {
+	color: #fff;
+	text-shadow: 0px 0px 5px #0c0c0c;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
-
-var THUMBNAMILS_CURRENTCOVERINDEX = 'thumbnamils.currentCoverIndex';
-var THUMBNAMILS_CURRENTIMAGEINDEX = 'thumbnamils.currentImageIndex';
-var itemName;
-var selectedNumber;
-var imageCount;
+var storageItemIndexName;
+var storageItemWidthName;
+var storageItemHeightName;
+var currentIndex = 0;
+var itemCount = 0;
+var itemMap;
+var imageCount = 0;
 var imageMap;
+var coverCount = 0;
+var coverMap;
 var lastPage = false;
 var imageSizePerPage = 50;
 var displaycount = 0;
 var mode;
+var url = '${PATH}/image/data.json';
+var param;
+var scrollBottomChecker;
 
 $(document).ready(function() {
-	var imgWidth  = getlocalStorageItem("thumbnamils.img-width", 120);
-	var imgHeight = getlocalStorageItem("thumbnamils.img-height", 100);
-	$("#img-width").val(imgWidth);
-	$("#img-height").val(imgHeight);
-	$(".addon-width" ).html("W " + imgWidth);
-	$(".addon-height").html("H " + imgHeight);
 
+	mode = getLocalStorageItem(THUMBNAMILS_MODE, "image");
+	$("input:radio[name='mode'][value='" + mode + "']").attr("checked", true).parent().addClass("active");
+	
 	$("input:radio[name='mode']").on('change', fnToggleBtnMode);
 	fnToggleBtnMode();
 
@@ -84,16 +91,20 @@ $(document).ready(function() {
 
 	$("#delete").on("click", function() {
 		var thisValue = $(this).data("checked");
-		setlocalStorageItem("thumbnamils.close", thisValue);
-		$(".close").toggleClass("hide", !thisValue);
-		$(".img-title").toggleClass("hide", !thisValue);
+		setLocalStorageItem(THUMBNAMILS_BTN_DELETE, thisValue);
+		if (mode === 'image') {
+			$(".close").toggleClass("hide", !thisValue);
+			$(".img-title").toggleClass("hide", !thisValue);
+		}
 	});
-	
+	if (getLocalStorageItem(THUMBNAMILS_BTN_DELETE, false) === 'true') {
+		$("#delete").click();	
+	}
+
 	$("#magnify").on("click", function() {
-		setlocalStorageItem("thumbnamils.magnify", $(this).data("checked"));
+		setLocalStorageItem(THUMBNAMILS_BTN_MAGNIFY, $(this).data("checked"));
 	});
-	var magnifyValue = getlocalStorageItem("thumbnamils.magnify", false) === 'true';
-	if (magnifyValue) {
+	if (getLocalStorageItem(THUMBNAMILS_BTN_MAGNIFY, false) === 'true') {
 		$("#magnify").click();	
 	}
 
@@ -102,31 +113,72 @@ $(document).ready(function() {
 
 function fnToggleBtnMode() {
 	mode = $("input:radio[name='mode']:checked").val();
-	console.log("mode", mode);
-	var param;
+	console.log("fnToggleBtnMode mode", mode);
+	
 	if (mode === 'cover') {
-		param =  "?m=c";
-		itemName = THUMBNAMILS_CURRENTCOVERINDEX;
+		param =  "m=c";
+		storageItemIndexName  = THUMBNAMILS_COVER_INDEX;
+		storageItemWidthName  = THUMBNAMILS_COVER_WIDTH;
+		storageItemHeightName = THUMBNAMILS_COVER_HEIGHT;
+		if (coverCount == 0) 
+			requestData();
+		itemCount = coverCount;
+		itemMap   = coverMap;
 	}
 	else {
 		param = "";
-		itemName = THUMBNAMILS_CURRENTIMAGEINDEX;
+		storageItemIndexName  = THUMBNAMILS_IMAGE_INDEX;
+		storageItemWidthName  = THUMBNAMILS_IMAGE_WIDTH;
+		storageItemHeightName = THUMBNAMILS_IMAGE_HEIGHT;
+		if (imageCount == 0)
+			requestData();
+		itemCount = imageCount;
+		itemMap   = imageMap;
 	}
+	
+	currentIndex  = parseInt(getLocalStorageItem(storageItemIndexName, getRandomInteger(0, itemCount-1)));
+	var imgWidth  = getLocalStorageItem(storageItemWidthName, 100);
+	var imgHeight = getLocalStorageItem(storageItemHeightName, 100);
+	
+	$("#img-width").val(imgWidth);
+	$("#img-height").val(imgHeight);
+	$(".addon-width" ).html("W " + imgWidth);
+	$(".addon-height").html("H " + imgHeight);
 
-	$.getJSON("${PATH}/image/data.json" + param ,function(data) {
-		imageCount = data['imageCount'];
-		imageMap = data['imageNameMap'];
+	$("ul#thumbnailUL").empty();
+	displaycount = 0;
+	render();
 
-		selectedNumber = parseInt(getlocalStorageItem(itemName, getRandomInteger(0, imageCount-1)));
+	clearInterval(scrollBottomChecker);
+	scrollBottomChecker = setInterval(function() {
+		if (fnIsScrollBottom())
+			render();
+	}, 3000);
 
-		$("ul#thumbnailUL").empty();
-		render();
-		
-		setInterval(function() {
-			if (fnIsScrollBottom())
-				render();
-		}, 3000);
+	setLocalStorageItem(THUMBNAMILS_MODE, mode);
+}
+
+function requestData() {
+	console.log("requestData start");
+	$.ajax({
+		type: 'GET',
+		url: url,
+		data: param,
+		async: false
+	}).done(function(data, textStatus, jqXHR) {
+		itemCount = data['imageCount'];
+		itemMap   = data['imageNameMap'];
+		if (mode === 'cover') {
+			coverCount = itemCount;
+			coverMap   = itemMap;
+		}
+		else {
+			imageCount = itemCount;
+			imageMap   = itemMap;
+		}
+		console.log("requestData done");
 	});
+	console.log("requestData end");
 }
 
 function fnIsScrollBottom() {
@@ -139,31 +191,37 @@ function fnIsScrollBottom() {
 }
 
 function render() {
-	$(".total-count").html("T " + imageCount);
-	$(".current-index").html("I " + selectedNumber);
-	$(".debug").html("render..." + selectedNumber).show().hide("fade", {}, 2000);
-	console.log("render..." + selectedNumber);
+	$(".total-count").html("T " + itemCount);
+	$(".current-index").html("I " + currentIndex);
+	$(".debug").html("render..." + currentIndex).show().hide("fade", {}, 2000);
+	console.log("render..." + currentIndex);
 
-	setlocalStorageItem(itemName, selectedNumber);
+	setLocalStorageItem(storageItemIndexName, currentIndex);
 	
-	var start = selectedNumber;
+	var showDelete = ($("#delete").data("checked") && mode === 'image') ? "" : "hide";
+	
+	var start = currentIndex;
 	var end = start + imageSizePerPage;
 	for (var i=start; i<end; i++) {
 
-		var imgSrc = mode === 'cover' ? "${PATH}/video/" + imageMap[i] + "/cover" : "${PATH}/image/" + i;
+		var imgSrc = mode === 'cover' ? "${PATH}/video/" + itemMap[i] + "/cover" : "${PATH}/image/" + i;
+		var imgTitle = mode === 'cover' 
+				? '<a onclick="fnVideoDetail(\'' + itemMap[i] + '\')" href="#">' + itemMap[i] + '</a>'
+				: '<a href="${PATH}/image/' + i + '" target="image-' + i + '">' + itemMap[i] + '</a>';
 			
 		$("ul#thumbnailUL").append(
 			$("<li>").addClass("img-thumbnail").append(
 				$("<a>").attr({
 					'href': imgSrc,
 					'data-lightbox': 'lightbox-set',
-					'data-title': "<a href='${PATH}/image/" + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
-					'data-index': i
+					'data-title': imgTitle,
+					'data-index': i,
+					'data-type': mode
 				}).append(
 					$("<div>").addClass("nowrap").data("src", imgSrc).css({
 						backgroundImage: "url('" + imgSrc + "')"
 					}).append(
-						$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
+						$("<span>").addClass("close " + showDelete).html("&times;").on("click", function(event) {
 							event.stopPropagation();
 							// console.log("delete ", $(this).parent().data("src"));
 							var imgSrc = $(this).parent().data("src");
@@ -174,7 +232,7 @@ function render() {
 							return false;
 						})
 					).append(
-						$("<small>").addClass("img-title hide").html(imageMap[i])
+						$("<small>").addClass("img-title " + showDelete).html(itemMap[i])
 					)
 				)
 			).hover(
@@ -195,14 +253,14 @@ function render() {
 			})
 		);
 		displaycount++;
-		selectedNumber = i;
-		if ((selectedNumber + 1) >= imageCount) {
+		currentIndex = i;
+		if ((currentIndex + 1) >= itemCount) {
 			console.log("approached last page", i);
-			selectedNumber = -1;
+			currentIndex = -1;
 			break;
 		}
 	}
-	selectedNumber++;
+	currentIndex++;
 	$(".display-count").html("D " + displaycount);
 
 }
@@ -214,11 +272,12 @@ function resize() {
 		width: imgWidth,
 		height: imgHeight
 	});
-	setlocalStorageItem("thumbnamils.img-width",  imgWidth);
-	setlocalStorageItem("thumbnamils.img-height", imgHeight);
 	$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);
 	$(".addon-width" ).html("W " + imgWidth);
 	$(".addon-height").html("H " + imgHeight);
+	
+	setLocalStorageItem(storageItemWidthName,  imgWidth);
+	setLocalStorageItem(storageItemHeightName, imgHeight);
 }
 function fnSetOption() {
 	lightbox.option({
@@ -240,8 +299,8 @@ function fnSetOption() {
 		</label>
 		
 		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
-			<a class="btn btn-default active" data-toggle="tab" data-target="#imageTab"><input type="radio" name="mode" value="image" checked="checked">Image</a>
-			<a class="btn btn-default"        data-toggle="tab" data-target="#coverTab"><input type="radio" name="mode" value="cover">Cover</a>
+			<a class="btn btn-default" data-toggle="tab" data-target="#imageTab"><input type="radio" name="mode" value="image">Image</a>
+			<a class="btn btn-default" data-toggle="tab" data-target="#coverTab"><input type="radio" name="mode" value="cover">Cover</a>
 		</div>
 		
 		
@@ -253,9 +312,9 @@ function fnSetOption() {
 			<span class="input-group-addon addon-height">Height</span>
 			<input type="range" id="img-height" class="form-control" min="100" max="800" value="100" step="50" onchange="resize()"/>
 		</div>
-		<span class="label label-primary total-count"></span>
-		<span class="label label-primary display-count"></span>
-		<span class="label label-primary current-index"></span>
+		<span class="label label-primary total-count"   title="Total"></span>
+		<span class="label label-primary display-count" title="Display"></span>
+		<span class="label label-primary current-index" title="Index"></span>
    		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
    		<span class="label label-default" id="delete"   role="checkbox" data-role-value="false" title="active delete mode">Delete</span>
 		<span class="label label-warning debug"></span>

@@ -104,7 +104,8 @@
 	    		$(this).hide();
 	    	}
 	    });
-		$(".slidesjs-slide[slidesjs-index='" + currentIndex() + "'] > div").randomBG(0.5);
+		$(".slidesjs-slide[slidesjs-index='" + index + "'] > div").randomBG(0.5);
+		setLocalStorageItem(THUMBNAMILS_COVER_INDEX, index);
 	}
 	$.fn.previousView = function() {
 		$(".slidesjs-previous").click();
