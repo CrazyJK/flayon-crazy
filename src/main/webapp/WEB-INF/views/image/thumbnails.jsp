@@ -47,18 +47,24 @@ input[type='range'] {
 span.input-group-addon {
     background-color: transparent;
     border: 0;
-    color: #337ab7 !important;
+    color: #fff !important;
     font-weight: bold;
+	text-shadow: 0px 0px 5px #0c0c0c;
 }
 </style>
 <script type="text/javascript">
 bgContinue = false;
+
+var THUMBNAMILS_CURRENTCOVERINDEX = 'thumbnamils.currentCoverIndex';
+var THUMBNAMILS_CURRENTIMAGEINDEX = 'thumbnamils.currentImageIndex';
+var itemName;
 var selectedNumber;
 var imageCount;
 var imageMap;
 var lastPage = false;
 var imageSizePerPage = 50;
 var displaycount = 0;
+var mode;
 
 $(document).ready(function() {
 	var imgWidth  = getlocalStorageItem("thumbnamils.img-width", 120);
@@ -68,19 +74,8 @@ $(document).ready(function() {
 	$(".addon-width" ).html("W " + imgWidth);
 	$(".addon-height").html("H " + imgHeight);
 
-	$.getJSON("${PATH}/image/data.json" ,function(data) {
-		imageCount = data['imageCount'];
-		imageMap = data['imageNameMap'];
-		
-		selectedNumber = parseInt(getlocalStorageItem("thumbnamils.currentImageIndex", getRandomInteger(0, imageCount-1)));
-		
-		render();
-		
-		setInterval(function() {
-			if (fnIsScrollBottom())
-				render();
-		}, 3000);
-	});
+	$("input:radio[name='mode']").on('change', fnToggleBtnMode);
+	fnToggleBtnMode();
 
 	$("#content_div").scroll(function() {
 		if (fnIsScrollBottom())
@@ -105,6 +100,35 @@ $(document).ready(function() {
 	fnSetOption();
 });
 
+function fnToggleBtnMode() {
+	mode = $("input:radio[name='mode']:checked").val();
+	console.log("mode", mode);
+	var param;
+	if (mode === 'cover') {
+		param =  "?m=c";
+		itemName = THUMBNAMILS_CURRENTCOVERINDEX;
+	}
+	else {
+		param = "";
+		itemName = THUMBNAMILS_CURRENTIMAGEINDEX;
+	}
+
+	$.getJSON("${PATH}/image/data.json" + param ,function(data) {
+		imageCount = data['imageCount'];
+		imageMap = data['imageNameMap'];
+
+		selectedNumber = parseInt(getlocalStorageItem(itemName, getRandomInteger(0, imageCount-1)));
+
+		$("ul#thumbnailUL").empty();
+		render();
+		
+		setInterval(function() {
+			if (fnIsScrollBottom())
+				render();
+		}, 3000);
+	});
+}
+
 function fnIsScrollBottom() {
 	var containerHeight    = $("#content_div").height();
 	var containerScrollTop = $("#content_div").scrollTop();
@@ -120,21 +144,24 @@ function render() {
 	$(".debug").html("render..." + selectedNumber).show().hide("fade", {}, 2000);
 	console.log("render..." + selectedNumber);
 
-	setlocalStorageItem("thumbnamils.currentImageIndex", selectedNumber);
-
+	setlocalStorageItem(itemName, selectedNumber);
+	
 	var start = selectedNumber;
 	var end = start + imageSizePerPage;
 	for (var i=start; i<end; i++) {
+
+		var imgSrc = mode === 'cover' ? "${PATH}/video/" + imageMap[i] + "/cover" : "${PATH}/image/" + i;
+			
 		$("ul#thumbnailUL").append(
 			$("<li>").addClass("img-thumbnail").append(
 				$("<a>").attr({
-					'href': "${PATH}/image/" + i,
+					'href': imgSrc,
 					'data-lightbox': 'lightbox-set',
 					'data-title': "<a href='${PATH}/image/" + i + "' target='image-" + i + "'>" + imageMap[i] + "</a>",
 					'data-index': i
 				}).append(
-					$("<div>").addClass("nowrap").data("src", "${PATH}/image/" + i).css({
-						backgroundImage: "url('${PATH}/image/" + i + "')"
+					$("<div>").addClass("nowrap").data("src", imgSrc).css({
+						backgroundImage: "url('" + imgSrc + "')"
 					}).append(
 						$("<span>").addClass("close hide").html("&times;").on("click", function(event) {
 							event.stopPropagation();
@@ -211,6 +238,13 @@ function fnSetOption() {
 		<label class="title">
 			<s:message code="video.thumbnails"/>
 		</label>
+		
+		<div class="btn-group btn-group-xs btn-mode" data-toggle="buttons">
+			<a class="btn btn-default active" data-toggle="tab" data-target="#imageTab"><input type="radio" name="mode" value="image" checked="checked">Image</a>
+			<a class="btn btn-default"        data-toggle="tab" data-target="#coverTab"><input type="radio" name="mode" value="cover">Cover</a>
+		</div>
+		
+		
 		<div class="input-group input-group-xs">
 			<span class="input-group-addon addon-width">Width</span>
 			<input type="range" id="img-width"  class="form-control" min="100" max="800" value="120" step="50" onchange="resize()"/>

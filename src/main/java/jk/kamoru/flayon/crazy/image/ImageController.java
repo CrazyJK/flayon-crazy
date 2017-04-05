@@ -3,10 +3,12 @@ package jk.kamoru.flayon.crazy.image;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.ImageType;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.crazy.video.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -29,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageController extends CrazyController {
 
 	private static final long TODAY = new Date().getTime();
+
+	@Autowired private VideoService videoService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String viewSlide() {
@@ -63,10 +69,22 @@ public class ImageController extends CrazyController {
 	}
 
 	@RequestMapping("/data")
-	public Map<String, Object> getData() {
+	public Map<String, Object> getData(@RequestParam(value = "m", required = false, defaultValue = "i") String mode) {
 		Map<String, Object> data = new HashMap<>();
-		data.put("imageCount", imageService.getImageSourceSize());
-		data.put("imageNameMap", imageService.getImageNameMap());
+		if ("i".equals(mode)) {
+			data.put("imageCount", imageService.getImageSourceSize());
+			data.put("imageNameMap", imageService.getImageNameMap());
+		}
+		else {
+			List<Video> videoList = videoService.getVideoList(null, false, true, false);
+			Map<Integer, String> map = new HashMap<>();
+			int index = 0;
+			for (Video video : videoList) {
+				map.put(index++, video.getOpus());
+			}
+			data.put("imageCount", videoList.size());
+			data.put("imageNameMap", map);
+		}
 		return data;
 	}
 
