@@ -242,7 +242,7 @@ function fnStartVideoBatch(type) {
 	<div id="content_div" class="row">
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
-				<h4><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>
+				<h4 class="title"><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>
 				<table class="table table-condensed table-hover table-bordered" style="display:none;">
 					<thead>
 						<tr>
@@ -260,7 +260,7 @@ function fnStartVideoBatch(type) {
 		</div>
 		<div class="col-lg-6">		
 			<div id="resultHistoryDiv" class="box" style="overflow:auto">
-				<h4><s:message code="video.history"/> <span id="history-count" class="badge"></span></h4>
+				<h4 class="title"><s:message code="video.history"/> <span id="history-count" class="badge"></span></h4>
 				<table class="table table-condensed table-hover table-bordered" style="display:none;">
 					<thead>
 						<tr>

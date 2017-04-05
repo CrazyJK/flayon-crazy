@@ -339,8 +339,8 @@ function toogleTheme(themeName) {
 					+ ' .btn {background: transparent none !important; color: #333;}'
 				 	+ ' .table-hover > tbody > tr:hover, .table-hover > tbody > tr:focus {background-color: rgba(38, 90, 136, .1);}'
 				 	+ ' .border-shadow {box-shadow: none;}'
-					+ ' .btn:hover, .btn:focus, .btn-primary.active, .btn-primary.active:focus {color: #333; box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
-					+ ' .label-success, .label-info, .label-warning, .label-primary, .label-danger {background-color: rgba(38, 90, 136, .5);}'
+					+ ' .btn:hover, .btn:focus, .btn-primary.active, .btn-primary.active:focus {color: #333 !important; box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
+					+ ' .label-success, .label-info, .label-warning, .label-primary, .label-danger {background-color: rgba(38, 90, 136, .5) !important;}'
 				 	+ ' .favorite {box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
 				+ '</style>'
 			);

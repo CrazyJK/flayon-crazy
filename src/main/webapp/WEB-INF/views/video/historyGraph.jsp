@@ -44,6 +44,7 @@ function toggleBG() {
 $(document).ready(function() {
 	$("#zoom" + currentStartIndex).addClass("active");
 	requestData();
+	toggleBG();
 });
 
 function requestData() {
@@ -210,7 +211,7 @@ function zoomChart(month) {
     console.log("zoomChart : currentStartIndex = " + currentStartIndex, "[" + fromDay,"] -> [" + toDay + "]");
 	
 	// hide amcharts. sorry!
-	$("div.amcharts-chart-div > a").html("History chart by amCharts");
+	$("div.amcharts-chart-div > a").html("");
 
 }
 

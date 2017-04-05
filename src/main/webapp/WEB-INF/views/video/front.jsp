@@ -68,6 +68,14 @@ body {
 #favicon-video {
 	right: 5px;
 }
+h1 > b.neon {
+	text-shadow: rgba(38, 90, 136, 0.5) 3px 3px 10px;
+    color: rgb(238, 238, 238);
+}
+p > span.neon {
+	text-shadow: rgba(38, 90, 136, 0.8) 3px 3px 0;
+    color: rgb(238, 238, 238);
+}
 </style>
 <script type="text/javascript" src="${PATH}/js/jquery.crazy.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/typed.js"></script>
@@ -113,7 +121,7 @@ function neonEffect() {
 		});
 	}
 	if (themeSwitch === 'plain') {
-		$(".neon").css({color: '#333'}).removeClass('blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10'); // for front
+		$(".neon").removeClass('blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10'); // for front
 	}
 }
 
