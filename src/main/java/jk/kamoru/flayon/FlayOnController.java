@@ -9,12 +9,14 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,7 +34,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -40,6 +44,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import jk.kamoru.flayon.base.access.AccessLog;
 import jk.kamoru.flayon.base.access.AccessLogRepository;
+import jk.kamoru.flayon.base.crypto.AES256;
+import jk.kamoru.flayon.base.crypto.RSA;
+import jk.kamoru.flayon.base.crypto.SHA;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -329,6 +336,75 @@ public class FlayOnController {
 			throw new FlayOnException("execute error", e);
 		}
 	}
+	
+	static Map<String, Map<String, String>> cryptoMethods = new HashMap<>();
+	static {
+		
+		Map<String, String> shaMethod = new TreeMap<>();
+		shaMethod.put("SHA1", "encrypt");
+		shaMethod.put("SHA256", "encrypt");
+		shaMethod.put("SHA384", "encrypt");
+		shaMethod.put("SHA512", "encrypt");
+		cryptoMethods.put("SHA", shaMethod);
+		
+		Map<String, String> aesMethod = new TreeMap<>();
+		aesMethod.put("AES256 ecb encrypt", "encrypt");
+		aesMethod.put("AES256 ecb decrypt", "decrypt");
+		aesMethod.put("AES256 cbc noIv encrypt", "encrypt");
+		aesMethod.put("AES256 cbc noIv decrypt", "decrypt");
+		aesMethod.put("AES256 cbc Iv encrypt", "encrypt");
+		aesMethod.put("AES256 cbc Iv decrypt", "decrypt");
+		cryptoMethods.put("AES", aesMethod);
+		
+		Map<String, String> rsaMethod = new TreeMap<>();
+		rsaMethod.put("RSA encrypt", "encrypt");
+		rsaMethod.put("RSA decrypt", "decrypt");
+		cryptoMethods.put("RSA", rsaMethod);
+	}
+	
+	@RequestMapping("/crypto")
+	public String crypto(Model model) {
+		model.addAttribute("cryptoMethods", cryptoMethods);
+		return "flayon/crypto";
+	}
+
+	String key = "crazyjk-kamoru-58818-6969";
+	String iv  = "flayon-crazy";
+	KeyPair keyPair = RSA.generateKey();
+	
+	@RequestMapping(value="/crypto", method=RequestMethod.POST)
+	public @ResponseBody String doCrypt(@RequestParam String method, @RequestParam String value) {
+		log.info("doCrypt : {}, {}", method, value);		
+		switch (method) {
+		case "SHA1":
+			return new SHA(SHA.AlgorithmType.SHA1).encrypt(value);
+		case "SHA256":
+			return new SHA(SHA.AlgorithmType.SHA256).encrypt(value);
+		case "SHA384":
+			return new SHA(SHA.AlgorithmType.SHA384).encrypt(value);
+		case "SHA512":
+			return new SHA(SHA.AlgorithmType.SHA512).encrypt(value);
+		case "AES256 ecb encrypt":
+			return new AES256(AES256.AlgorithmMode.ECB, key, null).encrypt(value);
+		case "AES256 ecb decrypt":
+			return new AES256(AES256.AlgorithmMode.ECB, key, null).decrypt(value);
+		case "AES256 cbc noIv encrypt":
+			return new AES256(AES256.AlgorithmMode.CBC, key, null).encrypt(value);
+		case "AES256 cbc noIv decrypt":
+			return new AES256(AES256.AlgorithmMode.CBC, key, null).decrypt(value);
+		case "AES256 cbc Iv encrypt":
+			return new AES256(AES256.AlgorithmMode.CBC, key, iv).encrypt(value);
+		case "AES256 cbc Iv decrypt":
+			return new AES256(AES256.AlgorithmMode.CBC, key, iv).decrypt(value);
+		case "RSA encrypt":
+			return new RSA(keyPair).encrypt(value);
+		case "RSA decrypt":
+			return new RSA(keyPair).decrypt(value);
+		default:
+			return "not available method";
+		}
+	}
+
 }
 
 @Data

@@ -73,7 +73,7 @@ $(document).ready(function() {
 	setRankColor();
  	showNav();
 	resizeDivHeight();
-	$('[data-toggle="tooltip"]').tooltip(); // bootstrap tooltip initialize 
+//	$('[data-toggle="tooltip"]').tooltip(); // bootstrap tooltip initialize 
 	toogleTheme(themeSwitch);
 	loading(false);
 });
@@ -316,7 +316,6 @@ function toogleTheme(themeName) {
 				);
 			}
 		}
-		return;
 	}
 	else {
 		if (themeName === 'normal') {
