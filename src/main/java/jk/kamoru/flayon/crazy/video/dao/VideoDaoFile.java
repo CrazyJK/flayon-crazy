@@ -107,6 +107,7 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 	public void moveVideo(String opus, String destPath) {
 		instanceVideoSource.moveVideo(opus, destPath);
 	}
+
 	@Override
 	public void reload(StopWatch stopWatch, Boolean instance, Boolean archive) {
 		if (instance)
@@ -114,14 +115,6 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 		if (archive)
 			archiveVideoSource.reload(stopWatch);
 	}
-
-//	@Override
-//	public void reload(Boolean instance, Boolean archive) {
-//		if (instance)
-//			instanceVideoSource.reload();
-//		if (archive)
-//			archiveVideoSource.reload();
-//	}
 
 	@Override
 	public boolean contains(String opus, Boolean instance, Boolean archive) {

@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -576,16 +577,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
+	@CacheEvict(value = "flayon-cover-cache", allEntries=true)
 	public void reload(StopWatch stopWatch) {
 		log.debug("reload");
 		videoDao.reload(stopWatch, true, false);
 	}
-
-//	@Override
-//	public void reload() {
-//		log.debug("reload");
-//		videoDao.reload(true, false);
-//	}
 
 	@Override
 	public void saveStudioInfo(Map<String, String> params) {

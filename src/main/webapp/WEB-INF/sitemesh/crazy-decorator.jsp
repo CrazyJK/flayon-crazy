@@ -126,7 +126,8 @@ function ping() {
 				}
 				else {
 					if (data.noti.length > 0) {
-						$(".noti").html(data.noti).show().fadeOut(pingInterval);
+//						$(".noti").html(data.noti).show().fadeOut(pingInterval);
+						$(".noti").html(data.noti).show().hide("highlight", {color: "#ffff99"}, pingInterval);
 						console.log("ping : ", data.noti);
 					}
 				}

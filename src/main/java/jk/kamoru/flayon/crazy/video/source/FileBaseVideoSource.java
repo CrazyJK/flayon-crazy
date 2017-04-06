@@ -45,7 +45,7 @@ public class FileBaseVideoSource implements VideoSource {
 	private Map<String, Video>     videoMap	= new HashMap<>();
 	private Map<String, Studio>   studioMap	= new HashMap<>();
 	private Map<String, Actress> actressMap = new HashMap<>();
-	
+
 	// Domain provider
 	@Inject Provider<Video>     videoProvider;
 	@Inject Provider<Studio>   studioProvider;
@@ -77,18 +77,21 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 	
 	/**
-	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
+	 * 첫 call이면 load()
 	 */
 	private final void videoSource() {
 		if (firstLoaded) {
-			while(loading) {
-				try {
-					logger.warn("loading... {}", toTypeString());
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					logger.error("sleep error", e);
-					break;
-				}
+//			while(loading) {
+//				try {
+//					logger.warn("loading... {}", toTypeString());
+//					Thread.sleep(500);
+//				} catch (InterruptedException e) {
+//					logger.error("sleep error", e);
+//					break;
+//				}
+//			}
+			if (loading) {
+				logger.info("loading... {}", toTypeString());
 			}
 		}
 		else {
@@ -114,9 +117,13 @@ public class FileBaseVideoSource implements VideoSource {
 		Collection<File> files = Utils.listFiles(paths, null, true);
 		stopWatch.stop();
 
-		videoMap.clear();
-		studioMap.clear();
-		actressMap.clear();
+//		videoMap.clear();
+//		studioMap.clear();
+//		actressMap.clear();
+
+		Map<String, Video>     _videoMap = new HashMap<>();
+		Map<String, Studio>   _studioMap = new HashMap<>();
+		Map<String, Actress> _actressMap = new HashMap<>();
 
 		// domain create & data source
 		stopWatch.start("load : make Video object in " + files.size() + " files");
@@ -146,7 +153,7 @@ public class FileBaseVideoSource implements VideoSource {
 					wrongFileNames.add(String.format("[%s] : %s, %s, %s", file.getPath(), file.getName(), titlePart.getCheckDescShort(), titlePart.getStyleString()));
 					continue;
 				}
-				addTitlePart(titlePart);
+				addTitlePart(titlePart, _videoMap, _studioMap, _actressMap);
 			}
 			catch (Exception e) {
 				logger.error("File loading error : " + filename, e);
@@ -162,6 +169,10 @@ public class FileBaseVideoSource implements VideoSource {
 			logger.error("write wrong file name fail", e);
 		}
 		stopWatch.stop();
+
+		  videoMap =   _videoMap;
+		 studioMap =  _studioMap;
+		actressMap = _actressMap;
 		
 		loading = false;
 		if (standalone)
@@ -326,8 +337,7 @@ public class FileBaseVideoSource implements VideoSource {
 		addTitlePart(part);
 	}
 
-	@Override
-	public void addTitlePart(TitlePart titlePart) {
+	public void addTitlePart(TitlePart titlePart, Map<String, Video> videoMap, Map<String, Studio> studioMap, Map<String, Actress> actressMap) {
 		Video video = videoMap.get(titlePart.getOpus());
 		if (video == null) {
 			video = videoProvider.get();
@@ -372,6 +382,11 @@ public class FileBaseVideoSource implements VideoSource {
 			studio.addActress(actress);
 			video.addActress(actress);
 		}
+	}
+	
+	@Override
+	public void addTitlePart(TitlePart titlePart) {
+		addTitlePart(titlePart, videoMap, studioMap, actressMap);
 	}
 
 }
