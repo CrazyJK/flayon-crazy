@@ -81,7 +81,7 @@ function fnAddEventListener() {
 		videoSort(videoList, sort.code, reverse);
 
 		$(".sorted").html(sort.name + (reverse ? " desc" : ""));
-		$(this).swapClass("btn-default", "btn-success", true).html(sort.name + (reverse ? ' ▼' : ' ▲'));
+		$(this).swapClass("btn-default", "btn-success", true).html(sort.code + (reverse ? ' ▼' : ' ▲'));
 		
 		render(true);
 	});
