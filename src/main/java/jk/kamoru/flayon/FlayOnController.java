@@ -47,6 +47,7 @@ import jk.kamoru.flayon.base.access.AccessLogRepository;
 import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
+import jk.kamoru.flayon.base.crypto.Seed256;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -360,6 +361,11 @@ public class FlayOnController {
 		rsaMethod.put("RSA encrypt", "encrypt");
 		rsaMethod.put("RSA decrypt", "decrypt");
 		cryptoMethods.put("RSA", rsaMethod);
+
+		Map<String, String> seedMethod = new TreeMap<>();
+		seedMethod.put("Seed encrypt", "encrypt");
+		seedMethod.put("Seed decrypt", "decrypt");
+		cryptoMethods.put("Seed", seedMethod);
 	}
 	
 	@RequestMapping("/crypto")
@@ -400,6 +406,10 @@ public class FlayOnController {
 			return new RSA(keyPair).encrypt(value);
 		case "RSA decrypt":
 			return new RSA(keyPair).decrypt(value);
+		case "Seed decrypt":
+			return new Seed256().decrypt(value);
+		case "Seed encrypt":
+			return new Seed256().encrypt(value);
 		default:
 			return "not available method";
 		}

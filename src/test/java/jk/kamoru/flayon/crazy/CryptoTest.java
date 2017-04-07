@@ -12,12 +12,13 @@ import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.Crypto;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
+import jk.kamoru.flayon.base.crypto.Seed256;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CryptoTest {
 
-	String plain = "31413,0,2,1";
+	String plain = "0123456789 가나다라90-";
 
 	@Test
 	public void aes256ecb() {
@@ -104,4 +105,16 @@ public class CryptoTest {
 		log.info("sha512 encrypt : " + sha512.encrypt(plain));		
 	}
 	
+	@Test
+	public void seed256() {
+		Crypto seed256 = new Seed256();
+		
+		String encrypt = seed256.encrypt(plain);
+		log.info("seed256 encrypt : " + encrypt);
+		
+		String decrypt = seed256.decrypt(encrypt);
+		log.info("seed256 decrypt : " + decrypt);
+
+		assertTrue(plain.equals(decrypt));
+	}
 }
