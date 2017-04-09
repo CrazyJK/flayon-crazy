@@ -67,11 +67,12 @@ body, .label-info, .progress, .paging {
 }
 #config-box {
 	position: fixed;
-	left: 0;
-	bottom: 0;
-	margin: 1px;
+	left: 110px;
+	top: 0;
+	margin: 3px;
 	cursor: pointer;
 	opacity: 0;
+	z-index: 2001;
 }
 #config-box:hover {
 	opacity: 1;
@@ -91,13 +92,20 @@ body, .label-info, .progress, .paging {
 </style>
 <script type="text/javascript">
 bgContinue = false;
-var imagepath = '<s:url value="/image/" />';
+var SLIDE_SOURCE_MODE   = "slide.source.mode";
+var SLIDE_EFFECT_MODE   = "slide.effect.mode";
+var SLIDE_PLAY_MODE     = "slide.play.mode";
+var SLIDE_PLAY_INTERVAL = "slide.play.interval";
+
 var selectedNumber;
-var selectedImgUrl;
+var selectedItemUrl;
+var selectedItemTitle;
 var imageCount;
+var imageMap;
+var coverCount;
+var coverMap;
 var windowWidth  = $(window).width();
 var windowHeight = $(window).height();
-var imageMap;
 var playSlide = false;
 var playInterval = 10;
 var playSec = playInterval;
@@ -107,13 +115,21 @@ var showEffect, showDuration, showOptions;
 
 $(document).ready(function() {
 	
-	$.getJSON(imagepath + "data.json" ,function(data) {
+	$.getJSON("${PATH}/image/" + "data.json" ,function(data) {
 		imageCount = data['imageCount'];
-		imageMap = data['imageNameMap'];
+		imageMap   = data['imageNameMap'];
+		coverCount = data['coverCount'];
+		coverMap   = data['coverNameMap'];
 
 		$("#firstNo").html(0);
-		$("#endNo").html(imageCount-1);
-		selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
+		if (sourceMode.value == 0) { // image
+			$("#endNo").html(imageCount-1);
+			selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
+		}
+		else { // cover
+			$("#endNo").html(coverCount-1);
+			selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, getRandomInteger(0, coverCount)));
+		}
 
 		resizeImage();
 		setNextEffect();
@@ -177,7 +193,16 @@ $(document).ready(function() {
 		event.stopPropagation();
 	});
 	$(window).bind("resize", resizeImage);
-	
+	$("#configModal").on("hidden.bs.modal", function() {
+		//console.log("hidden.bs.modal", sourceMode.value);
+		if (sourceMode.value == 0) {
+			selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
+		}
+		else { // cover
+			selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, getRandomInteger(0, coverCount)));
+		}
+		fnViewImage(selectedNumber);
+	});
 });
 
 function toggleSlideView() {
@@ -246,17 +271,24 @@ function setNextEffect() {
 
 function fnViewImage(current) {
 	selectedNumber = current;
-	selectedImgUrl = imagepath + selectedNumber;
-	
-	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
+	if (sourceMode.value == 0) { // image
+		selectedItemUrl = "${PATH}/image/" + selectedNumber;
+		selectedItemTitle = imageMap[selectedNumber];
+		setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
+	}
+	else {
+		selectedItemUrl = "${PATH}/video/" + coverMap[selectedNumber] + "/cover";
+		selectedItemTitle = coverMap[selectedNumber];
+		setLocalStorageItem(THUMBNAMILS_COVER_INDEX, selectedNumber);
+	}
 
 	$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
 		$("#leftNo").html(getPrevNumber());
 		$("#currNo").html(selectedNumber);
 		$("#rightNo").html(getNextNumber());
-		$(".title").html(imageMap[selectedNumber]);
+		$(".title").html(selectedItemTitle);
 		$(this).css({
-			backgroundImage: "url('" + selectedImgUrl + "')"
+			backgroundImage: "url('" + selectedItemUrl + "')"
 		}).show(showEffect, showOptions, showDuration, setNextEffect);
 
 		if (!playSlide) {
@@ -266,7 +298,12 @@ function fnViewImage(current) {
 }
 
 function fnFullyImageView() {
-	popupImage(selectedImgUrl);
+	if (sourceMode.value == 0) { // image
+		popupImage(selectedItemUrl);
+	}
+	else {
+		fnVideoDetail(coverMap[selectedNumber]);
+	}
 }
 function getPrevNumber() {
 	return selectedNumber == 0 ? imageCount - 1 : selectedNumber - 1;
@@ -290,19 +327,27 @@ function fnRandomImageView() {
 	fnViewImage(Math.floor(Math.random() * imageCount));
 }
 function fnDisplayThumbnail() {
+	var itemCount = 0;
+	if (sourceMode.value == 0) { // image
+		itemCount = imageCount;
+	}
+	else {
+		itemCount = coverCount;
+	}
 	windowWidth = $(window).width();
 	var thumbnailRange = parseInt(windowWidth / (150 * 2));
 	$("#thumbnailUL").empty();
 	for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
 		var thumbNo = current;
 		if (thumbNo < 0 )
-			thumbNo = imageCount + thumbNo;
-		if (thumbNo >= imageCount)
-			thumbNo = thumbNo - imageCount;
+			thumbNo = itemCount + thumbNo;
+		if (thumbNo >= itemCount)
+			thumbNo = thumbNo - itemCount;
+		var itemUrl = sourceMode.value == 0 ? "${PATH}/image/" + thumbNo : "${PATH}/video/" + coverMap[thumbNo] + "/cover"
 		$("<li>").append(
 			$("<div>")
 				.addClass("img-thumbnail" + (thumbNo == selectedNumber ? " active" : ""))
-				.css({backgroundImage: "url('" + imagepath + thumbNo + "')"})
+				.css({backgroundImage: "url('" + itemUrl + "')"})
 				.data("imgNo", thumbNo)
 				.on("click", function() {
 					fnViewImage($(this).data("imgNo"));
@@ -374,8 +419,16 @@ function showTimer(sec, text) {
 				<div class="modal-body">
 					<table class="table">
 						<tr>
+							<th>Source Mode</th>
+							<td class="text-center">
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="sourceMode">Image</span>
+								<input type="range" role="switch" id="sourceMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="sourceMode">Cover</span>
+							</td>
+						</tr>
+						<tr>
 							<th>Effect</th>
-							<td>
+							<td class="text-center">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMethod">Fadein</span>
 								<input type="range" role="switch" id="effectMethod" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMethod">Random</span>
@@ -383,7 +436,7 @@ function showTimer(sec, text) {
 						</tr>
 						<tr>
 							<th>Play mode</th>
-							<td>
+							<td class="text-center">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="playMode">Sequencial</span>
 								<input type="range" role="switch" id="playMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="playMode">Random</span>
@@ -397,6 +450,7 @@ function showTimer(sec, text) {
 				</div>
 				<div class="modal-footer">
 					<div class="text-center">
+						Source   <span class="label label-info sourceMode"></span> 
 						Effect   <span class="label label-info effectMethod"></span> 
 						Play     <span class="label label-info playMode"></span>
 						Interval <span class="label label-info interval"></span>
@@ -413,6 +467,7 @@ function showTimer(sec, text) {
 				$("." + target).html(text);
 				$("[data-target='" + target + "']").removeClass("active-switch");
 				$(this).addClass("active-switch");
+				setConfig();
 			});
 			$("input[type='range'][role='switch']").on('click', function() {
 				var value = $(this).val();
@@ -425,8 +480,10 @@ function showTimer(sec, text) {
 				$("#timerBar").attr({
 					"aria-valuemax": playInterval 
 				});
+				setConfig();
 			});
 			function shuffleOnce() {
+				$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").click();
 				$("[data-target='effectMethod'][data-value='" + getRandomInteger(0, 1) + "']").click();
 				$("[data-target='playMode'][data-value='" + getRandomInteger(0, 1) + "']").click();
 				$("#interval").val(getRandomInteger(5, 20)).click();
@@ -440,10 +497,28 @@ function showTimer(sec, text) {
 					if (++count > maxShuffle) {
 					 	clearInterval(shuffler);
 					 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
+					 	setConfig();
 					}
 				}, 500);
 			}
-			shuffleOnce();
+			function setConfig() {
+				setLocalStorageItem(SLIDE_SOURCE_MODE,   sourceMode.value);
+				setLocalStorageItem(SLIDE_EFFECT_MODE,   effectMethod.value);
+				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
+				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
+			}
+			function getConfig() {
+				var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
+				var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
+				var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
+				var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
+
+				$("[data-target='sourceMode'][data-value='" + slideSourceMode + "']").click();
+				$("[data-target='effectMethod'][data-value='" + slideEffectMode + "']").click();
+				$("[data-target='playMode'][data-value='" + slidePlayMode + "']").click();
+				$("#interval").val(slidePlayInterval).click();
+			}
+			getConfig();
 			</script>
 		</div>
 	</div>

@@ -69,22 +69,21 @@ public class ImageController extends CrazyController {
 	}
 
 	@RequestMapping("/data")
-	public Map<String, Object> getData(@RequestParam(value = "m", required = false, defaultValue = "i") String mode) {
+	public Map<String, Object> getData() {
 		Map<String, Object> data = new HashMap<>();
-		if ("i".equals(mode)) {
-			data.put("imageCount", imageService.getImageSourceSize());
-			data.put("imageNameMap", imageService.getImageNameMap());
+
+		data.put("imageCount", imageService.getImageSourceSize());
+		data.put("imageNameMap", imageService.getImageNameMap());
+		
+		List<Video> videoList = videoService.getVideoList(null, false, true, false);
+		Map<Integer, String> map = new HashMap<>();
+		int index = 0;
+		for (Video video : videoList) {
+			map.put(index++, video.getOpus());
 		}
-		else {
-			List<Video> videoList = videoService.getVideoList(null, false, true, false);
-			Map<Integer, String> map = new HashMap<>();
-			int index = 0;
-			for (Video video : videoList) {
-				map.put(index++, video.getOpus());
-			}
-			data.put("imageCount", videoList.size());
-			data.put("imageNameMap", map);
-		}
+		data.put("coverCount", videoList.size());
+		data.put("coverNameMap", map);
+
 		return data;
 	}
 

@@ -43,6 +43,11 @@ body {
 	height: 27px;
 	min-height: 27px;
 }
+.form-group .input-group-addon{
+    border: 0;
+    background-color: transparent;
+    padding: 6px 6px;
+}
 .control-label {
 	text-transform: capitalize;
 }
@@ -92,8 +97,7 @@ $(document).ready(function() {
 			showTimer(playSec);
 		}
 	},	1000);
-	
-	fnSetOption();
+
 	$(".form-control, .checkbox-inline, .radio-inline").on("change", function() {
 		var changeOptionText;
 		if (this.nodeName === 'LABEL')
@@ -103,12 +107,25 @@ $(document).ready(function() {
 				changeOptionText = $(this.control).attr("id") + " = " + $(this.control).is(":checked");
 			else
 				changeOptionText = "unknown change";
-		else
+		else {
 			changeOptionText = $(this).attr("id") + " = " + $(this).val();
-
+			var id = $(this).attr("id");
+			var val = $(this).val();
+			$("#" + id + "-label").html(val);
+		}
+		
 		showSnackbar(changeOptionText, 1000);
 		fnSetOption();
 	});
+/*
+	$("input[type='range']").on("change", function() {
+		var id = $(this).attr("id");
+		var val = $(this).val();
+		$("#" + id + "-label").html(val);
+	});
+*/	
+	shuffleOnce();
+	fnSetOption();
 });
 
 function fnPrevImage() {
@@ -191,6 +208,11 @@ function shuffleOnce() {
 	$("#wrapAround").prop("checked", getRandomBoolean());
 	$("#playInterval").val(getRandomInteger(5, 20));
 	$($("input:radio[name='playMode']")[getRandomInteger(0, 1)]).prop("checked", true);
+
+	$(   "#resizeDuration-label").html($(   "#resizeDuration").val());
+	$(     "#fadeDuration-label").html($(     "#fadeDuration").val());
+	$("#imageFadeDuration-label").html($("#imageFadeDuration").val());
+	$(     "#playInterval-label").html($(     "#playInterval").val());
 }
 function shuffle() {
 	var count = 0;
@@ -241,19 +263,28 @@ function shuffle() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="resizeDuration">resizeDuration:</label>
 				<div class="col-xs-6">
-					<input type="range" class="form-control" id="resizeDuration" value="700" min="100" max="1000" step="100"/>
+					<div class="input-group">
+						<input type="range" class="form-control" id="resizeDuration" value="700" min="100" max="1000" step="100"/>
+						<span id="resizeDuration-label" class="input-group-addon">700</span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="fadeDuration">fadeDuration:</label>
 				<div class="col-xs-6"> 
-					<input type="range" class="form-control" id="fadeDuration" value="600" min="100" max="1000" step="100"/>
+					<div class="input-group">
+						<input type="range" class="form-control" id="fadeDuration" value="600" min="100" max="1000" step="100"/>
+						<span id="fadeDuration-label" class="input-group-addon">600</span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="imageFadeDuration">imageFadeDuration:</label>
 				<div class="col-xs-6"> 
-					<input type="range" class="form-control" id="imageFadeDuration" value="700" min="100" max="1000" step="100"/>
+					<div class="input-group">
+						<input type="range" class="form-control" id="imageFadeDuration" value="700" min="100" max="1000" step="100"/>
+						<span id="imageFadeDuration-label" class="input-group-addon">700</span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -271,13 +302,19 @@ function shuffle() {
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="playInterval">playInterval:</label>
 				<div class="col-xs-6"> 
-					<input type="range" class="form-control" id="playInterval" value="10" min="5" max="20" step="1"/>
+					<div class="input-group">
+						<input type="range" class="form-control" id="playInterval" value="10" min="5" max="20" step="1"/>
+						<span id="playInterval-label" class="input-group-addon">10</span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-6" for="positionFromTop">positionFromTop:</label>
 				<div class="col-xs-6"> 
-					<input type="range" class="form-control" id="positionFromTop" value="30" min="30" max="100" step="10"/>
+					<div class="input-group">
+						<input type="range" class="form-control" id="positionFromTop" value="30" min="30" max="100" step="10"/>
+						<span id="positionFromTop-label" class="input-group-addon">30</span>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">

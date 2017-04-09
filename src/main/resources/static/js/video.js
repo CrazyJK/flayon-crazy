@@ -42,12 +42,13 @@ function resizeDivHeight() {
 function setBackgroundImage(imgIdx) {
 	if (imgIdx)
 		currBGImageNo = imgIdx;
-	else 
-		currBGImageNo = getRandomInteger(0, bgImageCount-1);
-	
+	else {
+		currBGImageNo = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, bgImageCount-1)));
+	}
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
 //	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
 	$("body").css("background-image", "url(" + currBGImageUrl + ")");
+	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
 }
 /**
  * toggle studio div

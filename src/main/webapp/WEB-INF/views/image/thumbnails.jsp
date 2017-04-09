@@ -73,7 +73,6 @@ var imageSizePerPage = 50;
 var displaycount = 0;
 var mode;
 var url = '${PATH}/image/data.json';
-var param;
 var scrollBottomChecker;
 
 $(document).ready(function() {
@@ -82,7 +81,7 @@ $(document).ready(function() {
 	$("input:radio[name='mode'][value='" + mode + "']").attr("checked", true).parent().addClass("active");
 	
 	$("input:radio[name='mode']").on('change', fnToggleBtnMode);
-	fnToggleBtnMode();
+	requestData();
 
 	$("#content_div").scroll(function() {
 		if (fnIsScrollBottom())
@@ -116,22 +115,16 @@ function fnToggleBtnMode() {
 	console.log("fnToggleBtnMode mode", mode);
 	
 	if (mode === 'cover') {
-		param =  "m=c";
 		storageItemIndexName  = THUMBNAMILS_COVER_INDEX;
 		storageItemWidthName  = THUMBNAMILS_COVER_WIDTH;
 		storageItemHeightName = THUMBNAMILS_COVER_HEIGHT;
-		if (coverCount == 0) 
-			requestData();
 		itemCount = coverCount;
 		itemMap   = coverMap;
 	}
 	else {
-		param = "";
 		storageItemIndexName  = THUMBNAMILS_IMAGE_INDEX;
 		storageItemWidthName  = THUMBNAMILS_IMAGE_WIDTH;
 		storageItemHeightName = THUMBNAMILS_IMAGE_HEIGHT;
-		if (imageCount == 0)
-			requestData();
 		itemCount = imageCount;
 		itemMap   = imageMap;
 	}
@@ -163,20 +156,14 @@ function requestData() {
 	$.ajax({
 		type: 'GET',
 		url: url,
-		data: param,
 		async: false
 	}).done(function(data, textStatus, jqXHR) {
-		itemCount = data['imageCount'];
-		itemMap   = data['imageNameMap'];
-		if (mode === 'cover') {
-			coverCount = itemCount;
-			coverMap   = itemMap;
-		}
-		else {
-			imageCount = itemCount;
-			imageMap   = itemMap;
-		}
+		coverCount = data['coverCount'];
+		coverMap   = data['coverNameMap'];
+		imageCount = data['imageCount'];
+		imageMap   = data['imageNameMap'];
 		console.log("requestData done");
+		fnToggleBtnMode();
 	});
 	console.log("requestData end");
 }

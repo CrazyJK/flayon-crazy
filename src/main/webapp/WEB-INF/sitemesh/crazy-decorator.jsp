@@ -206,7 +206,7 @@ function actionFrame(reqUrl, reqData, method, msg, interval) {
  * loading layer control
  */
 function loading(show, msg, interval, detail) {
-	console.log("loading", show, msg, interval, detail);
+	// console.log("loading", show, msg, interval, detail);
 	if (show) {
 		$("#loading").css("display", "table");
 		tSec = 1;
@@ -231,7 +231,7 @@ function loading(show, msg, interval, detail) {
 	}
 
 	function loadingTimer(start) {
-		console.log("loadingTimer", start, tSec);
+		//console.log("loadingTimer", start, tSec);
 		if (start) {
 			$("#loading-timer").html(tSec++);
 		}
