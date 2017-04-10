@@ -10,12 +10,9 @@
 	border: 1px solid #ccc;
 	background-color: #d9edf7; 
 }
-.ui-accordion .ui-accordion-content {
-    padding: 3px;
-}
 </style>
 <script type="text/javascript">
-var effectTime = 500;
+var effectTime = 300;
 $(document).ready(function() {
 	
 	$("button").on('click', function() {
@@ -79,10 +76,23 @@ $(document).ready(function() {
 
 	});
 	
-	$(".col-sm-5 textarea").height(500);
+	$(window).bind("resize", resize);
+	resize();
+	
 	$("a[href='#collapseSeed']").click();
 
 });
+
+function resize() {
+	if ($(window).width() < 992) {
+		$("textarea").height(100);
+		$(".panel-heading > h3").css({fontSize: "12px", margin: 0});
+	}
+	else {
+		$("textarea").height(500);
+		$(".panel-heading > h3").css({fontSize: "24px", margin: "20px 0 10px"});
+	}
+}
 
 function printDebug(msg) {
 	$(".debug").html(msg).fadeIn(500);
@@ -99,7 +109,7 @@ function printDebug(msg) {
 	<div class="text-info debug text-right" style="height:22px;">Ready</div>
 
 	<form class="row">
-		<div class="col-sm-5">
+		<div class="col-md-5">
 			<div class="panel panel-default">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Plain text</h3>
@@ -109,7 +119,7 @@ function printDebug(msg) {
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-2 text-center" style="padding:3px;">
+		<div class="col-md-2 text-center" style="padding:3px;">
 			<div class="panel panel-default">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Method</h3>
@@ -143,7 +153,7 @@ function printDebug(msg) {
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-5">
+		<div class="col-md-5">
 			<div class="panel panel-default">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Cipher text</h3>
