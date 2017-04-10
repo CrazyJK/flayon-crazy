@@ -10,12 +10,44 @@
 	border: 1px solid #ccc;
 	background-color: #d9edf7; 
 }
+.ui-effects-transfer-danger { 
+	border: 1px solid red;
+	background-color: #f2dede; 
+}
+#accordion button {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+}
+
+@media (min-width: 992px) {
+	textarea.form-control {height: 500px;}
+	.panel-heading {padding: 10px 15px;}
+	.panel-heading > h3 {font-size: 24px; margin: 20px 0 10px;}
+	#accordion {padding: 0;}
+	#accordion .panel-heading {padding: 10px 15px;}
+	.col-md-2 {padding: 0 3px;}
+	.col-md-2 > .panel.panel-default {width: 100%; margin: 0 0 20px;}
+	.panel-method > .panel-heading {display: block;}
+	.panel-method > .panel-body {padding: 15px 0;}
+}
+@media (max-width: 991px) {
+	textarea.form-control {height: 100px;}
+	.panel-heading {padding: 5px 15px;}
+	.panel-heading > h3 {font-size: 16px; margin: 0;}
+	#accordion {padding: 0 15px;}
+	#accordion .panel-heading {padding: 3px 5px;}
+	.col-md-2 {padding: 0 15px;}
+	.col-md-2 > .panel.panel-default {width: 50%; margin: 20px auto;}
+	.panel-method > .panel-heading {display: none;}
+	.panel-method > .panel-body {padding: 5px 0;}
+}
 </style>
 <script type="text/javascript">
 var effectTime = 300;
 $(document).ready(function() {
 	
-	$("button").on('click', function() {
+	$(".crypto-btn").on('click', function() {
 		var id          = $(this).attr("id");
 		var method      = $(this).attr("data-method");
 		var direction   = $(this).attr("data-direction");
@@ -25,7 +57,7 @@ $(document).ready(function() {
 		var text        = $.trim($(fromObject).val());
 
 		if ($.trim(text) === '') {
-			$(fromObject).effect("pulsate", {}, 300);
+			$(fromObject).effect("highlight", {color: "#f2dede"}, 500);
 			return;
 		}
 
@@ -43,7 +75,7 @@ $(document).ready(function() {
 			}).done(function(data, textStatus, jqXHR) {
 				console.log("done", textStatus);
 				if (jqXHR.getResponseHeader('error') == 'true') {
-					$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer" }, effectTime, function() {
+					$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
 						var errorMessge = jqXHR.getResponseHeader('error.message');
 						var errorCause  = jqXHR.getResponseHeader('error.cause');
 						printDebug('<strong class="text-danger">' + errorMessge + '</strong>&nbsp;' + errorCause);
@@ -61,7 +93,7 @@ $(document).ready(function() {
 					});
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown) {
-				$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer" }, effectTime, function() {
+				$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
 					errorHtml = $.parseHTML(jqXHR.responseText);
 					parsed = $('<div>').append(errorHtml);
 					context = parsed.find("body > div.container").html();
@@ -76,23 +108,9 @@ $(document).ready(function() {
 
 	});
 	
-	$(window).bind("resize", resize);
-	resize();
-	
-	$("a[href='#collapseSeed']").click();
+	$("button[href='#collapseSeed']").click();
 
 });
-
-function resize() {
-	if ($(window).width() < 992) {
-		$("textarea").height(100);
-		$(".panel-heading > h3").css({fontSize: "12px", margin: 0});
-	}
-	else {
-		$("textarea").height(500);
-		$(".panel-heading > h3").css({fontSize: "24px", margin: "20px 0 10px"});
-	}
-}
 
 function printDebug(msg) {
 	$(".debug").html(msg).fadeIn(500);
@@ -106,8 +124,6 @@ function printDebug(msg) {
 		<h1>Cryptography</h1>
  	</div>
 
-	<div class="text-info debug text-right" style="height:22px;">Ready</div>
-
 	<form class="row">
 		<div class="col-md-5">
 			<div class="panel panel-default">
@@ -119,32 +135,31 @@ function printDebug(msg) {
 				</div>
 			</div>
 		</div>
-		<div class="col-md-2 text-center" style="padding:3px;">
-			<div class="panel panel-default">
+		<div class="col-md-2 text-center">
+			<div class="panel panel-default panel-method">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Method</h3>
 				</div>
-				<div class="panel-body" style="padding:15px 0; margin:0 3px;">
-					<div class="panel-group" id="accordion">
+				<div class="panel-body" style="margin:0 3px;">
+					<div class="panel-group" id="accordion" style="margin:0;">
 						<c:forEach items="${cryptoMethods}" var="cryptoMethod" varStatus="x">
 							<div class="panel panel-default">
 	      						<div class="panel-heading">
 	        						<h4 class="panel-title">
-	          							<a data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</a>
+	          							<button data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</button>
 	        						</h4>
 	      						</div>
 	      						<div id="collapse${cryptoMethod.key}" class="panel-collapse collapse">
 	        						<div class="panel-body" style="padding:3px;">
 										<div class="btn-group-vertical btn-group-sm btn-block" data-toggle="buttons">
 											<c:forEach items="${cryptoMethod.value}" var="crypto" varStatus="y">
-												<button class="btn btn-info nowrap" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
+												<a class="btn btn-info nowrap crypto-btn" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
 													<span class="glyphicon glyphicon-chevron-left"  style="float:left;  ${crypto.value eq 'decrypt' ? '' : 'visibility: hidden;'}"></span>
 													<span class="glyphicon glyphicon-chevron-right" style="float:right; ${crypto.value eq 'encrypt' ? '' : 'visibility: hidden;'}"></span>
 													${fn:replace(crypto.key, 'crypt', '')}
-												</button>
+												</a>
 											</c:forEach>			
 										</div>
-								<%-- ${x.last ? '' : '<hr>'} --%>
 									</div>
 	    						</div>
 							</div>
@@ -164,6 +179,8 @@ function printDebug(msg) {
 			</div>
 		</div>
 	</form>
+
+	<div class="debug alert text-info text-center" style="border-radius:4px; padding:5px 15px;">Ready</div>
 
 </div>
 

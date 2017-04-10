@@ -122,7 +122,7 @@ window.onload = function() {
 		</div>
 
 		<table class="table table-striped table-bordered table-condensed">
-			<thead>
+			<thead style="background-color: rgba(255,165,0,.5);">
 				<tr>
 					<th>Property name</th>
 					<th>Property value</th>

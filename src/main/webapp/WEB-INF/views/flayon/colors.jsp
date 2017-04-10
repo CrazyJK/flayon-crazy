@@ -6,6 +6,10 @@
 <meta charset="UTF-8"></meta>
 <title>Standard colors</title>
 <style type="text/css">
+#colors {
+	padding: 10px;
+	text-align: center;
+}
 .colordvcon {
 	display: inline-block;
 	margin: 3px 1px;
