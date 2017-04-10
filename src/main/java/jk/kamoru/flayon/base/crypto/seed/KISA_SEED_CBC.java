@@ -1,7 +1,4 @@
 package jk.kamoru.flayon.base.crypto.seed;
-import java.io.UnsupportedEncodingException;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
 @file KISA_SEED_CBC.java
@@ -160,7 +157,7 @@ public class KISA_SEED_CBC {
 		0xc9d1d819, 0x4c404c0c, 0x83838003, 0x8f838c0f, 0xcec2cc0e, 0x0b33383b, 0x4a42480a, 0x87b3b437
 	};
 
-	private static final int BLOCK_SIZE_SEED = 16;
+	public static final int BLOCK_SIZE_SEED = 16;
 	private static final int BLOCK_SIZE_SEED_INT = 4;
 
 	private static final byte GetB0(int A) { return (byte)(A & 0x0ff); }
@@ -188,8 +185,6 @@ public class KISA_SEED_CBC {
 		LR[L0] ^= T[0]; LR[L1] ^= T[1];
 	}
 
-
-
 	private static final int EndianChange(int dwS) { return ( (/*ROTL(dwS,8)*/(((dwS) << (8)) | (((dwS) >> (32-(8)))&0x000000ff)) & 0x00ff00ff) | (/*ROTL(dwS,24)*/(((dwS) << (24)) | (((dwS) >> (32-(24)))&0x00ffffff)) & 0xff00ff00) ); }
 
 	/************************ Constants for Key schedule **************************/
@@ -210,9 +205,6 @@ public class KISA_SEED_CBC {
 	private static final int KC14 = 0xde6e678d;
 	private static final int KC15 = 0xbcdccf1b;
 
-	
-	
-	
 	private static final int ABCD_A = 0;
 	private static final int ABCD_B = 1;
 	private static final int ABCD_C = 2;
@@ -298,7 +290,6 @@ public class KISA_SEED_CBC {
 		out[out_offset+1] = LR[LR_R1];
 		out[out_offset+2] = LR[LR_L0];
 		out[out_offset+3] = LR[LR_L1];
-
 	}
 
 	private static void KISA_SEED_Decrypt_Block_forCBC( int[] in, int in_offset, int[] out, int out_offset, KISA_SEED_KEY ks ) {
@@ -349,9 +340,7 @@ public class KISA_SEED_CBC {
 		out[out_offset+1] = LR[LR_R1];
 		out[out_offset+2] = LR[LR_L0];
 		out[out_offset+3] = LR[LR_L1];
-
 	}
-
 
 	public static int[] chartoint32_for_SEED_CBC(byte[] in, int inLen) {
 		int[] data;
@@ -368,11 +357,9 @@ public class KISA_SEED_CBC {
 		{
 			Common.byte_to_int(data, i, in, i*4, ENDIAN);
 		}
-
 		return data;
 	}
 	
-
 	public static byte[] int32tochar_for_SEED_CBC(int in[], int inLen) {
 		byte[] data;
 		int i;
@@ -389,10 +376,8 @@ public class KISA_SEED_CBC {
 				data[i] = (byte)(in[i/4] >> ((3-(i%4))*8));
 			}			
 		}
-
 		return data;
 	}
-
 
 	public static int SEED_CBC_init( KISA_SEED_INFO pInfo, KISA_ENC_DEC enc, byte[] pbszUserKey, byte[] pbszIV ) {
 		int ABCD[] = new int[4];			// Iuput/output values at each rounds(각 라운드 입/출력)
@@ -449,10 +434,7 @@ public class KISA_SEED_CBC {
 				SS2[GetB2(T[1])&0x0ff] ^ SS3[GetB3(T[1])&0x0ff];
 
 		return 1;
-
-
 	}
-
 
 	public static int SEED_CBC_Process( KISA_SEED_INFO pInfo, int[] in, int inLen, int[] out, int[] outLen ) {
 		int nCurrentCount = BLOCK_SIZE_SEED;		
@@ -467,31 +449,23 @@ public class KISA_SEED_CBC {
 				0 > inLen )
 			return 0;
 
-
 		if( KISA_ENC_DEC._KISA_ENCRYPT == pInfo.encrypt ) {
 			pdwXOR = pInfo.ivec;
 			in_offset = 0;
 			out_offset = 0;
 			pdwXOR_offset = 0;
-				
-
 			while( nCurrentCount <= inLen )
 			{
 				BLOCK_XOR_CBC( out, out_offset, in, in_offset, pdwXOR, pdwXOR_offset );
-
 				KISA_SEED_Encrypt_Block_forCBC( out, out_offset, out, out_offset, pInfo.seed_key );
-
 				pdwXOR = out;
 				pdwXOR_offset = out_offset;
-
 				nCurrentCount += BLOCK_SIZE_SEED;
 				in_offset += BLOCK_SIZE_SEED_INT;		
 				out_offset += BLOCK_SIZE_SEED_INT;		
 			}
-
 			outLen[0] = nCurrentCount - BLOCK_SIZE_SEED; 
 			pInfo.buffer_length = (inLen - outLen[0]);
-
 			Common.memcpy( pInfo.ivec, pdwXOR, pdwXOR_offset, BLOCK_SIZE_SEED );
 			Common.memcpy( pInfo.cbc_buffer, in, in_offset, pInfo.buffer_length );
 		}
@@ -500,91 +474,56 @@ public class KISA_SEED_CBC {
 			in_offset = 0;
 			out_offset = 0;
 			pdwXOR_offset = 0;
-
 			while( nCurrentCount <= inLen )			
 			{
 				KISA_SEED_Decrypt_Block_forCBC( in, in_offset, out, out_offset, pInfo.seed_key );
-
 				BLOCK_XOR_CBC( out, out_offset, out, out_offset, pdwXOR, pdwXOR_offset );
-
 				pdwXOR = in;
 				pdwXOR_offset = in_offset;
-
 				nCurrentCount += BLOCK_SIZE_SEED;
 				in_offset += BLOCK_SIZE_SEED_INT;		
 				out_offset += BLOCK_SIZE_SEED_INT;		
 			}
-
 			outLen[0] = nCurrentCount - BLOCK_SIZE_SEED;
-
- 
-
 			Common.memcpy( pInfo.ivec, pdwXOR, pdwXOR_offset, BLOCK_SIZE_SEED );		 	
 			Common.memcpy( pInfo.cbc_last_block, out, out_offset-BLOCK_SIZE_SEED_INT, BLOCK_SIZE_SEED );	
-
-			
 		}
-
 		return 1;
-
 	}
-
 
 	public static int SEED_CBC_Close( KISA_SEED_INFO pInfo, int[] out, int out_offset, int[] outLen ) {
 		int nPaddngLeng;
 		int i;
-
 		outLen[0] = 0;
-
 		if( null == out )
 			return 0;
-
 		if( KISA_ENC_DEC._KISA_ENCRYPT == pInfo.encrypt ) {
 			nPaddngLeng = BLOCK_SIZE_SEED - pInfo.buffer_length;
-
 			for( i = pInfo.buffer_length; i<BLOCK_SIZE_SEED; i++ ) {
 				Common.set_byte_for_int(pInfo.cbc_buffer, i, (byte)nPaddngLeng, ENDIAN);
 			}
 			BLOCK_XOR_CBC( pInfo.cbc_buffer, 0, pInfo.cbc_buffer, 0, pInfo.ivec, 0 );
-
 			KISA_SEED_Encrypt_Block_forCBC( pInfo.cbc_buffer, 0, out, out_offset, pInfo.seed_key );
-
 			outLen[0] = BLOCK_SIZE_SEED;
-
 			return 1;
 		}
-		
-
 		else {
 			nPaddngLeng = Common.get_byte_for_int(pInfo.cbc_last_block, BLOCK_SIZE_SEED-1, ENDIAN);			
-	
-
 			if( nPaddngLeng > 0 && nPaddngLeng <= BLOCK_SIZE_SEED )   
 			{
 				for(i=nPaddngLeng; i>0; i--)
 				{
 					Common.set_byte_for_int(out, out_offset-i, (byte)0x00, ENDIAN);
 				}
-
 				outLen[0] = nPaddngLeng;
 			}
 			else
 				return 0;
-
-			
 		}
 		return 1;
-
-
 	}
-
-
-
 	
-	
-	
-	
-	public static byte[] SEED_CBC_Encrypt( byte[] pbszUserKey, byte[] pbszIV, byte[] message, int message_offset, int message_length ) {
+	public static byte[] SEED_CBC_Encrypt(byte[] pbszUserKey, byte[] pbszIV, byte[] message, int message_offset, int message_length) {
 		KISA_SEED_INFO info = new KISA_SEED_INFO();
 		int[] outbuf;
 		int[] data;
@@ -592,49 +531,29 @@ public class KISA_SEED_CBC {
 		int outlen;
 		int nRetOutLeng[] = new int[] { 0 };
 		int nPaddingLeng[] = new int[] { 0 };
-		
 		byte[] pbszPlainText = new byte[message_length];
 		System.arraycopy(message, message_offset, pbszPlainText, 0, message_length);
 		int nPlainTextLen = pbszPlainText.length;
-		
-
 		int nPlainTextPadding = BLOCK_SIZE_SEED - (nPlainTextLen % BLOCK_SIZE_SEED);
-		byte []newpbszPlainText = new byte[nPlainTextLen+nPlainTextPadding];
+		byte[] newpbszPlainText = new byte[nPlainTextLen + nPlainTextPadding];
 		Common.arraycopy(newpbszPlainText, pbszPlainText, nPlainTextLen);
-		
 		byte[] pbszCipherText = new byte[newpbszPlainText.length];
-		
-
-		SEED_CBC_init( info, KISA_ENC_DEC.KISA_ENCRYPT, pbszUserKey, pbszIV );
-
-		outlen = ((newpbszPlainText.length/BLOCK_SIZE_SEED) ) * BLOCK_SIZE_SEED_INT ;
+		SEED_CBC_init(info, KISA_ENC_DEC.KISA_ENCRYPT, pbszUserKey, pbszIV);
+		outlen = ((newpbszPlainText.length / BLOCK_SIZE_SEED)) * BLOCK_SIZE_SEED_INT;
 		outbuf = new int[outlen];
 		data = chartoint32_for_SEED_CBC(newpbszPlainText, nPlainTextLen);
-
-		SEED_CBC_Process( info, data, nPlainTextLen, outbuf, nRetOutLeng );
-		SEED_CBC_Close( info, outbuf, (nRetOutLeng[0]/4), nPaddingLeng );
-
-		cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0]+nPaddingLeng[0]);
-		Common.arraycopy(pbszCipherText, cdata, nRetOutLeng[0]+nPaddingLeng[0]);
-
+		SEED_CBC_Process(info, data, nPlainTextLen, outbuf, nRetOutLeng);
+		SEED_CBC_Close(info, outbuf, (nRetOutLeng[0] / 4), nPaddingLeng);
+		cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0] + nPaddingLeng[0]);
+		Common.arraycopy(pbszCipherText, cdata, nRetOutLeng[0] + nPaddingLeng[0]);
 		data = null;
 		cdata = null;
 		outbuf = null;
-
 		return pbszCipherText;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-
-	public static byte[] SEED_CBC_Decrypt( byte[] pbszUserKey, byte[] pbszIV, byte[] message, int message_offset, int message_length ) {
+	public static byte[] SEED_CBC_Decrypt(byte[] pbszUserKey, byte[] pbszIV, byte[] message, int message_offset,
+			int message_length) {
 		KISA_SEED_INFO info = new KISA_SEED_INFO();
 		int[] outbuf;
 		int[] data;
@@ -642,72 +561,37 @@ public class KISA_SEED_CBC {
 		int outlen;
 		int nRetOutLeng[] = new int[] { 0 };
 		int nPaddingLeng[] = new int[] { 0 };
-		
-		
-		
 		byte[] pbszCipherText = new byte[message_length];
 		System.arraycopy(message, message_offset, pbszCipherText, 0, message_length);
 		int nCipherTextLen = pbszCipherText.length;
-		
-		if( (nCipherTextLen%BLOCK_SIZE_SEED) != 0 )
-		{
+		if ((nCipherTextLen % BLOCK_SIZE_SEED) != 0) {
 			byte result[] = null;
 			return result;
 		}
-		
-
-		byte []newpbszCipherText = new byte[nCipherTextLen];
-		Common.arraycopy(newpbszCipherText, pbszCipherText, nCipherTextLen);		
-
+		byte[] newpbszCipherText = new byte[nCipherTextLen];
+		Common.arraycopy(newpbszCipherText, pbszCipherText, nCipherTextLen);
 		nCipherTextLen = newpbszCipherText.length;
-
-
-		SEED_CBC_init( info, KISA_ENC_DEC.KISA_DECRYPT, pbszUserKey, pbszIV );
-
-		outlen = ((nCipherTextLen/16)) *4 ;
+		SEED_CBC_init(info, KISA_ENC_DEC.KISA_DECRYPT, pbszUserKey, pbszIV);
+		outlen = ((nCipherTextLen / 16)) * 4;
 		outbuf = new int[outlen];
 		data = chartoint32_for_SEED_CBC(newpbszCipherText, nCipherTextLen);
-
-		SEED_CBC_Process( info, data, nCipherTextLen, outbuf, nRetOutLeng );
-		
-		
-		if( SEED_CBC_Close( info, outbuf, (nRetOutLeng[0]), nPaddingLeng ) == 1 )
-		{
-			cdata = int32tochar_for_SEED_CBC( outbuf, nRetOutLeng[0]-nPaddingLeng[0] );
-			
-			byte[] pbszPlainText = new byte[nRetOutLeng[0]-nPaddingLeng[0]];
-						
-			Common.arraycopy(pbszPlainText, cdata, nRetOutLeng[0]-nPaddingLeng[0]);
-			
-			int pdmessage_length = nRetOutLeng[0]-nPaddingLeng[0];
+		SEED_CBC_Process(info, data, nCipherTextLen, outbuf, nRetOutLeng);
+		if (SEED_CBC_Close(info, outbuf, (nRetOutLeng[0]), nPaddingLeng) == 1) {
+			cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0] - nPaddingLeng[0]);
+			byte[] pbszPlainText = new byte[nRetOutLeng[0] - nPaddingLeng[0]];
+			Common.arraycopy(pbszPlainText, cdata, nRetOutLeng[0] - nPaddingLeng[0]);
+			int pdmessage_length = nRetOutLeng[0] - nPaddingLeng[0];
 			byte[] result = new byte[pdmessage_length];
 			System.arraycopy(pbszPlainText, 0, result, 0, pdmessage_length);
-			
 			data = null;
 			cdata = null;
 			outbuf = null;
-
 			return result;
-			
-		}
-		else
-		{
+		} else {
 			byte result[] = null;
 			return result;
 		}
-
-
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
-
 
 	public static final class KISA_ENC_DEC {
 		public static final int _KISA_DECRYPT = 0;
@@ -752,14 +636,8 @@ public class KISA_SEED_CBC {
 			cbc_last_block[0] = cbc_last_block[1] = cbc_last_block[2] = cbc_last_block[3] = 0;
 			last_block_flag = 0;
 		}
-
-
 	}
 	
-	
-	
-	
-
 	public static class Common {
 		
 		public static final int BIG_ENDIAN = 0;
@@ -922,7 +800,6 @@ public class KISA_SEED_CBC {
 			return i;
 		}
 		
-		
 		//1블럭(128비트 XOR)
 		public static void BLOCK_XOR_PROPOSAL(int[] OUT_VALUE, int out_value_offset, int[] IN_VALUE1, int in_value1_offset, int[] IN_VALUE2, int in_value2_offset) {
 			OUT_VALUE[out_value_offset+0] = (in_value1_offset<IN_VALUE1.length?IN_VALUE1[in_value1_offset+0]:0) ^ (in_value2_offset<IN_VALUE2.length?IN_VALUE2[in_value2_offset+0]:0);
@@ -930,20 +807,14 @@ public class KISA_SEED_CBC {
 			OUT_VALUE[out_value_offset+2] = (in_value1_offset+2<IN_VALUE1.length?IN_VALUE1[in_value1_offset+2]:0) ^ (in_value2_offset+2<IN_VALUE2.length?IN_VALUE2[in_value2_offset+2]:0);
 			OUT_VALUE[out_value_offset+3] = (in_value1_offset+3<IN_VALUE1.length?IN_VALUE1[in_value1_offset+3]:0) ^ (in_value2_offset+3<IN_VALUE2.length?IN_VALUE2[in_value2_offset+3]:0);
 		}
-		
-		
 	}
-	
-	
 
 	public static int SeedRoundKey( KISA_SEED_INFO pInfo, KISA_ENC_DEC enc, byte[] pbszUserKey, byte[] pbszIV ) {
 		int ABCD[] = new int[4];			// Iuput/output values at each rounds(각 라운드 입/출력)
 		int T[] = new int[2];				// Temporary variable
 		int K[];
 
-		if( null == pInfo ||
-				null == pbszUserKey ||
-				null == pbszIV )
+		if( null == pInfo || null == pbszUserKey || null == pbszIV )
 			return 0;
 
 		K = pInfo.seed_key.key_data;										// Pointer of round keys
@@ -991,16 +862,95 @@ public class KISA_SEED_CBC {
 				SS2[GetB2(T[1])&0x0ff] ^ SS3[GetB3(T[1])&0x0ff];
 
 		return 1;
-
-
 	}
 	
-	
-	
-	
+	public static byte[] encrypt(byte[] key, byte[] iv, byte[] message) {
+	    KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_CBC_init(info, KISA_ENC_DEC.KISA_ENCRYPT, key, iv);
+
+		int[] data;
+		byte[] cdata;
+		int nRetOutLeng[] = new int[] { 0 };
+		int nPaddingLeng[] = new int[] { 0 };
+		int j;
+		int nPlainTextPadding = BLOCK_SIZE_SEED - (message.length % BLOCK_SIZE_SEED);
+		byte[] newpbszPlainText = new byte[message.length + nPlainTextPadding];
+		Common.arraycopy(newpbszPlainText, message, message.length);		
+		byte[] pbszCipherText = new byte[newpbszPlainText.length];			
+		int process_blockLeng = BLOCK_SIZE_SEED * 2;	//한번에 처리할 BLOCK
+		int[] outbuf = new int[process_blockLeng/4];
+		for (j = 0; j < message.length - process_blockLeng;) {
+			System.arraycopy(message, j, newpbszPlainText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_CBC(newpbszPlainText, process_blockLeng);
+			SEED_CBC_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, pbszCipherText, j, nRetOutLeng[0]);
+			j += nRetOutLeng[0];
+		}
+		int remainleng = message.length % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(message, j, newpbszPlainText, 0, remainleng);
+		data = chartoint32_for_SEED_CBC(newpbszPlainText, remainleng);
+		SEED_CBC_Process( info, data, remainleng, outbuf, nRetOutLeng);
+		cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0]);
+		System.arraycopy(cdata, 0, pbszCipherText, j, nRetOutLeng[0]);
+		j += nRetOutLeng[0];
+		
+		SEED_CBC_Close(info, outbuf, 0, nPaddingLeng);
+		cdata = int32tochar_for_SEED_CBC(outbuf, nPaddingLeng[0]);
+		System.arraycopy(cdata, 0, pbszCipherText, j, nPaddingLeng[0]);		
+		return pbszCipherText;	
+	}
+
+	public static byte[] decrypt(byte[] key, byte[] iv, byte[] cipher) throws Exception {
+		byte[] message = new byte[cipher.length];
+		System.arraycopy(cipher, 0, message, 0, cipher.length);
+		int nCipherTextLen = message.length;
+		if ((nCipherTextLen % BLOCK_SIZE_SEED) != 0) {
+			throw new Exception("Decryption_FAIL!");
+		}
+		KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_CBC_init(info, KISA_ENC_DEC.KISA_DECRYPT, key, iv);
+		int process_blockLeng = BLOCK_SIZE_SEED * 2;
+		int[]          outbuf = new int[process_blockLeng / 4];
+		byte[]     cipherText = new byte[nCipherTextLen];
+		byte[]      plainText = new byte[nCipherTextLen];
+		int[]     nRetOutLeng = new int[] { 0 };
+		int[]    nPaddingLeng = new int[] { 0 };
+		int[]   data;
+		byte[] cdata;
+		int i;
+		for (i = 0; i < nCipherTextLen - process_blockLeng;) {
+			System.arraycopy(message, i, cipherText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_CBC(cipherText, process_blockLeng);
+			SEED_CBC_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, plainText, i, nRetOutLeng[0]);
+			i += nRetOutLeng[0];
+		}
+		int remainleng = nCipherTextLen % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(message, i, cipherText, 0, remainleng);
+		data = chartoint32_for_SEED_CBC(cipherText, remainleng);
+		SEED_CBC_Process(info, data, remainleng, outbuf, nRetOutLeng);
+		if (SEED_CBC_Close(info, outbuf, nRetOutLeng[0], nPaddingLeng) == 1) {
+			cdata = int32tochar_for_SEED_CBC(outbuf, remainleng - nPaddingLeng[0]);
+			System.arraycopy(cdata, 0, plainText, i, remainleng - nPaddingLeng[0]);
+			int resultLength = i + remainleng - nPaddingLeng[0];
+			byte[] result = new byte[resultLength];
+			System.arraycopy(plainText, 0, result, 0, resultLength);
+			return result;	
+		} else {
+			throw new Exception("DECRYPT FAIL!");
+		}
+	}
+
 	public static void main(String[] args) throws Exception
 	{
-
 
 		byte pbUserKey[] = {(byte)0x88, (byte)0xE3, (byte)0x4F, (byte)0x8F, (byte)0x08, (byte)0x17, (byte)0x79, (byte)0xF1, 
 							(byte)0xE9, (byte)0xF3, (byte)0x94, (byte)0x37, (byte)0x0A, (byte)0xD4, (byte)0x05, (byte)0x89};
@@ -1015,9 +965,12 @@ public class KISA_SEED_CBC {
 		byte pbData1[]   = {(byte)0x00, (byte)0x01};
 		byte pbData2[]   = {(byte)0xD7, (byte)0x6D, (byte)0x0D, (byte)0x18, (byte)0x32, (byte)0x7E, (byte)0xC5, (byte)0x62,
 							(byte)0xB1, (byte)0x5E, (byte)0x6B, (byte)0xC3, (byte)0x65, (byte)0xAC, (byte)0x0C, (byte)0x0F};
-		byte pbData3[]   = {(byte)0x00, (byte)0x01, (byte)0x02, (byte)0x03, (byte)0x04, (byte)0x05, (byte)0x06, (byte)0x07,
-							(byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, 
-							(byte)0x00, (byte)0x01};
+//		byte pbData3[]   = {(byte)0x00, (byte)0x01, (byte)0x02, (byte)0x03, (byte)0x04, (byte)0x05, (byte)0x06, (byte)0x07,
+//							(byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, 
+//							(byte)0x00, (byte)0x01};
+		
+//		byte[] pbData3 = "lerisque vulputate.lerisque vulputate.lerisque vulputate.lerisque vulputate.".getBytes(); 
+		byte[] pbData3 = "lerisque vulputate.lerisque vulputate.".getBytes(); 
 		
 	    int  PLAINTEXT_LENGTH = 14;
 	    int CIPHERTEXT_LENGTH = 16;		
@@ -1058,22 +1011,22 @@ public class KISA_SEED_CBC {
 	    System.out.println(" Plaintext(SEED_CBC_Decrypt)\t: " + toHex(Plain3));
 	    System.out.println();
 	    
-		String plain = "0123456789 가나다라90- 핸디소프트";
-		byte[] pbData4 = plain.getBytes("UTF-8");
-	    byte[] Cipher4 = SEED_CBC_Encrypt(pbUserKey, bszIV, pbData4, 0, pbData4.length);
-	    String cipherByBase64 = new String(Base64.encodeBase64(Cipher4));
-		System.out.println("    Plain                       : " + plain);
-		System.out.println("    Plain hex                   : " + toHex(pbData4));
-		System.out.println("   Cipher hex                   : " + toHex(Cipher4));
-		System.out.println("   Cipher Base64                : " + cipherByBase64);
-
-		byte[] bytes = cipherByBase64.getBytes();
-		byte[] decodeBase64 = Base64.decodeBase64(bytes);
-		byte[] Plain4  = SEED_CBC_Decrypt(pbUserKey, bszIV, decodeBase64, 0, decodeBase64.length);
-		String decryptText = new String(Plain4, "UTF-8");
-	    System.out.println("decrypted hex                   : " + toHex(Plain4));
-	    System.out.println("decrypted text                  : " + decryptText);
-	    System.out.println();
+//		String plain = "0123456789 가나다라90- 핸디소프트";
+//		byte[] pbData4 = plain.getBytes("UTF-8");
+//	    byte[] Cipher4 = SEED_CBC_Encrypt(pbUserKey, bszIV, pbData4, 0, pbData4.length);
+//	    String cipherByBase64 = new String(Base64.encodeBase64(Cipher4));
+//		System.out.println("    Plain                       : " + plain);
+//		System.out.println("    Plain hex                   : " + toHex(pbData4));
+//		System.out.println("   Cipher hex                   : " + toHex(Cipher4));
+//		System.out.println("   Cipher Base64                : " + cipherByBase64);
+//
+//		byte[] bytes = cipherByBase64.getBytes();
+//		byte[] decodeBase64 = Base64.decodeBase64(bytes);
+//		byte[] Plain4  = SEED_CBC_Decrypt(pbUserKey, bszIV, decodeBase64, 0, decodeBase64.length);
+//		String decryptText = new String(Plain4, "UTF-8");
+//	    System.out.println("decrypted hex                   : " + toHex(Plain4));
+//	    System.out.println("decrypted text                  : " + decryptText);
+//	    System.out.println();
 
 	    
 
@@ -1527,8 +1480,9 @@ public class KISA_SEED_CBC {
 	     * 네번째 t.v
 	     */    
 	    
-	    PLAINTEXT_LENGTH = 18;
+	    PLAINTEXT_LENGTH = pbData3.length;
 	    
+
 
 		nPlainTextPadding = BLOCK_SIZE_SEED - (PLAINTEXT_LENGTH % BLOCK_SIZE_SEED);
 		newpbszPlainText = new byte[PLAINTEXT_LENGTH+nPlainTextPadding];
@@ -1536,7 +1490,8 @@ public class KISA_SEED_CBC {
 		
 		
 		pbszCipherText = new byte[newpbszPlainText.length];			
-		
+
+		System.out.println(" plaintext(SEED_CBC_Encrypt 3)\t: " + toHex(newpbszPlainText));
 
 		SEED_CBC_init( info, KISA_ENC_DEC.KISA_ENCRYPT, pbUserKey, bszIV );
 		
@@ -1576,30 +1531,14 @@ public class KISA_SEED_CBC {
 		cdata = int32tochar_for_SEED_CBC(outbuf, nPaddingLeng[0]);		
 		System.arraycopy(cdata, 0, pbszCipherText, j, nPaddingLeng[0]);
 		
-
-		
-		
 	    
-	    System.out.print("\n\nIV\t\t\t\t: ");
-	    for (int i=0; i<16; i++)
-	    	System.out.print(Integer.toHexString(0xff&bszIV[i])+" ");
-	    System.out.print("\n");
-	    
-		System.out.print("Ciphertext(SEED_CBC_Encrypt)\t: ");
-	    for (int i=0; i<32; i++)
-	    	System.out.print(Integer.toHexString(0xff&pbszCipherText[i])+" ");
-	    System.out.print("\n");
-	    
-   
+		System.out.println("Ciphertext(SEED_CBC_Encrypt 3)\t: " + toHex(pbszCipherText));
 	    	    
+		
 		data = null;
 		cdata = null;
 		outbuf = null;
-		
-		
-		
-		
-		
+
 		/**
 		 * 복호화
 		 */
@@ -1607,10 +1546,9 @@ public class KISA_SEED_CBC {
 	    // 복호화
 	    
 	    info = new KISA_SEED_INFO();
-	    CIPHERTEXT_LENGTH = 32;
+	    CIPHERTEXT_LENGTH = pbszCipherText.length;
 	    
 	    pbszCipherText_offset = 0;
-    
 	    
 	    message = new byte[CIPHERTEXT_LENGTH];
 		System.arraycopy(pbszCipherText, pbszCipherText_offset, message, 0, CIPHERTEXT_LENGTH);
@@ -1621,9 +1559,6 @@ public class KISA_SEED_CBC {
 		{
 			System.out.print("Decryption_FAIL! \n\n");	
 		}
-		
-
-
 
 		SEED_CBC_init( info, KISA_ENC_DEC.KISA_DECRYPT, pbUserKey, bszIV );
 		
@@ -1648,33 +1583,21 @@ public class KISA_SEED_CBC {
 		remainleng =  nCipherTextLen%process_blockLeng;
 		if(remainleng == 0)
 		{
-			remainleng = process_blockLeng;
+			remainleng = process_blockLeng;	
 		}
 		System.arraycopy(message, j, newpbszCipherText, 0, remainleng);
 		data = chartoint32_for_SEED_CBC(newpbszCipherText, remainleng);	
 		SEED_CBC_Process( info, data, remainleng, outbuf, nRetOutLeng );			
-		cdata = int32tochar_for_SEED_CBC(outbuf, nRetOutLeng[0]);			
-		System.arraycopy(cdata, 0, pbszPlainText, j, nRetOutLeng[0]);			
-		j += nRetOutLeng[0];
+	    System.out.println("Plaintext(SEED_CBC_Decrypt 3)\t: " + toHex(cdata));
 		
-
-		
-		if(SEED_CBC_Close( info, outbuf, (nRetOutLeng[0]), nPaddingLeng ) == 1)
+		if(SEED_CBC_Close( info, outbuf, nRetOutLeng[0], nPaddingLeng ) == 1)
 		{
 			cdata = int32tochar_for_SEED_CBC( outbuf, remainleng-nPaddingLeng[0] );
-			
-			byte[] newpbszPlainTexts = new byte[remainleng-nPaddingLeng[0]];
-						
-			Common.arraycopy(newpbszPlainTexts, cdata, remainleng-nPaddingLeng[0]);
-			
-			int message_length = remainleng-nPaddingLeng[0];
-			
-			result = new byte[message_length];
-			System.arraycopy(newpbszPlainTexts, 0, result, 0, message_length);
-			
-			data = null;
-			cdata = null;
-			outbuf = null;
+			System.arraycopy(cdata, 0, pbszPlainText, j, remainleng - nPaddingLeng[0]);
+			System.out.println("pbszPlainText(SEED_pt 3)\t: " + toHex(pbszPlainText));
+			int PLAINTEXT_LENGTH2 = j + remainleng - nPaddingLeng[0];
+			result = new byte[PLAINTEXT_LENGTH2];
+			System.arraycopy(pbszPlainText, 0, result, 0, PLAINTEXT_LENGTH2);
 
 		}
 		else
@@ -1682,50 +1605,10 @@ public class KISA_SEED_CBC {
 			System.out.print("DECRYPT FAIL! ");
 		}
 	    
-	
-	    
-	    
-	    System.out.print("Plaintext(SEED_CBC_Decrypt 1)\t: ");
-	    for (int i=0; i<PLAINTEXT_LENGTH; i++)
-	    	System.out.print(Integer.toHexString(0xff&result[i])+" ");
-	    System.out.print("\n\n");
-	    
-		data = null;
-		cdata = null;
-		outbuf = null;			
-		
-		
-		pbszCipherText = null;
-		result = null;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	    
-	    
-	    
-
-
+	    System.out.println("Plaintext(SEED_CBC_Decrypt 3)\t: " + toHex(result));
 	}	
 
-	private static String toHex(byte[] bytes) {
+	public static String toHex(byte[] bytes) {
 		String ret = "";
 	    for (int i=0; i<bytes.length; i++) {
 	    	String s = Integer.toHexString(0xff&bytes[i]);
@@ -1735,13 +1618,3 @@ public class KISA_SEED_CBC {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-

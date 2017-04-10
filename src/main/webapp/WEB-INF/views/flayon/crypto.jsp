@@ -10,12 +10,13 @@
 	border: 1px solid #ccc;
 	background-color: #d9edf7; 
 }
+.ui-accordion .ui-accordion-content {
+    padding: 3px;
+}
 </style>
 <script type="text/javascript">
 var effectTime = 500;
 $(document).ready(function() {
-	
-	$(".col-sm-5 textarea").height($(".col-sm-2 .panel-body").height() - 14);
 	
 	$("button").on('click', function() {
 		var id          = $(this).attr("id");
@@ -24,7 +25,7 @@ $(document).ready(function() {
 		var  fromObject = direction === 'encrypt' ? "#decrypt" : "#encrypt";
 		var    toObject = direction === 'encrypt' ? "#encrypt" : "#decrypt";
 		var debugObject = ".debug";
-		var text        = $(fromObject).val();
+		var text        = $.trim($(fromObject).val());
 
 		if ($.trim(text) === '') {
 			$(fromObject).effect("pulsate", {}, 300);
@@ -77,6 +78,10 @@ $(document).ready(function() {
 		});
 
 	});
+	
+	$(".col-sm-5 textarea").height(500);
+	$("a[href='#collapseSeed']").click();
+
 });
 
 function printDebug(msg) {
@@ -104,24 +109,37 @@ function printDebug(msg) {
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-2 text-center">
+		<div class="col-sm-2 text-center" style="padding:3px;">
 			<div class="panel panel-default">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Method</h3>
 				</div>
-				<div class="panel-body">
-					<c:forEach items="${cryptoMethods}" var="cryptoMethod" varStatus="x">
-						<div class="btn-group-vertical btn-group-sm btn-block" data-toggle="buttons">
-							<c:forEach items="${cryptoMethod.value}" var="crypto" varStatus="y">
-								<button class="btn btn-default nowrap" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
-									<span class="glyphicon glyphicon-chevron-left"  style="float:left;  ${crypto.value eq 'decrypt' ? '' : 'visibility: hidden;'}"></span>
-									<span class="glyphicon glyphicon-chevron-right" style="float:right; ${crypto.value eq 'encrypt' ? '' : 'visibility: hidden;'}"></span>
-									${fn:replace(crypto.key, 'crypt', '')}
-								</button>
-							</c:forEach>			
-						</div>
-						${x.last ? '' : '<hr>'}
-					</c:forEach>
+				<div class="panel-body" style="padding:15px 0; margin:0 3px;">
+					<div class="panel-group" id="accordion">
+						<c:forEach items="${cryptoMethods}" var="cryptoMethod" varStatus="x">
+							<div class="panel panel-default">
+	      						<div class="panel-heading">
+	        						<h4 class="panel-title">
+	          							<a data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</a>
+	        						</h4>
+	      						</div>
+	      						<div id="collapse${cryptoMethod.key}" class="panel-collapse collapse">
+	        						<div class="panel-body" style="padding:3px;">
+										<div class="btn-group-vertical btn-group-sm btn-block" data-toggle="buttons">
+											<c:forEach items="${cryptoMethod.value}" var="crypto" varStatus="y">
+												<button class="btn btn-info nowrap" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
+													<span class="glyphicon glyphicon-chevron-left"  style="float:left;  ${crypto.value eq 'decrypt' ? '' : 'visibility: hidden;'}"></span>
+													<span class="glyphicon glyphicon-chevron-right" style="float:right; ${crypto.value eq 'encrypt' ? '' : 'visibility: hidden;'}"></span>
+													${fn:replace(crypto.key, 'crypt', '')}
+												</button>
+											</c:forEach>			
+										</div>
+								<%-- ${x.last ? '' : '<hr>'} --%>
+									</div>
+	    						</div>
+							</div>
+						</c:forEach>
+					</div>
 				</div>
 			</div>
 		</div>

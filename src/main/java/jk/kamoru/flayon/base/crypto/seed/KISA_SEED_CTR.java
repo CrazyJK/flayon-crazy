@@ -1251,14 +1251,82 @@ public class KISA_SEED_CTR {
 		
 		pbszCipherText = null;
 		pbszPlainText = null;
-	}	
+	}
+
+	public static byte[] encrypt(byte[] key, byte[] ctr, byte[] message) {
+		KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_CTR_init(info, KISA_ENC_DEC.KISA_ENCRYPT, key, ctr);
+
+		int pdmessage_length = message.length;
+		int process_blockLeng = 32;
+		int[] outbuf = new int[process_blockLeng];
+		int[] data;
+		byte[] cdata;
+		int nRetOutLeng[] = new int[] { 0 };
+		int nPaddingLeng[] = new int[] { 0 };
+		byte[] pbszPlainText = new byte[process_blockLeng];
+		byte[] pbszCipherText = new byte[pdmessage_length];
+
+		int j;
+		for (j = 0; j < pdmessage_length - process_blockLeng;) {
+			System.arraycopy(message, j, pbszPlainText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_CTR(pbszPlainText, process_blockLeng);
+			SEED_CTR_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_CTR(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, pbszCipherText, j, nRetOutLeng[0]);
+			j += nRetOutLeng[0];
+		}
+		int remainleng = pdmessage_length % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(message, j, pbszPlainText, 0, remainleng);
+		data = chartoint32_for_SEED_CTR(pbszPlainText, remainleng);
+		SEED_CTR_Process(info, data, remainleng, outbuf, nRetOutLeng);
+		
+		SEED_CTR_Close(info, outbuf, nRetOutLeng[0], nPaddingLeng);
+		cdata = int32tochar_for_SEED_CTR(outbuf, nRetOutLeng[0] - nPaddingLeng[0]);
+		System.arraycopy(cdata, 0, pbszCipherText, j, nRetOutLeng[0] - nPaddingLeng[0]);
+		j += nRetOutLeng[0];
+		return pbszCipherText;
+	}
+
+	public static byte[] decrypt(byte[] key, byte[] ctr, byte[] pbszCipherText) {
+		KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_CTR_init(info, KISA_ENC_DEC.KISA_DECRYPT, key, ctr);
+
+		int pdmessage_length = pbszCipherText.length;
+		int process_blockLeng = 32;
+		int[] outbuf = new int[process_blockLeng];
+		byte[] cipherText = new byte[process_blockLeng];
+		byte[] pbszPlainText = new byte[pdmessage_length];
+		int nRetOutLeng[] = new int[] { 0 };
+		int nPaddingLeng[] = new int[] { 0 };
+		int[] data;
+		byte[] cdata;
+
+		int j;
+		for (j = 0; j < pdmessage_length - process_blockLeng;) {
+			System.arraycopy(pbszCipherText, j, cipherText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_CTR(cipherText, process_blockLeng);
+			SEED_CTR_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_CTR(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, pbszPlainText, j, nRetOutLeng[0]);
+			j += nRetOutLeng[0];
+		}
+		int remainleng = pdmessage_length % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(pbszCipherText, j, cipherText, 0, remainleng);
+		data = chartoint32_for_SEED_CTR(cipherText, remainleng);
+		SEED_CTR_Process(info, data, remainleng, outbuf, nRetOutLeng);
+
+		SEED_CTR_Close(info, outbuf, nRetOutLeng[0], nPaddingLeng);
+		cdata = int32tochar_for_SEED_CTR(outbuf, nRetOutLeng[0] - nPaddingLeng[0]);
+		System.arraycopy(cdata, 0, pbszPlainText, j, nRetOutLeng[0] - nPaddingLeng[0]);
+		j += nRetOutLeng[0];
+		return pbszPlainText;
+	}
+
 }
-
-
-
-
-
-
-
-
-

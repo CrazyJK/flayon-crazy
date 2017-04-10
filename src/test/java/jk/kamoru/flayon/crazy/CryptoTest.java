@@ -12,13 +12,14 @@ import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.Crypto;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
+import jk.kamoru.flayon.base.crypto.Seed;
 import jk.kamoru.flayon.base.crypto.Seed256;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CryptoTest {
 
-	String plain = "0123456789 가나다라90-";
+	String plain = "lerisque vulputate.lerisque vulputate.lerisque vulputate.lerisque vulputate.";
 
 	@Test
 	public void aes256ecb() {
@@ -105,7 +106,7 @@ public class CryptoTest {
 		log.info("sha512 encrypt : " + sha512.encrypt(plain));		
 	}
 	
-	@Test
+//	@Test
 	public void seed256() {
 		Crypto seed256 = new Seed256();
 		
@@ -117,4 +118,51 @@ public class CryptoTest {
 
 		assertTrue(plain.equals(decrypt));
 	}
+	
+	@Test
+	public void seedCBC() {
+//		String key = "this is seed cbc key";
+//		String iv  = "this is seed cbc iv";
+		String key = "crazyjk-kamoru-58818-6969";
+		String iv  = "flayon-crazy-58818";
+
+		Crypto crypto = new Seed(Seed.AlgorithmMode.CBC, key, iv);
+		
+		String encrypt = crypto.encrypt(plain);
+		log.info("seed cbc encrypt : " + encrypt);
+		
+		String decrypt = crypto.decrypt(encrypt);
+		log.info("seed cbc decrypt : " + decrypt);
+
+		assertTrue(plain.equals(decrypt));
+	}
+	
+	@Test
+	public void seedECB() {
+		String key = "this is seed cbc key";
+		Crypto crypto = new Seed(Seed.AlgorithmMode.ECB, key, null);
+		
+		String encrypt = crypto.encrypt(plain);
+		log.info("seed ecb encrypt : " + encrypt);
+		
+		String decrypt = crypto.decrypt(encrypt);
+		log.info("seed ecb decrypt : " + decrypt);
+
+		assertTrue(plain.equals(decrypt));
+	}
+
+	@Test
+	public void seedCTR() {
+		String key = "this is seed ctr key";
+		Crypto crypto = new Seed(Seed.AlgorithmMode.CTR, key, null);
+		
+		String encrypt = crypto.encrypt(plain);
+		log.info("seed ctr encrypt : " + encrypt);
+		
+		String decrypt = crypto.decrypt(encrypt);
+		log.info("seed ctr decrypt : " + decrypt);
+
+		assertTrue(plain.equals(decrypt));
+	}
+
 }

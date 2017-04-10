@@ -1,5 +1,4 @@
 package jk.kamoru.flayon.base.crypto.seed;
-import java.io.UnsupportedEncodingException;
 
 /**
 @file KISA_SEED_ECB.java
@@ -194,7 +193,7 @@ public class KISA_SEED_ECB {
 	private static final int LR_R0 = 2;
 	private static final int LR_R1 = 3;
 
-	private static final int BLOCK_SIZE_SEED = 16;
+	public static final int BLOCK_SIZE_SEED = 16;
 	private static final int BLOCK_SIZE_SEED_INT = 4;
 
 	/********************************* Encryption *********************************/
@@ -902,7 +901,86 @@ public class KISA_SEED_ECB {
 		}
 	}
 	
+	public static byte[] encrypt(byte[] key, byte[] message) {
+		KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_ECB_init(info, KISA_ENC_DEC.KISA_ENCRYPT, key);
 
+		int[] data;
+		byte[] cdata;
+		int nRetOutLeng[] = new int[] { 0 };
+		int nPaddingLeng[] = new int[] { 0 };
+		int i;
+		int nPlainTextPadding = (BLOCK_SIZE_SEED - (message.length) % BLOCK_SIZE_SEED);
+		byte[] pbszCipherText = new byte[message.length + nPlainTextPadding];
+		int process_blockLeng = BLOCK_SIZE_SEED * 2;
+		int[] outbuf = new int[process_blockLeng];
+		byte[] pbszPlainText = new byte[process_blockLeng];
+		for (i = 0; i < message.length - process_blockLeng;) {
+			System.arraycopy(message, i, pbszPlainText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_ECB(pbszPlainText, process_blockLeng);
+			SEED_ECB_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_ECB(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, pbszCipherText, i, nRetOutLeng[0]);
+			i += nRetOutLeng[0];
+		}
+		int remainleng = message.length % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(message, i, pbszPlainText, 0, remainleng);
+		data = chartoint32_for_SEED_ECB(pbszPlainText, remainleng);
+		SEED_ECB_Process(info, data, remainleng, outbuf, nRetOutLeng);
+		cdata = int32tochar_for_SEED_ECB(outbuf, nRetOutLeng[0]);
+		System.arraycopy(cdata, 0, pbszCipherText, i, nRetOutLeng[0]);
+		i += nRetOutLeng[0];
+
+		SEED_ECB_Close(info, outbuf, 0, nPaddingLeng);
+		cdata = int32tochar_for_SEED_ECB(outbuf, nPaddingLeng[0]);
+		System.arraycopy(cdata, 0, pbszCipherText, i, nPaddingLeng[0]);
+		return pbszCipherText;
+	}
+
+	public static byte[] decrypt(byte[] key, byte[] cipher) throws Exception {
+		if (cipher.length % BLOCK_SIZE_SEED > 0) {
+			throw new Exception("DECRYPT FAIL! ");
+		}
+		KISA_SEED_INFO info = new KISA_SEED_INFO();
+		SEED_ECB_init(info, KISA_ENC_DEC.KISA_DECRYPT, key);
+		int process_blockLeng = BLOCK_SIZE_SEED * 2;
+		int[]          outbuf = new int[process_blockLeng];
+		byte[]     cipherText = new byte[process_blockLeng];
+		byte[]  pbszPlainText = new byte[cipher.length];
+		int     nRetOutLeng[] = new int[] { 0 };
+		int    nPaddingLeng[] = new int[] { 0 };
+		int[] data;
+		byte[] cdata;
+		int i;
+		for (i = 0; i < cipher.length - process_blockLeng;) {
+			System.arraycopy(cipher, i, cipherText, 0, process_blockLeng);
+			data = chartoint32_for_SEED_ECB(cipherText, process_blockLeng);
+			SEED_ECB_Process(info, data, process_blockLeng, outbuf, nRetOutLeng);
+			cdata = int32tochar_for_SEED_ECB(outbuf, nRetOutLeng[0]);
+			System.arraycopy(cdata, 0, pbszPlainText, i, nRetOutLeng[0]);
+			i += nRetOutLeng[0];
+		}
+		int remainleng = cipher.length % process_blockLeng;
+		if (remainleng == 0) {
+			remainleng = process_blockLeng;
+		}
+		System.arraycopy(cipher, i, cipherText, 0, remainleng);
+		data = chartoint32_for_SEED_ECB(cipherText, remainleng);
+		SEED_ECB_Process(info, data, remainleng, outbuf, nRetOutLeng);
+		if (SEED_ECB_Close(info, outbuf, nRetOutLeng[0], nPaddingLeng) > 0) {
+			cdata = int32tochar_for_SEED_ECB(outbuf, remainleng - nPaddingLeng[0]);
+			System.arraycopy(cdata, 0, pbszPlainText, i, remainleng - nPaddingLeng[0]);
+			int PLAINTEXT_LENGTH = i + remainleng - nPaddingLeng[0];
+			byte[] result = new byte[PLAINTEXT_LENGTH];
+			System.arraycopy(pbszPlainText, 0, result, 0, PLAINTEXT_LENGTH);
+			return result;
+		} else {
+			throw new Exception("DECRYPT FAIL! ");
+		}
+	}
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -915,7 +993,10 @@ public class KISA_SEED_ECB {
 		
 		byte pbData1[]    = {(byte)0x00, (byte)0x01};
 		byte pbData2[]    = {(byte)0x00, (byte)0x01, (byte)0x02, (byte)0x03, (byte)0x04, (byte)0x05, (byte)0x06, (byte)0x07, 
-				             (byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, (byte)0x00, (byte)0x01};
+				             (byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, 
+				             (byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, 
+				             (byte)0x08, (byte)0x09, (byte)0x0A, (byte)0x0B, (byte)0x0C, (byte)0x0D, (byte)0x0E, (byte)0x0F, 
+				             (byte)0x00, (byte)0x01};
 
 		byte pbCipher[]   = new byte[50];
 		byte pbPlain[]    = new byte[16];
@@ -1290,7 +1371,7 @@ public class KISA_SEED_ECB {
 	     * 테스트벡터 3
 	     *********************************************************************/
 	    
-	    PLAINTEXT_LENGTH = 18;
+	    PLAINTEXT_LENGTH = pbData2.length;
 
 	    
 	    info = new KISA_SEED_INFO();
@@ -1346,8 +1427,8 @@ public class KISA_SEED_ECB {
 	    
 	   //복호
 		
-
-	    CIPHERTEXT_LENGTH = 32;	
+		System.out.println("pbszCipherText.length=" + pbszCipherText.length);
+	    CIPHERTEXT_LENGTH = pbszCipherText.length;	
 	    
 	    result = new byte[] {0};
 		

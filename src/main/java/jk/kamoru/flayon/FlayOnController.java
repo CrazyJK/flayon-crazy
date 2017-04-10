@@ -47,7 +47,7 @@ import jk.kamoru.flayon.base.access.AccessLogRepository;
 import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
-import jk.kamoru.flayon.base.crypto.Seed256;
+import jk.kamoru.flayon.base.crypto.Seed;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -363,8 +363,12 @@ public class FlayOnController {
 		cryptoMethods.put("RSA", rsaMethod);
 
 		Map<String, String> seedMethod = new TreeMap<>();
-		seedMethod.put("Seed encrypt", "encrypt");
-		seedMethod.put("Seed decrypt", "decrypt");
+		seedMethod.put("Seed ecb encrypt", "encrypt");
+		seedMethod.put("Seed ecb decrypt", "decrypt");
+		seedMethod.put("Seed cbc encrypt", "encrypt");
+		seedMethod.put("Seed cbc decrypt", "decrypt");
+		seedMethod.put("Seed ctr encrypt", "encrypt");
+		seedMethod.put("Seed ctr decrypt", "decrypt");
 		cryptoMethods.put("Seed", seedMethod);
 	}
 	
@@ -375,7 +379,7 @@ public class FlayOnController {
 	}
 
 	String key = "crazyjk-kamoru-58818-6969";
-	String iv  = "flayon-crazy";
+	String iv  = "flayon-crazy-58818";
 	KeyPair keyPair = RSA.generateKey();
 	
 	@RequestMapping(value="/crypto", method=RequestMethod.POST)
@@ -406,10 +410,18 @@ public class FlayOnController {
 			return new RSA(keyPair).encrypt(value);
 		case "RSA decrypt":
 			return new RSA(keyPair).decrypt(value);
-		case "Seed decrypt":
-			return new Seed256().decrypt(value);
-		case "Seed encrypt":
-			return new Seed256().encrypt(value);
+		case "Seed ecb encrypt":
+			return new Seed(Seed.AlgorithmMode.ECB, key, null).encrypt(value);
+		case "Seed ecb decrypt":
+			return new Seed(Seed.AlgorithmMode.ECB, key, null).decrypt(value);
+		case "Seed cbc encrypt":
+			return new Seed(Seed.AlgorithmMode.CBC, key, iv).encrypt(value);
+		case "Seed cbc decrypt":
+			return new Seed(Seed.AlgorithmMode.CBC, key, iv).decrypt(value);
+		case "Seed ctr encrypt":
+			return new Seed(Seed.AlgorithmMode.CTR, key, null).encrypt(value);
+		case "Seed ctr decrypt":
+			return new Seed(Seed.AlgorithmMode.CTR, key, null).decrypt(value);
 		default:
 			return "not available method";
 		}
