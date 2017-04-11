@@ -8,7 +8,6 @@
 <style type="text/css">
 #colors {
 	padding: 10px;
-	text-align: center;
 }
 .colordvcon {
 	display: inline-block;
