@@ -6,27 +6,11 @@
 <meta charset="UTF-8"></meta>
 <title>Port Sacn</title>
 <style type="text/css">
-.result-li {
-	display: inline-block;
-	border:1px solid orange;
-	font-size: 9pt;
-	color: gray;
-	border-radius: 5px;
-	padding:2px;
-}
-.result-listen {
-	color: red;
-}
-.result-close {
-	display: none;
-}
 input {
-	/* background-color:rgba(0,0,0,0); */
-	/* border:0; */
 	text-align: center;
 }
-label {
-	margin-right: 15px;
+.input-group-addon {
+	border-right: 0;
 }
 </style>
 </head>
@@ -37,27 +21,37 @@ label {
 		<h1>Port Scanner</h1>
  	</div>
 
- 	<form>
+ 	<form class="form-inline">
  	<div class="panel panel-default">
  		<div class="panel-heading">
-	 		IP Address <input name="ip" size="11" value="${ip}" placeHolder="ip address"/>
-	 		 Port from <input name="ports" size="5" value="${ports}" placeHolder="port"/>
-	 		        to <input name="porte" size="5" value="${porte}" placeHolder="port"/>
+ 			<div class="input-group input-group-sm">
+	 			<span class="input-group-addon">IP Address</span>
+		 		<input name="ip" size="11" value="${param.ip}" placeHolder="ip address" class="form-control"/>
+		 	</div>
+ 			<div class="input-group input-group-sm">
+	 			<span class="input-group-addon">Port</span>
+	 			<span class="input-group-addon">from</span>
+	 		   	<input name="from" size="5" value="${param.from}" placeHolder="port" class="form-control"/>
+	 			<span class="input-group-addon">to</span>
+	 		    <input name="to"   size="5" value="${param.to}"   placeHolder="port" class="form-control"/>
+	 		</div>
 	 		<button class="btn btn-sm btn-default" style="float:right" type="submit">Scan</button>
  		</div>
  		<div class="panel-body">
-	 		<textarea name="portArr" style="width:100%; height:100px;" placeHolder="ex. 8080, 8081, 8082">${portArr}</textarea>
+	 		<textarea name="list" style="width:100%; height:100px;" placeHolder="ex. 8080, 8081, 8082" class="form-control">${param.list}</textarea>
 		</div>
 	</div>
  	</form>
  	
  	<div class="panel panel-default">
  		<div class="panel-heading">
-			Result - <span class="result-listen">LISTEN</span>
+			Result - <span class="result-listen">Listen ports</span>
  		</div>
  		<div class="panel-body">
  			<c:forEach items="${results}" var="result">
-	 		<span class="result-li ${result[2] ? 'result-listen' : 'result-close'}">${result[1]}</span>
+ 				<c:if test="${result[2]}">
+			 		<span class="label label-danger">${result[1]}</span>
+ 				</c:if>
 	 		</c:forEach>
 		</div>
 	</div>

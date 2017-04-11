@@ -47,8 +47,7 @@ function img2Change(val) {
 	<div class="page-header">
 		<h1>Face off</h1>
  	</div>
-</div> 	
-<div class="container-fluid">
+
 	<div class="row">
 		<div class="col-sm-4 text-center">
 			<div class="form-group has-feedback">
@@ -76,7 +75,6 @@ function img2Change(val) {
 			<div id="img2" class="imageWrapper"><img src="<c:url value="/img/face/face2.png"/>"></div>
 		</div>
 	</div>
-
 </div>
 </body>
 </html>

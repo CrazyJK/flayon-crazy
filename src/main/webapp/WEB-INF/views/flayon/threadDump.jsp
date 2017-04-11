@@ -7,9 +7,6 @@
 <meta charset="UTF-8"></meta>
 <title>Thread dump</title>
 <style type="text/css">
-p {
-	margin:0 10px;
-}
 .input-group-addon {
 	background-color: #fff;
 }
@@ -42,17 +39,15 @@ p {
 		<div class="panel-body">
 			<div class="list-group">
 				<c:forEach items="${threadInfos}" var="threadInfo">
-				<div class="list-group-item">
-					<h4 class="list-group-item-heading text-nowrap">
+				<dl class="list-group-item">
+					<dt class="list-group-item-heading text-nowrap">
 						<b>${threadInfo.threadName} ${threadInfo.threadState}</b> - 
 						<a href="?threadId=${threadInfo.threadId}">${threadInfo.threadId}</a>
-					</h4>
-					<div class="list-group-item-text">
-						<c:forEach items="${threadInfo.stackTrace}" var="stackTrace">
-						<p>${stackTrace}</p>
-						</c:forEach>
-					</div>
-				</div>
+					</dt>
+					<c:forEach items="${threadInfo.stackTrace}" var="stackTrace">
+					<dd class="list-group-item-text">${stackTrace}</dd>
+					</c:forEach>
+				</dl>
 				</c:forEach>
 			</div>
 		</div>

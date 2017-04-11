@@ -8,7 +8,7 @@
  		<section style="float:right; font-size:10px; margin-top: 3px;">
 			<form name="langChange">
 				<%-- <span><%=lang%></span> --%>
-				<select id="lang" name="lang" onchange="document.forms['langChange'].submit();" style="border:0;">
+				<select id="lang" name="lang" onchange="document.forms['langChange'].submit();" style="border:0;background-color:#fff;">
 					<option value="ko" <%="ko".equals(lang) ? "selected" : "" %>><s:message code="locale.korean.text"/></option>
 					<option value="en" <%="en".equals(lang) ? "selected" : "" %>><s:message code="locale.english.text"/></option>
 					<option value="ja" <%="ja".equals(lang) ? "selected" : "" %>><s:message code="locale.japanese.text"/></option>

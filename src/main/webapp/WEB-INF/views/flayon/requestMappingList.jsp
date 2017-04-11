@@ -6,12 +6,6 @@
 <meta charset="UTF-8"></meta>
 <title>RequestMapping List</title>
 <style type="text/css">
-thead > tr {
-	background-color:rgba(255,165,0,.5);
-}
-tbody > tr:hover {
-	background-color:rgba(255,165,0,.25);
-}
 td, td a {
 	font-family: "나눔고딕코딩";
 	font-size: 11px;
@@ -34,13 +28,14 @@ td, td a {
 <script type="text/javascript">
 $(document).ready(function() {
 	var windowHeight = $(window).innerHeight();
-	var tableHeight = windowHeight - 250;
+	var tableHeight = windowHeight - 200;
 	console.log(windowHeight, tableHeight);
     $('#list').DataTable({
     	scrollY:        tableHeight + 'px',
         scrollCollapse: true,
         paging:         false,
-        searching:      false
+        searching:      false,
+        info:           false
     });
 });
 </script>
@@ -52,8 +47,8 @@ $(document).ready(function() {
 		<h1>Request Mapping List ... <span class="badge">${mappingList.size()}</span></h1>
  	</div>
 
-	<table id="list" class="table table-condensed">
-		<thead>
+	<table id="list" class="table table-condensed table-hover">
+		<thead class="bg-info">
 			<tr>
 				<th class="text-center">No</th>
 				<th class="text-center">Method</th>

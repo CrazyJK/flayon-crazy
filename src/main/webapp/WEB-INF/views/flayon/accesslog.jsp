@@ -11,12 +11,6 @@
 table {
 	font-size: 0.8em;
 }
-tbody > tr:hover {
-	background-color: rgba(255,165,0,.25);
-}
-th {
-	background-color: rgba(255,165,0,.5);
-}
 td {
 	font-family: "나눔고딕코딩";
 }
@@ -34,6 +28,17 @@ td {
 .row {
     margin-right: -20px;
     margin-left: -20px;
+}
+.form-control {
+	display: initial;
+	width: initial;
+}
+.input-xs {
+	padding: 2px;
+	height: 22px;
+	font-size: 12px;
+	line-height: 1.2;
+	width: 100%;
 }
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
@@ -70,9 +75,6 @@ function go(page) {
 		<div class="page-header">
 			<h1>Access Log Viewer
 				<small class="badge"><fmt:formatNumber type="number" pattern="#,##0" value="${pageImpl.totalElements}" /></small>
-				<c:if test="${!useAccesslogRepository}">
-					<span class="label label-danger" style="float:right;">No repository</span>
-				</c:if>
 			</h1>
 	 	</div>
 		<ul class="pager">
@@ -91,7 +93,7 @@ function go(page) {
 
 	<div class="container-fluid">
 		<table id="list" class="table table-condensed">
-			<thead>
+			<thead class="bg-info">
 				<tr>
 					<th class="text-center">No</th>
 					<th class="hide">ID</th>
@@ -124,18 +126,26 @@ function go(page) {
 					<td class="hide" align="left">${accessLog.modelAndViewInfo}</td>
 				</tr>
 				</c:forEach>
+				<c:if test="${!useAccesslogRepository}">
+				<tr>
+					<td colspan="10"><div class="text-center text-danger lead">No repository</div></td>
+				</tr>
+				</c:if>
+			</tbody>
+			<tfoot class="bg-info">
 				<tr>
 					<td></td>
 					<td></td>
-					<td><input id="remoteAddr" name="remoteAddr" placeholder="remoteAddr" value="${param.remoteAddr}"/></td>
+					<td><input id="remoteAddr" name="remoteAddr" placeholder="remoteAddr" value="${param.remoteAddr}" class="form-control input-xs"/></td>
 					<td></td>
 					<td></td>
-					<td><input id="requestURI" name="requestURI" placeholder="requestURI" value="${param.requestURI}"/></td>
+					<td><input id="requestURI" name="requestURI" placeholder="requestURI" value="${param.requestURI}" class="form-control input-xs"/></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
 				</tr>
-			</tbody>
+			</tfoot>
 		</table>
 	
 	</div>
@@ -163,7 +173,7 @@ function go(page) {
 				first: ${pageImpl.first},
 				last: ${pageImpl.last},
 				number: ${pageImpl.number},
-				size: <input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center"/>
+				size: <input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center form-control input-xs"/>
 				numberOfElements: ${pageImpl.numberOfElements}
 			</div>
 		</div>

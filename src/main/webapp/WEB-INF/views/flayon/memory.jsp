@@ -6,14 +6,6 @@
 <head>
 <meta charset="utf-8" />
 <title>Memory</title>
-<style type="text/css">
-thead > tr {
-	background-color:rgba(255,165,0,.5);
-}
-tbody > tr:hover {
-	background-color:rgba(255,165,0,.25);
-}
-</style>
 </head>
 <body>
 <div class="container">
@@ -23,7 +15,7 @@ tbody > tr:hover {
 	</div>
 
 	<table class="table table-bordered">
-		<thead>
+		<thead class="bg-info">
 			<tr>
 				<th>Area</th>
 				<th class="text-right">Init</th>

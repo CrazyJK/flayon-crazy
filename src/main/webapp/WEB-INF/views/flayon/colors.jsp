@@ -55,7 +55,7 @@
 			</div>
 			</c:if>
 		</div>
- 		<div class="panel-heading">
+ 		<div class="panel-heading text-right">
 			Find more color <a href="http://www.color-hex.com/" target="_blank">www.color-hex.com</a>
 		</div>
 	</div>

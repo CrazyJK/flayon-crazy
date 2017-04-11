@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,56 +134,31 @@ public class FlayOnController {
 	}
 	
 	@RequestMapping("/portscan")
-	public String portscan(HttpServletRequest request, Model model) {
-		
-		String ip = request.getParameter("ip");
-		if (StringUtils.isEmpty(ip))
-			ip = "127.0.0.1";
-		int port_s = 0;
-		try {
-			port_s = Integer.parseInt(request.getParameter("ports"));
-		} catch (Exception e) {}
-		int port_e = 0;
-		try {
-			port_e = Integer.parseInt(request.getParameter("porte"));
-		} catch (Exception e) {}
-		String[] portArr = null;
-		try {
-			portArr = request.getParameter("portArr").split(",");
-		} catch (Exception e) {}
+	public String portscan(Model model, 
+			@RequestParam(value="ip",   required=false, defaultValue="127.0.0.1") String ip, 
+			@RequestParam(value="from", required=false, defaultValue="-1") int from, 
+			@RequestParam(value="to",   required=false, defaultValue="-1") int to, 
+			@RequestParam(value="list", required=false, defaultValue="") int[] list) {
 
-		List<Integer> ports = new ArrayList<>(); 
-		if (port_s > 0 && port_s < port_e)
-			for(int port=port_s; port<= port_e; port++)
-				ports.add(port);
-		else if (portArr != null)
-			for(String port : portArr)
-				if (port.trim().length() > 0)
-					try {
-						int _port = Integer.parseInt(port.trim());
-						if (_port > 0)
-							ports.add(_port);
-					} catch (Exception e) {}
+		List<Integer> portList = new ArrayList<>(); 
+		if (0 < from && from < to)
+			for (int port = from; port <= to; port++)
+				portList.add(port);
+		if (list != null)
+			for (int port : list)
+				portList.add(port);
 
 		List<Object[]> results = new ArrayList<>();
-		if (ports.size() > 0) {
-			final int timeout = 200;
-			for(int port : ports) {
-				try {
-					Socket socket = new Socket();
-		          	socket.connect(new InetSocketAddress(ip, port), timeout);
-		          	socket.close();
-		          	results.add(new Object[] {ip, port, true});
-		        } catch (Exception ex) {
-					results.add(new Object[] {ip, port, false});
-		        }
-			}
+		final int SOCKET_TIMEOUT = 200;
+		for(int port : portList) {
+			try (Socket socket = new Socket()) {
+	          	socket.connect(new InetSocketAddress(ip, port), SOCKET_TIMEOUT);
+	          	results.add(new Object[] {ip, port, true});
+	        } catch (Exception ex) {
+				results.add(new Object[] {ip, port, false});
+	        }
 		}
 		model.addAttribute("results", results);
-		model.addAttribute("ip", ip);
-		model.addAttribute("ports", port_s);
-		model.addAttribute("porte", port_e);
-		model.addAttribute("portArr", StringUtils.join(portArr, ","));
 		
 		return "flayon/portscan";
 	}
@@ -248,27 +221,20 @@ public class FlayOnController {
 	}
 
 	@RequestMapping("/logviewt")
-	public String logView(HttpServletRequest request, Model model) {
-		
-		String logpath    = request.getParameter("logpath");
-		String delimeter  = request.getParameter("delimeter");
-		String search     = request.getParameter("search");
-		String searchOper = request.getParameter("searchOper");
-		String deliMax    = request.getParameter("deliMax");
+	public String logView(Model model, 
+			@RequestParam(value="logpath",   required=false, defaultValue="") String logpath,
+			@RequestParam(value="delimeter", required=false, defaultValue="") String delimeter,
+			@RequestParam(value="deliMax",   required=false, defaultValue="-1") int deliMax,
+			@RequestParam(value="search",    required=false, defaultValue="") String search,
+			@RequestParam(value="oper",      required=false, defaultValue="1") int oper) {
 
-		logpath   = logpath   == null ? "" : logpath.trim();
-		delimeter = delimeter == null ? "" : delimeter;
-		search    = search    == null ? "" : search.trim();
-		searchOper= searchOper== null ? "or" : searchOper;
-		int max = StringUtils.isEmpty(deliMax) ? -1 : Integer.parseInt(deliMax);
-
-		List<String[]> lines = new ArrayList<String[]>();
+		List<String[]> lines = new ArrayList<>();
 		int tdCount = 0;
 		String msg = "";
 		try {
-			lines = Utils.readLines(logpath, delimeter, max, search, searchOper);
+			lines = Utils.readLines(logpath, delimeter, deliMax, search, oper);
 			for (String[] line : lines) {
-				tdCount = line.length > tdCount ? line.length : tdCount;
+				tdCount = Math.max(line.length -1, tdCount);
 			}
 		}
 		catch (Exception e) {
@@ -278,11 +244,6 @@ public class FlayOnController {
 		model.addAttribute("lines", lines);
 		model.addAttribute("tdCount", tdCount);
 		model.addAttribute("msg", msg);
-		model.addAttribute("logpath", logpath);
-		model.addAttribute("delimeter", delimeter);
-		model.addAttribute("deliMax", deliMax);
-		model.addAttribute("search", search);
-		model.addAttribute("searchOper", searchOper);
 
 		return "flayon/logView";
 	}

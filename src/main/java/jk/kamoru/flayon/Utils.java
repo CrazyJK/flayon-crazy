@@ -24,7 +24,7 @@ public class Utils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<String[]> readLines(String logpath, String delimeter, int max, String search, String searchOper) throws Exception {
+	public static List<String[]> readLines(String logpath, String delimeter, int max, String search, int searchOper) throws Exception {
 		
 		if (logpath.length() == 0)
 			throw new Exception("log path is empty");
@@ -36,15 +36,25 @@ public class Utils {
 		
 		List<String[]> lineArrayList = new ArrayList<String[]>();
 		String[] searchArray = trimArray(StringUtils.splitByWholeSeparator(search, ",", -1));
-		int count = 0;
+		int lineNo = 0;
 		log.info("logView readLines Start");
 		for (String line : Files.readAllLines(file.toPath())) {
+			lineNo++;
 			if (searchArray.length == 0 || containsByOper(line, searchArray, searchOper)) {
 				line = StringUtils.replaceEach(line, new String[]{"<", ">"}, new String[]{"&lt;", "&gt;"});
 				line = StringUtils.replaceEach(line, searchArray, wrapString(searchArray, "<em>", "</em>"));
-				lineArrayList.add(delimeter.length() > 0 ? StringUtils.splitByWholeSeparator(line, delimeter, max) : new String[]{line});
-				if (++count % 100 == 0)
-					log.info("logView readLines " + count);
+				if (StringUtils.isNotBlank(delimeter)) {
+					String[] split = StringUtils.splitByWholeSeparator(line, delimeter, max);
+					String[] dest = new String[split.length + 1];
+					dest[0] = String.valueOf(lineNo);
+					System.arraycopy(split, 0, dest, 1, split.length);
+					lineArrayList.add(dest);
+				}
+				else {
+					lineArrayList.add(new String[]{String.valueOf(lineNo), line});
+				}
+				if (lineNo % 100 == 0)
+					log.info("logView readLines " + lineNo);
 			}
 		}
 		log.info("logView readLines End");
@@ -74,13 +84,13 @@ public class Utils {
 	 * @param searchOper 'or', 'and'
 	 * @return
 	 */
-	public static boolean containsByOper(String str, String[] searchArr, String searchOper) {
+	public static boolean containsByOper(String str, String[] searchArr, int searchOper) {
 		boolean result = true;
 		for (String search : searchArr) {
-			if (searchOper.equals("or")) {
+			if (searchOper == 1) {
 				return StringUtils.contains(str, search);
 			}
-			else if (searchOper.equals("and")) {
+			else if (searchOper == 0) {
 				result = result && StringUtils.contains(str, search);
 			}
 		}

@@ -14,10 +14,10 @@
 	border: 1px solid red;
 	background-color: #f2dede; 
 }
-#accordion button {
+#accordion button, #accordion a {
     width: 100%;
     border: 0;
-    background-color: transparent;
+    padding: 3px;
 }
 
 @media (min-width: 992px) {
@@ -146,7 +146,7 @@ function printDebug(msg) {
 							<div class="panel panel-default">
 	      						<div class="panel-heading">
 	        						<h4 class="panel-title">
-	          							<button data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</button>
+	          							<a class="btn" data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</a>
 	        						</h4>
 	      						</div>
 	      						<div id="collapse${cryptoMethod.key}" class="panel-collapse collapse">

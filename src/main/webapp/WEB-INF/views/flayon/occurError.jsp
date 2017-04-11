@@ -28,18 +28,24 @@
 	</div>
 
 	<div class="text-center">
-		<ul class="list-inline">
-			<li><a class="text-primary" target="errorFrame" href="/UnknownPage">general</a>
-			<li><a class="text-danger" target="errorFrame" href="?k=default">default</a>
-			<li><a class="text-danger" target="errorFrame" href="?k=falyon">falyon</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=crazy">crazy</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=video">video</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=videonotfound">videoNotFound</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=studionotfound">studioNotFound</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=actressnotfound">actressNotFound</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=image">image</a>
-			<li><a class="text-warning" target="errorFrame" href="${throwError}?k=imagenotfound">imageNotFound</a>
-		</ul>
+		<div class="btn-group btn-group-sm">
+			<a class="btn btn-default" target="errorFrame" href="/UnknownPage">general</a>
+		</div>
+		<div class="btn-group btn-group-sm">
+			<a class="btn btn-default" target="errorFrame" href="?k=default">default</a>
+			<a class="btn btn-default" target="errorFrame" href="?k=falyon">falyon</a>
+		</div>
+		<div class="btn-group btn-group-sm">
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=crazy">crazy</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=video">video</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=videonotfound">videoNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=studionotfound">studioNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=actressnotfound">actressNotFound</a>
+		</div>
+		<div class="btn-group btn-group-sm">
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=image">image</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=imagenotfound">imageNotFound</a>
+		</div>
 	</div>
 
 	<iframe name="errorFrame" style="width:100%; height:500px;" class="box-frame"></iframe>
