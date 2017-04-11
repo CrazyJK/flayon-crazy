@@ -1,6 +1,7 @@
 package jk.kamoru.flayon;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,21 +25,21 @@ public class Utils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<String[]> readLines(String logpath, String delimeter, int max, String search, int searchOper) throws Exception {
+	public static List<String[]> readLines(String logpath, String delimeter, int max, String search, int searchOper, String charset) throws Exception {
 		
 		if (logpath.length() == 0)
-			throw new Exception("log path is empty");
+			throw new IllegalStateException("log path is empty");
 		File file = new File(logpath);
 		if (file.isDirectory()) 
-			throw new Exception("log path is directory");
+			throw new IllegalStateException("log path is directory");
 		if (!file.exists())
-			throw new Exception("log file not exist");
+			throw new IllegalStateException("log file not exist");
 		
 		List<String[]> lineArrayList = new ArrayList<String[]>();
 		String[] searchArray = trimArray(StringUtils.splitByWholeSeparator(search, ",", -1));
 		int lineNo = 0;
 		log.info("logView readLines Start");
-		for (String line : Files.readAllLines(file.toPath())) {
+		for (String line : Files.readAllLines(file.toPath(), Charset.forName(charset))) {
 			lineNo++;
 			if (searchArray.length == 0 || containsByOper(line, searchArray, searchOper)) {
 				line = StringUtils.replaceEach(line, new String[]{"<", ">"}, new String[]{"&lt;", "&gt;"});
@@ -53,11 +54,9 @@ public class Utils {
 				else {
 					lineArrayList.add(new String[]{String.valueOf(lineNo), line});
 				}
-				if (lineNo % 100 == 0)
-					log.info("logView readLines " + lineNo);
 			}
 		}
-		log.info("logView readLines End");
+		log.info("logView readLines End {} lines" + lineNo);
 		return lineArrayList;
 	}
 	

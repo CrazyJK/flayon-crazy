@@ -226,19 +226,24 @@ public class FlayOnController {
 			@RequestParam(value="delimeter", required=false, defaultValue="") String delimeter,
 			@RequestParam(value="deliMax",   required=false, defaultValue="-1") int deliMax,
 			@RequestParam(value="search",    required=false, defaultValue="") String search,
-			@RequestParam(value="oper",      required=false, defaultValue="1") int oper) {
+			@RequestParam(value="oper",      required=false, defaultValue="1") int oper,
+			@RequestParam(value="charset",   required=false, defaultValue="UTF-8") String charset) {
 
 		List<String[]> lines = new ArrayList<>();
 		int tdCount = 0;
 		String msg = "";
 		try {
-			lines = Utils.readLines(logpath, delimeter, deliMax, search, oper);
+			lines = Utils.readLines(logpath, delimeter, deliMax, search, oper, charset);
 			for (String[] line : lines) {
 				tdCount = Math.max(line.length -1, tdCount);
 			}
 		}
-		catch (Exception e) {
+		catch (IllegalStateException e) {
 			msg = e.getMessage();
+		}
+		catch (Exception e) {
+			msg = e.getClass().getName() + " : " + e.getMessage();
+			log.error("logview error", e);
 		}
 		
 		model.addAttribute("lines", lines);
