@@ -13,7 +13,6 @@ import jk.kamoru.flayon.base.crypto.Crypto;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
 import jk.kamoru.flayon.base.crypto.Seed;
-import jk.kamoru.flayon.base.crypto.Seed256;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -106,23 +105,8 @@ public class CryptoTest {
 		log.info("sha512 encrypt : " + sha512.encrypt(plain));		
 	}
 	
-//	@Test
-	public void seed256() {
-		Crypto seed256 = new Seed256();
-		
-		String encrypt = seed256.encrypt(plain);
-		log.info("seed256 encrypt : " + encrypt);
-		
-		String decrypt = seed256.decrypt(encrypt);
-		log.info("seed256 decrypt : " + decrypt);
-
-		assertTrue(plain.equals(decrypt));
-	}
-	
 	@Test
 	public void seedCBC() {
-//		String key = "this is seed cbc key";
-//		String iv  = "this is seed cbc iv";
 		String key = "crazyjk-kamoru-58818-6969";
 		String iv  = "flayon-crazy-58818";
 
