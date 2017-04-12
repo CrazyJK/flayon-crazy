@@ -121,10 +121,6 @@ window.onload = function() {
 			<h1>Navigator Object Properties</h1>
 		</div>
 
-		<div class="alert alert-info">
-			your browser is <strong class="browser"></strong>, and system is <strong class="system"></strong>
-		</div>
-
 		<table class="table table-striped table-bordered table-condensed">
 			<thead class="bg-info">
 				<tr>
@@ -134,6 +130,13 @@ window.onload = function() {
 			</thead>
 			<tbody>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2"  class="alert alert-info text-center">
+						your browser is <strong class="browser"></strong>, and system is <strong class="system"></strong>
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 
 	</div>
