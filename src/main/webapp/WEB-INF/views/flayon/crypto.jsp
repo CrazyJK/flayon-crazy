@@ -7,21 +7,25 @@
 <title>Cryptography</title>
 <style type="text/css">
 .ui-effects-transfer { 
-	border: 1px solid #ccc;
-	background-color: #d9edf7; 
+	border-radius: 4px; 
+	border: 1px solid rgb(217,237,247);
+	background-color: rgba(217,237,247,.5);
 }
 .ui-effects-transfer-danger { 
-	border: 1px solid red;
-	background-color: #f2dede; 
+	border-radius: 4px; 
+	border: 0px solid rgba(255, 128, 128, 1);
+	background-color: rgba(255, 128, 128, 0.5);
 }
 #accordion button, #accordion a {
     width: 100%;
     border: 0;
     padding: 3px;
 }
-
+#accordion button:hover, #accordion a:hover {
+	z-index: auto;
+}
 @media (min-width: 992px) {
-	textarea.form-control {height: 500px;}
+	textarea.form-control {height: 400px;}
 	.panel-heading {padding: 10px 15px;}
 	.panel-heading > h3 {font-size: 24px; margin: 20px 0 10px;}
 	#accordion {padding: 0;}
@@ -44,7 +48,7 @@
 }
 </style>
 <script type="text/javascript">
-var effectTime = 300;
+var effectTime = 500;
 $(document).ready(function() {
 	
 	$(".crypto-btn").on('click', function() {
@@ -108,7 +112,7 @@ $(document).ready(function() {
 
 	});
 	
-	$("button[href='#collapseSeed']").click();
+	$("[href='#collapseSeed']").click();
 
 });
 
