@@ -173,7 +173,7 @@ function go(page) {
 				first: ${pageImpl.first},
 				last: ${pageImpl.last},
 				number: ${pageImpl.number},
-				size: <input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center form-control input-xs"/>
+				size: <input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center form-control input-xs" style="width:initial;"/>
 				numberOfElements: ${pageImpl.numberOfElements}
 			</div>
 		</div>
