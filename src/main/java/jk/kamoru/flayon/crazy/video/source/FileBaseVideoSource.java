@@ -52,8 +52,8 @@ public class FileBaseVideoSource implements VideoSource {
 	@Inject Provider<Actress> actressProvider;
 
 	// logic variables
-	private boolean firstLoaded = false;
-	private boolean loading = false;
+	private boolean firstCall = true;
+	private boolean startLoad = false;
 	
 	// property
 	private boolean isArchive;
@@ -80,26 +80,27 @@ public class FileBaseVideoSource implements VideoSource {
 	 * 첫 call이면 load()
 	 */
 	private final void videoSource() {
-		if (firstLoaded) {
-//			while(loading) {
-//				try {
-//					logger.warn("loading... {}", toTypeString());
-//					Thread.sleep(500);
-//				} catch (InterruptedException e) {
-//					logger.error("sleep error", e);
-//					break;
-//				}
-//			}
-			if (loading) {
-				logger.info("loading... {}", toTypeString());
+		if (firstCall) {
+			if (startLoad) {
+				while(startLoad) {
+					try {
+						logger.warn("loading... {}", toTypeString());
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						logger.error("sleep error", e);
+						break;
+					}
+				}
 			}
-		}
-		else {
-			load(null);
+			else {
+				load(null);
+			}
 		}
 	}
 	
 	private synchronized void load(StopWatch stopWatch) {
+		firstCall = false;
+		startLoad = true;
 		logger.debug("Start {} video source load", toTypeString());
 		boolean standalone = false;
 		if (stopWatch == null) {
@@ -107,8 +108,6 @@ public class FileBaseVideoSource implements VideoSource {
 			stopWatch = new StopWatch(toTypeString() + " VideoSource load");
 		}
 		
-		firstLoaded = true;
-		loading = true;
 
 		List<String> wrongFileNames = new ArrayList<>();
 		
@@ -174,7 +173,7 @@ public class FileBaseVideoSource implements VideoSource {
 		 studioMap =  _studioMap;
 		actressMap = _actressMap;
 		
-		loading = false;
+		startLoad = false;
 		if (standalone)
 			logger.info("{} video source load. {} videos\n\n{}", toTypeString(), videoMap.size(), stopWatch.prettyPrint());
 		else
