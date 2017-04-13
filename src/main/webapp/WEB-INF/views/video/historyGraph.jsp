@@ -64,88 +64,47 @@ function renderChart() {
 	    "marginRight": 40,
 	    "marginLeft": 40,
 	    "autoMarginOffset": 20,
-	    "mouseWheelZoomEnabled":true,
+	    "mouseWheelZoomEnabled": true,
 	    "dataDateFormat": chartFormat,
 	    "startDuration": 0,
+	    "dataProvider": chartData,
 	    "legend": {
 	        "equalWidths": false,
 	        "useGraphSettings": true,
 	        "valueAlign": "left",
 	        "valueWidth": 120
-	    },
+	    }, 
 	    "valueAxes": [{
-	        "id": "v1",
-	        "axisAlpha": 0,
-	        "position": "left",
-	        "ignoreAxisWidth":true
+	        "axisAlpha": 0.2,
+	        "dashLength": 1,
+	        "position": "left"
 	    }],
-	    "balloon": {
-	        "borderThickness": 1,
-	        "shadowAlpha": 0
-	    },
 	    "graphs": [{
-	        "id": "g1",
+	        "id": "playTime",
 	        "type" : "column",
-	        "lineThickness": 2,
-	        "fillAlphas": 0.8,
-	        "title": "Play video",
-	        "useLineColorForBulletBorder": true,
-	        "legendPeriodValueText": "total: [[value.sum]] played",
-	        "legendValueText": "[[value]] played",
-	        "valueField": "play",
-	        "balloon":{
-	            "drop":true,
-	            "adjustBorderColor":false,
-	            "color":"#ffff00"
-	          },
-	        "balloonText": "<span style='font-size:15px;'>Play : [[value]]</span>"
-	    }
-	    /*,{
-	        "id": "g2",
-	        "type" : "column",
-	        "clustered":false,
-	        "columnWidth":0.5,
 	        "fillAlphas": 0.8,
 	        "lineAlpha": 0,
-	        "title": "Remove video",
-	        "useLineColorForBulletBorder": true,
-	        "legendPeriodValueText": "total: [[value.sum]] removed",
-	        "legendValueText": "[[value]] removed",
-	        "valueField": "remove",
-	        "balloonText": "<span style='font-size:15px;'>Remove : [[value]]</span>"
-	    } */
-	    ],
-	    "chartScrollbar": {
-	    	updateOnReleaseOnly : true,
-	        "graph": "g1",
-	        "oppositeAxis": true,
-	        "offset":30,
-	        "scrollbarHeight": 50,
-		            "backgroundAlpha": 0,
-	        "selectedBackgroundAlpha": 0.1,
-	        "selectedBackgroundColor": "#888888",
-	                "graphFillAlpha": 0,
-	        "selectedGraphFillAlpha": 0,
-	                "graphLineAlpha": 0.5,
-	        "selectedGraphLineAlpha": 1,
-	        "autoGridCount":true,
-	        "color":"#AAAAAA"
-	    },
+	        "lineThickness": 0,
+	        "title": "Play video",
+	        "valueField": "play",
+	        "balloonText": "[[value]]",
+	        "legendPeriodValueText": "Total: [[value.sum]] played",
+	        "legendValueText": "[[category]]: [[value]] played",
+	    }],
 	    "chartCursor": {
-	        "pan": true,
-	        "fullWidth" : true,
-	        "valueLineEnabled": false,
-	        "valueLineBalloonEnabled": false,
-	        "cursorAlpha": 0.1,
-	        "cursorColor":"#258cbb",
-	        "limitToGraph":"g1",
-	        "valueLineAlpha":0.2,
-	        "valueZoomable":true
+	        "limitToGraph": "playTime",
+	        "fullWidth": true,
+	        "cursorAlpha": .25
+	    },
+	    "chartScrollbar": {
+	        "autoGridCount": true,
+	        "graph": "playTime",
+	        "scrollbarHeight": 40,
 	    },
 	    "valueScrollbar":{
-	      "oppositeAxis":false,
-	      "offset":50,
-	      "scrollbarHeight":5
+	      	"oppositeAxis": false,
+	      	"offset": 50,
+	      	"scrollbarHeight": 5
 	    },
 	    "categoryField": "date",
 	    "categoryAxis": {
@@ -168,8 +127,7 @@ function renderChart() {
 	    },
 	    "export": {
 	        "enabled": true
-	    },
-	    "dataProvider": chartData
+	    }
 	});
 	
 	chart.addListener("rendered", zoomChart);
