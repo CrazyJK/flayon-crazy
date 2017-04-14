@@ -2,8 +2,7 @@
 
 /* for navbar fixed-top */
 body {
-  padding-top: 50px;
-  /* margin-bottom: 30px; */
+ 	padding-top: 50px;
 }
 
 .form-error {
@@ -28,6 +27,7 @@ body {
 	background-image: none;
 	background-color: transparent;
 	box-shadow: none;
+	z-index: 58818
 }
 
 #headerNav.navbar-default > .container {
