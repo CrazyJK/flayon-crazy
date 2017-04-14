@@ -8,8 +8,8 @@
 <style type="text/css">
 .ui-effects-transfer { 
 	border-radius: 4px; 
-	border: 1px solid rgb(217,237,247);
-	background-color: rgba(217,237,247,.5);
+	border: 1px solid rgba(217, 237, 247, 1);
+	background-color: rgba(217, 237, 247, 0.5);
 }
 .ui-effects-transfer-danger { 
 	border-radius: 4px; 
@@ -19,7 +19,7 @@
 #accordion button, #accordion a {
     width: 100%;
     border: 0;
-    padding: 3px;
+    padding: 5px;
 }
 #accordion button:hover, #accordion a:hover {
 	z-index: auto;
@@ -58,6 +58,7 @@ $(document).ready(function() {
 		var  fromObject = direction === 'encrypt' ? "#decrypt" : "#encrypt";
 		var    toObject = direction === 'encrypt' ? "#encrypt" : "#decrypt";
 		var debugObject = ".debug";
+		var   btnObject = "#" + id;
 		var text        = $.trim($(fromObject).val());
 
 		if ($.trim(text) === '') {
@@ -66,7 +67,8 @@ $(document).ready(function() {
 		}
 
 		$(debugObject).html("&nbsp;");
-		$(fromObject).effect("transfer", { to: "#" + id, className: "ui-effects-transfer" }, effectTime, function() {
+		$(btnObject).attr("disabled", true);
+		$(fromObject).effect("transfer", { to: btnObject, className: "ui-effects-transfer" }, effectTime, function() {
 			$.ajax({
 				method: "POST",
 				url: "${PATH}/flayon/crypto.text",
@@ -79,31 +81,27 @@ $(document).ready(function() {
 			}).done(function(data, textStatus, jqXHR) {
 				console.log("done", textStatus);
 				if (jqXHR.getResponseHeader('error') == 'true') {
-					$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
+					$(btnObject).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
 						var errorMessge = jqXHR.getResponseHeader('error.message');
 						var errorCause  = jqXHR.getResponseHeader('error.cause');
 						printDebug('<strong class="text-danger">' + errorMessge + '</strong>&nbsp;' + errorCause);
 					});
 				}
 				else {
-					$("#" + id).effect("transfer", { to: toObject, className: "ui-effects-transfer" }, effectTime, function() {
-						if (direction === 'encrypt') {
-							$("#encrypt").val(data);
-						} 
-						else {
-							$("#decrypt").val(data);
-						}
+					$(btnObject).effect("transfer", { to: toObject, className: "ui-effects-transfer" }, effectTime, function() {
+						$(toObject).val(data).effect("highlight", {color: "rgba(217,237,247,1)"}, 1000);
 						printDebug(direction + " by <strong>" + method + "</strong");
 					});
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown) {
-				$("#" + id).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
+				$(btnObject).effect("transfer", { to: debugObject, className: "ui-effects-transfer-danger" }, effectTime, function() {
 					errorHtml = $.parseHTML(jqXHR.responseText);
 					parsed = $('<div>').append(errorHtml);
 					context = parsed.find("body > div.container").html();
 					printDebug(context);
 				});
 			}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
+				$(btnObject).attr("disabled", false);
 			//	console.log("crypto : data_jqXHR", data_jqXHR);
 			//	console.log("crypto : textStatus", textStatus);
 			//	console.log("crypto : jqXHR_errorThrown", jqXHR_errorThrown);
