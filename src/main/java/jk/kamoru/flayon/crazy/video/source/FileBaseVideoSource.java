@@ -369,7 +369,7 @@ public class FileBaseVideoSource implements VideoSource {
 
 		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
 			String forwardActressName = VideoUtils.sortForwardName(actressName);
-
+			actressName = VideoUtils.trimBlank(actressName);
 			Actress actress = actressMap.get(forwardActressName);
 			if (actress == null) {
 				actress = actressProvider.get();
