@@ -36,7 +36,7 @@ var theme = "chalk";
 
 function toggleBG() {
 	if ($("#chartDiv").css("background-image") == 'none')
-		$("#chartDiv").css("background-image", "url(<c:url value="/img/chalk-bg.png"/>)");
+		$("#chartDiv").css("background-image", "url(<c:url value="/img/bg/chalk-bg.png"/>)");
 	else
 		$("#chartDiv").css("background-image", "");
 }

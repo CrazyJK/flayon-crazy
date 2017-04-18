@@ -10,7 +10,7 @@
 <style type="text/css">
 body {
  	font-family: 'clipregular';
-	background-image: url("${PATH}/img/neon-bg.png");
+	background-image: url("${PATH}/img/bg/neon-bg.png");
 	background-position: center top;	
 	background-repeat: repeat;
  	background-size: 950px 341px;
