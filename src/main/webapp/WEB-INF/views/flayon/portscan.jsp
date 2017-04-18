@@ -11,6 +11,7 @@ input {
 }
 .input-group-addon {
 	border-right: 0;
+	color: #337ab7;
 }
 </style>
 </head>

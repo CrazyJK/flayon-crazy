@@ -93,7 +93,7 @@ function go(page) {
 
 	<div class="container-fluid">
 		<table id="list" class="table table-condensed">
-			<thead class="bg-info">
+			<thead class="bg-primary">
 				<tr>
 					<th class="text-center">No</th>
 					<th class="hide">ID</th>
@@ -132,7 +132,7 @@ function go(page) {
 				</tr>
 				</c:if>
 			</tbody>
-			<tfoot class="bg-info">
+			<tfoot class="bg-primary">
 				<tr>
 					<td></td>
 					<td></td>

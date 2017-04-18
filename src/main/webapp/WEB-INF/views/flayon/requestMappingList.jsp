@@ -48,7 +48,7 @@ $(document).ready(function() {
  	</div>
 
 	<table id="list" class="table table-condensed table-hover">
-		<thead class="bg-info">
+		<thead class="bg-primary">
 			<tr>
 				<th class="text-center">No</th>
 				<th class="text-center">Method</th>

@@ -128,7 +128,7 @@ function printDebug(msg) {
 
 	<form class="row">
 		<div class="col-md-5">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Plain text</h3>
 				</div>
@@ -145,7 +145,7 @@ function printDebug(msg) {
 				<div class="panel-body" style="margin:0 3px;">
 					<div class="panel-group" id="accordion" style="margin:0;">
 						<c:forEach items="${cryptoMethods}" var="cryptoMethod" varStatus="x">
-							<div class="panel panel-default">
+							<div class="panel panel-primary">
 	      						<div class="panel-heading">
 	        						<h4 class="panel-title">
 	          							<a class="btn" data-toggle="collapse" data-parent="#accordion" href="#collapse${cryptoMethod.key}">${cryptoMethod.key}</a>
@@ -155,7 +155,7 @@ function printDebug(msg) {
 	        						<div class="panel-body" style="padding:3px;">
 										<div class="btn-group-vertical btn-group-sm btn-block" data-toggle="buttons">
 											<c:forEach items="${cryptoMethod.value}" var="crypto" varStatus="y">
-												<a class="btn btn-info nowrap crypto-btn" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
+												<a class="btn btn-success nowrap crypto-btn" id="${x.index}-${y.index}" data-method="${crypto.key}" data-direction="${crypto.value}">
 													<span class="glyphicon glyphicon-chevron-left"  style="float:left;  ${crypto.value eq 'decrypt' ? '' : 'visibility: hidden;'}"></span>
 													<span class="glyphicon glyphicon-chevron-right" style="float:right; ${crypto.value eq 'encrypt' ? '' : 'visibility: hidden;'}"></span>
 													${fn:replace(crypto.key, 'crypt', '')}
@@ -171,7 +171,7 @@ function printDebug(msg) {
 			</div>
 		</div>
 		<div class="col-md-5">
-			<div class="panel panel-default">
+			<div class="panel panel-primary">
 	  			<div class="panel-heading">
 					<h3 class="text-center">Cipher text</h3>
 				</div>

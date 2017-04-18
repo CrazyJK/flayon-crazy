@@ -15,7 +15,7 @@
 	</div>
 
 	<table class="table table-bordered">
-		<thead class="bg-info">
+		<thead class="bg-primary">
 			<tr>
 				<th>Area</th>
 				<th class="text-right">Init</th>
