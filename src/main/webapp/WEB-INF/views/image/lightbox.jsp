@@ -264,8 +264,8 @@ function shuffle() {
 				<label class="control-label col-xs-6" for="resizeDuration">resizeDuration:</label>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<input type="range" class="form-control" id="resizeDuration" value="700" min="100" max="1000" step="100"/>
 						<span id="resizeDuration-label" class="input-group-addon">700</span>
+						<input type="range" class="form-control" id="resizeDuration" value="700" min="100" max="1000" step="100"/>
 					</div>
 				</div>
 			</div>
@@ -273,8 +273,8 @@ function shuffle() {
 				<label class="control-label col-xs-6" for="fadeDuration">fadeDuration:</label>
 				<div class="col-xs-6"> 
 					<div class="input-group">
-						<input type="range" class="form-control" id="fadeDuration" value="600" min="100" max="1000" step="100"/>
 						<span id="fadeDuration-label" class="input-group-addon">600</span>
+						<input type="range" class="form-control" id="fadeDuration" value="600" min="100" max="1000" step="100"/>
 					</div>
 				</div>
 			</div>
@@ -282,8 +282,8 @@ function shuffle() {
 				<label class="control-label col-xs-6" for="imageFadeDuration">imageFadeDuration:</label>
 				<div class="col-xs-6"> 
 					<div class="input-group">
-						<input type="range" class="form-control" id="imageFadeDuration" value="700" min="100" max="1000" step="100"/>
 						<span id="imageFadeDuration-label" class="input-group-addon">700</span>
+						<input type="range" class="form-control" id="imageFadeDuration" value="700" min="100" max="1000" step="100"/>
 					</div>
 				</div>
 			</div>
@@ -303,8 +303,8 @@ function shuffle() {
 				<label class="control-label col-xs-6" for="playInterval">playInterval:</label>
 				<div class="col-xs-6"> 
 					<div class="input-group">
-						<input type="range" class="form-control" id="playInterval" value="10" min="5" max="20" step="1"/>
 						<span id="playInterval-label" class="input-group-addon">10</span>
+						<input type="range" class="form-control" id="playInterval" value="10" min="5" max="20" step="1"/>
 					</div>
 				</div>
 			</div>
@@ -312,8 +312,8 @@ function shuffle() {
 				<label class="control-label col-xs-6" for="positionFromTop">positionFromTop:</label>
 				<div class="col-xs-6"> 
 					<div class="input-group">
-						<input type="range" class="form-control" id="positionFromTop" value="30" min="30" max="100" step="10"/>
 						<span id="positionFromTop-label" class="input-group-addon">30</span>
+						<input type="range" class="form-control" id="positionFromTop" value="30" min="30" max="100" step="10"/>
 					</div>
 				</div>
 			</div>
