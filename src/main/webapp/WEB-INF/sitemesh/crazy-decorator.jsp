@@ -8,7 +8,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - Crazy [${profiles}] [<%=System.getenv("COMPUTERNAME")%>]</title>
-<link rel="shortcut icon" type="image/x-icon" href="${PATH}/img/favicon-crazy.ico"/>
+<link rel="shortcut icon" type="image/x-icon" href="${PATH}/img/flayon/favicon-crazy.ico"/>
 <link rel="stylesheet" href="${PATH}/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="${PATH}/webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css"/>
 <link rel="stylesheet" href="${PATH}/webjars/jquery-ui/1.12.1/themes/base/jquery-ui.min.css"/>

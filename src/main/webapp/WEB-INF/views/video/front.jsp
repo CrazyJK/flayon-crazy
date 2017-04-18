@@ -131,7 +131,7 @@ var opusList;
  */
 function frontEffect() {
 	$("#front").attr({
-		src: '${PATH}/img/favicon-crazy-' + getRandomInteger(0, 4) + '.png'
+		src: '${PATH}/img/flayon/favicon-crazy-' + getRandomInteger(0, 4) + '.png'
 	}).bind("click", function() {
 		var opus = $(this).data("opus");
 		if (opus && opus != "") {
@@ -254,7 +254,7 @@ function faviconEffect() {
 		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
 		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
 		}).attr({
-			"src": "${PATH}/img/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
+			"src": "${PATH}/img/flayon/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
 		});
 	}, 1000 * getRandomInteger(10, 30));
 	setInterval(function() {
@@ -264,7 +264,7 @@ function faviconEffect() {
 		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
 		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
 		}).attr({
-			"src": "${PATH}/img/favicon-video-" + getRandomInteger(0, 1) + ".png"
+			"src": "${PATH}/img/flayon/favicon-video-" + getRandomInteger(0, 1) + ".png"
 		});
 	}, 1000 * getRandomInteger(10, 30));
 }
