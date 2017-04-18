@@ -54,7 +54,7 @@ $(document).ready(function() {
 		<div class="panel-body" id="colors">
 			<c:forEach items="aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, orange, purple, red, silver, teal, white, yellow" var="color">
 			<div class="colordvcon">
-				<div class="colordva" style="background-color: ${color}"></div>
+				<div class="colordva" style="background-color:${color}"></div>
 				<code>${color}</code>
 			</div>
 			</c:forEach>
