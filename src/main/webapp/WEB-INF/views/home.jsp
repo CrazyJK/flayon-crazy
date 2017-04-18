@@ -7,7 +7,7 @@
 <title><s:message code="default.home"/></title>
 <style type="text/css">
 body {
- 	background: transparent url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center;
+	background: transparent url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center;
  	transition: background .5s linear;
  	overflow: hidden;
 }
