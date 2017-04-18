@@ -7,7 +7,7 @@
 <title><s:message code="default.home"/></title>
 <style type="text/css">
 body {
- 	background: transparent url("<c:url value="/img/mountain.jpg"/>") no-repeat fixed top center;
+ 	background: transparent url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center;
  	transition: background .5s linear;
  	overflow: hidden;
 }
@@ -16,7 +16,7 @@ div.container, footer.nav, select {
 	background-image: none;
 }
 div.jumbotron {
-	background: url("<c:url value="/img/chalk-bg.png"/>") repeat center top;
+	background: url("<c:url value="/img/bg/chalk-bg.png"/>") repeat center top;
 	background-size: cover;
 	margin: 15px auto;
     padding: 10px;
@@ -41,7 +41,7 @@ div.modal-dialog {
     margin-top: 380px;
 }
 div.modal-content {
-/*	background: transparent url("<c:url value="/img/chalk-bg.png"/>") repeat center top;
+/*	background: transparent url("<c:url value="/img/bg/chalk-bg.png"/>") repeat center top;
 	background-size: cover; */
  	background-color: rgba(0, 0, 0, 0);
     color: #eee;

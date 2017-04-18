@@ -62,7 +62,7 @@ $(document).ready(function() {
 		var text        = $.trim($(fromObject).val());
 
 		if ($.trim(text) === '') {
-			$(fromObject).effect("highlight", {color: "#f2dede"}, 500);
+			$(fromObject).effect("pulsate", {times: 2}, 300).effect("highlight", {color: "#f2dede"}, 500);
 			return;
 		}
 

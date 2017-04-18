@@ -8,6 +8,7 @@
 <style type="text/css">
 #colors {
 	padding: 10px;
+	transition: all .5s ease;
 }
 .colordvcon {
 	display: inline-block;
@@ -29,6 +30,15 @@
     transform: scale(1.1, 1.1);
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".colordva").hover(function() {
+		$("#colors").css("background-color", $(this).css("background-color"));
+	}, function() {
+		$("#colors").css("background-color", "#fff");
+	});
+});
+</script>
 </head>
 <body>
 <div class="container">
@@ -44,13 +54,13 @@
 		<div class="panel-body" id="colors">
 			<c:forEach items="aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, orange, purple, red, silver, teal, white, yellow" var="color">
 			<div class="colordvcon">
-				<div class="colordva" style="background-color: ${color}"></div>
+				<div class="colordva" style="background-color:${color}"></div>
 				<code>${color}</code>
 			</div>
 			</c:forEach>
-			<c:if test="${param.c != ''}">
+			<c:if test="${!empty param.c}">
 			<div class="colordvcon">
-				<div class="colordva" style="background-color: ${param.c}"></div>
+				<div class="colordva" style="background-color:${param.c};"></div>
 				<code>${param.c}</code>
 			</div>
 			</c:if>

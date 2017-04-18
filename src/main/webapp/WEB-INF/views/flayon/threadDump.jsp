@@ -10,7 +10,63 @@
 .input-group-addon {
 	background-color: #fff;
 }
+.dataTables_filter {
+	float: right;
+	margin: 5px 15px;
+}
+.dataTables_info {
+	display: inline-block;
+}
 </style>
+<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
+<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var windowHeight = $(window).innerHeight();
+	var tableHeight = windowHeight - 300;
+	console.log(windowHeight, tableHeight);
+    var table = $('#thread-table').DataTable({
+    	scrollY:        tableHeight + 'px',
+        scrollCollapse: true,
+        paging:         false,
+        searching:      true,
+        info:           true,
+        columnDefs: [
+            { "visible": false, "targets": 0 }
+        ],
+        order: [[ 0, 'asc' ]],
+        drawCallback: function (settings) {
+            var api = this.api();
+            var rows = api.rows({page:'current'}).nodes();
+            var last = null;
+ 
+            api.column(0, {page:'current'}).data().each( function (group, i) {
+                if (last !== group) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group bg-info"><td colspan="1" class="text-center">'+group+'</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
+		// dom: '<"top">rt<"bottom"fi><"clear">',
+        dom: '<<t>if>',
+    });
+ 	// Order by the grouping
+    $('#thread-table tbody').on('click', 'tr.group', function () {
+        var currentOrder = table.order()[0];
+        console.log(currentOrder);
+        if (currentOrder[0] === 0 && currentOrder[1] === 'asc' ) {
+            table.order([0, 'desc']).draw();
+        }
+        else {
+            table.order([0, 'asc']).draw();
+        }
+    } );
+    
+});
+</script>
 </head>
 <body>
 <div class="container">
@@ -19,39 +75,29 @@
 		<h1>Thread Info ... <span class="badge">${threadInfos.size()}</span></h1>
 	</div>
 	
-	<section class="panel panel-default">
-		<header class="panel-heading">
-			<form:form method="get" commandName="paramInfo" cssClass="form-inline">
-				<div class="input-group input-group-sm">
-      				<span class="input-group-addon" title="Show only what thread name starts with">thread name starts with</span>
-					<form:input path="name" cssClass="form-control"/>
-				</div> 
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon" title="thread state">thread state is</span>
-					<form:select path="state" cssClass="form-control">
-						<option value="">All</option>
-		 				<form:options items="${threadStates}"/>
-					</form:select>
-				</div>
-				<button type="submit" class="btn btn-sm btn-default" style="float:right">View</button>
-			</form:form>
-		</header>
-		<div class="panel-body">
-			<div class="list-group">
-				<c:forEach items="${threadInfos}" var="threadInfo">
-				<dl class="list-group-item">
-					<dt class="list-group-item-heading text-nowrap">
-						<b>${threadInfo.threadName} ${threadInfo.threadState}</b> - 
-						<a href="?threadId=${threadInfo.threadId}">${threadInfo.threadId}</a>
-					</dt>
-					<c:forEach items="${threadInfo.stackTrace}" var="stackTrace">
-					<dd class="list-group-item-text">${stackTrace}</dd>
-					</c:forEach>
-				</dl>
-				</c:forEach>
-			</div>
-		</div>
-	</section>
+	<table class="table table-condensed" id="thread-table">
+		<thead>
+			<tr>
+				<th>Thread State</th>
+				<th>Thread Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${threadInfos}" var="threadInfo">
+			<tr>
+				<td class="text-info">${threadInfo.threadState}</td>
+				<td><strong class="text-primary">${threadInfo.threadName}</strong>
+					<button class="btn btn-xs float-right" data-toggle="collapse" data-target="#tid-${threadInfo.threadId}"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
+					<div id="tid-${threadInfo.threadId}" class="collapse">
+						<c:forEach items="${threadInfo.stackTrace}" var="stackTrace">
+						${stackTrace}<br/>
+						</c:forEach>
+					</div>
+				</td>
+			</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 
 </div>
 </body>

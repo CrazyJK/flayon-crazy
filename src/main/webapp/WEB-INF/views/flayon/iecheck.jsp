@@ -118,11 +118,12 @@ window.onload = function() {
 	<div class="container">
 		
 		<div class="page-header">
-			<h1>Navigator Object Properties</h1>
+			<h1><strong class="browser text-primary"></strong> <small>browser on</small> <strong class="system text-primary"></strong></h1>
 		</div>
 
+		<h3>Navigator Object Properties</h3>
 		<table class="table table-striped table-bordered table-condensed">
-			<thead class="bg-info">
+			<thead class="bg-primary">
 				<tr>
 					<th>Property name</th>
 					<th>Property value</th>
@@ -130,13 +131,6 @@ window.onload = function() {
 			</thead>
 			<tbody>
 			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="2"  class="alert alert-info text-center">
-						your browser is <strong class="browser"></strong>, and system is <strong class="system"></strong>
-					</td>
-				</tr>
-			</tfoot>
 		</table>
 
 	</div>

@@ -95,8 +95,8 @@ $(document).ready(function() {
 					<div class="col-sm-3">
 						<div class="input-group input-group-sm">
 						 	<input type="text" id="delimeter" name="delimeter" size="4" value="${param.delimeter}" placeHolder="delimeter" class="form-control"/>
-			 				<span class="input-group-addon">Delimeter</span>
-							<input type="text" id="deliMax" name="deliMax" size="2" value="${param.deliMax}" placeHolder="max" class="form-control"/>
+			 				<span class="input-group-addon" style="border-right:none; border-left:none;">Delimeter</span>
+							<input type="number" id="deliMax" name="deliMax" size="1" value="${param.deliMax}" placeHolder="max" class="form-control" style="width:60px;"/>
 						</div>
 					</div>
 					<div class="col-sm-6">

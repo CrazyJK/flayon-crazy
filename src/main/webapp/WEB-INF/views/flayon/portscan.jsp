@@ -26,13 +26,13 @@ input {
  		<div class="panel-heading">
  			<div class="input-group input-group-sm">
 	 			<span class="input-group-addon">IP Address</span>
-		 		<input name="ip" size="11" value="${param.ip}" placeHolder="ip address" class="form-control"/>
+		 		<input name="ip" size="20" value="${param.ip}" placeHolder="ip address" class="form-control"/>
 		 	</div>
  			<div class="input-group input-group-sm">
 	 			<span class="input-group-addon">Port</span>
 	 			<span class="input-group-addon">from</span>
 	 		   	<input name="from" size="5" value="${param.from}" placeHolder="port" class="form-control"/>
-	 			<span class="input-group-addon">to</span>
+	 			<span class="input-group-addon" style="border-left:none;">to</span>
 	 		    <input name="to"   size="5" value="${param.to}"   placeHolder="port" class="form-control"/>
 	 		</div>
 	 		<button class="btn btn-sm btn-default" style="float:right" type="submit">Scan</button>
