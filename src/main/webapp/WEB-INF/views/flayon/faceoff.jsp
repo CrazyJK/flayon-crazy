@@ -8,6 +8,7 @@
 <style type="text/css">
 img {
 	width: 200px;
+	border-radius: 50%;
 }
 .imageWrapper {
 	border: 1px solid #337ab7;

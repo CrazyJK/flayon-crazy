@@ -45,10 +45,8 @@
 		</tbody>
 	</table>
 
-	<div class="well well-sm">
-		<p>Heap : ${heap}</p>
-		<p>Non-Heap : ${nonHeap}</p>
-	</div>
+	<pre>Heap : ${heap}<br>Non-Heap : ${nonHeap}</pre>
+
 </div>
 </body>
 </html>

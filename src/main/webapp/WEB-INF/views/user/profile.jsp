@@ -15,18 +15,17 @@
 	</div>
 	
 	<form:form commandName="user" method="post" class="form-horizontal" role="form">
-		<p><button type="submit" class="btn btn-xs btn-success">Update</button></p>
 		<form:input path="id"   type="hidden"/>
 		<form:input path="name" type="hidden"/>
 		<form:input path="role" type="hidden"/>
 		<div class="form-group">
-			<form:label class="control-label col-sm-2" path="name">Name</form:label>
-      		<div class="col-sm-6">
+			<form:label class="col-sm-2 control-label" path="name">Name</form:label>
+      		<div class="col-sm-10">
 				<p class="form-control-static">${user.name}</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<form:label class="control-label col-sm-2" path="password">Password</form:label>
+			<form:label class="col-sm-2 control-label" path="password">Password</form:label>
       		<div class="col-sm-6">
 				<form:input type="password" path="password" placeholder="password" cssClass="form-control"/>
 			</div>
@@ -35,11 +34,16 @@
 			</div>
 		</div>
 		<div class="form-group">        
-			<form:label class="control-label col-sm-2" path="role">Role</form:label>
+			<form:label class="col-sm-2 control-label" path="role">Role</form:label>
       		<div class="col-sm-6">
 				<p class="form-control-static">${user.role}</p>
 			</div>
 		</div>
+		<div class="form-group">        
+      		<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-sm btn-success">Update</button>
+      		</div>
+      	</div>
 	</form:form>
 
 </div>

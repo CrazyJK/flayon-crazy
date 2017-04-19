@@ -65,7 +65,7 @@ $(document).ready(function() {
 			</div>
 			</c:if>
 		</div>
- 		<div class="panel-heading text-right">
+ 		<div class="panel-footer text-right">
 			Find more color <a href="http://www.color-hex.com/" target="_blank">www.color-hex.com</a>
 		</div>
 	</div>

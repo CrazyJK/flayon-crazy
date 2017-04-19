@@ -43,12 +43,18 @@ body {
 	box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08);
 }
 
-.page-header, .page-header > h1 {
-	margin: 10px;
-	padding: 0;
-}
 .page-header {
 	height: 50px;
     border-bottom: 5px solid #337ab7;
     border-radius: 15px;
+}
+.page-header, .page-header > h1 {
+	margin: 10px;
+	padding: 0;
+	color: #337ab7;
+}
+
+.badge {
+	background-color: #337ab7;
+	color: #fff;
 }

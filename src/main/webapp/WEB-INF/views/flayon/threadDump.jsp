@@ -24,8 +24,13 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	var windowHeight = $(window).innerHeight();
-	var tableHeight = windowHeight - 300;
+	var tableHeight = windowHeight - 250;
 	console.log(windowHeight, tableHeight);
+	
+	$(window).resize(function() {
+		$(".dataTables_scrollBody").css("max-height", $(window).innerHeight() - 250);
+	});
+	
     var table = $('#thread-table').DataTable({
     	scrollY:        tableHeight + 'px',
         scrollCollapse: true,

@@ -25,6 +25,9 @@ function fnUpdate() {
 function fnSubmit() {
 	document.forms[0].submit();
 }
+$(document).ready(function() {
+	$("input[type=radio]").parent().addClass("radio-inline");
+});
 </script>
 </head>
 <body>
@@ -33,16 +36,6 @@ function fnSubmit() {
 	<div class="page-header">
 		<h1>User Info ...</h1>
 	</div>
-	<p>
-		<a href="<c:url value="/user"/>" class="btn btn-xs btn-default">Users</a>
-		<c:if test="${empty user.id}">
-			<button onclick="fnSave()"   class="btn btn-xs btn-success">Save</button>
-		</c:if>
-		<c:if test="${!empty user.id}">
-			<button onclick="fnUpdate()" class="btn btn-xs btn-success">Update</button>
-			<button onclick="fnDelete()" class="btn btn-xs btn-warning">Delete</button>
-		</c:if>
-	</p>
 
 	<form:form commandName="user" method="post" class="form-horizontal" role="form">
 		<input type="hidden" id="hiddenMethod" name="_method" value="PUT"/>
@@ -73,6 +66,20 @@ function fnSubmit() {
 				<p class="form-control-static"><form:errors path="role" cssClass="text-danger" /></p>
 			</div>
 		</div>
+		<div class="form-group">        
+			<div class="col-sm-2 text-right">
+				<a href="<c:url value="/user"/>" class="btn btn-sm btn-default">Users</a>
+			</div>
+			<div class="col-sm-10">
+				<c:if test="${empty user.id}">
+					<button onclick="fnSave()"   class="btn btn-sm btn-success">Save</button>
+				</c:if>
+				<c:if test="${!empty user.id}">
+					<button onclick="fnUpdate()" class="btn btn-sm btn-success">Update</button>
+					<button onclick="fnDelete()" class="btn btn-sm btn-warning">Delete</button>
+				</c:if>
+			</div>
+		</div>		
 	</form:form>
 
 </div>

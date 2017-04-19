@@ -24,6 +24,10 @@
 #accordion button:hover, #accordion a:hover {
 	z-index: auto;
 }
+#accordion a:hover, #accordion a:focus {
+	color: #fff;
+	box-shadow: none;	
+}
 @media (min-width: 992px) {
 	textarea.form-control {height: 400px;}
 	.panel-heading {padding: 10px 15px;}
@@ -45,6 +49,10 @@
 	.col-md-2 > .panel.panel-default {width: 50%; margin: 20px auto;}
 	.panel-method > .panel-heading {display: none;}
 	.panel-method > .panel-body {padding: 5px 0;}
+}
+textarea.form-control {
+	border: 0;
+	box-shadow: none;
 }
 </style>
 <script type="text/javascript">

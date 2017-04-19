@@ -30,6 +30,11 @@ $(document).ready(function() {
 	var windowHeight = $(window).innerHeight();
 	var tableHeight = windowHeight - 200;
 	console.log(windowHeight, tableHeight);
+	
+	$(window).resize(function() {
+		$(".dataTables_scrollBody").css("max-height", $(window).innerHeight() - 200);
+	});
+
     $('#list').DataTable({
     	scrollY:        tableHeight + 'px',
         scrollCollapse: true,
