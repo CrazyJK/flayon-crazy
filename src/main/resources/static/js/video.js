@@ -90,9 +90,10 @@ function fnEditSubtitles(selectedOpus) {
  * @param selectedOpus
  */
 function fnPlay(selectedOpus) {
-	console.log("Video play " + selectedOpus);
-	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/play");
-	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F') {
+	console.log("Video play ", selectedOpus, "listViewType=", listViewType);
+//	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/play");
+	actionFrame(videoPath + "/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
+	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'Test') {
 		fnVideoDetail(selectedOpus);
 	}  
 }
@@ -138,17 +139,25 @@ function fnRandomPlay() {
  * @param opus
  */
 function fnFocusVideo(opus) {
+	console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
 	if (listViewType == 'L') {
 		$.large.focusVideo(opus);
 	}
 	else if (listViewType == 'S' || listViewType == 'V' || listViewType == 'F') {
 		$.slide.focusVideo(opus);
 	}
-	else { // Card, Box
+	else if (listViewType == 'C' || listViewType == 'B' || listViewType == 'IH') {
 		$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
 			$(this).addClass("video-focus");
 		});
-		var topValue = $("#opus-" + opus).position().top - $("#headerDiv").outerHeight() - 20;
+	}
+	else {
+		var topValue = $("#opus-" + opus).position().top - $("#header_div").outerHeight() - 20;
+		console.log("fnFocusVideo", opus, "listViewType = ", listViewType, 
+				"position.top", $("#opus-" + opus).position().top, 
+				"offset.top", $("#opus-" + opus).offset().top, 
+				"header", $("#header_div").outerHeight(), 
+				"scrollTop", topValue);
 		$("#content_div").scrollTop(topValue);
 	}
 }

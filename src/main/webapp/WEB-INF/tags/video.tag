@@ -8,7 +8,8 @@
 <%@ attribute name="mode"    required="false" %><%-- mode : s(Small), l(Large) --%>
 <%@ attribute name="tooltip" required="false" %><%-- tooltip --%>
 <%@ attribute name="tagList" required="false" type="java.util.List" %>
-<c:set var="cssClass" value="label label-plain"/>
+<%@ attribute name="css"     required="false" %>
+<c:set var="cssClass" value="${empty css ? 'label label-plain' : css}"/>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
 <%  if (view.equalsIgnoreCase("video")) { %>
 	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" style="margin-right:3px;" onclick="fnPlay('${video.opus}')">

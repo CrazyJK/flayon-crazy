@@ -437,7 +437,7 @@ listViewType = '${videoSearch.listViewType}';
 			</ul>
 		</c:when>
 		<c:otherwise>
-			<div class="">
+			<div class="hide">
 				<h3><span  class="label label-primary">파일 2개이상인 비디오</span></h3>
 				<ol>
 				<c:forEach items="${videoList}" var="video">
@@ -452,7 +452,7 @@ listViewType = '${videoSearch.listViewType}';
 				</c:forEach>
 				</ol>
 			</div>
-			<div class="">
+			<div class="hide">
 				<ul class="list-group">
 				<c:forEach items="${videoList}" var="video">
 					<li class="list-group-item">
@@ -463,6 +463,109 @@ listViewType = '${videoSearch.listViewType}';
 					</li>
 				</c:forEach>
 				</ul>
+			</div>
+			<style type="text/css">
+			.cover-wrap {
+				padding-top: 10px;
+			}
+			.cover-image {
+				background-attachment: fixed;
+    			background-position: center 70px;
+    			background-repeat: no-repeat;
+    			background-size: 800px 530px;
+    			width: 790px;
+    			height: 520px;
+     			margin: 0 auto 10px;
+				box-shadow: 0 3px 9px rgba(0,0,0,.5) inset;
+				border-radius: 6px;
+				position: relative;
+			}
+			.cover-title {
+			    padding: 15px;
+			    margin: 15px;
+			    text-shadow: 0px 0px 5px #0c0c0c;
+			    color: #fff;
+			    background-color: rgba(256,256,256,.5);
+			    border-radius: 12px;
+			    text-align: center;
+			}
+			.cover-detail {
+				width: 780px;
+     			margin: 0 auto 25px;
+     			text-align: center;
+			}
+			.btn-random-view {
+				display: inline-block; 
+				padding: 5px 14px; 
+				background-color: #fff; 
+				border-radius: 15px; 
+				color: #337ab7; 
+				text-decoration: none;
+			}
+			</style>
+			<div>
+				<c:forEach items="${videoList}" var="video">
+					<div class="cover-wrap" id="opus-${video.opus}">
+						<div class="cover-image" data-src="${PATH}/video/${video.opus}/cover"><!-- style="background-image:url(${PATH}/video/${video.opus}/cover);" -->
+							<div class="display-middle">
+								<h3 class="cover-title">
+									<jk:video video="${video}" view="title" css="label"/>
+								</h3>
+							</div>
+						</div>
+						<div class="cover-detail">
+									
+								<jk:video video="${video}" view="rank"      mode="l"/>
+							<h4><jk:video video="${video}" view="studio"    mode="l"/>
+								<jk:video video="${video}" view="opus"      mode="l"/>
+								<jk:video video="${video}" view="release"   mode="l"/>
+								<jk:video video="${video}" view="download"  mode="l"/></h4>
+							<h5><jk:video video="${video}" view="score"     mode="l"/>
+								<jk:video video="${video}" view="video"     mode="l"/>
+								<jk:video video="${video}" view="cover"     mode="l"/>
+								<jk:video video="${video}" view="subtitles" mode="l"/>
+								<jk:video video="${video}" view="overview"  mode="l"/></h5>
+							<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
+						   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
+							
+						</div>
+					</div>
+				</c:forEach>
+				<div style="position:fixed; right:20px; bottom:15px;">
+					<a onclick="randomView();" class="btn-random-view">Random View</a>
+				</div>
+				<script type="text/javascript">
+				function randomView() {
+					var selectedNumber = getRandomInteger(0, opusArray.length-1);
+					var selectedOpus = opusArray[selectedNumber];
+					console.log("randomView", selectedOpus);
+					location.href = "#opus-" + selectedOpus;
+				}
+				$(window).ready(function() {
+					randomView();
+					
+					// scroll
+					$("#content_div").scroll(function(e) {
+						var containerScrollTop = $("#content_div").scrollTop();
+						//console.log("scroll", containerScrollTop, e);
+						
+						$(".cover-wrap").each(function() {
+							var id = $(this).attr("id");
+							var top = $(this).offset().top;
+							if (-800 < top && top < 800) {
+								var coverImage = $(this).find(".cover-image");
+								var coverImageSrc = coverImage.attr("data-src");
+								var coverImageBgImg = coverImage.css("background-image");
+								if (coverImageBgImg === 'none') {
+									coverImage.css("background-image", "url(" + coverImageSrc + ")");
+								 	console.log("id", id, "top", top, "bg", "data-src", coverImageSrc, coverImageBgImg);
+								}
+							}
+						});
+					});
+
+				});
+				</script>
 			</div>
 		</c:otherwise>
 	</c:choose>

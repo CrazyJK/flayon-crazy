@@ -84,3 +84,11 @@ input[type='range'] {
 .btn-link:focus, .btn-link:hover, a:active, a:hover {
     text-decoration: none;
 }
+
+.display-middle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
