@@ -373,15 +373,17 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
-							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px;">
-								<%-- <dt style="margin-top: 479px;" class="nowrap">
-									<jk:video video="${video}" view="title"/>
-								</dt> --%>
+							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
+								<dt class="nowrap" style="height: inherit;">
+									<%-- <jk:video video="${video}" view="title"/> --%>
+									<span class="label label-plain title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
+									style="writing-mode: tb-rl; padding: 10px 10px; margin: 5px auto;">${video.title}</span>
+								</dt>
 							</dl>
 							<div class="box box-small">
-								<h3 class="nowrap" style="margin:0 0 5px; height:30px;">
+								<%-- <h3 class="nowrap" style="margin:0 0 5px; height:30px;">
 									<jk:video video="${video}" view="title"/>
-								</h3>
+								</h3> --%>
 									<jk:video video="${video}" view="rank"      mode="l"/>
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>
@@ -470,28 +472,30 @@ listViewType = '${videoSearch.listViewType}';
 			}
 			.cover-image {
 				background-attachment: fixed;
-    			background-position: center 70px;
+    			background-position: center 77px;
     			background-repeat: no-repeat;
     			background-size: 800px 530px;
     			width: 790px;
     			height: 520px;
-     			margin: 0 auto 10px;
+     			margin: 0 auto;
 				box-shadow: 0 3px 9px rgba(0,0,0,.5) inset;
 				border-radius: 6px;
 				position: relative;
 			}
 			.cover-title {
-			    padding: 15px;
-			    margin: 15px;
+				position: absolute;
+				left: 46.5%;
+			    padding: 5px;
+			    margin: 5px;
 			    text-shadow: 0px 0px 5px #0c0c0c;
 			    color: #fff;
-			    background-color: rgba(256,256,256,.5);
+			    background-color: rgba(256,256,256,.9);
 			    border-radius: 12px;
-			    text-align: center;
+			    writing-mode: tb-rl;
 			}
 			.cover-detail {
 				width: 780px;
-     			margin: 0 auto 25px;
+     			margin: 10px auto 25px;
      			text-align: center;
 			}
 			.btn-random-view {
@@ -506,12 +510,10 @@ listViewType = '${videoSearch.listViewType}';
 			<div>
 				<c:forEach items="${videoList}" var="video">
 					<div class="cover-wrap" id="opus-${video.opus}">
-						<div class="cover-image" data-src="${PATH}/video/${video.opus}/cover"><!-- style="background-image:url(${PATH}/video/${video.opus}/cover);" -->
-							<div class="display-middle">
-								<h3 class="cover-title">
-									<jk:video video="${video}" view="title" css="label"/>
-								</h3>
-							</div>
+						<div class="cover-image nowrap" data-src="${PATH}/video/${video.opus}/cover"><!-- style="background-image:url(${PATH}/video/${video.opus}/cover);" -->
+							<h3 class="cover-title">
+								<jk:video video="${video}" view="title" css="label"/>
+							</h3>
 						</div>
 						<div class="cover-detail">
 									
