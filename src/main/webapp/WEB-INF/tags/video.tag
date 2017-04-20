@@ -64,7 +64,7 @@
 <%  } else if (view.equalsIgnoreCase("studio")) { %>
 	<span class="${cssClass}" title="${video.studio}" onclick="fnViewStudioDetail('${video.studio.name}')">${video.studio.name}</span>
 <%  } else if (view.equalsIgnoreCase("title")) { %>
-	<span class="${cssClass} title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
+	<span class="${cssClass} video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 <%  } else if (view.equalsIgnoreCase("score")) { %>
 	<span class="${cssClass}" title="${video.scoreDesc}">${video.score}</span>
 	<c:if test="${mode eq 'l'}">

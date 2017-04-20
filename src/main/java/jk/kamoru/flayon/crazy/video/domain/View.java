@@ -23,6 +23,8 @@ public enum View {
 	F("Flay"),
 	/** Aperture */
 	A("Aperture"),
+	/** jk */
+	K("jk"),
 	/** Test */
 	Test("Test");
 	

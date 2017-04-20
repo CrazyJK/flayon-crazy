@@ -9,7 +9,6 @@
 <head>
 <title><s:message code="video.video"/></title>
 <script type="text/javascript">
-//bgContinue = false;
 var opusArray = ${opusArray};
 var bgImageCount = ${bgImageCount};
 var totalVideoSize = parseInt('${fn:length(videoList)}');
@@ -375,9 +374,8 @@ listViewType = '${videoSearch.listViewType}';
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
 							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
 								<dt class="nowrap" style="height: inherit;">
-									<%-- <jk:video video="${video}" view="title"/> --%>
-									<span class="label label-plain title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
-									style="writing-mode: tb-rl; padding: 10px 10px; margin: 5px auto;">${video.title}</span>
+									<span class="label label-plain video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
+										style="writing-mode:vertical-rl; padding:10px 10px; margin:5px auto;">${video.title}</span>
 								</dt>
 							</dl>
 							<div class="box box-small">
@@ -395,7 +393,7 @@ listViewType = '${videoSearch.listViewType}';
 									<jk:video video="${video}" view="subtitles" mode="l"/>
 									<jk:video video="${video}" view="overview"  mode="l"/></h5>
 								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
-								<div><jk:video video="${video}" view="tags"     mode="l" tagList="${tagList}"/></div>
+							   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
 							</div>
 						</div>
 					</c:forEach>
@@ -438,136 +436,85 @@ listViewType = '${videoSearch.listViewType}';
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:otherwise>
-			<div class="hide">
-				<h3><span  class="label label-primary">파일 2개이상인 비디오</span></h3>
-				<ol>
+		<c:when test="${videoSearch.listViewType eq 'K'}">
+			<div class="jk-video-wrapper" class="hide">
 				<c:forEach items="${videoList}" var="video">
-					<c:if test="${video.videoFileList.size() > 1 }">
-						<li><b class="badge">${video.videoFileList.size()}</b> 
-							<label class="label label-plain">${video.opus}</label>
-							<c:forEach items="${video.videoFileList}" var="file">
-								<br/><span class="label label-info" onclick="fnPlay('${video.opus}')">${file}</span>
-							</c:forEach>
-						</li>
-					</c:if>
-				</c:forEach>
-				</ol>
-			</div>
-			<div class="hide">
-				<ul class="list-group">
-				<c:forEach items="${videoList}" var="video">
-					<li class="list-group-item">
-						<div class="btn btn-info">
-							<span class="glyphicon glyphicon-film text-red"></span>
-							${video.fullname}
-						</div>
-					</li>
-				</c:forEach>
-				</ul>
-			</div>
-			<style type="text/css">
-			.cover-wrap {
-				padding-top: 10px;
-			}
-			.cover-image {
-				background-attachment: fixed;
-    			background-position: center 77px;
-    			background-repeat: no-repeat;
-    			background-size: 800px 530px;
-    			width: 790px;
-    			height: 520px;
-     			margin: 0 auto;
-				box-shadow: 0 3px 9px rgba(0,0,0,.5) inset;
-				border-radius: 6px;
-				position: relative;
-			}
-			.cover-title {
-				position: absolute;
-				left: 46.5%;
-			    padding: 5px;
-			    margin: 5px;
-			    text-shadow: 0px 0px 5px #0c0c0c;
-			    color: #fff;
-			    background-color: rgba(256,256,256,.9);
-			    border-radius: 12px;
-			    writing-mode: tb-rl;
-			}
-			.cover-detail {
-				width: 780px;
-     			margin: 10px auto 25px;
-     			text-align: center;
-			}
-			.btn-random-view {
-				display: inline-block; 
-				padding: 5px 14px; 
-				background-color: #fff; 
-				border-radius: 15px; 
-				color: #337ab7; 
-				text-decoration: none;
-			}
-			</style>
-			<div>
-				<c:forEach items="${videoList}" var="video">
-					<div class="cover-wrap" id="opus-${video.opus}">
-						<div class="cover-image nowrap" data-src="${PATH}/video/${video.opus}/cover"><!-- style="background-image:url(${PATH}/video/${video.opus}/cover);" -->
-							<h3 class="cover-title">
-								<jk:video video="${video}" view="title" css="label"/>
-							</h3>
-						</div>
-						<div class="cover-detail">
-									
-								<jk:video video="${video}" view="rank"      mode="l"/>
-							<h4><jk:video video="${video}" view="studio"    mode="l"/>
-								<jk:video video="${video}" view="opus"      mode="l"/>
-								<jk:video video="${video}" view="release"   mode="l"/>
-								<jk:video video="${video}" view="download"  mode="l"/></h4>
-							<h5><jk:video video="${video}" view="score"     mode="l"/>
-								<jk:video video="${video}" view="video"     mode="l"/>
-								<jk:video video="${video}" view="cover"     mode="l"/>
-								<jk:video video="${video}" view="subtitles" mode="l"/>
-								<jk:video video="${video}" view="overview"  mode="l"/></h5>
-							<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
-						   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
-							
+					<div class="jk-video" id="opus-${video.opus}">
+						<div class="jk-video-inner">
+							<div class="jk-video-cover lazy-load" data-src="${PATH}/video/${video.opus}/cover">
+								<h3 class="jk-video-title">
+									<jk:video video="${video}" view="title" css="label"/>
+								</h3>
+							</div>
+							<div class="jk-video-detail">
+									<jk:video video="${video}" view="rank"      mode="l"/>
+								<h4><jk:video video="${video}" view="studio"    mode="l"/>
+									<jk:video video="${video}" view="opus"      mode="l"/>
+									<jk:video video="${video}" view="release"   mode="l"/>
+									<jk:video video="${video}" view="download"  mode="l"/></h4>
+								<h5><jk:video video="${video}" view="score"     mode="l"/>
+									<jk:video video="${video}" view="video"     mode="l"/>
+									<jk:video video="${video}" view="cover"     mode="l"/>
+									<jk:video video="${video}" view="subtitles" mode="l"/>
+									<jk:video video="${video}" view="overview"  mode="l"/></h5>
+								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
+							   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
+							</div>
 						</div>
 					</div>
 				</c:forEach>
+				<div class="clear" style="height:200px;"></div>
 				<div style="position:fixed; right:20px; bottom:15px;">
 					<a onclick="randomView();" class="btn-random-view">Random View</a>
 				</div>
-				<script type="text/javascript">
-				function randomView() {
-					var selectedNumber = getRandomInteger(0, opusArray.length-1);
-					var selectedOpus = opusArray[selectedNumber];
-					console.log("randomView", selectedOpus);
-					location.href = "#opus-" + selectedOpus;
-				}
-				$(window).ready(function() {
-					randomView();
-					
-					// scroll
-					$("#content_div").scroll(function(e) {
-						var containerScrollTop = $("#content_div").scrollTop();
-						//console.log("scroll", containerScrollTop, e);
-						
-						$(".cover-wrap").each(function() {
-							var id = $(this).attr("id");
-							var top = $(this).offset().top;
-							if (-800 < top && top < 800) {
-								var coverImage = $(this).find(".cover-image");
-								var coverImageSrc = coverImage.attr("data-src");
-								var coverImageBgImg = coverImage.css("background-image");
-								if (coverImageBgImg === 'none') {
-									coverImage.css("background-image", "url(" + coverImageSrc + ")");
-								 	console.log("id", id, "top", top, "bg", "data-src", coverImageSrc, coverImageBgImg);
-								}
-							}
-						});
-					});
-
-				});
-				</script>
+				<div style="position:fixed; left:20px; bottom:15px;" class="range-cover-size">
+					<input type="range" id="rangeCover" min="200" max="800" value="800" step="50" onchange="changeCover(this.value)"/>
+				</div>
+			</div>
+			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
+			<script type="text/javascript" src="${PATH}/js/videoMain.jk.js"></script>
+		</c:when>
+		<c:otherwise>
+			<div class="panel-group">
+				<div class="panel panel-primary" style="background-color:rgba(255,255,255,.5);">
+					<div class="panel-heading">
+						More than 2 video files
+					</div>
+					<div class="panel-body">
+						<ol>
+							<c:forEach items="${videoList}" var="video">
+								<c:if test="${video.videoFileList.size() > 1 }">
+									<li>
+										<span class="glyphicon glyphicon-film text-red"></span>
+										<jk:video video="${video}" view="opus" mode="s"/>
+										<ul>
+											<c:forEach items="${video.videoFileList}" var="file">
+												<li><span class="label label-plain" onclick="fnPlay('${video.opus}')">${file}</span></li>
+											</c:forEach>
+										</ul>
+									</li>
+								</c:if>
+							</c:forEach>
+						</ol>
+					</div>
+				</div>
+				<div class="panel panel-primary" style="background-color:rgba(255,255,255,.5);">
+					<div class="panel-heading">
+						No video list
+					</div>
+					<div class="panel-body">
+						<ol>
+							<c:forEach items="${videoList}" var="video">
+								<c:if test="${video.videoFileList.size() < 1 }">
+									<li>
+										<span class="glyphicon glyphicon-film text-red"></span>
+										<span class="label label-plain" onclick="fnVideoDetail('${video.opus}')">${video.fullname}</span>
+									</li>
+								</c:if>
+							</c:forEach>
+						</ol>
+					</div>
+				</div>
 			</div>
 		</c:otherwise>
 	</c:choose>

@@ -1,17 +1,19 @@
 var calculatedDivHeight = 0;
 
-var CRAZY_DECORATOR_THEME    = 'crazy-decorator.theme';
-var THUMBNAMILS_COVER_INDEX  = 'thumbnamils.cover.index';
-var THUMBNAMILS_COVER_WIDTH  = 'thumbnamils.cover.width';
-var THUMBNAMILS_COVER_HEIGHT = 'thumbnamils.cover.height';
-var THUMBNAMILS_IMAGE_INDEX  = 'thumbnamils.image.index';
-var THUMBNAMILS_IMAGE_WIDTH  = 'thumbnamils.image.width';
-var THUMBNAMILS_IMAGE_HEIGHT = 'thumbnamils.image.height';
-var THUMBNAMILS_MODE         = 'thumbnamils.mode';
-var THUMBNAMILS_BTN_DELETE   = 'thumbnamils.btn.delete';
-var THUMBNAMILS_BTN_MAGNIFY  = 'thumbnamils.btn.magnify';
+var CRAZY_DECORATOR_THEME       = 'crazy-decorator.theme';
+var THUMBNAMILS_COVER_INDEX     = 'thumbnamils.cover.index';
+var THUMBNAMILS_COVER_WIDTH     = 'thumbnamils.cover.width';
+var THUMBNAMILS_COVER_HEIGHT    = 'thumbnamils.cover.height';
+var THUMBNAMILS_IMAGE_INDEX     = 'thumbnamils.image.index';
+var THUMBNAMILS_IMAGE_WIDTH     = 'thumbnamils.image.width';
+var THUMBNAMILS_IMAGE_HEIGHT    = 'thumbnamils.image.height';
+var THUMBNAMILS_MODE            = 'thumbnamils.mode';
+var THUMBNAMILS_BTN_DELETE      = 'thumbnamils.btn.delete';
+var THUMBNAMILS_BTN_MAGNIFY     = 'thumbnamils.btn.magnify';
 var GRAVIAINTERVIEW_IMAGE_WIDTH = 'graviainterview.image.width';
 var VIDEOLISTBYSPA_IMAGE_WIDTH  = 'videolistbyspa.image.width';
+var VIDEOMAIN_JK_COVER_WIDTH    = 'videomain.jk.cover.width';
+
 /**
  * div container 높이 조정
  */
@@ -90,10 +92,10 @@ function fnEditSubtitles(selectedOpus) {
  * @param selectedOpus
  */
 function fnPlay(selectedOpus) {
-	console.log("Video play ", selectedOpus, "listViewType=", listViewType);
+	//console.log("Video play ", selectedOpus, "listViewType=", listViewType);
 //	$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/play");
 	actionFrame(videoPath + "/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
-	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'Test') {
+	if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'K') {
 		fnVideoDetail(selectedOpus);
 	}  
 }
@@ -123,7 +125,7 @@ function fnVideoWrong(selectedOpus) {
  * call video player by random
  */
 function fnRandomPlay() {
-	console.log("Random play start");
+	//console.log("Random play start");
 	if(opusArray.length == 0) {
 		alert("다 봤슴당");
 		return;
@@ -139,7 +141,7 @@ function fnRandomPlay() {
  * @param opus
  */
 function fnFocusVideo(opus) {
-	console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
+	//console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
 	if (listViewType == 'L') {
 		$.large.focusVideo(opus);
 	}
@@ -150,6 +152,9 @@ function fnFocusVideo(opus) {
 		$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
 			$(this).addClass("video-focus");
 		});
+	}
+	else if (listViewType == 'K') {
+		location.href = "#opus-" + opus;
 	}
 	else {
 		var topValue = $("#opus-" + opus).position().top - $("#header_div").outerHeight() - 20;
