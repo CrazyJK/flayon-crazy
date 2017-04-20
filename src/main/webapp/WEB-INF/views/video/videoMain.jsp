@@ -392,7 +392,8 @@ listViewType = '${videoSearch.listViewType}';
 									<jk:video video="${video}" view="cover"     mode="l"/>
 									<jk:video video="${video}" view="subtitles" mode="l"/>
 									<jk:video video="${video}" view="overview"  mode="l"/></h5>
-								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
+								<h4 style="margin-bottom:0;">
+									<jk:video video="${video}" view="actress"   mode="f"/></h4>
 							   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
 							</div>
 						</div>
@@ -437,7 +438,9 @@ listViewType = '${videoSearch.listViewType}';
 			</ul>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'K'}">
-			<div class="jk-video-wrapper" class="hide">
+			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
+			<script type="text/javascript" src="${PATH}/js/videoMain.jk.js"></script>
+			<div class="jk-video-wrapper" style="visibility:hidden;">
 				<c:forEach items="${videoList}" var="video">
 					<div class="jk-video" id="opus-${video.opus}">
 						<div class="jk-video-inner">
@@ -457,13 +460,14 @@ listViewType = '${videoSearch.listViewType}';
 									<jk:video video="${video}" view="cover"     mode="l"/>
 									<jk:video video="${video}" view="subtitles" mode="l"/>
 									<jk:video video="${video}" view="overview"  mode="l"/></h5>
-								<h4><jk:video video="${video}" view="actress"   mode="f"/></h4>
+								<h4 style="margin-bottom:0;">
+									<jk:video video="${video}" view="actress"   mode="f"/></h4>
 							   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
 							</div>
 						</div>
 					</div>
 				</c:forEach>
-				<div class="clear" style="height:200px;"></div>
+				<div class="clear" style="height:100px;"></div>
 				<div style="position:fixed; right:20px; bottom:15px;">
 					<a onclick="randomView();" class="btn-random-view">Random View</a>
 				</div>
@@ -471,8 +475,6 @@ listViewType = '${videoSearch.listViewType}';
 					<input type="range" id="rangeCover" min="200" max="800" value="800" step="50" onchange="changeCover(this.value)"/>
 				</div>
 			</div>
-			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
-			<script type="text/javascript" src="${PATH}/js/videoMain.jk.js"></script>
 		</c:when>
 		<c:otherwise>
 			<div class="panel-group">

@@ -30,7 +30,7 @@
 <%  } else if (view.equalsIgnoreCase("release")) { %>
 	<span class="${cssClass}" title="release date">${video.releaseDate}</span>
 <%  } else if (view.equalsIgnoreCase("actress")) { %>
-	<div style="max-height:${mode eq 'f' ? '70' : '50'}px; overflow:auto;">
+	<div style="max-height:${mode eq 'f' ? '70' : '50'}px; overflow:auto; padding-bottom:5px;">
 	<c:forEach items="${video.actressList}" var="actress">
 		${mode eq 'f' ? '<div style="margin-bottom: 5px; display:inline-block;">' : '' }
 		<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 

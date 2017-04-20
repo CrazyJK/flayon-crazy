@@ -343,6 +343,7 @@ function toogleTheme(themeName) {
 					+ ' .btn:hover, .btn:focus, .btn-primary.active, .btn-primary.active:focus {color: #333 !important; box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
 					+ ' .label-success, .label-info, .label-warning, .label-primary, .label-danger {background-color: rgba(38, 90, 136, .5) !important;}'
 				 	+ ' .favorite {box-shadow: 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
+				 	+ ' .jk-video-detail .label-plain.favorite {box-shadow: 0 3px 9px rgba(0,0,0,.3), 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
 				+ '</style>'
 			);
 			$("#backMenu").hide();
