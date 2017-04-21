@@ -48,7 +48,7 @@ public class VideoSearch implements Serializable {
 	/**
 	 * View type
 	 */
-	View listViewType = View.F;
+	View listViewType = View.K;
 	/**
 	 * 정렬 방법 
 	 */

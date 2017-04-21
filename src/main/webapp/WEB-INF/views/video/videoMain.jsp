@@ -85,7 +85,7 @@ listViewType = '${videoSearch.listViewType}';
 			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
 		</label>
 		<!-- Play -->
-		<button class="btn btn-xs btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></button>
+		<a class="btn btn-xs btn-primary float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></a>
 
 		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(studioList)}</span></li>
@@ -468,12 +468,12 @@ listViewType = '${videoSearch.listViewType}';
 					</div>
 				</c:forEach>
 				<div class="clear" style="height:100px;"></div>
-				<div style="position:fixed; right:20px; bottom:15px;">
-					<a onclick="randomView();" class="btn-random-view">Random View</a>
-				</div>
-				<div style="position:fixed; left:20px; bottom:15px;" class="range-cover-size">
-					<input type="range" id="rangeCover" min="200" max="800" value="800" step="50" onchange="changeCover(this.value)"/>
-				</div>
+			</div>
+			<div style="position:fixed; left:20px; bottom:15px;" class="range-cover-wrap w3-animate-left">
+				<input type="range" id="rangeCover" min="200" max="800" value="800" step="50"/>
+			</div>
+			<div style="position:fixed; right:20px; bottom:15px;" class="w3-animate-right">
+				<a id="randomViewBtn" class="btn-random-view">Random View</a>
 			</div>
 		</c:when>
 		<c:otherwise>

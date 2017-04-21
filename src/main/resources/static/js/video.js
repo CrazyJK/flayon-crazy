@@ -42,13 +42,10 @@ function resizeDivHeight() {
  * @param imgIdx
  */
 function setBackgroundImage(imgIdx) {
-	if (imgIdx)
-		currBGImageNo = imgIdx;
-	else {
-		currBGImageNo = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, bgImageCount-1)));
-	}
+//	if (imgIdx)		currBGImageNo = imgIdx;
+//	else		currBGImageNo = getRandomInteger(0, bgImageCount-1);
+	currBGImageNo = imgIdx ? imgIdx : getRandomInteger(0, bgImageCount-1);
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
-//	$("#content_div").css("background-image", "url(" + currBGImageUrl + ")");
 	$("body").css("background-image", "url(" + currBGImageUrl + ")");
 	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
 }

@@ -3,7 +3,7 @@
 	text-align: center;
 }
 	.jk-video {
-		padding: 5px 5px;
+		padding: 10px;
 		display: inline-block;
 	}
 		.jk-video-inner {
@@ -11,23 +11,21 @@
 			width: 800px;
 			box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19);
 			border-radius: 4px;
-   			transition: width .3s;
+   			transition: width .3s, box-shadow .3s;
+		}
+		.jk-video-inner:hover {
+			box-shadow: 0 4px 10px 0 rgba(0,0,255,0.2),0 4px 20px 0 rgba(0,0,255,0.19);
 		}
 			.jk-video-cover {
 				background: rgba(241, 241, 241, .5) url('/img/bg/blank-cover.png') no-repeat center bottom;
     			background-size: cover;
-				/* background-attachment: fixed; */
-    			/* background-position: center 77px; */
-    			/* background-size: 810px 548px; */
-    			/* background-color: transparent; */
     			width: inherit;
     			height: 538px;
      			margin: 0 auto;
-				/* box-shadow: 0 3px 9px rgba(0,0,0,.5) inset; */
 				border-top-left-radius: 4px;
     			border-top-right-radius: 4px;
     			position: relative;
-    			transition: background .3s, height .3s;
+    			transition: height .3s;
 			}
 				.jk-video-title {
 					position: absolute;
@@ -43,19 +41,23 @@
 				    overflow: hidden;
 	    			white-space: nowrap;
 	    			text-overflow: ellipsis;
-	    			transition: background-color .3s;
+	    			transition: background .3s;
 				}
 				.jk-video-title:hover {
 					background-color: #337ab7;
 				}
 			.jk-video-detail {
 				width: inherit;
-     			margin: 0 auto 25px;
+     			margin: 0 auto 15px;
      			text-align: center;
      			padding: 10px 0;
      			border-bottom-right-radius: 4px;
     			border-bottom-left-radius: 4px;
 				background-color: #f1f1f1;
+    			transition: background .3s;
+			}
+			.jk-video-detail:hover {
+				background-color: #fff;
 			}
 			.jk-video-detail .label-plain, .jk-video-detail .input-group {
 				box-shadow: 0 3px 9px rgba(0,0,0,.3);
@@ -64,16 +66,28 @@
 				box-shadow: 0 0px 10px 0px rgba(250, 0, 230, 0.5) inset, 0 3px 9px rgba(0,0,0,.3);
 			}
 
-.btn-random-view, .range-cover-size {
+.btn-random-view, .range-cover-wrap {
 	display: inline-block; 
 	padding: 5px 14px; 
 	background-color: #fff; 
 	border-radius: 15px; 
 	color: #337ab7; 
 	text-decoration: none;
+	cursor: pointer;
+	transition: background-color .3s, box-shadow .3s;
 }
-.btn-random-view:hover {
+.btn-random-view:hover, .range-cover-wrap:hover {
 	text-decoration: none;
- 	background-color: rgba(38, 90, 136, .5);
- 	color: white;
+ 	/* background-color: rgba(38, 90, 136, .5);
+ 	color: white; */
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
 }
+
+.w3-animate-fading{animation:fading 10s infinite}@keyframes fading{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.w3-animate-opacity{animation:opac 0.8s}@keyframes opac{from{opacity:0} to{opacity:1}}
+.w3-animate-top{position:relative;animation:animatetop 0.4s}@keyframes animatetop{from{top:-300px;opacity:0} to{top:0;opacity:1}}
+.w3-animate-left{position:relative;animation:animateleft 0.4s}@keyframes animateleft{from{left:-300px;opacity:0} to{left:0;opacity:1}}
+.w3-animate-right{position:relative;animation:animateright 0.4s}@keyframes animateright{from{right:-300px;opacity:0} to{right:0;opacity:1}}
+.w3-animate-bottom{position:relative;animation:animatebottom 0.4s;}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
+.w3-animate-zoom{animation:animatezoom 0.6s}@keyframes animatezoom{from{transform:scale(0)} to{transform:scale(1)}}
+.w3-animate-input{transition:width 0.4s ease-in-out}.w3-animate-input:focus{width:100%!important}

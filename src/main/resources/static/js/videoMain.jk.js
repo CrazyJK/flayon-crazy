@@ -1,70 +1,88 @@
 /**
  * for videoMain.jsp jk view
  */
-$(window).ready(function() {
+$(function(){
 
-	// scroll
-	$("#content_div").scroll(setCover);
+	var firstChangeCoverSize = true;
+	var opusList = new Array();
+	
+	$(window).ready(function() {
 
-	$(window).on("mousedown", function(event) {
-		switch (event.which) {
-		case 1: // left click
-			break;
-		case 2: // middle click
-			fnRandomPlay();
-			break;
-		case 3: // right click
-			break;
-		}
+		$(window).on("mousedown", function(event) {
+			switch (event.which) {
+			case 1: // left click
+				break;
+			case 2: // middle click
+				fnRandomPlay();
+				break;
+			case 3: // right click
+				break;
+			}
+		});
+
+		var width = getLocalStorageItem(VIDEOMAIN_JK_COVER_WIDTH, 800);
+
+		makeOpusList();
+		
+		$("#rangeCover").on("change", changeCoverSize).val(width).trigger("change");
+		$("#randomViewBtn").on("click", randomView).trigger("click");
+		$("#content_div").on('scroll', loadCoverImage).trigger("scroll");
+
+		$(".jk-video-wrapper").css("visibility", "visible");
+
 	});
 
-	var width = getLocalStorageItem(VIDEOMAIN_JK_COVER_WIDTH, 800);
-	rangeCover.value = width;
-	changeCover(width);
+	function makeOpusList() {
+		$(".jk-video").each(function() {
+			opusList.push($(this).attr("id"));
+		});
+	}
 	
-	randomView();
+	
+	function changeCoverSize() {
+		var width = parseInt(rangeCover.value);
+		var height = parseInt(width * 0.6725);
+		
+		$(".jk-video-inner").css({width: width});
+		$(".jk-video-cover").css({height: height}); //  , backgroundSize: width + "px " + height + "px"
+		$(".jk-video-title").css({fontSize: (width > 500 ? '24px' : "18px"), maxHeight: height-10});
+		$(".jk-video-detail").toggle(width > 500);
+		
+		setLocalStorageItem(VIDEOMAIN_JK_COVER_WIDTH, width);
+		rangeCover.title = width + " x " + height;
+		console.log("changeCoverSize", "width", width, "height", height);
+		
+		if ($(".jk-video-cover.lazy-load").length > 0)
+			if (firstChangeCoverSize)
+				firstChangeCoverSize = false;
+			else
+				loadCoverImage();
+	}
 
-	$(".jk-video-wrapper").css("visibility", "visible");
-});
+	function randomView() {
+		var selectedNumber = getRandomInteger(0, opusList.length-1);
+		var selectedOpus = opusList[selectedNumber];
+		location.href = "#" + selectedOpus;
+		console.log("randomView", selectedOpus);
+	}
 
-function randomView() {
-	var selectedNumber = getRandomInteger(0, opusArray.length-1);
-	var selectedOpus = opusArray[selectedNumber];
-	//console.log("randomView", selectedOpus);
-	location.href = "#opus-" + selectedOpus;
-}
-
-function setCover() {
-	$(".jk-video-cover.lazy-load").each(function() {
-		var top = $(this).offset().top;
+	function loadCoverImage() {
 		var from = 0 - parseInt(rangeCover.value);
-		var to = $("#content_div").height() + 100;
-		//console.log("margin", from, to);
-		if (from < top && top < to) {
-			$(this).css("background-image", "url(" + $(this).attr("data-src") + ")").removeClass("lazy-load").addClass("lazy-loaded");
-		 	//console.log("set background-image as", $(this).attr("data-src"));
-		}
-	});
-	//console.log(".jk-video-cover.lazy-load length", $(".jk-video-cover.lazy-load").length);
-	if ($(".jk-video-cover.lazy-load").length == 0) {
-		$("#content_div").off("scroll");
-		//console.log("off scroll event");
-	}
-}
+		var to   = $("#content_div").height() + 100;
+		//console.log("loadCoverImage", "from", from, "to", to);
 
-function changeCover(val) {
-	var width = parseInt(val);
-	var height = parseInt(val*0.6725);
-	rangeCover.title = width + "px " + height + "px";
-	//console.log("changeCover", width, height);
-	$(".jk-video-inner").css({width: width});
-	$(".jk-video-cover").css({height: height}); //  , backgroundSize: width + "px " + height + "px"
-	$(".jk-video-title").css({fontSize: (width > 500 ? '24px' : "18px"), maxHeight: height-10});
-	$(".jk-video-detail").toggle(width > 500);
-	
-	setLocalStorageItem(VIDEOMAIN_JK_COVER_WIDTH, width);
-	
-	if ($(".jk-video-cover.lazy-load").length > 0) {
-		setCover();
+		$(".jk-video-cover.lazy-load").each(function() {
+			var top  = $(this).offset().top;
+			if (from < top && top < to) {
+				var imgUrl = $(this).attr("data-src");
+				$(this).css("background-image", "url(" + imgUrl + ")").removeClass("lazy-load").addClass("lazy-loaded");
+			 	console.log("load cover image", imgUrl);
+			}
+		});
+		if ($(".jk-video-cover.lazy-load").length == 0) {
+			$("#content_div").off("scroll");
+			console.log("all cover image loadeed. #content_div scroll event off");
+		}
 	}
-}
+	
+});
