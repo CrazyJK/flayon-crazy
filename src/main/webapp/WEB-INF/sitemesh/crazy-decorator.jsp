@@ -76,7 +76,13 @@ $(document).ready(function() {
 	resizeDivHeight();
 //	$('[data-toggle="tooltip"]').tooltip(); // bootstrap tooltip initialize 
 	toogleTheme(themeSwitch);
+
+	try {
+		activeLazyClass();
+	} catch(e) {}
+
 	loading(false);
+
 });
 
 function addResizeListener() {

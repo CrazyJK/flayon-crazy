@@ -355,3 +355,18 @@ function getLocalStorageItem(itemName, notfoundDefault) {
 function guid() {
 	return 'f' + (Math.random() * (1<<30)).toString(16).replace('.', '');
 }
+
+/**
+ * data-lazy-class="w3-animate-opacity, 3000"
+ * 3초후에 클래스를 추가한다.
+ * @returns
+ */
+function activeLazyClass() {
+	$("[data-lazy-class]").each(function() {
+		var o = $(this);
+		var c = $(this).attr("data-lazy-class").split(",");
+		setTimeout(function() {
+			o.show().removeClass("hide").css({visibility: 'visible'}).addClass(c[0]);
+		}, parseInt(c[1]));
+	});
+}

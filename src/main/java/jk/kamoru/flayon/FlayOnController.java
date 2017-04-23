@@ -1,5 +1,12 @@
 package jk.kamoru.flayon;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.fields;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
@@ -26,7 +33,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -39,6 +51,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.base.access.AccessLog;
 import jk.kamoru.flayon.base.access.AccessLogRepository;
@@ -255,7 +269,7 @@ public class FlayOnController {
 
 	@RequestMapping("/accesslog")
 	public String accesslog(Model model, 
-			@PageableDefault(sort = { "id" }, direction = Direction.DESC, size = 15) Pageable pageable,
+			@PageableDefault(sort = { "id" }, direction = Direction.DESC, size = 10) Pageable pageable,
 			@RequestParam(value="remoteAddr", required=false, defaultValue="") String remoteAddr, 
 			@RequestParam(value="requestURI", required=false, defaultValue="") String requestURI) {
 		log.info("remoteAddr [{}], requestURI [{}], {}", remoteAddr, requestURI, pageable);
@@ -278,6 +292,53 @@ public class FlayOnController {
 		model.addAttribute("useAccesslogRepository", useAccesslogRepository);
 
 		return "flayon/accesslog";
+	}
+	
+	@Autowired MongoTemplate mongoTemplate;
+	@RequestMapping("/accesslog/groupby/requestURI")
+	@ResponseBody
+	public List<RequestURICount> accesslogGroupbyRequestURI() {
+		Aggregation agg = newAggregation(
+				match(Criteria.where("requestURI").ne("/video/ping.json"))
+				, group("requestURI").count().as("total")
+				, project("total").and("requestURI").previousOperation()
+				, sort(Sort.Direction.ASC, "requestURI")
+		); 
+		AggregationResults<RequestURICount> groupResults = mongoTemplate.aggregate(agg, AccessLog.class, RequestURICount.class);
+		List<RequestURICount> result = groupResults.getMappedResults();
+		return result;
+	}
+	@RequestMapping("/accesslog/groupby/accessDate")
+	@ResponseBody
+	public List<AccessDateCount> accesslogGroupbyAccessDate() {
+		Aggregation agg = newAggregation(
+				match(Criteria.where("accessDate").ne(null))
+				, project()
+			        .andExpression("year(accessDate)").as("year")
+			        .andExpression("month(accessDate)").as("month")
+			        .andExpression("dayOfMonth(accessDate)").as("day")
+			    , group(fields().and("year").and("month").and("day")).count().as("total")
+				, sort(Sort.Direction.ASC, "year").and(Sort.Direction.ASC, "month").and(Sort.Direction.ASC, "day")
+		); 
+		AggregationResults<AccessDateCount> groupResults = mongoTemplate.aggregate(agg, AccessLog.class, AccessDateCount.class);
+		List<AccessDateCount> result = groupResults.getMappedResults();
+		return result;
+	}
+	@Data
+	static class RequestURICount {
+		private String requestURI;
+		private long total;
+	}
+	@Data
+	static class AccessDateCount {
+		@JsonIgnore private String year;
+		@JsonIgnore private String month;
+		@JsonIgnore private String day;
+		private long total;
+		
+		public String getAccessDate() {
+			return year + "-" + (month.length() < 2 ? "0" : "") + month + "-" + (day.length() < 2 ? "0" : "") + day;
+		}
 	}
 	
 	@RequestMapping("/exec")

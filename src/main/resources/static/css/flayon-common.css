@@ -66,3 +66,10 @@ body {
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
+.w3-display-center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}

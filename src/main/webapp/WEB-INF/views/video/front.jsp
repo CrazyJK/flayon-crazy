@@ -55,18 +55,21 @@ body {
     padding: 5px 140px !important;
     margin: 0;
 }
-#favicon-crazy, #favicon-video {
+#favicon-crazy {
+	left: 5px;
+} 
+#favicon-video {
+	right: 5px;
+}
+.favicon {
 	position: absolute;
 	cursor: move;
 	bottom: 5px;
 	width: 128px;
 	transition: border-radius 3s ease 0s;
 }
-#favicon-crazy {
-	left: 5px;
-} 
-#favicon-video {
-	right: 5px;
+.favicon:hover {
+	box-shadow: 0 3px 6px rgba(0,0,0,.15), 0 3px 9px rgba(0,0,0,.19);
 }
 h1 > b.neon {
 	text-shadow: rgba(38, 90, 136, 0.5) 3px 3px 10px;
@@ -314,8 +317,8 @@ function draggableEffect() {
 </div>
 
 <div class="favicon-wrap">
-	<img id="favicon-crazy" class="neon border-shadow"/>
-	<img id="favicon-video" class="neon border-shadow"/>
+	<img id="favicon-crazy" class="favicon neon border-shadow"/>
+	<img id="favicon-video" class="favicon neon border-shadow"/>
 </div>
 
 </body>

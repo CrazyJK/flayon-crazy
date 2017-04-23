@@ -399,7 +399,9 @@ listViewType = '${videoSearch.listViewType}';
 						</div>
 					</c:forEach>
 				</div>
-				<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
+				<div style="position:fixed; right:20px; bottom:15px; display:none;" data-lazy-class="w3-animate-zoom, 500">
+					<a class="slidesjs-navigation slidesjs-random" href="#">Random View</a>
+				</div>
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
@@ -440,7 +442,7 @@ listViewType = '${videoSearch.listViewType}';
 		<c:when test="${videoSearch.listViewType eq 'K'}">
 			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
 			<script type="text/javascript" src="${PATH}/js/videoMain.jk.js"></script>
-			<div class="jk-video-wrapper" style="visibility:hidden;">
+			<div class="jk-video-wrapper" style="visibility:hidden;" data-lazy-class="w3-animate-opacity, 300">
 				<c:forEach items="${videoList}" var="video">
 					<div class="jk-video" id="opus-${video.opus}">
 						<div class="jk-video-inner">
@@ -469,10 +471,10 @@ listViewType = '${videoSearch.listViewType}';
 				</c:forEach>
 				<div class="clear" style="height:100px;"></div>
 			</div>
-			<div style="position:fixed; left:20px; bottom:15px;" class="range-cover-wrap w3-animate-left">
+			<div style="position:fixed; left:20px; bottom:15px;" data-lazy-class="w3-animate-left, 3000" class="range-cover-wrap hide">
 				<input type="range" id="rangeCover" min="200" max="800" value="800" step="50"/>
 			</div>
-			<div style="position:fixed; right:20px; bottom:15px;" class="w3-animate-right">
+			<div style="position:fixed; right:20px; bottom:15px;" data-lazy-class="w3-animate-right, 3000" class="hide">
 				<a id="randomViewBtn" class="btn-random-view">Random View</a>
 			</div>
 		</c:when>

@@ -249,6 +249,7 @@ function render(first) {
 				}
 			}
 		}
+		$(".tab-content").css({visibility: 'hidden'});
 	}
 	
 	while (entryIndex < videoList.length) {
@@ -276,6 +277,10 @@ function render(first) {
 	if (entryIndex == videoList.length) { // 전부 보여주었으면
 		lastPage = true;
 		$(".more").hide();
+	}
+	
+	if (first) {
+		$(".tab-content").css({visibility: 'visible'}).addClass("w3-animate-opacity");
 	}
 	
 	if (fnIsScrollBottom()) // 한페이지에 다 보여서 스크롤이 생기지 않으면 한번더
@@ -403,7 +408,8 @@ function resizeCover(first) {
 		imgWidth = $('#img-width').val();
 	}
 	var imgHeight = Math.round(parseInt(imgWidth) * 0.6725);
-	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px;}</style>";
+	var isLarge = imgWidth > 500;
+	var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px; font-size:" + (isLarge ? '22px' : '16px') + ";}</style>";
 	$("#cover-size-style").empty().append(coverSizeStyle);
 	setLocalStorageItem(VIDEOLISTBYSPA_IMAGE_WIDTH, imgWidth);
 	$('#img-width').attr({title: imgWidth + " x " + imgHeight});

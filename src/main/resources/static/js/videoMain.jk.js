@@ -28,10 +28,8 @@ $(function(){
 		$("#randomViewBtn").on("click", randomView).trigger("click");
 		$("#content_div").on('scroll', loadCoverImage).trigger("scroll");
 
-		$(".jk-video-wrapper").css("visibility", "visible");
-
 	});
-
+	
 	function makeOpusList() {
 		$(".jk-video").each(function() {
 			opusList.push($(this).attr("id"));
@@ -42,11 +40,13 @@ $(function(){
 	function changeCoverSize() {
 		var width = parseInt(rangeCover.value);
 		var height = parseInt(width * 0.6725);
+		var isLarge = width > 500;
 		
+		$(".jk-video").css({padding: (isLarge ? "10px" : "5px")});
 		$(".jk-video-inner").css({width: width});
-		$(".jk-video-cover").css({height: height}); //  , backgroundSize: width + "px " + height + "px"
-		$(".jk-video-title").css({fontSize: (width > 500 ? '24px' : "18px"), maxHeight: height-10});
-		$(".jk-video-detail").toggle(width > 500);
+		$(".jk-video-cover").css({height: height});
+		$(".jk-video-title").css({fontSize: (isLarge ? '24px' : "18px"), maxHeight: height-10});
+		$(".jk-video-detail").toggle(isLarge);
 		
 		setLocalStorageItem(VIDEOMAIN_JK_COVER_WIDTH, width);
 		rangeCover.title = width + " x " + height;
