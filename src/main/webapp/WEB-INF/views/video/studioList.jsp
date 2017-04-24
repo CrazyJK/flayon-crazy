@@ -66,7 +66,7 @@ function view() {
 						<c:forEach items="${sorts}" var="s">
 						<th style="max-width: 50px;" title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
 						</c:forEach>
-						<th>Video</th>
+						<th style="max-width:140px;">Video</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -78,7 +78,7 @@ function view() {
 						<td>${studio.company}</td>
 						<td class="number">${fn:length(studio.videoList)}</td>
 						<td class="number">${studio.score}</td>
-						<td style="max-width:150px;">
+						<td>
 							<div class="nowrap">
 								<c:forEach items="${studio.videoList}" var="video">
 								<jk:video video="${video}" view="opus"/>

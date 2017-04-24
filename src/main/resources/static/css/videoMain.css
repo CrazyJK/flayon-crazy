@@ -53,6 +53,7 @@
 }
 .video-box dt {
 	text-align: center;
+	margin: 0 5px;
 }
 .video-box dd {
 	margin-left: 3px;

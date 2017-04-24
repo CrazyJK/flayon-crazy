@@ -71,7 +71,7 @@ function go(page) {
 
 	<div class="container">
 		<div class="page-header">
-			<h1>Access Log Viewer
+			<h1>Access Log
 				<small class="badge"><fmt:formatNumber type="number" pattern="#,##0" value="${pageImpl.totalElements}" /></small>
 			</h1>
 	 	</div>
@@ -126,7 +126,7 @@ function go(page) {
 				</c:forEach>
 				<c:if test="${!useAccesslogRepository}">
 				<tr>
-					<td colspan="10"><div class="text-center text-danger lead">No repository</div></td>
+					<td colspan="12"><div class="text-center text-danger lead">No repository</div></td>
 				</tr>
 				</c:if>
 			</tbody>
@@ -139,7 +139,6 @@ function go(page) {
 					<td></td>
 					<td></td>
 					<td><input id="requestURI" name="requestURI" placeholder="requestURI" value="${param.requestURI}" class="form-control input-xs"/></td>
-					<td></td>
 					<td class="isHide"></td>
 					<td></td>
 					<td class="isHide"></td>

@@ -151,8 +151,8 @@ listViewType = '${videoSearch.listViewType}';
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li style="margin:5px;">
-					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom" style="width:400px; height:274px;"><a href="#" style="height:inherit;">
-	        			<div class="img" style="height:inherit;"><img src="${PATH}/video/${video.opus}/cover"></div>
+					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom" style="width:400px; height:269px;"><a href="#">
+	        			<div class="img"><img class="lazy" src="${PATH}/video/${video.opus}/cover" style="height:253px;"></div>
 	        			<div class="info">
 	          				<div class="info-back">
 	            				<h3 class="nowrap"><jk:video video="${video}" view="title" mode="s"/></h3>

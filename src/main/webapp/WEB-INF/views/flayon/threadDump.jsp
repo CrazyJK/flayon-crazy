@@ -17,6 +17,9 @@
 .dataTables_info {
 	display: inline-block;
 }
+[data-toggle="collapse"] {
+	cursor: zoom-in;
+}
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
@@ -91,9 +94,8 @@ $(document).ready(function() {
 			<c:forEach items="${threadInfos}" var="threadInfo">
 			<tr>
 				<td class="text-info">${threadInfo.threadState}</td>
-				<td><strong class="text-primary">${threadInfo.threadName}</strong>
-					<button class="btn btn-xs float-right" data-toggle="collapse" data-target="#tid-${threadInfo.threadId}"><span class="glyphicon glyphicon-triangle-bottom"></span></button>
-					<div id="tid-${threadInfo.threadId}" class="collapse">
+				<td><strong class="text-primary" data-toggle="collapse" data-target="#tid-${threadInfo.threadId}">${threadInfo.threadName}</strong>
+					<div id="tid-${threadInfo.threadId}" class="collapse small">
 						<c:forEach items="${threadInfo.stackTrace}" var="stackTrace">
 						${stackTrace}<br/>
 						</c:forEach>
