@@ -52,7 +52,14 @@ $(document).ready(function() {
 		//console.log("label click", id, val);
 		$("#" + id).val(val);
 	});
-	
+
+	$("form").submit(function(event) {
+		console.log("form submit...");
+		$(".panel.panel-default").fadeOut(300).parent().append(
+				$("<img>").attr({src: "${PATH}/img/loading.gif"}).addClass("w3-display-middle")
+		);
+	});
+
 	var lineSize = ${lines.size()};
 	if (0 == lineSize) {
 		$('.table').hide();
