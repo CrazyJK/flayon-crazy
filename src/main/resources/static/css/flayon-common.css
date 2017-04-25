@@ -73,3 +73,24 @@ body {
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
+
+.scrollup-wrap {
+    position: fixed;
+    right: 0px;
+    bottom: 20px;
+}
+.scrollup {
+    display: block;
+    width: 40px;
+    height: 40px;
+	margin: 20px;
+    opacity: .3;
+    text-indent: -9999px;
+    background: url('../img/back-to-top.png') no-repeat;
+    transition: display .6s;
+}
+.scrollup:focus, .scrollup:hover, .scrollup:active {
+	text-decoration: none;
+	outline: none;
+	color: inherit;
+}

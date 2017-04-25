@@ -39,30 +39,37 @@ try {
 var prevScrollTop = 0;
 var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
 
-$(document).ready(function() {
-//	$('h1').pulse();
-	var selectedEffect = effects[getRandomInteger(0, effects.length)];
-	var options = {};
-	if ( selectedEffect === "scale" ) {
-		options = { percent: 50 };
-	} else if ( selectedEffect === "size" ) {
-		options = { to: { width: 280, height: 185 } };
-	}
-	$("h1:not(.no-effect), .title-effect").hide().show(selectedEffect, options, 1000);
-	
-	// bootstrap tooltip, popover initialize
-	$('[data-toggle="tooltip"]').tooltip(); 
-	$('[data-toggle="popover"]').popover();
-
-	$(document).scroll(function() {
-		var currScrollTop = $(window).scrollTop();
-		if (prevScrollTop == 0 || currScrollTop == 0) {
-			$("#headerNav.navbar-default > .container").toggleClass("scrolling", currScrollTop > 0);
-			prevScrollTop = currScrollTop
+(function($) {
+	$(document).ready(function() {
+	//	$('h1').pulse();
+		var selectedEffect = effects[getRandomInteger(0, effects.length)];
+		var options = {};
+		if ( selectedEffect === "scale" ) {
+			options = { percent: 50 };
+		} else if ( selectedEffect === "size" ) {
+			options = { to: { width: 280, height: 185 } };
 		}
-	});
+		$("h1:not(.no-effect), .title-effect").hide().show(selectedEffect, options, 1000);
+		
+		// bootstrap tooltip, popover initialize
+		$('[data-toggle="tooltip"]').tooltip(); 
+		$('[data-toggle="popover"]').popover();
 
-});
+		$(document).scroll(function() {
+			var currScrollTop = $(window).scrollTop();
+			if (prevScrollTop == 0 || currScrollTop == 0) {
+				$("#headerNav.navbar-default > .container").toggleClass("scrolling", currScrollTop > 0);
+				prevScrollTop = currScrollTop
+			}
+			$(".scrollup").toggle(currScrollTop > 100);
+		});
+	
+		$(".scrollup").on("click", function() {
+			return $("html, body").animate({scrollTop: 0}, 600), !1;
+		});
+		
+	});
+}(jQuery));
 </script>
 <sitemesh:write property="head" />
 </head>
@@ -73,6 +80,10 @@ $(document).ready(function() {
 	<sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
 
 	<%@ include file="./flayon-footer.jspf" %>
+
+	<div class="scrollup-wrap">
+		<a href="#" class="scrollup" style="display:none;">Back to the top</a>
+	</div>
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
