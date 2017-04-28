@@ -335,33 +335,62 @@ listViewType = '${videoSearch.listViewType}';
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'L'}">
 			<div id="video-slide-wrapper">
-				<div id="slides" style="display: block;">
-				<c:forEach items="${videoList}" var="video" varStatus="status">
-					<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none; height: 550px;" class="slidesjs-slide">             
-						<dl style="background-image:url('${PATH}/video/${video.opus}/cover');">
-							<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-							<dd><jk:video video="${video}" view="rank"      mode="l"/></dd>
-							<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
-							<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
-							<dd><jk:video video="${video}" view="opus"      mode="l"/></dd>
-							<dd><jk:video video="${video}" view="actress"   mode="l"/></dd>
-							<dd><jk:video video="${video}" view="release"   mode="l"/></dd>
-							<dd><jk:video video="${video}" view="download"  mode="l"/></dd>
-							<dd><jk:video video="${video}" view="video"     mode="l"/></dd>
-							<dd><jk:video video="${video}" view="cover"     mode="l"/></dd>
-							<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
-							<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
-							<dd><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></dd>
-						</dl>
-					</div>
-				</c:forEach>
+				<table style="width: 100%; max-width: 100%;">
+					<tbody style="vertical-align: top;">
+					<tr>
+						<td>
+							<div class="prevCover text-right"></div>
+						</td>
+						<td style="width:800px;">
+							<div id="slides" style="display: block;">
+							<c:forEach items="${videoList}" var="video" varStatus="status">
+								<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none;" class="slidesjs-slide">             
+									<dl class="box box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 530px; margin: 6px;">
+										<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+									</dl>
+									<div class="box box-small box-detail">
+											<jk:video video="${video}" view="rank"      mode="l"/>
+										<h4><jk:video video="${video}" view="studio"    mode="l"/>
+											<jk:video video="${video}" view="opus"      mode="l"/>
+											<jk:video video="${video}" view="release"   mode="l"/>
+											<jk:video video="${video}" view="download"  mode="l"/></h4>
+										<h5><jk:video video="${video}" view="score"     mode="l"/>
+											<jk:video video="${video}" view="video"     mode="l"/>
+											<jk:video video="${video}" view="cover"     mode="l"/>
+											<jk:video video="${video}" view="subtitles" mode="l"/>
+											<jk:video video="${video}" view="overview"  mode="l"/></h5>
+										<h4 style="margin-bottom:0;">
+											<jk:video video="${video}" view="actress"   mode="f"/></h4>
+									   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
+									</div>
+								</div>
+							</c:forEach>
+							</div>
+						</td>
+						<td>
+							<div class="nextCover text-left"></div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<div class="text-center" style="position: fixed; bottom: 0; width: 100%; left: 0;">
+					<ul class="pagination text-center">
+					  	<li><a href="#">1</a></li>
+					  	<li><a href="#">2</a></li>
+					  	<li><a href="#">3</a></li>
+					  	<li><a href="#">4</a></li>
+					  	<li><a href="#">5</a></li>
+					</ul>
 				</div>
-				<ul class="pager">
-    				<li><a id="slideNumber"></a></li>
-    			</ul>
-				<div id="video_slide_bar" class="text-center"></div>
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
+			<style type="text/css">
+			@media screen and (max-width: 1390px) {
+				.prevCover, .nextCover {
+					display: none;
+				}
+			}
+			</style>
 			<script type="text/javascript" src="${PATH}/js/jquery.crazy.large.js"></script>
 			<script type="text/javascript">
 				$("#slides").largeview();
