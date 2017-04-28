@@ -21,7 +21,7 @@ div.jumbotron {
 	margin: 15px auto;
     padding: 10px;
 	width: 650px;
-	min-height: 250px;
+	min-height: 260px;
     color: #f0f0f0;
     line-height: 1.40em;
     text-shadow: #000 0px 1px 0px;
@@ -259,8 +259,8 @@ function showTimer() {
 }
 
 function setFonts() {
-	$("h1").css({fontFamily: randomFont()});
-	$("#wording").css({fontFamily: randomFont()});
+	$("h1").css({fontFamily: randomFont()}); // 'Fredericka the Great'
+	$("#wording").css({fontFamily: randomFont()}); // 'Finger Paint'
 	$("#loginModal").css({fontFamily: randomFont()});
 	$("#login-welcome").css({fontFamily: randomFont()});
 	$(".life-timer").css({fontFamily: randomFont()});
