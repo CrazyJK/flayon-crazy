@@ -346,9 +346,15 @@ listViewType = '${videoSearch.listViewType}';
 							<c:forEach items="${videoList}" var="video" varStatus="status">
 								<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none;" class="slidesjs-slide">             
 									<dl class="box box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 530px; margin: 6px;">
-										<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
+										<dt class="nowrap" style="height:510px;">
+											<span class="label label-plain video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
+												style="writing-mode:vertical-rl; padding:10px 10px; margin:5px auto; text-shadow: 0px 0px 5px #0c0c0c; color: #fff; font-weight: 700; background: rgba(51, 122, 183, .5)">${video.title}</span>
+										</dt>
 									</dl>
 									<div class="box box-small box-detail">
+										<h3 class="nowrap" style="margin:0 0 5px; height:30px;">
+											<jk:video video="${video}" view="title"/>
+										</h3>
 											<jk:video video="${video}" view="rank"      mode="l"/>
 										<h4><jk:video video="${video}" view="studio"    mode="l"/>
 											<jk:video video="${video}" view="opus"      mode="l"/>
@@ -389,6 +395,9 @@ listViewType = '${videoSearch.listViewType}';
 				.prevCover, .nextCover {
 					display: none;
 				}
+			}
+			.box-detail .label-plain, .box-detail .input-group {
+    			box-shadow: 0 3px 9px rgba(0,0,0,.3);
 			}
 			</style>
 			<script type="text/javascript" src="${PATH}/js/jquery.crazy.large.js"></script>

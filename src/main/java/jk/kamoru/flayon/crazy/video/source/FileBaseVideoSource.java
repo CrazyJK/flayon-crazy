@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -188,6 +189,7 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 
 	@Override
+	@PostConstruct
 	public void reload() {
 		reload(null);
 	}
