@@ -388,8 +388,12 @@ listViewType = '${videoSearch.listViewType}';
 					  	<li><a href="#">5</a></li>
 					</ul>
 				</div>
+				<div style="position:fixed; right:20px; bottom:25px;" data-lazy-class="w3-animate-right, 1000" class="hide">
+					<a id="randomViewBtn" class="btn-random-view">Random View</a>
+				</div>
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
+			<link rel="stylesheet" href="${PATH}/css/videoMain.large.css"/>
 			<style type="text/css">
 			@media screen and (max-width: 1390px) {
 				.prevCover, .nextCover {

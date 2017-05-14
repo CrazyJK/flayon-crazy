@@ -27,6 +27,10 @@
 			}
 		});
 		
+		$("#randomViewBtn").on("click", function() {
+			$.large.fnRandomVideoView();
+		});
+		
 		return this;
 	};
 

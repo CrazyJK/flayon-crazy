@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+
+.btn-random-view, .range-cover-wrap {
+	display: inline-block; 
+	padding: 5px 14px; 
+	background-color: #fff; 
+	border-radius: 15px; 
+	color: #337ab7; 
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color .3s, box-shadow .3s;
+}
+.btn-random-view:hover, .range-cover-wrap:hover {
+	text-decoration: none;
+ 	/* background-color: rgba(38, 90, 136, .5);
+ 	color: white; */
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}

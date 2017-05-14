@@ -56,7 +56,7 @@ $(document).ready(function() {
 		$(".isHide").toggleClass("hide", $(window).width() < 960);
 	}).trigger("resize");
 
-	$("#list").fadeIn(2000);
+	$("#list").fadeIn(1000);
 });
 
 function go(page) {
@@ -165,7 +165,7 @@ function go(page) {
 		</div>
 		<div class="text-center text-info">
 			<c:if test="${useAccesslogRepository}">
-				<button onclick="renderAccessDateChart()" class="btn btn-default btn-xs">Access chart</button>
+				<button onclick="renderAccessDateChart(); this.disabled='disabled';" class="btn btn-default btn-xs">Access chart</button>
 			</c:if>
 			totalElements: ${pageImpl.totalElements},
 			totalPages: ${pageImpl.totalPages},
@@ -175,12 +175,12 @@ function go(page) {
 			size: <input id="size" size="2" placeholder="Line size" title="Line size" value="${pageImpl.size}" class="text-center form-control input-xs" style="width:initial;"/>
 			numberOfElements: ${pageImpl.numberOfElements}
 			<c:if test="${useAccesslogRepository}">
-				<button onclick="renderRequestURIChart()" class="btn btn-default btn-xs">URI chart</button>
+				<button onclick="renderRequestURIChart(); this.disabled='disabled';" class="btn btn-default btn-xs">URI chart</button>
 			</c:if>
 		</div>
 	</div>
 	
-	<div class="container">
+	<div class="container-fluid">
 		<div id="accessDate-chartdiv" style="width:100%; font-size:11px;"></div>
 		<div id="requestURI-chartdiv" style="width:100%; font-size:11px;"></div>
 	</div>
@@ -232,6 +232,11 @@ function renderRequestURIChart() {
 				"borderThickness": 1,
 				"shadowAlpha": 0
 			},
+			"titles": [{
+				"text": "requestURI",
+				"size": 15,
+				"color": "#337ab7"
+			}],
 			"graphs": [{
 				"id": "g1",
 				"balloon":{
@@ -245,7 +250,7 @@ function renderRequestURIChart() {
 				"type": "column",
 				"valueField": "total",
 				"lineThickness": 2,
-				"title": "access date",
+				"title": "requestURI",
 				"useLineColorForBulletBorder": true,
 			}],
 			"categoryField": "requestURI",
@@ -294,7 +299,8 @@ function renderRequestURIChart() {
 }
 
 function zoomChart() {
-    chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+//	chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+	$("#requestURI-chartdiv").find("div.amcharts-chart-div > a").html("request URI chart").css({color: '#337ab7', fontWeight: 700});
 }
 
 var accessDateChart;
@@ -323,6 +329,11 @@ function renderAccessDateChart() {
 				"borderThickness": 1,
 				"shadowAlpha": 0
 			},
+			"titles": [{
+				"text": "Access date",
+				"size": 15,
+				"color": "#337ab7"
+			}],
 			"graphs": [{
 				"id": "g1",
 				"balloon":{
@@ -386,6 +397,7 @@ function renderAccessDateChart() {
 
 function accessDateZoomChart() {
 	accessDateChart.zoomToIndexes(accessDateChart.dataProvider.length - 30, accessDateChart.dataProvider.length - 1);
+	$("#accessDate-chartdiv").find("div.amcharts-chart-div > a").html("Access date chart").css({color: '#337ab7', fontWeight: 700});
 }
 </script>	
 
