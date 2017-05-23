@@ -48,7 +48,7 @@
 			$.large.fnShowVideoSlise();
 		},
 		fnRandomVideoView: function() {
-			currentVideoIndex = getRandomInteger(1, totalVideoSize);
+			currentVideoIndex = getRandomVideoIndex(); //getRandomInteger(1, totalVideoSize);
 			$.large.fnShowVideoSlise();
 		},
 		fnVideoView: function(idx) {

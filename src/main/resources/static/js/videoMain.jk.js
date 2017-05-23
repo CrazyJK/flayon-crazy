@@ -60,7 +60,7 @@ $(function(){
 	}
 
 	function randomView() {
-		var selectedNumber = getRandomInteger(0, opusList.length-1);
+		var selectedNumber = getRandomVideoIndex() - 1; // getRandomInteger(0, opusList.length-1);
 		var selectedOpus = opusList[selectedNumber];
 		location.href = "#" + selectedOpus;
 		console.log("randomView", selectedOpus);

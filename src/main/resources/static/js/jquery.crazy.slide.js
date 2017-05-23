@@ -38,7 +38,7 @@
 		});
 		$(".slidesjs-play").show();
 	    $(".slidesjs-random").show().click(function() {
-			var selectedNumber = getRandomInteger(0, totalVideoSize);
+			var selectedNumber = getRandomVideoIndex() -1; // getRandomInteger(0, totalVideoSize);
 			$("a[data-slidesjs-item='" + selectedNumber + "']").click();
 		});
 

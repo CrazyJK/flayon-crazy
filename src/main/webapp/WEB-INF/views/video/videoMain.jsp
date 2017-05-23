@@ -421,9 +421,9 @@ listViewType = '${videoSearch.listViewType}';
 								</dt>
 							</dl>
 							<div class="box box-small">
-								<%-- <h3 class="nowrap" style="margin:0 0 5px; height:30px;">
+								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
 									<jk:video video="${video}" view="title"/>
-								</h3> --%>
+								</h3>
 									<jk:video video="${video}" view="rank"      mode="l"/>
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>
@@ -494,6 +494,9 @@ listViewType = '${videoSearch.listViewType}';
 								</h3>
 							</div>
 							<div class="jk-video-detail">
+								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
+									<jk:video video="${video}" view="title"/>
+								</h3>
 									<jk:video video="${video}" view="rank"      mode="l"/>
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>

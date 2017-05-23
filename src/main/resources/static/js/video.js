@@ -435,3 +435,21 @@ function goTorrentMove(opus) {
 	fnMarkChoice(opus);
 	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 }
+
+var videoCoverSeenHistory = new Array();
+  function getRandomVideoIndex() {
+	  if (videoCoverSeenHistory.length === totalVideoSize) {
+		  showSnackbar("Turned around whole video");
+		  videoCoverSeenHistory = [];
+		  return getRandomVideoIndex();
+	  }
+	  var idx = getRandomInteger(1, totalVideoSize);
+	  if (videoCoverSeenHistory.includes(idx)) {
+		  return getRandomVideoIndex();
+	  }
+	  else {
+		  videoCoverSeenHistory.push(idx);
+		  console.log('getRandomVideoIndex videoCoverSeenHistory', videoCoverSeenHistory);
+		  return  idx;
+	  }
+  }
