@@ -949,7 +949,7 @@ public class KISA_SEED_CBC {
 		}
 	}
 
-	public static void main(String[] args) throws Exception
+	private static void main(String[] args) throws Exception
 	{
 
 		byte pbUserKey[] = {(byte)0x88, (byte)0xE3, (byte)0x4F, (byte)0x8F, (byte)0x08, (byte)0x17, (byte)0x79, (byte)0xF1, 
