@@ -1,7 +1,5 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.apache.commons.lang3.StringUtils;
