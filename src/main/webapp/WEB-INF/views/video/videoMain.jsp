@@ -416,11 +416,10 @@ listViewType = '${videoSearch.listViewType}';
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
 							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
 								<dt class="nowrap" style="height: inherit;">
-									<span class="label label-plain video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
-										style="writing-mode:vertical-rl; padding:10px 10px; margin:5px auto;">${video.title}</span>
+									<span class="label video-title_v" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 								</dt>
 							</dl>
-							<div class="box box-small">
+							<div class="box box-small" style="margin-top: 15px;">
 								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
 									<jk:video video="${video}" view="title"/>
 								</h3>

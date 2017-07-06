@@ -140,3 +140,11 @@
     padding: 1px 6px;
 	text-shadow: 0px 0px 5px #0c0c0c;
 }
+.video-title_v {
+    color: rgba(255, 255, 255, .9);
+    background-color: rgba(51, 122, 183, .9);
+    font-weight: bold;
+    writing-mode: vertical-rl; 
+    padding: 10px 10px 10px 8px; 
+    margin: 1px auto;
+}
