@@ -19,9 +19,10 @@ body, .label-info, .progress, .paging {
 	top: 0; 
 	margin: 5px 5px 0px 5px; 
 	z-index: 2000;
+	min-width: 200px;
 }
 .progress {
-	width: 100px; 
+	width: 136px; 
 	margin: 0; 
 }
 .progress-bar {
@@ -53,6 +54,9 @@ body, .label-info, .progress, .paging {
 	background-repeat: no-repeat; 
 	background-position: center center;
 }
+.img-thumbnail:not(.active) {
+	cursor: pointer;
+}
 .active {
 	opacity: 1;
     border-color: #66afe9;
@@ -67,7 +71,7 @@ body, .label-info, .progress, .paging {
 }
 #config-box {
 	position: fixed;
-	left: 110px;
+	left: 145px;
 	top: 0;
 	margin: 3px;
 	cursor: pointer;
@@ -88,6 +92,20 @@ body, .label-info, .progress, .paging {
 }
 .active-switch {
 	background-color: #5bc0de;
+}
+#currNo {
+	height: 12px; 
+	background-color: #5bc0de; 
+	border: 0;
+	width: 30px;
+	text-align: center;
+}
+.left-bottom {
+	position: fixed;
+	left: 0;
+	bottom: 10px;
+	width: 100%;
+	text-align: center;
 }
 </style>
 <script type="text/javascript">
@@ -163,7 +181,7 @@ $(document).ready(function() {
 	});
 	$(window).bind("keyup", function(e) {
 		var event = window.event || e;
-		//alert(event.keyCode);
+		console.log("window keyup event", event.keyCode);
 		switch(event.keyCode) {
 		case 37: // left
 		case 40: // down
@@ -175,6 +193,14 @@ $(document).ready(function() {
 			fnRandomImageView();
 		case 13: // enter
 			break;
+		}
+	});
+	$("#currNo").on("keyup", function(e) {
+		var event = window.event || e;
+		event.stopPropagation();
+		console.log("#currNo keyup event", event.keyCode);
+		if (event.keyCode === 13) {
+			fnRandomImageView($(this).val());
 		}
 	});
 	$("#imageDiv").bind("click", function(event){
@@ -209,18 +235,22 @@ function toggleSlideView() {
 	if (playSlide) {
 		$("body").css("background", "#000");
 		$("#thumbnailDiv").css('height', '5px').hide();
-		$(".progress").css("background-image", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
+		$(".progress").css("background", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
 		$(".progress-bar").css("background", "#000");
 		$(".label-info").css("background", "#000");
 		$(".paging").hide();
+		$("#navDiv").css("opacity", ".5");
+		$("#title-area").addClass("left-bottom");
 	}
 	else {
 		$("body").css("background", "#fff");
 		$("#thumbnailDiv").css('height', '105px').show('fade', {}, 1000);
-		$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
-		$(".progress-bar").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
-		$(".label-info").css("background-image", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$(".progress").css("background", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
+		$(".progress-bar").css("background", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+		$(".label-info").css("background", "linear-gradient(rgb(91, 192, 222) 0px, rgb(49, 176, 213) 100%)");
 		$(".paging").show();
+		$("#navDiv").css("opacity", "1");
+		$("#title-area").removeClass("left-bottom");
 	}
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
 }
@@ -270,7 +300,7 @@ function setNextEffect() {
 }
 
 function fnViewImage(current) {
-	selectedNumber = current;
+	selectedNumber = parseInt(current);
 	if (sourceMode.value == 0) { // image
 		selectedItemUrl = "${PATH}/image/" + selectedNumber;
 		selectedItemTitle = imageMap[selectedNumber];
@@ -284,7 +314,7 @@ function fnViewImage(current) {
 
 	$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
 		$("#leftNo").html(getPrevNumber());
-		$("#currNo").html(selectedNumber);
+		$("#currNo").val(selectedNumber);
 		$("#rightNo").html(getNextNumber());
 		$(".title").html(selectedItemTitle);
 		$(this).css({
@@ -305,6 +335,15 @@ function fnFullyImageView() {
 		fnVideoDetail(coverMap[selectedNumber]);
 	}
 }
+function fnImageDelete() {
+	if (sourceMode.value == 0) { // image
+		var imgSrc = selectedItemUrl;
+		if (confirm('Delete this image\n' + imgSrc)) {
+			actionFrame(imgSrc, {}, "DELETE", "this image delete");
+			fnNextImageView();
+		}
+	}
+}
 function getPrevNumber() {
 	return selectedNumber == 0 ? imageCount - 1 : selectedNumber - 1;
 }
@@ -323,8 +362,10 @@ function fnNextImageView() {
 function fnEndImageView() {
 	fnViewImage(imageCount-1);
 }
-function fnRandomImageView() {
-	fnViewImage(Math.floor(Math.random() * imageCount));
+function fnRandomImageView(no) {
+	if (!no)
+		no = Math.floor(Math.random() * imageCount);
+	fnViewImage(no);
 }
 function fnDisplayThumbnail() {
 	var itemCount = 0;
@@ -343,15 +384,16 @@ function fnDisplayThumbnail() {
 			thumbNo = itemCount + thumbNo;
 		if (thumbNo >= itemCount)
 			thumbNo = thumbNo - itemCount;
-		var itemUrl = sourceMode.value == 0 ? "${PATH}/image/" + thumbNo : "${PATH}/video/" + coverMap[thumbNo] + "/cover"
+		var itemUrl = sourceMode.value == 0 ? "${PATH}/image/" + thumbNo : "${PATH}/video/" + coverMap[thumbNo] + "/cover";
+		console.log("fnDisplayThumbnail", itemUrl);
 		$("<li>").append(
-			$("<div>")
-				.addClass("img-thumbnail" + (thumbNo == selectedNumber ? " active" : ""))
-				.css({backgroundImage: "url('" + itemUrl + "')"})
-				.data("imgNo", thumbNo)
-				.on("click", function() {
-					fnViewImage($(this).data("imgNo"));
-				})
+				$("<div>")
+					.addClass("img-thumbnail " + (thumbNo == selectedNumber ? "active" : ""))
+					.css({backgroundImage: "url('" + itemUrl + "')"})
+					.data("imgNo", thumbNo)
+					.on("click", function() {
+						fnViewImage($(this).data("imgNo"));
+					})
 		).appendTo($("ul#thumbnailUL"));
 	}
 }
@@ -384,8 +426,18 @@ function showTimer(sec, text) {
 		  		</div>
 		  	</div>
 		  	<div>
-				<span class="label label-info title"  onclick="fnFullyImageView();"></span>
 		  	</div>
+		  	<div id="title-area">
+				<span class="label label-info paging" onclick="fnFirstImageView();"><span id="firstNo">&nbsp;</span></span>
+				<span class="label label-info paging"><input id="currNo"></span>
+				<span class="close close-o0" onclick="fnImageDelete();">&times;</span>
+				<span class="label label-info title" onclick="fnFullyImageView();">&nbsp;</span>
+				<span class="label label-info paging" onclick="fnEndImageView();"><span id="endNo">&nbsp;</span></span>
+		  	</div>
+			<div class="hide">
+				<span class="label label-info paging" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
+				<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
+			</div>
 		</div>
 
 		<div id="imageDiv"></div>
@@ -398,15 +450,6 @@ function showTimer(sec, text) {
 		<div id="effectInfo-box">
 			<span class="label label-info effectInfo" title="Next effect"></span>
 		</div>
-		
-	</div>
-
-	<div class="hide">
-		<span class="label label-info paging" onclick="fnFirstImageView();"><span id="firstNo"></span></span>
-		<span class="label label-info paging" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
-		<span class="label label-info paging"><span id="currNo"></span></span>
-		<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
-		<span class="label label-info paging" onclick="fnEndImageView();"><span id="endNo"></span></span>
 	</div>
 	
 	<div id="configModal" class="modal fade" role="dialog">
