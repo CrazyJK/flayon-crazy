@@ -2,8 +2,8 @@ package jk.kamoru.flayon.crazy.image.source;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+//import java.util.Collections;
+//import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.Utils;
+//import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.IMAGE;
 import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.domain.Image;
@@ -54,12 +54,12 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 		}
 		log.info("{} images found", imageList.size());
 		
-		Collections.sort(imageList, new Comparator<Image>() {
-			@Override
-			public int compare(Image o1, Image o2) {
-				return Utils.compareTo(o1.getLastModified(), o2.getLastModified());
-			}
-		});
+//		Collections.sort(imageList, new Comparator<Image>() {
+//			@Override
+//			public int compare(Image o1, Image o2) {
+//				return Utils.compareTo(o1.getLastModified(), o2.getLastModified());
+//			}
+//		});
 		loading = false;
 		
 		NotiQueue.pushNoti("Image loading " + imageList.size());
