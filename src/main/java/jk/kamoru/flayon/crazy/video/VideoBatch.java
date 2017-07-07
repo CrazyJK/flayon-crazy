@@ -101,6 +101,9 @@ public class VideoBatch extends CrazyProperties {
 			stopWatch.stop();
 		}
 		
+		logger.info(" - delete empty folder");
+		videoService.deletEmptyFolder();
+
 		videoService.reload(stopWatch);
 
 		logger.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
