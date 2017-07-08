@@ -148,3 +148,8 @@
     padding: 10px 10px 10px 8px; 
     margin: 1px auto;
 }
+.mark {
+	font-weight: bold;
+	color: red;
+	background-color: chartreuse;
+}
