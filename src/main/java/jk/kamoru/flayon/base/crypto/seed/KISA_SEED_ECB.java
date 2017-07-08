@@ -167,7 +167,6 @@ public class KISA_SEED_ECB {
 	private static final byte GetB2(int A) { return (byte)((A>>16) & 0x0ff); }
 	private static final byte GetB3(int A) { return (byte)((A>>24) & 0x0ff); }
 
-	// TODO : check
 	// Round function F and adding output of F to L.
 	// L0, L1 : left input values at each round
 	// R0, R1 : right input values at each round
