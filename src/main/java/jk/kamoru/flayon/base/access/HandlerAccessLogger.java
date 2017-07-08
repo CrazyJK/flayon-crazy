@@ -118,8 +118,10 @@ public class HandlerAccessLogger implements HandlerInterceptor {
 				user,
 				status);
 
-		if (useAccesslogRepository)
-			accessLogRepository.save(accessLog);
+		if (useAccesslogRepository) {
+			if (!requestUri.contains("ping.json"))
+				accessLogRepository.save(accessLog);
+		}
 		
 		if (!(contentType.startsWith("image") || requestUri.contains("ping.json") || handlerlInfo.startsWith("ImageController.image")))
 			log.info(accessLog.toLogString());
