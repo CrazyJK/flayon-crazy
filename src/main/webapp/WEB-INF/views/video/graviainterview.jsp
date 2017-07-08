@@ -249,7 +249,7 @@ function renderContent(idx) {
 			checkCount++;
 		}
 		
-		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? "/video/" + title.opus + "/cover" : title.imgSrc)};
+		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? videoPath + "/" + title.opus + "/cover" : title.imgSrc)};
 				
 		$("<div>").addClass("cover-wrapper" + stateClass).append(
 				$("<img>").addClass("img-thumbnail cover-image").attr({src: title.imgSrc}).attr(onClick)
@@ -269,7 +269,7 @@ function renderContent(idx) {
 			}
 		).appendTo(imageWrapper);
 
-		$("<div>").addClass("input-group" + stateClass).append(
+		$("<div>").addClass("input-group" + stateClass).attr({"id": "check-" + title.opus}).append(
 				$("<div>").addClass('input-group-btn hover_img').append(
 						$("<a>").addClass("btn btn-link btn-xs btn-img").attr(onClick).html("Find").append(
 								$('<span>').append(
