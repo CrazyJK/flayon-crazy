@@ -99,15 +99,15 @@ function resizeSecondDiv() {
 		<span class="label label-plain" onclick="$(this).next().toggleClass('hide')">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
 		<div class="box fileinfoDiv hide">
 			<c:forEach items="${video.videoFileList}" var="file">
-			<p><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file}</span></p>
+			<p><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 			</c:forEach>
 			<c:forEach items="${video.subtitlesFileList}" var="file">
-			<p><span class="label label-danger" onclick="opener.fnEditSubtitles('${video.opus}')">${file}</span></p>
+			<p><span class="label label-danger" onclick="opener.fnEditSubtitles('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 			</c:forEach>
-			<p><span class="label label-success" onclick="opener.fnCoverView('${video.opus}')">${video.coverFilePath}</span></p>
-			<p><span class="label label-warning" title="${video.title}" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="${video.info}">${video.infoFilePath}</span></p>
+			<p><span class="label label-success" onclick="opener.fnCoverView('${video.opus}')">${video.coverFilePath} <fmt:formatNumber value="${video.coverFile.length()}" type="NUMBER"/></span></p>
+			<p><span class="label label-warning" title="${video.title}" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="${video.info}">${video.infoFilePath} <fmt:formatNumber value="${video.infoFile.length()}" type="NUMBER"/></span></p>
 			<c:forEach items="${video.etcFileList}" var="file">
-			<p><span class="label label-primary">${file}</span></p>
+			<p><span class="label label-primary">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 			</c:forEach>
 			<form id="renameForm" method="post" action="<s:url value="/video/${video.opus}/rename"/>" target="ifrm" role="form" class="form-horizontal">
 				<div class="form-group">

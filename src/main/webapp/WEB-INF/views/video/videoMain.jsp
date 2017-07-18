@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"   uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt"  uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s"    uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri='http://www.springframework.org/tags/form'%>
 <%@ taglib prefix="jk"   tagdir="/WEB-INF/tags"%>
@@ -537,7 +538,9 @@ listViewType = '${videoSearch.listViewType}';
 										<jk:video video="${video}" view="opus" mode="s"/>
 										<ul>
 											<c:forEach items="${video.videoFileList}" var="file">
-												<li><span class="label label-plain" onclick="fnPlay('${video.opus}')">${file}</span></li>
+												<li>
+													<span class="label label-plain"><fmt:formatNumber value="${file.length()}" type="NUMBER"/></span>
+													<span class="label label-plain" onclick="fnPlay('${video.opus}')">${file}</span></li>
 											</c:forEach>
 										</ul>
 									</li>
