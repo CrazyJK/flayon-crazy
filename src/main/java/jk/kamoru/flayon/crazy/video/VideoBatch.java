@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -184,7 +185,7 @@ public class VideoBatch extends CrazyProperties {
 	
 //	@Scheduled(fixedDelay = 1000 * 60 * 60 * 24) // fixedDelay per day 
 	@PreDestroy
-	public synchronized void backup() {
+	public synchronized void backup() throws IOException {
 		
 		if (StringUtils.isBlank(BACKUP_PATH)) {
 			logger.info("BATCH - backup path not set");
@@ -196,30 +197,24 @@ public class VideoBatch extends CrazyProperties {
 		if (!backupPath.exists())
 			backupPath.mkdirs();
 
-		// video list backup to csv
-		List<Video> videoList = videoService.getVideoList(null, false, true, false);
-		List<Video> archiveVideoList = videoService.getVideoList(null, false, false, true);
-		List<History> historyList = historyService.getDeduplicatedList();
-
 		final String csvHeader = "Studio, Opus, Title, Actress, Released, Rank, Fullname";
 		final String csvFormat = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\"";
+
+		// video list backup to csv
+		List<Video>        videoList =   videoService.getVideoList(null, false, true, false);
+		List<Video> archiveVideoList =   videoService.getVideoList(null, false, false, true);
+		List<History>    historyList = historyService.getDeduplicatedList();
+		List<String>    instanceList = new ArrayList<>();
+		List<String>     archiveList = new ArrayList<>();
+
 		// instance
-		List<String> rowList = new ArrayList<>();
-		rowList.add(csvHeader);
-		for (Video video : videoList) {
-			rowList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), video.getRank(), video.getFullname()));
-		}
-		try {
-			FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_INSTANCE_FILENAME), "EUC-KR", rowList, false); 
-		} catch (IOException e) {
-			logger.error("BATCH - backup instance fail", e);
-		}
+		instanceList.add(csvHeader);
+		for (Video video : videoList)
+			instanceList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), video.getRank(), video.getFullname()));
 		// archive
-		rowList.clear();
-		rowList.add(csvHeader);
-		for (Video video : archiveVideoList) {
-			rowList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), "", video.getFullname()));
-		}
+		archiveList.add(csvHeader);
+		for (Video video : archiveVideoList)
+			archiveList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), "", video.getFullname()));
 		for (History history : historyList) {
 			String opus = history.getOpus();
 			boolean foundInArchive = false;
@@ -230,39 +225,29 @@ public class VideoBatch extends CrazyProperties {
 				}
 			}
 			if (!foundInArchive)
-				rowList.add(String.format(csvFormat, "", history.getOpus(), "", "", "", "", history.getDesc()));
+				archiveList.add(String.format(csvFormat, "", history.getOpus(), "", "", "", "", history.getDesc()));
 		}
-		try {
-			FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_ARCHIVE_FILENAME), "EUC-KR", rowList, false); 
-		} catch (IOException e) {
-			logger.error("BATCH - backup archive fail", e);
-		}
+		FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_INSTANCE_FILENAME), "EUC-KR", instanceList, false); 
+		FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_ARCHIVE_FILENAME),  "EUC-KR", archiveList,  false); 
 		
-		// _info folder backup to zip
-		File src = new File(STORAGE_PATH, "_info");
-		ZipUtils zipUtils = new ZipUtils();
-		try {
-			zipUtils.zip(src, backupPath, VIDEO.ENCODING, true);
-		} catch (IOException e) {
-			logger.error("BATCH - info zip backup fail", e);
-		}
-
 		// history backup
-		File historyFile = new File(STORAGE_PATH, VIDEO.HISTORY_LOG_FILENAME);
-		try {
-			FileUtils.copyFileToDirectory(historyFile, backupPath);
-		} catch (IOException e) {
-			logger.error("BATCH - history file backup fail", e);
-		}
+		FileUtils.copyFileToDirectory(new File(STORAGE_PATH, VIDEO.HISTORY_LOG_FILENAME), backupPath);
 		
 		// tag data backup
-		File tagFile = new File(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME);
-		try {
-			FileUtils.copyFileToDirectory(tagFile, backupPath);
-		} catch (IOException e) {
-			logger.error("BATCH - tag file backup fail", e);
-		}
+		FileUtils.copyFileToDirectory(new File(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME), backupPath);
 		
+		// zip to cover, info, subtitles file on instance
+		File files = Files.createTempDirectory(VIDEO.BACKUP_FILE_FILENAME).toFile();
+		for (Video video : videoList)
+			for (File file : video.getFileWithoutVideo())
+				if (file != null && file.exists())
+					FileUtils.copyFileToDirectory(file, files, false);
+		ZipUtils.zip(files, backupPath, VIDEO.BACKUP_FILE_FILENAME, VIDEO.ENCODING, true);
+		FileUtils.deleteDirectory(files);
+		
+		// _info folder backup to zip
+		ZipUtils.zip(new File(STORAGE_PATH, "_info"), backupPath, VIDEO.BACKUP_INFO_FILENAME, VIDEO.ENCODING, true);
+
 		NotiQueue.pushNoti("Backup completed");
 	}
 }

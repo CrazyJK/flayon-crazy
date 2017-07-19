@@ -805,11 +805,13 @@ public class VideoController extends CrazyController {
 	
 	@RequestMapping(value="/manager/startVideoBatch/{type}", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void startVideoBatch(@PathVariable String type) {
+	public void startVideoBatch(@PathVariable String type) throws IOException {
 		if ("instance".equals(type))
 			videoBatch.batchInstanceVideoSource();
 		else if ("archive".equals(type))
 			videoBatch.batchArchiveVideoSource();
+		else if ("backup".equals(type))
+			videoBatch.backup();
 		else
 			throw new VideoException("unknown videobatch type : " + type);
 	}

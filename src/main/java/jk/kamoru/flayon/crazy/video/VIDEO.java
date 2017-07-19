@@ -33,8 +33,12 @@ public interface VIDEO extends CRAZY {
 	
 	public static final String             WRONG_FILENAME  = "wrongFilenames.txt";
 
-	public static final String   BACKUP_INSTANCE_FILENAME  = "backup-instance.csv";
+	public static final String   BACKUP_INSTANCE_FILENAME  = "flayon-instance.csv";
 	
-	public static final String    BACKUP_ARCHIVE_FILENAME  = "backup-archive.csv";
+	public static final String    BACKUP_ARCHIVE_FILENAME  = "flayon-archive.csv";
+
+	public static final String       BACKUP_INFO_FILENAME  = "flayon-info.zip";
+
+	public static final String       BACKUP_FILE_FILENAME  = "flayon-file.zip";
 
 }

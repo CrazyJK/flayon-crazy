@@ -18,38 +18,37 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ZipUtils {
-/*	
-	public static void main(String[] args) throws IOException {
-		File src = new File("D:\\Crazy\\Storage\\_info");
-		File destDir = new File("E:\\kAmOrU\\Documents\\Archives");
-		String charSetName = "UTF-8";
-		boolean includeSrc = true;
-		ZipUtils zip = new ZipUtils();
-		zip.zip(src, destDir, charSetName, includeSrc);
-	}
-*/	
+	
+//	public static void main(String[] args) throws IOException {
+//		File src = new File("/home/kamoru/utilities/sts-bundle/crazy/Stage");
+//		File destDir = new File("/home/kamoru/workspace/flayon-backup");
+//		String charSetName = "UTF-8";
+//		boolean includeSrc = true;
+//		ZipUtils zip = new ZipUtils();
+//		zip.zip(src, destDir, charSetName, includeSrc);
+//	}
 
-	public void unzip(File zippedFile) throws IOException {
+	public static void unzip(File zippedFile) throws IOException {
 		unzip(zippedFile, Charset.defaultCharset().name());
 	}
 
-	public void unzip(File zippedFile, String charsetName) throws IOException {
+	public static void unzip(File zippedFile, String charsetName) throws IOException {
 		unzip(zippedFile, zippedFile.getParentFile(), charsetName);
 	}
 
-	public void unzip(File zippedFile, File destDir) throws IOException {
+	public static void unzip(File zippedFile, File destDir) throws IOException {
 		unzip(new FileInputStream(zippedFile), destDir, Charset.defaultCharset().name());
 	}
 
-	public void unzip(File zippedFile, File destDir, String charsetName) throws IOException {
+	public static void unzip(File zippedFile, File destDir, String charsetName) throws IOException {
 		unzip(new FileInputStream(zippedFile), destDir, charsetName);
 	}
 
-	public void unzip(InputStream is, File destDir) throws IOException {
+	public static void unzip(InputStream is, File destDir) throws IOException {
 		unzip(is, destDir, Charset.defaultCharset().name());
 	}
 
-	public void unzip(InputStream is, File destDir, String charsetName) throws IOException {
+	public static void unzip(InputStream is, File destDir, String charsetName) throws IOException {
 		ZipArchiveInputStream zis;
 		ZipArchiveEntry entry;
 		String name;
@@ -86,7 +85,7 @@ public class ZipUtils {
 	 *            file or directory
 	 * @throws IOException
 	 */
-	public void zip(File src) throws IOException {
+	public static void zip(File src) throws IOException {
 		zip(src, Charset.defaultCharset().name(), true);
 	}
 
@@ -100,7 +99,7 @@ public class ZipUtils {
 	 *            compression. if false, src is included.
 	 * @throws IOException
 	 */
-	public void zip(File src, boolean includeSrc) throws IOException {
+	public static void zip(File src, boolean includeSrc) throws IOException {
 		zip(src, Charset.defaultCharset().name(), includeSrc);
 	}
 
@@ -112,7 +111,7 @@ public class ZipUtils {
 	 * @param includeSrc
 	 * @throws IOException
 	 */
-	public void zip(File src, String charSetName, boolean includeSrc) throws IOException {
+	public static void zip(File src, String charSetName, boolean includeSrc) throws IOException {
 		zip(src, src.getParentFile(), charSetName, includeSrc);
 	}
 
@@ -124,7 +123,7 @@ public class ZipUtils {
 	 * @param os
 	 * @throws IOException
 	 */
-	public void zip(File src, OutputStream os) throws IOException {
+	public static void zip(File src, OutputStream os) throws IOException {
 		zip(src, os, Charset.defaultCharset().name(), true);
 	}
 
@@ -138,7 +137,7 @@ public class ZipUtils {
 	 * @param includeSrc
 	 * @throws IOException
 	 */
-	public void zip(File src, File destDir, String charSetName, boolean includeSrc) throws IOException {
+	public static void zip(File src, File destDir, String charSetName, boolean includeSrc) throws IOException {
 		String fileName = src.getName();
 		if (!src.isDirectory()) {
 			int pos = fileName.lastIndexOf(".");
@@ -154,7 +153,25 @@ public class ZipUtils {
 		zip(src, new FileOutputStream(zippedFile), charSetName, includeSrc);
 	}
 
-	public void zip(File src, OutputStream os, String charsetName, boolean includeSrc) throws IOException {
+	/**
+	 * compresses the given src file(or directory) and create the compressed
+	 * file under the given destDir, destFileName.
+	 * 
+	 * @param src
+	 * @param destDir
+	 * @param destFileName
+	 * @param charSetName
+	 * @param includeSrc
+	 * @throws IOException
+	 */
+	public static void zip(File src, File destDir, String destFileName, String charSetName, boolean includeSrc) throws IOException {
+		File zippedFile = new File(destDir, destFileName);
+		if (!zippedFile.exists())
+			zippedFile.createNewFile();
+		zip(src, new FileOutputStream(zippedFile), charSetName, includeSrc);
+	}
+
+	public static void zip(File src, OutputStream os, String charsetName, boolean includeSrc) throws IOException {
 		ZipArchiveOutputStream zos = new ZipArchiveOutputStream(os);
 		zos.setEncoding(charsetName);
 		FileInputStream fis;
@@ -186,7 +203,6 @@ public class ZipUtils {
 			File f = stack.pop();
 			name = toPath(root, f);
 			if (f.isDirectory()) {
-				log.debug("dir  : " + name);
 				File[] fs = f.listFiles();
 				for (int i = 0; i < fs.length; i++) {
 					if (fs[i].isDirectory())
@@ -195,7 +211,6 @@ public class ZipUtils {
 						stack.add(0, fs[i]);
 				}
 			} else {
-				log.debug("file : " + name);
 				ze = new ZipArchiveEntry(name);
 				zos.putArchiveEntry(ze);
 				fis = new FileInputStream(f);
@@ -209,7 +224,7 @@ public class ZipUtils {
 		zos.close();
 	}
 
-	private String toPath(File root, File dir) {
+	private static String toPath(File root, File dir) {
 		String path = dir.getAbsolutePath();
 		path = path.substring(root.getAbsolutePath().length()).replace(File.separatorChar, '/');
 		if (path.startsWith("/"))

@@ -235,6 +235,9 @@ function fnStartVideoBatch(type) {
 				<button class="btn btn-default" onclick="fnStartVideoBatch('instance')">InstanceVideoBatch</button>
 				<button class="btn btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
 			</div>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnStartVideoBatch('backup')">Backup Batch</button>
+			</div>
 		</div>
 		
 	</div>
