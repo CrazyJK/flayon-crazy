@@ -3,6 +3,9 @@
 	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
 	updateCheck="false">
 	
+	<!-- Persistence and Restartability  http://www.ehcache.org/documentation/2.7/configuration/fast-restart.html -->
+	
+	<!-- 
 	<diskStore path="java.io.tmpdir" />
 	
 	<cache name="flayon-image-cache" 
@@ -27,6 +30,17 @@
 			memoryStoreEvictionPolicy="LFU" 
 			transactionalMode="off">
 		<persistence strategy="localTempSwap" />
+	</cache>
+	 -->
+
+	<cache name="flayon-image-cache" 
+			maxEntriesLocalHeap="10000">
+		<persistence strategy="none"/>
+	</cache> 
+
+	<cache name="flayon-cover-cache" 
+			maxEntriesLocalHeap="10000">
+		<persistence strategy="none"/>
 	</cache>
 
 </ehcache>
