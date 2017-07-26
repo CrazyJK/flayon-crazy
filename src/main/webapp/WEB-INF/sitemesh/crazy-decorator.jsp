@@ -65,7 +65,7 @@ window.onerror = function (e) {
 
 $(document).ready(function() {
 	
-	crazy_listener.start();
+	crazy_listener.init();
 
 	crazy_manipulateDom.init();
 	
@@ -168,7 +168,7 @@ var crazy_listener = (function() {
 	};
 	
 	return {
-		start : start
+		init : start
 	};
 }());
 
