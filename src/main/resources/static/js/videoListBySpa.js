@@ -14,11 +14,11 @@ var entryIndex = 0;				// 비디오 인덱스
 var renderingCount = 0;			// 보여준 개수
 var sortList = [
 		{code: "S", name: "Studio"},  {code: "O", name: "Opus"},     {code: "T", name: "Title"}, 
-		{code: "A", name: "Actress"}, {code: "D", name: "Rel"}, {code: "M", name: "Mod"}, 
+		{code: "A", name: "Actress"}, {code: "D", name: "Release"}, {code: "M", name: "Modified"}, 
 		{code: "R", name: "Rank"},    {code: "Sc", name: "Score"}, 
-		{code: "To", name: "Tor"}, 
-//		{code: "F", name: "Fav"}, 
-		{code: "C", name: "Candi"}];
+		{code: "To", name: "Torrrent"}, 
+		{code: "F", name: "Favorite"}, 
+		{code: "C", name: "Candidated"}];
 var candidateCount = 0;			// candidate 파일 개수
 var hadTorrentCount = 0;		// torrent 파일 개수
 var videoCount = 0;				// video 파일 개수
