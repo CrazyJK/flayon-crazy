@@ -155,7 +155,7 @@ var isCheckedNoCover = false;
 		});
 		
 	});
-}(jQuery));
+})(jQuery);
 
 function request() {
 	loading(true, "request...");

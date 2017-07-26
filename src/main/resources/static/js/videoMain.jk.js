@@ -36,7 +36,6 @@ $(function(){
 		});
 	}
 	
-	
 	function changeCoverSize() {
 		var width = parseInt(rangeCover.value);
 		var height = parseInt(width * 0.6725);

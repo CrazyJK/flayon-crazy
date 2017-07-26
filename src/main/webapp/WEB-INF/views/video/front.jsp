@@ -80,8 +80,7 @@ p > span.neon {
     color: rgb(238, 238, 238);
 }
 </style>
-<script type="text/javascript" src="${PATH}/js/jquery.crazy.aperture.js"></script>
-<script type="text/javascript" src="${PATH}/js/typed.js"></script>
+<script type="text/javascript" src="${PATH}/js/crazy.ui.typed.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 var timingProperties = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
@@ -108,7 +107,7 @@ $(document).ready(function() {
  */
 function backgroundEffect() {
 	setInterval(function() {
-		$("body").css("background-color", randomColor(1));
+		$("body").randomBG(1);
 	}, 1000 * getRandomInteger(10, 60));
 }
 

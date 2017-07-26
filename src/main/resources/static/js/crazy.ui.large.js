@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 	$.fn.largeview = function() {
 		$.large.fnShowVideoSlise();
 

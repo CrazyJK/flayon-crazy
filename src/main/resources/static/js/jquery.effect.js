@@ -42,6 +42,36 @@
 		fadeHigh : 1
 	};
 
+	// Random effect using by jquery-ui
+	$.fn.jkEffect = function(options) {
+		var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
+		
+		var opts = $.extend({}, $.fn.jkEffect.defaults, options);
+		//console.log(this);
+		return this.each(function() {
+			var selectedEffect;
+			var options = {};
+			if (opts.effect === "") {
+				selectedEffect = effects[getRandomInteger(0, effects.length)];
+			} else {
+				selectedEffect = opts.effect;
+			}
+			if (selectedEffect === "scale") {
+				options = { percent: opts.scale };
+			} else if (selectedEffect === "size") {
+				options = { to: opts.size };
+			}
+			//console.log("effect", this, selectedEffect, options);
+			$(this).hide().show(selectedEffect, options, 1000);
+		});
+	};
+	
+	$.fn.jkEffect.defaults = {
+		effect : "",
+		scale : 50,
+		size : { width: 280, height: 185 }
+	};
+
 })(jQuery);
 // 플러그인에서 $ 단축표현 사용하기
 // jQuery는 jQuery 개체를 위한 사용자 정의 별칭으로써 $ 함수를 사용하고 있다.

@@ -32,24 +32,18 @@ try {
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/common.js" />"></script>
-<script type="text/javascript" src="<c:url value="/js/jquery.pulse.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.effect.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
 <script type="text/javascript">
+var lang = '<%=lang%>';
 var prevScrollTop = 0;
-var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
 
 (function($) {
 	$(document).ready(function() {
-	//	$('h1').pulse();
-		var selectedEffect = effects[getRandomInteger(0, effects.length)];
-		var options = {};
-		if ( selectedEffect === "scale" ) {
-			options = { percent: 50 };
-		} else if ( selectedEffect === "size" ) {
-			options = { to: { width: 280, height: 185 } };
-		}
-		$("h1:not(.no-effect), .title-effect").hide().show(selectedEffect, options, 1000);
+		//	$('h1').pulse();
+		// titleEffect("h1:not(.no-effect), .title-effect");
+		$("h1:not(.no-effect), .title-effect").jkEffect();
 		
 		// bootstrap tooltip, popover initialize
 		$('[data-toggle="tooltip"]').tooltip(); 
@@ -69,7 +63,7 @@ var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "hi
 		});
 		
 	});
-}(jQuery));
+})(jQuery);
 </script>
 <sitemesh:write property="head" />
 </head>

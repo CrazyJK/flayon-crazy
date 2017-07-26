@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 	$.fn.slideview = function(options) {
 
 		var opts = $.extend({}, $.fn.slideview.defaults, options);
@@ -128,4 +128,4 @@
 		}
 	}
 	
-})(jQuery);
+}(jQuery));

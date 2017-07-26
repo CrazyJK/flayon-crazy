@@ -28,11 +28,10 @@
 <script type="text/javascript" src="${PATH}/webjars/jQuery/2.2.3/dist/jquery.min.js"></script>
 <script type="text/javascript" src="${PATH}/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${PATH}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
-<script type="text/javascript" src="${PATH}/js/jquery.crazy.js"></script>
-<script type="text/javascript" src="${PATH}/js/common.js"></script>
-<script type="text/javascript" src="${PATH}/js/video.js"></script>
-<script type="text/javascript" src="${PATH}/js/videoMain.js"></script>
-<script type="text/javascript" src="${PATH}/js/jquery.crazy.aperture.js"></script>
+<script type="text/javascript" src="${PATH}/js/crazy.common.js"></script>
+<script type="text/javascript" src="${PATH}/js/crazy.video.js"></script>
+<script type="text/javascript" src="${PATH}/js/crazy.ui.js"></script>
+<script type="text/javascript" src="${PATH}/js/crazy.ui.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/zeroclipboard/ZeroClipboard.js"></script>
 <script type="text/javascript">
 var videoPath = '${PATH}/video';
@@ -65,56 +64,175 @@ window.onerror = function (e) {
 };
 
 $(document).ready(function() {
- 	addLinkListener();
-	addBGChangerListener();
-	addResizeListener();
+	
+	crazy_listener.start();
 
+	crazy_manipulateDom.init();
+	
 	ping();
 
-	setRankColor();
- 	showNav();
-	resizeDivHeight();
-//	$('[data-toggle="tooltip"]').tooltip(); // bootstrap tooltip initialize 
 	toogleTheme(themeSwitch);
-
-	try {
-		activeLazyClass();
-	} catch(e) {}
 
 	loading(false);
 
 });
 
-function addResizeListener() {
-	$(window).bind("resize", resizeDivHeight);
-}
+var crazy_listener = (function() {
+	
+	var resize = function() {
+		console.log("crazy_listener : resize listener start");
+		$(window).bind("resize", resizeDivHeight);
+		resizeDivHeight();
+	};
+	
+	var pageMove = function() {
+		console.log("crazy_listener : pageMove listener start");
+		$("#deco_nav a[href]").on("click", function() {
+			console.log("nav click...");
+			loading(true, loadingText);
+		});
+		$("#header_div form").submit(function(event) {
+			console.log("form submit...");
+			loading(true, "form submit");
+		});
+	};
+	
+	var background = function() {
+		console.log("crazy_listener : background listener start");
+		$("#bgChangeInterval").on("keyup", function() {
+			bgChangeInterval = parseInt($(this).val());
+			clearInterval(bgImageChanger);
+			setBackgroundImage();
+			bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
+			console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
+		});
+	};
+	
+	var checkbox = function() {
+		// Add listener : implement checkbox element
+		$('span[id^="checkbox"]')
+			.css("cursor", "pointer")
+			.on("click", function() {
+				var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
+				//console.log("checkbox click", $(this).attr("id"), isChecked);
+				$(this).swapClass("label-success", "label-default", isChecked);
+				$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
+			})
+			.each(function() {
+				var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
+				$(this).swapClass("label-success", "label-default", !isChecked);
+				$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
+			});
+	};
+	
+	var radioBtn = function() {
+		// Add listener : implement radio element
+		$('span[id^="radio"]')
+			.on("click", function() {
+				var idArr = $(this).attr("id").split("-");
+				$("#" + idArr[1]).val(idArr[2]);
+				$('span[id^="radio-' + idArr[1] + '"]').removeClass("radio-on");
+				$(this).addClass("radio-on");
+			})
+			.each(function() {
+				var idArr = $(this).attr("id").split("-");
+				if($("#" + idArr[1]).val() == idArr[2]) {
+					$(this).addClass("radio-on");
+				} else {
+					$(this).removeClass("radio-on");
+				}
+			});
+	};
+	
+	var checkbox_role = function() {
+		/* Add listener
+		 * custom checkbox
+		 * ex) <span class="label label-default" role="checkbox" data-role-value="false">Favorite</span> 
+		 * */
+		$("[role='checkbox']").each(function() {
+			var checked = $(this).attr("data-role-value") === 'true';
+			$(this).addClass('pointer').toggleClass("label-success", checked).data("checked", checked);
+		}).on("click", function() {
+			var checked = $(this).data("checked");
+			$(this).toggleClass("label-success", !checked).data("checked", !checked);
+		});
+	};
+	
+	var start = function() {
+		resize();
+		pageMove();
+		background();
+		checkbox();
+		radioBtn();
+		checkbox_role();
+	};
+	
+	return {
+		start : start
+	};
+}());
 
-function addLinkListener() {
-	$("#deco_nav a[href]").on("click", function() {
-		loading(true, loadingText);
-	});
-	$("#header_div form").submit(function(event) {
-		console.log("form submit...");
-		loading(true, "form submit");
-	});
-}
-
-function addBGChangerListener() {
-	$("#bgChangeInterval").on("keyup", function() {
-		bgChangeInterval = parseInt($(this).val());
-		clearInterval(bgImageChanger);
-		setBackgroundImage();
-		bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
-		console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
-	});
-}
-
-function setRankColor() {
- 	$('input[type="range"].rank-range').each(function() {
-		var opus = $(this).attr("data-opus");
-		fnRankColor($(this), $("#Rank-"+opus+"-label"));
- 	});
-}
+var crazy_manipulateDom = (function() {
+	
+	var rankColor = function() {
+		console.log("crazy_manipulateDom : set rank color");
+	 	$('input[type="range"].rank-range').each(function() {
+			var opus = $(this).attr("data-opus");
+			fnRankColor($(this), $("#Rank-"+opus+"-label"));
+	 	});
+	};
+	
+	/**
+	 * 현재 url비교하여 메뉴 선택 효과를 주고, 메뉴 이외의 창에서는 nav를 보이지 않게
+	 */
+	var showNavigation = function() {
+		console.log("crazy_manipulateDom : show navigation")
+		var found = false;
+		$("nav#deco_nav ul li a").each(function() {
+			// console.log($(this).attr("href"), locationPathname);
+			if ($(this).attr("href") === locationPathname || $(this).attr("href") + '/' === locationPathname) {
+				$(this).parent().addClass("active");
+				found = true;
+			}
+		});
+		if (!found)
+			$("nav#deco_nav").hide();
+		
+		if (locationPathname.startsWith(imagePath)) {
+			$("#backMenu").hide();
+		}
+	};
+	
+	/**
+	 * data-lazy-class="w3-animate-opacity, 3000"
+	 * 3초후에 클래스를 추가한다.
+	 */
+	var lazyLoadCssClass = function() {
+		console.log("crazy_manipulateDom : lazyLoadCssClass");
+		$("[data-lazy-class]").each(function() {
+			var o = $(this);
+			var c = $(this).attr("data-lazy-class").split(",");
+			setTimeout(function() {
+				o.show().removeClass("hide").css({visibility: 'visible'}).addClass(c[0]);
+			}, parseInt(c[1]));
+		});
+	};
+	
+	var removeOnclick = function() {
+		$(".nonExist").attr("onclick", "");
+	};
+	
+	var init = function() {
+		rankColor();
+		showNavigation();
+		lazyLoadCssClass();
+		removeOnclick();
+	};
+	
+	return {
+		init : init
+	};
+}());
 
 /**
  * start ping
@@ -144,26 +262,6 @@ function ping() {
 				//console.log("ping.json", new Date());
 			});	
 		}, pingInterval);
-	}
-}
-
-/**
- * 현재 url비교하여 메뉴 선택 효과를 주고, 메뉴 이외의 창에서는 nav를 보이지 않게
- */
-function showNav() {
-	var found = false;
-	$("nav#deco_nav ul li a").each(function() {
-		// console.log($(this).attr("href"), locationPathname);
-		if ($(this).attr("href") === locationPathname || $(this).attr("href") + '/' === locationPathname) {
-			$(this).parent().addClass("active");
-			found = true;
-		}
-	});
-	if(!found)
-		$("nav#deco_nav").hide();
-	
-	if (locationPathname.startsWith(imagePath)) {
-		$("#backMenu").hide();
 	}
 }
 
@@ -366,6 +464,7 @@ function propagateTheme() {
 		$("#innerSearchPage > iframe").get(0).contentWindow.toogleTheme(themeSwitch);
 	}
 }
+
 </script>
 
 <sitemesh:write property="head" />

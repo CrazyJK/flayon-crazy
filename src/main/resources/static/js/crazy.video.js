@@ -24,7 +24,7 @@ function resizeDivHeight() {
 	var headerHeight = $("#header_div").outerHeight();
 	calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
 	$("#content_div").outerHeight(calculatedDivHeight);
-	//console.log("resizeDivHeight", calculatedDivHeight);
+	console.log("resizeDivHeight", calculatedDivHeight);
 	
 	$("#innerSearchPage").css({
 		width: windowWidth - offsetMargin * 2, 
@@ -34,9 +34,10 @@ function resizeDivHeight() {
 	try {
 		resizeSecondDiv(); // if it exist
 	} catch (e) {
-		//console.log("resizeSecondDiv Error", e.message);
+		console.log("resizeSecondDiv Error", e.message);
 	}
 }
+
 /**
  * background image set
  * @param imgIdx
@@ -49,6 +50,7 @@ function setBackgroundImage(imgIdx) {
 	$("body").css("background-image", "url(" + currBGImageUrl + ")");
 	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
 }
+
 /**
  * toggle studio div
  */

@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 	$.fn.aperture = function(options) {
 
 		var $circleWrapper = $(this);
@@ -151,4 +151,4 @@
 		var _num = parsePixel(pixel);
 		return parseInt(_num / divide) + "px";
 	}
-})(jQuery);
+}(jQuery));

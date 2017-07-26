@@ -119,7 +119,7 @@ var isShortWidth = false;
 		// ajax data		
 		request();
 	});
-}(jQuery));
+})(jQuery);
 
 function request() {
 	loading(true, "request...");
