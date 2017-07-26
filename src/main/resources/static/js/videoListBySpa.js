@@ -42,7 +42,7 @@ var tagList;
 		request();
 		
 	});
-}(jQuery));
+})(jQuery);
 
 function initComponent() {
 	$.each(sortList, function(i, sort) {
