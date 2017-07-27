@@ -3,6 +3,7 @@
  */
 
 var tagList;
+var candidateCount = 0;			// candidate 파일 개수
 
 var videoList = (function() {
 	'use strict';
@@ -22,7 +23,6 @@ var videoList = (function() {
 			{code: "To", name: "Torrrent"}, 
 			{code: "F", name: "Favorite"}, 
 			{code: "C", name: "Candidated"}];
-	var candidateCount = 0;			// candidate 파일 개수
 	var hadTorrentCount = 0;		// torrent 파일 개수
 	var videoCount = 0;				// video 파일 개수
 	var queryFoundCount = 0;		// 검색으로 찾은 비디오 개수
@@ -265,34 +265,20 @@ var videoList = (function() {
 				).append(
 						$("<td>").addClass(widthTorrentClass).append(
 								$("<div>").append(
+										$("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", video.opus).html("Find").on("click", function() {
+											var opus = $(this).data("opus");
+											$(this).parent().parent().parent().addClass("found");
+											popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+											popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+										})
+								).append(
 										video.html_videoCandidates
 								).append(
 										video.html_torrents
-								).append(
-										video.html_torrentFindBtn
 								)
 						)
 				)
 		);
-	};
-
-	var fnSelectCandidateVideo = function(opus, idx, i) {
-		$("[data-candidate='" + opus + "-" + i + "']").hide();
-		$(".candidate").html("C " + --candidateCount);
-		showSnackbar("accept file " + opus);
-	};
-	
-	var goTorrentMove = function(opus, idx, i) {
-		$("[data-torrent='" + opus + "-" + i + "']").hide();
-		$("[data-idx='" + idx + "']").addClass("moved");
-		actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
-		showSnackbar("move torrent " + opus);
-	};
-	
-	var goTorrentSearch = function(opus, idx) {
-		$("[data-idx='" + idx + "']").addClass("found");
-		popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-		popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
 	};
 
 	var setCoverPositionOnTableView = function() {

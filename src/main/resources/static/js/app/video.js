@@ -46,7 +46,7 @@ function Video(idx, data) {
 	this.html_fullname        = wrapLabel(this.fullname, this.fullname, "fnVideoDetail('" + this.opus + "')");
 	this.html_title           = wrapLabel(this.title, this.title, "fnVideoDetail('" + this.opus + "')", '', {fontSize: '85%'});
 	this.html_studio          = wrapLabel(this.studio.name, '', "fnViewStudioDetail('" + this.studio.name + "')");
-	this.html_opus            = wrapLabel(this.opus);
+	this.html_opus            = wrapLabel(this.opus, '', "fnVideoDetail('" + this.opus + "')");
 	this.html_actress         = this.actressHtmlNames();
 	this.html_release         = wrapLabel(this.releaseDate);
 	this.html_modified        = wrapLabel(this.videoDate);
@@ -56,7 +56,6 @@ function Video(idx, data) {
 	this.html_subtitles       = wrapLabel("Sub", '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
 	this.html_videoCandidates = this.candidatesNames();
 	this.html_torrents        = this.torrentNames();
-	this.html_torrentFindBtn  = '<span class="label label-info" title="Torrent search" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</span>';
 	this.html_favorite        = this.favorite ? wrapLabel("Fav", "", "", "label-success") : "";
 	this.html_overview		  = wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
 }
@@ -124,6 +123,20 @@ function getFilename(file) {
 		lastIndex = file.lastIndexOf("/");
 	return file.substring(lastIndex + 1, file.length);
 }
+
+
+var fnSelectCandidateVideo = function(opus, idx, i) {
+	$("[data-candidate='" + opus + "-" + i + "']").hide();
+	$(".candidate").html("C " + --candidateCount);
+	showSnackbar("accept file " + opus);
+};
+
+var goTorrentMove = function(opus, idx, i) {
+	$("[data-torrent='" + opus + "-" + i + "']").hide();
+	$("[data-idx='" + idx + "']").addClass("moved");
+	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+	showSnackbar("move torrent " + opus);
+};
 
 /**
  * wrap span tag
