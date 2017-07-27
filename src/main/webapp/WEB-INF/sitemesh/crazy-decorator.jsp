@@ -81,8 +81,7 @@ var crazy_listener = (function() {
 	
 	var resize = function() {
 		console.log("crazy_listener : resize listener start");
-		$(window).bind("resize", resizeDivHeight);
-		resizeDivHeight();
+		$(window).on("resize", resizeDivHeight).trigger("resize");
 	};
 	
 	var pageMove = function() {
@@ -155,6 +154,7 @@ var crazy_listener = (function() {
 		}).on("click", function() {
 			var checked = $(this).data("checked");
 			$(this).toggleClass("label-success", !checked).data("checked", !checked);
+			//console.log("checkbox_role call", !checked);
 		});
 	};
 	
