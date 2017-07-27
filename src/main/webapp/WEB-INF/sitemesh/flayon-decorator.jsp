@@ -31,10 +31,10 @@ try {
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/common.js" />"></script>
-<script type="text/javascript" src="<c:url value="/js/jquery.effect.js" />"></script>
-<script type="text/javascript" src="<c:url value="/js/jquery.crazy.aperture.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/typed.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/crazy.common.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/crazy.effect.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/crazy.ui.aperture.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/crazy.ui.typed.js" />"></script>
 <script type="text/javascript">
 var lang = '<%=lang%>';
 var prevScrollTop = 0;
