@@ -306,15 +306,16 @@ function fnIsScrollBottom() {
 }
 
 function renderBox(index, video, parent) {
-	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover").hover(function(event) {
-		if ($("#magnify").data("checked")) {
-			$(this).addClass("box-hover");
-		}
-	}, function() {
-		if ($("#magnify").data("checked")) {
-			$(this).removeClass("box-hover");
-		}
-	});
+	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover").hover(
+			function(event) {
+				if ($("#magnify").data("checked")) {
+					$(this).addClass("box-hover");
+				}
+			}, function() {
+				if ($("#magnify").data("checked")) {
+					$(this).removeClass("box-hover");
+				}
+			});
 	$("<dt>").appendTo(dl).html(video.html_title).addClass("nowrap text-center");
 	$("<dd>").appendTo(dl).html(video.html_studio);
 	$("<dd>").appendTo(dl).html(video.html_opus);
@@ -334,8 +335,7 @@ function renderTable(index, video, parent) {
 				currentVideoNo = $(this).attr("data-no");
 				showCover();
 			}, function(event) {
-			}
-	);
+			});
 	$("<td>").appendTo(tr).addClass("text-right").append(
 			$("<span>").addClass('label label-plain').html(index+1)
 	).append(
@@ -345,9 +345,9 @@ function renderTable(index, video, parent) {
 	$("<td>").appendTo(tr).html(video.html_opus);
 	$("<td>").appendTo(tr).html(
 		$('<div>').addClass("nowrap").append(
-			$('<span>').addClass('label label-plain').attr({"onclick": "fnVideoDetail('" + video.opus + "')"}).html(video.title).attr({"title": video.title, "data-toggle": "tooltip"}) //.tooltip()
+			$('<span>').addClass('label label-plain').attr({"onclick": "fnVideoDetail('" + video.opus + "')", "title": video.title, "data-toggle": "tooltip"}).html(video.title) //.tooltip()
 		).append(
-			$("<img>").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).addClass("img-thumbnail tbl-cover").hide()
+			$("<img>").addClass("img-thumbnail tbl-cover").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).hide()
 		).append(
 			$('<span>').addClass('label label-plain').css({color: "#a94442 !important"}).html(video.overviewText)
 		)
