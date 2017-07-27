@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>Video list</title>
-<link rel="stylesheet" href="<c:url value="/css/videoListBySpa.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/videoListBySpa.css"/>"/>
 </head>
 <body>
 <div class="container-fluid" role="main">
@@ -26,14 +26,14 @@
 		      	<button class="btn btn-default" data-toggle="tab" data-target="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-xs btn-group-sort"></div>
-			<button class="btn btn-xs btn-primary" onclick="getAllTorrents()" title="get all torrent">All T</button>
+			<button class="btn btn-xs btn-primary" id="getAllTorrents" title="get all torrent">All T</button>
       	</div>
       	<div class="float-right forTable">
 	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>
 	   		<span class="label label-default" id="cover"    role="checkbox" data-role-value="false" title="view cover">Cover</span>
       	</div>
       	<div class="float-right forBox">
-	   		<input type="range" id="img-width" class="form-control input-sm" min="290" max="790" value="290" step="100" onchange="resizeCover()"/>
+	   		<input type="range" id="img-width" class="form-control input-sm" min="290" max="790" value="290" step="100"/>
 	   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
 	   	</div>
 	</div>
@@ -45,18 +45,23 @@
 			</section>
 			<section id="table" class="tab-pane fade table-responsive">
 				<form>
-				<table class="table table-condensed table-hover table-bordered" style="margin-bottom:0;">
+				<table class="table table-condensed table-hover" style="margin-bottom:0;">
 					<tbody></tbody>
 				</table>
 				</form>
 			</section>
 		</div>
-		<p class="more text-center"><button class="btn btn-warning" onclick="render()">View More</button></p>
+		<p class="more text-center"><button class="btn btn-warning" id="viewMore">View More</button></p>
 	</div>
 
 </div>
 
-<script type="text/javascript" src="<c:url value="/js/video-prototype.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/videoListBySpa.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/app/video.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/app/videolist.js"/>"></script>
+<script type="text/javascript">
+$(function() {
+	videoList.init();
+});
+</script>
 </body>
 </html>

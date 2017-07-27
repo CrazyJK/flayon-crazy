@@ -306,62 +306,92 @@ function fnIsScrollBottom() {
 }
 
 function renderBox(index, video, parent) {
-	var dl = $("<dl>").css({"background-image": "url('" + video.coverURL + "')"}).addClass("video-cover").hover(
-			function(event) {
-				if ($("#magnify").data("checked")) {
-					$(this).addClass("box-hover");
-				}
-			}, function() {
-				if ($("#magnify").data("checked")) {
-					$(this).removeClass("box-hover");
-				}
-			});
-	$("<dt>").appendTo(dl).html(video.html_title).addClass("nowrap text-center");
-	$("<dd>").appendTo(dl).html(video.html_studio);
-	$("<dd>").appendTo(dl).html(video.html_opus);
-	$("<dd>").appendTo(dl).html(video.html_actress);
-	$("<dd>").appendTo(dl).html(video.html_release);
-	$("<dd>").appendTo(dl).html(video.html_video);
-	$("<dd>").appendTo(dl).html(video.html_subtitles);
-	$("<dd>").appendTo(dl).html(video.html_videoCandidates);
-	$("<dd>").appendTo(dl).html(video.html_torrents + video.html_torrentFindBtn);
-	$("<dd>").appendTo(dl).html(video.overviewText);
-	$("<li>").append(dl).appendTo(parent).attr({"data-idx": video.idx});
+	parent.append(
+			$("<li>").attr({"data-idx": video.idx}).append(
+					$("<dl>").css({backgroundImage: 'url(' + video.coverURL + ')'}).addClass("video-cover").hover(
+						function(event) {
+							if ($("#magnify").data("checked")) $(this).addClass("box-hover");
+						}, function() {
+							if ($("#magnify").data("checked")) $(this).removeClass("box-hover");
+						}
+					).append(
+							$("<dt>").html(video.html_title).addClass("nowrap text-center")
+					).append(
+							$("<dd>").html(video.html_studio)
+					).append(
+							$("<dd>").append(video.html_opus).append("&nbsp;").append(video.html_overview)
+					).append(
+							$("<dd>").html(video.html_actress)
+					).append(
+							$("<dd>").html(video.html_release)
+					).append(
+							$("<dd>").html(video.html_video)
+					).append(
+							$("<dd>").html(video.html_subtitles)
+					).append(
+							$("<dd>").html(video.html_videoCandidates)
+					).append(
+							$("<dd>").append(video.html_torrentFindBtn).append("&nbsp;").append(video.html_torrents)
+					)
+			)
+	);
 }
 
 function renderTable(index, video, parent) {
-	var tr = $("<tr>").appendTo(parent).attr({"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).hover(
-			function(event) {
-				currentVideoNo = $(this).attr("data-no");
-				showCover();
-			}, function(event) {
-			});
-	$("<td>").appendTo(tr).addClass("text-right").append(
-			$("<span>").addClass('label label-plain').html(index+1)
-	).append(
-			$("<input>").attr({name: "opus", type: "hidden"}).val(video.opus)
+	var   shortWidthClass = isShortWidth ? "shortWidth hide" : "shortWidth";
+	var widthTorrentClass = withTorrent ? "torrent" : "torrent hide";
+	parent.append(
+			$("<tr>").attr({"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).hover(
+				function(event) {
+					currentVideoNo = $(this).attr("data-no");
+					showCover();
+				}, function(event) {}
+			).append(
+					$("<td>").addClass("text-right").append(
+							$("<span>").addClass('label label-plain').html(index+1)
+					).append(
+							$("<input>").attr({name: "opus", type: "hidden"}).val(video.opus)
+					)
+			).append(
+					$("<td>").html(video.html_studio)
+			).append(
+					$("<td>").html(video.html_opus)
+			).append(
+					$("<td>").css({maxWidth: "300px"}).append(
+							$('<div>').addClass("nowrap").append(
+									$('<span>').addClass('label label-plain').attr({onclick: "fnVideoDetail('" + video.opus + "')", title: video.title}).html(video.title)
+							).append(
+									$("<img>").addClass("img-thumbnail tbl-cover").attr({id: "tbl-cover-" + video.opus, src: video.coverURL}).hide()
+							).append(
+									video.html_overview
+							)
+					)
+			).append(
+					$("<td>").css({maxWidth: "100px"}).attr({title: video.actressName}).html(video.html_actress)
+			).append(
+					$("<td>").addClass(shortWidthClass).html(video.html_release)
+			).append(
+					$("<td>").addClass(shortWidthClass).html(video.html_modified)
+			).append(
+					$("<td>").html(video.html_video)
+			).append(
+					$("<td>").addClass(shortWidthClass).html(video.html_subtitles)
+			).append(
+					$("<td>").addClass(shortWidthClass).html(video.html_rank)
+			).append(
+					$("<td>").addClass(shortWidthClass).html(video.html_score)
+			).append(
+					$("<td>").addClass(widthTorrentClass).append(
+							$("<div>").append(
+									video.html_videoCandidates
+							).append(
+									video.html_torrents
+							).append(
+									video.html_torrentFindBtn
+							)
+					)
+			)
 	);
-	$("<td>").appendTo(tr).html(video.html_studio);
-	$("<td>").appendTo(tr).html(video.html_opus);
-	$("<td>").appendTo(tr).html(
-		$('<div>').addClass("nowrap").append(
-			$('<span>').addClass('label label-plain').attr({"onclick": "fnVideoDetail('" + video.opus + "')", "title": video.title, "data-toggle": "tooltip"}).html(video.title) //.tooltip()
-		).append(
-			$("<img>").addClass("img-thumbnail tbl-cover").attr({"id": "tbl-cover-" + video.opus,"src": video.coverURL}).hide()
-		).append(
-			$('<span>').addClass('label label-plain').css({color: "#a94442 !important"}).html(video.overviewText)
-		)
-	).css({"max-width": "300px"});
-	$("<td>").appendTo(tr).html(video.html_actress).css({"max-width": "100px"}).attr({"title": video.actressName});
-	$("<td>").appendTo(tr).html(video.html_release).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
-	$("<td>").appendTo(tr).html(video.html_modified).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
-	$("<td>").appendTo(tr).html(video.html_video);
-	$("<td>").appendTo(tr).html(video.html_subtitles).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
-	$("<td>").appendTo(tr).html(video.html_rank).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
-	$("<td>").appendTo(tr).html(video.html_score).addClass("shortWidth " + (isShortWidth ? "hide" : ""));
-	$("<td>").appendTo(tr).append(
-			$("<div>").append(video.html_videoCandidates).append(video.html_torrents).append(video.html_torrentFindBtn)
-	).addClass("torrent " + (withTorrent ? "" : "hide"));
 }
 
 function fnSelectCandidateVideo(opus, idx, i) {
@@ -396,7 +426,7 @@ function setTblCoverPosition() {
 	if (imgWidth > 800)
 		imgWidth = 800;
 	var imgLeft = windowWidth / 4;
-	$(".tbl-cover").css({"left": imgLeft, "width": imgWidth});
+	$(".tbl-cover").css({left: imgLeft, width: imgWidth});
 }
 
 function resizeCover(first) {
@@ -404,7 +434,7 @@ function resizeCover(first) {
 	if (first) {
 		imgWidth = getLocalStorageItem(VIDEOLISTBYSPA_IMAGE_WIDTH, 290);
 		$('#img-width').val(imgWidth);
-	}else {
+	} else {
 		imgWidth = $('#img-width').val();
 	}
 	var imgHeight = Math.round(parseInt(imgWidth) * 0.6725);

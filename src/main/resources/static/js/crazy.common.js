@@ -349,3 +349,17 @@ function guid() {
 	return 'f' + (Math.random() * (1<<30)).toString(16).replace('.', '');
 }
 
+
+function compareTo(data1, data2, reverse) {
+	var result = 0;
+	if (typeof data1 === 'number') {
+		result = data1 - data2;
+	} else if (typeof data1 === 'string') {
+		result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
+	} else if (typeof data1 === 'boolean') {
+		result = data1 ? 1 : (data2 ? -1 : 0);
+	} else {
+		result = data1 > data2 ? 1 : -1;
+	}
+	return result * (reverse ? -1 : 1);
+}

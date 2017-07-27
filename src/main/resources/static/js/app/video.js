@@ -17,7 +17,7 @@ function Video(idx, data) {
 	this.videoDate    = data.videoDate;
 	this.playCount    = data.playCount;
 	this.rank         = data.rank;
-	this.fullname     = "" + data.studio.name + "][" + data.opus + "][" + data.title + "][" + data.actressName + "][" + data.releaseDate + "]";
+	this.fullname     = "[" + data.studio.name + "][" + data.opus + "][" + data.title + "][" + data.actressName + "][" + data.releaseDate + "]";
 	this.actressName  = data.actressName;
 	this.score        = data.score;
 //	this.scoreDesc    = data.scoreDesc;
@@ -44,7 +44,7 @@ function Video(idx, data) {
 	
 	// html
 	this.html_fullname        = wrapLabel(this.fullname, this.fullname, "fnVideoDetail('" + this.opus + "')");
-	this.html_title           = wrapLabel(this.title, this.title, "fnVideoDetail('" + this.opus + "')");
+	this.html_title           = wrapLabel(this.title, this.title, "fnVideoDetail('" + this.opus + "')", '', {fontSize: '85%'});
 	this.html_studio          = wrapLabel(this.studio.name, '', "fnViewStudioDetail('" + this.studio.name + "')");
 	this.html_opus            = wrapLabel(this.opus);
 	this.html_actress         = this.actressHtmlNames();
@@ -58,7 +58,7 @@ function Video(idx, data) {
 	this.html_torrents        = this.torrentNames();
 	this.html_torrentFindBtn  = '<span class="label label-info" title="Torrent search" onclick="goTorrentSearch(\'' + this.opus + '\',' + this.idx + ');">Find</span>';
 	this.html_favorite        = this.favorite ? wrapLabel("Fav", "", "", "label-success") : "";
-	this.html_overview		  = wrapLabel(this.overviewText);
+	this.html_overview		  = wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
 }
 
 Video.prototype.candidatesNames = function() {
@@ -125,60 +125,6 @@ function getFilename(file) {
 	return file.substring(lastIndex + 1, file.length);
 }
 
-function videoSort(list, sort, reverse) {
-	
-	list.sort(function(video1, video2) {
-		switch(sort) {
-		case 'S':
-			return compareTo(video1.studio.name, video2.studio.name, reverse); 
-		case 'O':
-			return compareTo(video1.opus, video2.opus, reverse); 
-		case 'T':
-			return compareTo(video1.title, video2.title, reverse); 
-		case 'A':
-			return compareTo(video1.actress, video2.actress, reverse); 
-		case 'D':
-			return compareTo(video1.releaseDate, video2.releaseDate, reverse); 
-		case 'M':
-			return compareTo(video1.videoDate, video2.videoDate, reverse); 
-		case 'R':
-			return compareTo(video1.rank, video2.rank, reverse); 
-		case 'SC':
-			return compareTo(video1.score, video2.score, reverse); 
-		case 'T':
-			return compareTo(video1.torrents.length, video2.torrents.length, reverse); 
-		case 'F':
-			return compareTo(video1.favorite, video2.favorite, reverse); 
-		case 'C':
-			var result = compareTo(video1.existCandidates, video2.existCandidates, reverse);
-			if (result == 0)
-				result = compareTo(video1.favorite, video2.favorite, reverse);
-			if (result == 0)
-				result = compareTo(video1.existTorrents, video2.existTorrents, reverse);
-			if (result == 0)
-				result = compareTo(video1.opus, video2.opus, reverse); 
-			return result; 
-		default:
-			return video1.title > video2.title ? 1 : -1;
-		}
-	});
-
-}
-
-function compareTo(data1, data2, reverse) {
-	var result = 0;
-	if (typeof data1 === 'number') {
-		result = data1 - data2;
-	} else if (typeof data1 === 'string') {
-		result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
-	} else if (typeof data1 === 'boolean') {
-		result = data1 ? 1 : (data2 ? -1 : 0);
-	} else {
-		result = data1 > data2 ? 1 : -1;
-	}
-	return result * (reverse ? -1 : 1);
-}
-
 /**
  * wrap span tag
  * @param html
@@ -188,15 +134,17 @@ function compareTo(data1, data2, reverse) {
  * @param extCss
  * @returns
  */
-function wrapLabel(html, title, onclick, extClass) {
+function wrapLabel(html, title, onclick, extClass, extCss) {
 	var span = $("<span>").addClass("label label-plain");
 	span.html(html);
-	if (title != '')
+	if (title && title != '')
 		span.attr("title", title);
-	if (onclick != '')
+	if (onclick && onclick != '')
 		span.attr("onclick", onclick);
-	if (extClass != '')
+	if (extClass && extClass != '')
 		span.addClass(extClass);
+	if (extCss && extCss != '')
+		span.css(extCss);
 	return span.clone().wrapAll("<div/>").parent().html();
 }
 
