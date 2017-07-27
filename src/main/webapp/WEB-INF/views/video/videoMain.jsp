@@ -16,15 +16,6 @@ var totalVideoSize = parseInt('${fn:length(videoList)}');
 var currentVideoIndex = getRandomInteger(1, totalVideoSize);
 var currBGImageUrl;
 listViewType = '${videoSearch.listViewType}';
-
-$(function() {
-	// Add listener : addCond click if its child clicked
- 	$('span[id^="checkbox-exist"]').bind("click", function(){
- 		if(!$("#addCond1").is(":checked")) {
- 			$("#checkbox-addCond1").click();
- 		}
-	});
-});
 </script>
 </head>
 <body>
