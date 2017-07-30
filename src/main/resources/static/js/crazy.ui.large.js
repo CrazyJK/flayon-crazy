@@ -1,4 +1,5 @@
 ;(function($) {
+
 	$.fn.largeview = function() {
 		$.large.fnShowVideoSlise();
 
@@ -56,16 +57,24 @@
 			$.large.fnShowVideoSlise();
 		},
 		fnShowVideoSlise: function() {
+			// show slide
 			$("#slides > div:visible").hide();
-			$("div[tabindex='" + currentVideoIndex + "']").fadeIn(600);
+			$("div[tabindex='" + currentVideoIndex + "']").fadeIn(300);
 
-			$(".pagination").empty();
-			$(".prevCover, .nextCover").empty();
+			// render prevView
+			var prevViewWidth  = Math.floor(($("#content_div").width() - 800 ) / 2);
+			var prevViewHeight = $(window).height() - 200;
+			var prevViewColumn = Math.floor(prevViewWidth / 270);
+			var prevViewRow    = Math.floor(prevViewHeight / 200);
+			var prevViewSize   = prevViewColumn * prevViewRow;
+			var prevViewStartIndex = parseInt(currentVideoIndex) - prevViewSize;
+			var prevViewEndIndex   = parseInt(currentVideoIndex) + prevViewSize;
 			
+			$(".pagination, .prevCover, .nextCover").empty();
 			fillPagination(1);
-			var startIdx = parseInt(currentVideoIndex) - 4;
-			var endIdx = parseInt(currentVideoIndex) + 4;
-			for (var i = startIdx; i <= endIdx; i++) {
+			var halfIndex = (prevViewEndIndex - prevViewStartIndex) / 2;
+			var count = 0;
+			for (var i = prevViewStartIndex; i <= prevViewEndIndex; i++) {
 				var previewIndex = i;
 				if (previewIndex <= 0)
 					previewIndex = totalVideoSize + i;
@@ -73,42 +82,38 @@
 					previewIndex = previewIndex - totalVideoSize;
 
 				fillPagination(previewIndex);
-				/*
-				$(".pagination").append(
-						$("<li>").append(
-								$("<a>").attr({href: '#'}).html(previewIndex).data("previewIndex", previewIndex).on("click", function() {
-									$.large.fnVideoView($(this).data("previewIndex"));
-								}).css({minWidth: '50px'})
-						).addClass(previewIndex == currentVideoIndex ? "active" : "")
-				);
-				*/
+
 				if (currentVideoIndex == i) {
 					continue;
 				}
-		
-//				if ($(window).width() > 1390) {
-					var item = $("<div class='thumb-box' style='display:inline-block; width:266px; margin:5px; cursor:pointer;'>");
-					item.append($("div[tabindex='" + previewIndex + "']").html());
-					item.find(".box-detail").hide();
-					item.find("dl").css({height: "178px", backgroundSize: 'cover', border: 0}).addClass("box");
-					item.find("dt").css({marginTop: '170px', textAlign: 'center', height: '24px'});
-					item.find("dt > span").css({writingMode: 'horizontal-tb', borderRadius: '4px', padding: '5px', margin: '0'});
-					item.append(
-				//			$("<div>").addClass("text-center").append(
-				//					$("<span>").css({display: 'inline-block', padding: '5px 14px', backgroundColor: '#fff', border: '1px solid #ddd', borderRadius: '15px', color: '#337ab7'}).html(previewIndex)	
-				//			)
-					).data("previewIndex", previewIndex).on("click", function() {
+				
+				var item = $("<div>");
+				item.append($("div[tabindex='" + previewIndex + "']").html())
+					.addClass("thumb-box")
+					.attr("data-thumb-box-index", previewIndex)
+					.css({display: "inline-block", width: "266px", margin: "5px", cursor: "pointer", transition: "all .3s"})
+					.data("previewIndex", previewIndex)
+					.on("click", function() {
 						$.large.fnVideoView($(this).data("previewIndex"));
 					});
-					if (i < currentVideoIndex) {
-						item.appendTo($(".prevCover"));
-					}
-					else {
-						item.appendTo($(".nextCover"));
-					}
-//				}
+
+				item.find("dl").css({height: "178px", backgroundSize: 'cover', border: 0}).addClass("box");
+				item.find("dt").css({marginTop: '170px', textAlign: 'center', height: '24px'});
+				item.find("dt > span").css({writingMode: 'horizontal-tb', borderRadius: '4px', padding: '5px', margin: '0'});
+				item.find(".box-detail").remove();
+
+				if (count++ < halfIndex)
+					item.appendTo($(".prevCover"));
+				else
+					item.appendTo($(".nextCover"));
 			}
 			fillPagination(totalVideoSize);
+		
+			console.log("prevViewWidth", prevViewWidth, "prevViewHeight", prevViewHeight, 
+					"prevViewColumn", prevViewColumn, "prevViewRow", prevViewRow, "prevViewSize", 
+					prevViewSize, "prevViewStartIndex", prevViewStartIndex, "prevViewEndIndex", prevViewEndIndex, "currentVideoIndex", currentVideoIndex
+			);
+			
 		},
 		focusVideo: function(opus) {
 			var idx = $("#opus-" + opus).attr("tabindex");

@@ -354,6 +354,22 @@ public class VideoUtils {
 	}
 
 	/**
+	 * 릴리즈 년도를 기준으로 yyyy 형식 하위 폴더를 만든다 
+	 * @param video
+	 * @return 생성된 폴더 path
+	 */
+	public static String makeSubPathByReleaseYear(Video video) {
+		if (!StringUtils.isEmpty(video.getReleaseDate())) {
+			File subDir = new File(video.getDelegatePathFile(), StringUtils.substring(video.getReleaseDate(), 0, 4));
+			if (!subDir.exists()) {
+				subDir.mkdir();
+			}
+			return subDir.getAbsolutePath();
+		}
+		return video.getDelegatePath();
+	}
+
+	/**
 	 * title(full name)에서 opus를 찾아 반환
 	 * @param title
 	 * @return

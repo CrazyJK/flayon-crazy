@@ -102,30 +102,31 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				|| !Pattern.matches(CRAZY.REGEX_DATE, releaseDate)
 				) {
 			logger.warn("Check video : [{}] [{}] archive={} [{}]", opus, releaseDate, isArchive, getDelegatePath());
+			return;
 		}
-		else {
-			if (isArchive) {
-				if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_ARCHIVE))
-					move(VideoUtils.makeSubPathByReleaseDate(this));
+
+		if (isArchive) {
+			if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_ARCHIVE))
+				move(VideoUtils.makeSubPathByReleaseDate(this));
+		}
+		else { // instance
+			if (this.isExistVideoFileList()) {
+				if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_STAGE))
+					move(VideoUtils.makeSubPathByReleaseYear(this));
+				else
+					move(this.getDelegatePath());
+			}
+			else if (this.isExistCoverFile()) {
+				if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_COVER))
+					move(VideoUtils.makeSubPathByReleaseYear(this));
+				else
+					move(this.getDelegatePath());
 			}
 			else {
-				if (this.isExistVideoFileList()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_STAGE))
-						move(VideoUtils.makeSubPathByReleaseDate(this));
-					else
-						move(this.getDelegatePath());
-				}
-				else if (this.isExistCoverFile()) {
-					if (StringUtils.endsWith(this.getDelegatePath(), CRAZY.PATH_COVER))
-						move(VideoUtils.makeSubPathByReleaseDate(this));
-					else
-						move(this.getDelegatePath());
-				}
-				else {
-					move(this.getDelegatePath());
-				}
+				move(this.getDelegatePath());
 			}
 		}
+
 	}
 
 	@Override
