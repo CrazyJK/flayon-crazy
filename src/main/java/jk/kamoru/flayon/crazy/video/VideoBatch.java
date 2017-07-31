@@ -184,7 +184,9 @@ public class VideoBatch extends CrazyProperties {
 	}
 	
 //	@Scheduled(fixedDelay = 1000 * 60 * 60 * 24) // fixedDelay per day 
-	@PreDestroy
+//	@PreDestroy
+	// cron every 2h 13m
+	@Scheduled(cron="0 0 0 * * *")
 	public synchronized void backup() throws IOException {
 		
 		if (StringUtils.isBlank(BACKUP_PATH)) {

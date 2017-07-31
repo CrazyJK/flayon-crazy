@@ -382,8 +382,7 @@ function fsOpen(folder) {
 					<li><jk:tags tag="${tag}" view="span"/></li>
 				</c:forEach>
 			</ul>
-			<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();" style="margin-top:10px;">
-				<input type="hidden" name="_method" id="hiddenHttpMethod2" value="PUT"/>
+			<form action="<c:url value="/video/tag/new"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();" style="margin-top:10px;">
 				<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
 				<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
 				<button class="btn btn-primary" type="submit">Regist</button>

@@ -750,7 +750,7 @@ public class VideoController extends CrazyController {
 		videoService.deleteTag(tag);
 	}
 	
-	@RequestMapping(value="/tag", method=RequestMethod.PUT)
+	@RequestMapping(value="/tag/new", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void saveTag(@ModelAttribute VTag tag, @RequestParam(value="opus", required=false, defaultValue="") String opus) {
 		videoService.createTag(tag);

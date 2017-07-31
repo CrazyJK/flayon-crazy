@@ -100,9 +100,8 @@
 	<%	} %>
 			<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
 		</div>
-		<form action="<c:url value="/video/tag"/>" method="post" role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this)">
+		<form action="<c:url value="/video/tag/new"/>" method="post" role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this)">
 			<span style="display:none; padding:3px;" class="bg-primary" id="newTag-${video.opus}">
-				<input type="hidden" name="_method" id="hiddenHttpMethod-${video.opus}" value="PUT"/>
 				<input type="hidden" name="opus" value="${video.opus}"/>
 				<input name="name" placeholder="name" id="newTag-name-${video.opus}" class="form-control input-sm" required="required"/>
 				<input name="description" placeholder="Description" class="form-control input-sm"/>
