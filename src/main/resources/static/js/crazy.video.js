@@ -47,6 +47,7 @@ function setBackgroundImage(imgIdx) {
 //	else		currBGImageNo = getRandomInteger(0, bgImageCount-1);
 	currBGImageNo = imgIdx ? imgIdx : getRandomInteger(0, bgImageCount-1);
 	currBGImageUrl = imagePath + "/" + currBGImageNo;
+	console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
 	$("body").css("background-image", "url(" + currBGImageUrl + ")");
 	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
 }
@@ -352,7 +353,7 @@ function fnSetTag(dom, opus, tagId) {
 //	frm.submit();
 }
 /**
- * 저장한 태그를 화면에 추가한다
+ * 저장한 태그를 화면에 추가하고, 서버에 저장시킨다.
  * @param frm
  */
 function addTag(frm) {
@@ -360,10 +361,12 @@ function addTag(frm) {
 	var tagname = $(frm).find("input[name='name']").val();
 	var tagdesc = $(frm).find("input[name='description']").val();
 	console.log("tag ",  opus, tagname, tagdesc);
-	var newTag = $("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname);
-	$("#tags-"+opus).append(newTag);
-	$(frm).children().first().click();
+	$("#tags-"+opus).append(
+			$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
+	);
 	
+	actionFrame(videoPath + "/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname);
+	return false;
 }
 /**
  * 태그 상세화면 팝업.

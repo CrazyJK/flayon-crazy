@@ -3,45 +3,25 @@
 	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
 	updateCheck="false">
 	
-	<!-- Persistence and Restartability  http://www.ehcache.org/documentation/2.7/configuration/fast-restart.html -->
-	
-	<!-- 
-	<diskStore path="java.io.tmpdir" />
-	
-	<cache name="flayon-image-cache" 
-			maxEntriesLocalHeap="10000"
-			maxEntriesLocalDisk="1000" 
-			eternal="false" 
-			diskSpoolBufferSizeMB="20"
-			timeToIdleSeconds="0" 
-			timeToLiveSeconds="0"
-			memoryStoreEvictionPolicy="LFU" 
-			transactionalMode="off">
-		<persistence strategy="localTempSwap" />
-	</cache>
-
-	<cache name="flayon-cover-cache" 
-			maxEntriesLocalHeap="10000"
-			maxEntriesLocalDisk="1000" 
-			eternal="false" 
-			diskSpoolBufferSizeMB="20"
-			timeToIdleSeconds="0" 
-			timeToLiveSeconds="0"
-			memoryStoreEvictionPolicy="LFU" 
-			transactionalMode="off">
-		<persistence strategy="localTempSwap" />
-	</cache>
+	<!-- Persistence and Restartability  
+		http://www.ehcache.org/documentation/2.7/configuration/fast-restart.html
+		http://www.ehcache.org/ehcache.xml
 	 -->
-
-	<cache name="flayon-image-cache" 
-			maxEntriesLocalHeap="10000">
-		<persistence strategy="none"/>
-	</cache> 
-
-	<cache name="flayon-cover-cache" 
-			maxEntriesLocalHeap="10000">
-		<persistence strategy="none"/>
+ 
+	<diskStore path="java.io.tmpdir/flayon" />
+	
+	<cache name="flayon-image-cache"
+			maxEntriesLocalHeap="10"
+			maxEntriesLocalDisk="0"
+			eternal="true" 
+			memoryStoreEvictionPolicy="LFU">
+		<persistence strategy="localTempSwap" />
 	</cache>
+
+	<cache name="flayon-cover-cache"
+			maxEntriesLocalHeap="10000" 
+			eternal="true" 
+			memoryStoreEvictionPolicy="FIFO" />
 
 </ehcache>
 

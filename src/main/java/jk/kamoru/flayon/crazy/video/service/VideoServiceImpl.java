@@ -492,10 +492,12 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		log.debug("groupByPath");
 		Map<String, Long[]> pathMap = new TreeMap<>();
 		Long[] total = new Long[]{0l, 0l};
-		for (Video video : videoDao.getVideoList(true, false)) {
+		for (Video video : videoDao.getVideoList(true, true)) {
 			String path = video.getDelegatePath();
 			if (path.contains(STORAGE_PATH))
 				path = STORAGE_PATH;
+			else if (path.contains(ARCHIVE_PATH))
+				path = ARCHIVE_PATH;
 			long length = video.getLength();
 			Long[] data = pathMap.get(path);
 			if (data == null) {

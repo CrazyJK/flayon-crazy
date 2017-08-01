@@ -6,6 +6,7 @@
 <%@ taglib prefix="jk"  tagdir="/WEB-INF/tags"%>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
 <c:set var="tab" value="${empty param.tab ? 'folder' : param.tab}"/>
+<c:set var="displayLimit" value="${empty param.l ? 10 : param.l}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,7 +64,8 @@ function fsOpen(folder) {
 	</div>
 
 	<div class="float-right">
-		<span class="label label-default">Max : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span>
+		<span class="label label-default">Display limit ${displayLimit}</span>
+		<span class="label label-default">Max Storage : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span>
 	</div>
 
 </div>
@@ -110,47 +112,35 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th><s:message code="video.date"/></th>
-						<th>Rank 0</th>
-						<th>Rank 1</th>
-						<th>Rank 2</th>
-						<th>Rank 3</th>
-						<th>Rank 4</th>
-						<th>Rank 5</th>
+						<th style="width:10%;"><s:message code="video.date"/></th>
+						<th style="width:15%;">Rank 0</th>
+						<th style="width:15%;">Rank 1</th>
+						<th style="width:15%;">Rank 2</th>
+						<th style="width:15%;">Rank 3</th>
+						<th style="width:15%;">Rank 4</th>
+						<th style="width:15%;">Rank 5</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${dateMap}" var="date" varStatus="status">
 					<tr>
-						<td style="width:120px;">${date.key} <span class="badge float-right">${fn:length(date.value)}</span></td>
-						<td style="max-width:130px;">
-							<div id="rank0-${date.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank1-${date.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank2-${date.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank3-${date.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank4-${date.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank5-${date.key}" class="nowrap"></div>
-						</td>
+						<td><span class="badge float-right">${fn:length(date.value)}</span>${date.key}</td>
+						<td><div id="rank0-${date.key}" class="nowrap"></div></td>
+						<td><div id="rank1-${date.key}" class="nowrap"></div></td>
+						<td><div id="rank2-${date.key}" class="nowrap"></div></td>
+						<td><div id="rank3-${date.key}" class="nowrap"></div></td>
+						<td><div id="rank4-${date.key}" class="nowrap"></div></td>
+						<td><div id="rank5-${date.key}" class="nowrap"></div></td>
 					</tr>
 						<c:forEach items="${date.value}" var="video" varStatus="status">
+							<c:if test="${status.index < displayLimit}">
 							<script type="text/javascript">
-								var vItem = $("<span>");
-								vItem.addClass("label label-plain");
-								vItem.attr("data-opus", "${video.opus}");
-								vItem.attr("onclick", "fnVideoDetail('${video.opus}')");
-								vItem.attr("title", "${video.fullname}");
-								$("#rank${video.rank}-${date.key}").append(vItem).append("&nbsp;");
+								$("#rank${video.rank}-${date.key}").append(
+										$("<span>").addClass("label label-plain")
+											.attr({"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}"})
+								).append("&nbsp;");
 							</script>
+							</c:if>
 						</c:forEach>
 					</c:forEach>		
 				</tbody>
@@ -161,47 +151,35 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th>Play</th>
-						<th>Rank 0</th>
-						<th>Rank 1</th>
-						<th>Rank 2</th>
-						<th>Rank 3</th>
-						<th>Rank 4</th>
-						<th>Rank 5</th>
+						<th style="width:10%;">Play</th>
+						<th style="width:15%;">Rank 0</th>
+						<th style="width:15%;">Rank 1</th>
+						<th style="width:15%;">Rank 2</th>
+						<th style="width:15%;">Rank 3</th>
+						<th style="width:15%;">Rank 4</th>
+						<th style="width:15%;">Rank 5</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${playMap}" var="play" varStatus="status">
 					<tr>
-						<td style="width:100px;">${play.key} <span class="badge float-right">${fn:length(play.value)}</span></td>
-						<td style="max-width:130px;">
-							<div id="rank0-${play.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank1-${play.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank2-${play.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank3-${play.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank4-${play.key}" class="nowrap"></div>
-						</td>
-						<td style="max-width:130px;">
-							<div id="rank5-${play.key}" class="nowrap"></div>
-						</td>
+						<td><span class="badge float-right">${fn:length(play.value)}</span>${play.key}</td>
+						<td><div id="rank0-${play.key}" class="nowrap"></div></td>
+						<td><div id="rank1-${play.key}" class="nowrap"></div></td>
+						<td><div id="rank2-${play.key}" class="nowrap"></div></td>
+						<td><div id="rank3-${play.key}" class="nowrap"></div></td>
+						<td><div id="rank4-${play.key}" class="nowrap"></div></td>
+						<td><div id="rank5-${play.key}" class="nowrap"></div></td>
 					</tr>
 						<c:forEach items="${play.value}" var="video" varStatus="status">
+							<c:if test="${status.index < displayLimit}">
 							<script type="text/javascript">
-								var vItem = $("<span>");
-								vItem.addClass("label label-plain");
-								vItem.attr("data-opus", "${video.opus}");
-								vItem.attr("onclick", "fnVideoDetail('${video.opus}')");
-								vItem.attr("title", "${video.fullname}");
-								$("#rank${video.rank}-${play.key}").append(vItem).append("&nbsp;");
+								$("#rank${video.rank}-${play.key}").append(
+										$("<span>").addClass("label label-plain")
+											.attr({"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}"})
+								).append("&nbsp;");
 							</script>
+							</c:if>
 						</c:forEach>
 					</c:forEach>
 				</tbody>
@@ -212,26 +190,28 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th><s:message code="video.rank"/></th>
-						<th><s:message code="video.length"/></th>
+						<th style="width: 100px;"><s:message code="video.rank"/></th>
+						<th style="width: 120px;"><s:message code="video.length"/></th>
 						<th><s:message code="video.video"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${rankMap}" var="rank" varStatus="status">
 					<tr class="nowrap">
-						<td style="width: 80px;">${rank.key} <span class="badge float-right">${fn:length(rank.value)}</span></td>
-						<td style="width: 80px;" class="text-right">
+						<td><span class="badge float-right">${fn:length(rank.value)}</span>${rank.key}</td>
+						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${rank.value}" var="video" varStatus="status">
 								<c:set var="totalLength" value="${totalLength + video.length}"/>
 							</c:forEach>				
 							<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
 						</td>
-						<td style="max-width: 760px;">
+						<td>
 							<div class="nowrap">
 							<c:forEach items="${rank.value}" var="video" varStatus="status">
+								<c:if test="${status.index < displayLimit}">
 								<jk:video video="${video}" view="label"/>
+								</c:if>
 							</c:forEach>
 							</div>
 						</td>
@@ -245,9 +225,9 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th><s:message code="video.score"/></th>
-						<th><s:message code="video.length"/></th>
-						<th><s:message code="video.length.sum"/></th>
+						<th style="width: 100px;"><s:message code="video.score"/></th>
+						<th style="width: 120px;"><s:message code="video.length"/></th>
+						<th style="width: 120px;"><s:message code="video.length.sum"/></th>
 						<th><s:message code="video.video"/></th>
 					</tr>
 				</thead>
@@ -260,17 +240,19 @@ function fsOpen(folder) {
 							<c:set var="totalLength" value="${totalLength + video.length}"/>
 						</c:forEach>
 					<tr>
-						<td style="width: 80px;">${score.key} <span class="badge float-right">${fn:length(score.value)}</span></td>
+						<td><span class="badge float-right">${fn:length(score.value)}</span>${score.key}</td>
 						<td class="text-right">
 							<fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/>
 						</td>
-						<td style="width: 80px;" class="text-right">
+						<td class="text-right">
 							<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
 						</td>
-						<td style="max-width: 660px;">
+						<td>
 							<div class="nowrap">
 							<c:forEach items="${score.value}" var="video" varStatus="status">
+								<c:if test="${status.index < displayLimit}">
 								<jk:video video="${video}" view="label" tooltip="${video.scoreDesc}"/>
+								</c:if>
 							</c:forEach>
 							</div>
 						</td>
@@ -284,8 +266,8 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th><s:message code="video.length"/></th>
-						<th><s:message code="video.length"/></th>
+						<th style="width: 100px;"><s:message code="video.length"/></th>
+						<th style="width: 120px;"><s:message code="video.length"/></th>
 						<th><s:message code="video.video"/></th>
 					</tr>
 				</thead>
@@ -293,18 +275,20 @@ function fsOpen(folder) {
 					<c:set var="totalLength" value="0"/>
 					<c:forEach items="${lengthMap}" var="length" varStatus="status">
 					<tr>
-						<td style="width: 100px;">${length.key} GB↓ <span class="badge float-right">${fn:length(length.value)}</span></td>
-						<td style="width: 80px;" class="text-right">
+						<td><span class="badge float-right">${fn:length(length.value)}</span>${length.key} GB↓</td>
+						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${length.value}" var="video" varStatus="status">
 								<c:set var="totalLength" value="${totalLength + video.length}"/>
 							</c:forEach>
 							<fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/>
 						</td>
-						<td style="max-width: 720px;">
+						<td>
 							<div class="nowrap">
 							<c:forEach items="${length.value}" var="video" varStatus="status">
+								<c:if test="${status.index < displayLimit}">
 								<jk:video video="${video}" view="label"/>
+								</c:if>
 							</c:forEach>
 							</div>
 						</td>
@@ -318,8 +302,8 @@ function fsOpen(folder) {
 			<table class="table table-condensed table-hover table-bordered">
 				<thead>
 					<tr>
-						<th><s:message code="video.extension"/></th>
-						<th><s:message code="video.length"/></th>
+						<th style="width: 100px;"><s:message code="video.extension"/></th>
+						<th style="width: 120px;"><s:message code="video.length"/></th>
 						<th><s:message code="video.video"/></th>
 					</tr>
 				</thead>
@@ -327,18 +311,20 @@ function fsOpen(folder) {
 					<c:set var="totalLength" value="0"/>
 					<c:forEach items="${extensionMap}" var="extension" varStatus="status">
 					<tr>
-						<td style="width: 100px;">${extension.key} <span class="badge float-right">${fn:length(extension.value)}</span></td>
-						<td style="width: 100px;" class="text-right">
+						<td><span class="badge float-right">${fn:length(extension.value)}</span>${extension.key}</td>
+						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${extension.value}" var="video" varStatus="status">
 								<c:set var="totalLength" value="${totalLength + video.length}"/>
 							</c:forEach>
 							<fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/>
 						</td>
-						<td style="max-width: 700px;">
+						<td>
 							<div class="nowrap">
 							<c:forEach items="${extension.value}" var="video" varStatus="status">
+								<c:if test="${status.index < displayLimit}">
 								<jk:video video="${video}" view="label"/>
+								</c:if>
 							</c:forEach>
 							</div>
 						</td>
@@ -347,19 +333,7 @@ function fsOpen(folder) {
 				</tbody>
 			</table>
 		</section>
-		<%-- 
-		<section id="video" class="tab-pane fade">
-			<table class="table table-condensed table-bordered">
-				<tr>
-					<td>
-						<c:forEach items="${videoList}" var="video" varStatus="status">
-							<jk:video video="${video}" view="span"/>
-						</c:forEach>
-					</td>
-				</tr>
-			</table>
-		</section>
-		 --%>
+
 		<section id="studio" class="tab-pane fade">
 			<ul class="cloud">
 				<c:forEach var="studio" items="${studioList}">
@@ -382,19 +356,20 @@ function fsOpen(folder) {
 					<li><jk:tags tag="${tag}" view="span"/></li>
 				</c:forEach>
 			</ul>
-			<form action="<c:url value="/video/tag/new"/>" method="post" role="form" class="form-inline" onsubmit="appendNewTag();" style="margin-top:10px;">
+			<form role="form" class="form-inline" style="margin-top:10px;" onsubmit="appendNewTag(this); return false;">
 				<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
 				<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
 				<button class="btn btn-primary" type="submit">Regist</button>
 			</form>
 			<script type="text/javascript">
-			function appendNewTag() {
-				var newTag = $("<span>").attr("style", "padding: 5px; margin: 5px; background-color:#ff0;")
-								.attr("title", $("#newTagDesc").val())
-								.addClass("item box nowrap")
-								.html($("#newTagName").val());
-				//console.log("tags", $("#taglist"));
-				$("#taglist").append(newTag);
+			function appendNewTag(frm) {
+				var tagname = $("#newTagName").val();
+				var tagDesc = $("#newTagDesc").val();
+				$("#taglist").append(
+						$("<span>").html(tagname).attr("title", tagDesc).addClass("item box nowrap").css({padding: "5px", margin: "5px", backgroundColor: "#ff0"})
+				);
+				actionFrame(videoPath + "/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname);
+				return false;
 			}
 			</script>
 		</section>
