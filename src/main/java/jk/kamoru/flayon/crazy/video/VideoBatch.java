@@ -3,12 +3,12 @@ package jk.kamoru.flayon.crazy.video;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -239,13 +239,15 @@ public class VideoBatch extends CrazyProperties {
 		FileUtils.copyFileToDirectory(new File(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME), backupPath);
 		
 		// zip to cover, info, subtitles file on instance
-		File files = Files.createTempDirectory(VIDEO.BACKUP_FILE_FILENAME).toFile();
+		//File backupTemp = new File(QUEUE_PATH, "backuptemp"); 
+		//Files.createTempDirectory(VIDEO.BACKUP_FILE_FILENAME).toFile();
+		File backupTemp = Files.createDirectory(Paths.get(QUEUE_PATH, "backuptemp")).toFile();
 		for (Video video : videoList)
 			for (File file : video.getFileWithoutVideo())
 				if (file != null && file.exists())
-					FileUtils.copyFileToDirectory(file, files, false);
-		ZipUtils.zip(files, backupPath, VIDEO.BACKUP_FILE_FILENAME, VIDEO.ENCODING, true);
-		FileUtils.deleteDirectory(files);
+					FileUtils.copyFileToDirectory(file, backupTemp, false);
+		ZipUtils.zip(backupTemp, backupPath, VIDEO.BACKUP_FILE_FILENAME, VIDEO.ENCODING, true);
+		FileUtils.deleteDirectory(backupTemp);
 		
 		// _info folder backup to zip
 		ZipUtils.zip(new File(STORAGE_PATH, "_info"), backupPath, VIDEO.BACKUP_INFO_FILENAME, VIDEO.ENCODING, true);

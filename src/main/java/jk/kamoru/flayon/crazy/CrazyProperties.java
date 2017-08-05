@@ -14,6 +14,7 @@ public class CrazyProperties {
     /** video Stage path */                      @Value("${path.video.stage}")           protected String[]         STAGE_PATHS;
     /** video cover path */                      @Value("${path.video.cover}")           protected String           COVER_PATH;
     /** Torrent seed path */                     @Value("${path.video.seed}")            protected String            SEED_PATH;
+    /** queue path */                            @Value("${path.video.queue}")           protected String           QUEUE_PATH;
 
     /** specific file moving info */             @Value("${path.move.file}")             protected String[]     MOVE_FILE_PATHS;
     /** managed picture path */                  @Value("${path.sora.pictures}")         protected String[] SORA_PICTURES_PATHS;
