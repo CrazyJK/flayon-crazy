@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
-import jk.kamoru.flayon.crazy.image.domain.ImageType;
+import jk.kamoru.flayon.crazy.image.domain.Image.Type;
 
 /**
  * Image Service
@@ -61,7 +61,7 @@ public interface ImageService {
 	 */
 	Map<Integer, String> getImageNameMap();
 	
-	byte[] getBytes(int idx, ImageType imageType);
+	byte[] getBytes(int idx, Type imageType);
 
 	int getRandomImageNo();
 	

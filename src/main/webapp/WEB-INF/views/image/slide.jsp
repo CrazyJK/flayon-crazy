@@ -497,7 +497,7 @@ function showTimer(sec, text) {
 						Effect   <span class="label label-info effectMethod"></span> 
 						Play     <span class="label label-info playMode"></span>
 						Interval <span class="label label-info interval"></span>
-						<button class="btn btn-plain btn-sm float-right" onclick="shuffle()">Shuffle</button>
+						<button class="btn btn-plain btn-sm float-right btn-shuffle" onclick="shuffle()">Shuffle</button>
 					</div>
 				</div>
 			</div>

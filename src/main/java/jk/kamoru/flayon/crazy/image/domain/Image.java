@@ -12,50 +12,53 @@ import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 
 import jk.kamoru.flayon.crazy.CrazyException;
-import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.ImageException;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
 
 /**
  * Image Domain
  * @author kamoru
  *
  */
-@Data
-@Slf4j
+@Getter
 public class Image {
 
-	private int idx;
-	private String name;
-	private String suffix;
-	private long size;
-	private long lastModified;
+	public enum Type {
+
+		/** Original size */
+		MASTER(0), 
+		/** width 500px size */
+		WEB(500), 
+		/**  width 100px size */
+		THUMBNAIL(100);
+		
+		int size;
+		
+		Type(int size) {
+			this.size = size;
+		}
+		
+		int getSize() {
+			return size;
+		}
+	}
+	
 	private File file;
 
 	public Image(File file) {
-		this(file, -1);
+		this.file  = file;
 	}
 
-	public Image(File file, int i) {
-		this.file = file;
-		this.idx = i;
-		init();
+	public String getName() {
+		return file.getName();
 	}
-
-	private void init() {
-		this.name = file.getName();
-		this.suffix = Utils.getExtension(file);
-		this.size = file.length();
-		this.lastModified = file.lastModified();
-	}
-
+	
 	/**
 	 * return byte array of image file
 	 * @param type
 	 * @return image file byte array
 	 */
-	public byte[] getByteArray(ImageType type) {
+	public byte[] getByteArray(Type type) {
 		try {
 			switch (type) {
 			case MASTER:
@@ -65,13 +68,13 @@ public class Image {
 						Scalr.resize(
 								ImageIO.read(file), 
 								Scalr.Mode.FIT_TO_WIDTH, 
-								ImageType.WEB.getSize()));
+								Type.WEB.getSize()));
 			case THUMBNAIL:
 				return readBufferedImageToByteArray(
 						Scalr.resize(
 								ImageIO.read(file), 
 								Method.SPEED, 
-								ImageType.THUMBNAIL.getSize(), 
+								Type.THUMBNAIL.getSize(), 
 								Scalr.OP_ANTIALIAS, 
 								Scalr.OP_BRIGHTER));
 			default:
@@ -95,14 +98,6 @@ public class Image {
 		} catch (IOException e) {
 			throw new CrazyException("read bufferedImage error", e);
 		}
-	}
-
-	/**
-	 * delete image file
-	 */
-	public void delete() {
-		FileUtils.deleteQuietly(file);
-		log.info("DELETE - {}", name);
 	}
 
 }

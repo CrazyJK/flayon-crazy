@@ -38,10 +38,8 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 	private synchronized void load() {
 		loading = true;
 		
-		int idx = 0;
-
 		if (imageList == null)
-			imageList = new ArrayList<Image>();
+			imageList = new ArrayList<>();
 		imageList.clear();
 
 		for (String path : this.IMAGE_PATHS) {
@@ -49,20 +47,12 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 			if (dir.isDirectory()) {
 				log.info("Image scanning ... {}", dir);
 				for (File file : FileUtils.listFiles(dir, IMAGE.SUFFIX_IMAGE_ARRAY, true))
-					imageList.add(new Image(file, idx++));
+					imageList.add(new Image(file));
 			}
 		}
 		log.info("{} images found", imageList.size());
-		
-//		Collections.sort(imageList, new Comparator<Image>() {
-//			@Override
-//			public int compare(Image o1, Image o2) {
-//				return Utils.compareTo(o1.getLastModified(), o2.getLastModified());
-//			}
-//		});
-		loading = false;
-		
 		NotiQueue.pushNoti("Image loading " + imageList.size());
+		loading = false;
 	}
 
 	private List<Image> imageSource() {
@@ -103,7 +93,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 
 	@Override
 	public void delete(int idx) {
-		imageSource().get(idx).delete();
+		FileUtils.deleteQuietly(imageSource().get(idx).getFile());
 		imageSource().remove(idx);
 	}
 

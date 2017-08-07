@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
-import jk.kamoru.flayon.crazy.image.domain.ImageType;
+import jk.kamoru.flayon.crazy.image.domain.Image.Type;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	@Cacheable(value="flayon-image-cache")
-	public byte[] getBytes(int idx, ImageType imageType) {
+	public byte[] getBytes(int idx, Type imageType) {
 		log.debug("getBytes {}, {}", idx, imageType);
 		return imageSource.getImage(idx).getByteArray(imageType);
 	}

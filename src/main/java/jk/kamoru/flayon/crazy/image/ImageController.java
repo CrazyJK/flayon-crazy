@@ -3,7 +3,6 @@ package jk.kamoru.flayon.crazy.image;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,93 +12,66 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.image.domain.ImageType;
+import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/image")
-@Slf4j
 public class ImageController extends CrazyController {
 
-	private static final long TODAY = new Date().getTime();
+	private long today = new Date().getTime();
 
 	@Autowired private VideoService videoService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String viewSlide() {
-		return "image/slide";
+	@Scheduled(cron="0 0 0 * * *")
+	public void updateDate() {
+		today = new Date().getTime();
 	}
 	
-	@RequestMapping(value = "/slides", method = RequestMethod.GET)
-	public String viewSlidesjs() {
-		return "image/slidesjs";
-	}
-
-	@RequestMapping(value = "/canvas", method = RequestMethod.GET)
-	public String viewCanvas(@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex) {
-		if (deleteImageIndex > -1) 
-			imageService.delete(deleteImageIndex);
-		return "image/canvas";
-	}
-
-	@RequestMapping(value = "/aperture", method = RequestMethod.GET)
-	public String aperture() {
-		return "image/aperture";
-	}
-
-	@RequestMapping(value = "/lightbox", method = RequestMethod.GET)
-	public String lightbox() {
-		return "image/lightbox";
-	}
-
-	@RequestMapping(value = "/thumbnails", method = RequestMethod.GET)
-	public String thumbnails() {
-		return "image/thumbnails";
-	}
+	@RequestMapping()              public String slide()      { return "image/slide"; }
+	@RequestMapping("/slides")     public String slidesjs()   { return "image/slidesjs"; }
+	@RequestMapping("/canvas")     public String canvas()     { return "image/canvas"; }
+	@RequestMapping("/aperture")   public String aperture()   { return "image/aperture"; }
+	@RequestMapping("/lightbox")   public String lightbox()   { return "image/lightbox"; }
+	@RequestMapping("/thumbnails") public String thumbnails() { return "image/thumbnails"; }
 
 	@RequestMapping("/data")
 	public Map<String, Object> getData() {
 		Map<String, Object> data = new HashMap<>();
-
-		data.put("imageCount", imageService.getImageSourceSize());
+		data.put("imageCount",   imageService.getImageSourceSize());
 		data.put("imageNameMap", imageService.getImageNameMap());
-		
-		List<Video> videoList = videoService.getVideoList(null, false, true, false);
-		Map<Integer, String> map = new HashMap<>();
 		int index = 0;
-		for (Video video : videoList) {
+		Map<Integer, String> map = new HashMap<>();
+		for (Video video : videoService.getVideoList(null, false, true, false)) {
 			map.put(index++, video.getOpus());
 		}
-		data.put("coverCount", videoList.size());
+		data.put("coverCount",   index);
 		data.put("coverNameMap", map);
-
 		return data;
 	}
 
-	@RequestMapping(value = "/{idx}/thumbnail")
-	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx, HttpServletResponse response) {
-		return getImageEntity(imageService.getBytes(idx, ImageType.THUMBNAIL), MediaType.IMAGE_GIF, response);
+	@RequestMapping("/{idx}/{imageType}")
+	@Deprecated
+	public HttpEntity<byte[]> getImageOnType(@PathVariable int idx, @PathVariable Image.Type imageType, HttpServletResponse response) {
+		log.warn("this method is deprecated");
+		return getImageEntity(imageService.getBytes(idx, imageType), MediaType.IMAGE_JPEG, response);
 	}
 
-	@RequestMapping(value = "/{idx}/WEB")
-	public HttpEntity<byte[]> imageWEB(@PathVariable int idx, HttpServletResponse response) {
-		return getImageEntity(imageService.getBytes(idx, ImageType.WEB), MediaType.IMAGE_JPEG, response);
-	}
-
-	@RequestMapping(value = "/{idx}")
-	public HttpEntity<byte[]> imageMaster(@PathVariable int idx, HttpServletResponse response) {
-		return getImageEntity(imageService.getBytes(idx, ImageType.MASTER), MediaType.IMAGE_JPEG, response);
+	@RequestMapping("/{idx}")
+	public HttpEntity<byte[]> getImage(@PathVariable int idx, HttpServletResponse response) {
+		return getImageEntity(imageService.getBytes(idx, Image.Type.MASTER), MediaType.IMAGE_JPEG, response);
 	}
 
 	@RequestMapping(value = "/{idx}", method = RequestMethod.DELETE)
@@ -109,16 +81,13 @@ public class ImageController extends CrazyController {
 		imageService.delete(idx);
 	}
 
-	@RequestMapping(value = "/random")
-	public HttpEntity<byte[]> imageRandom(HttpServletResponse response) throws IOException {
-
-		byte[] imageBytes = imageService.getBytes(imageService.getRandomImageNo(), ImageType.MASTER);
-
+	@RequestMapping("/random")
+	public HttpEntity<byte[]> getImageRandom() throws IOException {
+		byte[] imageBytes = imageService.getBytes(imageService.getRandomImageNo(), Image.Type.MASTER);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setCacheControl("max-age=1");
 		headers.setContentLength(imageBytes.length);
 		headers.setContentType(MediaType.IMAGE_JPEG);
-
 		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
 
@@ -130,8 +99,8 @@ public class ImageController extends CrazyController {
 		 */
 		response.setHeader("Cache-Control",    "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
 		response.setHeader("Pragma",           "public");
-		response.setDateHeader("Expires",       TODAY + VIDEO.WEBCACHETIME_MILI);
-		response.setDateHeader("Last-Modified", TODAY - VIDEO.WEBCACHETIME_MILI);
+		response.setDateHeader("Expires",       today + VIDEO.WEBCACHETIME_MILI);
+		response.setDateHeader("Last-Modified", today - VIDEO.WEBCACHETIME_MILI);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentLength(imageBytes.length);
