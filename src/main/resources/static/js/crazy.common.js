@@ -290,7 +290,7 @@ function mousewheel(event) {
  * @returns
  */
 function getRandomInteger(start, end) {
-	return Math.floor(Math.random() * end) + start;
+	return Math.round(getRandom(start, end));
 }
 
 function getRandomBoolean() {
