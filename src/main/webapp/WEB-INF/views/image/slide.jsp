@@ -107,6 +107,14 @@ body, .label-info, .progress, .paging {
 	width: 100%;
 	text-align: center;
 }
+.top-center {
+	position: fixed;
+	left: 0;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: -1;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -240,7 +248,7 @@ function toggleSlideView() {
 		$(".label-info").css("background", "#000");
 		$(".paging").hide();
 		$("#navDiv").css("opacity", ".5");
-		$("#title-area").addClass("left-bottom");
+		$("#title-area").addClass("top-center");
 	}
 	else {
 		$("body").css("background", "#fff");
@@ -250,7 +258,7 @@ function toggleSlideView() {
 		$(".label-info").css("background", "linear-gradient(rgb(91, 192, 222) 0px, rgb(49, 176, 213) 100%)");
 		$(".paging").show();
 		$("#navDiv").css("opacity", "1");
-		$("#title-area").removeClass("left-bottom");
+		$("#title-area").removeClass("top-center");
 	}
 	$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
 }
@@ -438,6 +446,9 @@ function showTimer(sec, text) {
 				<span class="label label-info paging" onclick="fnPrevImageView();"><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
 				<span class="label label-info paging" onclick="fnNextImageView();"><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
 			</div>
+			<div id="effectInfo-boxX">
+				<span class="label label-info effectInfo" title="Next effect"></span>
+			</div>
 		</div>
 
 		<div id="imageDiv"></div>
@@ -446,9 +457,6 @@ function showTimer(sec, text) {
 		
 		<div id="config-box">
 			<img src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
-		</div>
-		<div id="effectInfo-box">
-			<span class="label label-info effectInfo" title="Next effect"></span>
 		</div>
 	</div>
 	
