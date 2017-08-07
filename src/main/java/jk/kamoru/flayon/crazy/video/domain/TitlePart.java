@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class TitlePart {
 	
-	private static final String AMATEUR = "Amateur";
+	public static final String AMATEUR = "Amateur";
 	
 	String studio;
 	String opus;

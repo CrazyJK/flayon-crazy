@@ -978,6 +978,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public int getActressScore() {
 		int actressVideoScore = 0;
 		for (Actress actress : getActressList()) {
+			if (StringUtils.isBlank(actress.getName()) || actress.getName().equals(TitlePart.AMATEUR))
+				continue;
 			actressVideoScore += Math.round(actress.getVideoList().size() * ACTRESS_RATIO / 10);
 		}
 		return actressVideoScore;
