@@ -34,6 +34,7 @@
 <script type="text/javascript" src="${PATH}/js/crazy.ui.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/zeroclipboard/ZeroClipboard.js"></script>
 <script type="text/javascript">
+var PATH      = '${PATH}';
 var videoPath = '${PATH}/video';
 var imagePath = '${PATH}/image';
 var locationPathname = window.location.pathname;
