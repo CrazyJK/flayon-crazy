@@ -16,13 +16,11 @@ body, .label-info, .progress, .paging {
 #navDiv > * {
 	cursor: pointer;
 }
-#navDiv > .progress {
+#navDiv .progress {
 	width: 136px; 
 	margin: 0; 
 }
-#navDiv > .progress > .progress-bar {
-	width:100%
-}
+
 .delete-image {
 	float: none;
 	font-size: 21px;

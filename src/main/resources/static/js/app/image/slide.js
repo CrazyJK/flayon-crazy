@@ -3,6 +3,7 @@
  */
 
 var slide = (function() {
+
 	var SLIDE_SOURCE_MODE   = "slide.source.mode";
 	var SLIDE_EFFECT_MODE   = "slide.effect.mode";
 	var SLIDE_PLAY_MODE     = "slide.play.mode";
@@ -17,9 +18,7 @@ var slide = (function() {
 	var coverMap = [];
 	var windowWidth  = $(window).width();
 	var windowHeight = $(window).height();
-	var playSlide = false;
 	var playInterval = 10;
-	var playSec = playInterval;
 	var hideEffect, hideDuration, hideOptions;
 	var showEffect, showDuration, showOptions;
 
@@ -157,15 +156,19 @@ var slide = (function() {
 			},
 			play: function() {
 				console.log("    play START");
-				playSlide = !playSlide;
-				if (playSlide) { // start
-					playSec = playInterval;
+				if (playMode.value == 1) {
+					console.log("    play call -> image.random");
+					image.random();
 				}
-				else { // stop
-					console.log("    play call -> image.showTimer");
-					image.showTimer(playInterval, "Play");
+				else { 
+					console.log("    play call -> image.next");
+					image.next();
 				}
-				if (playSlide) {
+				console.log("    play END");
+			},
+			playCallback: function(status) {
+				console.log("    playCallback START");
+				if (status) {
 					$("body").css("background", "#000");
 					$("#thumbnailDiv").css('height', '5px').hide();
 					$(".progress").css("background", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
@@ -185,9 +188,9 @@ var slide = (function() {
 					$("#navDiv").css("opacity", "1");
 					$("#title-area").removeClass("top-center");
 				}
-				console.log("    play call -> image.resize");
+				console.log("    playCallback call -> image.resize");
 				image.resize();
-				console.log("    play END");
+				console.log("    playCallback END");
 			},
 			resize: function() {
 				console.log("    resize START");
@@ -199,9 +202,6 @@ var slide = (function() {
 			},
 			displayThumbnail: function fnDisplayThumbnail() {
 				console.log("    displayThumbnail START", selectedNumber);
-				if (playSlide) {
-					return;
-				}
 				windowWidth = $(window).width();
 				$("#thumbnailUL").empty();
 				var itemCount = image.maxCount();
@@ -213,7 +213,7 @@ var slide = (function() {
 					if (thumbNo >= itemCount)
 						thumbNo = thumbNo - itemCount;
 					var itemUrl = sourceMode.value == 0 ? PATH + "/image/" + thumbNo : PATH + "/video/" + coverMap[thumbNo] + "/cover";
-					console.log("      displayThumbnail", itemUrl, thumbNo);
+					//console.log("      displayThumbnail", itemUrl, thumbNo);
 					$("<li>").append(
 							$("<div>")
 								.addClass("img-thumbnail " + (thumbNo == selectedNumber ? "active" : ""))
@@ -225,14 +225,6 @@ var slide = (function() {
 					).appendTo($("ul#thumbnailUL"));
 				}
 				console.log("    displayThumbnail END");
-			},
-			showTimer: function showTimer(sec, text) {
-				console.log("    showTimer", sec, text);
-				if (text)
-					$("#timer").html(text);
-				else
-					$("#timer").html(sec + "s");
-				$("#timerBar").attr("aria-valuenow", sec).css("width", sec/playInterval*100 + "%");
 			},
 			maxCount: function(i) {
 				i = i || 0;
@@ -265,7 +257,7 @@ var slide = (function() {
 		$(window).on("keyup", function(e) {
 			var event = window.event || e;
 			console.log("window keyup event", event.keyCode);
-			switch(event.keyCode) {
+			switch (event.keyCode) {
 			case 37: // left
 			case 40: // down
 				image.prev(); break;
@@ -280,7 +272,6 @@ var slide = (function() {
 		}).on("resize", image.resize);
 
 		// for #navDiv
-		$("#playImage"   ).on("click", image.play);
 		$(".paging-first").on("click", image.first);
 		$(".delete-image").on("click", image.delete);
 		$(".popup-image" ).on("click", image.popup);
@@ -330,6 +321,7 @@ var slide = (function() {
 				$(".delete-image").hide();
 			}
 			console.log("#configModal hidden.bs.modal", sourceMode.value, selectedNumber);
+			timerEngine.setTimer(playInterval);
 			image.view(selectedNumber);
 		});
 		$("[data-role='switch']").on('click', function() {
@@ -383,23 +375,9 @@ var slide = (function() {
 			
 			console.log("initModule", "getJSON", imageCount, coverCount, selectedNumber);
 
-			image.view();
-
 			// play engine
-			setInterval(function() {
-				if (playSlide) {
-					if (--playSec % playInterval == 0) {
-						if (playMode.value == 1) {
-							image.random();
-						}
-						else { 
-							image.next();
-						}
-						playSec = playInterval;
-					}
-					image.showTimer(playSec);
-				}
-			},	1000);
+			timerEngine.init(image.play, playInterval, "#progressWrapper", {}, "Play", image.playCallback);
+			image.view();
 		});
 	};
 	

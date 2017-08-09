@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title><s:message code="image.image-viewer"/></title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
+<script src="${PATH}/js/app/image/timer.engine.js"></script>
 <script src="${PATH}/js/app/image/slide.js"></script>
 <script type="text/javascript">
 bgContinue = false;
@@ -19,11 +20,7 @@ $(function() {
 	<div class="container-fluid">
 	
 		<div id="navDiv">
-			<div class="progress" id="playImage">
-		  		<div id="timerBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">
-		  			<span id="timer">Play</span>
-		  		</div>
-		  	</div>
+			<div id="progressWrapper"></div>
 		  	<div id="title-area">
 				<span class="label label-info paging paging-first"><span id="firstNo">0</span></span>
 				<span class="label label-info paging"><input id="currNo"/></span>
