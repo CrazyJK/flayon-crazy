@@ -2,7 +2,7 @@
  * timer engine
  */
 
-var timerEngine = (function() {
+var timerEngine = (function($) {
 
 	var initiated = false;
 	var timerStatus = false;
@@ -89,7 +89,7 @@ var timerEngine = (function() {
 		if (callback)
 			callback(timerStatus);
 	};
-	var setTimer = function(second) {
+	var setTime = function(second) {
 		timerInterval = second;
 		return this;
 	};
@@ -109,9 +109,9 @@ var timerEngine = (function() {
 		off: off,
 		toggle: toggle,
 		css: css,
-		setTimer: setTimer,
+		setTime: setTime,
 		setLabel: setLabel
 	};
 
-}());
+}(jQuery));
 

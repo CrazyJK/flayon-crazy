@@ -9,13 +9,13 @@ var slide = (function() {
 	var SLIDE_PLAY_MODE     = "slide.play.mode";
 	var SLIDE_PLAY_INTERVAL = "slide.play.interval";
 
-	var selectedNumber = -1;
-	var selectedItemUrl = "";
+	var selectedNumber    = -1;
+	var selectedItemUrl   = "";
 	var selectedItemTitle = "";
 	var imageCount = 0;
-	var imageMap = [];
+	var imageMap   = [];
 	var coverCount = 0;
-	var coverMap = [];
+	var coverMap   = [];
 	var windowWidth  = $(window).width();
 	var windowHeight = $(window).height();
 	var playInterval = 10;
@@ -25,9 +25,9 @@ var slide = (function() {
 	var image = {
 			setConfig: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE,   sourceMode.value);
-				setLocalStorageItem(SLIDE_EFFECT_MODE,   effectMethod.value);
-				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
-				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
+				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMethod.value);
+				setLocalStorageItem(SLIDE_PLAY_MODE,       playMode.value);
+				setLocalStorageItem(SLIDE_PLAY_INTERVAL,   interval.value);
 				console.log("    setConfig", sourceMode.value, effectMethod.value, playMode.value, interval.value);
 			},
 			nextEffect: function setNextEffect() {
@@ -321,7 +321,7 @@ var slide = (function() {
 				$(".delete-image").hide();
 			}
 			console.log("#configModal hidden.bs.modal", sourceMode.value, selectedNumber);
-			timerEngine.setTimer(playInterval);
+			timerEngine.setTime(playInterval);
 			image.view(selectedNumber);
 		});
 		$("[data-role='switch']").on('click', function() {

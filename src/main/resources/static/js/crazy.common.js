@@ -284,6 +284,15 @@ function mousewheel(event) {
 }
 
 /**
+ * mouse click event wrapper
+ * @param event
+ * @returns left = 1001, middle = 1002, right = 1003 
+ */
+function mouseClick(event) {
+	return event.which + 1000;
+}
+
+/**
  * start부터 end사이의 random 정수 반환
  * @param start
  * @param end

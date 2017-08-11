@@ -1,5 +1,7 @@
 ## Javascript : function review
 
+# 자바스크립트 모듈, 모듈 포맷, 모듈 로더와 모듈 번들러에 대한 10분 입문서
+# https://github.com/codepink/codepink.github.com/wiki/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EB%AA%A8%EB%93%88,-%EB%AA%A8%EB%93%88-%ED%8F%AC%EB%A7%B7,-%EB%AA%A8%EB%93%88-%EB%A1%9C%EB%8D%94%EC%99%80-%EB%AA%A8%EB%93%88-%EB%B2%88%EB%93%A4%EB%9F%AC%EC%97%90-%EB%8C%80%ED%95%9C-10%EB%B6%84-%EC%9E%85%EB%AC%B8%EC%84%9C
 
 함수는 first-class object, first-class citizen, first-class value 다
     first-class object는 변수에 저장할 수 있어야 합니다.
@@ -286,3 +288,56 @@
 	    DOM + 리소스 로딩 완료 후 실행.
 
 
+;(function($) {
+
+	$.fn.jkEffect = function(options) {
+
+    };
+
+})(jQuery);
+
+
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd)
+        define(['jquery'], factory);
+    else if (typeof exports === 'object')
+        module.exports = factory(require('jquery'));
+    else
+        root.lightbox = factory(root.jQuery);
+}(this, function ($) {
+
+	function LightboxApp() {
+		this.imagepath = PATH + '/image/';
+		this.imageCount;
+		this.init();
+	}
+
+	LightboxApp.prototype.init = function() {
+		var self = this;
+		$(document).ready(function() {
+			self.enable();
+			self.start();
+		});
+	};
+
+	return new LightboxApp();
+
+}));
+
+
+var timerEngine = (function($) {
+
+	return {
+		init: initiate,
+		on: on,
+		off: off
+	};
+
+}(jQuery));
+
+
+(function(window, undefined) {
+
+})(function() {
+  return this || window;
+}());

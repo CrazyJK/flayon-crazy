@@ -30,16 +30,15 @@ $(function() {
 			<div>
 				<span class="label label-info effectInfo" title="Next effect"></span>
 			</div>
+			<div id="config-box">
+				<img src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
+			</div>
+			<div id="delete-box">
+				<span class="close close-o0 delete-image">&times;</span>
+			</div>
 		</div>
-
 		<div id="imageDiv"></div>
-
 		<div id="thumbnailDiv"><ul id="thumbnailUL" class="list-inline"></ul></div>
-		
-		<div id="config-box">
-			<img src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
-			<span class="close close-o0 delete-image">&times;</span>
-		</div>
 	</div>
 	
 	<div id="configModal" class="modal fade" role="dialog">

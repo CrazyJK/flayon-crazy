@@ -76,7 +76,16 @@ body, .label-info, .progress, .paging {
 	opacity: 0;
 	z-index: 2001;
 }
-#config-box:hover {
+#delete-box {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	margin: 3px;
+	cursor: pointer;
+	opacity: 0;
+	z-index: 2001;
+}
+#config-box:hover, #delete-box:hover {
 	opacity: 1;
 }
 .modal-body > .table {

@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+body {
+	transition: background .5s ease
+}
+.progress {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100px;
+	margin: 5px;
+	z-index: 2000;
+	float: right;
+	background-image: linear-gradient(to bottom,#403a3a 0,#2f2626 100%);
+}
+#timerBar {
+	background: #000;
+	transition: all .5s ease
+}
+.form-control {
+	border: 0;
+    box-shadow: none;
+    min-height: 40px;
+}
+.form-group {
+    margin: auto 5px 5px 5px !important;
+}
+.form-group:not(:last-child) {
+	border-bottom: 1px dashed #ddd;
+    padding-bottom: 5px;
+}
+.form-group input[type='range'],.form-group input[type='text'] {
+	font-size: 12px;
+	padding: 0 6px;
+	height: 27px;
+	min-height: 27px;
+}
+.form-group .input-group-addon{
+    border: 0;
+    background-color: transparent;
+    padding: 6px 6px;
+}
+.control-label {
+	text-transform: capitalize;
+}
