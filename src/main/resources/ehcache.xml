@@ -11,7 +11,7 @@
 	<diskStore path="java.io.tmpdir/flayon" />
 	
 	<cache name="flayon-image-cache"
-			maxEntriesLocalHeap="10"
+			maxEntriesLocalHeap="100"
 			maxEntriesLocalDisk="0"
 			eternal="true" 
 			memoryStoreEvictionPolicy="LFU">
@@ -19,9 +19,12 @@
 	</cache>
 
 	<cache name="flayon-cover-cache"
-			maxEntriesLocalHeap="10000" 
+			maxEntriesLocalHeap="100"
+			maxEntriesLocalDisk="0"
 			eternal="true" 
-			memoryStoreEvictionPolicy="FIFO" />
+			memoryStoreEvictionPolicy="LFU">
+		<persistence strategy="localTempSwap" />
+	</cache>
 
 </ehcache>
 
