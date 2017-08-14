@@ -9,31 +9,31 @@ var slide = (function() {
 	var SLIDE_PLAY_MODE     = "slide.play.mode";
 	var SLIDE_PLAY_INTERVAL = "slide.play.interval";
 
-	var selectedNumber    = -1;
+	var currentIndex    = -1;
 	var selectedItemUrl   = "";
 	var selectedItemTitle = "";
 	var imageCount = 0;
 	var imageMap   = [];
 	var coverCount = 0;
 	var coverMap   = [];
-	var windowWidth  = $(window).width();
-	var windowHeight = $(window).height();
-	var playInterval = 10;
 	var hideEffect, hideDuration, hideOptions;
 	var showEffect, showDuration, showOptions;
+	var prevMode = 0;
 
 	var image = {
-			setConfig: function() {
-				setLocalStorageItem(SLIDE_SOURCE_MODE,   sourceMode.value);
-				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMethod.value);
-				setLocalStorageItem(SLIDE_PLAY_MODE,       playMode.value);
-				setLocalStorageItem(SLIDE_PLAY_INTERVAL,   interval.value);
-				console.log("    setConfig", sourceMode.value, effectMethod.value, playMode.value, interval.value);
+			setLocalStorage: function() {
+				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
+				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
+				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
+				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
+				timerEngine.setTime(interval.value);
+				prevMode = sourceMode.value;
+				console.log("    setLocalStorage", sourceMode.value, effectMode.value, playMode.value, interval.value);
 			},
 			nextEffect: function setNextEffect() {
 				console.log("    nextEffect START");
 				var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
-				if (effectMethod.value == 1) {
+				if (effectMode.value == 1) {
 					hideEffect   = effects[getRandomInteger(0, effects.length-1)];
 					hideDuration = getRandomInteger(100, 1000);
 					if (hideEffect === "scale")
@@ -65,10 +65,10 @@ var slide = (function() {
 				console.log("    nextEffect END", hideEffect, hideDuration, hideOptions, showEffect, showDuration, showOptions);
 			},
 			prevNumber: function getPrevNumber() {
-				return selectedNumber == 0 ? image.maxCount(-1) : selectedNumber - 1;
+				return currentIndex == 0 ? image.maxCount(-1) : currentIndex - 1;
 			},
 			nextNumber: function getNextNumber() {
-				return selectedNumber == image.maxCount(-1) ? 0 : selectedNumber + 1;
+				return currentIndex == image.maxCount(-1) ? 0 : currentIndex + 1;
 			},
 			first: function() {
 				console.log("    first");
@@ -92,36 +92,36 @@ var slide = (function() {
 			},
 			view: function(current) {
 				console.log("    view START", current);
-				if (!current) { // first call
+				if (typeof current == 'undefined') { // first call
 					if (sourceMode.value == 0) { // image
-						selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
-						if (selectedNumber >= imageCount)
-							selectedNumber = getRandomInteger(0, imageCount-1);
+						currentIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
+						if (currentIndex >= imageCount)
+							currentIndex = getRandomInteger(0, imageCount-1);
 					}
 					else { // cover
-						selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
-						if (selectedNumber >= coverCount)
-							selectedNumber = getRandomInteger(0, coverCount-1);
+						currentIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
+						if (currentIndex >= coverCount)
+							currentIndex = getRandomInteger(0, coverCount-1);
 					}
 				}
 				else {
-					selectedNumber = parseInt(current);
+					currentIndex = parseInt(current);
 				}
 				
 				if (sourceMode.value == 0) { // image
-					selectedItemUrl = PATH + "/image/" + selectedNumber;
-					selectedItemTitle = imageMap[selectedNumber];
-					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
+					selectedItemUrl = PATH + "/image/" + currentIndex;
+					selectedItemTitle = imageMap[currentIndex];
+					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
 				}
 				else {
-					selectedItemUrl = PATH + "/video/" + coverMap[selectedNumber] + "/cover";
-					selectedItemTitle = coverMap[selectedNumber];
-					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, selectedNumber);
+					selectedItemUrl = PATH + "/video/" + coverMap[currentIndex] + "/cover";
+					selectedItemTitle = coverMap[currentIndex];
+					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 				}
 				$("#endNo").html(image.maxCount(-1));
 				$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
 					$("#leftNo").html(image.prevNumber());
-					$("#currNo").val(selectedNumber);
+					$("#currNo").val(currentIndex);
 					$("#rightNo").html(image.nextNumber());
 					$(".title").html(selectedItemTitle);
 					console.log("    view call -> image.nextEffect");
@@ -132,7 +132,7 @@ var slide = (function() {
 					console.log("    view call -> image.displayThumbnail");
 					image.displayThumbnail();
 				});
-				console.log("    view END", selectedNumber, selectedItemUrl, selectedItemTitle);
+				console.log("    view END", currentIndex, selectedItemUrl, selectedItemTitle);
 			},
 			delete: function() {
 				console.log("    delete");
@@ -151,7 +151,7 @@ var slide = (function() {
 					popupImage(selectedItemUrl);
 				}
 				else {
-					fnVideoDetail(coverMap[selectedNumber]);
+					fnVideoDetail(coverMap[currentIndex]);
 				}
 			},
 			play: function() {
@@ -196,17 +196,15 @@ var slide = (function() {
 				console.log("    resize START");
 				console.log("    resize call -> image.displayThumbnail");
 				image.displayThumbnail();
-				windowHeight = $(window).height();
-				$("#imageDiv").height(windowHeight - $("#thumbnailDiv").outerHeight() - 35);
+				$("#imageDiv").height($(window).height() - $("#thumbnailDiv").outerHeight() - 35);
 				console.log("    resize END");
 			},
 			displayThumbnail: function fnDisplayThumbnail() {
-				console.log("    displayThumbnail START", selectedNumber);
-				windowWidth = $(window).width();
+				console.log("    displayThumbnail START", currentIndex);
 				$("#thumbnailUL").empty();
 				var itemCount = image.maxCount();
-				var thumbnailRange = parseInt(windowWidth / (150 * 2));
-				for (var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
+				var thumbnailRange = parseInt($(window).width() / (150 * 2));
+				for (var current = currentIndex - thumbnailRange; current <= currentIndex + thumbnailRange; current++) {
 					var thumbNo = current;
 					if (thumbNo < 0 )
 						thumbNo = itemCount + thumbNo;
@@ -216,7 +214,7 @@ var slide = (function() {
 					//console.log("      displayThumbnail", itemUrl, thumbNo);
 					$("<li>").append(
 							$("<div>")
-								.addClass("img-thumbnail " + (thumbNo == selectedNumber ? "active" : ""))
+								.addClass("img-thumbnail " + (thumbNo == currentIndex ? "active" : ""))
 								.css({backgroundImage: "url('" + itemUrl + "')"})
 								.data("imgNo", thumbNo)
 								.on("click", function() {
@@ -229,7 +227,36 @@ var slide = (function() {
 			maxCount: function(i) {
 				i = i || 0;
 				return sourceMode.value == 0 ? imageCount + i : coverCount + i;
-			}
+			},
+			nav: function(e) {
+				e.stopPropagation();
+				var signal = 0;
+				if (e.type === 'mousewheel') signal = mousewheel(e);
+				else if (e.type === 'keyup') signal = e.keyCode;
+				else if (e.type === 'click') signal = event.which + 1000;
+				console.log("image.nav", e.type, signal);
+				switch(signal) {
+					case 1 : // mouse : wheel up
+					case 37: // key : left
+					case 40: // key : down
+					case 1003 : // click : right
+						image.prev();
+						break;
+					case -1 : // mouse : wheel down
+					case 39: // key : right
+					case 38: // key : up
+					case 1001 : // click : left
+						image.next();
+						break;
+					case 32: // key : space
+					case 1002 : // click : middle
+						image.random();
+						break;
+					case 13: // key : enter
+						image.view($(e.target).val());
+						break;
+				}
+			},
 	};
 	
 	var manipulateDom = function() {
@@ -238,10 +265,11 @@ var slide = (function() {
 		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
 		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
 		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
+		prevMode = slideSourceMode;
 
 		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
-		$("[data-role='switch'][data-target='effectMethod'][data-value='" + slideEffectMode + "']").trigger("click");
-		$("[data-role='switch'][data-target='playMode'][data-value='" + slidePlayMode + "']").trigger("click");
+		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
+		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
 		$("#interval").val(slidePlayInterval).trigger("click");
 
 		console.log("  manipulateDom call -> image.resize");
@@ -254,75 +282,25 @@ var slide = (function() {
 	
 	var addEventListener = function() {
 
-		$(window).on("keyup", function(e) {
-			var event = window.event || e;
-			console.log("window keyup event", event.keyCode);
-			switch (event.keyCode) {
-			case 37: // left
-			case 40: // down
-				image.prev(); break;
-			case 39: // right
-			case 38: // up
-				image.next(); break;
-			case 32: // space
-				image.random();
-			case 13: // enter
-				break;
-			}
-		}).on("resize", image.resize);
+		$(window).on("keyup", image.nav).on("resize", image.resize);
 
 		// for #navDiv
 		$(".paging-first").on("click", image.first);
 		$(".delete-image").on("click", image.delete);
 		$(".popup-image" ).on("click", image.popup);
 		$(".paging-end"  ).on("click", image.end);
-		$("#currNo"      ).on("keyup", function(e) {
-			var event = window.event || e;
-			event.stopPropagation();
-			console.log("#currNo keyup event", event.keyCode);
-			if (event.keyCode === 13) {
-				image.view($(this).val());
-			}
-		});
+		$("#currNo"      ).on("keyup", image.nav);
 		
 		// for #imageDiv
-		$("#imageDiv").on("click", function(event) {
-			console.log("#imageDiv click", event.which);
-			switch (event.which) {
-			case 1: // left click
-				image.next();
-				break;
-			case 2: // middle click
-				image.random();
-				break;
-			case 3: // right click
-				break;
-			}
-			event.stopImmediatePropagation();
-			event.preventDefault();
-			event.stopPropagation();
-		}).on("mousewheel DOMMouseScroll", function(e) {
-			var delta = mousewheel(e);
-			console.log("#imageDiv mousewheel", delta);
-			if (delta > 0) 
-				image.prev(); //alert("마우스 휠 위로~");
-		    else 	
-		    	image.next(); //alert("마우스 휠 아래로~");
-		});
+		$("#imageDiv").on("click", image.nav).on("mousewheel DOMMouseScroll", image.nav);
 
 		// for #configModal
 		$("#configModal").on("hidden.bs.modal", function() {
-			if (sourceMode.value == 0) {
-				selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount-1)));
-				$(".delete-image").show();
-			}
-			else {
-				selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, getRandomInteger(0, coverCount-1)));
-				$(".delete-image").hide();
-			}
-			console.log("#configModal hidden.bs.modal", sourceMode.value, selectedNumber);
-			timerEngine.setTime(playInterval);
-			image.view(selectedNumber);
+			console.log("#configModal hidden.bs.modal", sourceMode.value, interval.value);
+			$(".delete-image").toggle(sourceMode.value == 0);
+			if (prevMode != sourceMode.value)
+				image.view();
+			image.setLocalStorage();
 		});
 		$("[data-role='switch']").on('click', function() {
 			var target = $(this).attr("data-target");
@@ -332,7 +310,6 @@ var slide = (function() {
 			$("." + target).html(text);
 			$("[data-target='" + target + "']").removeClass("active-switch");
 			$(this).addClass("active-switch");
-			image.setConfig();
 		});
 		$("input[type='range'][role='switch']").on('click', function() {
 			var value = $(this).val();
@@ -342,15 +319,12 @@ var slide = (function() {
 		$("#interval").on('click', function() {
 			var value = $(this).val();
 			$(".interval").html(value);
-			$("#timerBar").attr({"aria-valuemax": value});
-			playInterval = value;
-			image.setConfig();
 		});
 		$(".btn-shuffle").on("click", function() {
 			var shuffleOnce = function shuffleOnce() {
 				$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
-				$("[data-target='effectMethod'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
-				$("[data-target='playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+				$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+				$("[data-target=  'playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 				$("#interval").val(getRandomInteger(5, 20)).trigger("click");
 			};
 			showSnackbar("shuffle start", 1000);
@@ -360,7 +334,7 @@ var slide = (function() {
 				if (++count > maxShuffle) {
 				 	clearInterval(shuffler);
 				 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
-				 	image.setConfig();
+				 	image.setLocalStorage();
 				}
 			}, 500);
 		});
@@ -373,10 +347,10 @@ var slide = (function() {
 			coverCount = data['coverCount'];
 			coverMap   = data['coverNameMap'];
 			
-			console.log("initModule", "getJSON", imageCount, coverCount, selectedNumber);
+			console.log("initModule", "getJSON", imageCount, coverCount, currentIndex);
 
 			// play engine
-			timerEngine.init(image.play, playInterval, "#progressWrapper", {}, "Play", image.playCallback);
+			timerEngine.init(image.play, interval.value, "#progressWrapper", {}, "Play", image.playCallback);
 			image.view();
 		});
 	};

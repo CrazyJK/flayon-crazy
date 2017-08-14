@@ -61,9 +61,9 @@ $(function() {
 						<tr>
 							<th>Effect</th>
 							<td class="text-center">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMethod">Fadein</span>
-								<input type="range" role="switch" id="effectMethod" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMethod">Random</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Fadein</span>
+								<input type="range" role="switch" id="effectMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMode">Random</span>
 							</td>
 						</tr>
 						<tr>
@@ -83,9 +83,9 @@ $(function() {
 				<div class="modal-footer">
 					<div class="text-center">
 						Source   <span class="label label-info sourceMode"></span> 
-						Effect   <span class="label label-info effectMethod"></span> 
-						Play     <span class="label label-info playMode"></span>
-						Interval <span class="label label-info interval"></span>
+						Effect   <span class="label label-info effectMode"></span> 
+						Play     <span class="label label-info   playMode"></span>
+						Interval <span class="label label-info   interval"></span>
 						<button class="btn btn-plain btn-sm float-right btn-shuffle">Shuffle</button>
 					</div>
 				</div>

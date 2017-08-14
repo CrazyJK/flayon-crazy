@@ -21,15 +21,13 @@ var timerEngine = (function($) {
 		}
 		
 		// render progress
-		$(progressWrapperSelector).empty().append(
+		$(".progress").remove();
+		$(progressWrapperSelector).append(
 				$("<div>").addClass("progress").css(progressStyle).on("click", function() {
 					toggle(toggleCallback);
 				}).append(
-						$("<div>").addClass("progress-bar progress-bar-info").css({width: "100%", cursor: "pointer"}).attr({
-							role: "progressbar", 
-							"aria-valuemin": 0,
-							"aria-valuemax": 100, 
-							"aria-valuenow": 100}).append(
+						$("<div>", {style: "width: 100%; cursor: pointer;", "class": "progress-bar progress-bar-info", 
+							role: "progressbar", "aria-valuemin": 1, "aria-valuemax": timerInterval, "aria-valuenow": timerInterval}).append(
 									$("<span>").addClass("progress-label").html(labelText)
 						)
 				)
@@ -48,9 +46,9 @@ var timerEngine = (function($) {
 				display(currentSecond, currentSecond + "s");
 			}
 		},	1000);
-		console.log("timerEngine.initiate", "engine start");
-
 		initiated = true;
+
+		console.log("timerEngine.initiate", "engine start");
 	};
 	
 	var display = function(second, text) {
@@ -76,6 +74,7 @@ var timerEngine = (function($) {
 			return;
 		}
 		timerStatus = false;
+		currentSecond = timerInterval;
 		display(timerInterval, labelText);
 		if (callback)
 			callback();
@@ -90,14 +89,17 @@ var timerEngine = (function($) {
 			callback(timerStatus);
 	};
 	var setTime = function(second) {
+		console.log("timerEngine.setTime", second);
 		timerInterval = second;
 		return this;
 	};
 	var css = function(style) {
+		console.log("timerEngine.css", style);
 		$(".progress").css(style);
 		return this;
 	};
 	var setLabel = function(text) {
+		console.log("timerEngine.setLabel", text);
 		labelText = text;
 		$(".progress-label").html(labelText);
 		return this;
