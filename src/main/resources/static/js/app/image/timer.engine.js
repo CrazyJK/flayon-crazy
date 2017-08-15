@@ -26,7 +26,7 @@ var timerEngine = (function($) {
 				$("<div>").addClass("progress").css(progressStyle).on("click", function() {
 					toggle(toggleCallback);
 				}).append(
-						$("<div>", {style: "width: 100%; cursor: pointer;", "class": "progress-bar progress-bar-info", 
+						$("<div>", {style: "width: 100%; cursor: pointer;", "class": "progress-bar progress-bar-primary", 
 							role: "progressbar", "aria-valuemin": 1, "aria-valuemax": timerInterval, "aria-valuenow": timerInterval}).append(
 									$("<span>").addClass("progress-label").html(labelText)
 						)

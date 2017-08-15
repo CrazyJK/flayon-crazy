@@ -18,27 +18,37 @@ $(function() {
 </head>
 <body>
 	<div class="container-fluid">
-	
-		<div id="navDiv">
-			<div id="progressWrapper"></div>
-		  	<div id="title-area">
-				<span class="label label-info paging paging-first"><span id="firstNo">0</span></span>
-				<span class="label label-info paging"><input id="currNo"/></span>
-				<span class="label label-info title popup-image">&nbsp;</span>
-				<span class="label label-info paging paging-end"><span id="endNo">&nbsp;</span></span>
-		  	</div>
-			<div>
-				<span class="label label-info effectInfo" title="Next effect"></span>
+		<div>
+			<div id="leftTop">
+				<div id="progressWrapper"></div>
 			</div>
-			<div id="config-box">
-				<img src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
+			<div id="leftBottom">
+			  	<div id="pagingArea">
+					<span class="label label-primary paging paging-first"><span id="firstNo">0</span></span>
+					<span class="label label-primary paging"><input id="currNo" class="label-primary"/></span>
+					<span class="label label-primary paging paging-end"><span id="endNo">&nbsp;</span></span>
+			  	</div>
 			</div>
-			<div id="delete-box">
-				<span class="close close-o0 delete-image">&times;</span>
+			<div id="rightTop">
+			</div>
+			<div id="rightBottom">
+				<div id="deleteBox" class="text-right">
+					<span class="close close-o0 delete-image">&times;</span>
+				</div>
+				<div id="effectInfoBox">
+					<span class="label label-plain effectInfo" title="Next effect"></span>
+				</div>
+			</div>
+			<div id="fixedBox">
+				<img class="btn-config" src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
+				<span class="label label-plain title popup-image">&nbsp;</span>
 			</div>
 		</div>
-		<div id="imageDiv"></div>
-		<div id="thumbnailDiv"><ul id="thumbnailUL" class="list-inline"></ul></div>
+		<div id="imageDiv">
+		</div>
+		<div id="thumbnailDiv">
+			<ul id="thumbnailUL" class="list-inline"></ul>
+		</div>
 	</div>
 	
 	<div id="configModal" class="modal fade" role="dialog">

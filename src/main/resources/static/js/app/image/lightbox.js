@@ -124,14 +124,12 @@
 			self.view();
 			$("body").css({backgroundColor: randomColor('r')});
 			$(".lightboxOverlay").css({opacity: 1});
-			$(".progress").css("background", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
-			$(".progress-bar").css("background", "#000");
+			$(".progress-bar").addClass("label-black");
 		}
 		else { // stop
 			$("body").css({backgroundColor: "#fff"});
 			$(".lightboxOverlay").css({opacity: 0.8});
-			$(".progress").css("background", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
-			$(".progress-bar").css("background", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
+			$(".progress-bar").removeClass("label-black");
 		}
 	};
 	

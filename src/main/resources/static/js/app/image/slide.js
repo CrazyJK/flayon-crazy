@@ -118,11 +118,10 @@ var slide = (function() {
 					selectedItemTitle = coverMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 				}
-				$("#endNo").html(image.maxCount(-1));
+				
 				$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
-					$("#leftNo").html(image.prevNumber());
 					$("#currNo").val(currentIndex);
-					$("#rightNo").html(image.nextNumber());
+					$("#endNo").html(image.maxCount(-1));
 					$(".title").html(selectedItemTitle);
 					console.log("    view call -> image.nextEffect");
 					$(this).css({
@@ -132,6 +131,7 @@ var slide = (function() {
 					console.log("    view call -> image.displayThumbnail");
 					image.displayThumbnail();
 				});
+				
 				console.log("    view END", currentIndex, selectedItemUrl, selectedItemTitle);
 			},
 			delete: function() {
@@ -169,24 +169,14 @@ var slide = (function() {
 			playCallback: function(status) {
 				console.log("    playCallback START");
 				if (status) {
-					$("body").css("background", "#000");
+					$("body, .progress-bar, .label").addClass("label-black");
 					$("#thumbnailDiv").css('height', '5px').hide();
-					$(".progress").css("background", "linear-gradient(to bottom,#403a3a 0,#2f2626 100%)");
-					$(".progress-bar").css("background", "#000");
-					$(".label-info").css("background", "#000");
-					$(".paging").hide();
-					$("#navDiv").css("opacity", ".5");
-					$("#title-area").addClass("top-center");
+					$("#pagingArea, #effectInfoBox").hide();
 				}
 				else {
-					$("body").css("background", "#fff");
+					$("body, .progress-bar, .label").removeClass("label-black");
 					$("#thumbnailDiv").css('height', '105px').show('fade', {}, 1000);
-					$(".progress").css("background", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
-					$(".progress-bar").css("background", "linear-gradient(to bottom,#5bc0de 0,#31b0d5 100%)");
-					$(".label-info").css("background", "linear-gradient(rgb(91, 192, 222) 0px, rgb(49, 176, 213) 100%)");
-					$(".paging").show();
-					$("#navDiv").css("opacity", "1");
-					$("#title-area").removeClass("top-center");
+					$("#pagingArea, #effectInfoBox").show();
 				}
 				console.log("    playCallback call -> image.resize");
 				image.resize();
@@ -350,7 +340,7 @@ var slide = (function() {
 			console.log("initModule", "getJSON", imageCount, coverCount, currentIndex);
 
 			// play engine
-			timerEngine.init(image.play, interval.value, "#progressWrapper", {}, "Play", image.playCallback);
+			timerEngine.init(image.play, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
 			image.view();
 		});
 	};

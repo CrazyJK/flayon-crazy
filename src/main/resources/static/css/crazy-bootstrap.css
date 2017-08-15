@@ -95,3 +95,18 @@ input[type='range'] {
 .close-o0 {
 	opacity: 0;
 }
+.progress {
+	background: rgba(234, 6, 6, 0.28); 
+}
+.top-center {
+	position: fixed;
+	left: 0;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: -1;
+}
+.label-black {
+	background: #000;
+	color: #fff;
+}
