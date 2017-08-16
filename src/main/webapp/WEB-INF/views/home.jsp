@@ -259,14 +259,11 @@ function showTimer() {
 }
 
 function setFonts() {
-	$("h1").css({fontFamily: randomFont()}); // 'Fredericka the Great'
-	$("#wording").css({fontFamily: randomFont()}); // 'Finger Paint'
-	$("#loginModal").css({fontFamily: randomFont()});
-	$("#login-welcome").css({fontFamily: randomFont()});
-	$(".life-timer").css({fontFamily: randomFont()});
-	
 	if (!isLogin)
 		$("#headerNav").css({fontFamily: randomFont()});
+	$("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
+		$(this).css({fontFamily: randomFont()});
+	});
 }
 </script>
 </body>

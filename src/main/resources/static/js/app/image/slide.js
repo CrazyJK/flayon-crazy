@@ -9,7 +9,7 @@ var slide = (function() {
 	var SLIDE_PLAY_MODE     = "slide.play.mode";
 	var SLIDE_PLAY_INTERVAL = "slide.play.interval";
 
-	var currentIndex    = -1;
+	var currentIndex      = -1;
 	var selectedItemUrl   = "";
 	var selectedItemTitle = "";
 	var imageCount = 0;
@@ -246,28 +246,7 @@ var slide = (function() {
 						image.view($(e.target).val());
 						break;
 				}
-			},
-	};
-	
-	var manipulateDom = function() {
-		console.log("  manipulateDom START");
-		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
-		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
-		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
-		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
-		prevMode = slideSourceMode;
-
-		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
-		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
-		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
-		$("#interval").val(slidePlayInterval).trigger("click");
-
-		console.log("  manipulateDom call -> image.resize");
-		image.resize();
-		console.log("  manipulateDom call -> image.nextEffect");
-		image.nextEffect();
-
-		console.log("  manipulateDom END", slideSourceMode, slideEffectMode, slidePlayMode, slidePlayInterval);
+			}
 	};
 	
 	var addEventListener = function() {
@@ -328,6 +307,27 @@ var slide = (function() {
 				}
 			}, 500);
 		});
+	};
+	
+	var manipulateDom = function() {
+		console.log("  manipulateDom START");
+		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
+		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
+		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
+		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
+		prevMode = slideSourceMode;
+
+		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
+		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
+		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
+		$("#interval").val(slidePlayInterval).trigger("click");
+
+		console.log("  manipulateDom call -> image.resize");
+		image.resize();
+		console.log("  manipulateDom call -> image.nextEffect");
+		image.nextEffect();
+
+		console.log("  manipulateDom END", slideSourceMode, slideEffectMode, slidePlayMode, slidePlayInterval);
 	};
 	
 	var initModule = function() {

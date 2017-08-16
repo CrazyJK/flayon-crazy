@@ -72,3 +72,6 @@
 .forTable, .forBox {
 	display: none;	
 }
+.btn-sort {
+	border-color: rgb(62, 143, 62);
+}

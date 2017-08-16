@@ -13,21 +13,28 @@ var timerEngine = (function($) {
 	
 	var initiate = function(invokedMethod, second, progressWrapperSelector, progressStyle, text, toggleCallback) {
 		console.log("timerEngine.initiate");
+
 		timerInterval = currentSecond = second;
 		labelText = text;
 
 		if (initiated) {
 			clearInterval(engine);
+			$(".progress").remove();
 		}
-		
+
 		// render progress
-		$(".progress").remove();
 		$(progressWrapperSelector).append(
 				$("<div>").addClass("progress").css(progressStyle).on("click", function() {
 					toggle(toggleCallback);
 				}).append(
-						$("<div>", {style: "width: 100%; cursor: pointer;", "class": "progress-bar progress-bar-primary", 
-							role: "progressbar", "aria-valuemin": 1, "aria-valuemax": timerInterval, "aria-valuenow": timerInterval}).append(
+						$("<div>", {
+							style: "width: 100%; cursor: pointer;", 
+							"class": "progress-bar progress-bar-primary", 
+							role: "progressbar", 
+							"aria-valuemin": 1, 
+							"aria-valuemax": timerInterval, 
+							"aria-valuenow": timerInterval
+						}).append(
 									$("<span>").addClass("progress-label").html(labelText)
 						)
 				)
