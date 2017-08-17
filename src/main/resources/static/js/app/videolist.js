@@ -26,7 +26,8 @@ var videoList = (function() {
 	var isCheckedNoVideo  = false;	// novideo  체크박스가 체크되어 있는지 여부
 	var isCheckedTags     = false;
 	var isShowCover       = false;
-	var currentView = '#table';		// 현재 보여지고 있는 뷰. #table or #box
+	var currentView   = '#table';	// 현재 보여지고 있는 뷰. #table or #box
+	var coverPosition = {};
 
 	var fn = {
 			isrequiredMoreRendering: function() {
@@ -88,7 +89,7 @@ var videoList = (function() {
 						}
 						var thisTr = $("tr[data-no='" + currentVideoNo + "']");
 						var imgTop = $(thisTr).offset().top + 40;
-						thisTr.addClass("trFocus").find("img").css({"top": imgTop}).show();
+						thisTr.addClass("trFocus").find("img").css({"top": imgTop}).css(coverPosition).show();
 					}
 				}
 			},
@@ -354,7 +355,8 @@ var videoList = (function() {
 				if (imgWidth > 800)
 					imgWidth = 800;
 				var imgLeft = windowWidth / 4;
-				$(".tbl-cover").css({left: imgLeft, width: imgWidth});
+//				$(".tbl-cover").css({left: imgLeft, width: imgWidth});
+				coverPosition = {left: imgLeft, width: imgWidth};
 				console.log("setCoverPositionOnTableView", {left: imgLeft, width: imgWidth});
 			};
 			
