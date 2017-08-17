@@ -2,24 +2,23 @@
  * video-list module 
  */
 
-var tagList;
-var candidateCount = 0;			// candidate 파일 개수
-
 var videoList = (function() {
 	'use strict';
 	
 	var sortList    = [{code: "S", name: "Studio"}, {code: "O", name: "Opus"}, {code: "T", name: "Title"}, {code: "A", name: "Actress"}, {code: "D", name: "Release"}, {code: "M", name: "Modified"}, 
 		{code: "R", name: "Rank"}, {code: "Sc", name: "Score"}, {code: "To", name: "Torrrent"}, {code: "F", name: "Favorite"}, {code: "C", name: "Candidated"}];
 	var currentSort = {code: 'M', reverse: false}; // 현재 정렬 방법
-	var videoList  = new Array(); 	// 비디오 배열
+	var videoList   = new Array(); 	// 비디오 배열
+	var   tagList   = [];
 	var        entryIndex = 0;		// 비디오 인덱스
 	var    renderingCount = 0;		// 보여준 개수
 	var   hadTorrentCount = 0;		// torrent 파일 개수
 	var hadVideoFileCount = 0;		// video 파일 개수
 	var     filteredCount = 0;		// 검색으로 찾은 비디오 개수
+	var    candidateCount = 0;		// candidate 파일 개수
 	var lastPage   = false;			// 마지막 페이지까지 다 보여줬는지
 	var pageSize   = 12;			// 한페이지에 보여줄 개수
-	
+
 	var currentVideoNo    = -1;		// table 뷰에서 커서/키가 위치한 tr번호. 커버 보여주기 위해
 	var withTorrent       = false;	// table 뷰에서 torrent 정보 컬럼 보여줄지 여부 
 	var isShortWidth      = false;	// table 뷰에서 가로폭이 좁은지 여부
@@ -92,6 +91,24 @@ var videoList = (function() {
 						thisTr.addClass("trFocus").find("img").css({"top": imgTop}).show();
 					}
 				}
+			},
+			videoContains: function(video, query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags) {
+				var containsTag = function(video) {
+					if (video.tags.length > 0)
+						return true;
+					for (var i = 0; i < tagList.length; i++) {
+						var tag = tagList[i];
+						if (fullname.toLowerCase().indexOf(tag.name.toLowerCase()) > -1) {
+							return true;
+						}
+					}
+					return false;
+				};
+				var fullname = video.fullname + video.videoDate + video.overviewText;
+				return fullname.toLowerCase().indexOf(query.toLowerCase()) > -1
+					&& (isCheckedFavorite ?  video.favorite           : true)
+					&& (isCheckedNoVideo  ? !video.existVideoFileList : true)
+					&& (isCheckedTags     ?  containsTag(video)       : true);
 			}
 	};
 
@@ -102,30 +119,22 @@ var videoList = (function() {
 					$("<li>", {"data-idx": video.idx}).append(
 							$("<dl>").css({backgroundImage: 'url(' + video.coverURL + ')'}).addClass("video-cover").hover(
 								function(event) {
-									console.log("tr hover event.type mouseenter", event);
+									// console.log("tr hover event.type mouseenter", event);
 									if ($("#magnify").data("checked")) $(this).addClass("box-hover");
 								}, function(event) {
-									console.log("tr hover event.type mouseleave", event);
+									// console.log("tr hover event.type mouseleave", event);
 									if ($("#magnify").data("checked")) $(this).removeClass("box-hover");
 								}
 							).append(
-									$("<dt>").html(video.html_title).addClass("nowrap text-center")
-							).append(
-									$("<dd>").html(video.html_studio)
-							).append(
-									$("<dd>").append(video.html_opus).append("&nbsp;").append(video.html_overview)
-							).append(
-									$("<dd>").html(video.html_actress)
-							).append(
-									$("<dd>").html(video.html_release)
-							).append(
-									$("<dd>").html(video.html_video)
-							).append(
-									$("<dd>").html(video.html_subtitles)
-							).append(
-									$("<dd>").html(video.html_videoCandidates)
-							).append(
-									$("<dd>").append(video.html_torrentFindBtn).append("&nbsp;").append(video.html_torrents)
+									$("<dt>").append(video.label_title).addClass("nowrap text-center"),
+									$("<dd>").append(video.label_studio),
+									$("<dd>").append(video.label_opus, "&nbsp;", video.label_overview),
+									$("<dd>").append(video.label_actress),
+									$("<dd>").append(video.label_release),
+									$("<dd>").append(video.label_video),
+									$("<dd>").append(video.label_subtitles),
+									$("<dd>").append(video.label_seedFindBtn),
+//									$("<dd>").append(video.label_videoCandidates).append("&nbsp;").append(video.label_torrentSeed)
 							)
 					)
 			);
@@ -140,54 +149,28 @@ var videoList = (function() {
 							fn.showCover();
 					}).append(
 							$("<td>").addClass("text-right").append(
-									$("<span>").addClass('label label-plain').html(index+1)
-							).append(
+									$("<span>").addClass('label label-plain').html(index+1),
 									$("<input>", {name: "opus", type: "hidden", value: video.opus})
-							)
-					).append(
-							$("<td>").html(video.html_studio)
-					).append(
-							$("<td>").html(video.html_opus)
-					).append(
+							),
+							$("<td>").append(video.label_studio),
+							$("<td>").append(video.label_opus),
 							$("<td>").css({maxWidth: "300px"}).append(
 									$('<div>').addClass("nowrap").append(
-											$('<span>', {"class": "label label-plain pointer", title: video.title, "data-opus": video.opus}).html(video.title).on("click", function() {
-												fnVideoDetail($(this).attr("data-opus"))
-											})
-									).append(
-											$("<img>", {"class": "img-thumbnail tbl-cover", id: "tbl-cover-" + video.opus, src: video.coverURL}).hide()
-									).append(
-											video.html_overview
+											video.label_title,
+											$("<img>", {"class": "img-thumbnail tbl-cover", id: "tbl-cover-" + video.opus, src: video.coverURL}).hide(),
+											"&nbsp;",
+											video.label_overview
 									)
-							)
-					).append(
-							$("<td>").css({maxWidth: "100px"}).attr({title: video.actressName}).html(video.html_actress)
-					).append(
-							$("<td>").addClass(shortWidthClass).html(video.html_release)
-					).append(
-							$("<td>").addClass(shortWidthClass).html(video.html_modified)
-					).append(
-							$("<td>").html(video.html_video)
-					).append(
-							$("<td>").addClass(shortWidthClass).html(video.html_subtitles)
-					).append(
-							$("<td>").addClass(shortWidthClass).html(video.html_rank)
-					).append(
-							$("<td>").addClass(shortWidthClass).html(video.html_score)
-					).append(
+							),
+							$("<td>").css({maxWidth: "100px"}).attr({title: video.actressName}).append(video.label_actress),
+							$("<td>").addClass(shortWidthClass).append(video.label_release),
+							$("<td>").addClass(shortWidthClass).append(video.label_modified),
+							$("<td>").append(video.label_video),
+							$("<td>").addClass(shortWidthClass).append(video.label_subtitles),
+							$("<td>").addClass(shortWidthClass).append(video.label_rank),
+							$("<td>").addClass(shortWidthClass).append(video.label_score),
 							$("<td>").addClass(widthTorrentClass).append(
-									$("<div>").append(
-											$("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", video.opus).html("Find").on("click", function() {
-												var opus = $(this).data("opus");
-												$(this).parent().parent().parent().addClass("found");
-												popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-												popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
-											})
-									).append(
-											video.html_videoCandidates
-									).append(
-											video.html_torrents
-									)
+									$("<div>").append(video.label_seedFindBtn).append("&nbsp;").append(video.label_videoCandidates).append("&nbsp;").append(video.label_torrentSeed)
 							)
 					)
 			);
@@ -204,7 +187,7 @@ var videoList = (function() {
 		var isFilter = query != '' || isCheckedFavorite || isCheckedNoVideo || isCheckedTags;
 		//console.log("render isFilter", query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags, " = " + isFilter);
 		
-		if (first === true) { // initialize if first rendering 
+		if (first == true) { // initialize if first rendering 
 			entryIndex = 0;
 			renderingCount = 0;
 			lastPage = false;
@@ -215,7 +198,7 @@ var videoList = (function() {
 			if (isFilter) { // found count by query
 				filteredCount = 0;
 				for (var i = 0; i < videoList.length; i++) {
-					if (videoList[i].contains(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
+					if (fn.videoContains(videoList[i], query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
 						filteredCount++;
 					}
 				}
@@ -225,7 +208,7 @@ var videoList = (function() {
 		while (entryIndex < videoList.length) {
 			//console.log("render entryIndex", entryIndex, "displayCount", displayCount);
 			if (isFilter) { // query filtering
-				if (!videoList[entryIndex].contains(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
+				if (!fn.videoContains(videoList[entryIndex], query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags)) {
 					entryIndex++;
 					continue;
 				}
@@ -362,7 +345,7 @@ var videoList = (function() {
 
 		// view more btn
 		$("#viewMore").on("click", render);
-				
+
 		$(window).on("resize", function() {
 			console.log("window resize");
 			var setCoverPositionOnTableView = function() {
@@ -400,14 +383,14 @@ var videoList = (function() {
 		loading(true, "request...");
 
 		// reset variables
-		hadTorrentCount = 0;
-		candidateCount = 0;
 		hadVideoFileCount = 0;
+		  hadTorrentCount = 0;
+		   candidateCount = 0;
 		
 		$.getJSON({
 			method: 'GET',
 			url: videoPath + '/list.json',
-			data: {"t": withTorrent},
+			data: {t: withTorrent},
 //			cache: false,
 			timeout: 60000
 		}).done(function(data) {

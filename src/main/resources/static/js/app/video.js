@@ -43,122 +43,86 @@ function Video(idx, data) {
 	this.existOverview          = data.overviewText != '';
 	
 	// html
-	this.html_fullname        = wrapLabel(this.fullname, this.fullname, "fnVideoDetail('" + this.opus + "')");
-	this.html_title           = wrapLabel(this.title, this.title, "fnVideoDetail('" + this.opus + "')", '', {fontSize: '85%'});
-	this.html_studio          = wrapLabel(this.studio.name, '', "fnViewStudioDetail('" + this.studio.name + "')");
-	this.html_opus            = wrapLabel(this.opus, '', "fnVideoDetail('" + this.opus + "')");
-	this.html_actress         = this.actressHtmlNames();
-	this.html_release         = wrapLabel(this.releaseDate);
-	this.html_modified        = wrapLabel(this.videoDate);
-	this.html_score           = wrapLabel('S ' + this.score);
-	this.html_rank            = wrapLabel("R " + this.rank);
-	this.html_video           = wrapLabel("Video", '', this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "", this.existVideoFileList ? "exist" : "nonExist");
-	this.html_subtitles       = wrapLabel("Sub", '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
-	this.html_videoCandidates = this.candidatesNames();
-	this.html_torrents        = this.torrentNames();
-	this.html_favorite        = this.favorite ? wrapLabel("Fav", "", "", "label-success") : "";
-	this.html_overview		  = wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
+	this.label_fullname        = VideoUtils.wrapLabel(this.fullname,    this.fullname, "fnVideoDetail('" + this.opus + "')");
+	this.label_title           = VideoUtils.wrapLabel(this.title,       this.title,    "fnVideoDetail('" + this.opus + "')",            '', {fontSize: '85%'});
+	this.label_studio          = VideoUtils.wrapLabel(this.studio.name, '',            "fnViewStudioDetail('" + this.studio.name + "')");
+	this.label_opus            = VideoUtils.wrapLabel(this.opus,        '',            "fnVideoDetail('" + this.opus + "')");
+	this.label_release         = VideoUtils.wrapLabel(this.releaseDate);
+	this.label_modified        = VideoUtils.wrapLabel(this.videoDate);
+	this.label_score           = VideoUtils.wrapLabel('S ' + this.score);
+	this.label_rank            = VideoUtils.wrapLabel("R " + this.rank);
+	this.label_video           = VideoUtils.wrapLabel("Video", '', this.existVideoFileList     ? "fnPlay('" + this.opus + "')" : "",          this.existVideoFileList ? "exist" : "nonExist");
+	this.label_subtitles       = VideoUtils.wrapLabel("Sub",   '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
+	this.label_overview		   = VideoUtils.wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
+	this.label_favorite        = this.favorite ? VideoUtils.wrapLabel("Fav", "", "", "label-success") : "";
+	this.label_actress         = function() {
+		var elements = [];
+		$.each(data.actressList, function(index, actress) {
+			if (index > 0) elements.push("&nbsp;");
+			elements.push(VideoUtils.wrapLabel(actress.name, '', "fnViewActressDetail('" + actress.name + "')", actress.favorite ? "favorite" : ""));
+		});
+		return elements;
+	};
+	this.label_videoCandidates = function() {
+		var elements = [];
+		$.each(data.videoCandidates, function(index, candidate) {
+			if (index > 0) elements.push("&nbsp;");
+			elements.push(
+					$("<span>", {
+						opus: data.opus, title: candidate, "class": "nowrap btn btn-xs btn-primary"
+					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
+						var opus = $(this).attr("opus");
+						var candidate = $(this).data("path");
+						actionFrame(videoPath + "/" + opus + "/confirmCandidate", {"path": candidate}, "POST", "accept Candidate");
+						showSnackbar("accept file " + opus);
+						$("#check-" + opus).addClass("found");
+						$(this).off().hide();
+					})
+			);
+		});
+		return elements;
+	};
+	this.label_torrentSeed = function() {
+		var elements = [];
+		$.each(data.torrents, function(index, torrent) {
+			if (index > 0) elements.push("&nbsp;");
+			elements.push(
+					$("<span>", {
+						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
+					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(torrent)).on("click", function() {
+						var opus = $(this).attr("opus");
+						actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+						showSnackbar("move torrent " + opus);
+						$("#check-" + opus).addClass("moved");
+						$(this).off().hide();
+					})
+			);
+		});
+		return elements;
+	};
+	this.label_seedFindBtn = function() {
+		return $("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", data.opus).html("Find").on("click", function() {
+			var opus = $(this).data("opus");
+			$("#check-" + opus).addClass("found");
+			popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+			popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+		})
+	};
 }
 
-Video.prototype.candidatesNames = function() {
-	var html = '';
-	for (var i=0; i<this.videoCandidates.length; i++) {
-		if (i > 0)
-			html += "&nbsp;";
-		html += '<form method="post" target="ifrm" action="' + videoPath + '/' + this.opus + '/confirmCandidate" style="display: inline-block;" data-candidate="' + this.opus + '-' + i + '">';
-		html += '<input type="hidden" name="path" value="' + this.videoCandidates[i] + '"/>';
-		html += '<button type="submit" style="max-width:200px;" class="nowrap btn btn-xs btn-primary" onclick="fnSelectCandidateVideo(\'' + this.opus + '\',' + this.idx  + ',' + i + ')" title="' + this.videoCandidates[i] + '">' + getFilename(this.videoCandidates[i]) + '</button>';
-		html += '</form>';
-	}
-	return html;
-}
-
-Video.prototype.torrentNames = function() {
-	var html = "";
-	for (var i=0; i<this.torrents.length; i++) {
-		if (i > 0)
-			html += "&nbsp;";
-		html += '<span class="label label-warning" data-torrent="' + this.opus + '-' + i + '" onclick="goTorrentMove(\'' + this.opus + '\',' + this.idx  + ',' + i + ')">' + getFilename(this.torrents[i]) + '</span>';
-	}
-	return html;
-}
-
-Video.prototype.actressHtmlNames = function() {
-	var actressNames = "<div class='nowrap'  title='" + this.actressName + "'>";
-	for (var i=0; i<this.actressList.length; i++) {
-		var actress = this.actressList[i];
-		if (i > 0)
-			actressNames += " ";
-		actressNames += "<span class='label label-plain " + (actress.favorite ? "favorite" : "") + "' onclick=\"fnViewActressDetail('" + actress.name + "')\">" + actress.name + "</span>";
-	}
-	return actressNames + "</div>";
-}
-
-Video.prototype.play = function() {
-	$("#actionIframe").attr("src", videoPath + "/" + this.opus + "/play");
-} 
-
-Video.prototype.contains = function(query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags) {
-	return (this.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1 || this.overviewText.toLowerCase().indexOf(query.toLowerCase()) > -1)
-		&& (isCheckedFavorite ?  this.favorite             : true)
-		&& (isCheckedNoVideo  ? !this.existVideoFileList   : true)
-		&& (isCheckedTags     ? containsTag(this) : true);
-}
-
-function containsTag(video) {
-	if (video.tags.length > 0)
-		return true;
-	for (var i=0; i<tagList.length; i++) {
-		var tag = tagList[i];
-		if (video.fullname.toLowerCase().indexOf(tag.name.toLowerCase()) > -1) {
-			return true;
+var VideoUtils = {
+		getFilename: function(file) {
+			var lastIndex = file.lastIndexOf("\\");
+			if (lastIndex < 0) lastIndex = file.lastIndexOf("/");
+			return file.substring(lastIndex + 1, file.length);
+		},
+		wrapLabel: function(html, title, onclick, extClass, extCss, extAttr) {
+			var $span = $("<span>").addClass("label label-plain").html(html);
+			if (title    && title    != '')	$span.attr("title", title);
+			if (onclick  && onclick  != '')	$span.attr("onclick", onclick);
+			if (extClass && extClass != '')	$span.addClass(extClass);
+			if (extCss   && extCss   != '')	$span.css(extCss);
+			if (extAttr  && extAttr  != '')	$span.attr(extAttr);
+			return $span.clone().wrapAll("<div/>").parent().html();
 		}
-	}
-	return false;
-}
-
-function getFilename(file) {
-	var lastIndex = file.lastIndexOf("\\");
-	if (lastIndex < 0)
-		lastIndex = file.lastIndexOf("/");
-	return file.substring(lastIndex + 1, file.length);
-}
-
-
-var fnSelectCandidateVideo = function(opus, idx, i) {
-	$("[data-candidate='" + opus + "-" + i + "']").hide();
-	$(".candidate").html("C " + --candidateCount);
-	showSnackbar("accept file " + opus);
 };
-
-var goTorrentMove = function(opus, idx, i) {
-	$("[data-torrent='" + opus + "-" + i + "']").hide();
-	$("[data-idx='" + idx + "']").addClass("moved");
-	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
-	showSnackbar("move torrent " + opus);
-};
-
-/**
- * wrap span tag
- * @param html
- * @param title
- * @param onclick
- * @param extClass
- * @param extCss
- * @returns
- */
-function wrapLabel(html, title, onclick, extClass, extCss) {
-	var span = $("<span>").addClass("label label-plain");
-	span.html(html);
-	if (title && title != '')
-		span.attr("title", title);
-	if (onclick && onclick != '')
-		span.attr("onclick", onclick);
-	if (extClass && extClass != '')
-		span.addClass(extClass);
-	if (extCss && extCss != '')
-		span.css(extCss);
-	return span.clone().wrapAll("<div/>").parent().html();
-}
-
-
