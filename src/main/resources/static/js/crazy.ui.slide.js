@@ -1,23 +1,31 @@
 ;(function($) {
+	var $slidesjs;
+
 	$.fn.slideview = function(options) {
 
+		$.fn.slideview.defaults = {
+				width: 800,
+				height: 550,
+				interval: 5000
+		};
+
 		var opts = $.extend({}, $.fn.slideview.defaults, options);
-		
+
 		$(this).slidesjs({
 			start: currentVideoIndex,
 	        width: opts.width,
 	        height: opts.height,
 	        navigation: {active: true, effect: "slide"},
 	        pagination: {active: true, effect: "fade"},
-	        play: {active: true, interval:5000, auto: false, effect: "slide"},
+	        play: {active: true, interval: opts.interval, auto: false, effect: "slide"},
 	        callback: {
 	        	loaded: function(number) {
-	        		$.fn.rePagination();
+	        		$.fn.rePagination(number-1);
 	        	},
 	        	start: function(number) {
-	        		$.fn.rePagination();
 	        	},
 	        	complete: function(number) {
+	        		$.fn.rePagination(number-1);
 	        	}
 	        },
 	        effect: {
@@ -29,103 +37,79 @@
 	            }
 	        }
 		});
+		$slidesjs = $(this).data("plugin_slidesjs");
+		
+		// UI : navigation position
 		$(".slidesjs-navigation").hide();
-//	    $(".slidesjs-previous").html("Prev");
 		$(".slidesjs-play, .slidesjs-stop").css({
 		    position: 'fixed',
 	    	left: '20px',
 	    	bottom: '15px'
 		});
-		$(".slidesjs-play").show();
-	    $(".slidesjs-random").show().click(function() {
-			var selectedNumber = getRandomVideoIndex() -1; // getRandomInteger(0, totalVideoSize);
-			$("a[data-slidesjs-item='" + selectedNumber + "']").click();
-		});
+		$(".slidesjs-play, .slidesjs-random").show();
 
-		$(window).bind("mousewheel DOMMouseScroll", function(e) {
-			var delta = mousewheel(e);
-			if (delta > 0) // 휠 위로
-				$.fn.previousView();
-		    else // 휠 아래로
-		    	$.fn.nextView();
-		});
-		$(window).bind("keyup", function(e) {
-			var event = window.event || e;
-			switch(event.keyCode) {
-			case 37: // left
-			case 40: // down
-				$.fn.previousView();
-				break;
-			case 39: // right
-			case 38: // up
-				$.fn.nextView(); 
-				break;
-			//case 32: // space
-			case 34: // PageDown key
-				$.fn.randomView(); 
-				break;
-			case 13: // enter
-				break;
-			}
-		});
-		$(window).on("mousedown", function(event) {
-			switch (event.which) {
-			case 1: // left click
-				break;
-			case 2: // middle click
-				fnRandomPlay();
-				break;
-			case 3: // right click
-				break;
-			}
-		});
-
+		// Event
+	    $(".slidesjs-random").on("click", $.fn.randomView);
+	    $("#content_div").on("mousewheel mousedown", $.fn.navEvent);
+	    $(window).on("keyup", $.fn.navEvent);
 	};
 
-	$.fn.slideview.defaults = {
-		width: 800,
-		height: 550
-	};
-	
-	$.fn.rePagination = function() {
+	$.fn.rePagination = function(index) {
+		//console.log("$.fn.rePagination", index);
 	    if (totalVideoSize == 1) {
-	    	console.log("slidesjs-slide left 0");
-	    	$(".slidesjs-slide").css("left", "0");
+	    	$(".slidesjs-slide").css({left: 0});
 	    }
-		var index = currentIndex();
-	    //console.log("active index", index);
 	    $(".slidesjs-pagination-item").each(function() {
 	    	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
-	    	
-	    	if ((itemIdx < index + 5 && itemIdx > index - 5) || itemIdx == 0 || itemIdx == totalVideoSize-1) {
+	    	if ((itemIdx < index + 5 && itemIdx > index - 5) || itemIdx == 0 || itemIdx == totalVideoSize-1)
 	    		$(this).show();
-	    	}
-	    	else {
+	    	else
 	    		$(this).hide();
-	    	}
 	    });
 		$(".slidesjs-slide[slidesjs-index='" + index + "'] > div").randomBG(0.5);
 		setLocalStorageItem(THUMBNAMILS_COVER_INDEX, index);
 	}
-	$.fn.previousView = function() {
-		$(".slidesjs-previous").click();
+	
+	$.fn.randomView = function(e) {
+    	$slidesjs.goto(getRandomInteger(1, totalVideoSize));
 	}
-	$.fn.nextView = function() {
-    	$(".slidesjs-next").click(); 
-	}
-	$.fn.randomView = function() {
-		$(".slidesjs-random").click();
+	
+	$.fn.navEvent = function(e) {
+		if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
+			console.log("navEvent", e.target.tagName, "pass");
+			return;
+		}
+			
+		var delta  = mousewheel(e);
+		var which  = mouseClick(e);
+		var signal = delta || e.keyCode || which;
+		console.log(e.target.tagName, "event.type", e.type, "[mousewheel delta", delta, "] [keyup : keyCode", e.keyCode, "] [mousedown : which", which, "] = " + signal);
+		switch(signal) {
+			case 1 : // mouse : wheel up
+			case 37: // key : left
+			case 40: // key : down
+			case 1003 : // click : right
+				$slidesjs.previous();
+				break;
+			case -1 : // mouse : wheel down
+			case 39: // key : right
+			case 38: // key : up
+				$slidesjs.next();
+				break;
+			case 1002 : // click : middle
+				fnRandomPlay();
+				break;
+			case 34 : // key : PageDown
+				$.fn.randomView();
+				break;
+			case 1001 : // click : left
+			case 32: // key : space
+			case 13: // key : enter
+				break;
+		}
+		event.stopImmediatePropagation();
+		event.preventDefault();
+		event.stopPropagation();
 	}
 
-	function currentIndex() {
-		return parseInt($(".slidesjs-pagination-item>.active").attr("data-slidesjs-item"));
-	}
-	
-	$.slide = {
-		focusVideo: function(opus) {
-			var idx = $("#opus-" + opus).attr("slidesjs-index");
-			$("a[data-slidesjs-item='" + idx + "']").click();
-		}
-	}
-	
 }(jQuery));

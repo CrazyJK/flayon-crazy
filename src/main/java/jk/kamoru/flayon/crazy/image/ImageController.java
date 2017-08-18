@@ -46,6 +46,7 @@ public class ImageController extends CrazyController {
 	@RequestMapping("/aperture")   public String aperture()   { return "image/aperture"; }
 	@RequestMapping("/lightbox")   public String lightbox()   { return "image/lightbox"; }
 	@RequestMapping("/thumbnails") public String thumbnails() { return "image/thumbnails"; }
+	@RequestMapping("/tablet")     public String tablet()     { return "image/tablet"; }
 
 	@RequestMapping("/data")
 	public Map<String, Object> getData() {

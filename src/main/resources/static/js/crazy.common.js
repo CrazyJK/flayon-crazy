@@ -336,7 +336,7 @@ function setLocalStorageItem(itemName, itemValue) {
 function getLocalStorageItem(itemName, notfoundDefault) {
 	if (typeof(Storage) !== "undefined") {
 		var _value = localStorage.getItem(itemName);
-		if (_value == null || _value === 'NaN')
+		if (_value == null || _value === 'NaN' || _value === 'undefined')
 			return notfoundDefault;
 		return _value;
 	}

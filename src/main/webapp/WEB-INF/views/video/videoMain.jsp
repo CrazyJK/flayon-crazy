@@ -421,12 +421,12 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
-							<dl class="box box-small" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
+							<dl class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
 								<dt class="nowrap" style="height: inherit;">
 									<span class="label video-title_v" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 								</dt>
 							</dl>
-							<div class="box box-small" style="margin-top: 15px;">
+							<div class="box box-small box-detail" style="margin-top: 15px;">
 								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
 									<jk:video video="${video}" view="title"/>
 								</h3>
@@ -457,9 +457,9 @@ listViewType = '${videoSearch.listViewType}';
 			<script type="text/javascript">
 			$("#slides").slideview({width:800, height:700});
 			function resizeSecondDiv() {
-				var slidesjsPaginationHeight = $(".slidesjs-pagination").outerHeight();
-				var flayonSlideHeight = calculatedDivHeight - slidesjsPaginationHeight;
-				$("#slides > .slidesjs-container").height(flayonSlideHeight);
+				var slidesjsContainerCss = {height: calculatedDivHeight - $(".slidesjs-pagination").outerHeight() - 30};
+				console.log("Flay slidesjsContainerCss", slidesjsContainerCss);
+				$("#slides > .slidesjs-container").css(slidesjsContainerCss);
 			}
 			</script>
 		</c:when>

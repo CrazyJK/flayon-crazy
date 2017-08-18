@@ -13,6 +13,7 @@
   	<mapping path="/image/aperture"   decorator="/WEB-INF/sitemesh/crazy-decorator.jsp"/>
   	<mapping path="/image/lightbox"   decorator="/WEB-INF/sitemesh/crazy-decorator.jsp"/>
   	<mapping path="/image/thumbnails" decorator="/WEB-INF/sitemesh/crazy-decorator.jsp"/>
+  	<mapping path="/image/tablet"     decorator="/WEB-INF/sitemesh/crazy-decorator.jsp"/>
   	
  	<!-- Alternative convention. This is more verbose but allows multiple decorators to be applied to a single path. 
   	<mapping>

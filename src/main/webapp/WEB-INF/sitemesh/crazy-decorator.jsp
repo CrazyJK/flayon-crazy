@@ -504,6 +504,7 @@ function propagateTheme() {
 					<li><a href="${PATH}/image/slides"	  ><s:message code="video.slides"          /></a></li>
 					<li><a href="${PATH}/image/lightbox"  ><s:message code="video.lightbox"        /></a></li>
 					<li><a href="${PATH}/image/thumbnails"><s:message code="video.thumbnails"      /></a></li>
+					<li><a href="${PATH}/image/tablet"    >Tablet</a></li>
     			</ul>
   			</li>
 			<li><a href="${PATH}/video/briefing"	      ><s:message code="video.briefing"        /></a></li>
