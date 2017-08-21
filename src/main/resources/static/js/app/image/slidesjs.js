@@ -101,7 +101,8 @@ bgContinue = false;
 		var slidesjs;
 
 		var addEventListener = function() {
-			$(window).off().on("mousewheel DOMMouseScroll keyup mousedown", event.nav).on("resize", event.resize);
+			$(window).off().on("mousewheel DOMMouseScroll keyup", event.nav).on("resize", event.resize);
+			$("#slides").off().on("mousedown", event.nav);
 			$(".slidesjs-control").on("click", event.nav);
 			$(".slidesjs-play").on('click', event.play);
 			$(".slidesjs-stop").on('click', event.stop);

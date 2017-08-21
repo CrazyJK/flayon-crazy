@@ -115,6 +115,6 @@ body, .label-info, .progress, .paging {
 	width: 30px;
 	text-align: center;
 }
-.title, .effectInfo {
+.title, .effectInfo, code {
 	font-family: "D2Coding";
 }

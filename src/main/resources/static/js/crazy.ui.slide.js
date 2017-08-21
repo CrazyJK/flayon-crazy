@@ -112,4 +112,11 @@
 		event.stopPropagation();
 	}
 
+	$.slide = {
+			focusVideo: function(opus) { // random play로 선태된 슿라이드 보이기  
+				var idx = parseInt($("#opus-" + opus).attr("slidesjs-index")) + 1;
+				$slidesjs.goto(idx);
+			}
+	}
+	
 }(jQuery));

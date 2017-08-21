@@ -9,7 +9,6 @@ var slide = (function() {
 	var SLIDE_PLAY_MODE     = "slide.play.mode";
 	var SLIDE_PLAY_INTERVAL = "slide.play.interval";
 
-	var currentIndex      = -1;
 	var selectedItemUrl   = "";
 	var selectedItemTitle = "";
 	var imageIndex        = 0;
@@ -20,32 +19,28 @@ var slide = (function() {
 	var coverCount        = 0;
 	var coverNameMap      = [];
 	var coverIndexMap     = [];
-	var hideEffect, hideDuration, hideOptions;
 	var showEffect, showDuration, showOptions;
-	var prevMode = 0;
+	var zIndex = 0;
 
 	var image = {
-			setLocalStorage: function() {
+			saveConfig: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
 				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
 				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
 				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
 				timerEngine.setTime(interval.value);
-				prevMode = sourceMode.value;
+				image.displayConfigInfo();
 				console.log("    setLocalStorage", sourceMode.value, effectMode.value, playMode.value, interval.value);
 			},
-			nextEffect: function setNextEffect() {
-				console.log("    nextEffect START");
+			setEffect: function setEffect() {
 				var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
-				if (effectMode.value == 1) {
-					hideEffect   = effects[getRandomInteger(0, effects.length-1)];
-					hideDuration = getRandomInteger(100, 1000);
-					if (hideEffect === "scale")
-						hideOptions = { percent: getRandomInteger(10, 50) };
-					else if (hideEffect === "size")
-						hideOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
-					else
-						hideOptions = {};
+				
+				if (effectMode.value == 0) {
+					showEffect   = "fade";
+					showDuration = 500;
+					showOptions  = {};
+				}
+				else {
 					showEffect   = effects[getRandomInteger(0, effects.length-1)];
 					showDuration = getRandomInteger(100, 2000);
 					if (showEffect === "scale")
@@ -54,25 +49,49 @@ var slide = (function() {
 						showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
 					else
 						showOptions = {};
+				}
+				$(".effectInfo").html(showEffect);
+				console.log("    setEffect", showEffect, showDuration, showOptions);
+			},
+			prev: function() {
+				console.log("    prev");
+				// 다 지웠으면 끝
+				if ($("#imageDiv").children().length < 1)
+					return;
 
-					$(".effectInfo").show().html(hideEffect + "(" + hideDuration + ") ▷ " + showEffect + "(" + showDuration + ")");
+				image.setEffect();
+
+				// 마지막 이미지 삭제 및 map배열 복원
+				var $last = $("#imageDiv").children().last();
+				var data = $last.data("data");
+				var mode = data.mode;
+				var arrIdx = data.arrayIndex;
+				var index = data.imageIndex;
+				if (mode == 0) {
+					imageIndexMap.splice(arrIdx, 0, index);
+					console.log("    prev image", arrIdx, index);
 				}
 				else {
-					hideEffect = "fade";
-					hideDuration = 500;
-					hideOptions = {};
-					showEffect = "fade";
-					showDuration = 500;
-					showOptions = {};
-					$(".effectInfo").hide();
+					coverIndexMap.splice(arrIdx, 0, index);
+					console.log("    prev cover", arrIdx, index);
 				}
-				console.log("    nextEffect END", hideEffect, hideDuration, hideOptions, showEffect, showDuration, showOptions);
+				$last.remove();
+
+				// 새로운 마지막 이미지 설정
+				var $imageDivChildren = $("#imageDiv").children();
+				if ($imageDivChildren.length > 0) {
+					data = $imageDivChildren.last().data("data");
+					$(".title").html(data.title);
+					$(".displayCount").html($("#imageDiv").children().length);
+				}
+				else {
+					$(".title").html("&nbsp;").data("data", {});
+					$(".displayCount").html("&nbsp;");
+				}
 			},
-			prevNumber: function getPrevNumber() {
-				return currentIndex == 0 ? image.maxCount(-1) : currentIndex - 1;
-			},
-			nextNumber: function getNextNumber() {
-				var index = -1;
+			next: function() {
+				console.log("    next");
+				var currentIndex      = -1;
 				if (sourceMode.value == 0) { // image
 					if (playMode.value == 0) { // sequencial
 						if (imageIndex >= imageIndexMap.length)
@@ -81,11 +100,15 @@ var slide = (function() {
 					else { // random
 						imageIndex = getRandomInteger(0, imageIndexMap.length -1);
 					}
-					index = imageIndexMap.splice(imageIndex, 1)[0];
-					console.log("nextNumber", imageIndex, index);
+					currentIndex = imageIndexMap.splice(imageIndex, 1)[0];
+					console.log("    next imageIndex", imageIndex, "currentIndex", currentIndex);
 					if (imageIndexMap.length == 0) {
 						showSnackbar("cover all shown");
+						return;
 					}
+					selectedItemUrl = PATH + "/image/" + currentIndex;
+					selectedItemTitle = imageNameMap[currentIndex];
+					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
 				}
 				else { // cover
 					if (playMode.value == 0) { // sequencial
@@ -95,215 +118,237 @@ var slide = (function() {
 					else { // random
 						coverIndex = getRandomInteger(0, coverIndexMap.length -1);
 					}
+					currentIndex = coverIndexMap.splice(coverIndex, 1)[0];
+					console.log("    next coverIndex", coverIndex, "currentIndex", currentIndex);
 					if (coverIndexMap.length == 0) {
 						showSnackbar("image all shown");
+						return;
 					}
-					index = coverIndexMap.splice(coverIndex, 1)[0];
-					console.log("nextNumber", coverIndex, index, coverIndexMap);
-				}
-				
-				return currentIndex = index;
-			},
-			first: function() {
-				console.log("    first");
-				image.view(0);
-			},
-			prev: function() {
-				console.log("    prev", $("#imageDiv").children().last());
-				if ($("#imageDiv").children().length < 1)
-					return;
-				var $last = $("#imageDiv").children().last();
-				var mode = $last.attr("data-mode");
-				var index = parseInt($last.attr("data-index"));
-				var arrIdx = $last.attr("data-array-index");
-				if (mode == 0) {
-					imageIndexMap.splice(arrIdx, 0, index);
-					console.log("prev image", arrIdx, index, imageIndexMap);
-				}
-				else {
-					coverIndexMap.splice(arrIdx, 0, index);
-					console.log("prev cover", arrIdx, index, coverIndexMap);
-				}
-				$last.remove();
-
-				$(".title").html($("#imageDiv").children().last().data("title"));
-			//	image.view(image.prevNumber());
-			},
-			next: function() {
-				console.log("    next");
-				image.view(image.nextNumber());
-			},
-			end: function() {
-				console.log("    end");
-				image.view(image.maxCount(-1));
-			},
-			random: function() {
-				console.log("    random");
-				image.view(getRandomInteger(0, image.maxCount(-1)));
-			},
-			view: function(current) {
-				console.log("    view START", current);
-				if (typeof current == 'undefined') { // first call
-					console.log("view stop", current);
-					return;
-				}
-				currentIndex = parseInt(current);
-				
-				if (sourceMode.value == 0) { // image
-					selectedItemUrl = PATH + "/image/" + currentIndex;
-					selectedItemTitle = imageNameMap[currentIndex];
-					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
-				}
-				else {
 					selectedItemUrl = PATH + "/video/" + coverNameMap[currentIndex] + "/cover";
 					selectedItemTitle = coverNameMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 				}
 				
+				image.setEffect();
+				
+				// FIFO 오래된 미미지 지우기. 성능 때문에
+				var IMAGE_DISPLAY_LIMIT = 30;
+				var currentImageCount = $("#imageDiv").children().length;
+				var diffCount = currentImageCount - IMAGE_DISPLAY_LIMIT + 1;
+				if (diffCount > 0) {
+					for (var i=0; i < diffCount; i++) {
+						$("#imageDiv").children().first().remove();
+					}
+				}
+				
+				// 기존 이미지의 테두리 초기화
+				$("#imageDiv").children().each(function() {$(this).css({backgroundColor: "#fff"});});
+				
 				var preloader = new Image();
 				preloader.onload = function() {
-					var divWidth  = $("#imageDiv").width();
-					var divHeight = $("#imageDiv").height();
-					var imgWidth  = preloader.width;
-					var imgHeight = preloader.height;
-					var imgTop    = $("#imageDiv").offset().top;
-					var imgLeft   = 0;
-
-					if (divHeight < imgHeight) {
-						imgHeight = divHeight;
-					}
-					else {
-						imgTop += (divHeight - imgHeight) / 2;
-					}
-					
 					var $image = $("<img>", {
-						src: preloader.src, 
-						"class": "img-thumbnail", 
-						"data-index": currentIndex,
-						"data-mode": sourceMode.value,
-						"data-array-index": (sourceMode.value == 0 ? imageIndex : coverIndex) 
-					}).css({
-						visibility: "hidden"
-					}).data("title", selectedItemTitle);
-					$("#imageDiv").append(
-							$image.css({
-							    position: 'fixed',
-							    left: imgLeft,
-							    top: imgTop,
-//							    width: imgWidth,
-							    height: imgHeight
-							})
-					);
-					imgWidth = $image.width();
-					if (divWidth > imgWidth) {
-						imgLeft = (divWidth - imgWidth) / 2;
-						$image.css({
-							left: imgLeft
-						});
-					}
-					$image.css({visibility: "visible"}).hide().show(showEffect, showOptions, showDuration, image.nextEffect);
-					console.log("img", {left: imgLeft, top: imgTop, width: imgWidth, height: imgHeight});
+						src: preloader.src,
+						"class": "img-thumbnail img-card" 
+					}).css(
+						image.refactorImageInfo($("#imageDiv").width(), $("#imageDiv").height(), preloader.width, preloader.height, 0, $("#imageDiv").offset().top)	
+					).data("data", {
+						"src": preloader.src,
+						"mode": parseInt(sourceMode.value),
+						"title": selectedItemTitle,
+						"imageIndex": currentIndex,
+						"arrayIndex": (sourceMode.value == 0 ? imageIndex : coverIndex),
+						"width": preloader.width,
+						"height": preloader.height
+					}).on("click", function() {
+						var data = $(this).data("data");
+						$(".title").html(data.title).data("data", data);
+						$("#imageDiv").children().each(function() {$(this).css({backgroundColor: "#fff"});});
+						$(this).css({zIndex: ++zIndex}).randomBG(0.5);
+					}).appendTo(
+							$("#imageDiv")
+					).css({
+						visibility: "visible",
+						zIndex: ++zIndex
+					}).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration);
 
-					$(".title").html(selectedItemTitle);
+					$(".title").html(selectedItemTitle).data("data", $image.data("data"));
+					$(".displayCount").html($("#imageDiv").children().length);
+					
+					console.log("    next", selectedItemUrl, selectedItemTitle);
 				};
 				preloader.src = selectedItemUrl;
-
-				
-				/*
-				$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
-					$("#currNo").val(currentIndex);
-					$("#endNo").html(image.maxCount(-1));
-					$(".title").html(selectedItemTitle);
-					console.log("    view call -> image.nextEffect");
-					$(this).css({
-						backgroundImage: "url('" + selectedItemUrl + "')"
-					}).show(showEffect, showOptions, showDuration, image.nextEffect);
-
-					console.log("    view call -> image.displayThumbnail");
-					image.displayThumbnail();
-				});
-				*/
-				console.log("    view END", currentIndex, selectedItemUrl, selectedItemTitle);
 			},
-			delete: function() {
+			clear: function() {
+				$("#imageDiv").empty();
+				$(".displayCount").html("&nbsp;");
+				$(".title").html("&nbsp;").data("data", {});
+				zIndex = 0;
+				console.log("    clear");
+			},
+			refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop) {
+				var imgWidth  = originalWidth;
+				var imgHeight = originalHeight;
+				var imgLeft   = offsetLeft;
+				var imgTop    = offsetTop;
+				if (divHeight < imgHeight) { // 이미지가 더 크면
+					imgHeight = divHeight;
+					imgWidth = Math.floor(imgHeight * originalWidth / originalHeight);
+				}
+				if (divWidth < imgWidth) {
+					imgWidth = divWidth;
+					imgHeight = Math.floor(imgWidth * originalHeight / originalWidth);
+				}
+
+				if (divHeight > imgHeight) { // 이미지가 작으면
+					imgTop += getRandomInteger(0, divHeight - imgHeight);
+				}
+				if (divWidth > imgWidth) { // 이미지가 작으면
+					imgLeft += getRandomInteger(0, divWidth - imgWidth);
+				}
+				return {
+					width: imgWidth,
+					height: imgHeight,
+					left: imgLeft,
+					top: imgTop
+				};
+			},
+			shuffleImage: function() {
+				$("#imageDiv").children().each(function() {
+					$(this).animate(
+						image.refactorImageInfo($("#imageDiv").width(), $("#imageDiv").height(), $(this).data("data").width, $(this).data("data").height, 0, $("#imageDiv").offset().top)		
+					);
+				});
+				console.log("    shuffleImage");
+			},
+			remove: function(willDelete) {
 				console.log("    delete");
-				if (sourceMode.value == 0) { // image
-					var imgSrc = selectedItemUrl;
-					if (confirm('Delete this image\n' + imgSrc)) {
-						actionFrame(imgSrc, {}, "DELETE", "this image delete");
+				var data = $(".title").data("data");
+				if (data && data.mode == 0) { // image
+					var imgSrc = data.src;
+					if (confirm('remove this image?\n' + imgSrc + "\n" + data.title)) {
+						if (willDelete)
+							actionFrame(imgSrc, {}, "DELETE", "this image delete");
+						$("img[src='" + data.src + "']").remove();
+						$(".displayCount").html($("#imageDiv").children().length);
+						$(".title").html("&nbsp;");
 						console.log("    delete call -> image.next");
-						image.next();
 					}
 				}
 			},
-			popup: function() {
-				console.log("    popup");
-				if (sourceMode.value == 0) { // image
-					popupImage(selectedItemUrl);
+			popup: function(e) {
+				var data = $(e.target).data("data");
+				console.log("    popup", data);
+				if (data.mode == 0) { // image
+					popupImage(data.src);
 				}
 				else {
-					fnVideoDetail(coverNameMap[currentIndex]);
+					fnVideoDetail(data.title);
 				}
 			},
 			playCallback: function(status) {
-				console.log("    playCallback START");
-				if (status) {
-					$("body, .progress-bar, .label").addClass("label-black");
-					$("#pagingArea, #effectInfoBox").hide();
-				}
-				else {
-					$("body, .progress-bar, .label").removeClass("label-black");
-					$("#pagingArea, #effectInfoBox").show();
-				}
-				console.log("    playCallback call -> image.resize");
+				console.log("    playCallback", status);
+				$("body, .progress-bar, .label, code").toggleClass("label-black", status);
 				image.resize();
-				console.log("    playCallback END");
 			},
 			resize: function() {
-				console.log("    resize START");
+				console.log("    resize");
 				$("#imageDiv").height($(window).height() - 35);
-				console.log("    resize END");
 			},
-			maxCount: function(i) {
-				i = i || 0;
-				return sourceMode.value == 0 ? imageCount + i : coverCount + i;
+			toggleSourceMode: function() {
+				$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleEffect: function() {
+				$("#effectMode").val(effectMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			togglePlayMode: function() {
+				$("#playMode").val(playMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleInterval: function(sec) {
+				$("#interval").val(sec).trigger("click");
 			},
 			nav: function(e) {
+				e.stopImmediatePropagation();
+				e.preventDefault();
 				e.stopPropagation();
 				var signal = 0;
 				if (e.type === 'mousewheel') signal = mousewheel(e);
 				else if (e.type === 'keyup') signal = e.keyCode;
-				else if (e.type === 'click') signal = event.which + 1000;
-				console.log("image.nav", e.type, signal);
+				else if (e.type === 'mousedown') signal = event.which + 1000;
+				console.log("image.nav", e.type, signal, e);
 				switch(signal) {
-					case 1 : // mouse : wheel up
+					case 1 : // mousewheel : up
 					case 37: // key : left
 					case 40: // key : down
-					case 1003 : // click : right
 						image.prev();
 						break;
-					case -1 : // mouse : wheel down
+					case -1 : // mousewheel : down
 					case 39: // key : right
 					case 38: // key : up
-					case 1001 : // click : left
 						image.next();
 						break;
 					case 32: // key : space
-					case 1002 : // click : middle
-						image.random();
+						timerEngine.toggle(image.playCallback);
+						break;
+					case 46 : // key delete
+						image.clear();
+						break;
+					case 34 : // key PageDown
+						image.shuffleImage();
+						break;
+					case 45 : // key : Insert
+						image.toggleSourceMode();
+						break;
+					case 36 : // key : home
+						image.toggleEffect();
+						break;
+					case 33 : // key : PageUp
+						image.togglePlayMode();
+						break;
+					case 97 : // key : keypad 1
+						image.toggleInterval(1);
+						break;
+					case 98 : // key : keypad 2 
+						image.toggleInterval(2);
+						break;
+					case 99 : // key : keypad 3
+						image.toggleInterval(3);
+						break;
+					case 100 : // key : keypad 4 
+						image.toggleInterval(4);
+						break;
+					case 101 : // key : keypad 5 
+						image.toggleInterval(5);
+						break;
+					case 102 : // key : keypad 6 
+						image.toggleInterval(6);
+						break;
+					case 103 : // key : keypad 7 
+						image.toggleInterval(7);
+						break;
+					case 104 : // key : keypad 8 
+						image.toggleInterval(8);
+						break;
+					case 105 : // key : keypad 9 
+						image.toggleInterval(9);
 						break;
 					case 13: // key : enter
-						image.view($(e.target).val());
+						break;
+					case 1001 : // click : left
+						break;
+					case 1002 : // click : middle
+						image.shuffleImage();
+						break;
+					case 1003 : // click : right
+						break;
+					case 83 : // key : 's'
 						break;
 				}
 			},
-			displayInfo: function() {
-				$(".configInfo").html(
-						"Source " + (sourceMode.value == 0 ? "Image" : "Cover") + 
-						", Effect " + (effectMode.value == 0 ? "Fade" : "Radndom") +
-						", Next " + (playMode.value == 0 ? "Sequence" : "Random") +
-						", Inteval " + interval.value
-				);
+			displayConfigInfo: function() {
+				$(".configInfo > code.sourceInfo"  ).html(sourceMode.value == 0 ? "Image"    : "Cover");
+				$(".configInfo > code.effectInfo"  ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
+				$(".configInfo > code.playInfo"    ).html(playMode.value == 0   ? "Sequence" : "Random");
+				$(".configInfo > code.intervalInfo").html(interval.value);
 			}
 	};
 	
@@ -312,21 +357,16 @@ var slide = (function() {
 		$(window).on("keyup", image.nav).on("resize", image.resize);
 
 		// for #navDiv
-		$(".paging-first").on("click", image.first);
-		$(".delete-image").on("click", image.delete);
+		$(".delete-image").on("click", image.remove);
 		$(".popup-image" ).on("click", image.popup);
-		$(".paging-end"  ).on("click", image.end);
-		$("#currNo"      ).on("keyup", image.nav);
 		
 		// for #imageDiv
-		$("#imageDiv").on("click", image.nav).on("mousewheel DOMMouseScroll", image.nav);
+		$("#imageDiv").on("mousewheel DOMMouseScroll mousedown", image.nav);
 
 		// for #configModal
 		$("#configModal").on("hidden.bs.modal", function() {
 			console.log("#configModal hidden.bs.modal", sourceMode.value, interval.value);
 			$(".delete-image").toggle(sourceMode.value == 0);
-			image.displayInfo();
-			image.setLocalStorage();
 		});
 		$("[data-role='switch']").on('click', function() {
 			var target = $(this).attr("data-target");
@@ -336,6 +376,7 @@ var slide = (function() {
 			$("." + target).html(text);
 			$("[data-target='" + target + "']").removeClass("active-switch");
 			$(this).addClass("active-switch");
+			image.saveConfig();
 		});
 		$("input[type='range'][role='switch']").on('click', function() {
 			var value = $(this).val();
@@ -345,6 +386,7 @@ var slide = (function() {
 		$("#interval").on('click', function() {
 			var value = $(this).val();
 			$(".interval").html(value);
+			image.saveConfig();
 		});
 		$(".btn-shuffle").on("click", function() {
 			var shuffleOnce = function shuffleOnce() {
@@ -360,7 +402,6 @@ var slide = (function() {
 				if (++count > maxShuffle) {
 				 	clearInterval(shuffler);
 				 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
-				 	image.setLocalStorage();
 				}
 			}, 500);
 		});
@@ -372,7 +413,6 @@ var slide = (function() {
 		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
 		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
 		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
-		prevMode = slideSourceMode;
 
 		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
 		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
@@ -381,16 +421,11 @@ var slide = (function() {
 
 		console.log("  manipulateDom call -> image.resize");
 		image.resize();
-		console.log("  manipulateDom call -> image.nextEffect");
-		image.nextEffect();
 
 		console.log("  manipulateDom END", slideSourceMode, slideEffectMode, slidePlayMode, slidePlayInterval);
 	};
 	
 	var initModule = function() {
-
-		image.displayInfo();
-
 		$.getJSON(PATH + "/image/data.json" ,function(data) {
 			imageCount   = data['imageCount'];
 			imageNameMap = data['imageNameMap'];

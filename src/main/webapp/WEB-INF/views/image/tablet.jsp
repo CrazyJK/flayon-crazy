@@ -5,8 +5,15 @@
 <html> 
 <head>
 <meta charset="UTF-8">
-<title>Tablet</title>
+<title>Image Tablet</title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
+<style type="text/css">
+.img-card {
+	position: fixed;
+	visibility: hidden;
+	transition: unset;
+}
+</style>
 <script src="${PATH}/js/app/image/timer.engine.js"></script>
 <script src="${PATH}/js/app/image/tablet.js"></script>
 <script type="text/javascript">
@@ -23,30 +30,23 @@ $(function() {
 				<div id="progressWrapper"></div>
 			</div>
 			<div id="leftBottom">
-			  	<div id="pagingArea">
-					<span class="label label-primary paging paging-first"><span id="firstNo">0</span></span>
-					<span class="label label-primary paging"><input id="currNo" class="label-primary"/></span>
-					<span class="label label-primary paging paging-end"><span id="endNo">&nbsp;</span></span>
-			  	</div>
-			</div>
-			<div id="rightTop">
-			</div>
-			<div id="rightBottom">
-				<div id="deleteBox" class="text-right">
-					<span class="close close-o0 delete-image">&times;</span>
-				</div>
-				<div id="effectInfoBox">
-					<span class="label label-plain effectInfo" title="Next effect"></span>
+				<div class="configInfo">
+					<code class="label label-plain sourceInfo"></code>
+					<code class="label label-plain effectInfo"></code>
+					<code class="label label-plain playInfo"></code>
+					<code class="label label-plain intervalInfo"></code>
 				</div>
 			</div>
+			<div id="rightTop"></div>
+			<div id="rightBottom"></div>
 			<div id="fixedBox">
 				<img class="btn-config" src="${PATH}/img/config.png" width="20px" data-toggle="modal" data-target="#configModal"/>
+				<span class="label label-plain displayCount">&nbsp;</span>
 				<span class="label label-plain title popup-image">&nbsp;</span>
-				<span class="label label-plain configInfo">&nbsp;</span>
+				<span class="close close-o0 delete-image">&times;</span>
 			</div>
 		</div>
-		<div id="imageDiv">
-		</div>
+		<div id="imageDiv"></div>
 	</div>
 	
 	<div id="configModal" class="modal fade" role="dialog">
@@ -69,7 +69,7 @@ $(function() {
 						<tr>
 							<th>Effect</th>
 							<td class="text-center">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Fadein</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Fade</span>
 								<input type="range" role="switch" id="effectMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMode">Random</span>
 							</td>
@@ -84,7 +84,7 @@ $(function() {
 						</tr>
 						<tr>
 							<th>Play interval</th>
-							<td><input type="range" id="interval" value="10" min="5" max="20"/></td>
+							<td><input type="range" id="interval" value="10" min="1" max="20"/></td>
 						</tr>
 					</table>
 				</div>

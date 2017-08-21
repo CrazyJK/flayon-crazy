@@ -110,3 +110,6 @@ input[type='range'] {
 	background: #000;
 	color: #fff;
 }
+code {
+	margin: 2px;
+}
