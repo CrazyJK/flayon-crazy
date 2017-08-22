@@ -271,9 +271,9 @@ var slide = (function() {
 				e.preventDefault();
 				e.stopPropagation();
 				var signal = 0;
-				if (e.type === 'mousewheel') signal = mousewheel(e);
+				if (e.type === 'mousewheel' || e.type === 'DOMMouseScroll') signal = mousewheel(e);
 				else if (e.type === 'keyup') signal = e.keyCode;
-				else if (e.type === 'mousedown') signal = event.which + 1000;
+				else if (e.type === 'mousedown') signal = e.which + 1000;
 				console.log("image.nav", e.type, signal, e);
 				switch(signal) {
 					case 1 : // mousewheel : up
