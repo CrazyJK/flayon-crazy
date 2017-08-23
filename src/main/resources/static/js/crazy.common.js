@@ -325,6 +325,14 @@ function randomFont(selectedFont) {
     return selectedFont;
 }
 
+var randomColor = function(alpha) {
+	if (!alpha)
+		alpha = 1;
+	else if (alpha === 'r')
+		alpha = getRandom(0, 1);
+	return "rgba(" + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + alpha + ")";
+};
+
 function setLocalStorageItem(itemName, itemValue) {
 	if (typeof(Storage) !== "undefined") {
 		localStorage.setItem(itemName, itemValue);

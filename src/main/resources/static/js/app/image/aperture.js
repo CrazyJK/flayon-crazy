@@ -97,51 +97,42 @@ var apertureApp = (function() {
 					$(".progress").css("background-image", "linear-gradient(to bottom,#ebebeb 0,#f5f5f5 100%)");
 					$(".paging").show();
 				}
+			},
+			nav: function(signal) {
+				switch(signal) {
+				case 1 : // mousewheel : up
+				case 37: // key : left
+				case 40: // key : down
+					app.prev();
+					break;
+				case -1 : // mousewheel : down
+				case 39: // key : right
+				case 38: // key : up
+					app.next();
+					break;
+				case 32: // space
+					app.random(); 
+					break;
+				case 1001: // left click
+					app.next(); 
+					break;
+				case 1002: // middle click
+					app.random(); 
+					break;
+				case 1003: // right click
+					break;
+				}
 			}
 	};
 	
 	var addEventListener = function() {
-		$(window).on("mousewheel DOMMouseScroll", function(e) {
-			var delta = mousewheel(e);
-			if (delta > 0) 
-				app.prev();
-		    else 	
-				app.next();
-		}).on("keyup", function(e) {
-			var event = window.event || e;
-			switch (event.keyCode) {
-			case 37: // left
-			case 40: // down
-				app.prev(); break;
-			case 39: // right
-			case 38: // up
-				app.next(); break;
-			case 32: // space
-				app.random(); break;
-			case 13: // enter
-				break;
-			}
-		}).on("resize", app.resize);
-		
+		$(window).on("resize", app.resize);
+		$("#imageDiv").navEvent(app.nav);
 		$(".paging-first").on("click", app.first);
 		$(".paging-prev" ).on("click", app.prev);
 		$(".paging-next" ).on("click", app.next);
 		$(".paging-end"  ).on("click", app.end);
 		$("#imageTitle"  ).on("click", app.popup);
-		$("#imageDiv"    ).on("click", function(event) {
-			switch (event.which) {
-			case 1: // left click
-				app.next(); break;
-			case 2: // middle click
-				app.random(); break;
-			case 3: // right click
-				break;
-			}
-			event.stopImmediatePropagation();
-			event.preventDefault();
-			event.stopPropagation();
-		});
-		
 	};
 	
 	var initModule = function() {

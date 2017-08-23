@@ -266,15 +266,7 @@ var slide = (function() {
 			toggleInterval: function(sec) {
 				$("#interval").val(sec).trigger("click");
 			},
-			nav: function(e) {
-				e.stopImmediatePropagation();
-				e.preventDefault();
-				e.stopPropagation();
-				var signal = 0;
-				if (e.type === 'mousewheel' || e.type === 'DOMMouseScroll') signal = mousewheel(e);
-				else if (e.type === 'keyup') signal = e.keyCode;
-				else if (e.type === 'mousedown') signal = e.which + 1000;
-				console.log("image.nav", e.type, signal, e);
+			nav: function(signal) {
 				switch(signal) {
 					case 1 : // mousewheel : up
 					case 37: // key : left
@@ -354,15 +346,15 @@ var slide = (function() {
 	
 	var addEventListener = function() {
 
-		$(window).on("keyup", image.nav).on("resize", image.resize);
+		$(window).on("resize", image.resize);
 
 		// for #navDiv
 		$(".delete-image").on("click", image.remove);
 		$(".popup-image" ).on("click", image.popup);
 		
 		// for #imageDiv
-		$("#imageDiv").on("mousewheel DOMMouseScroll mousedown", image.nav);
-
+		$("#imageDiv").navEvent(image.nav);
+		
 		// for #configModal
 		$("#configModal").on("hidden.bs.modal", function() {
 			console.log("#configModal hidden.bs.modal", sourceMode.value, interval.value);

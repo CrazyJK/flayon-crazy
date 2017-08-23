@@ -218,13 +218,7 @@ var slide = (function() {
 				i = i || 0;
 				return sourceMode.value == 0 ? imageCount + i : coverCount + i;
 			},
-			nav: function(e) {
-				e.stopPropagation();
-				var signal = 0;
-				if (e.type === 'mousewheel') signal = mousewheel(e);
-				else if (e.type === 'keyup') signal = e.keyCode;
-				else if (e.type === 'click') signal = event.which + 1000;
-				console.log("image.nav", e.type, signal);
+			nav: function(signal) {
 				switch(signal) {
 					case 1 : // mouse : wheel up
 					case 37: // key : left
@@ -251,7 +245,7 @@ var slide = (function() {
 	
 	var addEventListener = function() {
 
-		$(window).on("keyup", image.nav).on("resize", image.resize);
+		$(window).on("resize", image.resize);
 
 		// for #navDiv
 		$(".paging-first").on("click", image.first);
@@ -261,7 +255,7 @@ var slide = (function() {
 		$("#currNo"      ).on("keyup", image.nav);
 		
 		// for #imageDiv
-		$("#imageDiv").on("click", image.nav).on("mousewheel DOMMouseScroll", image.nav);
+		$("#imageDiv").navEvent(image.nav);
 
 		// for #configModal
 		$("#configModal").on("hidden.bs.modal", function() {

@@ -101,9 +101,9 @@ bgContinue = false;
 		var slidesjs;
 
 		var addEventListener = function() {
-			$(window).off().on("mousewheel DOMMouseScroll keyup", event.nav).on("resize", event.resize);
-			$("#slides").off().on("mousedown", event.nav);
-			$(".slidesjs-control").on("click", event.nav);
+			$(window).on("resize", event.resize);
+//			$("#slides").off().on("mousedown", event.nav);
+			$(".slidesjs-control").navEvent(event.nav);
 			$(".slidesjs-play").on('click', event.play);
 			$(".slidesjs-stop").on('click', event.stop);
 			$(".label-title").on("click", event.popup);
@@ -111,11 +111,8 @@ bgContinue = false;
 		};
 		
 		var event = {
-			nav: function(e) {
-				var delta = mousewheel(e);
-				var which = mouseClick(e);
-				var signal = delta || e.keyCode || which;
-				console.log("SlidejsApp.enable", delta, e.keyCode, which, " = " + signal);
+			nav: function(signal) {
+				console.log("slidesWrapper.event.nav", signal);
 				switch(signal) {
 					case 1 : // mouse : wheel up
 					case 37: // key : left
