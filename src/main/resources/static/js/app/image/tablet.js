@@ -80,8 +80,8 @@ var slide = (function() {
 				// 새로운 마지막 이미지 설정
 				var $imageDivChildren = $("#imageDiv").children();
 				if ($imageDivChildren.length > 0) {
-					data = $imageDivChildren.last().data("data");
-					$(".title").html(data.title);
+					var data = $imageDivChildren.last().data("data");
+					$(".title").html(data.title).data("data", data);
 					$(".displayCount").html($("#imageDiv").children().length);
 				}
 				else {
@@ -221,18 +221,16 @@ var slide = (function() {
 				console.log("    shuffleImage");
 			},
 			remove: function(willDelete) {
-				console.log("    delete");
+				console.log("delete", willDelete);
 				var data = $(".title").data("data");
-				if (data && data.mode == 0) { // image
-					var imgSrc = data.src;
-					if (confirm('remove this image?\n' + imgSrc + "\n" + data.title)) {
+				if (confirm('remove this image?\n' + data.src + "\n" + data.title)) {
+					if (data && data.mode == 0) { // image
 						if (willDelete)
-							actionFrame(imgSrc, {}, "DELETE", "this image delete");
-						$("img[src='" + data.src + "']").remove();
-						$(".displayCount").html($("#imageDiv").children().length);
-						$(".title").html("&nbsp;");
-						console.log("    delete call -> image.next");
+							actionFrame(data.src, {}, "DELETE", "this image delete");
 					}
+					$("img[src='" + data.src + "']").remove();
+					$(".displayCount").html($("#imageDiv").children().length);
+					$(".title").html("&nbsp;");
 				}
 			},
 			popup: function(e) {

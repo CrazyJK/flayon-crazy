@@ -79,7 +79,7 @@
 				self.off().on("contextmenu", function(e) {
 					detectEvent(e, callback);
 				});
-			$(window).off().on("keyup", function(e) {
+			$(window).on("keyup", function(e) {
 				detectEvent(e, callback);
 			});
 		});

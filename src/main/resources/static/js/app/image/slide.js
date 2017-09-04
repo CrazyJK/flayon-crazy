@@ -191,6 +191,8 @@ var slide = (function() {
 			},
 			displayThumbnail: function fnDisplayThumbnail() {
 				console.log("    displayThumbnail START", currentIndex);
+				if (currentIndex < 0)
+					return;
 				$("#thumbnailUL").empty();
 				var itemCount = image.maxCount();
 				var thumbnailRange = parseInt($(window).width() / (150 * 2));
@@ -201,7 +203,7 @@ var slide = (function() {
 					if (thumbNo >= itemCount)
 						thumbNo = thumbNo - itemCount;
 					var itemUrl = sourceMode.value == 0 ? PATH + "/image/" + thumbNo : PATH + "/video/" + coverMap[thumbNo] + "/cover";
-					//console.log("      displayThumbnail", itemUrl, thumbNo);
+					console.log("      displayThumbnail", itemUrl, thumbNo);
 					$("<li>").append(
 							$("<div>")
 								.addClass("img-thumbnail " + (thumbNo == currentIndex ? "active" : ""))

@@ -253,7 +253,7 @@ function ping() {
 				else {
 					if (data.noti.length > 0) {
 //						$(".noti").html(data.noti).show().fadeOut(pingInterval);
-						$(".noti").html(data.noti).show().hide("highlight", {color: "#ffff99"}, pingInterval);
+						$(".noti").html(data.noti).show().hide("highlight", {color: "#ff0000"}, pingInterval);
 						console.log("ping : ", data.noti);
 					}
 				}
@@ -487,7 +487,7 @@ function propagateTheme() {
 
  	<nav id="deco_nav">
 		<ul class="nav nav-pills">
-			<li><a class="noti text-danger"></a></li>
+			<li><a class="noti"></a></li>
 			<li><a href="${PATH}/video"        		      ><s:message code="video.front"           /></a></li>
 			<li id="backMenu"><a onclick="toogleBody()"   ><s:message code="video.background.title"/></a></li>
 			<li><a href="${PATH}/video/main"      	      ><s:message code="video.main"            /></a></li>
