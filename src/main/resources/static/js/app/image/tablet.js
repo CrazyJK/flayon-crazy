@@ -81,7 +81,7 @@ var slide = (function() {
 				if ($imageDivChildren.length > 0) {
 					var data = $imageDivChildren.last().addClass("img-card-focus").randomBG(0.5).data("data");
 					$(".title").html(data.title).data("data", data);
-					$(".displayCount").html($("#imageDiv").children().length);
+					$(".displayCount").html($("#imageDiv").children().length + " / " + (mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 				}
 				else {
 					$(".title").html("&nbsp;").data("data", {});
@@ -160,7 +160,7 @@ var slide = (function() {
 						"arrayIndex": (sourceMode.value == 0 ? imageIndex : coverIndex),
 						"width": preloader.width,
 						"height": preloader.height
-					}).on("click", function() {
+					}).on("mousedown", function() {
 						var data = $(this).data("data");
 						$(".title").html(data.title).data("data", data);
 						$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
@@ -170,7 +170,7 @@ var slide = (function() {
 					).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration);
 
 					$(".title").html(selectedItemTitle).data("data", $image.data("data"));
-					$(".displayCount").html($("#imageDiv").children().length);
+					$(".displayCount").html($("#imageDiv").children().length + " / " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
 					
 					console.log("    next", selectedItemUrl, selectedItemTitle);
 				};
@@ -225,7 +225,7 @@ var slide = (function() {
 							actionFrame(data.src, {}, "DELETE", "this image delete");
 					}
 					$("img[src='" + data.src + "']").remove();
-					$(".displayCount").html($("#imageDiv").children().length);
+					$(".displayCount").html($("#imageDiv").children().length + " / " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 					$(".title").html("&nbsp;");
 				}
 			},
