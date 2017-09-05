@@ -13,6 +13,17 @@
 	visibility: hidden;
 	transition: unset;
 }
+.img-card-focus {
+	padding: 0px;
+	border: 1px solid #337ab7;
+}
+.ui-draggable-dragging {
+	box-shadow: 
+		-3px -3px 3px 3px rgba(255, 0, 0, 0.5), 
+		 3px -3px 3px 3px rgba(0, 255, 0, 0.5), 
+		 3px  3px 3px 3px rgba(0, 0, 255, 0.5), 
+		-3px  3px 3px 3px rgba(255, 255, 0, 0.5);
+}
 </style>
 <script src="${PATH}/js/app/image/timer.engine.js"></script>
 <script src="${PATH}/js/app/image/tablet.js"></script>

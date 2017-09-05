@@ -67,13 +67,19 @@ bgContinue = false;
 					$("[data-target='" + target + "']").removeClass("active-switch");
 					$(this).addClass("active-switch");
 				});
-				$("input[type='range'][role='switch']").on('click', function() {
+				$("input[type='range'][role='switch']").on('click keyup', function(e) {
 					var value = $(this).val();
 					var target = $(this).attr("id");
 					$("[data-target='" + target + "'][data-value='" + value + "']").click();
+					e.stopImmediatePropagation();
+					e.preventDefault();
+					e.stopPropagation();
 				});
-				$("#interval").on('click', function() {
+				$("#interval").on('click keyup', function(e) {
 					$(".interval").html($(this).val());
+					e.stopImmediatePropagation();
+					e.preventDefault();
+					e.stopPropagation();
 				});
 				$("#configModal").on("hidden.bs.modal", function() {
 					setLocalStorageItem(SLIDESJS_SOURCE_MODE,   sourceMode.value);

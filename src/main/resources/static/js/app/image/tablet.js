@@ -20,7 +20,6 @@ var slide = (function() {
 	var coverNameMap      = [];
 	var coverIndexMap     = [];
 	var showEffect, showDuration, showOptions;
-	var zIndex = 0;
 
 	var image = {
 			saveConfig: function() {
@@ -80,7 +79,7 @@ var slide = (function() {
 				// 새로운 마지막 이미지 설정
 				var $imageDivChildren = $("#imageDiv").children();
 				if ($imageDivChildren.length > 0) {
-					var data = $imageDivChildren.last().data("data");
+					var data = $imageDivChildren.last().addClass("img-card-focus").randomBG(0.5).data("data");
 					$(".title").html(data.title).data("data", data);
 					$(".displayCount").html($("#imageDiv").children().length);
 				}
@@ -131,7 +130,7 @@ var slide = (function() {
 				
 				image.setEffect();
 				
-				// FIFO 오래된 미미지 지우기. 성능 때문에
+				// FIFO 오래된 이미지 지우기. 성능 때문에
 				var IMAGE_DISPLAY_LIMIT = 30;
 				var currentImageCount = $("#imageDiv").children().length;
 				var diffCount = currentImageCount - IMAGE_DISPLAY_LIMIT + 1;
@@ -142,16 +141,18 @@ var slide = (function() {
 				}
 				
 				// 기존 이미지의 테두리 초기화
-				$("#imageDiv").children().each(function() {$(this).css({backgroundColor: "#fff"});});
+				$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
 				
 				var preloader = new Image();
 				preloader.onload = function() {
 					var $image = $("<img>", {
 						src: preloader.src,
-						"class": "img-thumbnail img-card" 
+						"class": "img-thumbnail img-card img-card-focus" 
 					}).css(
 						image.refactorImageInfo($("#imageDiv").width(), $("#imageDiv").height(), preloader.width, preloader.height, 0, $("#imageDiv").offset().top)	
-					).data("data", {
+					).css({
+						visibility: "visible"
+					}).data("data", {
 						"src": preloader.src,
 						"mode": parseInt(sourceMode.value),
 						"title": selectedItemTitle,
@@ -162,14 +163,11 @@ var slide = (function() {
 					}).on("click", function() {
 						var data = $(this).data("data");
 						$(".title").html(data.title).data("data", data);
-						$("#imageDiv").children().each(function() {$(this).css({backgroundColor: "#fff"});});
-						$(this).css({zIndex: ++zIndex}).randomBG(0.5);
+						$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
+						$(this).addClass("img-card-focus").randomBG(0.5).appendTo($("#imageDiv"));
 					}).appendTo(
 							$("#imageDiv")
-					).css({
-						visibility: "visible",
-						zIndex: ++zIndex
-					}).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration);
+					).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration);
 
 					$(".title").html(selectedItemTitle).data("data", $image.data("data"));
 					$(".displayCount").html($("#imageDiv").children().length);
@@ -182,7 +180,6 @@ var slide = (function() {
 				$("#imageDiv").empty();
 				$(".displayCount").html("&nbsp;");
 				$(".title").html("&nbsp;").data("data", {});
-				zIndex = 0;
 				console.log("    clear");
 			},
 			refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop) {
@@ -198,7 +195,6 @@ var slide = (function() {
 					imgWidth = divWidth;
 					imgHeight = Math.floor(imgWidth * originalHeight / originalWidth);
 				}
-
 				if (divHeight > imgHeight) { // 이미지가 작으면
 					imgTop += getRandomInteger(0, divHeight - imgHeight);
 				}
@@ -250,7 +246,7 @@ var slide = (function() {
 			},
 			resize: function() {
 				console.log("    resize");
-				$("#imageDiv").height($(window).height() - 35);
+				$("#imageDiv").height($(window).height() - 30);
 			},
 			toggleSourceMode: function() {
 				$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
@@ -368,15 +364,22 @@ var slide = (function() {
 			$(this).addClass("active-switch");
 			image.saveConfig();
 		});
-		$("input[type='range'][role='switch']").on('click', function() {
+		$("input[type='range'][role='switch']").on('click keyup', function(e) {
+			console.log("input range", e);
 			var value = $(this).val();
 			var target = $(this).attr("id");
 			$("[data-target='" + target + "'][data-value='" + value + "']").click();
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			e.stopPropagation();
 		});
-		$("#interval").on('click', function() {
+		$("#interval").on('click keyup', function(e) {
 			var value = $(this).val();
 			$(".interval").html(value);
 			image.saveConfig();
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			e.stopPropagation();
 		});
 		$(".btn-shuffle").on("click", function() {
 			var shuffleOnce = function shuffleOnce() {
@@ -395,6 +398,9 @@ var slide = (function() {
 				}
 			}, 500);
 		});
+		$(".configInfo > code.sourceInfo"  ).on("click", image.toggleSourceMode);
+		$(".configInfo > code.effectInfo"  ).on("click", image.toggleEffect);
+		$(".configInfo > code.playInfo"    ).on("click", image.togglePlayMode);
 	};
 	
 	var manipulateDom = function() {
@@ -439,7 +445,6 @@ var slide = (function() {
 				if (coverIndex < 0 || coverIndex >= coverCount)
 					coverIndex = getRandomInteger(0, coverCount-1);
 			}
-			
 			console.log("initModule", "getJSON", imageIndex, '/', imageCount, coverIndex, '/', coverCount);
 
 			// play engine

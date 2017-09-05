@@ -129,7 +129,7 @@ var slide = (function() {
 					}).show(showEffect, showOptions, showDuration, image.nextEffect);
 
 					console.log("    view call -> image.displayThumbnail");
-					image.displayThumbnail();
+					image.resize();
 				});
 				
 				console.log("    view END", currentIndex, selectedItemUrl, selectedItemTitle);
