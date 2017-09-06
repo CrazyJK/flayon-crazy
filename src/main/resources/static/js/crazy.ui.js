@@ -72,11 +72,12 @@
 
 		return this.each(function() {
 			var self = $(this);
-			self.off().on("mousewheel DOMMouseScroll mouseup", function(e) {
+			self.off();
+			self.on("mousewheel DOMMouseScroll mouseup", function(e) {
 				detectEvent(e, callback);
 			});
 			if (browser === FIREFOX)
-				self.off().on("contextmenu", function(e) {
+				self.on("contextmenu", function(e) {
 					detectEvent(e, callback);
 				});
 			$(window).on("keyup", function(e) {

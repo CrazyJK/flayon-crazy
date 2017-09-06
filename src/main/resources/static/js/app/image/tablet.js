@@ -99,12 +99,12 @@ var slide = (function() {
 					else { // random
 						imageIndex = getRandomInteger(0, imageIndexMap.length -1);
 					}
-					currentIndex = imageIndexMap.splice(imageIndex, 1)[0];
-					console.log("    next imageIndex", imageIndex, "currentIndex", currentIndex);
 					if (imageIndexMap.length == 0) {
-						showSnackbar("cover all shown");
+						showSnackbar("image all shown");
 						return;
 					}
+					currentIndex = imageIndexMap.splice(imageIndex, 1)[0];
+					console.log("    next imageIndex", imageIndex, "currentIndex", currentIndex);
 					selectedItemUrl = PATH + "/image/" + currentIndex;
 					selectedItemTitle = imageNameMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
@@ -117,12 +117,12 @@ var slide = (function() {
 					else { // random
 						coverIndex = getRandomInteger(0, coverIndexMap.length -1);
 					}
-					currentIndex = coverIndexMap.splice(coverIndex, 1)[0];
-					console.log("    next coverIndex", coverIndex, "currentIndex", currentIndex);
 					if (coverIndexMap.length == 0) {
-						showSnackbar("image all shown");
+						showSnackbar("cover all shown");
 						return;
 					}
+					currentIndex = coverIndexMap.splice(coverIndex, 1)[0];
+					console.log("    next coverIndex", coverIndex, "currentIndex", currentIndex);
 					selectedItemUrl = PATH + "/video/" + coverNameMap[currentIndex] + "/cover";
 					selectedItemTitle = coverNameMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
