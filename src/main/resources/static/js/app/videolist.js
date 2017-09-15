@@ -230,7 +230,7 @@ var videoList = (function() {
 
 		if (entryIndex == videoList.length) { // 전부 보여주었으면
 			lastPage = true;
-			$("#viewMore").html('End of Video').addClass("disabled").off("click");
+			$("#viewMore").html('End of Video').addClass("disabled").off("click").hide();
 			$(".more").height(400);
 		}
 		

@@ -195,17 +195,10 @@ function fnViewBGImage() {
 		</div>
 		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/crazy.ui.slide.js"/>"></script>
 		<script type="text/javascript">
 			$("#slides").slideview();
 		</script>
-		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'V'}">
-		<div class="jumbotron">
-			<h1 class="text-center">
-				No supported View
-			</h1>
-		</div>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'L'}">
 		<div id="video-slide-wrapper">
@@ -230,7 +223,7 @@ function fnViewBGImage() {
 			<div id="video_slide_bar" class="text-center"></div>
 		</div>
 		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
-		<script type="text/javascript" src="<c:url value="/js/jquery.crazy.large.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/crazy.ui.large.js"/>"></script>
 		<script type="text/javascript">
 			$("#slides").largeview();
 		</script>
@@ -262,17 +255,17 @@ function fnViewBGImage() {
 			</div>
 			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-			<script type="text/javascript" src="<c:url value="/js/jquery.crazy.slide.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/crazy.ui.slide.js"/>"></script>
 			<script type="text/javascript">
 				$("#slides").slideview({width:800, height:750});
 			</script>
 		</c:when>
 		<c:otherwise>
-		<ol>
-			<c:forEach items="${videoList}" var="video">
-			<li>${video.studio.name} ${video.opus} ${video.title} 
-			</c:forEach>
-		</ol>		
+	        <div class="jumbotron">
+	            <h1 class="text-center">
+	                Not supported View
+	            </h1>
+	        </div>
 		</c:otherwise>
 	</c:choose>
 	</div>
