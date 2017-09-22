@@ -58,7 +58,7 @@ function Video(idx, data) {
 	this.label_actress         = function() {
 		var elements = [];
 		$.each(data.actressList, function(index, actress) {
-			if (index > 0) elements.push("&nbsp;");
+			index > 0 && elements.push("&nbsp;");
 			elements.push(VideoUtils.wrapLabel(actress.name, '', "fnViewActressDetail('" + actress.name + "')", actress.favorite ? "favorite" : ""));
 		});
 		return elements;
@@ -66,7 +66,7 @@ function Video(idx, data) {
 	this.label_videoCandidates = function() {
 		var elements = [];
 		$.each(data.videoCandidates, function(index, candidate) {
-			if (index > 0) elements.push("&nbsp;");
+			index > 0 && elements.push("&nbsp;");
 			elements.push(
 					$("<span>", {
 						opus: data.opus, title: candidate, "class": "nowrap btn btn-xs btn-primary"
@@ -85,7 +85,7 @@ function Video(idx, data) {
 	this.label_torrentSeed = function() {
 		var elements = [];
 		$.each(data.torrents, function(index, torrent) {
-			if (index > 0) elements.push("&nbsp;");
+			index > 0 && elements.push("&nbsp;");
 			elements.push(
 					$("<span>", {
 						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
@@ -113,16 +113,16 @@ function Video(idx, data) {
 var VideoUtils = {
 		getFilename: function(file) {
 			var lastIndex = file.lastIndexOf("\\");
-			if (lastIndex < 0) lastIndex = file.lastIndexOf("/");
+			lastIndex < 0 && (lastIndex = file.lastIndexOf("/"));
 			return file.substring(lastIndex + 1, file.length);
 		},
 		wrapLabel: function(html, title, onclick, extClass, extCss, extAttr) {
 			var $span = $("<span>").addClass("label label-plain").html(html);
-			if (title    && title    != '')	$span.attr("title", title);
-			if (onclick  && onclick  != '')	$span.attr("onclick", onclick);
-			if (extClass && extClass != '')	$span.addClass(extClass);
-			if (extCss   && extCss   != '')	$span.css(extCss);
-			if (extAttr  && extAttr  != '')	$span.attr(extAttr);
+			title    && title    != '' && $span.attr("title", title);
+			onclick  && onclick  != '' && $span.attr("onclick", onclick);
+			extClass && extClass != '' && $span.addClass(extClass);
+			extCss   && extCss   != '' && $span.css(extCss);
+			extAttr  && extAttr  != '' && $span.attr(extAttr);
 			return $span.clone().wrapAll("<div/>").parent().html();
 		}
 };

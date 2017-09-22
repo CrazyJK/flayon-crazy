@@ -15,6 +15,7 @@
         root.lightboxApp = factory(root.jQuery);
     }
 }(this, function ($) {
+	
 	function LightboxApp() {
 		this.imagepath = PATH + '/image/';
 		this.imageCount;

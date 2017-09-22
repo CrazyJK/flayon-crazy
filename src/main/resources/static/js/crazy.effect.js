@@ -43,33 +43,23 @@
 	};
 
 	// Random effect using by jquery-ui
-	$.fn.jkEffect = function(options) {
-		var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
-		
-		var opts = $.extend({}, $.fn.jkEffect.defaults, options);
-		//console.log(this);
+	$.fn.jkEffect = function(options, callback) {
+		var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"],
+			opts = $.extend({}, $.fn.jkEffect.defaults, options);
 		return this.each(function() {
-			var selectedEffect;
-			var options = {};
-			if (opts.effect === "") {
-				selectedEffect = effects[getRandomInteger(0, effects.length)];
-			} else {
-				selectedEffect = opts.effect;
-			}
-			if (selectedEffect === "scale") {
-				options = { percent: opts.scale };
-			} else if (selectedEffect === "size") {
-				options = { to: opts.size };
-			}
-			//console.log("effect", this, selectedEffect, options);
-			$(this).hide().show(selectedEffect, options, 1000);
+			var selectedEffect, options = {};
+			opts.effect === "" ? (selectedEffect = effects[getRandomInteger(0, effects.length)]) : (selectedEffect = opts.effect);
+			selectedEffect === "scale" && (options = { percent: opts.scale });
+			selectedEffect === "size"  && (options = { to: opts.size });
+			$(this).hide().show(selectedEffect, options, opts.duration, callback);
 		});
 	};
 	
 	$.fn.jkEffect.defaults = {
 		effect : "",
 		scale : 50,
-		size : { width: 280, height: 185 }
+		size : { width: 280, height: 185 },
+		duration: 1000
 	};
 
 })(jQuery);

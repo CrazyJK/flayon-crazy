@@ -4,24 +4,25 @@
 
 var slide = (function() {
 
-	var SLIDE_SOURCE_MODE   = "slide.source.mode";
-	var SLIDE_EFFECT_MODE   = "slide.effect.mode";
-	var SLIDE_PLAY_MODE     = "slide.play.mode";
-	var SLIDE_PLAY_INTERVAL = "slide.play.interval";
-
-	var selectedItemUrl   = "";
-	var selectedItemTitle = "";
-	var imageIndex        = 0;
-	var imageCount        = 0;
-	var imageNameMap      = [];
-	var imageIndexMap     = [];
-	var coverIndex        = 0;
-	var coverCount        = 0;
-	var coverNameMap      = [];
-	var coverIndexMap     = [];
-	var showEffect, showDuration, showOptions;
-
-	var image = {
+	var SLIDE_SOURCE_MODE   = "slide.source.mode",
+		SLIDE_EFFECT_MODE   = "slide.effect.mode",
+		SLIDE_PLAY_MODE     = "slide.play.mode",
+		SLIDE_PLAY_INTERVAL = "slide.play.interval",
+		selectedItemUrl   = "",
+		selectedItemTitle = "",
+		imageIndex        = 0,
+		imageCount        = 0,
+		imageNameMap      = [],
+		imageIndexMap     = [],
+		coverIndex        = 0,
+		coverCount        = 0,
+		coverNameMap      = [],
+		coverIndexMap     = [],
+		showEffect, showDuration, showOptions,
+		/**
+		 * main
+		 */
+		image = {
 			saveConfig: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
 				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
@@ -336,9 +337,11 @@ var slide = (function() {
 				$(".configInfo > code.playInfo"    ).html(playMode.value == 0   ? "Sequence" : "Random");
 				$(".configInfo > code.intervalInfo").html(interval.value);
 			}
-	};
-	
-	var addEventListener = function() {
+	},
+	/**
+	 * add event listener
+	 */
+	addEventListener = function() {
 
 		$(window).on("resize", image.resize);
 
@@ -401,9 +404,11 @@ var slide = (function() {
 		$(".configInfo > code.sourceInfo"  ).on("click", image.toggleSourceMode);
 		$(".configInfo > code.effectInfo"  ).on("click", image.toggleEffect);
 		$(".configInfo > code.playInfo"    ).on("click", image.togglePlayMode);
-	};
-	
-	var manipulateDom = function() {
+	},
+	/**
+	 * manipulate dom element
+	 */
+	manipulateDom = function() {
 		console.log("  manipulateDom START");
 		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
 		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
@@ -419,9 +424,11 @@ var slide = (function() {
 		image.resize();
 
 		console.log("  manipulateDom END", slideSourceMode, slideEffectMode, slidePlayMode, slidePlayInterval);
-	};
-	
-	var initModule = function() {
+	},
+	/**
+	 * initiate moudle
+	 */
+	initModule = function() {
 		$.getJSON(PATH + "/image/data.json" ,function(data) {
 			imageCount   = data['imageCount'];
 			imageNameMap = data['imageNameMap'];
@@ -451,9 +458,11 @@ var slide = (function() {
 			timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
 			image.next();
 		});
-	};
-	
-	var init = function() {
+	},
+	/**
+	 * initiate
+	 */
+	init = function() {
 		console.log("init START");
 		
 		console.log("init call -> addEventListener");
@@ -467,7 +476,7 @@ var slide = (function() {
 		
 		console.log("init END");
 	};
-	
+
 	return {
 		init: init
 	};

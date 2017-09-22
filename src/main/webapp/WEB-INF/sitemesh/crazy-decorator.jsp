@@ -34,28 +34,28 @@
 <script type="text/javascript" src="${PATH}/js/crazy.ui.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/zeroclipboard/ZeroClipboard.js"></script>
 <script type="text/javascript">
-var PATH      = '${PATH}';
-var videoPath = '${PATH}/video';
-var imagePath = '${PATH}/image';
-var locationPathname = window.location.pathname;
-var currBGImageNo = 0;
-var bgImageCount = parseInt('${bgImageCount}');
-var bgContinue = true;	/** content_div에 이미지를 보여줄지 여부 */
-var urlSearchVideo   = '${urlSearchVideo}';
-var urlSearchActress = '${urlSearchActress}';
-var urlSearchTorrent = '${urlSearchTorrent}';
-var tSec = 1;
-var timer;
-var bgChangeInterval = 60;
-var bgImageChanger;
-var listViewType;
-var windowWidth = 0;
-var windowHeight = 0;
-var pingInterval = 5000;
-var themeSwitch = getLocalStorageItem(CRAZY_DECORATOR_THEME,  'normal');
-var bgToggle = 0;
-var isLoadedSearchPage = false;
-var loadingText = 'Loading...';
+var PATH      = '${PATH}',
+    videoPath = '${PATH}/video',
+    imagePath = '${PATH}/image',
+    locationPathname = window.location.pathname,
+    currBGImageNo = 0,
+    bgImageCount = parseInt('${bgImageCount}'),
+    bgContinue = true,	/** content_div에 이미지를 보여줄지 여부 */
+    urlSearchVideo   = '${urlSearchVideo}',
+    urlSearchActress = '${urlSearchActress}',
+    urlSearchTorrent = '${urlSearchTorrent}',
+    tSec = 1,
+    timer,
+    bgChangeInterval = 60,
+    bgImageChanger,
+    listViewType,
+    windowWidth = 0,
+    windowHeight = 0,
+    pingInterval = 5000,
+    themeSwitch = getLocalStorageItem(CRAZY_DECORATOR_THEME,  'normal'),
+    bgToggle = 0,
+    isLoadedSearchPage = false,
+    loadingText = 'Loading...';
 
 window.onerror = function (e) {
 	console.log('Error: ', e);
@@ -105,7 +105,7 @@ var crazy_listener = (function() {
 			setBackgroundImage();
 			bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 			console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
-		});
+		}).val(bgChangeInterval).trigger("keyup");
 	};
 	
 	var checkbox = function() {

@@ -2,12 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<security:authorize access="isAuthenticated()" var="isAuth"/>
+<c:if test="${isAuth}">
+    <security:authentication property="principal.username" var="username"/>
+</c:if>
 <html>
 <head>
 <title><s:message code="default.home"/></title>
 <style type="text/css">
 body {
-	background: transparent url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center;
+    /* background: #000 url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center; */
+    background: url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center, url("<c:url value="/img/bg/chalk-bg.png"/>");
  	transition: background .5s linear;
  	overflow: hidden;
 }
@@ -20,7 +25,7 @@ div.jumbotron {
 	background-size: cover;
 	margin: 15px auto;
     padding: 10px;
-	width: 650px;
+	width: 750px;
 	min-height: 260px;
     color: #f0f0f0;
     line-height: 1.40em;
@@ -41,8 +46,6 @@ div.modal-dialog {
     margin-top: 380px;
 }
 div.modal-content {
-/*	background: transparent url("<c:url value="/img/bg/chalk-bg.png"/>") repeat center top;
-	background-size: cover; */
  	background-color: rgba(0, 0, 0, 0);
     color: #eee;
 }
@@ -105,6 +108,11 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 .timer-delimiter {
 	color: #eee;
 }
+.life-timer-on {
+    border-radius: 4px;
+    background: #111;
+    color: #eee;   
+}
 </style>
 </head>
 <body>
@@ -137,9 +145,6 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 					<a class="close" data-dismiss="modal">&times;</a>
 					<h3 class="modal-title">
 						<b id="login-welcome">Welcome to FlayOn</b>
-						<c:if test="${null ne param.error}">
-							<span id="error" class="text-danger">${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</span>
-						</c:if>
 					</h3>
 				</div>
 				<div class="modal-body">
@@ -175,96 +180,92 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	</div>
 
 <script type="text/javascript">
-var isLogin = false;
-var username = "";
-<security:authorize access="isAuthenticated()">
-	isLogin = true;
-	username = '<security:authentication property="principal.username"/>';
-</security:authorize>
+var isLogin = ${isAuth},
+    username = '${username}',
+    DEADLINE = 'Apr 28 2031 00:00:00 GMT+0900',
+    WORDING1 = '<s:message code="home.favorites.wording1"/>',
+    WORDING2 = '<s:message code="home.favorites.wording2"/>',
+    showTimer = function() {
+	    var SECOND = 1000,
+	        MINUTE = SECOND * 60, // 1000 * 60
+	        HOUR   = MINUTE * 60, // 1000 * 60 * 60
+	        DAY    = HOUR   * 24, // 1000 * 60 * 60 * 24
+	        countDownDate = new Date(DEADLINE).getTime(),
+	        lifeTimer = setInterval(function() {
+		        var now = new Date().getTime(),
+		            timeRemaining = countDownDate - now;
+		        if (timeRemaining < 0) {
+		            clearInterval(lifeTimer);
+		            $(".life-timer").html("EXPIRED!!!").effect("puff", {}, 1000);
+		            return;
+		        }
+		        
+		        var days    = Math.floor(timeRemaining / DAY),
+		            hours   = Math.floor(timeRemaining % DAY / HOUR),
+		            minutes = Math.floor(timeRemaining % HOUR / MINUTE),
+		            seconds = Math.floor(timeRemaining % MINUTE / SECOND);
+		        if (seconds == 0) {
+		            setFonts();
+		            $(".life-timer").jkEffect({duration: 500});
+		        }
+		        
+		        $(   ".day-timer").html(days);
+		        $(  ".hour-timer").html(hours);
+		        $(".minute-timer").html(minutes);
+		        $(".second-timer").html(seconds);
+		    }, 1000);
 
+            $(".life-timer > div").attr({"title": DEADLINE.substr(0, 11)}).tooltip({
+	            position: {at: "center"},
+	            classes: {"ui-tooltip": "life-timer-on"}
+	        });
+
+	},
+    setFonts = function() {
+	    !isLogin && $("#headerNav").css({fontFamily: randomFont()});
+	    $("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
+	        $(this).css({fontFamily: randomFont()});
+	    });
+	},
+	viewLoginForm = function() {
+	    $("#aperture").aperture({
+	        src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
+	        duration: "3s",
+	        baseColor: "rgba(0,0,0,0.1)",
+	        color: "rgba(0,0,0,0.5)",
+	        backgroundColor: "transparent",
+	        width: "150px",
+	        outerRadius: "0"
+	    });
+	    $("#loginModal").modal();
+	};
+
+setFonts();
 
 $(document).ready(function() {
-
-	setFonts();
-
-	showTimer();
-	
-	$(".jumbotron").draggable();
-
-	setTimeout(function() {
-		
-		$("#hello").html("FlayOn");
-		if (isLogin)
-			$("#name").html(username);
-		$("h1").show('scale');
-		
-		$("#wording").typed({
-		    strings: ["<s:message code="home.favorites.wording1"/><br/><s:message code="home.favorites.wording2"/>"],
-		    //stringsElement: $('#wordings'),
-		    typeSpeed: getRandomInteger(10, 50),
-		    backDelay: 500,
-		    loop: false,
-		    contentType: 'html', // or text
-		    // defaults to false for infinite loop
-		    loopCount: false,
-		    callback: function() {
-		    	$("#wording").next(".typed-cursor").hide();
-		    }
-		});
-
-	}, 1000);
-
+    showTimer();
+    $(".jumbotron").draggable();
 });
 
-function viewLoginForm() {
-	$("#aperture").aperture({
-		src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
-		duration: "3s",
-		baseColor: "rgba(0,0,0,0.1)",
-		color: "rgba(0,0,0,0.5)",
-		backgroundColor: "transparent",
-		width: "150px",
-		outerRadius: "0"
+$(window).load(function() {
+	$("#hello").html("FlayOn");
+	isLogin && $("#name").html(username);
+    $("h1").jkEffect();
+	$("#wording").typed({
+        strings: [WORDING1 + "<br/>" + WORDING2],
+	    //stringsElement: $('#wordings'),
+	    typeSpeed: getRandomInteger(10, 50),
+	    backDelay: 500,
+	    loop: false,
+	    contentType: 'html', // or text
+	    // defaults to false for infinite loop
+	    loopCount: false,
+	    callback: function() {
+	    	$("#wording").next(".typed-cursor").hide();
+	    }
 	});
-	$("#loginModal").modal();
-}
+});
 
-function showTimer() {
-	var countDownDate = new Date("Apr 28 2031 00:00:00 GMT+0900").getTime();
-
-	var lifeTimer = setInterval(function() {
-		var now = new Date().getTime();
-		var distance = countDownDate - now;
-		
-		var days    = Math.floor(distance / (1000 * 60 * 60 * 24));
-		var hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-		
-		if (seconds == 0) {
-			setFonts();
-			$(".life-timer").effect("fade", {}, 300);
-		}
-		
-		$(".day-timer").html(days);
-		$(".hour-timer").html(hours);
-		$(".minute-timer").html(minutes);
-		$(".second-timer").html(seconds);
-		
-		if (distance < 0) {
-		 	clearInterval(lifeTimer);
-		 	$(".life-timer").html("EXPIRED");
-		}
-	}, 1000);
-}
-
-function setFonts() {
-	if (!isLogin)
-		$("#headerNav").css({fontFamily: randomFont()});
-	$("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
-		$(this).css({fontFamily: randomFont()});
-	});
-}
 </script>
 </body>
 </html>

@@ -53,7 +53,7 @@
 			case  105 : // key : keypad 9 
 		 */
 		var detectEvent = function(e, method) {
-			var signal = 0;
+		/*	var signal = 0;
 			if (e.type === 'mousewheel' || e.type === 'DOMMouseScroll') 
 				signal = mousewheel(e);
 			else if (e.type === 'keyup') 
@@ -66,20 +66,26 @@
 			e.stopImmediatePropagation();
 			e.preventDefault();
 			e.stopPropagation();
-			
-			method(signal);
+			method(signal); */
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			e.stopPropagation();
+			method(
+				(e.type === 'mousewheel' || e.type === 'DOMMouseScroll') ? mousewheel(e) :
+					(e.type === 'keyup') ? e.keyCode :
+						(e.type === 'mousedown' || e.type === 'mouseup') ? e.which + 1000 :
+							(e.type === 'contextmenu') ? 1003 : 0
+			);
 		};
 
 		return this.each(function() {
 			var self = $(this);
-			self.off();
-			self.on("mousewheel DOMMouseScroll mouseup", function(e) {
+			self.off().on("mousewheel DOMMouseScroll mouseup", function(e) {
 				detectEvent(e, callback);
 			});
-			if (browser === FIREFOX)
-				self.on("contextmenu", function(e) {
+			browser === FIREFOX && self.on("contextmenu", function(e) {
 					detectEvent(e, callback);
-				});
+			});
 			$(window).on("keyup", function(e) {
 				detectEvent(e, callback);
 			});

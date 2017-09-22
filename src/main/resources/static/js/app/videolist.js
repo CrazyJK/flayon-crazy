@@ -347,35 +347,38 @@ var videoList = (function() {
 		// view more btn
 		$("#viewMore").on("click", render);
 
-		$(window).on("resize", function() {
-			console.log("window resize");
-			var setCoverPositionOnTableView = function() {
-				windowWidth = $(window).width();
-				var imgWidth = windowWidth / 2;
-				if (imgWidth > 800)
-					imgWidth = 800;
-				var imgLeft = windowWidth / 4;
-//				$(".tbl-cover").css({left: imgLeft, width: imgWidth});
-				coverPosition = {left: imgLeft, width: imgWidth};
-				console.log("setCoverPositionOnTableView", {left: imgLeft, width: imgWidth});
-			};
-			
-			isShortWidth = $(window).width() < 960;
-			$(".shortWidth").toggleClass("hide", isShortWidth);
-			setCoverPositionOnTableView();
-		}).on('keyup', function(e) {
-			if (currentView === '#table') {
-				console.log("window keyup", e.keyCode);
-				if (e.keyCode == 38) { // up key
-					if (currentVideoNo > -1)
-						currentVideoNo--;
-				} else if (e.keyCode == 40) { // down key
-					if (currentVideoNo < renderingCount - 1)
-						currentVideoNo++;
-				} else {
-					return; // nothing
+		$(window).on({
+			"resize": function() {
+				console.log("window resize");
+				var setCoverPositionOnTableView = function() {
+					windowWidth = $(window).width();
+					var imgWidth = windowWidth / 2;
+					if (imgWidth > 800)
+						imgWidth = 800;
+					var imgLeft = windowWidth / 4;
+					//$(".tbl-cover").css({left: imgLeft, width: imgWidth});
+					coverPosition = {left: imgLeft, width: imgWidth};
+					console.log("setCoverPositionOnTableView", {left: imgLeft, width: imgWidth});
+				};
+				
+				isShortWidth = $(window).width() < 960;
+				$(".shortWidth").toggleClass("hide", isShortWidth);
+				setCoverPositionOnTableView();
+			},
+			'keyup': function(e) {
+				if (currentView === '#table') {
+					console.log("window keyup", e.keyCode);
+					if (e.keyCode == 38) { // up key
+						currentVideoNo > -1 && currentVideoNo--;
+					} 
+					else if (e.keyCode == 40) { // down key
+						currentVideoNo < renderingCount - 1 && currentVideoNo++;
+					} 
+					else {
+						return; // nothing
+					}
+					fn.showCover(true);
 				}
-				fn.showCover(true);
 			}
 		});
 	};
