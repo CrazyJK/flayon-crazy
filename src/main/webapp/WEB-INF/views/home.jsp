@@ -180,6 +180,19 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	</div>
 
 <script type="text/javascript">
+var viewLoginForm = function() {
+    $("#aperture").aperture({
+        src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
+        duration: "3s",
+        baseColor: "rgba(0,0,0,0.1)",
+        color: "rgba(0,0,0,0.5)",
+        backgroundColor: "transparent",
+        width: "150px",
+        outerRadius: "0"
+    });
+    $("#loginModal").modal();
+};
+
 var homeApp = (function($) {
 	var isLogin  = '${isAuth}' == 'true',
 	    username = '${username}',
@@ -230,19 +243,6 @@ var homeApp = (function($) {
         $("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
             $(this).css({fontFamily: randomFont()});
         });
-    };
-    
-	var viewLoginForm = function() {
-        $("#aperture").aperture({
-            src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
-            duration: "3s",
-            baseColor: "rgba(0,0,0,0.1)",
-            color: "rgba(0,0,0,0.5)",
-            backgroundColor: "transparent",
-            width: "150px",
-            outerRadius: "0"
-        });
-        $("#loginModal").modal();
     };
     
 	var start = function() {
