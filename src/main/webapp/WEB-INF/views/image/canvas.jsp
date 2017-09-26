@@ -24,6 +24,9 @@ canvas#cv:hover {
 nav#img-nav {
 	text-align:center;
 	margin:0;
+    border-radius: 4px;
+    background: rgba(255,255,255,.5);
+    padding: 0 5px 10px;
 }
 nav#img-nav table {
 	width:100%; 
@@ -345,7 +348,7 @@ function resizeSecondDiv() {
 	if ($("#deco_section").outerHeight() != null)
 		contentDivHeight = $("#deco_section").outerHeight();
 	var imgNavHeight = $("#img-nav").outerHeight();
-	var calculatedCanvasHeight = contentDivHeight - imgNavHeight - 40 - 15; // margin:16, padding:20 
+	var calculatedCanvasHeight = contentDivHeight - imgNavHeight - 40 - 5; // margin:16, padding:20 
 	$("#cv").attr("height", calculatedCanvasHeight);
 	var calculatedCanvasWidth = $("#img-nav").parent().outerWidth();
 	$("#cv").attr("width", calculatedCanvasWidth);
