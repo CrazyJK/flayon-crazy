@@ -1,409 +1,128 @@
-var calculatedDivHeight = 0,
-	CRAZY_DECORATOR_THEME       = 'crazy-decorator.theme',
-	THUMBNAMILS_COVER_INDEX     = 'thumbnamils.cover.index',
-	THUMBNAMILS_COVER_WIDTH     = 'thumbnamils.cover.width',
-	THUMBNAMILS_COVER_HEIGHT    = 'thumbnamils.cover.height',
-	THUMBNAMILS_IMAGE_INDEX     = 'thumbnamils.image.index',
-	THUMBNAMILS_IMAGE_WIDTH     = 'thumbnamils.image.width',
-	THUMBNAMILS_IMAGE_HEIGHT    = 'thumbnamils.image.height',
-	THUMBNAMILS_MODE            = 'thumbnamils.mode',
-	THUMBNAMILS_BTN_DELETE      = 'thumbnamils.btn.delete',
-	THUMBNAMILS_BTN_MAGNIFY     = 'thumbnamils.btn.magnify',
-	GRAVIAINTERVIEW_IMAGE_WIDTH = 'graviainterview.image.width',
-	VIDEOLISTBYSPA_IMAGE_WIDTH  = 'videolistbyspa.image.width',
-	VIDEOMAIN_JK_COVER_WIDTH    = 'videomain.jk.cover.width',
-	/**
-	 * div container 높이 조정
-	 */
-	resizeDivHeight = function() {
-		var offsetMargin = 20,
-			headerHeight = $("#header_div").outerHeight();
-		windowHeight = $(window).outerHeight();
-		windowWidth  = $(window).width();
-		calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
-		$("#content_div").outerHeight(calculatedDivHeight);
-		//console.log("resizeDivHeight", calculatedDivHeight);
-		
-		$("#innerSearchPage").css({
-			width: windowWidth - offsetMargin * 2, 
-			height: windowHeight - offsetMargin * 2
-		});
+/**
+ * Video Prototype
+ */
+function Video(idx, data) {
+	this.idx = idx;
+	this.studio       = data.studio;      // studio object
+	this.opus         = data.opus;
+	this.title        = data.title;
+	this.actressList  = data.actressList; // actress object list
+	this.releaseDate  = data.releaseDate;
+	this.etcInfo      = data.etcInfo;
+//	this.info         = data.info;        // info object
+	this.tags         = data.tags;        // tag object list
+	this.archive      = data.archive;
+	this.favorite     = data.favorite;
+	this.overviewText = data.overviewText;
+	this.videoDate    = data.videoDate;
+	this.playCount    = data.playCount;
+	this.rank         = data.rank;
+	this.fullname     = "[" + data.studio.name + "][" + data.opus + "][" + data.title + "][" + data.actressName + "][" + data.releaseDate + "]";
+	this.actressName  = data.actressName;
+	this.score        = data.score;
+//	this.scoreDesc    = data.scoreDesc;
+	this.fileLength   = data.length; 
+	this.coverURL     = videoPath + "/" + data.opus + "/cover";
+	// files
+//	this.videoFileList     = data.videoFileList;     // array
+//	this.subtitlesFileList = data.subtitlesFileList; // array
+//	this.coverFile         = data.coverFile;
+//	this.infoFile          = data.infoFile;
+	this.etcFileList       = data.etcFileList;       // array
+	this.videoCandidates   = data.videoCandidates;   // array
+	this.torrents          = data.torrents;          // array
+	this.fileAll           = data.fileAll;           // array
+
+	this.existVideoFileList     = data.existVideoFileList;     //data.videoFileList.length > 0;
+	this.existSubtitlesFileList = data.existSubtitlesFileList; //data.subtitlesFileList.length > 0;
+	this.existCoverFile         = data.existCoverFile;         //data.coverFile != 'null';
+	this.existInfoFile          = data.existInfoFile;
+	this.existEtcFileList       = data.etcFileList.length > 0;
+	this.existCandidates        = data.videoCandidates.length > 0;
+	this.existTorrents          = data.torrents.length > 0;
+	this.existOverview          = data.overviewText != '';
 	
-		try {
-			resizeSecondDiv(); // if it exist
-		} catch (e) {
-			//console.log("resizeSecondDiv Error", e.message);
-		}
-	},
-	/**
-	 * background image set
-	 * @param imgIdx
-	 */
-	setBackgroundImage = function(imgIdx) {
-		currBGImageNo = imgIdx ? imgIdx : getRandomInteger(0, bgImageCount-1);
-		currBGImageUrl = imagePath + "/" + currBGImageNo;
-		console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
-		$("body").css("background-image", "url(" + currBGImageUrl + ")");
-		setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
-	},
-	/**
-	 * toggle studio div
-	 */
-	fnStudioDivToggle = function() {
-		$("#studioDiv").toggle();
-		resizeDivHeight();
-	},
-	/**
-	 * toggle actress div
-	 */
-	fnActressDivToggle = function() {
-		$("#actressDiv").toggle();
-		resizeDivHeight();
-	},
-	/**
-	 * toggle tag div
-	 */
-	fnTagDivToggle = function() {
-		$("#tagDiv").toggle();
-		resizeDivHeight();
-	},
-	/**
-	 * form submit
-	 */
-	fnSearch = function() {
-		document.forms[0].submit();
-	},
-	/**
-	 * call subtitles editer
-	 * @param selectedOpus
-	 */
-	fnEditSubtitles = function(selectedOpus) {
-		console.log("edit subtitles " + selectedOpus);
-		$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/subtitles");
-	},
-	/**
-	 * call video player
-	 * @param selectedOpus
-	 */
-	fnPlay = function(selectedOpus) {
-		//console.log("Video play ", selectedOpus, "listViewType=", listViewType);
-		actionFrame(videoPath + "/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
-		if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'K') {
-			fnVideoDetail(selectedOpus);
-		}  
-	},
-	/**
-	 * reset video info
-	 * @param selectedOpus
-	 */
-	fnVideoReset = function(selectedOpus) {
-		actionFrame(videoPath + "/" + selectedOpus + "/reset", {}, "PUT", selectedOpus + " reset");
-	},
-	/**
-	 * remove wrong video file
-	 * @param selectedOpus
-	 */
-	fnVideoWrong = function(selectedOpus) {
-		actionFrame(videoPath + "/" + selectedOpus + "/wrong", {}, "PUT", selectedOpus + " mark wrong");
-	},
-	/**
-	 * call video player by random
-	 */
-	fnRandomPlay = function() {
-		//console.log("Random play start");
-		if(opusArray.length == 0) {
-			alert("다 봤슴당");
-			return;
-		}
-		var selectedNumber = getRandomInteger(0, opusArray.length);
-		var selectedOpus = opusArray[selectedNumber];
-		opusArray.splice(selectedNumber, 1);
-		fnFocusVideo(selectedOpus);
-		fnPlay(selectedOpus);
-	},
-	/**
-	 * focus on selected video
-	 * @param opus
-	 */
-	fnFocusVideo = function(opus) {
-		//console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
-		if (listViewType == 'L') {
-			$.large.focusVideo(opus);
-		}
-		else if (listViewType == 'S' || listViewType == 'V' || listViewType == 'F') {
-			$.slide.focusVideo(opus);
-		}
-		else if (listViewType == 'C' || listViewType == 'B' || listViewType == 'IH') {
-			$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
-				$(this).addClass("video-focus");
-			});
-		}
-		else if (listViewType == 'K') {
-			location.href = "#opus-" + opus;
-		}
-		else {
-			var topValue = $("#opus-" + opus).position().top - $("#header_div").outerHeight() - 20;
-			console.log("fnFocusVideo", opus, "listViewType = ", listViewType, 
-					"position.top", $("#opus-" + opus).position().top, 
-					"offset.top", $("#opus-" + opus).offset().top, 
-					"header", $("#header_div").outerHeight(), 
-					"scrollTop", topValue);
-			$("#content_div").scrollTop(topValue);
-		}
-	},
-	/**
-	 * popup view background image
-	 */
-	fnBGImageView = function() {
-		popupImage(currBGImageUrl, "bg-image");
-	},
-	/**
-	 * delete current backgroung image
-	 */
-	fnBGImageDELETE = function() {
-		actionFrame(currBGImageUrl, {}, "DELETE", "this image delete");
-	},
-	/**
-	 * popup view video cover
-	 * @param opus
-	 */
-	fnCoverView = function(opus) {
-		console.log("Cover image view : " + opus);
-		popupImage(videoPath + "/" + opus + "/cover");
-	},
-	/**
-	 * popup overview editer
-	 * @param opus
-	 */
-	fnEditOverview = function(opus, event) {
-		console.log("Overview Popup : " + opus);
-	    popup(videoPath + "/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse', DEFAULT_SPECS, event);
-	},
-	/**
-	 * popup video detail info
-	 * @param opus
-	 */
-	fnVideoDetail = function(opus) {
-	    popup(videoPath + "/" + opus, "videoDetail-"+opus, 800, 640);
-	},
-	/**
-	 * popup view actress detail
-	 * @param name
-	 */
-	fnViewActressDetail = function(name) {
-		popup(videoPath + "/actress/" + name, "actressDetail-" + name, 850, 600);
-	},
-	/**
-	 * popup view studio detail
-	 * @param name
-	 */
-	fnViewStudioDetail = function(name) {
-		popup(videoPath + "/studio/" + name, "studioDetail-" + name, 850, 600);
-	},
-	/**
-	 * save video rank
-	 * @param opus
-	 */
-	fnRank = function(opus) {
-		var rank = $("#Rank-"+opus);
-		var rankLabel = $("#Rank-"+opus+"-label");
-		fnRankColor(rank, rankLabel);
-	
-		var frm;
-		if (opener) {
-			try {
-				$("#Rank-"+opus, opener.document).val(rank.val());
-				$("#Rank-"+opus+"-label", opener.document).html(rank.val());
-				opener.fnRankColor($("#Rank-"+opus, opener.document), $("#Rank-"+opus+"-label", opener.document));
-			} catch(e) {/*opener가 이상하더라도 submit은 해야하므로*/
-				console.log("fnRank opener error", e);
-			}
-		}
-		actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), {}, "PUT", opus + " rank " + rank.val(), 300);
-	},
-	/**
-	 * set rank color
-	 * @param rank
-	 */
-	fnRankColor = function(rank, rankLabel) {
-		try {
-			rankLabel.html(rank.val());
-			rank.val() == 0 ? rank.parent().css({"background-color": "rgba(255, 255, 255, 0.5)"}) :
-				rank.val() > 0 ? rank.parent().css({"background-color": "rgba(255, 0, 0, 0.5)"}) :
-					rank.parent().css({"background-color": "rgba(0, 0, 255, 0.5)"});
-		} catch(e) {}
-	},
-	/**
-	 * set, mark favorite actress
-	 * @param dom
-	 * @param name
-	 */
-	fnFavorite = function(dom, name) {
-		var val = dom.innerHTML == '★';
-		dom.innerHTML = val ? '☆' : '★';
-		actionFrame(videoPath + "/actress/" + name + "/favorite/" + !val, {}, "PUT", name + " set favorite");
-	},
-	/**
-	 * searching content by keyword
-	 * @param keyword
-	 */
-	searchContent = function(keyword) {
-		if(event.keyCode != 13)
-			return;
-		loading(true, "Search : " + keyword);
-		var foundCount = 0;
-		$("div#content_div table tr").each(function() {
-			var found = false;
-			$(this).children().each(function() {
-				if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-					found = true;
-					foundCount++;
-				}
-			});
-			$(this).toggle(found);
+	// html
+	this.label_fullname        = VideoUtils.wrapLabel(this.fullname,    this.fullname, "fnVideoDetail('" + this.opus + "')");
+	this.label_title           = VideoUtils.wrapLabel(this.title,       this.title,    "fnVideoDetail('" + this.opus + "')",            '', {fontSize: '85%'});
+	this.label_studio          = VideoUtils.wrapLabel(this.studio.name, '',            "fnViewStudioDetail('" + this.studio.name + "')");
+	this.label_opus            = VideoUtils.wrapLabel(this.opus,        '',            "fnVideoDetail('" + this.opus + "')");
+	this.label_release         = VideoUtils.wrapLabel(this.releaseDate);
+	this.label_modified        = VideoUtils.wrapLabel(this.videoDate);
+	this.label_score           = VideoUtils.wrapLabel('S ' + this.score);
+	this.label_rank            = VideoUtils.wrapLabel("R " + this.rank);
+	this.label_video           = VideoUtils.wrapLabel("Video", '', this.existVideoFileList     ? "fnPlay('" + this.opus + "')" : "",          this.existVideoFileList ? "exist" : "nonExist");
+	this.label_subtitles       = VideoUtils.wrapLabel("Sub",   '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
+	this.label_overview		   = VideoUtils.wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
+	this.label_favorite        = this.favorite ? VideoUtils.wrapLabel("Fav", "", "", "label-success") : "";
+	this.label_actress         = function() {
+		var elements = [];
+		$.each(data.actressList, function(index, actress) {
+			index > 0 && elements.push("&nbsp;");
+			elements.push(VideoUtils.wrapLabel(actress.name, '', "fnViewActressDetail('" + actress.name + "')", actress.favorite ? "favorite" : ""));
 		});
-		if (keyword === '') {
-			$(".label-search").hide();
-		}
-		else {
-			$(".label-search").removeClass("hide").show();
-			$(".count-search").html(foundCount);
-		}
-		loading(false);
-	},
-	/**
-	 * all un checked in actress/studio/tag div
-	 * @param obj
-	 */
-	fnUnchecked = function(obj) {
-		$(obj).parent().children().children().children("input[type=checkbox]:checked").each(function() {
-			$("#checkbox-" + $(this).attr("id")).click();
-		});
-	},
-	/**
-	 * reload video source
-	 */
-	fnReloadVideoSource = function() {
-		actionFrame(videoPath + "/reload", {}, "GET", "Source reload");
-	},
-	/**
-	 * 비디오 확인을 기억하기 위해 css class를 변경한다.
-	 */
-	fnMarkChoice = function(opus) {
-		$("#check-" + opus).addClass("mark");
-	},
-	/**
-	 * 비디오에 태그 설정
-	 * @param dom 태그 object
-	 * @param opus 
-	 * @param tagId
-	 */
-	fnSetTag = function(dom, opus, tagId) {
-		if ($(dom).hasClass("label-default")) {
-			$(dom).removeClass("label-default");
-			$(dom).addClass("label-plain");
-		}
-		else {
-			$(dom).removeClass("label-plain");
-			$(dom).addClass("label-default");
-		}
-		actionFrame(videoPath + "/" + opus + "/tag?id=" + tagId, {}, "POST", "set tag " + opus + " <- " + tagId);
-	},
-	/**
-	 * 저장한 태그를 화면에 추가하고, 서버에 저장시킨다.
-	 * @param frm
-	 */
-	addTag = function(frm) {
-		var opus    = $(frm).find("input[name='opus']").val();
-		var tagname = $(frm).find("input[name='name']").val();
-		var tagdesc = $(frm).find("input[name='description']").val();
-		console.log("tag ",  opus, tagname, tagdesc);
-		$("#tags-"+opus).append(
-				$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
-		);
-		
-		actionFrame(videoPath + "/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname);
-		return false;
-	},
-	/**
-	 * 태그 상세화면 팝업.
-	 * @param name
-	 */
-	fnViewTagDetail = function(name) {
-		popup(videoPath + "/tag/" + name, "tagDetail-" + name, 850, 600);
-	},
-	/**
-	 * 태그 삭제
-	 * @param tagId
-	 */
-	fnDeleteTag = function(tagId, dom) {
-		if (confirm("Are you sure to delete it?")) {
-			$(dom).parent().hide();
-			actionFrame(videoPath + "/tag?id=" + tagId, {}, "DELETE", tagId + " tag delete");
-		}
-	},
-	fnSearchOpus = function() {
-		console.log(arguments);
-		var opus;
-		if (arguments.length == 0)
-			opus = $("#query").val();
-		else
-			opus = arguments[0];
-		showDebug("searchURL", urlSearchVideo + opus);
-		popup(urlSearchVideo + opus, 'videoSearch', 900, 950);
-	},
-	fnSearchActress = function(name) {
-		var name;
-		if (arguments.length == 0)
-			name = $("#query").val();
-		else
-			name = arguments[0];
-		showDebug("searchURL", urlSearchActress + name);
-		popup(urlSearchActress + name, 'actressSearch', 900, 950);
-	},
-	fnSearchTorrent = function(opus) {
-		var opus;
-		if (arguments.length == 0)
-			opus = $("#query").val();
-		else
-			opus = arguments[0];
-		showDebug("searchURL", urlSearchTorrent + opus);
-		popup(urlSearchTorrent + opus, 'torrentSearch', 900, 950);
-	},
-	showDebug = function(debugDomId, msg) {
-		var resultId = "copyResult";
-		var resultObj = $("#" + resultId);
-		if (resultObj.length == 0)
-			resultObj = $("<span>").attr("id", resultId).addClass("label label-danger").html("Copied").hide();
-		$("#" + debugDomId).attr("data-clipboard-text", msg).css("cursor", "pointer").html("Click to copy url").show().parent().append(resultObj);
-	
-		new ZeroClipboard(document.getElementById(debugDomId)).on('aftercopy', function(event) {
-			// event.target.style.color = 'red';
-			event.target.style.display = 'none';
-			resultObj.show();
-			setTimeout(function() {
-				resultObj.fadeOut(500);
-		    }, 1000);
-		});	
-	},
-	goTorrentMove = function(opus) {
-		fnMarkChoice(opus);
-		actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
-	},
-	videoCoverSeenHistory = new Array(),
-	getRandomVideoIndex = function() {
-		if (videoCoverSeenHistory.length === totalVideoSize) {
-			showSnackbar("Turned around whole video");
-			videoCoverSeenHistory = [];
-			return getRandomVideoIndex();
-		}
-		var idx = getRandomInteger(1, totalVideoSize);
-		if (videoCoverSeenHistory.includes(idx)) {
-			return getRandomVideoIndex();
-		}
-		else {
-			videoCoverSeenHistory.push(idx);
-			console.log('getRandomVideoIndex videoCoverSeenHistory', videoCoverSeenHistory);
-			return  idx;
-		}
+		return elements;
 	};
+	this.label_videoCandidates = function() {
+		var elements = [];
+		$.each(data.videoCandidates, function(index, candidate) {
+			index > 0 && elements.push("&nbsp;");
+			elements.push(
+					$("<span>", {
+						opus: data.opus, title: candidate, "class": "nowrap btn btn-xs btn-primary"
+					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
+						var opus = $(this).attr("opus");
+						var candidate = $(this).data("path");
+						actionFrame(videoPath + "/" + opus + "/confirmCandidate", {"path": candidate}, "POST", "accept Candidate");
+						showSnackbar("accept file " + opus);
+						$("#check-" + opus).addClass("found");
+						$(this).off().hide();
+					})
+			);
+		});
+		return elements;
+	};
+	this.label_torrentSeed = function() {
+		var elements = [];
+		$.each(data.torrents, function(index, torrent) {
+			index > 0 && elements.push("&nbsp;");
+			elements.push(
+					$("<span>", {
+						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
+					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(torrent)).on("click", function() {
+						var opus = $(this).attr("opus");
+						actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+						showSnackbar("move torrent " + opus);
+						$("#check-" + opus).addClass("moved");
+						$(this).off().hide();
+					})
+			);
+		});
+		return elements;
+	};
+	this.label_seedFindBtn = function() {
+		return $("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", data.opus).html("Find").on("click", function() {
+			var opus = $(this).data("opus");
+			$("#check-" + opus).addClass("found");
+			popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+			popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+		})
+	};
+}
+
+var VideoUtils = {
+		getFilename: function(file) {
+			var lastIndex = file.lastIndexOf("\\");
+			lastIndex < 0 && (lastIndex = file.lastIndexOf("/"));
+			return file.substring(lastIndex + 1, file.length);
+		},
+		wrapLabel: function(html, title, onclick, extClass, extCss, extAttr) {
+			var $span = $("<span>").addClass("label label-plain").html(html);
+			title    && title    != '' && $span.attr("title", title);
+			onclick  && onclick  != '' && $span.attr("onclick", onclick);
+			extClass && extClass != '' && $span.addClass(extClass);
+			extCss   && extCss   != '' && $span.css(extCss);
+			extAttr  && extAttr  != '' && $span.attr(extAttr);
+			return $span.clone().wrapAll("<div/>").parent().html();
+		}
+};
