@@ -80,7 +80,7 @@ p > span.neon {
     color: rgb(238, 238, 238);
 }
 </style>
-<script type="text/javascript" src="${PATH}/js/crazy.ui.typed.js"></script>
+<script type="text/javascript" src="${PATH}/js/flayon.effect.typed.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 var timingProperties = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
@@ -217,11 +217,11 @@ function aperture($obj, imgSrc) {
 		});
 	}).aperture({
 		src: imgSrc + "?_t=" + new Date().getTime(),
-		baseColor1: randomColor("." + getRandomInteger(10, 50)),
-		baseColor2: randomColor("." + getRandomInteger(10, 50)),
-		baseColor3: randomColor("." + getRandomInteger(10, 50)),
-		baseColor4: randomColor("." + getRandomInteger(10, 50)),
-		backgroundColor: randomColor("." + getRandomInteger(10, 50)),
+		baseColor1: getRandomColor("." + getRandomInteger(10, 50)),
+		baseColor2: getRandomColor("." + getRandomInteger(10, 50)),
+		baseColor3: getRandomColor("." + getRandomInteger(10, 50)),
+		baseColor4: getRandomColor("." + getRandomInteger(10, 50)),
+		backgroundColor: getRandomColor("." + getRandomInteger(10, 50)),
 		outerMargin: "0 auto",
 		outerRadius: "0",
 		timing: timingProperties[getRandomInteger(1, 5)],

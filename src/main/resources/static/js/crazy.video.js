@@ -22,7 +22,7 @@ function Video(idx, data) {
 	this.score        = data.score;
 //	this.scoreDesc    = data.scoreDesc;
 	this.fileLength   = data.length; 
-	this.coverURL     = videoPath + "/" + data.opus + "/cover";
+	this.coverURL     = PATH + "/video/" + data.opus + "/cover";
 	// files
 //	this.videoFileList     = data.videoFileList;     // array
 //	this.subtitlesFileList = data.subtitlesFileList; // array
@@ -73,7 +73,7 @@ function Video(idx, data) {
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
 						var opus = $(this).attr("opus");
 						var candidate = $(this).data("path");
-						actionFrame(videoPath + "/" + opus + "/confirmCandidate", {"path": candidate}, "POST", "accept Candidate");
+						actionFrame(PATH + "/video/" + opus + "/confirmCandidate", {"path": candidate}, "POST", "accept Candidate");
 						showSnackbar("accept file " + opus);
 						$("#check-" + opus).addClass("found");
 						$(this).off().hide();
@@ -91,7 +91,7 @@ function Video(idx, data) {
 						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(torrent)).on("click", function() {
 						var opus = $(this).attr("opus");
-						actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+						actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 						showSnackbar("move torrent " + opus);
 						$("#check-" + opus).addClass("moved");
 						$(this).off().hide();
@@ -104,8 +104,8 @@ function Video(idx, data) {
 		return $("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", data.opus).html("Find").on("click", function() {
 			var opus = $(this).data("opus");
 			$("#check-" + opus).addClass("found");
-			popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-			popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+			popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+			popup(PATH + '/video/torrent/search/' + opus, 'torrentSearch', 900, 950);
 		})
 	};
 }

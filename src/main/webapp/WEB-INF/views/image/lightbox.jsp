@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="${PATH}/css/lightbox.css">
 <link rel="stylesheet" href="${PATH}/css/app/image/lightbox.css"/>
 <script src="${PATH}/js/lightbox.js"></script>
-<script src="${PATH}/js/app/image/timer.engine.js"></script>
-<script src="${PATH}/js/app/image/lightbox.js"></script>
+<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
+<script src="${PATH}/js/crazy.image.lightbox.js"></script>
 </head>
 <body>
 	<div class="container">

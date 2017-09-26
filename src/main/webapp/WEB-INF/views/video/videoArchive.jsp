@@ -195,7 +195,7 @@ function fnViewBGImage() {
 		</div>
 		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 		<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/js/crazy.ui.slide.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/crazy.video.main.slide.js"/>"></script>
 		<script type="text/javascript">
 			$("#slides").slideview();
 		</script>
@@ -223,7 +223,7 @@ function fnViewBGImage() {
 			<div id="video_slide_bar" class="text-center"></div>
 		</div>
 		<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
-		<script type="text/javascript" src="<c:url value="/js/crazy.ui.large.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/crazy.video.main.large.js"/>"></script>
 		<script type="text/javascript">
 			$("#slides").largeview();
 		</script>
@@ -255,7 +255,7 @@ function fnViewBGImage() {
 			</div>
 			<link rel="stylesheet" href="<c:url value="/css/video-slides.css"/>"/>
 			<script type="text/javascript" src="<c:url value="/js/jquery.slides.min.js"/>"></script>
-			<script type="text/javascript" src="<c:url value="/js/crazy.ui.slide.js"/>"></script>
+			<script type="text/javascript" src="<c:url value="/js/crazy.video.main.slide.js"/>"></script>
 			<script type="text/javascript">
 				$("#slides").slideview({width:800, height:750});
 			</script>

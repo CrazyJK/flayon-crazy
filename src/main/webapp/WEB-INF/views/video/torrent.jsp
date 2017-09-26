@@ -349,16 +349,16 @@ function fnSelectCandidateVideo(opus, idx) {
 }
 function goTorrentSearch(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("found");
-	popup(videoPath + '/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-	popup(videoPath + '/torrent/search/' + opus, 'torrentSearch', 900, 950);
+	popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+	popup(PATH + '/video/torrent/search/' + opus, 'torrentSearch', 900, 950);
 }
 function goTorrentMove(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("moved");
-	actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+	actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 }
 
 function getAllTorrents() {
-	actionFrame(videoPath + "/torrent/getAll", {}, "POST", "Torrent get all");
+	actionFrame(PATH + "/video/torrent/getAll", {}, "POST", "Torrent get all");
 }
 function resizeSecondDiv() {
 	isShortWidth = $(window).width() < 950;

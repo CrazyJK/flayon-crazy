@@ -47,7 +47,7 @@ $(document).ready(function() {
 	$("dl.dl-detail").css({
 		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
 //		backgroundSize: thisWidth + "px",
-//		backgroundColor: randomColor(0.5)
+//		backgroundColor: getRandomColor(0.5)
 	});
 	
 	$("form#renameForm").submit(function(event) {

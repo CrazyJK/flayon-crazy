@@ -7,8 +7,8 @@
 <meta charset="UTF-8">
 <title><s:message code="image.image-viewer"/></title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
-<script src="${PATH}/js/app/image/timer.engine.js"></script>
-<script src="${PATH}/js/app/image/slide.js"></script>
+<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
+<script src="${PATH}/js/crazy.image.slide.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 $(function() {

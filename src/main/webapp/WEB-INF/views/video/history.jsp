@@ -13,7 +13,7 @@ $(document).ready(function(){
 	
 	$("#query").bind("keyup click", function(event) {
 		var keyword = $(this).val();
-		var queryUrl = videoPath + '/history.json?q=' + keyword; 
+		var queryUrl = PATH + '/video/history.json?q=' + keyword; 
 		$("#debug").html(queryUrl);
 		$("#opus").val(keyword);
 		$.getJSON(queryUrl ,function(data) {

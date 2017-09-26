@@ -5,8 +5,7 @@ bgContinue = false;
  */
 var apertureApp = (function() {
 
-	var imagepath = PATH + '/image/',
-		selectedNumber,
+	var selectedNumber,
 		selectedImgUrl,
 		imageCount,
 		imageMap,
@@ -61,10 +60,10 @@ var apertureApp = (function() {
 						height: (imageDivHeight) + "px",
 						outerRadius: "0",
 	//					baseColor: (playSlide ? "#000" : "#fff"),
-						color1: randomColor(0.5),
-						color2: randomColor(0.5),
-						color3: randomColor(0.5),
-						color4: randomColor(0.5),
+						color1: getRandomColor(0.5),
+						color2: getRandomColor(0.5),
+						color3: getRandomColor(0.5),
+						color4: getRandomColor(0.5),
 						innerCirclePadding: "0px",
 						borderRadius: "50%"
 					});
@@ -72,7 +71,7 @@ var apertureApp = (function() {
 				view: function fnViewImage(current) {
 					console.log("view");
 					selectedNumber = current;
-					selectedImgUrl = imagepath + selectedNumber;
+					selectedImgUrl = PATH + '/image/' + selectedNumber;
 					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
 	
 					$("#aperture .circle-img").css("background-image", "url('"+selectedImgUrl+"')");
@@ -143,7 +142,7 @@ var apertureApp = (function() {
 		 */
 		initModule = function() {
 			
-			$.getJSON(imagepath + "data.json" ,function(data) {
+			$.getJSON(PATH + '/image/data.json' ,function(data) {
 				imageCount = data['imageCount'];
 				imageMap   = data['imageNameMap'];
 				selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount-1)));

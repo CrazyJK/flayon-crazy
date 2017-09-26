@@ -14,7 +14,6 @@ bgContinue = false;
 
 	var SLIDESJS_SOURCE_MODE   = "slidesjs.source.mode",
 		SLIDESJS_PLAY_INTERVAL = "slidesjs.play.interval",
-		imagepath = PATH + '/image/',
 		currentIndex,
 		imageCount,
 		imageMap,
@@ -227,7 +226,7 @@ bgContinue = false;
 				console.log("SlidejsApp.start START");
 				$.ajax({
 					type: 'GET',
-					url: imagepath + "data.json"
+					url: PATH + "/image/data.json"
 				}).done(function(data, textStatus, jqXHR) {
 					coverCount = data['coverCount'];
 					coverMap   = data['coverNameMap'];

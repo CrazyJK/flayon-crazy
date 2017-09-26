@@ -55,12 +55,8 @@
 
 </div>
 
-<script type="text/javascript" src="<c:url value="/js/app/video.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/app/videolist.js"/>"></script>
-<script type="text/javascript">
-$(function() {
-	videoList.init();
-});
-</script>
+<script type="text/javascript" src="<c:url value="/js/crazy.video.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/crazy.video.list.js"/>"></script>
+<script type="text/javascript">$(function(){videoList.init()})</script>
 </body>
 </html>

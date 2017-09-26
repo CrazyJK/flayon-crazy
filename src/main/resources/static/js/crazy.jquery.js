@@ -1,4 +1,5 @@
-;(function($) {
+;
+(function($) {
 	$.fn.swapClass = function(class1, class2, cond) {
 		return this.each(function() {
 			var $element = $(this);
@@ -9,18 +10,14 @@
 			}
 		});
 	};
-}(jQuery));
 
-(function($) {
 	$.fn.randomBG = function(alpha) {
 		return this.each(function() {
 			var $element = $(this);
-			$element.css("background-color", randomColor(alpha));
+			$element.css("background-color", getRandomColor(alpha));
 		});
 	};
-}(jQuery));
 
-(function($) {
 	$.fn.navEvent = function(callback) {
 		/**
 		 * detect event signal 

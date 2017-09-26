@@ -290,7 +290,7 @@ listViewType = '${videoSearch.listViewType}';
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
-			<script type="text/javascript" src="${PATH}/js/crazy.ui.slide.js"></script>
+			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
 				$("#slides").slideview();
 			</script>
@@ -331,7 +331,7 @@ listViewType = '${videoSearch.listViewType}';
 			<link rel="stylesheet" href="<c:url value="http://vjs.zencdn.net/c/video-js.css"/>"/>
 			<script type="text/javascript" src="<c:url value="http://vjs.zencdn.net/c/video.js"/>"></script>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
-			<script type="text/javascript" src="${PATH}/js/crazy.ui.slide.js"></script>
+			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
 				function resizeSecondDiv() {
 					var flayonSlideHeight = calculatedDivHeight - 100;
@@ -411,7 +411,7 @@ listViewType = '${videoSearch.listViewType}';
     			box-shadow: 0 3px 9px rgba(0,0,0,.3);
 			}
 			</style>
-			<script type="text/javascript" src="${PATH}/js/crazy.ui.large.js"></script>
+			<script type="text/javascript" src="${PATH}/js/crazy.video.main.large.js"></script>
 			<script type="text/javascript">
 				$("#slides").largeview();
 			</script>
@@ -453,7 +453,7 @@ listViewType = '${videoSearch.listViewType}';
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
-			<script type="text/javascript" src="${PATH}/js/crazy.ui.slide.js"></script>
+			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
 			$("#slides").slideview({width:800, height:700});
 			function resizeSecondDiv() {
@@ -469,12 +469,13 @@ listViewType = '${videoSearch.listViewType}';
 				<li style="padding: 10px;">
 					<div id="aperture_${video.opus}"></div>
 				</li>
+                <script type="text/javascript" src="${PATH}/js/flayon.effect.aperture.js"></script>
 				<script type="text/javascript">
 				$("#aperture_${video.opus}")
 					.attr("onclick", "fnVideoDetail('${video.opus}')")
 					.aperture({
 						src:"${PATH}/video/${video.opus}/cover",
-						baseColor: randomColor(0.5),
+						baseColor: getRandomColor(0.5),
 						outerMargin: "0 auto",
 						width: "200px",
 						height: "134px",
@@ -489,7 +490,7 @@ listViewType = '${videoSearch.listViewType}';
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'K'}">
 			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
-			<script type="text/javascript" src="${PATH}/js/videoMain.jk.js"></script>
+			<script type="text/javascript" src="${PATH}/js/crazy.video.main.jk.js"></script>
 			<div class="jk-video-wrapper" style="visibility:hidden;" data-lazy-class="w3-animate-opacity, 300">
 				<c:forEach items="${videoList}" var="video">
 					<div class="jk-video" id="opus-${video.opus}">

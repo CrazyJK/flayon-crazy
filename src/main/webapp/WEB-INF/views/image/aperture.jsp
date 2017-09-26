@@ -14,8 +14,9 @@ body, .label-info, .progress, .paging, .img-circle {
 	cursor: pointer;
 }
 </style>
-<script src="${PATH}/js/app/image/timer.engine.js"></script>
-<script src="${PATH}/js/app/image/aperture.js"></script>
+<script src="${PATH}/js/flayon.effect.aperture.js"></script>
+<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
+<script src="${PATH}/js/crazy.image.aperture.js"></script>
 </head>
 <body>
 <div class="container-fluid">

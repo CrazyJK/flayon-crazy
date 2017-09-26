@@ -102,7 +102,6 @@ input[type=radio] {
 //bgContinue = false;
 var canvas, context, tool;
 
-var imagepath = '<s:url value="/image/" />';
 var selectedNumber = 0;
 var imageCount;
 var imageMap;
@@ -113,7 +112,7 @@ var playSlide = false;
 
 $(document).ready(function() {
 
-	$.getJSON(imagepath + "data.json" ,function(data) {
+	$.getJSON(PATH + "/image/data.json" ,function(data) {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 
@@ -201,13 +200,13 @@ $(document).ready(function() {
 
 function imageURL() {
 	setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
-	return imagepath + selectedNumber + "?_t=" + new Date().getTime();
+	return PATH + "/image/" + selectedNumber + "?_t=" + new Date().getTime();
 }
 function loadImage(nextNumber) {
 	if (parseInt(nextNumber) > -1)
 		selectedNumber = parseInt(nextNumber);
 	var image = new Image();
-	image.src = imagepath + selectedNumber;
+	image.src = PATH + "/image/" + selectedNumber;
 	image.onload = function(){
 		fnDrawImage(image);
 	};

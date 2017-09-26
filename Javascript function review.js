@@ -307,7 +307,6 @@
 }(this, function ($) {
 
 	function LightboxApp() {
-		this.imagepath = PATH + '/image/';
 		this.imageCount;
 		this.init();
 	}

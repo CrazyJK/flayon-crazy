@@ -69,7 +69,6 @@ $(document).ready(function(){
 	});
 	fnRandomImageView();
 });
-var imagepath = '<s:url value="/image/" />';
 var imgWidth, imgHeight;
 var img;
 var selectedNumber;
@@ -79,7 +78,7 @@ function fnViewImage(current) {
 	if(current)
 		selectedNumber = current;
 	fnDisplayThumbnail();
-	url = imagepath + selectedNumber;
+	url = PATH + "/image/" + selectedNumber;
 	img = $("<img id='img'/>");
 	img.hide();
 	img.attr("src", url);
@@ -143,7 +142,7 @@ function fnDisplayThumbnail() {
 	var thumbnailRange = 3;
 	$("#imageThumbnailDiv").empty();
 	for(var current = selectedNumber - thumbnailRange; current <= selectedNumber + thumbnailRange; current++) {
-		var url = imagepath + current + "/thumbnail";
+		var url = PATH + "/image/" + current + "/thumbnail";
 		var cssClass = "otherThumbnails";
 		if(current == selectedNumber)
 			cssClass = "currentThumbnail";

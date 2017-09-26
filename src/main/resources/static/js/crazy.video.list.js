@@ -329,7 +329,7 @@ var videoList = (function() {
 		
 		// All torrents
 		$("#getAllTorrents").on("click", function() {
-			actionFrame(videoPath + "/torrent/get", $("#table form").serialize(), "POST", "Get torrent in list");
+			actionFrame(PATH + "/video/torrent/get", $("#table form").serialize(), "POST", "Get torrent in list");
 		});
 		
 		// Box mode, size
@@ -394,7 +394,7 @@ var videoList = (function() {
 		
 		$.getJSON({
 			method: 'GET',
-			url: videoPath + '/list.json',
+			url: PATH + '/video/list.json',
 			data: {t: withTorrent},
 //			cache: false,
 			timeout: 60000

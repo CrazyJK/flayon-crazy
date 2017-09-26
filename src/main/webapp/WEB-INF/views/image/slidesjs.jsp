@@ -7,8 +7,8 @@
 <title><s:message code="image.image-viewer"/> by SlidesJS</title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slidesjs.css"/>
 <script src="${PATH}/js/jquery.slides.js"></script>
-<script src="${PATH}/js/app/image/timer.engine.js"></script>
-<script src="${PATH}/js/app/image/slidesjs.js"></script>
+<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
+<script src="${PATH}/js/crazy.image.slidesjs.js"></script>
 </head>
 <body>
 <div class="container-fluid">

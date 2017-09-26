@@ -17,7 +17,6 @@
 }(this, function ($) {
 	
 	function LightboxApp() {
-		this.imagepath = PATH + '/image/';
 		this.imageCount;
 		this.imageMap;
 		this.playInterval = 10;
@@ -69,7 +68,7 @@
 	LightboxApp.prototype.start = function() {
 		var self = this;
 		this.shuffle(1);
-		$.getJSON(this.imagepath + "data.json" ,function(data) {
+		$.getJSON(PATH + '/image/data.json' ,function(data) {
 			self.imageCount = data['imageCount'];
 			self.imageMap = data['imageNameMap'];
 			
@@ -78,9 +77,9 @@
 			var $imageset = $('#imageset');
 			for (var i=0; i<self.imageCount; i++) {
 				$("<a>").attr({
-					'href': self.imagepath + i,
+					'href': PATH + '/image/' + i,
 					'data-lightbox': 'lightbox-set',
-					'data-title': "<a href='" + self.imagepath + i + "' target='image-" + i + "'>" + self.imageMap[i] + "</a>",
+					'data-title': "<a href='" + PATH + "/image/" + i + "' target='image-" + i + "'>" + self.imageMap[i] + "</a>",
 					"data-index": i
 				}).appendTo($imageset);
 			}
@@ -123,7 +122,7 @@
 		var self = this.lightboxApp;
 		if (status) { // start
 			self.view();
-			$("body").css({backgroundColor: randomColor('r')});
+			$("body").css({backgroundColor: getRandomColor('r')});
 			$(".lightboxOverlay").css({opacity: 1});
 			$(".progress-bar").addClass("label-black");
 		}

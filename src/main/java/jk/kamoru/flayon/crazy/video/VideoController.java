@@ -821,4 +821,9 @@ public class VideoController extends CrazyController {
 		model.addAttribute("noti", NotiQueue.getNoti(flayonUser.getUser().getId()));
 	}
 
+	@RequestMapping("/blank")
+	public String blank() {
+		return "video/blank";
+	}
+	
 }

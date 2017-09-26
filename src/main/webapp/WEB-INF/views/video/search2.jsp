@@ -41,7 +41,7 @@ $(document).ready(function(){
 		loading(true, 'Searching');
 		 
 		var keyword = $(this).val();
-		var queryUrl = videoPath + '/search.json?q=' + keyword; 
+		var queryUrl = PATH + '/video/search.json?q=' + keyword; 
 		
 		$.getJSON(queryUrl ,function(data) {
 			$('#foundVideoList').empty();

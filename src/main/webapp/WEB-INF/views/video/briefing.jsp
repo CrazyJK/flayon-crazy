@@ -368,7 +368,7 @@ function fsOpen(folder) {
 				$("#taglist").append(
 						$("<span>").html(tagname).attr("title", tagDesc).addClass("item box nowrap").css({padding: "5px", margin: "5px", backgroundColor: "#ff0"})
 				);
-				actionFrame(videoPath + "/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname);
+				actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname);
 				return false;
 			}
 			</script>

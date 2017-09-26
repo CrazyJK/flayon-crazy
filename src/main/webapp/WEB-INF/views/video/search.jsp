@@ -50,7 +50,7 @@ $(document).ready(function(){
 		loading(true, 'Searching');
 
 		var keyword = $(this).val();
-		var queryUrl = videoPath + '/search.json?q=' + keyword; 
+		var queryUrl = PATH + '/video/search.json?q=' + keyword; 
 		$("#url").html(queryUrl);
 		
 //		$(".table").hide();
@@ -158,7 +158,7 @@ function resizeSecondDiv() {
 	
 	$("#content_div").css("background-color", "transparent");
 	$("#resultVideoDiv, #resultHistoryDiv").each(function() {
-		$(this).css("background-color", randomColor(0.3));
+		$(this).css("background-color", getRandomColor(0.3));
 	});
 }
 
@@ -168,30 +168,30 @@ var deleteLowerScoreVideo = ${DELETE_LOWER_SCORE_VIDEO};
 
 function setMoveWatchedVideo() {
 	moveWatchedVideo = !moveWatchedVideo;
-	actionFrame(videoPath + '/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo);
+	actionFrame(PATH + '/video/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo);
 	$("#MOVE_WATCHED_VIDEO").html("" + moveWatchedVideo);
 }
 function setDeleteLowerRankVideo() {
 	deleteLowerRankVideo = !deleteLowerRankVideo;
-	actionFrame(videoPath + '/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo);
+	actionFrame(PATH + '/video/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo);
 	$("#DELETE_LOWER_RANK_VIDEO").html("" + deleteLowerRankVideo);
 }
 function setDeleteLowerScoreVideo() {
 	deleteLowerScoreVideo = !deleteLowerScoreVideo;
-	actionFrame(videoPath + '/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo);
+	actionFrame(PATH + '/video/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo);
 	$("#DELETE_LOWER_SCORE_VIDEO").html("" + deleteLowerScoreVideo);
 }
 function fnMoveWatchedVideo() {
-	actionFrame(videoPath + '/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
+	actionFrame(PATH + '/video/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
 }
 function fnRemoveLowerRankVideo() {
-	actionFrame(videoPath + '/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
+	actionFrame(PATH + '/video/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
 }
 function fnRemoveLowerScoreVideo() {
-	actionFrame(videoPath + '/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
+	actionFrame(PATH + '/video/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
 }
 function fnStartVideoBatch(type) {
-	actionFrame(videoPath + '/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
+	actionFrame(PATH + '/video/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
 }
 </script>
 </head>

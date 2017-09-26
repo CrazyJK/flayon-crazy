@@ -24,8 +24,8 @@
 		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
 }
 </style>
-<script src="${PATH}/js/app/image/timer.engine.js"></script>
-<script src="${PATH}/js/app/image/tablet.js"></script>
+<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
+<script src="${PATH}/js/crazy.image.tablet.js"></script>
 <script type="text/javascript">
 bgContinue = false;
 $(function() {

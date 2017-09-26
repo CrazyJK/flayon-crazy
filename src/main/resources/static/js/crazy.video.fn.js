@@ -13,40 +13,6 @@ var calculatedDivHeight = 0,
 	VIDEOLISTBYSPA_IMAGE_WIDTH  = 'videolistbyspa.image.width',
 	VIDEOMAIN_JK_COVER_WIDTH    = 'videomain.jk.cover.width',
 	/**
-	 * div container 높이 조정
-	 */
-	resizeDivHeight = function() {
-		var offsetMargin = 20,
-			headerHeight = $("#header_div").outerHeight();
-		windowHeight = $(window).outerHeight();
-		windowWidth  = $(window).width();
-		calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
-		$("#content_div").outerHeight(calculatedDivHeight);
-		//console.log("resizeDivHeight", calculatedDivHeight);
-		
-		$("#innerSearchPage").css({
-			width: windowWidth - offsetMargin * 2, 
-			height: windowHeight - offsetMargin * 2
-		});
-	
-		try {
-			resizeSecondDiv(); // if it exist
-		} catch (e) {
-			//console.log("resizeSecondDiv Error", e.message);
-		}
-	},
-	/**
-	 * background image set
-	 * @param imgIdx
-	 */
-	setBackgroundImage = function(imgIdx) {
-		currBGImageNo = imgIdx ? imgIdx : getRandomInteger(0, bgImageCount-1);
-		currBGImageUrl = imagePath + "/" + currBGImageNo;
-		console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
-		$("body").css("background-image", "url(" + currBGImageUrl + ")");
-		setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
-	},
-	/**
 	 * toggle studio div
 	 */
 	fnStudioDivToggle = function() {
@@ -79,7 +45,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnEditSubtitles = function(selectedOpus) {
 		console.log("edit subtitles " + selectedOpus);
-		$("#actionIframe").attr("src", videoPath + "/" + selectedOpus + "/subtitles");
+		$("#actionIframe").attr("src", PATH + "/video/" + selectedOpus + "/subtitles");
 	},
 	/**
 	 * call video player
@@ -87,7 +53,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnPlay = function(selectedOpus) {
 		//console.log("Video play ", selectedOpus, "listViewType=", listViewType);
-		actionFrame(videoPath + "/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
+		actionFrame(PATH + "/video/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
 		if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'K') {
 			fnVideoDetail(selectedOpus);
 		}  
@@ -97,14 +63,14 @@ var calculatedDivHeight = 0,
 	 * @param selectedOpus
 	 */
 	fnVideoReset = function(selectedOpus) {
-		actionFrame(videoPath + "/" + selectedOpus + "/reset", {}, "PUT", selectedOpus + " reset");
+		actionFrame(PATH + "/video/" + selectedOpus + "/reset", {}, "PUT", selectedOpus + " reset");
 	},
 	/**
 	 * remove wrong video file
 	 * @param selectedOpus
 	 */
 	fnVideoWrong = function(selectedOpus) {
-		actionFrame(videoPath + "/" + selectedOpus + "/wrong", {}, "PUT", selectedOpus + " mark wrong");
+		actionFrame(PATH + "/video/" + selectedOpus + "/wrong", {}, "PUT", selectedOpus + " mark wrong");
 	},
 	/**
 	 * call video player by random
@@ -169,7 +135,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnCoverView = function(opus) {
 		console.log("Cover image view : " + opus);
-		popupImage(videoPath + "/" + opus + "/cover");
+		popupImage(PATH + "/video/" + opus + "/cover");
 	},
 	/**
 	 * popup overview editer
@@ -177,28 +143,28 @@ var calculatedDivHeight = 0,
 	 */
 	fnEditOverview = function(opus, event) {
 		console.log("Overview Popup : " + opus);
-	    popup(videoPath + "/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse', DEFAULT_SPECS, event);
+	    popup(PATH + "/video/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse', DEFAULT_SPECS, event);
 	},
 	/**
 	 * popup video detail info
 	 * @param opus
 	 */
 	fnVideoDetail = function(opus) {
-	    popup(videoPath + "/" + opus, "videoDetail-"+opus, 800, 640);
+	    popup(PATH + "/video/" + opus, "videoDetail-"+opus, 800, 640);
 	},
 	/**
 	 * popup view actress detail
 	 * @param name
 	 */
 	fnViewActressDetail = function(name) {
-		popup(videoPath + "/actress/" + name, "actressDetail-" + name, 850, 600);
+		popup(PATH + "/video/actress/" + name, "actressDetail-" + name, 850, 600);
 	},
 	/**
 	 * popup view studio detail
 	 * @param name
 	 */
 	fnViewStudioDetail = function(name) {
-		popup(videoPath + "/studio/" + name, "studioDetail-" + name, 850, 600);
+		popup(PATH + "/video/studio/" + name, "studioDetail-" + name, 850, 600);
 	},
 	/**
 	 * save video rank
@@ -219,7 +185,7 @@ var calculatedDivHeight = 0,
 				console.log("fnRank opener error", e);
 			}
 		}
-		actionFrame(videoPath + "/" + opus + "/rank/" + rank.val(), {}, "PUT", opus + " rank " + rank.val(), 300);
+		actionFrame(PATH + "/video/" + opus + "/rank/" + rank.val(), {}, "PUT", opus + " rank " + rank.val(), 300);
 	},
 	/**
 	 * set rank color
@@ -241,7 +207,7 @@ var calculatedDivHeight = 0,
 	fnFavorite = function(dom, name) {
 		var val = dom.innerHTML == '★';
 		dom.innerHTML = val ? '☆' : '★';
-		actionFrame(videoPath + "/actress/" + name + "/favorite/" + !val, {}, "PUT", name + " set favorite");
+		actionFrame(PATH + "/video/actress/" + name + "/favorite/" + !val, {}, "PUT", name + " set favorite");
 	},
 	/**
 	 * searching content by keyword
@@ -284,7 +250,7 @@ var calculatedDivHeight = 0,
 	 * reload video source
 	 */
 	fnReloadVideoSource = function() {
-		actionFrame(videoPath + "/reload", {}, "GET", "Source reload");
+		actionFrame(PATH + "/video/reload", {}, "GET", "Source reload");
 	},
 	/**
 	 * 비디오 확인을 기억하기 위해 css class를 변경한다.
@@ -307,7 +273,7 @@ var calculatedDivHeight = 0,
 			$(dom).removeClass("label-plain");
 			$(dom).addClass("label-default");
 		}
-		actionFrame(videoPath + "/" + opus + "/tag?id=" + tagId, {}, "POST", "set tag " + opus + " <- " + tagId);
+		actionFrame(PATH + "/video/" + opus + "/tag?id=" + tagId, {}, "POST", "set tag " + opus + " <- " + tagId);
 	},
 	/**
 	 * 저장한 태그를 화면에 추가하고, 서버에 저장시킨다.
@@ -322,7 +288,7 @@ var calculatedDivHeight = 0,
 				$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
 		);
 		
-		actionFrame(videoPath + "/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname);
+		actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname);
 		return false;
 	},
 	/**
@@ -330,7 +296,7 @@ var calculatedDivHeight = 0,
 	 * @param name
 	 */
 	fnViewTagDetail = function(name) {
-		popup(videoPath + "/tag/" + name, "tagDetail-" + name, 850, 600);
+		popup(PATH + "/video/tag/" + name, "tagDetail-" + name, 850, 600);
 	},
 	/**
 	 * 태그 삭제
@@ -339,7 +305,7 @@ var calculatedDivHeight = 0,
 	fnDeleteTag = function(tagId, dom) {
 		if (confirm("Are you sure to delete it?")) {
 			$(dom).parent().hide();
-			actionFrame(videoPath + "/tag?id=" + tagId, {}, "DELETE", tagId + " tag delete");
+			actionFrame(PATH + "/video/tag?id=" + tagId, {}, "DELETE", tagId + " tag delete");
 		}
 	},
 	fnSearchOpus = function() {
@@ -388,7 +354,7 @@ var calculatedDivHeight = 0,
 	},
 	goTorrentMove = function(opus) {
 		fnMarkChoice(opus);
-		actionFrame(videoPath + "/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+		actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
 	},
 	videoCoverSeenHistory = new Array(),
 	getRandomVideoIndex = function() {

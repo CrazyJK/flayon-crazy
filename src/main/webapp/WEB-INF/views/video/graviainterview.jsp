@@ -249,7 +249,7 @@ function renderContent(idx) {
 			checkCount++;
 		}
 		
-		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? videoPath + "/" + title.opus + "/cover" : title.imgSrc)};
+		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? PATH + "/video/" + title.opus + "/cover" : title.imgSrc)};
 				
 		$("<div>").addClass("cover-wrapper" + stateClass).append(
 				$("<img>").addClass("img-thumbnail cover-image").attr({src: title.imgSrc}).attr(onClick)
@@ -331,7 +331,7 @@ function fnToggleBtnMode() {
 }
 
 function saveCoverAll() {
-	actionFrame(videoPath + "/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
+	actionFrame(PATH + "/video/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
 }
 
 function resizeCover(first) {
