@@ -89,7 +89,7 @@ var videoList = (function() {
 						}
 						var thisTr = $("tr[data-no='" + currentVideoNo + "']");
 						var imgTop = $(thisTr).offset().top + 40;
-						thisTr.addClass("trFocus").find("img").css({"top": imgTop}).css(coverPosition).show();
+						thisTr.addClass("trFocus").find("img.tbl-cover").css({"top": imgTop}).css(coverPosition).show();
 					}
 				}
 			},
@@ -352,13 +352,13 @@ var videoList = (function() {
 				console.log("window resize");
 				var setCoverPositionOnTableView = function() {
 					windowWidth = $(window).width();
-					var imgWidth = windowWidth / 2;
-					if (imgWidth > 800)
+					var imgWidth = Math.floor(windowWidth / 2);
+					if (imgWidth > 800) 
 						imgWidth = 800;
-					var imgLeft = windowWidth / 4;
+					var imgLeft = Math.floor(windowWidth / 4);
 					//$(".tbl-cover").css({left: imgLeft, width: imgWidth});
 					coverPosition = {left: imgLeft, width: imgWidth};
-					console.log("setCoverPositionOnTableView", {left: imgLeft, width: imgWidth});
+					console.log("setCoverPositionOnTableView", coverPosition);
 				};
 				
 				isShortWidth = $(window).width() < 960;

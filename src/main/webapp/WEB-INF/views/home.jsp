@@ -25,7 +25,7 @@ div.jumbotron {
 	background-size: cover;
 	margin: 15px auto;
     padding: 10px;
-	width: 750px;
+	width: calc(100% - 350px);
 	min-height: 260px;
     color: #f0f0f0;
     line-height: 1.40em;
@@ -210,9 +210,9 @@ var isLogin = ${isAuth},
 		        }
 		        
 		        $(   ".day-timer").html(days);
-		        $(  ".hour-timer").html(hours);
-		        $(".minute-timer").html(minutes);
-		        $(".second-timer").html(seconds);
+		        $(  ".hour-timer").html(pad(hours, 2));
+		        $(".minute-timer").html(pad(minutes, 2));
+		        $(".second-timer").html(pad(seconds, 2));
 		    }, 1000);
 
             $(".life-timer > div").attr({"title": DEADLINE.substr(0, 11)}).tooltip({

@@ -86,8 +86,8 @@ $(document).ready(function() {
 			<li class="dropdown">
     			<a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">Theme<span class="caret"></span></a>
     			<ul class="dropdown-menu">
-					<li><a onclick="toogleTheme('normal')">Normal</a></li>
-					<li><a onclick="toogleTheme('plain')">Plain</a></li>
+					<li><a id="themeSwitchNormal" class="theme-switch-btn">Normal</a></li>
+					<li><a id="themeSwitchPlain"  class="theme-switch-btn">Plain</a></li>
     			</ul>
   			</li>
 		</ul>

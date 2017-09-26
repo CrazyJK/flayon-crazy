@@ -186,6 +186,10 @@ var agent = navigator.userAgent.toLowerCase(),
 		}
 		return result * (reverse ? -1 : 1); */
 	},
+	pad = function(n, width) {
+		n = n + '';
+		return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+	},
 	reqParam = location.search.split(/[?&]/).slice(1).map(function(paramPair) {
 		return paramPair.split(/=(.+)?/).slice(0, 2);
 	}).reduce(function(obj, pairArray) {

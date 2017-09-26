@@ -118,11 +118,11 @@ var VideoUtils = {
 		},
 		wrapLabel: function(html, title, onclick, extClass, extCss, extAttr) {
 			var $span = $("<span>").addClass("label label-plain").html(html);
-			title    && title    != '' && $span.attr("title", title);
-			onclick  && onclick  != '' && $span.attr("onclick", onclick);
+			title    &&    title != '' && $span.attr("title", title);
+			onclick  &&  onclick != '' && $span.attr("onclick", onclick);
 			extClass && extClass != '' && $span.addClass(extClass);
-			extCss   && extCss   != '' && $span.css(extCss);
-			extAttr  && extAttr  != '' && $span.attr(extAttr);
+			extCss   &&   extCss != '' && $span.css(extCss);
+			extAttr  &&  extAttr != '' && $span.attr(extAttr);
 			return $span.clone().wrapAll("<div/>").parent().html();
 		}
 };

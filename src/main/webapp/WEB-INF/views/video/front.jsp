@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="${PATH}/css/typed.css"/>
 <link rel="stylesheet" href="${PATH}/css/aperture.css"/>
 <link rel="stylesheet" href="${PATH}/css/neon.css"/>
+<script src="${PATH}/js/flayon.effect.aperture.js"></script>
 <style type="text/css">
 body {
  	font-family: 'clipregular';

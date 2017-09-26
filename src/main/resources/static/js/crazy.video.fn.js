@@ -309,32 +309,19 @@ var calculatedDivHeight = 0,
 		}
 	},
 	fnSearchOpus = function() {
-		console.log(arguments);
-		var opus;
-		if (arguments.length == 0)
-			opus = $("#query").val();
-		else
-			opus = arguments[0];
-		showDebug("searchURL", urlSearchVideo + opus);
-		popup(urlSearchVideo + opus, 'videoSearch', 900, 950);
+		var query = arguments.length == 0 ? $("#query").val() : arguments[0];
+		showDebug("searchURL", urlSearchVideo + query);
+		popup(urlSearchVideo + query, 'videoSearch', 1200, 950);
 	},
-	fnSearchActress = function(name) {
-		var name;
-		if (arguments.length == 0)
-			name = $("#query").val();
-		else
-			name = arguments[0];
-		showDebug("searchURL", urlSearchActress + name);
-		popup(urlSearchActress + name, 'actressSearch', 900, 950);
+	fnSearchActress = function() {
+		var query = arguments.length == 0 ? $("#query").val() : arguments[0];
+		showDebug("searchURL", urlSearchActress + query);
+		popup(urlSearchActress + query, 'actressSearch', 900, 950);
 	},
-	fnSearchTorrent = function(opus) {
-		var opus;
-		if (arguments.length == 0)
-			opus = $("#query").val();
-		else
-			opus = arguments[0];
-		showDebug("searchURL", urlSearchTorrent + opus);
-		popup(urlSearchTorrent + opus, 'torrentSearch', 900, 950);
+	fnSearchTorrent = function() {
+		var query = arguments.length == 0 ? $("#query").val() : arguments[0];
+		showDebug("searchURL", urlSearchTorrent + query);
+		popup(urlSearchTorrent + query, 'torrentSearch', 900, 950);
 	},
 	showDebug = function(debugDomId, msg) {
 		var resultId = "copyResult";
