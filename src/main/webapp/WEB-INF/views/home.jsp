@@ -180,92 +180,108 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	</div>
 
 <script type="text/javascript">
-var isLogin = ${isAuth},
-    username = '${username}',
-    DEADLINE = 'Apr 28 2031 00:00:00 GMT+0900',
-    WORDING1 = '<s:message code="home.favorites.wording1"/>',
-    WORDING2 = '<s:message code="home.favorites.wording2"/>',
-    showTimer = function() {
-	    var SECOND = 1000,
-	        MINUTE = SECOND * 60, // 1000 * 60
-	        HOUR   = MINUTE * 60, // 1000 * 60 * 60
-	        DAY    = HOUR   * 24, // 1000 * 60 * 60 * 24
-	        countDownDate = new Date(DEADLINE).getTime(),
-	        lifeTimer = setInterval(function() {
-		        var now = new Date().getTime(),
-		            timeRemaining = countDownDate - now;
-		        if (timeRemaining < 0) {
-		            clearInterval(lifeTimer);
-		            $(".life-timer").html("EXPIRED!!!").effect("puff", {}, 1000);
-		            return;
-		        }
-		        
-		        var days    = Math.floor(timeRemaining / DAY),
-		            hours   = Math.floor(timeRemaining % DAY / HOUR),
-		            minutes = Math.floor(timeRemaining % HOUR / MINUTE),
-		            seconds = Math.floor(timeRemaining % MINUTE / SECOND);
-		        if (seconds == 0) {
-		            setFonts();
-		            $(".life-timer").jkEffect({duration: 500});
-		        }
-		        
-		        $(   ".day-timer").html(days);
-		        $(  ".hour-timer").html(pad(hours, 2));
-		        $(".minute-timer").html(pad(minutes, 2));
-		        $(".second-timer").html(pad(seconds, 2));
-		    }, 1000);
+var homeApp = (function($) {
+	var isLogin  = '${isAuth}' == 'true',
+	    username = '${username}',
+	    DEADLINE = 'Apr 28 2031 00:00:00 GMT+0900',
+	    WORDING1 = '<s:message code="home.favorites.wording1"/>',
+	    WORDING2 = '<s:message code="home.favorites.wording2"/>';
+	    
+	var showTimer = function() {
+        var SECOND = 1000,
+            MINUTE = SECOND * 60, // 1000 * 60
+            HOUR   = MINUTE * 60, // 1000 * 60 * 60
+            DAY    = HOUR   * 24, // 1000 * 60 * 60 * 24
+            countDownDate = new Date(DEADLINE).getTime();
+            // life remaining display timer
+		var lifeTimer = setInterval(function() {
+            var now = new Date().getTime(),
+                timeRemaining = countDownDate - now;
+            if (timeRemaining < 0) {
+                clearInterval(lifeTimer);
+                $(".life-timer").html("EXPIRED!!!").effect("puff", {}, 1000);
+                return;
+            }
+            
+            var days    = Math.floor(timeRemaining / DAY),
+                hours   = Math.floor(timeRemaining % DAY / HOUR),
+                minutes = Math.floor(timeRemaining % HOUR / MINUTE),
+                seconds = Math.floor(timeRemaining % MINUTE / SECOND);
+            
+            if (seconds == 0) {
+                setFonts();
+                $(".life-timer").jkEffect({duration: 500});
+            }
+            
+            $(   ".day-timer").html(days);
+            $(  ".hour-timer").html(pad(hours, 2));
+            $(".minute-timer").html(pad(minutes, 2));
+            $(".second-timer").html(pad(seconds, 2));
+        }, 1000);
 
-            $(".life-timer > div").attr({"title": DEADLINE.substr(0, 11)}).tooltip({
-	            position: {at: "center"},
-	            classes: {"ui-tooltip": "life-timer-on"}
-	        });
-
-	},
-    setFonts = function() {
-	    !isLogin && $("#headerNav").css({fontFamily: randomFont()});
-	    $("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
-	        $(this).css({fontFamily: randomFont()});
-	    });
-	},
-	viewLoginForm = function() {
-	    $("#aperture").aperture({
-	        src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
-	        duration: "3s",
-	        baseColor: "rgba(0,0,0,0.1)",
-	        color: "rgba(0,0,0,0.5)",
-	        backgroundColor: "transparent",
-	        width: "150px",
-	        outerRadius: "0"
-	    });
-	    $("#loginModal").modal();
+        $(".life-timer > div").attr({"title": DEADLINE.substr(0, 11)}).tooltip({
+            position: {at: "center"},
+            classes: {"ui-tooltip": "life-timer-on"}
+        });
+    };
+    
+	var setFonts = function() {
+        !isLogin && $("#headerNav").css({fontFamily: randomFont()});
+        $("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
+            $(this).css({fontFamily: randomFont()});
+        });
+    };
+    
+	var viewLoginForm = function() {
+        $("#aperture").aperture({
+            src: "<c:url value="/img/kamoru_crazy_artistic_t.png"/>",
+            duration: "3s",
+            baseColor: "rgba(0,0,0,0.1)",
+            color: "rgba(0,0,0,0.5)",
+            backgroundColor: "transparent",
+            width: "150px",
+            outerRadius: "0"
+        });
+        $("#loginModal").modal();
+    };
+    
+	var start = function() {
+        $("#hello").html("FlayOn");
+        isLogin && $("#name").html(username);
+        $("h1").jkEffect();
+        setTimeout(function() {
+            $("#wording").typed({
+                strings: [WORDING1 + "<br/>" + WORDING2],
+                //stringsElement: $('#wordings'),
+                typeSpeed: getRandomInteger(10, 50),
+                backDelay: 500,
+                loop: false,
+                contentType: 'html', // or text
+                // defaults to false for infinite loop
+                loopCount: false,
+                callback: function() {
+                    $("#wording").next(".typed-cursor").hide();
+                    $(".jumbotron").draggable();
+                }
+            });
+        }, 1000);
 	};
+    
+    return {
+    	init: function() {
+    		$(document).ready(function() {
+    		    setFonts();
+    		    showTimer();
+    		});
+    		$(window).load(function() {
+    			start();
+    		});
+    	}
+    };
+    
+}(jQuery));
 
-setFonts();
-
-$(document).ready(function() {
-    showTimer();
-    $(".jumbotron").draggable();
-});
-
-$(window).load(function() {
-	$("#hello").html("FlayOn");
-	isLogin && $("#name").html(username);
-    $("h1").jkEffect();
-	$("#wording").typed({
-        strings: [WORDING1 + "<br/>" + WORDING2],
-	    //stringsElement: $('#wordings'),
-	    typeSpeed: getRandomInteger(10, 50),
-	    backDelay: 500,
-	    loop: false,
-	    contentType: 'html', // or text
-	    // defaults to false for infinite loop
-	    loopCount: false,
-	    callback: function() {
-	    	$("#wording").next(".typed-cursor").hide();
-	    }
-	});
-});
-
+homeApp.init();
 </script>
 </body>
 </html>
