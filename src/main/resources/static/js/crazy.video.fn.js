@@ -45,7 +45,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnEditSubtitles = function(selectedOpus) {
 		console.log("edit subtitles " + selectedOpus);
-		$("#actionIframe").attr("src", PATH + "/video/" + selectedOpus + "/subtitles");
+		actionFrame(PATH + "/video/" + selectedOpus + "/subtitles", {}, "GET", selectedOpus + " edit subtitles");
 	},
 	/**
 	 * call video player
@@ -116,18 +116,6 @@ var calculatedDivHeight = 0,
 					"scrollTop", topValue);
 			$("#content_div").scrollTop(topValue);
 		}
-	},
-	/**
-	 * popup view background image
-	 */
-	fnBGImageView = function() {
-		popupImage(currBGImageUrl, "bg-image");
-	},
-	/**
-	 * delete current backgroung image
-	 */
-	fnBGImageDELETE = function() {
-		actionFrame(currBGImageUrl, {}, "DELETE", "this image delete");
 	},
 	/**
 	 * popup view video cover

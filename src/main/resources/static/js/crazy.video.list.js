@@ -338,7 +338,7 @@ var videoList = (function() {
 			var imgHeight = Math.round(imgWidth * 0.6725);
 			var isLarge   = imgWidth > 500;
 			var coverSizeStyle = "<style>#box>ul>li>dl {width:" + imgWidth + "px; height:" + imgHeight + "px; font-size:" + (isLarge ? '22px' : '16px') + ";}</style>";
-			$("#cover-size-style").empty().append(coverSizeStyle);
+			$("#coverSizeStyle").empty().append(coverSizeStyle);
 			$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 			setLocalStorageItem(VIDEOLISTBYSPA_IMAGE_WIDTH, imgWidth);
 			console.log("#img-width change width", imgWidth, "height", imgHeight);

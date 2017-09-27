@@ -3,16 +3,14 @@
  */
 'use strict';
 
-var PATH      = '${PATH}',
-	bgImageCount = parseInt('${bgImageCount}'),
-	urlSearchVideo   = '${urlSearchVideo}',
-	urlSearchActress = '${urlSearchActress}',
-	urlSearchTorrent = '${urlSearchTorrent}',
+var PATH = '${PATH}',
+	bgImageCount = 0,
+	urlSearchVideo,
+	urlSearchActress,
+	urlSearchTorrent,
     locationPathname = window.location.pathname,
     currBGImageNo = 0,
     bgContinue = true,	/** content_div에 이미지를 보여줄지 여부 */
-    tSec = 1,
-    timer,
     bgChangeInterval = 60,
     bgImageChanger,
     listViewType,
@@ -28,13 +26,12 @@ var PATH      = '${PATH}',
 	 * div container 높이 조정
 	 */
 	resizeDivHeight = function() {
-		var offsetMargin = 20,
-			headerHeight = $("#header_div").outerHeight();
+		var offsetMargin = 20, headerHeight = $("#header_div").outerHeight();
 		windowHeight = $(window).outerHeight();
 		windowWidth  = $(window).width();
 		calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
 		$("#content_div").outerHeight(calculatedDivHeight);
-		//console.log("resizeDivHeight", calculatedDivHeight);
+		console.log("resizeDivHeight", calculatedDivHeight);
 		
 		$("#innerSearchPage").css({
 			width: windowWidth - offsetMargin * 2, 
@@ -60,10 +57,9 @@ var PATH      = '${PATH}',
 				loading(true, msg ? msg : loadingText);
 			}
 		}).done(function(data, textStatus, jqXHR) {
-			loading(false);
-			if (jqXHR.getResponseHeader('error') == 'true') {
+			if (jqXHR.getResponseHeader('error') === 'true') {
 				var errorMessge = jqXHR.getResponseHeader('error.message');
-				loading(true, 'Fail : ' + errorMessge, 10000);
+				loading(true, 'Fail : ' + errorMessge, {danger: true});
 			}
 			else {
 				loading(false);
@@ -73,57 +69,57 @@ var PATH      = '${PATH}',
 			var errorHtml = $.parseHTML(jqXHR.responseText);
 			var parsed = $('<div/>').append(errorHtml);
 			var context = parsed.find(".container").html();
-			loading(true, "fail : " + reqUrl + " [" + textStatus + "] "+ errorThrown, 0, context);
+			loading(true, "fail : " + reqUrl + " [" + textStatus + "] "+ errorThrown, {detail: context, danger: true});
+			console.log("actionFrame fail", jqXHR, textStatus, errorThrown);
 		}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
-			//console.log("actionFrame data_jqXHR", data_jqXHR);
-			//console.log("actionFrame textStatus", textStatus);
-			//console.log("actionFrame jqXHR_errorThrown", jqXHR_errorThrown);
+			console.log("actionFrame called", data_jqXHR, textStatus, jqXHR_errorThrown);
 		});
 	},
 	/**
 	 * loading layer control
 	 */
-	loading = function(show, msg, interval, detail) {
-		// console.log("loading", show, msg, interval, detail);
-		var loadingTimer = function(start) {
-			//console.log("loadingTimer", start, tSec);
-			if (start) {
-				$("#loading-timer").html(tSec++);
-			}
-			else {
-				clearInterval(timer);
-			}
-		};
-		
+	tSec = 0,
+	timer,
+	loading = function(show, msg, options) {
+		var defaults = {interval: 0, detail: "", danger: false},
+			opts = $.extend({}, defaults, options),
+			timerControl = function(start) {
+				console.log("loading timerControl", start, tSec);
+				if (start)
+					$("#loading-timer").html(tSec++);
+				else
+					clearInterval(timer);
+			};
+		console.log("loading", show, msg, options, opts);
+
 		if (show) {
-			$("#loading").css("display", "table");
 			tSec = 1;
+			timerControl(false);
 			timer = setInterval(function() {
-				loadingTimer(true);
+				timerControl(true);
 			}, 1000);
+			if (msg) $("#loading-msg").html(msg);
+			$("#loading-msg-detail").toggleClass("hide", opts.detail === "").html(opts.detail); 
+			$("#loading, #loader, #loading-timer, #loading-msg, #loading-msg-detail").toggleClass("red", opts.danger);
+			$("#loading-timer").html(tSec);
+			$("#loading").css("display", "table");
+			if (opts.interval > 0) {
+				console.log("loading will be disappear in ", opts.interval);
+				$("#loading").fadeOut(opts.interval, function() {
+					console.log("loading timerControl off");
+					timerControl(false);
+				});
+			}
 		}
 		else {
 			$("#loading").hide();
-			loadingTimer(false);
-		}
-		
-		if (msg)
-			$("#loading-msg").html(msg);
-		
-		if (interval)
-			$("#loading").fadeOut(interval, function() {
-				loadingTimer(false);
-			});
-		
-		if (detail) {
-			var loadingMsgDetail = $("<div>").attr("id", "loading-msg-detail").addClass("box").html(detail);
-			$("#loading-content").append(loadingMsgDetail);
+			timerControl(false);
 		}
 	},
 	/**
 	 * toggle body background image
 	 */
-	toogleBody = function() {
+	toggleBody = function() {
 		if (bgContinue) {
 		    $(".container-fluid, .container").animate({
 		        "opacity": bgToggle++ % 2
@@ -151,7 +147,7 @@ var PATH      = '${PATH}',
 	 * @param imgIdx
 	 */
 	setBackgroundImage = function(imgIdx) {
-		currBGImageNo = imgIdx ? imgIdx : getRandomInteger(0, bgImageCount-1);
+		currBGImageNo = typeof imgIdx === 'number' ? imgIdx : getRandomInteger(0, bgImageCount-1);
 		currBGImageUrl = PATH + "/image/" + currBGImageNo;
 		console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
 		$("body").css("background-image", "url(" + currBGImageUrl + ")");
@@ -170,6 +166,11 @@ var PATH      = '${PATH}',
 	 * toggle theme
 	 */
 	toggleTheme = function(themeName) {
+		var	propagateTheme = function() {
+			if (isLoadedSearchPage) {
+				$("#innerSearchPage > iframe").get(0).contentWindow.toggleTheme(themeSwitch);
+			}
+		};
 		if (locationPathname.startsWith(PATH + '/image')) {
 			if (locationPathname === PATH + '/image/thumbnails') {
 				if (themeName === 'normal') {
@@ -191,12 +192,13 @@ var PATH      = '${PATH}',
 				if (bgContinue) {
 					$("#bgChangeInterval").val(bgChangeInterval);
 					setBackgroundImage();
+					clearInterval(bgImageChanger);
 					bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 				}
 				$("#header_div" ).css({backgroundImage: 'linear-gradient(to bottom, #fff 0, ' + getRandomColor(0.3) + ' 100%)'});
 				$("#content_div").css({backgroundColor: getRandomColor(0.3)});
 				$("#plainStyle").empty();
-				$("#backMenu").show();
+				$("#backMenu").parent().show();
 			}
 			if (themeName === 'plain') {
 				clearInterval(bgImageChanger);
@@ -214,7 +216,7 @@ var PATH      = '${PATH}',
 					 	+ ' .jk-video-detail .label-plain.favorite {box-shadow: 0 3px 9px rgba(0,0,0,.3), 0 0 10px 0 rgba(38, 90, 136, .5) inset !important;}'
 					+ '</style>'
 				);
-				$("#backMenu").hide();
+				$("#backMenu").parent().hide();
 			}
 		}
 		themeSwitch = themeName;
@@ -222,10 +224,17 @@ var PATH      = '${PATH}',
 		propagateTheme();
 		setLocalStorageItem(CRAZY_DECORATOR_THEME, themeSwitch);
 	},
-	propagateTheme = function() {
-		if (isLoadedSearchPage) {
-			$("#innerSearchPage > iframe").get(0).contentWindow.toggleTheme(themeSwitch);
-		}
+	/**
+	 * delete current backgroung image
+	 */
+	deleteBGImage = function() {
+		actionFrame(currBGImageUrl, {}, "DELETE", "this image delete");
+	},
+	/**
+	 * popup view background image
+	 */
+	popupBGImage = function() {
+		popupImage(currBGImageUrl, "bg-image");
 	},
 	crazy = (function() {
 		
@@ -242,7 +251,7 @@ var PATH      = '${PATH}',
 					console.log("crazy_listener : pageMove listener start");
 					$("#deco_nav a[href]").on("click", function() {
 						console.log("nav click...");
-						loading(true, loadingText);
+						loading(true, 'new request call');
 					});
 					$("#header_div form").submit(function(event) {
 						console.log("form submit...");
@@ -251,6 +260,10 @@ var PATH      = '${PATH}',
 				},
 				background = function() {
 					console.log("crazy_listener : background listener start");
+					$("#backMenu"  ).on("click", toggleBody);
+					$("#bgImageBtn").on("click", deleteBGImage);
+					$("#nextBgBtn" ).on("click", setBackgroundImage);
+					$("#popupBgBtn").on("click", popupBGImage);
 					bgContinue && $("#bgChangeInterval").on("keyup", function() {
 						bgChangeInterval = parseInt($(this).val());
 						clearInterval(bgImageChanger);
@@ -258,6 +271,9 @@ var PATH      = '${PATH}',
 						bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 						console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
 					}).val(bgChangeInterval).trigger("keyup");
+				},
+				searchPage = function() {
+					$("#searchMenu").on("click", viewInnerSearchPage);
 				},
 				checkbox = function() {
 					console.log("crazy_listener : implement checkbox element");
@@ -323,6 +339,7 @@ var PATH      = '${PATH}',
 					resize();
 					pageMove();
 					background();
+					searchPage();
 					checkbox();
 					radioBtn();
 					checkbox_role();
@@ -361,7 +378,7 @@ var PATH      = '${PATH}',
 				
 				if (locationPathname.startsWith(PATH + '/image')) {
 					console.log("current " + locationPathname + " background menu hide");
-					$("#backMenu").hide();
+					$("#backMenu").parent().hide();
 				}
 			},
 			/**
@@ -440,8 +457,8 @@ var PATH      = '${PATH}',
 		};
 	}());
 
-window.onerror = function (e) {
-    console.log('Error: ', e);
+window.onerror = function(e) {
+    console.log('Error', e);
     $("#error > p").html('Error: ' + e);
     $("#error").dialog();
     loading(false);

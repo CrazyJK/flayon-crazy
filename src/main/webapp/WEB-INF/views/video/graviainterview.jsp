@@ -167,7 +167,7 @@ function request() {
 		timeout: 60000
 	}).done(function(data) {
 		if (data.exception) {
-			loading(true, data.exception.message);
+			loading(true, data.exception.message, {danger: true});
 		}
 		else {
 			$.each(data.tistoryGraviaItemList, function(i, row) { // 응답 json을 List 배열로 변환
@@ -181,7 +181,7 @@ function request() {
 			loading(false);
 		}
 	}).fail(function(jqxhr, textStatus, error) {
-		loading(true, textStatus + ", " + error);
+		loading(true, textStatus + ", " + error, {danger: true});
 	}).always(function() {});
 }
 
@@ -344,7 +344,7 @@ function resizeCover(first) {
 	}
 	var imgHeight = Math.round(parseInt(imgWidth) * 1.3235);
 	var coverSizeStyle = "<style>#imageWrapper>.cover-wrapper>.cover-image {width:" + imgWidth + "px; height:" + imgHeight + "px;} #imageWrapper>.cover-wrapper>.cover-title {width:" + imgWidth + "px;}</style>";
-	$("#cover-size-style").empty().append(coverSizeStyle);
+	$("#coverSizeStyle").empty().append(coverSizeStyle);
 	$('#img-width').attr({title: imgWidth + " x " + imgHeight});
 	$('.addon-width').html(imgWidth + " x " + imgHeight);
 	setLocalStorageItem(GRAVIAINTERVIEW_IMAGE_WIDTH, imgWidth);
