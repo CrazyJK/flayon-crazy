@@ -292,7 +292,7 @@ listViewType = '${videoSearch.listViewType}';
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
-				$("#slides").slideview();
+			totalVideoSize > 0 && $("#slides").slideview();
 			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'V'}">
@@ -455,7 +455,7 @@ listViewType = '${videoSearch.listViewType}';
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
-			$("#slides").slideview({width:800, height:700});
+			totalVideoSize > 0 && $("#slides").slideview({width:800, height:700});
 			function resizeSecondDiv() {
 				var slidesjsContainerCss = {height: calculatedDivHeight - $(".slidesjs-pagination").outerHeight() - 30};
 				console.log("Flay slidesjsContainerCss", slidesjsContainerCss);
