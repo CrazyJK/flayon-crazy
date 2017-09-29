@@ -31,67 +31,63 @@ $(document).ready(function() {
 //				if (opener.location.href.indexOf("video/actress") > -1) 
 //					opener.location.reload();
 //			}
-			location.href = "${PATH}/video/actress/" + $("#newName").val();
+			location.href = PATH + "/video/actress/" + $("#newName").val();
 		}, 1000);
 	});
-	
-<c:if test="${actress.existImage}">
-	$("body").css({
+	!bgContinue && $("body").css({
 		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
 	});	
-</c:if>
-	
 });
 </script>
 </head>
 <body>
 <div class="container">
-
-<form id="actressForm" method="post" role="form" action="${PATH}/video/actress" class="form-horizontal">
-	<input type="hidden" name="name" value="${actress.name}"/>
-	<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
-	<br/>
-	<div class="form-group">
-		<div class="col-sm-2 text-right">
-			<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
+	
+	<form id="actressForm" method="post" role="form" action="${PATH}/video/actress" class="form-horizontal">
+		<input type="hidden" name="name" value="${actress.name}"/>
+		<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
+		<br/>
+		<div class="form-group">
+			<div class="col-sm-2 text-right">
+				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
+			</div>
+			<div class="col-sm-4">
+				<input class="form-control" type="text" name="newname"   value="${actress.name}"      id="newName" />
+			</div>
+			<div class="col-sm-4">
+				<input class="form-control" type="text" name="localname" value="${actress.localName}" placeholder="local name"/>
+			</div>
+			<div class="col-sm-1">
+				<img src="${PATH}/img/magnify${status.count%2}.png" width="12px" title="<s:message code="video.find-info.actress"/>"
+					onclick="popup('<c:url value="${urlSearchActress}"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
+			</div>
+			<div class="col-sm-1">
+				<span class="label label-plain float-right">Score ${actress.score}</span>
+			</div>		
 		</div>
-		<div class="col-sm-4">
-			<input class="form-control" type="text" name="newname"   value="${actress.name}"      id="newName" />
+		<div class="form-group">
+			<div class="col-sm-3">
+				<input class="form-control" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
+			</div>
+			<div class="col-sm-3">
+				<input class="form-control" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
+			</div>
+			<div class="col-sm-2">
+				<input class="form-control" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
+			</div>
+			<div class="col-sm-2">
+				<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
+			</div>
+			<div class="col-sm-2 text-right">
+				<button type="submit" class="btn btn-default">Save</button>
+			</div>
 		</div>
-		<div class="col-sm-4">
-			<input class="form-control" type="text" name="localname" value="${actress.localName}" placeholder="local name"/>
+		<div class="form-group">
+			<div class="col-sm-12">
+				<textarea class="form-control" rows="1" name="comment">${actress.comment}</textarea>
+			</div>
 		</div>
-		<div class="col-sm-1">
-			<img src="${PATH}/img/magnify${status.count%2}.png" width="12px" title="<s:message code="video.find-info.actress"/>"
-				onclick="popup('<c:url value="${urlSearchActress}"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
-		</div>
-		<div class="col-sm-1">
-			<span class="label label-plain float-right">Score ${actress.score}</span>
-		</div>		
-	</div>
-	<div class="form-group">
-		<div class="col-sm-3">
-			<input class="form-control" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
-		</div>
-		<div class="col-sm-3">
-			<input class="form-control" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
-		</div>
-		<div class="col-sm-2">
-			<input class="form-control" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
-		</div>
-		<div class="col-sm-2">
-			<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
-		</div>
-		<div class="col-sm-2 text-right">
-			<button type="submit" class="btn btn-default">Save</button>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-12">
-			<textarea class="form-control" rows="1" name="comment">${actress.comment}</textarea>
-		</div>
-	</div>
-</form>
+	</form>
 	
 	<h3>
 		<span class="label label-plain">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>

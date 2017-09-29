@@ -11,8 +11,14 @@
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
 <script type="text/javascript">
-var table;
+var table, resizeSecondDiv = function() {
+	table.draw();
+};
 $(document).ready(function() {
+	$("#viewBtn").on("click", function() {
+		loading(true);
+		location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
+	});
     table = $('#list').DataTable({
     	scrollY:        (calculatedDivHeight - 70),
         scrollCollapse: true,
@@ -26,13 +32,6 @@ $(document).ready(function() {
         }
     });
 });
-function resizeSecondDiv() {
-	table.draw();
-}
-function view() {
-	loading(true);
-	location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
-}
 </script>
 </head>
 <body>
@@ -53,7 +52,7 @@ function view() {
 			<span class="label" id="checkbox-archive">Archive</span>
 		</label>
 		
-		<button class="btn btn-xs btn-default" onclick="view()">View</button>
+		<button class="btn btn-xs btn-default" id="viewBtn">View</button>
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">

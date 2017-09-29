@@ -41,15 +41,10 @@ dt, dd {
 </style>
 <script type="text/javascript">
 bgContinue = false;
-var thisWidth = $(this).width();
 $(document).ready(function() {
-
 	$("dl.dl-detail").css({
 		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
-//		backgroundSize: thisWidth + "px",
-//		backgroundColor: getRandomColor(0.5)
 	});
-	
 	$("form#renameForm").submit(function(event) {
 		console.log("form submit...");
 		loading(true, "rename...");
@@ -57,9 +52,7 @@ $(document).ready(function() {
 			location.reload();
 		}, 1000);
 	});
-
 	$('[data-toggle="popover"]').popover(); 
-		
 });
 function fnVideoToggle(dom) {
 	$(dom).next().next().toggleClass("hide");

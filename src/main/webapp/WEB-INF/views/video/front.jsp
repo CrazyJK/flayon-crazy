@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="${PATH}/css/typed.css"/>
 <link rel="stylesheet" href="${PATH}/css/aperture.css"/>
 <link rel="stylesheet" href="${PATH}/css/neon.css"/>
-<script src="${PATH}/js/flayon.effect.aperture.js"></script>
 <style type="text/css">
 body {
  	font-family: 'clipregular';
@@ -81,207 +80,192 @@ p > span.neon {
     color: rgb(238, 238, 238);
 }
 </style>
+<script type="text/javascript" src="${PATH}/js/flayon.effect.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/flayon.effect.typed.js"></script>
 <script type="text/javascript">
 bgContinue = false;
-var timingProperties = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
+var frontApp = (function() {
+
+	var opusList,
+	/**
+	 * random background-color
+	 */
+	backgroundEffect = function() {
+		setInterval(function() {
+			$("body").randomBG(1);
+		}, 1000 * getRandomInteger(10, 60));
+	},
+	/**
+	 * neon sign
+	 */
+	neonEffect = function() {
+		if (themeSwitch === 'normal') {
+			$("ul.nav > li").removeClass("active");
+			$(".neon").css({color: '#eee'}).each(function() { 
+				$(this).addClass("blink-" + getRandomInteger(1, 10));
+			});
+		}
+		if (themeSwitch === 'plain') {
+			$(".neon").removeClass('blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10');
+		}
+	},
+	/**
+	 * front image
+	 */
+	frontEffect = function() {
+		$("#front").attr({
+			src: '${PATH}/img/flayon/favicon-crazy-' + getRandomInteger(0, 4) + '.png'
+		}).on("click", function() {
+			var opus = $(this).data("opus");
+			if (opus && opus !== "") {
+				fnVideoDetail(opus);
+			}
+		});
+		$.getJSON("${PATH}/video/opus.json", function(data) {
+			opusList = data['opus'];
+			setInterval(function() {
+				var bool = getRandomBoolean();
+				var opusIndex = getRandomInteger(0, opusList.length-1);
+				$("#front").attr({
+					src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
+				}).css({
+					borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%"
+				}).data("opus", (bool ? "" : opusList[opusIndex]));
+			}, 1000 * getRandomInteger(3, 30));
+		});
+	},
+	/**
+	 * wording typed
+	 */
+	typedEffect = function() {
+		var typed = function(selector, message, callbackStart) {
+			$(selector).typed({
+			    strings: [message],
+			    //stringsElement: $('#wordings'),
+			    typeSpeed: getRandomInteger(10, 50),
+			    backDelay: 500,
+			    loop: false,
+			    contentType: 'html', // or text
+			    // defaults to false for infinite loop
+			    loopCount: false,
+			    callback: function() {
+			    	$(selector).next(".typed-cursor").hide();
+					if (callbackStart) {
+						// startImageBall();
+					}
+					else {
+						typed("#wording2", $("#wording-data-2").html(), true);
+					}
+			    }
+			});
+		}; 
+		typed("#wording1", $("#wording-data-1").html());
+	},
+	/**
+	 * image ball aperture
+	 */
+	imageballEffect = function() {
+		var minSize = 100, maxSize = 300;
+		var	aperture = function($obj, imgSrc) {
+			var TIMING_PROPERTIES = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
+			var	imageballPosition = function() {
+				var offset = 50;
+				var left  = getRandomInteger(1, $(window).innerWidth()  - maxSize);
+				var top   = getRandomInteger(1, $(window).innerHeight() - maxSize);
+				var sX    = $("#front").offset().left - offset;
+				var eX    = sX + $("#front").width() + offset*2;
+				var sY    = $("#front").offset().top - offset;
+				var eY    = sY + $("#front").height() + offset*2;
+				var _left = left + (maxSize /2);
+				var _top  = top  + (maxSize /2);
+				if (sX < _left && _left < eX && sY < _top && _top < eY) {
+					return imageballPosition();
+				}
+				return [left, top];
+			};
+			var position = imageballPosition();
+			var left  = position[0];
+			var top   = position[1];
+			var scale = "." + getRandomInteger(3, 9);
+			console.log("aperture", left, top, scale);
+				
+			$obj.css({
+				position: "absolute", /* relative, absolute */ 
+				left: left + "px",
+				top:  top  + "px", 
+				transform: "scale(" + scale + ", " + scale + ")"
+			}).on("click", function() {
+				$(this).css({
+					transform: "scale(1.5, 1.5)"
+				});
+			}).aperture({
+				src: imgSrc + "?_t=" + new Date().getTime(),
+				baseColor1: getRandomColor("." + getRandomInteger(10, 50)),
+				baseColor2: getRandomColor("." + getRandomInteger(10, 50)),
+				baseColor3: getRandomColor("." + getRandomInteger(10, 50)),
+				baseColor4: getRandomColor("." + getRandomInteger(10, 50)),
+				backgroundColor: getRandomColor("." + getRandomInteger(10, 50)),
+				outerMargin: "0 auto",
+				outerRadius: "0",
+				timing: TIMING_PROPERTIES[getRandomInteger(1, 5)],
+				width: maxSize + "px"
+			});
+		};
+		
+		setInterval(function() {aperture($("#aperture-O1"), "${PATH}/image/random")}, 1000 * getRandomInteger(10, 30));
+	 	setInterval(function() {aperture($("#aperture-O2"), "${PATH}/image/random")}, 1000 * getRandomInteger(10, 30));
+		setInterval(function() {aperture($("#aperture-O3"), "${PATH}/image/random")}, 1000 * getRandomInteger(10, 30));
+	},
+	/**
+	 *  favicon
+	 */
+	faviconEffect = function() {
+		setInterval(function() {
+			$( "#favicon-crazy").css({
+				"border-top-left-radius":     getRandomInteger(10, 50) + "%",
+			    "border-top-right-radius":    getRandomInteger(10, 50) + "%",
+			    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
+			    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
+			}).attr({
+				"src": "${PATH}/img/flayon/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
+			});
+		}, 1000 * getRandomInteger(10, 30));
+		setInterval(function() {
+			$( "#favicon-video").css({
+				"border-top-left-radius":     getRandomInteger(10, 50) + "%",
+			    "border-top-right-radius":    getRandomInteger(10, 50) + "%",
+			    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
+			    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
+			}).attr({
+				"src": "${PATH}/img/flayon/favicon-video-" + getRandomInteger(0, 1) + ".png"
+			});
+		}, 1000 * getRandomInteger(10, 30));
+	},
+	/**
+	 * draggable by jquery-ui
+	 */
+	draggableEffect = function() {
+		$("#favicon-crazy").draggable();
+		$("#favicon-video").draggable();
+		$("#aperture-O1").draggable();
+		$("#aperture-O2").draggable();
+		$("#aperture-O3").draggable();	
+	};
+	
+	return {init: function() {
+		backgroundEffect();
+		      neonEffect();
+		     frontEffect();
+		     typedEffect();
+		 imageballEffect();
+		   faviconEffect();
+		 draggableEffect();
+	}};
+}());
 
 $(document).ready(function() {
-	
-	backgroundEffect();
-	
-	neonEffect();
-
-	frontEffect();
-	
-	typedEffect();
-	
-	imageballEffect();
-	
-	faviconEffect();
-	
-	draggableEffect();
+	frontApp.init();	
 });
-
-/**
- * random background-color
- */
-function backgroundEffect() {
-	setInterval(function() {
-		$("body").randomBG(1);
-	}, 1000 * getRandomInteger(10, 60));
-}
-
-/**
- * neon sign
- */
-function neonEffect() {
-	if (themeSwitch === 'normal') {
-		$("ul.nav > li").removeClass("active");
-		// neon effect
-		$(".neon").css({color: '#eee'}).each(function() { // ul.nav > li > a, ul.dropdown-menu > li > a, 
-			$(this).addClass("blink-" + getRandomInteger(1, 10));
-		});
-	}
-	if (themeSwitch === 'plain') {
-		$(".neon").removeClass('blink-1 blink-2 blink-3 blink-4 blink-5 blink-6 blink-7 blink-8 blink-9 blink-10'); // for front
-	}
-}
-
-var opusList;
-/**
- * front image
- */
-function frontEffect() {
-	$("#front").attr({
-		src: '${PATH}/img/flayon/favicon-crazy-' + getRandomInteger(0, 4) + '.png'
-	}).bind("click", function() {
-		var opus = $(this).data("opus");
-		if (opus && opus != "") {
-			fnVideoDetail(opus);
-		}
-	});
-	$.getJSON("${PATH}/video/opus.json" ,function(data) {
-		opusList = data['opus'];
-		
-		setInterval(function() {
-			var bool = getRandomBoolean();
-			var opusIndex = getRandomInteger(0, opusList.length);
-			$("#front").attr({
-				src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
-			}).css({
-				borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%"
-			}).data("opus", (bool ? "" : opusList[opusIndex]));
-		}, 1000 * getRandomInteger(3, 30));
-	});
-}
-
-/**
- * wording typed
- */
-function typedEffect() {
-	typed("#wording1", $("#wording-data-1").html());
-}
-function typed(selector, message, callbackStart) {
-	$(selector).typed({
-	    strings: [message],
-	    //stringsElement: $('#wordings'),
-	    typeSpeed: getRandomInteger(10, 50),
-	    backDelay: 500,
-	    loop: false,
-	    contentType: 'html', // or text
-	    // defaults to false for infinite loop
-	    loopCount: false,
-	    callback: function() {
-	    	$(selector).next(".typed-cursor").hide();
-			if (callbackStart) {
-				// startImageBall();
-			}
-			else {
-				typed("#wording2", $("#wording-data-2").html(), true);
-			}
-	    }
-	});	
-}
-
-/**
- * image ball aperture
- */
-function imageballEffect() {
-	setInterval(function() {
-		aperture($("#aperture-O1"), "${PATH}/image/random");
-	}, 1000 * getRandomInteger(10, 30));
- 	setInterval(function() {
-		aperture($("#aperture-O2"), "${PATH}/image/random");
-	}, 1000 * getRandomInteger(10, 30));
-	setInterval(function() {
-		aperture($("#aperture-O3"), "${PATH}/image/random");
-	}, 1000 * getRandomInteger(10, 30));
-}
-var minSize = 100;
-var maxSize = 300;
-function aperture($obj, imgSrc) {
-	var position = imageballPosition();
-	var left  = position[0];
-	var top   = position[1];
-	var scale = "." + getRandomInteger(3, 9);
-//	console.log("aperture", left, top, scale);
-	
-	$obj.css({
-		position: "absolute", /* relative, absolute */ 
-		left: left + "px",
-		top:  top  + "px", 
-		transform: "scale(" + scale + ", " + scale + ")"
-	}).on("click", function() {
-		$(this).css({
-			transform: "scale(1.5, 1.5)"
-		});
-	}).aperture({
-		src: imgSrc + "?_t=" + new Date().getTime(),
-		baseColor1: getRandomColor("." + getRandomInteger(10, 50)),
-		baseColor2: getRandomColor("." + getRandomInteger(10, 50)),
-		baseColor3: getRandomColor("." + getRandomInteger(10, 50)),
-		baseColor4: getRandomColor("." + getRandomInteger(10, 50)),
-		backgroundColor: getRandomColor("." + getRandomInteger(10, 50)),
-		outerMargin: "0 auto",
-		outerRadius: "0",
-		timing: timingProperties[getRandomInteger(1, 5)],
-		width: maxSize + "px"
-	});
-}
-function imageballPosition() {
-	var offset = 50;
-	var left  = getRandomInteger(1, $(window).innerWidth()  - maxSize);
-	var top   = getRandomInteger(1, $(window).innerHeight() - maxSize);
-	var sX    = $("#front").offset().left - offset;
-	var eX    = sX + $("#front").width() + offset*2;
-	var sY    = $("#front").offset().top - offset;
-	var eY    = sY + $("#front").height() + offset*2;
-	var _left = left + (maxSize /2);
-	var _top  = top  + (maxSize /2);
-	if (sX < _left && _left < eX && sY < _top && _top < eY) {
-		return imageballPosition();
-	}
-//	console.log(sX + " < " + _left + " < " + eX + " : " + sY + " < " + _top + " < " + eY);
-	return [left, top];
-}
-
-/**
- *  favicon
- */
-function faviconEffect() {
-	setInterval(function() {
-		$( "#favicon-crazy").css({
-			"border-top-left-radius":     getRandomInteger(10, 50) + "%",
-		    "border-top-right-radius":    getRandomInteger(10, 50) + "%",
-		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
-		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
-		}).attr({
-			"src": "${PATH}/img/flayon/favicon-crazy-" + getRandomInteger(0, 4) + ".png"
-		});
-	}, 1000 * getRandomInteger(10, 30));
-	setInterval(function() {
-		$( "#favicon-video").css({
-			"border-top-left-radius":     getRandomInteger(10, 50) + "%",
-		    "border-top-right-radius":    getRandomInteger(10, 50) + "%",
-		    "border-bottom-right-radius": getRandomInteger(10, 50) + "%",
-		    "border-bottom-left-radius":  getRandomInteger(10, 50) + "%"
-		}).attr({
-			"src": "${PATH}/img/flayon/favicon-video-" + getRandomInteger(0, 1) + ".png"
-		});
-	}, 1000 * getRandomInteger(10, 30));
-}
-
-/**
- * draggable by jquery-ui
- */
-function draggableEffect() {
-	$("#favicon-crazy").draggable();
-	$("#favicon-video").draggable();
-	$("#aperture-O1").draggable();
-	$("#aperture-O2").draggable();
-	$("#aperture-O3").draggable();	
-}
 </script>
 </head>
 <body>

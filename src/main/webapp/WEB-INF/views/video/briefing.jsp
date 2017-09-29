@@ -4,8 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s"   uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="jk"  tagdir="/WEB-INF/tags"%>
-<c:set var="ONE_GB" value="${1024*1024*1024}"/>
-<c:set var="tab" value="${empty param.tab ? 'folder' : param.tab}"/>
+<c:set var="ONE_GB"       value="${1024*1024*1024}"/>
+<c:set var="tab"          value="${empty param.tab ? 'folder' : param.tab}"/>
 <c:set var="displayLimit" value="${empty param.l ? 10 : param.l}"/>
 <!DOCTYPE html>
 <html>
@@ -13,25 +13,16 @@
 <title><s:message code="video.briefing"/></title>
 <script type="text/javascript">
 $(document).ready(function(){
-
-	$(".btn-group-viewType").children().bind("click", function() {
+	$(".btn-group-viewType").children().on("click", function() {
 		var viewType = $(this).attr("data-viewType");
 		$("[data-opus]").each(function() {
-			if (viewType == 'n') {
-				$(this).html($(this).attr("data-opus"));
-			}
-			else {
-				$(this).html('O');
-			}
+			viewType === 'n' ? $(this).html($(this).attr("data-opus")) : $(this).html('O');
 		});
 	});
 	// set initial view
 	$('[data-viewType="s"]').click();
 	$('[href="#${tab}"]').click();
-	
-	$('.btn-group-tabs > .btn').addClass('btn-primary');
 });
-
 function fsOpen(folder) {
 	actionFrame('/flayon/openFolder', {'folder' : folder}, 'POST', 'Open folder ' + folder);
 }
@@ -51,16 +42,16 @@ function fsOpen(folder) {
 	</div>
 
 	<div role="group" class="btn-group btn-group-xs btn-group-tabs" data-toggle="buttons">
-	    <a role="button" class="btn" data-toggle="tab" href="#folder"    ><input type="radio"/><s:message code="video.video-by-folder"/></a>
-	    <a role="button" class="btn" data-toggle="tab" href="#date"	     ><input type="radio"/><s:message code="video.video-by-date"/></a>
-	    <a role="button" class="btn" data-toggle="tab" href="#play"	     ><input type="radio"/><s:message code="video.video-by-play"/></a>
-		<a role="button" class="btn" data-toggle="tab" href="#rank"	     ><input type="radio"/><s:message code="video.video-by-rank"/></a>
-		<a role="button" class="btn" data-toggle="tab" href="#score"     ><input type="radio"/><s:message code="video.video-by-score"/></a>
-		<a role="button" class="btn" data-toggle="tab" href="#length"    ><input type="radio"/><s:message code="video.video-by-length"/></a>
-		<a role="button" class="btn" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
-		<a role="button" class="btn" data-toggle="tab" href="#studio"    ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
-		<a role="button" class="btn" data-toggle="tab" href="#actress"   ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
-		<a role="button" class="btn" data-toggle="tab" href="#tags"      ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
+	    <a role="button" class="btn btn-primary" data-toggle="tab" href="#folder"    ><input type="radio"/><s:message code="video.video-by-folder"/></a>
+	    <a role="button" class="btn btn-primary" data-toggle="tab" href="#date"	     ><input type="radio"/><s:message code="video.video-by-date"/></a>
+	    <a role="button" class="btn btn-primary" data-toggle="tab" href="#play"	     ><input type="radio"/><s:message code="video.video-by-play"/></a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#rank"	     ><input type="radio"/><s:message code="video.video-by-rank"/></a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#score"     ><input type="radio"/><s:message code="video.video-by-score"/></a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#length"    ><input type="radio"/><s:message code="video.video-by-length"/></a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#studio"    ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#actress"   ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
+		<a role="button" class="btn btn-primary" data-toggle="tab" href="#tags"      ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
 	</div>
 
 	<div class="float-right">
@@ -135,10 +126,9 @@ function fsOpen(folder) {
 						<c:forEach items="${date.value}" var="video" varStatus="status">
 							<c:if test="${status.index < displayLimit}">
 							<script type="text/javascript">
-								$("#rank${video.rank}-${date.key}").append(
-										$("<span>").addClass("label label-plain")
-											.attr({"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}"})
-								).append("&nbsp;");
+							$("#rank${video.rank}-${date.key}").append(
+									$("<span>", {"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}", "class": "label label-plain"})
+							).append("&nbsp;");
 							</script>
 							</c:if>
 						</c:forEach>
@@ -174,10 +164,9 @@ function fsOpen(folder) {
 						<c:forEach items="${play.value}" var="video" varStatus="status">
 							<c:if test="${status.index < displayLimit}">
 							<script type="text/javascript">
-								$("#rank${video.rank}-${play.key}").append(
-										$("<span>").addClass("label label-plain")
-											.attr({"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}"})
-								).append("&nbsp;");
+							$("#rank${video.rank}-${play.key}").append(
+									$("<span>", {"data-opus": "${video.opus}", "onclick": "fnVideoDetail('${video.opus}')", "title": "${video.fullname}", "class": "label label-plain"})
+							).append("&nbsp;");
 							</script>
 							</c:if>
 						</c:forEach>
@@ -366,7 +355,7 @@ function fsOpen(folder) {
 				var tagname = $("#newTagName").val();
 				var tagDesc = $("#newTagDesc").val();
 				$("#taglist").append(
-						$("<span>").html(tagname).attr("title", tagDesc).addClass("item box nowrap").css({padding: "5px", margin: "5px", backgroundColor: "#ff0"})
+						$("<span>", {title: tagDesc, "class": "item box nowrap"}).css({padding: "5px", margin: "5px", backgroundColor: "#ff0"}).html(tagname)
 				);
 				actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname);
 				return false;

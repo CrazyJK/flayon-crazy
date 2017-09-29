@@ -23,39 +23,38 @@ $(document).ready(function() {
 				if (opener.location.href.indexOf("video/studio") > -1) 
 					opener.location.reload();
 			}
-			location.href = "<s:url value="/video/studio/"/>" + $("#newName").val();
+			location.href = PATH + "/video/studio/" + $("#newName").val();
 		}, 1000);
 	});
-
 });
 </script>
 </head>
 <body>
 <div class="container">
 
-<form id="studioForm" method="post" target="ifrm" role="form" action="<s:url value="/video/studio"/>" class="form-horizontal">
-	<input type="hidden" name="name" value="${studio.name}"/>
-	<br/>
-	<div class="form-group">
-		<div class="col-sm-11">
-			<input class="form-control" type="text" name="newname" value="${studio.name}" id="newName" />
+	<form id="studioForm" method="post" target="ifrm" role="form" action="<s:url value="/video/studio"/>" class="form-horizontal">
+		<input type="hidden" name="name" value="${studio.name}"/>
+		<br/>
+		<div class="form-group">
+			<div class="col-sm-11">
+				<input class="form-control" type="text" name="newname" value="${studio.name}" id="newName" />
+			</div>
+			<div class="col-sm-1">
+				<span class="label label-info">Score ${studio.score}</span>
+			</div>
 		</div>
-		<div class="col-sm-1">
-			<span class="label label-info">Score ${studio.score}</span>
+		<div class="form-group">
+			<div class="col-sm-6">
+				<input class="form-control" id="homepage" name="homepage" value="${studio.homepage}" placeholder="Homepage"/>
+			</div>
+			<div class="col-sm-5">
+				<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
+			</div>
+			<div class="col-sm-1">
+				<button type="submit" class="btn btn-default">Save</button>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-6">
-			<input class="form-control" id="homepage" name="homepage" value="${studio.homepage}" placeholder="Homepage"/>
-		</div>
-		<div class="col-sm-5">
-			<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
-		</div>
-		<div class="col-sm-1">
-			<button type="submit" class="btn btn-default">Save</button>
-		</div>
-	</div>
-</form>
+	</form>
 
 	<div class="form-group">
 		<span class="label label-info">Actress <i class="badge">${fn:length(studio.actressList)}</i></span>

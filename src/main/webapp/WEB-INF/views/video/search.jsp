@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix='form'   uri='http://www.springframework.org/tags/form'%>
+<%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"   uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="s"    uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri='http://www.springframework.org/tags/form'%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,26 +23,11 @@ mark {
 </style>
 <script type="text/javascript">
 bgContinue = false;
-var BOOTSTRAP_COL_LG_6 = 1230;
-
-$(document).ready(function(){
+$(document).ready(function() {
 	
-	$("#query").bind("keyup", function(e) {
-		
+	$("#query").on("keyup", function(e) {
 		var event = window.event || e;
 		$("#debug").html(event.keyCode);
-		/* 
-		if (!(event.keyCode >= 48 && event.keyCode <= 57) // 0 ~ 9
-				&& !(event.keyCode >= 65 && event.keyCode <= 90) // a ~ z
-				&& !(event.keyCode >= 96 && event.keyCode <= 105) // keypad : 0 ~ 9
-				&& event.keyCode != 109 // keypad : -
-				&& event.keyCode != 189 // -
-				&& event.keyCode != 8 // backspace
-				&& event.keyCode != 13 // enter
-				) {
-			return;
-		}
-		 */
 		if (event.keyCode != 13) {
 			return;
 		}
@@ -53,146 +38,133 @@ $(document).ready(function(){
 		var queryUrl = PATH + '/video/search.json?q=' + keyword; 
 		$("#url").html(queryUrl);
 		
-//		$(".table").hide();
-		
 		$.getJSON(queryUrl ,function(data) {
-			$('#foundVideoList').empty();
-			$('#foundHistoryList').empty();
+			$('#foundVideoList, #foundHistoryList').empty();
 
 			var videoRow = data['videoList'];
 			$("#video-count").html(videoRow.length);
 			$.each(videoRow, function(entryIndex, entry) {
-				
-				var studio 		   = entry['studio'];
-				var opus 		   = entry['opus'];
-				var title 		   = entry['title'];
-				var actress 	   = entry['actress'];
-				var existVideo 	   = entry['existVideo'];
-				var existCover 	   = entry['existCover'];
-				var existSubtitles = entry['existSubtitles'];
-				var releaseDate    = entry['releaseDate'];
-				
-				var studioDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnViewStudioDetail('" + studio +"')").html(studio);				
-				var opusDom 		  = $("<span>").addClass("label label-plain").attr("onclick", "fnVideoDetail('" + opus +"')").html(opus);
-				var titleDom 		  = $("<span>").addClass("label label-plain").html(title);
-				var releaseDom 		  = $("<span>").addClass("label label-plain").html(releaseDate);
-				var actressTD = $("<td>");
-				var actor = actress.split(",");
-				if (actor.length > 0) {
-					for (var i=0; i<actor.length; i++) {
-						$("<span>").addClass("label label-plain").attr("onclick", "fnViewActressDetail('" + actor[i] +"')").html(actor[i]).appendTo(actressTD);
-					}
-				}
-				var infoTD = $("<td>");
-				$("<span>").addClass("label").addClass((existVideo == "true" ? "label-success" : "label-default" )).html("V").appendTo(infoTD);
-				$("<span>").addClass("label").addClass((existCover == "true" ? "label-success" : "label-default" )).html("C").appendTo(infoTD);
-				$("<span>").addClass("label").addClass((existSubtitles == "true" ? "label-success" : "label-default" )).html("S").appendTo(infoTD);
-
-				var tr  = $("<tr>");
-				tr.append($("<td>").append(studioDom));
-				tr.append($("<td>").append(opusDom));
-				tr.append(infoTD);
-				tr.append(actressTD);
-				tr.append($("<td>").append(releaseDom));
-				tr.append($("<td>").append(titleDom));
-				$('#foundVideoList').append(tr);
+				var studio 		   = entry['studio'],
+					opus 		   = entry['opus'],
+					title 		   = entry['title'],
+					actress 	   = entry['actress'],
+					existVideo 	   = entry['existVideo'],
+					existCover 	   = entry['existCover'],
+					existSubtitles = entry['existSubtitles'],
+					releaseDate    = entry['releaseDate'];
+				$('#foundVideoList').append(
+						$("<tr>").append(
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain", "onclick": "fnViewStudioDetail('" + studio + "')"}).html(studio)
+								),
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain", "onclick": "fnVideoDetail('" + opus +"')"}).html(opus)
+								),
+								$("<td>").append(
+										$("<span>", {"class": "label " + (existVideo === "true" ? "label-success" : "label-default")}).html("V"),
+										$("<span>", {"class": "label " + (existCover === "true" ? "label-success" : "label-default")}).html("C"),
+										$("<span>", {"class": "label " + (existSubtitles === "true" ? "label-success" : "label-default")}).html("S")
+								),
+								$("<td>").append(
+									function() {
+										var objs = [], actor = actress.split(",");
+										if (actor.length > 0)
+											for (var i=0; i<actor.length; i++)
+												objs.push($("<span>", {"class": "label label-plain", "onclick": "fnViewActressDetail('" + actor[i] +"')"}).html(actor[i]));
+										return objs; 
+									}	
+								),
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain"}).html(releaseDate)
+								),
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain"}).html(title)
+								)
+						)
+				);
 			});
-			if (videoRow.length > 0)
-				$("#resultVideoDiv > table").show();
-			else
-				$("#resultVideoDiv > table").hide();
+			$("#resultVideoDiv > table").toggle(videoRow.length > 0);
 
 			var historyRow = data['historyList'];
 			$("#history-count").html(historyRow.length);
  			$.each(historyRow, function(entryIndex, entry) {
-				
-				var date = entry['date'];
-				var opus = entry['opus'];
-				var act  = entry['act'];
-				var desc = entry['desc'];
-				
-				var dateDom = $("<span>").addClass("label label-plain").html(date);
-				var opusDom = $("<span>").addClass("label label-plain").html(opus).attr("onclick", "fnVideoDetail('" + opus +"')");
-				var actDom	= $("<span>").addClass("label label-plain").html(act);
-				var descDom = $("<span>").addClass("label label-plain").html(desc);
-
-				var tr  = $("<tr>");
-				tr.append($("<td>").append(dateDom));
-				tr.append($("<td>").append(opusDom));
-				tr.append($("<td>").append(actDom));
-				tr.append($("<td>").append(descDom));
-				$('#foundHistoryList').append(tr);
+				var date = entry['date'],
+					opus = entry['opus'],
+					act  = entry['act'],
+					desc = entry['desc'];
+				$('#foundHistoryList').append(
+						$("<tr>").append(
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain"}).html(date)
+								),		
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain", "onclick": "fnVideoDetail('" + opus +"')"}).html(opus)
+								),		
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain"}).html(act)
+								),		
+								$("<td>").append(
+										$("<span>", {"class": "label label-plain"}).html(desc)
+								)
+						)
+				);
 			});
- 			if (historyRow.length > 0)
- 				$("#resultHistoryDiv > table").show();
- 			else
- 				$("#resultHistoryDiv > table").hide();
+ 			$("#resultHistoryDiv > table").toggle(historyRow.length > 0);
 
- 		    var rexp = eval('/' + keyword + "/gi");
+ 		    var rexp = eval('/' + keyword + '/gi');
  		    $("tbody > tr > td > span").each(function() {
- 				$(this).html($(this).text().replace(rexp,"<mark>"+keyword+"</mark>"));
+ 				$(this).html($(this).text().replace(rexp, "<mark>" + keyword + "</mark>"));
  			});
-
- 		    resizeDivHeight();
 
 			loading(false);
 		});
 	});
 });
- 
-function resizeSecondDiv() {
-	var contentDivHeight = $("#content_div").outerHeight();
-	var contentDivWidth  = $("#content_div").width();
-	var calculatedDivHeight = 0;
-	if (contentDivWidth > BOOTSTRAP_COL_LG_6) { // 가로
-		calculatedDivHeight = (contentDivHeight) - 20;	
-	}
-	else { // 세로
-		calculatedDivHeight = (contentDivHeight) / 2 - 15;
-	}
 
-	//console.log(contentDivWidth, calculatedDivHeight);
-	
-	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
-	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
-	
-	$("#content_div").css("background-color", "transparent");
-	$("#resultVideoDiv, #resultHistoryDiv").each(function() {
-		$(this).css("background-color", getRandomColor(0.3));
-	});
-}
-
-var moveWatchedVideo = ${MOVE_WATCHED_VIDEO};
-var deleteLowerRankVideo = ${DELETE_LOWER_RANK_VIDEO};
-var deleteLowerScoreVideo = ${DELETE_LOWER_SCORE_VIDEO};
-
-function setMoveWatchedVideo() {
-	moveWatchedVideo = !moveWatchedVideo;
-	actionFrame(PATH + '/video/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo);
-	$("#MOVE_WATCHED_VIDEO").html("" + moveWatchedVideo);
-}
-function setDeleteLowerRankVideo() {
-	deleteLowerRankVideo = !deleteLowerRankVideo;
-	actionFrame(PATH + '/video/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo);
-	$("#DELETE_LOWER_RANK_VIDEO").html("" + deleteLowerRankVideo);
-}
-function setDeleteLowerScoreVideo() {
-	deleteLowerScoreVideo = !deleteLowerScoreVideo;
-	actionFrame(PATH + '/video/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo);
-	$("#DELETE_LOWER_SCORE_VIDEO").html("" + deleteLowerScoreVideo);
-}
-function fnMoveWatchedVideo() {
-	actionFrame(PATH + '/video/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
-}
-function fnRemoveLowerRankVideo() {
-	actionFrame(PATH + '/video/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
-}
-function fnRemoveLowerScoreVideo() {
-	actionFrame(PATH + '/video/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
-}
-function fnStartVideoBatch(type) {
-	actionFrame(PATH + '/video/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
-}
+var BOOTSTRAP_COL_LG_6 = 1230,
+	moveWatchedVideo = ${MOVE_WATCHED_VIDEO},
+	deleteLowerRankVideo = ${DELETE_LOWER_RANK_VIDEO},
+	deleteLowerScoreVideo = ${DELETE_LOWER_SCORE_VIDEO},
+	fnMoveWatchedVideo = function() {
+		actionFrame(PATH + '/video/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
+	},
+	setMoveWatchedVideo = function() {
+		moveWatchedVideo = !moveWatchedVideo;
+		actionFrame(PATH + '/video/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo, 0, function() {
+			$("#MOVE_WATCHED_VIDEO").html("" + moveWatchedVideo);
+		});
+	},
+	fnRemoveLowerRankVideo = function() {
+		actionFrame(PATH + '/video/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
+	},
+	setDeleteLowerRankVideo = function() {
+		deleteLowerRankVideo = !deleteLowerRankVideo;
+		actionFrame(PATH + '/video/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo, 0, function() {
+			$("#DELETE_LOWER_RANK_VIDEO").html("" + deleteLowerRankVideo);	
+		});
+	},
+	fnRemoveLowerScoreVideo = function() {
+		actionFrame(PATH + '/video/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
+	},
+	setDeleteLowerScoreVideo = function() {
+		deleteLowerScoreVideo = !deleteLowerScoreVideo;
+		actionFrame(PATH + '/video/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo, 0, function() {
+			$("#DELETE_LOWER_SCORE_VIDEO").html("" + deleteLowerScoreVideo);
+		});
+	},
+	fnStartVideoBatch = function(type) {
+		actionFrame(PATH + '/video/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
+	},
+	resizeSecondDiv = function() {
+		$("#content_div").css("background-color", "transparent");
+		$("#resultVideoDiv, #resultHistoryDiv").outerHeight(
+				$("#content_div").width() > BOOTSTRAP_COL_LG_6 
+					? $("#content_div").outerHeight() - 20 
+					: $("#content_div").outerHeight() / 2 - 15
+		).each(function() {
+			$(this).css("background-color", getRandomColor(0.3));
+		});	
+	};
 </script>
 </head>
 <body>
@@ -269,7 +241,7 @@ function fnStartVideoBatch(type) {
 						<tr>
 							<th>Date</th>
 							<th>Opus</th>
-							<th>Act</th>
+							<th>Action</th>
 							<th>Desc</th>
 						</tr>
 					</thead>

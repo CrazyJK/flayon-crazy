@@ -11,8 +11,7 @@
 <title><s:message code="default.home"/></title>
 <style type="text/css">
 body {
-    /* background: #000 url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center; */
-    background: url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center, url("<c:url value="/img/bg/chalk-bg.png"/>");
+	background: url("<c:url value="/img/bg/mountain.jpg"/>") no-repeat fixed top center, url("<c:url value="/img/bg/chalk-bg.png"/>");
  	transition: background .5s linear;
  	overflow: hidden;
 }
@@ -91,7 +90,7 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	font-weight: bold;
 	font-size: 34px;
 	color: #4d6371;
-    text-shadow: #000 0px 1px 0px;
+    text-shadow: 0px 0px 5px #0c0c0c;
     position: fixed;
     bottom: 0;
     text-align: center;
@@ -103,7 +102,7 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	margin: 0 3px;
 }
 .hour-timer, .minute-timer, .second-timer {
-	width: 40px;
+	min-width: 40px;
 }
 .timer-delimiter {
 	color: #eee;
@@ -112,6 +111,9 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
     border-radius: 4px;
     background: #111;
     color: #eee;   
+}
+.ui-draggable {
+	cursor: move;
 }
 </style>
 </head>
@@ -130,11 +132,9 @@ div.modal-content .btn-link, div.modal-content a, div.modal-content .btn-link:ho
 	</div>
 
 	<div class="life-timer">
-		<div class="day-timer"></div><span class="timer-delimiter">D</span>
-		<div class="hour-timer"></div>
-		<span class="timer-delimiter">:</span>
-		<div class="minute-timer"></div>
-		<span class="timer-delimiter">:</span>
+		<div class="   day-timer"></div><span class="timer-delimiter">D</span>
+		<div class="  hour-timer"></div><span class="timer-delimiter">:</span>
+		<div class="minute-timer"></div><span class="timer-delimiter">:</span>
 		<div class="second-timer"></div>
 	</div>
 
@@ -239,9 +239,9 @@ var homeApp = (function($) {
     };
     
 	var setFonts = function() {
-        !isLogin && $("#headerNav").css({fontFamily: randomFont()});
+        !isLogin && $("#headerNav").css({fontFamily: getRandomFont()});
         $("h1, #wording, #loginModal, #login-welcome, .life-timer").each(function(index) {
-            $(this).css({fontFamily: randomFont()});
+            $(this).css({fontFamily: getRandomFont()});
         });
     };
     

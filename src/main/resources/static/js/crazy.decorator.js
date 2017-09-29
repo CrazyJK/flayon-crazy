@@ -47,7 +47,7 @@ var PATH = '${PATH}',
 	/**
 	 * post 액션
 	 */
-	actionFrame = function(reqUrl, reqData, method, msg, interval) {
+	actionFrame = function(reqUrl, reqData, method, msg, interval, callback) {
 		console.log("actionFrame", reqUrl, reqData, method, msg, interval);
 		$.ajax({
 			type: method ? method : "POST",
@@ -64,6 +64,8 @@ var PATH = '${PATH}',
 			else {
 				loading(false);
 				showSnackbar(msg + " Done", interval ? interval : 2000);
+				if (callback)
+					callback();
 			}
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			var errorHtml = $.parseHTML(jqXHR.responseText);
