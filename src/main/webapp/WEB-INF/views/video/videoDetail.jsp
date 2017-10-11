@@ -24,6 +24,7 @@ dt, dd {
 .dl-detail {
 	overflow: auto; 
 	margin: 0;
+ 	background-image: url('${PATH}/video/${video.opus}/cover');
 	background-position: center top;
 	background-attachment: fixed;
 	background-repeat: no-repeat;
@@ -37,14 +38,13 @@ dt, dd {
 .popover {
 	max-width: 700px;
 }
-
+body {
+	background-image: linear-gradient(to right, rgb(255, 0, 0) 0, rgb(255, 255, 255) 100%);
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	$("dl.dl-detail").css({
-		backgroundImage: "url('<c:url value="/video/${video.opus}/cover" />')",
-	});
 	$("form#renameForm").submit(function(event) {
 		console.log("form submit...");
 		loading(true, "rename...");
@@ -119,6 +119,7 @@ function resizeSecondDiv() {
 		<c:if test="${actress.name ne 'Amateur'}">
 			<dd>
 				<jk:actress actress="${actress}" view="detail"/>
+				<%-- 
 				<div class="form-group text-center box hide">
 					<ul class="list-inline">
 						<c:forEach items="${actress.videoList}" var="video">
@@ -130,14 +131,17 @@ function resizeSecondDiv() {
 						</c:forEach>
 					</ul>
 				</div>
+				 --%>
 			</dd>
 		</c:if>
 	</c:forEach>
-	
+
 	<dd class="tag-wrapper"><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 	
 </dl>
 
 </div>
+
+
 </body>
 </html>

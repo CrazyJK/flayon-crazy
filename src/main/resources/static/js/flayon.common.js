@@ -47,7 +47,7 @@ var agent = navigator.userAgent.toLowerCase(),
 		specs = "width=" + width + ",height=" + height + ",top=" + position.top + ",left=" + position.left + "," + (specs || DEFAULT_SPECS);
 	
 		try {
-			//console.log("[popup] open param", url, name, specs);
+			console.log("[popup] open param", url, name, specs);
 			var popupWindow = window.open(url, name, specs);
 			popupWindow.focus();
 		} catch (e) {

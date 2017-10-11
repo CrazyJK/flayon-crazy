@@ -11,6 +11,9 @@
 #actressForm .form-control {
 	background-color: rgba(255,255,255,.75);
 }
+#favoriteTEXT {
+	text-shadow: 0px 0px 5px #0c0c0c;
+}
 body {
     background-repeat: repeat;
     background-position: center top;
@@ -18,6 +21,22 @@ body {
 }
 input[type='text'].form-control {
 	text-align: center;
+}
+@media (min-width: 1200px) {
+	.container-actress {
+    	width: 100%;
+	}
+	ul.list-inline.list-actress > li {
+		transform: scale(2, 2);
+		margin: 65px 100px;
+	}
+	.video-card {
+		background-color: rgb(171, 116, 91);
+    }
+	.video-card:hover {
+		background-color: rgb(209, 125, 148);
+    	transform: none;
+    }
 }
 </style>
 <script type="text/javascript">
@@ -103,19 +122,21 @@ $(document).ready(function() {
 			</c:forEach>
 		</ul>
 	</div>
+</div>
+
+<div class="container container-actress">
 	<h3>
 		<span class="label label-plain">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
 	</h3>
 	<div class="form-group text-center">
 		<c:if test="${actress.name ne 'Amateur'}">
-			<ul class="list-inline">
+			<ul class="list-inline list-actress">
 				<c:forEach items="${actress.videoList}" var="video">
 					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 				</c:forEach>
 			</ul>
 		</c:if>
 	</div>
-
 </div>
 
 </body>
