@@ -75,3 +75,9 @@
 .btn-sort {
 	border-color: rgb(62, 143, 62);
 }
+
+@media (max-width: 1024px) {
+	.shortWidth {
+		display: none;
+	}
+}

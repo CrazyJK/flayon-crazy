@@ -26,9 +26,7 @@
 
 	if (view.equalsIgnoreCase("label")) {
 %>
-<label
-	class="item <%=itemCssClass %>" 
-	title="${tag.description}">
+<label class="item <%=itemCssClass%>" title="${tag.description}">
 	<form:checkbox path="selectedTag" id="selectedTag${count}" value="${tag.id}" cssClass="sr-only"/>
 	<span class="label label-default" style="padding: 5px; margin: 5px;" 
 		id="checkbox-selectedTag${count}">${tag.name} <i>${tag.videoList.size()}</i></span>
@@ -36,11 +34,12 @@
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<span style="background-color:#fff;" data-toggle="tooltip" class="item <%=itemCssClass %> box box-small" title="${tag.description}">
-	<span onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span> 
-	<small>${tag.videoList.size()}</small> 
-	<span onclick="fnDeleteTag(${tag.id}, this)" title="Delete">&times;</span>
-</span>
+<div style="background-color:#fff;" class="box box-small">
+	<span class="item <%=itemCssClass%> text-bold" onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span>
+	<span>${tag.description}</span>
+	<small class="badge badge-black">${tag.videoList.size()}</small> 
+	<small class="float-right" style="margin-left: 5px; color: #f00;" onclick="fnDeleteTag(${tag.id}, this)" title="Delete this tag">&times;</small>
+</div>
 <%
 	} else {
 %>

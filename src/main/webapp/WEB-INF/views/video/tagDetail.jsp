@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>${tag.name}</title>
+<title>Tag : ${tag.id} : ${tag.name}</title>
 <script type="text/javascript">
 //bgContinue = false;
 function fnSaveTagInfo() {
@@ -22,31 +22,31 @@ function fnSaveTagInfo() {
 <body>
 <div class="container">
 
-<form id="tagForm" method="post" role="form" class="form-horizontal">
-	<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
-	<input type="hidden" name="id" value="${tag.id}"/>
-	<div class="form-group">
-		<div class="col-sm-5">
-			<input class="form-control" type="text" name="name" value="${tag.name}" placeholder="Tag name"/>
+	<form id="tagForm" method="post" role="form" class="form-horizontal">
+		<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
+		<input type="hidden" name="id" value="${tag.id}"/>
+		<div class="form-group">
+			<div class="col-sm-4">
+				<input class="form-control" type="text" name="name" value="${tag.name}" placeholder="Tag name"/>
+			</div>
+			<div class="col-sm-7">
+				<input class="form-control" type="text" name="description" value="${tag.description}" placeholder="Description"/>
+			</div>
+			<div class="col-sm-1">
+				<span class="btn btn-default" onclick="fnSaveTagInfo()">Save</span>
+			</div>
 		</div>
-		<div class="col-sm-6">
-			<input class="form-control" type="text" name="description" value="${tag.description}" placeholder="Description"/>
+		<div class="form-group">
+			<span class="label label-info">Video <i class="badge">${fn:length(tag.videoList)}</i></span>
 		</div>
-		<div class="col-sm-1">
-			<span class="btn btn-default" onclick="fnSaveTagInfo()">Save</span>
+		<div class="form-group box" style="padding-left: 60px;">
+			<ul class="list-inline">
+				<c:forEach items="${tag.videoList}" var="video">
+					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+				</c:forEach>
+			</ul>
 		</div>
-	</div>
-	<div class="form-group">
-		<span class="label label-info">Video <i class="badge">${fn:length(tag.videoList)}</i></span>
-	</div>
-	<div class="form-group box" style="padding-left: 60px;">
-		<ul class="list-inline">
-			<c:forEach items="${tag.videoList}" var="video">
-				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-			</c:forEach>
-		</ul>
-	</div>
-</form>
+	</form>
 
 </div>
 </body>

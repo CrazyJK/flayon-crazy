@@ -10,6 +10,7 @@ var videoList = (function() {
 	var currentSort = {code: 'M', reverse: false}; // 현재 정렬 방법
 	var videoList   = new Array(); 	// 비디오 배열
 	var   tagList   = [];
+	var   tagKeys   = [];
 	var        entryIndex = 0;		// 비디오 인덱스
 	var    renderingCount = 0;		// 보여준 개수
 	var   hadTorrentCount = 0;		// torrent 파일 개수
@@ -21,7 +22,6 @@ var videoList = (function() {
 
 	var currentVideoNo    = -1;		// table 뷰에서 커서/키가 위치한 tr번호. 커버 보여주기 위해
 	var withTorrent       = false;	// table 뷰에서 torrent 정보 컬럼 보여줄지 여부 
-	var isShortWidth      = false;	// table 뷰에서 가로폭이 좁은지 여부
 	var isCheckedFavorite = false;	// favorite 체크박스가 체크되어 있는지 여부
 	var isCheckedNoVideo  = false;	// novideo  체크박스가 체크되어 있는지 여부
 	var isCheckedTags     = false;
@@ -95,11 +95,11 @@ var videoList = (function() {
 			},
 			videoContains: function(video, query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags) {
 				var containsTag = function(video) {
-					if (video.tags.length > 0)
-						return true;
-					for (var i = 0; i < tagList.length; i++) {
-						var tag = tagList[i];
-						if (fullname.toLowerCase().indexOf(tag.name.toLowerCase()) > -1) {
+//					if (video.tags.length > 0)
+//						return true;
+					for (var i = 0; i < tagKeys.length; i++) {
+						var key = tagKeys[i];
+						if (fullname.toLowerCase().indexOf(key.toLowerCase()) > -1) {
 							return true;
 						}
 					}
@@ -110,6 +110,19 @@ var videoList = (function() {
 					&& (isCheckedFavorite ?  video.favorite           : true)
 					&& (isCheckedNoVideo  ? !video.existVideoFileList : true)
 					&& (isCheckedTags     ?  containsTag(video)       : true);
+			},
+			setTagKeys: function() {
+				for (var i = 0; i < tagList.length; i++) {
+					var tag = tagList[i];
+					tagKeys.push($.trim(tag.name));
+					var descs = tag.description.split(',');
+					for (var j = 0; j < descs.length; j++) {
+						var desc = $.trim(descs[j]);
+						if (desc) {
+							tagKeys.push(desc);
+						}
+					}
+				}
 			}
 	};
 
@@ -142,7 +155,7 @@ var videoList = (function() {
 		};
 
 		var renderTable = function(index, video, parent) {
-			var   shortWidthClass = isShortWidth ? "shortWidth hide" : "shortWidth";
+			var   shortWidthClass = "shortWidth"; // table 뷰에서 가로폭이 좁을때 css에서 보이지 않게 한다
 			var widthTorrentClass = withTorrent ? "torrent" : "torrent hide";
 			parent.append(
 					$("<tr>", {"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).on("mouseenter", function(event) {
@@ -361,11 +374,9 @@ var videoList = (function() {
 					console.log("setCoverPositionOnTableView", coverPosition);
 				};
 				
-				isShortWidth = $(window).width() < 960;
-				$(".shortWidth").toggleClass("hide", isShortWidth);
 				setCoverPositionOnTableView();
 			},
-			'keyup': function(e) {
+			"keyup": function(e) {
 				if (currentView === '#table') {
 					console.log("window keyup", e.keyCode);
 					if (e.keyCode == 38) { // up key
@@ -405,6 +416,8 @@ var videoList = (function() {
 			else {
 				videoList = [];
 				tagList = data.tagList;
+				fn.setTagKeys(tagList);
+				console.log("tagKeys", tagKeys);
 				$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
 					if (row.torrents.length > 0)
 						hadTorrentCount++;

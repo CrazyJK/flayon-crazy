@@ -200,3 +200,9 @@ li.dropdown > a.dropdown-toggle, ul.dropdown-menu > li > a {
 #error, #dynamicStyleWrapper, #actionForm {
 	display: none;
 }
+
+@media (max-width: 768px) {
+	#header_div > * {
+		display: none;
+	}
+}
