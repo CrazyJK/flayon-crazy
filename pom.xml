@@ -230,6 +230,12 @@
 
 	<build>
 		<finalName>${final.name}</finalName>
+		<plugins>
+			<plugin><!-- repackage(default) : create a jar or war file that is auto-executable. -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
   	
 </project>
