@@ -17,7 +17,7 @@ if (self.innerHeight == 0) {
 </script>
 </head>
 <body>
-	
+
 	<div class="container">
 		<div class="jumbotron">
 			<c:if test="${exception.kind eq 'Video'}">

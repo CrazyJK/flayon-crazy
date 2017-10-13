@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -65,7 +67,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 	@Override
 	public VTag persist(VTag tag) {
 		if (tags.contains(tag))
-			throw new CrazyException("Fail to persist : already exist " + tag);
+			throw new CrazyException("Fail to persist : already exist " + tag).setKind("Tag");
 		tag.setId(findMaxId() + 1);
 		tag.validation();
 		tags.add(tag);
@@ -98,12 +100,12 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 			if (StringUtils.containsIgnoreCase(tag.getDescription(), desc))
 				found.add(tag);
 		}
-		return found;
+		return found.stream().sorted(Comparator.comparing(VTag::getName)).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<VTag> findAll() {
-		return tags;
+		return tags.stream().sorted(Comparator.comparing(VTag::getName)).collect(Collectors.toList());
 	}
 
 	@Override

@@ -76,7 +76,7 @@ var PATH = '${PATH}',
 			var context = parsed.find(".container").html();
 			if (jqXHR.getResponseHeader('error') === 'true') {
 				var errorMessge = jqXHR.getResponseHeader('error.message');
-				context = errorMessge + "<br>" + context;
+				context = context ? errorMessge + "<br>" + context : errorMessge;
 			}
 			loading(true, "fail : " + reqUrl + " [" + textStatus + "] "+ errorThrown, {detail: context, danger: true});
 			console.log("actionFrame fail", jqXHR, textStatus, errorThrown);

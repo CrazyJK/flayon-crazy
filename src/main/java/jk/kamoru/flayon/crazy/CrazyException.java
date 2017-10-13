@@ -26,7 +26,8 @@ public class CrazyException extends FlayOnException {
 		return kind;
 	}
 
-	public void setKind(String kind) {
+	public CrazyException setKind(String kind) {
 		this.kind = kind;
+		return this;
 	}
 }

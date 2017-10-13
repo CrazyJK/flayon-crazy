@@ -1318,7 +1318,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			}
 		}
-		return allTags.stream().sorted(Comparator.comparing(VTag::getName)).collect(Collectors.toList());
+		return allTags;
 	}
 
 	@Override
