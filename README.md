@@ -1,9 +1,9 @@
-#FlayOn Crazy is my Video controller.
- 
+FlayOn Crazy is my Video controller.
+====================================
 It works to gathering files, making Video and Image...
 
-###Using
-
+Using
+-----
 * JavaSE 1.8
 * Spring Boot
 * Spring Security
@@ -17,12 +17,12 @@ It works to gathering files, making Video and Image...
 * Imgscalr A Java Image Scaling Library
 * Webjars : amcharts, datatable, angular, bootstrap, jquery, jquery-ui
 
-##Build
-
+Build
+-----
     $ mvn claen package
 
-##Run
-
+Run
+---
 
     $ FlayOnStartup.sh
     
