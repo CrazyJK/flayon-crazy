@@ -354,10 +354,16 @@ function fsOpen(folder) {
 			function appendNewTag(frm) {
 				var tagname = $("#newTagName").val();
 				var tagDesc = $("#newTagDesc").val();
-				$("#taglist").append(
-						$("<span>", {title: tagDesc, "class": "item box nowrap"}).css({padding: "5px", margin: "5px", backgroundColor: "#ff0"}).html(tagname)
-				);
-				actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname);
+				actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname, 0, function() {
+					$("#taglist").append(
+							$("<li>").append(
+									$("<div>", {"class": "box box-small"}).css({backgroundColor: "#000", color: "#eee"}).append(
+											$("<span>", {"class": "item text-bold"}).html(tagname), 
+											$("<span>").html("&nbsp;" + tagDesc)
+									)		
+							)
+					);
+				});
 				return false;
 			}
 			</script>

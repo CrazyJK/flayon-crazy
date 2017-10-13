@@ -92,17 +92,19 @@
 		<div id="tags-${video.opus}">
 	<%	for (int i=0; i<tagList.size(); i++) {
 			jk.kamoru.flayon.crazy.video.domain.VTag tag = (jk.kamoru.flayon.crazy.video.domain.VTag)tagList.get(i);
-			String _cssClass = "label-plain";
-			if (video.getTags() == null || !video.getTags().contains(tag)) {
-				_cssClass = "label-default";
-			} %>
-			<span class="label <%=_cssClass %>" title="<%=tag.getDescription()%>" onclick="fnSetTag(this, '<%=video.getOpus()%>', '<%=tag.getId()%>')"><%=tag.getName()%></span>
+			boolean isSet = video.getTags() != null && video.getTags().contains(tag);
+			int tagId = tag.getId();
+			String name = tag.getName();
+			String desc = tag.getDescription();
+			String cssClass = isSet ? "label label-plain" : "label label-default";
+	%>
+			<span onclick="fnToggleTag(this)" class="<%=cssClass%>" title="<%=desc%>" data-opus="${video.opus}" data-tagid="<%=tagId%>" data-tagset="<%=isSet%>"><%=name%></span>
 	<%	} %>
 			<span class="label label-info" onclick="$('#newTag-${video.opus}').slideToggle(); $('#newTag-name-${video.opus}').focus();">NEW</span>
 		</div>
-		<form role="form" class="form-inline" style="margin-top: 5px;" onsubmit="addTag(this); return false;">
+		<form role="form" class="form-inline" style="margin-top: 5px;" onsubmit="fnAddTag(this); return false;">
 			<input type="hidden" name="opus" value="${video.opus}"/>
-			<span style="display:none; padding:3px;" class="bg-primary" id="newTag-${video.opus}">
+			<span style="display:none; padding:3px; border-radius:4px;" class="bg-primary" id="newTag-${video.opus}">
 				<input name="name" placeholder="name" id="newTag-name-${video.opus}" class="form-control input-sm" required="required"/>
 				<input name="description" placeholder="Description" class="form-control input-sm"/>
 				<button class="btn btn-primary btn-xs" type="submit">Regist</button>
@@ -111,7 +113,7 @@
 	</c:if>
 	<c:if test="${mode ne 'l'}">
 		<c:forEach items="${video.tags}" var="tag">
-			<span class="${cssClass}" title="${tag.description}" onclick="fnViewTagDetail('${tag.name}')">${tag.name}</span>
+			<span class="${cssClass}" title="${tag.description}" onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span>
 		</c:forEach>
 	</c:if>
 <%  } else { %>

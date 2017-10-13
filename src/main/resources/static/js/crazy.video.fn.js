@@ -252,39 +252,37 @@ var calculatedDivHeight = 0,
 	 * @param opus 
 	 * @param tagId
 	 */
-	fnSetTag = function(dom, opus, tagId) {
-		if ($(dom).hasClass("label-default")) {
-			$(dom).removeClass("label-default");
-			$(dom).addClass("label-plain");
-		}
-		else {
-			$(dom).removeClass("label-plain");
-			$(dom).addClass("label-default");
-		}
-		actionFrame(PATH + "/video/" + opus + "/tag?id=" + tagId, {}, "POST", "set tag " + opus + " <- " + tagId);
+	fnToggleTag = function(dom) {
+		var opus  = $(dom).attr("data-opus");
+		var tagId = $(dom).attr("data-tagid");
+		var isSet = $(dom).attr("data-tagset") === 'false';
+		$(dom).swapClass("label-default", "label-plain", isSet);
+		actionFrame(PATH + "/video/" + opus + "/tag?id=" + tagId, {}, "POST", opus + (isSet ? " set " : " unset ") + "tagId " + tagId, 0, function() {
+			$(dom).attr("data-tagset", isSet);
+		});
 	},
 	/**
 	 * 저장한 태그를 화면에 추가하고, 서버에 저장시킨다.
 	 * @param frm
 	 */
-	addTag = function(frm) {
+	fnAddTag = function(frm) {
 		var opus    = $(frm).find("input[name='opus']").val();
 		var tagname = $(frm).find("input[name='name']").val();
 		var tagdesc = $(frm).find("input[name='description']").val();
-		console.log("tag ",  opus, tagname, tagdesc);
-		$("#tags-"+opus).append(
-				$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
-		);
-		
-		actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname);
+		actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname, 0, function() {
+			$("#tags-"+opus).append(
+					$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
+			);
+		});
+		console.log("fnAddTag",  opus, tagname, tagdesc);
 		return false;
 	},
 	/**
 	 * 태그 상세화면 팝업.
 	 * @param name
 	 */
-	fnViewTagDetail = function(name) {
-		popup(PATH + "/video/tag/" + name, "tagDetail-" + name, 850, 600);
+	fnViewTagDetail = function(id) {
+		popup(PATH + "/video/tag/" + id, "tagDetail-" + id, 850, 600);
 	},
 	/**
 	 * 태그 삭제

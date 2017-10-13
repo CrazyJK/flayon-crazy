@@ -49,12 +49,15 @@ var PATH = '${PATH}',
 	 */
 	actionFrame = function(reqUrl, reqData, method, msg, interval, callback) {
 		console.log("actionFrame", reqUrl, reqData, method, msg, interval);
+		var token = $('#csrfToken').val();
+		var header = $('#csrfHeader').val();
 		$.ajax({
 			type: method ? method : "POST",
 			url: reqUrl,
 			data: reqData,
-			beforeSend : function() {
+			beforeSend : function(xhr) {
 				loading(true, msg ? msg : loadingText);
+				xhr.setRequestHeader("Accept", "application/json");
 			}
 		}).done(function(data, textStatus, jqXHR) {
 			if (jqXHR.getResponseHeader('error') === 'true') {
@@ -71,6 +74,10 @@ var PATH = '${PATH}',
 			var errorHtml = $.parseHTML(jqXHR.responseText);
 			var parsed = $('<div/>').append(errorHtml);
 			var context = parsed.find(".container").html();
+			if (jqXHR.getResponseHeader('error') === 'true') {
+				var errorMessge = jqXHR.getResponseHeader('error.message');
+				context = errorMessge + "<br>" + context;
+			}
 			loading(true, "fail : " + reqUrl + " [" + textStatus + "] "+ errorThrown, {detail: context, danger: true});
 			console.log("actionFrame fail", jqXHR, textStatus, errorThrown);
 		}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {

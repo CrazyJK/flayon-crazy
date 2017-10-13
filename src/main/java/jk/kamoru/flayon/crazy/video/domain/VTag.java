@@ -55,8 +55,11 @@ public class VTag {
 			return false;
 		VTag other = (VTag) obj;
 		if (id == null) {
+			if (name != null && name.equals(other.name))
+				return true;
 			if (other.id != null)
 				return false;
+			
 		} else if (!id.equals(other.id))
 			return false;
 		return true;

@@ -64,6 +64,8 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 	
 	@Override
 	public VTag persist(VTag tag) {
+		if (tags.contains(tag))
+			throw new CrazyException("Fail to persist : already exist " + tag);
 		tag.setId(findMaxId() + 1);
 		tag.validation();
 		tags.add(tag);
