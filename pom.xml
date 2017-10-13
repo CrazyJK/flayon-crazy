@@ -9,11 +9,11 @@
   	<packaging>war</packaging>
 
   	<name>FlayOn Crazy</name>
-	<url>http://localhost:58818/${final.name}</url>
+	<url>http://localhost:${server.port/${final.name}</url>
 
 	<organization>
 		<name>Crazy JK</name>
-		<url>http://crazyjk.github.io/</url>
+		<url>http://crazyjk.github.io</url>
 	</organization>
 
 	<parent>
