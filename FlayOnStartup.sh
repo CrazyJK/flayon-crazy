@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# JAVA_OPTS="-Dspring.profiles.active=crazy-linux"
+JAVA_OPTS="-Dspring.profiles.active=crazy-linux"
 # for JMX monitoring
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote=true"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=58869"

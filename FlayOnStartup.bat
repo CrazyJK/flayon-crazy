@@ -2,7 +2,7 @@
 chcp 65001
 setlocal
 
-rem set "JAVA_OPTS=%JAVA_OPTS% -Dspring.profiles.active=crazy-home"
+set "JAVA_OPTS=%JAVA_OPTS% -Dspring.profiles.active=crazy-home"
 set "JAVA_OPTS=%JAVA_OPTS% -Dcom.sun.management.jmxremote"
 set "JAVA_OPTS=%JAVA_OPTS% -Dcom.sun.management.jmxremote.port=58869"
 set "JAVA_OPTS=%JAVA_OPTS% -Dcom.sun.management.jmxremote.ssl=false"
