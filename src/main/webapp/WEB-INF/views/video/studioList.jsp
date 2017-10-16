@@ -11,7 +11,8 @@
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
 <script type="text/javascript">
-var table, resizeSecondDiv = function() {
+var table;
+var resizeSecondDiv = function() {
 	table.draw();
 };
 $(document).ready(function() {
@@ -20,13 +21,13 @@ $(document).ready(function() {
 		location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
 	});
     table = $('#list').DataTable({
-    	scrollY:        (calculatedDivHeight - 70),
+      	       scrollY: (calculatedDivHeight - 70),
         scrollCollapse: true,
-        paging:         false,
-        searching: false,
-        processing: true,
-        info: false,
-        "fnDrawCallback": function( oSettings ) {
+                paging: false,
+             searching: false,
+            processing: true,
+                  info: false,
+        fnDrawCallback: function(oSettings) {
         	$("#studio-list").css({visibility: 'visible'}).addClass("w3-animate-opacity");
         }
     });
@@ -62,9 +63,9 @@ $(document).ready(function() {
 					<tr>
 						<th style="max-width: 20px;">#</th>
 						<c:forEach items="${sorts}" var="s">
-						<th style="max-width: 50px;" title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
+						<th style="max-width: 100px;" title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
 						</c:forEach>
-						<th>Video</th>
+						<th style="max-width: 150px;">Video</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -76,7 +77,7 @@ $(document).ready(function() {
 						<td>${studio.company}</td>
 						<td class="number">${fn:length(studio.videoList)}</td>
 						<td class="number">${studio.score}</td>
-						<td style="max-width:150px;">
+						<td>
 							<div class="nowrap">
 								<c:forEach items="${studio.videoList}" var="video">
 								<jk:video video="${video}" view="opus"/>

@@ -237,7 +237,7 @@ var PATH = '${PATH}',
 	 * delete current backgroung image
 	 */
 	deleteBGImage = function() {
-		actionFrame(currBGImageUrl, {}, "DELETE", "this image delete");
+		confirm('delete ' + currBGImageUrl) && actionFrame(currBGImageUrl, {}, "DELETE", "this image delete", 0, setBackgroundImage);
 	},
 	/**
 	 * popup view background image
@@ -270,7 +270,7 @@ var PATH = '${PATH}',
 				background = function() {
 					console.log("crazy_listener : background listener start");
 					$("#backMenu"  ).on("click", toggleBody);
-					$("#bgImageBtn").on("click", deleteBGImage);
+					$("#deleteBgBtn").on("click", deleteBGImage);
 					$("#nextBgBtn" ).on("click", setBackgroundImage);
 					$("#popupBgBtn").on("click", popupBGImage);
 					bgContinue && $("#bgChangeInterval").on("keyup", function() {

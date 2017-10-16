@@ -12,11 +12,11 @@
 <head>
 <title><s:message code="video.briefing"/></title>
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function() {
 	$(".btn-group-viewType").children().on("click", function() {
 		var viewType = $(this).attr("data-viewType");
 		$("[data-opus]").each(function() {
-			viewType === 'n' ? $(this).html($(this).attr("data-opus")) : $(this).html('O');
+			$(this).html(viewType === 'n' ? $(this).attr("data-opus") : 'O');
 		});
 	});
 	// set initial view
@@ -55,7 +55,7 @@ function fsOpen(folder) {
 	</div>
 
 	<div class="float-right">
-		<span class="label label-default">Display limit ${displayLimit}</span>
+		<span class="label label-default" title="?l=${displayLimit}">Display limit ${displayLimit}</span>
 		<span class="label label-default">Max Storage : <fmt:formatNumber value="${maxEntireVideo}"/> GB</span>
 	</div>
 

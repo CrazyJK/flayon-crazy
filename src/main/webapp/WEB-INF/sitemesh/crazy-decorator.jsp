@@ -63,7 +63,7 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/actress"	><s:message code="video.actress"         /></a></li>
 			<li><a href="${PATH}/video/studio"	><s:message code="video.studio"          /></a></li>
 			<li class="dropdown">
-    			<a class="dropdown-toggle" data-toggle="dropdown">Image<span class="caret"></span></a>
+    			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="video.image"/><span class="caret"></span></a>
     			<ul class="dropdown-menu">
 					<li><a href="${PATH}/image"			  ><s:message code="video.image"     /></a></li>
 					<li><a href="${PATH}/image/aperture"  ><s:message code="video.aperture"  /></a></li>
@@ -71,7 +71,7 @@ $(document).ready(function() {
 					<li><a href="${PATH}/image/slides"	  ><s:message code="video.slides"    /></a></li>
 					<li><a href="${PATH}/image/lightbox"  ><s:message code="video.lightbox"  /></a></li>
 					<li><a href="${PATH}/image/thumbnails"><s:message code="video.thumbnails"/></a></li>
-					<li><a href="${PATH}/image/tablet"    >Tablet</a></li>
+					<li><a href="${PATH}/image/tablet"    ><s:message code="video.tablet"    /></a></li>
     			</ul>
   			</li>
 			<li><a href="${PATH}/video/briefing"	 ><s:message code="video.briefing"/></a></li>
@@ -80,41 +80,43 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/history/graph"><s:message code="video.history" /></a></li>
 			<li><a href="${PATH}/"					 ><s:message code="default.home"  /></a></li>
 			<li class="dropdown">
-    			<a class="dropdown-toggle" data-toggle="dropdown">Theme<span class="caret"></span></a>
+    			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="default.theme"/><span class="caret"></span></a>
     			<ul class="dropdown-menu">
-					<li><a id="themeSwitchNormal">Normal</a></li>
-					<li><a id="themeSwitchPlain" >Plain</a></li>
+					<li><a id="themeSwitchNormal"><s:message code="default.theme.normal"/></a></li>
+					<li><a id="themeSwitchPlain" ><s:message code="default.theme.plain"/></a></li>
     			</ul>
   			</li>
 		</ul>
 	</nav>
 
 	<sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
-	
-	<div id="actionForm">
-		<form id="actionFrm" name="actionFrm" target="ifrm" method="post">
-			<input type="hidden" name="_method" id="hiddenHttpMethod"/>
-		</form>
-		<iframe id="actionIframe" name="ifrm"></iframe>
-	</div>
-	<div id="bgActionGroup">
-		<span class="blink-1 float-left"  id="bgImageBtn">DELETE</span>
-		<span class="blink-2 float-right" id="nextBgBtn" >NEXT</span>
-		<span class="blink-3"             id="popupBgBtn">VIEW</span>
-		<span class="blink-4"><input id="bgChangeInterval"/>s</span>
-	</div>
-	<div id="innerSearchPage" class="box">
-		<iframe></iframe>
-	</div>
-	<div id="error" title="Error">
-		<p></p>
-	</div>
-	<div id="snackbar">
-		<strong>message...</strong>
-	</div>
-	<div id="dynamicStyleWrapper">
-		<div id="plainStyle"></div>
-		<div id="coverSizeStyle"></div>
+
+	<div>
+		<div id="actionForm">
+			<form id="actionFrm" name="actionFrm" target="ifrm" method="post">
+				<input type="hidden" name="_method" id="hiddenHttpMethod"/>
+			</form>
+			<iframe id="actionIframe" name="ifrm"></iframe>
+		</div>
+		<div id="bgActionGroup">
+			<span class="blink-1 pull-left"  id="deleteBgBtn">DELETE</span>
+			<span class="blink-2 pull-right" id="nextBgBtn"  >NEXT</span>
+			<span class="blink-3"            id="popupBgBtn" >VIEW</span>
+			<span class="blink-4"><input id="bgChangeInterval"/>s</span>
+		</div>
+		<div id="innerSearchPage" class="box">
+			<iframe></iframe>
+		</div>
+		<div id="error" title="Error">
+			<p></p>
+		</div>
+		<div id="snackbar">
+			<strong>message...</strong>
+		</div>
+		<div id="dynamicStyleWrapper">
+			<div id="plainStyle"></div>
+			<div id="coverSizeStyle"></div>
+		</div>
 	</div>
 
 </body>

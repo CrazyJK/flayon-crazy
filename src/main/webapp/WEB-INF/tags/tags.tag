@@ -36,7 +36,7 @@
 %>
 <div style="background-color:#fff;" class="box box-small">
 	<span class="item <%=itemCssClass%> text-bold" onclick="fnViewTagDetail('${tag.id}')">${tag.name}</span>
-	<span>${tag.description}</span>
+	<span class="label label-desc">${tag.description}</span>
 	<small class="badge badge-black">${tag.videoList.size()}</small> 
 	<small class="float-right" style="margin-left: 5px; color: #f00;" onclick="fnDeleteTag(${tag.id}, this)" title="Delete this tag">&times;</small>
 </div>

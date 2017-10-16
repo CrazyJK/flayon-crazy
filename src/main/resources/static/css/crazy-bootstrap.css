@@ -67,7 +67,8 @@ input[type='range'] {
 .badge-black {
 	background-color: transparent;
     color: #111;
-    border: 2px solid #111;
+    border: 0px dotted #111;
+    text-shadow: 1px 1px 2px #4c4c4c;
 }
 .input-group-xs > .form-control, .input-group-xs > .input-group-addon, .input-group-xs > .input-group-btn > .btn {
     height: 22px;
@@ -114,6 +115,9 @@ input[type='range'] {
 .label-black {
 	background: #000;
 	color: #fff;
+}
+.label-desc {
+	color: #804949;
 }
 code {
 	margin: 2px;

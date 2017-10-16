@@ -36,11 +36,11 @@
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-	<span style="background-color:#fff;" data-toggle="tooltip"
-		onclick="fnViewActressDetail('${actress.name}')" 
-		class="item <%=itemCssClass %> box box-small ${actress.favorite ? 'favorite' : ''}" 
-		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}"
-			>${actress.name} <small>${fn:length(actress.videoList)}</small></span>
+<div style="background-color:#fff;" class="box box-small">
+	<span class="item <%=itemCssClass%> ${actress.favorite ? 'favorite' : ''}" onclick="fnViewActressDetail('${actress.name}')" 
+		title="${actress.localName} ${actress.birth} ${actress.bodySize} ${actress.height} ${actress.debut}">${actress.name}</span>
+	<small>${fn:length(actress.videoList)}</small>
+</div>
 <%
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
