@@ -40,7 +40,7 @@
 	background-color: rgba(255, 255, 255, 0.5);
 	border-radius: 9px;
 	padding: 10px;
-	margin-left: 132px;
+	/* margin-left: 160px; */
 }
 .tab-content.tab-gravia > h4 {
 	margin-top: 0;
@@ -201,6 +201,8 @@ function renderNav() {
 		).appendTo(navGravia);
 	}
 	navGravia.children().first().addClass("active");
+	console.log("navGravia.width", navGravia.width());
+	$(".tab-gravia").css({marginLeft: navGravia.width() + 10});
 }
 
 function renderContent(idx) {

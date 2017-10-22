@@ -57,7 +57,7 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<div id="actress-list" style="visibility:hidden;">
+		<div id="actress-list">
 			<table id="list" class="table table-condensed table-hover">
 				<thead>
 					<tr>
@@ -82,7 +82,7 @@ $(document).ready(function() {
 						<td class="number">${fn:length(actress.videoList)}</td> 
 						<td class="number">${actress.score}</td>
 						<td class="number">${actress.age}</td>
-						<td>
+						<td style="max-width:150px;">
 							<div class="nowrap">
 								<c:forEach items="${actress.videoList}" var="video">
 								<jk:video video="${video}" view="opus"/>

@@ -2,7 +2,7 @@
 <!DOCTYPE xml>
 <configuration>
 
-	<!-- spring-boot-1.5.1.RELEASE.jar!org/springframework/boot/logging/logback/defaults.xml -->
+	<!-- spring-boot-1.5.8.RELEASE.jar!org/springframework/boot/logging/logback/defaults.xml -->
 	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
 	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/flayon/crazy}"/>
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
