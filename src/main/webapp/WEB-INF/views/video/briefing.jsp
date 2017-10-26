@@ -16,7 +16,7 @@ $(document).ready(function() {
 	$(".btn-group-viewType").children().on("click", function() {
 		var viewType = $(this).attr("data-viewType");
 		$("[data-opus]").each(function() {
-			$(this).html(viewType === 'n' ? $(this).attr("data-opus") : 'O');
+			$(this).html(viewType === 'n' ? $(this).attr("data-opus") : 'V');
 		});
 	});
 	// set initial view
@@ -115,7 +115,7 @@ function fsOpen(folder) {
 				<tbody>
 					<c:forEach items="${dateMap}" var="date" varStatus="status">
 					<tr>
-						<td><span class="badge float-right">${fn:length(date.value)}</span>${date.key}</td>
+						<td><span class="badge badge-black float-right">${fn:length(date.value)}</span>${date.key}</td>
 						<td><div id="rank0-${date.key}" class="nowrap"></div></td>
 						<td><div id="rank1-${date.key}" class="nowrap"></div></td>
 						<td><div id="rank2-${date.key}" class="nowrap"></div></td>
@@ -153,7 +153,7 @@ function fsOpen(folder) {
 				<tbody>
 					<c:forEach items="${playMap}" var="play" varStatus="status">
 					<tr>
-						<td><span class="badge float-right">${fn:length(play.value)}</span>${play.key}</td>
+						<td><span class="badge badge-black float-right">${fn:length(play.value)}</span>${play.key}</td>
 						<td><div id="rank0-${play.key}" class="nowrap"></div></td>
 						<td><div id="rank1-${play.key}" class="nowrap"></div></td>
 						<td><div id="rank2-${play.key}" class="nowrap"></div></td>
@@ -187,7 +187,7 @@ function fsOpen(folder) {
 				<tbody>
 					<c:forEach items="${rankMap}" var="rank" varStatus="status">
 					<tr class="nowrap">
-						<td><span class="badge float-right">${fn:length(rank.value)}</span>${rank.key}</td>
+						<td><span class="badge badge-black float-right">${fn:length(rank.value)}</span>${rank.key}</td>
 						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${rank.value}" var="video" varStatus="status">
@@ -229,7 +229,7 @@ function fsOpen(folder) {
 							<c:set var="totalLength" value="${totalLength + video.length}"/>
 						</c:forEach>
 					<tr>
-						<td><span class="badge float-right">${fn:length(score.value)}</span>${score.key}</td>
+						<td><span class="badge badge-black float-right">${fn:length(score.value)}</span>${score.key}</td>
 						<td class="text-right">
 							<fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/>
 						</td>
@@ -264,7 +264,7 @@ function fsOpen(folder) {
 					<c:set var="totalLength" value="0"/>
 					<c:forEach items="${lengthMap}" var="length" varStatus="status">
 					<tr>
-						<td><span class="badge float-right">${fn:length(length.value)}</span>${length.key} GB↓</td>
+						<td><span class="badge badge-black float-right">${fn:length(length.value)}</span>${length.key} GB↓</td>
 						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${length.value}" var="video" varStatus="status">
@@ -300,7 +300,7 @@ function fsOpen(folder) {
 					<c:set var="totalLength" value="0"/>
 					<c:forEach items="${extensionMap}" var="extension" varStatus="status">
 					<tr>
-						<td><span class="badge float-right">${fn:length(extension.value)}</span>${extension.key}</td>
+						<td><span class="badge badge-black float-right">${fn:length(extension.value)}</span>${extension.key}</td>
 						<td class="text-right">
 							<c:set var="totalLength" value="0"/>
 							<c:forEach items="${extension.value}" var="video" varStatus="status">
