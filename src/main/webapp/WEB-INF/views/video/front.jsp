@@ -250,9 +250,16 @@ var frontApp = (function() {
 		$("#aperture-O1").draggable();
 		$("#aperture-O2").draggable();
 		$("#aperture-O3").draggable();	
+	},
+	/**
+	 * nav Background button hide
+	 */
+	navBackBtnHide = function() {
+		$("#backMenu").parent().hide();
 	};
 	
 	return {init: function() {
+		  navBackBtnHide();
 		backgroundEffect();
 		      neonEffect();
 		     frontEffect();
