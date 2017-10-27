@@ -3,10 +3,14 @@ package jk.kamoru.flayon.crazy;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+
 import static java.nio.file.StandardOpenOption.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,7 +21,9 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.UsesJava8;
 
+import jk.kamoru.flayon.FLAYON;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
@@ -250,12 +256,38 @@ public class Utils extends jk.kamoru.flayon.Utils {
 		List<File> list = new ArrayList<>();
 		for (File dir : dirFiles)
 			if (dir.isDirectory())
-				list.addAll(FileUtils.listFiles(dir, extensions, recursive));
-//			else
-//				throw new CrazyException(String.format("%s is not directory", dir.getAbsolutePath()));
+				if (FLAYON.JAVA_VERSION.equals("1.8"))
+					list.addAll(listPath(dir.toPath(), extensions));
+				else
+					list.addAll(FileUtils.listFiles(dir, extensions, recursive));
 		return list;
 	}
 
+	@UsesJava8
+	private static List<File> listPath(Path start, String... suffixs) {
+		List<File> pathList = new ArrayList<>();
+		try {
+			boolean isSuffixEmpty = suffixs == null || suffixs.length == 0;
+			Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult visitFile(Path fileEntry, BasicFileAttributes attrs) throws IOException {
+					if (attrs.isRegularFile()) {
+						File file = fileEntry.toFile();
+						if (isSuffixEmpty || StringUtils.endsWithAny(file.getName(), suffixs)) {
+							pathList.add(file);
+						}
+					}
+					return FileVisitResult.CONTINUE;
+				}
+				
+			});
+			return pathList;
+		} catch (IOException e) {
+			throw new CrazyException("walk file tree error", e);
+		}
+	}
+	
 	/**
 	 * 배열을 합친다.
 	 * @param arr1
