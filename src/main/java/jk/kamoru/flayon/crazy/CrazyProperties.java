@@ -1,7 +1,5 @@
 package jk.kamoru.flayon.crazy;
 
-import java.net.URL;
-
 import org.springframework.beans.factory.annotation.Value;
 
 public class CrazyProperties {
@@ -45,7 +43,7 @@ public class CrazyProperties {
     /** actress ratio for score */               @Value("${score.ratio.actress}")        protected int   ACTRESS_RATIO;
     /** subtitles  ratio for score */            @Value("${score.ratio.subtitles}")      protected int SUBTITLES_RATIO;
 
-    /** new video RSS feed */                    @Value("${url.rss}")                    protected URL rssUrl;
+    /** new video RSS feed */                    @Value("${url.rss}")                    protected String urlRSS;
 
     /** video info finding url */                @Value("${url.search.video}")           protected String urlSearchVideo;
     /** actress info finding url */              @Value("${url.search.actress}")         protected String urlSearchActress;

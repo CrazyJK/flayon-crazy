@@ -3,6 +3,8 @@ package jk.kamoru.flayon.crazy.video.service;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1250,7 +1252,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<TistoryGraviaItem> getTistoryItem() {
-		return TistoryRSSReader.get(rssUrl, studioMapByOpus(), opusList());
+		URL url;
+		try {
+			url = new URL(urlRSS + "?t=" + System.currentTimeMillis());
+		} catch (MalformedURLException e) {
+			throw new CrazyException("rss url error", e);
+		}
+		return TistoryRSSReader.get(url, studioMapByOpus(), opusList());
 	}
 
 	private List<String> opusList() {
