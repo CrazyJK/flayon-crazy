@@ -1,5 +1,5 @@
 ;(function($) {
-	var $slidesjs;
+	var $slidesjs, viewHistory = [];
 
 	$.fn.slideview = function(options) {
 
@@ -68,12 +68,31 @@
 	    });
 		$(".slidesjs-slide[slidesjs-index='" + index + "'] > div").randomBG(0.5);
 		setLocalStorageItem(THUMBNAMILS_COVER_INDEX, index);
+		
+		var slideNo = index + 1;
+		//console.log("rePagination slideNo=", slideNo);
+		if (!viewHistory.includes(slideNo)) {
+			viewHistory.push(slideNo);
+		}
 	}
 	
 	$.fn.randomView = function(e) {
-    	$slidesjs.goto(getRandomInteger(1, totalVideoSize));
+    	if (viewHistory.length == totalVideoSize) {
+    		viewHistory = [];
+    		showSnackbar('All video seen');
+    	}
+		var selectedNo = getRandomInteger(1, totalVideoSize);
+		if (viewHistory.includes(selectedNo)) {
+			//console.log("randomView 본거", selectedNo);
+			$.fn.randomView();
+		}
+		else {
+			viewHistory.push(selectedNo);
+	    	$slidesjs.goto(selectedNo);
+	    	//console.log("randomView", viewHistory, selectedNo);
+		}
 	}
-	
+
 	$.fn.navEvent = function(e) {
 		if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
 			console.log("navEvent", e.target.tagName, "pass");
@@ -88,7 +107,6 @@
 			case 1 : // mouse : wheel up
 			case 37: // key : left
 			case 40: // key : down
-			case 1003 : // click : right
 				$slidesjs.previous();
 				break;
 			case -1 : // mouse : wheel down
@@ -96,13 +114,14 @@
 			case 38: // key : up
 				$slidesjs.next();
 				break;
-			case 1002 : // click : middle
-				fnRandomPlay();
-				break;
 			case 34 : // key : PageDown
 				$.fn.randomView();
 				break;
+			case 1002 : // click : middle
+				fnRandomPlay();
+				break;
 			case 1001 : // click : left
+			case 1003 : // click : right
 			case 32: // key : space
 			case 13: // key : enter
 				break;
