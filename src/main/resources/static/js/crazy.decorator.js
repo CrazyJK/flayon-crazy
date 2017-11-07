@@ -273,7 +273,8 @@ var	resizeDivHeight = function() {
 			else
 				displayNotice('Error', textStatus + "<br>" + errorThrown);
 		}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
-			loading(false);
+			if (settings.showLoading)
+				loading(false);
 		});
 
 	},

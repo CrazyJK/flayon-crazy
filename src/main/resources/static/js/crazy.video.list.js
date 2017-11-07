@@ -396,20 +396,19 @@ var videoList = (function() {
 	
 	var request = function() {
 		console.log("request");
-		loading(true, "request...");
 
 		// reset variables
 		hadVideoFileCount = 0;
 		  hadTorrentCount = 0;
 		   candidateCount = 0;
 		
-		restCall(PATH + '/rest/tag', {}, function(list) {
+		restCall(PATH + '/rest/tag', {showLoading: false}, function(list) {
 			tagList = list;
 			fn.setTagKeys();
 			console.log("tagKeys", tagKeys);
 		});
 		   
-		restCall(PATH + '/rest/video', {t: withTorrent}, function(list) {
+		restCall(PATH + '/rest/video', {data : {t: withTorrent}, title: "request video"}, function(list) {
 			videoList = [];
 			$.each(list, function(i, row) { // 응답 json을 videoList 배열로 변환
 				if (row.torrents.length > 0)
