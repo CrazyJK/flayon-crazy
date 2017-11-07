@@ -32,29 +32,75 @@ public class VideoBatch extends CrazyProperties {
 
 	private static final Logger logger = LoggerFactory.getLogger(VideoBatch.class);
 
-	@Autowired VideoService videoService;
+	public static enum Option {
+		/** MOVE_WATCHED_VIDEO */ W, /** DELETE_LOWER_RANK_VIDEO */ R, /** DELETE_LOWER_SCORE_VIDEO */ S;
+	}
+	
+	public static enum Type {
+		/** InstanceVideoSource */ I, /** ArchiveVideoSource */ A, /** Backup */ B,
+		/** MOVE_WATCHED_VIDEO */ W, /** DELETE_LOWER_RANK_VIDEO */ R, /** DELETE_LOWER_SCORE_VIDEO */ S;
+	}
+	
+	@Autowired   VideoService   videoService;
 	@Autowired HistoryService historyService;
 
-	public boolean isMOVE_WATCHED_VIDEO() {
-		return MOVE_WATCHED_VIDEO;
+	public Boolean setBatchOption(Option option, boolean setValue) {
+		try {
+			switch (option) {
+			case R:
+				return DELETE_LOWER_RANK_VIDEO = setValue;
+			case S:
+				return DELETE_LOWER_SCORE_VIDEO = setValue;
+			case W:
+				return MOVE_WATCHED_VIDEO = setValue;
+			default:
+				throw new VideoException("batch option key is invalid. k=" + option);
+			}
+		} finally {
+			showProperties();
+		}
 	}
-	public void setMOVE_WATCHED_VIDEO(boolean setValue) {
-		MOVE_WATCHED_VIDEO = setValue;
-		showProperties();
+
+	public Boolean getBatchOption(Option option) {
+		switch (option) {
+		case R:
+			return DELETE_LOWER_RANK_VIDEO;
+		case S:
+			return DELETE_LOWER_SCORE_VIDEO;
+		case W:
+			return MOVE_WATCHED_VIDEO;
+		default:
+			throw new VideoException("batch option key is invalid. k=" + option);
+		}
 	}
-	public boolean isDELETE_LOWER_RANK_VIDEO() {
-		return DELETE_LOWER_RANK_VIDEO;
-	}
-	public void setDELETE_LOWER_RANK_VIDEO(boolean setValue) {
-		DELETE_LOWER_RANK_VIDEO = setValue;
-		showProperties();
-	}
-	public boolean isDELETE_LOWER_SCORE_VIDEO() {
-		return DELETE_LOWER_SCORE_VIDEO;
-	}
-	public void setDELETE_LOWER_SCORE_VIDEO(boolean setValue) {
-		DELETE_LOWER_SCORE_VIDEO = setValue;
-		showProperties();
+
+	public void startBatch(Type type) {
+		switch(type) {
+		case I:
+			batchInstanceVideoSource(); 
+			break;
+		case A:
+			batchArchiveVideoSource(); 
+			break;
+		case B:
+			try {
+				backup();
+				 break;
+			} catch (IOException e) {
+				throw new VideoException("batch.backup error", e);
+			}
+		case R:
+			videoService.removeLowerRankVideo();
+			break;
+		case S:
+			videoService.removeLowerScoreVideo();
+			break;
+		case W:
+			videoService.moveWatchedVideo();
+			break;
+		default:
+			throw new VideoException("unknown videobatch type : " + type);
+		}
 	}
 
 	@PostConstruct
@@ -190,7 +236,7 @@ public class VideoBatch extends CrazyProperties {
 	public synchronized void backup() throws IOException {
 		
 		if (StringUtils.isBlank(BACKUP_PATH)) {
-			logger.info("BATCH - backup path not set");
+			logger.warn("BATCH - backup path not set");
 			return;
 		}
 		logger.info("BATCH - backup to {}", BACKUP_PATH);

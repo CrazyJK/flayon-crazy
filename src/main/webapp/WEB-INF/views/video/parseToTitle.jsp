@@ -45,11 +45,7 @@ function toggleInputDiv() {
 }
 function saveCover(opus) {
 	fnMarkChoice(opus);
-	var url = PATH + "/video/" + opus + "/saveCover";
-	var resultStatus = actionFrame(url, {title: $("#dataTitle_" + opus).val()}, "POST", 'save cover ' + opus, 1000);
-	if (resultStatus == 200) {
-		loading(true, 'Fail to save cover');
-	}
+	restCall(PATH + "/rest/video/" + opus + "/saveCover", {method: "POST", data: {title: $("#dataTitle_" + opus).val()}, title: 'save cover ' + opus});
 }
 function saveCoverAll() {
 	$("#saveCoverAll").val(true);

@@ -354,11 +354,11 @@ function goTorrentSearch(opus, idx) {
 }
 function goTorrentMove(opus, idx) {
 	$("[data-idx='" + idx + "']").addClass("moved");
-	actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+	restCall(PATH + "/rest/video/" + opus + "/moveTorrentToSeed", {method: "PUT", title: "Torrent move"});
 }
 
 function getAllTorrents() {
-	actionFrame(PATH + "/video/torrent/getAll", {}, "POST", "Torrent get all");
+	restCall(PATH + "/rest/video/torrent/getAll", {method: "PUT", title: "Torrent get all"});
 }
 function resizeSecondDiv() {
 	isShortWidth = $(window).width() < 950;

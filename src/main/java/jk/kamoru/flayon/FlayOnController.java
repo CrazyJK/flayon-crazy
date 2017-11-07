@@ -349,7 +349,7 @@ public class FlayOnController {
 		exec(new String[]{cmd, args});
 	}
 	
-	@RequestMapping("/openFolder")
+	@RequestMapping(value="/openFolder", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void openFolder(@RequestParam(value="folder") String folder) {
 		if (StringUtils.containsIgnoreCase(System.getProperty("os.name"), "Windows")) {

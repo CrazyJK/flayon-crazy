@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var PATH = '${PATH}',
+var PATH = '',
 	bgImageCount = 0,
 	urlSearchVideo,
 	urlSearchActress,
@@ -21,11 +21,12 @@ var PATH = '${PATH}',
     bgToggle = 0,
     isLoadedSearchPage = false,
     loadingText = 'Loading...',
-    currBGImageUrl,
+    currBGImageUrl;
+
 	/**
 	 * div container 높이 조정
 	 */
-	resizeDivHeight = function() {
+var	resizeDivHeight = function() {
 		var offsetMargin = 20, headerHeight = $("#header_div").outerHeight();
 		windowHeight = $(window).outerHeight();
 		windowWidth  = $(window).width();
@@ -46,7 +47,6 @@ var PATH = '${PATH}',
 	},
 	/**
 	 * post 액션
-	 */
 	actionFrame = function(reqUrl, reqData, method, msg, interval, callback) {
 		console.log("actionFrame", reqUrl, reqData, method, msg, interval);
 		var token = $('#csrfToken').val();
@@ -84,6 +84,7 @@ var PATH = '${PATH}',
 			console.log("actionFrame called", data_jqXHR, textStatus, jqXHR_errorThrown);
 		});
 	},
+	 */
 	/**
 	 * loading layer control
 	 */
@@ -93,7 +94,7 @@ var PATH = '${PATH}',
 		var defaults = {interval: 0, detail: "", danger: false},
 			opts = $.extend({}, defaults, options),
 			timerControl = function(start) {
-				console.log("loading timerControl", start, tSec);
+				//console.log("loading timerControl", start, tSec);
 				if (start)
 					$("#loading-timer").html(tSec++);
 				else
@@ -237,7 +238,7 @@ var PATH = '${PATH}',
 	 * delete current backgroung image
 	 */
 	deleteBGImage = function() {
-		confirm('delete ' + currBGImageUrl) && actionFrame(currBGImageUrl, {}, "DELETE", "this image delete", 0, setBackgroundImage);
+		confirm('delete ' + currBGImageUrl) && restCall(currBGImageUrl, {method: "DELETE", title: "this image delete"}, setBackgroundImage);
 	},
 	/**
 	 * popup view background image
@@ -245,7 +246,43 @@ var PATH = '${PATH}',
 	popupBGImage = function() {
 		popupImage(currBGImageUrl, "bg-image");
 	},
-	crazy = (function() {
+	restCall = function(url, args, callback) {
+		
+		var defaults = {
+				method: "GET",
+				data: {},
+				mimeType: "application/json",
+				title: "Request",
+				showLoading: true,
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+				}
+		};
+		var settings = $.extend({}, defaults, args);
+		
+		if (settings.showLoading)
+			loading(true, settings.title);
+		$.ajax(url, settings).done(function(data) {
+			console.log("restCall done", data);
+			if (callback)
+				callback(data);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log("restCall fail", '\njqXHR=', jqXHR, '\ntextStatus=', textStatus, '\nerrorThrown=', errorThrown);
+			if (jqXHR.responseJSON)
+				displayNotice('Error', 'Error: ' + jqXHR.responseJSON.message + '<br>' +  'Status: ' + jqXHR.responseJSON.status + '<br>' + 'Path: ' + jqXHR.responseJSON.path);
+			else
+				displayNotice('Error', textStatus + "<br>" + errorThrown);
+		}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
+			loading(false);
+		});
+
+	},
+	displayNotice = function(title, desc) {
+	    $("#notice > p").append(desc);
+	    $("#notice").attr("title", title).dialog();
+	};
+
+var	crazy = (function() {
 		
 		var 
 	    /**
@@ -425,18 +462,13 @@ var PATH = '${PATH}',
 				setInterval(function() {
 					$.getJSON({
 						method: 'GET',
-						url: PATH + '/video/ping.json',
+						url: PATH + '/rest/ping.json',
 						data: {},
 						cache: false
-					}).done(function(data) {
-						if (data.exception) {
-							console.log("ping : error", data.exception.message);
-						}
-						else {
-							if (data.noti.length > 0) {
-								$(".noti").html(data.noti).show().hide("highlight", {color: "#ff0000"}, pingInterval);
-								console.log("ping : ", data.noti);
-							}
+					}).done(function(noti) {
+						if (noti.message !== "") {
+							$(".noti").html(noti.message).show().hide("highlight", {color: "#ff0000"}, pingInterval);
+							console.log("ping noti :", noti.message);
 						}
 					}).fail(function(jqxhr, textStatus, error) {
 						console.log("ping : fail", textStatus + ", " + error);
@@ -468,8 +500,7 @@ var PATH = '${PATH}',
 
 window.onerror = function(e) {
     console.log('Error', e);
-    $("#error > p").html('Error: ' + e);
-    $("#error").dialog();
+    displayNotice('Error', e);
     loading(false);
 };
 

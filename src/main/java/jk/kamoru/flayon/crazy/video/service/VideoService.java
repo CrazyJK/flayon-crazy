@@ -272,25 +272,9 @@ public interface VideoService {
 	 */
 	Map<String, List<Video>> groupByExtension();
 
-	// --- for tag ---
-	
-	/**
-	 * tag list
-	 * @return
-	 */
-	List<VTag> getTagList();
-
-	void updateTag(VTag tag);
-
-	void deleteTag(VTag tag);
-
-	void createTag(VTag tag);
-
 	List<TistoryGraviaItem> getTistoryItem();
 
-	List<VTag> getTagListWithVideo();
 
-	VTag getTag(Integer id);
 
 	void moveTorrentToSeed(String opus);
 
@@ -352,19 +336,11 @@ public interface VideoService {
 	void arrangeArchiveVideo();
 
 	/**
-	 * toggle tag
-	 * @param opus
-	 * @param tag
-	 */
-	void toggleTag(String opus, VTag tag);
-
-	/**
 	 * save video cover
 	 * @param opus
 	 * @param title
 	 */
 	void saveCover(String opus, String title);
-
 	
 	// --- action method of actress --------------------------------------
 
@@ -373,22 +349,24 @@ public interface VideoService {
 	 * @param params map of actress info
 	 * @return 
 	 */
-	void saveActressInfo(Map<String, String> params);
+	Actress saveActressInfo(Map<String, String> params);
 
 	/**
 	 * set favorite
 	 * @param actressName
 	 * @param favorite
+	 * @return 
 	 */
-	void setFavoriteOfActress(String actressName, Boolean favorite);
+	boolean setFavoriteOfActress(String actressName, Boolean favorite);
 
 	// --- action method of actress --------------------------------------
 
 	/**
 	 * save studio info
 	 * @param params map of studio info
+	 * @return 
 	 */
-	void saveStudioInfo(Map<String, String> params);
+	Studio saveStudioInfo(Map<String, String> params);
 	
 	// --- action method of source --------------------------------------
 	
@@ -456,5 +434,7 @@ public interface VideoService {
 	List<String> getOpusList();
 
 	int getTorrents(String[] opusArr);
-	
+
+	void toggleTag(VTag tag, String opus);
+
 }

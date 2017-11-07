@@ -44,7 +44,7 @@
 <%
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
-	<span class="label label-plain" title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<span class="label label-plain" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 	<span class="label label-plain" title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
 	<span class="label label-plain" title="Age ${actress.age}">${actress.age}</span> 
 	<span class="label label-plain" title="Score ${actress.score}">S ${actress.score}</span>

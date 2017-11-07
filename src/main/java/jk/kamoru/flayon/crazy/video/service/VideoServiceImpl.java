@@ -76,8 +76,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	
 	/** video dao */
 	@Autowired VideoDao videoDao;
-	@Autowired HistoryService historyService;
 	@Autowired TagDao tagDao;
+	@Autowired HistoryService historyService;
 	@Autowired WebFileLookupService arzonLookupService;
 	@Autowired WebFileLookupService sukebeiNyaaLookupService;
 
@@ -516,8 +516,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void saveActressInfo(Map<String, String> params) {
-		videoDao.renameActress(params);
+	public Actress saveActressInfo(Map<String, String> params) {
+		return videoDao.renameActress(params);
 	}
 
 	@Override
@@ -588,8 +588,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void saveStudioInfo(Map<String, String> params) {
-		videoDao.renameStudio(params);
+	public Studio saveStudioInfo(Map<String, String> params) {
+		return videoDao.renameStudio(params);
 	}
 	
 	@Override
@@ -1212,42 +1212,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public void setFavoriteOfActress(String actressName, Boolean favorite) {
-		videoDao.getActress(actressName).setFavorite(favorite);
-	}
-
-	@Override
-	public List<VTag> getTagList() {
-		return tagDao.findAll();
-	}
-
-	@Override
-	public void updateTag(VTag tag) {
-		tagDao.merge(tag);
-		for (Video video : videoDao.getVideoList(true, false)) {
-			if (video.getInfo().getTags() == null)
-				continue;
-			if (video.getInfo().getTags().contains(tag)) {
-				video.updateTag(tag);
-			}
-		}
-	}
-
-	@Override
-	public void deleteTag(VTag tag) {
-		tagDao.remove(tag);
-		for (Video video : videoDao.getVideoList(true, false)) {
-			if (video.getInfo().getTags() == null)
-				continue;
-			if (video.getInfo().getTags().contains(tag)) {
-				video.toggleTag(tag);
-			}
-		}
-	}
-
-	@Override
-	public void createTag(VTag tag) {
-		tagDao.persist(tag);
+	public boolean setFavoriteOfActress(String actressName, Boolean favorite) {
+		return videoDao.getActress(actressName).setFavorite(favorite);
 	}
 
 	@Override
@@ -1306,43 +1272,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		return map;
 	}
 	
-	@Override
-	public void toggleTag(String opus, VTag tag) {
-		VTag _tag = tagDao.findById(tag.getId());
-		videoDao.getVideo(opus).toggleTag(_tag);
-	}
-
-	@Override
-	public List<VTag> getTagListWithVideo() {
-		List<VTag> allTags = tagDao.findAll();
-		List<Video> videoList = videoDao.getVideoList(true, false);
-		for (VTag vTag : allTags) {
-			vTag.getVideoList().clear();
-			for (Video video : videoList) {
-				if (video.getTags() == null)
-					continue;
-				if (video.getTags().contains(vTag)) {
-					vTag.addVideo(video);
-				}
-			}
-		}
-		return allTags;
-	}
-
-	@Override
-	public VTag getTag(Integer id) {
-		VTag vTag = tagDao.findById(id);
-		vTag.getVideoList().clear();
-		for (Video video : videoDao.getVideoList(true, false)) {
-			if (video.getTags() == null)
-				continue;
-			if (video.getTags().contains(vTag)) {
-				vTag.addVideo(video);
-			}
-		}
-		return vTag;
-	}
-
 	@Override
 	public List<Actress> getActressList(ActressSort sort, Boolean reverse, Boolean instance, Boolean archive) {
 		List<Actress> list = new ArrayList<>();
@@ -1483,11 +1412,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public List<String> getOpusList() {
-		List<String> list = new ArrayList<>();
-		for (Video video : getVideoList(null, false, true, false)) {
-			list.add(video.getOpus());
-		}
-		return list;
+		return getVideoList(null, false, true, false).stream().map(v -> v.getOpus()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -1510,4 +1435,11 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 		return found;
 	}
+
+	@Override
+	public void toggleTag(VTag tag, String opus) {
+		VTag _tag = tagDao.findById(tag.getId());
+		videoDao.getVideo(opus).toggleTag(_tag);
+	}
+
 }

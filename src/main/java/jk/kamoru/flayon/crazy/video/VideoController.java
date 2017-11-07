@@ -40,11 +40,11 @@ import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
-import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
+import jk.kamoru.flayon.crazy.video.service.TagService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
@@ -60,9 +60,10 @@ public class VideoController extends CrazyController {
 
 	static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	
-	@Autowired private VideoService videoService;
-	@Autowired private HistoryService historyService;
-	@Autowired private VideoBatch videoBatch;
+	@Autowired   VideoBatch     videoBatch;
+	@Autowired   VideoService   videoService;
+	@Autowired     TagService     tagService;
+	@Autowired HistoryService historyService;
 
 	long today = new Date().getTime();
 	
@@ -130,7 +131,7 @@ public class VideoController extends CrazyController {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
 			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
 		}
-		model.addAttribute("tagList", videoService.getTagListWithVideo());
+		model.addAttribute("tagList", tagService.getTagListWithVideo());
 
 		return "video/videoMain";
 	}
@@ -166,24 +167,6 @@ public class VideoController extends CrazyController {
 		model.addAttribute(videoService.getActress(actressName));
 		return "video/actressDetail";
 	}
-
-	/**
-	 * save actres info
-	 * @param actressName
-	 * @param params map of info
-	 */
-	@RequestMapping(value="/actress", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveActressInfo(@RequestParam Map<String, String> params) {
-		logger.info("params = {}", params);
-		videoService.saveActressInfo(params);
-	}
-
-	@RequestMapping(value="/actress/{actressName}/favorite/{favorite}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void putActressFavorite(@PathVariable String actressName, @PathVariable Boolean favorite) {
-		videoService.setFavoriteOfActress(actressName, favorite);
-	}
 	
 	/**
 	 * display status briefing view
@@ -205,7 +188,7 @@ public class VideoController extends CrazyController {
 		model.addAttribute(videoService.getActressList(null, false, true, false));
 		model.addAttribute(videoService.getVideoList(null, false, true, false));
 
-		model.addAttribute("tagList", videoService.getTagListWithVideo());
+		model.addAttribute("tagList", tagService.getTagListWithVideo());
 
 		return "video/briefing";
 	}
@@ -240,7 +223,7 @@ public class VideoController extends CrazyController {
 		model.addAttribute("reverse", reverse);
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
-		model.addAttribute("tagList", videoService.getTagList());
+		model.addAttribute("tagList", tagService.getTagList());
 		return "video/videoList";
 	}
 
@@ -268,18 +251,6 @@ public class VideoController extends CrazyController {
 		return "video/torrent";
 	}
 
-	@RequestMapping(value="/torrent/getAll", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void torrentGetAll() {
-		videoService.torrent(true);
-	}
-	
-	@RequestMapping(value="/torrent/get", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void torrentGet(@RequestParam("opus") String[] opusArr) {
-		videoService.getTorrents(opusArr);
-	}
-	
 	@RequestMapping(value="/torrent2", method=RequestMethod.GET)
 	public String torrent2(Model model, 
 			@RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
@@ -293,14 +264,10 @@ public class VideoController extends CrazyController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public String searchJson(Model model, @RequestParam(value="q", required=false, defaultValue="") String query) {
-		model.addAttribute("videoList", videoService.findVideoList(query));
-		model.addAttribute("historyList", videoService.findHistory(query));
-
-		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
-		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
-		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
-
+	public String searchView(Model model) {
+		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.getBatchOption(VideoBatch.Option.R));
+		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.getBatchOption(VideoBatch.Option.S));
+		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.getBatchOption(VideoBatch.Option.W));
         return "video/search";		
 	}
 
@@ -317,31 +284,17 @@ public class VideoController extends CrazyController {
 	}
 
 	/**
-	 * put studio info
-	 * @param studio
-	 * @param params map of info
-	 */
-	@RequestMapping(value="/studio", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveStudioInfo(@RequestParam Map<String, String> params) {
-		videoService.saveStudioInfo(params);
-	}
-
-	/**
 	 * display studio list view
 	 * @param model
 	 * @param sort default NAME
 	 * @return view name
 	 */
 	@RequestMapping(value="/studio", method=RequestMethod.GET)
-	public String studioList(Model model, @RequestParam(value="sort", required=false, defaultValue="NAME") StudioSort sort,
-			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
+	public String studioList(Model model, 
 			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
-		model.addAttribute(videoService.getStudioList(sort, reverse, instance, archive));
+		model.addAttribute(videoService.getStudioList(null, false, instance, archive));
 		model.addAttribute("sorts", StudioSort.values());
-		model.addAttribute("sort", sort);
-		model.addAttribute("reverse", reverse);
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
 		return "video/studioList";
@@ -449,51 +402,6 @@ public class VideoController extends CrazyController {
 	}
 
 	/**
-	 * call video player
-	 * @param model
-	 * @param opus
-	 */
-	@RequestMapping(value="/{opus}/play", method=RequestMethod.GET)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void callVideoPlayer(@PathVariable String opus) {
-		videoService.playVideo(opus);
-	}
-
-	/**
-	 * save video rank info
-	 * @param model
-	 * @param opus
-	 * @param rank
-	 */
-	@RequestMapping(value="/{opus}/rank/{rank}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void putVideoRank(Model model, @PathVariable String opus, @PathVariable int rank) {
-		videoService.rankVideo(opus, rank);
-	}
-
-	/**
-	 * call Subtitles editor
-	 * @param model
-	 * @param opus
-	 */
-	@RequestMapping(value="/{opus}/subtitles", method=RequestMethod.GET)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void opusSubtitles(Model model, @PathVariable String opus) {
-		videoService.editVideoSubtitles(opus);
-	}
-
-	/**
-	 * remove video
-	 * @param model
-	 * @param opus
-	 */
-	@RequestMapping(value="/{opus}", method=RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removeVideo(Model model, @PathVariable("opus") String opus) {
-		videoService.removeVideo(opus);
-	}
-
-	/**
 	 * display video detail view
 	 * @param model
 	 * @param opus
@@ -505,35 +413,11 @@ public class VideoController extends CrazyController {
 		if (video == null)
 			throw new VideoNotFoundException(opus);
 		model.addAttribute(video);
-		model.addAttribute("tagList", videoService.getTagList());
+		model.addAttribute("tagList", tagService.getTagList());
 		if (video.isArchive())
 			return "video/videoDetailArchive";
 		else
 			return "video/videoDetail";
-	}
-	
-	/**
-	 * rank, play 초기화
-	 * @param model
-	 * @param opus
-	 * @return
-	 */
-	@RequestMapping(value="/{opus}/reset", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void videoReset(@PathVariable String opus) {
-		videoService.resetVideoScore(opus);
-	}
-
-	/**
-	 * 잘못 매칭된 비디오. 밖으로 옮기고, info초기화
-	 * @param model
-	 * @param opus
-	 * @return
-	 */
-	@RequestMapping(value="/{opus}/wrong", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void videoWrong(@PathVariable String opus) {
-		videoService.resetWrongVideo(opus);
 	}
 
 	/**
@@ -560,72 +444,9 @@ public class VideoController extends CrazyController {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
 			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
 		}
-		model.addAttribute("tagList", videoService.getTagListWithVideo());
+		model.addAttribute("tagList", tagService.getTagListWithVideo());
 		
 		return "video/videoArchive";
-	}
-	
-	/**
-	 * reload video source
-	 * @param model
-	 */
-	@RequestMapping("/reload")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void reload(Model model) {
-		videoService.reload(null);
-	}
-
-	/**
-	 * display video manager view
-	 * @return view name
-	 */
-	@RequestMapping("/manager")
-	public String manager() {
-		return "video/manager";
-	}
-
-	/**
-	 * move watched video
-	 * @param model
-	 */
-	@RequestMapping(value="/manager/moveWatchedVideo", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void moveWatchedVideo(Model model) {
-		synchronized (java.lang.Object.class) {
-			videoService.moveWatchedVideo();
-//			videoService.reload();
-		}
-	}
-	
-	/**remove lower rank video
-	 * @param model
-	 */
-	@RequestMapping(value="/manager/removeLowerRankVideo", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removeLowerRankVideo(Model model) {
-		videoService.removeLowerRankVideo();
-	}
-	
-	/**
-	 * remove lower score video
-	 * @param model
-	 */
-	@RequestMapping(value="/manager/removeLowerScoreVideo", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removeLowerScoreVideo(Model model) {
-		videoService.removeLowerScoreVideo();
-	}
-	
-	/**
-	 * confirm video candidate
-	 * @param model
-	 * @param opus
-	 * @param path
-	 */
-	@RequestMapping(value="/{opus}/confirmCandidate", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmCandidate(Model model, @PathVariable("opus") String opus, @RequestParam("path") String path) {
-		videoService.confirmCandidate(opus, path);
 	}
 	
 	/**
@@ -684,22 +505,6 @@ public class VideoController extends CrazyController {
 		return "video/torrentSearch";
 	}
 
-	@RequestMapping(value="/set/MOVE_WATCHED_VIDEO/{setValue}", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void setMOVE_WATCHED_VIDEO(@PathVariable("setValue") boolean setValue) {
-		videoBatch.setMOVE_WATCHED_VIDEO(setValue);
-	}
-	@RequestMapping(value="/set/DELETE_LOWER_RANK_VIDEO/{setValue}", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void setDELETE_LOWER_RANK_VIDEO(@PathVariable("setValue") boolean setValue) {
-		videoBatch.setDELETE_LOWER_RANK_VIDEO(setValue);
-	}
-	@RequestMapping(value="/set/DELETE_LOWER_SCORE_VIDEO/{setValue}", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void setDELETE_LOWER_SCORE_VIDEO(@PathVariable("setValue") boolean setValue) {
-		videoBatch.setDELETE_LOWER_SCORE_VIDEO(setValue);
-	}
-
 	@RequestMapping("/list2")
 	public String list2() {
 		return "video/videoList2";
@@ -730,71 +535,15 @@ public class VideoController extends CrazyController {
 		sb.append("]}");
 		return sb.toString();
 	}
-
-	@RequestMapping(value="/tag/{tagId}", method=RequestMethod.GET)
-	public String viewTag(Model model, @PathVariable Integer tagId) {
-		VTag tag = videoService.getTag(tagId);
-		model.addAttribute("tag", tag);
-		return "video/tagDetail";
-	}
-
-	@RequestMapping(value="/tag/{tagId}", method=RequestMethod.POST)
-	public String updateTag(Model model, @ModelAttribute VTag tag, @PathVariable Integer tagId) {
-		videoService.updateTag(tag);
-		return "redirect:/video/tag/" + tagId;
-	}
-	
-	@RequestMapping(value="/tag", method=RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteTag(@ModelAttribute VTag tag) {
-		videoService.deleteTag(tag);
-	}
-	
-	@RequestMapping(value="/tag", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveTag(@ModelAttribute VTag tag, @RequestParam(value="opus", required=false, defaultValue="") String opus) {
-		videoService.createTag(tag);
-		if (opus.length() > 0)
-			videoService.toggleTag(opus, tag);
-	}
 	
 	@RequestMapping("/gravia")
 	public String graviainterview() {
 		return "video/graviainterview";
 	}
 
-	@RequestMapping(value="/gravia", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void graviainterviewSaveCover(Model model, @RequestParam(value="title", required=true) List<String> titles) {
-		videoService.saveCover(titles);
-	}
-
-	@RequestMapping("/gravia/data")
-	public void graviainterviewData(Model model) {
-		model.addAttribute(videoService.getTistoryItem());
-	}
-
-	@RequestMapping(value="/{opus}/tag", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void toggleTag(@ModelAttribute VTag tag, @PathVariable String opus) {
-		videoService.toggleTag(opus, tag);
-	}
-
-	@RequestMapping("/{opus}/saveCover")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void saveCover(@PathVariable String opus, @RequestParam String title) {
-		videoService.saveCover(opus, title);
-	}
-	
 	@RequestMapping("/historyOnDB")
 	public void historyOnDB(Model model) {
 		model.addAttribute(historyService.findOnDB());
-	}
-	
-	@RequestMapping(value="/{opus}/moveTorrentToSeed", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void moveTorrentToSeed(@PathVariable String opus) {
-		videoService.moveTorrentToSeed(opus);
 	}
 	
 	@RequestMapping(value="/{opus}/moveToInstance", method=RequestMethod.PUT)
@@ -803,22 +552,9 @@ public class VideoController extends CrazyController {
 		return "redirect:/video/" + opus;
 	}
 	
-	@RequestMapping(value="/manager/startVideoBatch/{type}", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void startVideoBatch(@PathVariable String type) throws IOException {
-		if ("instance".equals(type))
-			videoBatch.batchInstanceVideoSource();
-		else if ("archive".equals(type))
-			videoBatch.batchArchiveVideoSource();
-		else if ("backup".equals(type))
-			videoBatch.backup();
-		else
-			throw new VideoException("unknown videobatch type : " + type);
-	}
-
 	@RequestMapping("/ping")
 	public void ping(Model model, @AuthenticationPrincipal FlayOnUser flayonUser) {
-		model.addAttribute("noti", NotiQueue.getNoti(flayonUser.getUser().getId()));
+		model.addAttribute("noti", NotiQueue.getMessage(flayonUser.getUser().getId()));
 	}
 
 	@RequestMapping("/blank")

@@ -156,13 +156,15 @@ public interface VideoDao {
 	/**
 	 * rename Studio
 	 * @param data
+	 * @return 
 	 */
-	void renameStudio(Map<String, String> data);
+	Studio renameStudio(Map<String, String> data);
 	
 	/**
 	 * rename Actress
 	 * @param data
+	 * @return 
 	 */
-	void renameActress(Map<String, String> data);
+	Actress renameActress(Map<String, String> data);
 	
 }

@@ -107,7 +107,7 @@ $(document).ready(function() {
 		<div id="innerSearchPage" class="box">
 			<iframe></iframe>
 		</div>
-		<div id="error" title="Error">
+		<div id="notice" title="Error">
 			<p></p>
 		</div>
 		<div id="snackbar">

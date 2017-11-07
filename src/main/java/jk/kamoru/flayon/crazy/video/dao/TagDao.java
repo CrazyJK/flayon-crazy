@@ -47,12 +47,13 @@ public interface TagDao {
 	 * 태스 수정
 	 * @param tag
 	 */
-	void merge(VTag tag);
+	VTag merge(VTag tag);
 
 	/**
 	 * 태그 삭제
 	 * @param tag
+	 * @return 
 	 */
-	void remove(VTag tag);
+	boolean remove(VTag tag);
 	
 }

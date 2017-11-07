@@ -73,10 +73,11 @@ function Video(idx, data) {
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
 						var opus = $(this).attr("opus");
 						var candidate = $(this).data("path");
-						actionFrame(PATH + "/video/" + opus + "/confirmCandidate", {"path": candidate}, "POST", "accept Candidate");
-						showSnackbar("accept file " + opus);
+						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", date: {path: candidate}, title: "accept Candidate"}, function() {
+							showSnackbar("accept file " + opus);
+							$(this).off().hide();
+						});
 						$("#check-" + opus).addClass("found");
-						$(this).off().hide();
 					})
 			);
 		});
@@ -91,7 +92,7 @@ function Video(idx, data) {
 						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(torrent)).on("click", function() {
 						var opus = $(this).attr("opus");
-						actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+						restCall(PATH + "/rest/video/" + opus + "/moveTorrentToSeed", {method: "PUT", title: "Torrent move"});
 						showSnackbar("move torrent " + opus);
 						$("#check-" + opus).addClass("moved");
 						$(this).off().hide();

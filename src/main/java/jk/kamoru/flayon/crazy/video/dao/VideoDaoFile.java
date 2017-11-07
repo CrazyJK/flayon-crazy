@@ -206,7 +206,7 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 	}
 
 	@Override
-	public void renameStudio(Map<String, String> data) {
+	public Studio renameStudio(Map<String, String> data) {
 		String studioName = data.get("name");
 		String studioNewName = data.get("newname");
 		if (!StringUtils.equals(studioName, studioNewName)) {
@@ -220,11 +220,13 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 				renameVideo(entry.getKey(), entry.getValue());
 			}
 		}
-		instanceVideoSource.getStudio(studioNewName.toUpperCase()).saveInfo(data);
+		Studio studio = instanceVideoSource.getStudio(studioNewName.toUpperCase());
+		studio.saveInfo(data);
+		return studio;
 	}
 
 	@Override
-	public void renameActress(Map<String, String> data) {
+	public Actress renameActress(Map<String, String> data) {
 		String actressName = data.get("name");
 		String actressNewName = data.get("newname");
 		log.info("renameActress name={}, newname={}", actressName, actressNewName);
@@ -245,7 +247,9 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 				renameVideo(entry.getKey(), entry.getValue());
 			}
 		}
-		instanceVideoSource.getActress(VideoUtils.sortForwardName(actressNewName)).saveInfo(data);
+		Actress actress = instanceVideoSource.getActress(VideoUtils.sortForwardName(actressNewName));
+		actress.saveInfo(data);
+		return actress;
 	}
 }
 

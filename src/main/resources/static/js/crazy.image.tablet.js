@@ -223,7 +223,7 @@ var slide = (function() {
 				if (confirm('remove this image?\n' + data.src + "\n" + data.title)) {
 					if (data && data.mode == 0) { // image
 						if (willDelete)
-							actionFrame(data.src, {}, "DELETE", "this image delete");
+							restCall(data.src, {method: "DELETE", title: "this image delete"});
 					}
 					$("img[src='" + data.src + "']").remove();
 					$(".displayCount").html($("#imageDiv").children().length + " / " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));

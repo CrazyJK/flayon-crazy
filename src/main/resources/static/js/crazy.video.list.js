@@ -342,7 +342,7 @@ var videoList = (function() {
 		
 		// All torrents
 		$("#getAllTorrents").on("click", function() {
-			actionFrame(PATH + "/video/torrent/get", $("#table form").serialize(), "POST", "Get torrent in list");
+			restCall(PATH + "/rest/video/torrent/get", {method: "PUT", data: $("#table form").serialize(), title: "Get torrent in list"});
 		});
 		
 		// Box mode, size
@@ -403,42 +403,31 @@ var videoList = (function() {
 		  hadTorrentCount = 0;
 		   candidateCount = 0;
 		
-		$.getJSON({
-			method: 'GET',
-			url: PATH + '/video/list.json',
-			data: {t: withTorrent},
-//			cache: false,
-			timeout: 60000
-		}).done(function(data) {
-			if (data.exception) {
-				showSnackbar("Error.. " + data.exception.message);
-			}
-			else {
-				videoList = [];
-				tagList = data.tagList;
-				fn.setTagKeys(tagList);
-				console.log("tagKeys", tagKeys);
-				$.each(data.videoList, function(i, row) { // 응답 json을 videoList 배열로 변환
-					if (row.torrents.length > 0)
-						hadTorrentCount++;
-					if (row.videoCandidates.length > 0)
-						candidateCount++;
-					if (row.existVideoFileList)
-						hadVideoFileCount++;
-					videoList.push(new Video(i, row));
-				});
-				$(".candidate" ).html("C " + candidateCount);
-				$(".videoCount").html("V " + hadVideoFileCount);
-				$("#torrent"   ).html("T " + hadTorrentCount);
+		restCall(PATH + '/rest/tag', {}, function(list) {
+			tagList = list;
+			fn.setTagKeys();
+			console.log("tagKeys", tagKeys);
+		});
+		   
+		restCall(PATH + '/rest/video', {t: withTorrent}, function(list) {
+			videoList = [];
+			$.each(list, function(i, row) { // 응답 json을 videoList 배열로 변환
+				if (row.torrents.length > 0)
+					hadTorrentCount++;
+				if (row.videoCandidates.length > 0)
+					candidateCount++;
+				if (row.existVideoFileList)
+					hadVideoFileCount++;
+				videoList.push(new Video(i, row));
+			});
+			$(".candidate" ).html("C " + candidateCount);
+			$(".videoCount").html("V " + hadVideoFileCount);
+			$("#torrent"   ).html("T " + hadTorrentCount);
 
-				// 정렬하여 보여주기 => sort
-				$(".btn-sort-" + currentSort.code).click();
-			}
-		}).fail(function(jqxhr, textStatus, error) {
-			showSnackbar("Error "+ textStatus + ", " + error);
-		}).always(function() {
-			loading(false);
-		});	
+			// 정렬하여 보여주기 => sort
+			$(".btn-sort-" + currentSort.code).click();
+		});
+		
 	};
 	
 	var initModule = function() {

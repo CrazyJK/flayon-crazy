@@ -37,11 +37,11 @@
 			<c:if test="${mode ne 'f'}">
 				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
 				<c:if test="${mode eq 's'}">
-				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				</c:if>
 			</c:if>
 			<c:if test="${mode eq 'f'}">
-				<span title="set Favorite actress" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
 				<span title="age">${actress.age}</span> 
 				<span title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
@@ -66,9 +66,9 @@
 <%  } else if (view.equalsIgnoreCase("title")) { %>
 	<span class="${cssClass} video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 <%  } else if (view.equalsIgnoreCase("score")) { %>
-	<span class="${cssClass}" title="${video.scoreDesc}">${video.score}</span>
+	<span class="${cssClass}" title="${video.scoreDesc}" id="score-${video.opus}">${video.score}</span>
 	<c:if test="${mode eq 'l'}">
-		<span class="${cssClass}" onclick="fnVideoReset('${video.opus}')">Reset</span>
+		<span class="${cssClass}" onclick="fnVideoReset('${video.opus}')" title="rank, play count reset">Reset</span>
 		<span class="${cssClass}" onclick="fnVideoWrong('${video.opus}')">Wrong</span>
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("rank")) { %>

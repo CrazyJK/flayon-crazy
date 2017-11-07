@@ -109,18 +109,20 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 	}
 
 	@Override
-	public void merge(VTag updateTag) {
+	public VTag merge(VTag updateTag) {
 		updateTag.validation();
 		VTag foundTag = findById(updateTag.getId());
 		tags.remove(foundTag);
 		tags.add(updateTag);
 		saveTagData();
+		return updateTag;
 	}
 
 	@Override
-	public void remove(VTag tag) {
+	public boolean remove(VTag tag) {
 		tags.remove(tag);
 		saveTagData();
+		return true;
 	}
 
 	private void saveTagData() {

@@ -20,6 +20,12 @@ mark {
 .col-lg-6 {
 	padding: 0;
 }
+.btn {
+	min-width: 40px;
+}
+#content_div {
+	background-color: transparent !important;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -35,13 +41,13 @@ $(document).ready(function() {
 		loading(true, 'Searching');
 
 		var keyword = $(this).val();
-		var queryUrl = PATH + '/video/search.json?q=' + keyword; 
+		var queryUrl = PATH + '/rest/video/search/' + keyword; 
 		$("#url").html(queryUrl);
 		
-		$.getJSON(queryUrl ,function(data) {
+		restCall(queryUrl, {}, function(result) {
 			$('#foundVideoList, #foundHistoryList').empty();
 
-			var videoRow = data['videoList'];
+			var videoRow = result.videoResult;
 			$("#video-count").html(videoRow.length);
 			$.each(videoRow, function(entryIndex, entry) {
 				var studio 		   = entry['studio'],
@@ -85,7 +91,7 @@ $(document).ready(function() {
 			});
 			$("#resultVideoDiv > table").toggle(videoRow.length > 0);
 
-			var historyRow = data['historyList'];
+			var historyRow = result.historyResult;
 			$("#history-count").html(historyRow.length);
  			$.each(historyRow, function(entryIndex, entry) {
 				var date = entry['date'],
@@ -118,43 +124,28 @@ $(document).ready(function() {
 
 			loading(false);
 		});
+		
 	});
 });
 
-var BOOTSTRAP_COL_LG_6 = 1230,
-	moveWatchedVideo = ${MOVE_WATCHED_VIDEO},
-	deleteLowerRankVideo = ${DELETE_LOWER_RANK_VIDEO},
-	deleteLowerScoreVideo = ${DELETE_LOWER_SCORE_VIDEO},
-	fnMoveWatchedVideo = function() {
-		actionFrame(PATH + '/video/manager/moveWatchedVideo', {}, 'POST', 'Moving Watched Video');
-	},
-	setMoveWatchedVideo = function() {
-		moveWatchedVideo = !moveWatchedVideo;
-		actionFrame(PATH + '/video/set/MOVE_WATCHED_VIDEO/' + moveWatchedVideo, {}, "POST", "Set Watched Video to " + moveWatchedVideo, 0, function() {
-			$("#MOVE_WATCHED_VIDEO").html("" + moveWatchedVideo);
+var	fnSetVideoBatchOption = function(type, dom) {
+		var $self = $(dom), newValue = !($self.text() == 'true'), name = $self.prev().text();
+		restCall(PATH + '/rest/video/batch/option', {
+			method: "PUT", 
+			data: {k: type, v: newValue}, 
+			title: name,
+			showLoading: false
+		}, function(result) {
+//			showSnackbar("Set option " + name + " to " + result, 1000);
+			$("#restCallResult").html("Set option " + name + " to " + result).show().fadeOut(3000);
+			$self.html("" + result);
 		});
 	},
-	fnRemoveLowerRankVideo = function() {
-		actionFrame(PATH + '/video/manager/removeLowerRankVideo', {}, 'POST', 'Deleting Lower Rank');
-	},
-	setDeleteLowerRankVideo = function() {
-		deleteLowerRankVideo = !deleteLowerRankVideo;
-		actionFrame(PATH + '/video/set/DELETE_LOWER_RANK_VIDEO/' + deleteLowerRankVideo, {}, "POST", "Set Lower Rank to " + deleteLowerRankVideo, 0, function() {
-			$("#DELETE_LOWER_RANK_VIDEO").html("" + deleteLowerRankVideo);	
-		});
-	},
-	fnRemoveLowerScoreVideo = function() {
-		actionFrame(PATH + '/video/manager/removeLowerScoreVideo', {}, 'POST', 'Deleting Lower Score');
-	},
-	setDeleteLowerScoreVideo = function() {
-		deleteLowerScoreVideo = !deleteLowerScoreVideo;
-		actionFrame(PATH + '/video/set/DELETE_LOWER_SCORE_VIDEO/' + deleteLowerScoreVideo, {}, "POST", "Set Lower Score to " + deleteLowerScoreVideo, 0, function() {
-			$("#DELETE_LOWER_SCORE_VIDEO").html("" + deleteLowerScoreVideo);
-		});
-	},
-	fnStartVideoBatch = function(type) {
-		actionFrame(PATH + '/video/manager/startVideoBatch/' + type, {}, 'POST', type + ' VideoBatch...');
-	},
+	fnStartVideoBatch = function(type, dom) {
+		restCall(PATH + '/rest/video/batch/start', {method: "PUT", data: {t: type}, title: $(dom).text()});
+	};
+
+var BOOTSTRAP_COL_LG_6 = 1200,
 	resizeSecondDiv = function() {
 		$("#content_div").css("background-color", "transparent");
 		$("#resultVideoDiv, #resultHistoryDiv").outerHeight(
@@ -175,7 +166,7 @@ var BOOTSTRAP_COL_LG_6 = 1230,
 			<s:message code="video.search"/>
 		</label>
 		<input type="search" id="query" class="form-control input-sm" placeHolder="<s:message code="video.search"/>"/>
-		<span id="debug"     class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<span id="debug" class="label label-plain">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 		<div class="btn-group btn-group-xs">
 			<a class="btn btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
 			<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
@@ -191,24 +182,25 @@ var BOOTSTRAP_COL_LG_6 = 1230,
 
 		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">
 			<hr style="margin: 3px 0;"/>
+			<span id="restCallResult" class="label label-warning"></span>
 			<div class="btn-group btn-group-xs">
-				<button class="btn btn-default" onclick="fnMoveWatchedVideo()"><s:message code="video.mng.move"/></button>
-				<button class="btn btn-default" onclick="setMoveWatchedVideo()" id="MOVE_WATCHED_VIDEO">${MOVE_WATCHED_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('W', this)"><s:message code="video.mng.move"/></button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('W', this)">${MOVE_WATCHED_VIDEO}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
-				<button class="btn btn-default" onclick="fnRemoveLowerRankVideo()"><s:message code="video.mng.rank"/></button>
-				<button class="btn btn-default" onclick="setDeleteLowerRankVideo()" id="DELETE_LOWER_RANK_VIDEO">${DELETE_LOWER_RANK_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('R', this)"><s:message code="video.mng.rank"/></button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('R', this)">${DELETE_LOWER_RANK_VIDEO}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
-				<button class="btn btn-default" onclick="fnRemoveLowerScoreVideo()"><s:message code="video.mng.score"/></button>
-				<button class="btn btn-default" onclick="setDeleteLowerScoreVideo()" id="DELETE_LOWER_SCORE_VIDEO">${DELETE_LOWER_SCORE_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('S', this)"><s:message code="video.mng.score"/></button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('S', this)">${DELETE_LOWER_SCORE_VIDEO}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
-				<button class="btn btn-default" onclick="fnStartVideoBatch('instance')">InstanceVideoBatch</button>
-				<button class="btn btn-default" onclick="fnStartVideoBatch('archive')">ArchiveVideoBatch</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('I', this)">InstanceVideoBatch</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('A', this)">ArchiveVideoBatch</button>
 			</div>
 			<div class="btn-group btn-group-xs">
-				<button class="btn btn-default" onclick="fnStartVideoBatch('backup')">Backup Batch</button>
+				<button class="btn btn-default" onclick="fnStartVideoBatch('B', this)">Backup Batch</button>
 			</div>
 		</div>
 		

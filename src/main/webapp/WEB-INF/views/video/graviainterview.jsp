@@ -333,7 +333,7 @@ function fnToggleBtnMode() {
 }
 
 function saveCoverAll() {
-	actionFrame(PATH + "/video/gravia", $("form#graviaForm").serialize(), "POST", "call saveCoverAll");
+	restCall(PATH + "/rest/video/gravia", method: "POST", data: $("form#graviaForm").serialize(), title: "call saveCoverAll"});
 }
 
 function resizeCover(first) {

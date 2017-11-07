@@ -44,33 +44,39 @@ var calculatedDivHeight = 0,
 	 * @param selectedOpus
 	 */
 	fnEditSubtitles = function(selectedOpus) {
-		console.log("edit subtitles " + selectedOpus);
-		actionFrame(PATH + "/video/" + selectedOpus + "/subtitles", {}, "GET", selectedOpus + " edit subtitles");
+		restCall(PATH + '/rest/video/' + selectedOpus + '/exec/subtitles', {method: "PUT", showLoading: false});
+		
 	},
 	/**
 	 * call video player
 	 * @param selectedOpus
 	 */
 	fnPlay = function(selectedOpus) {
-		//console.log("Video play ", selectedOpus, "listViewType=", listViewType);
-		actionFrame(PATH + "/video/" + selectedOpus + "/play", {}, "GET", selectedOpus + " play");
-		if (listViewType != 'S' && listViewType != 'L' && listViewType != 'V' && listViewType != 'F' && listViewType != 'K') {
-			fnVideoDetail(selectedOpus);
-		}  
+		restCall(PATH + '/rest/video/' + selectedOpus + '/exec/play', {method: "PUT", showLoading: false}, function() {
+			if (!['S', 'L', 'V', 'F', 'K'].includes(listViewType)) {
+				fnVideoDetail(selectedOpus);
+			}
+		});
 	},
 	/**
 	 * reset video info
 	 * @param selectedOpus
 	 */
 	fnVideoReset = function(selectedOpus) {
-		actionFrame(PATH + "/video/" + selectedOpus + "/reset", {}, "PUT", selectedOpus + " reset");
+		restCall(PATH + '/rest/video/' + selectedOpus + '/reset', {method: "PUT", title: selectedOpus + " reset"}, function() {
+			if (opener)
+				location.reload();
+		});
 	},
 	/**
 	 * remove wrong video file
 	 * @param selectedOpus
 	 */
 	fnVideoWrong = function(selectedOpus) {
-		actionFrame(PATH + "/video/" + selectedOpus + "/wrong", {}, "PUT", selectedOpus + " mark wrong");
+		restCall(PATH + '/rest/video/' + selectedOpus + '/wrong', {method: "PUT", title: selectedOpus + " mark wrong"}, function() {
+			if (opener)
+				location.reload();
+		});
 	},
 	/**
 	 * call video player by random
@@ -173,7 +179,7 @@ var calculatedDivHeight = 0,
 				console.log("fnRank opener error", e);
 			}
 		}
-		actionFrame(PATH + "/video/" + opus + "/rank/" + rank.val(), {}, "PUT", opus + " rank " + rank.val(), 300);
+		restCall(PATH + "/rest/video/" + opus + "/rank/" + rank.val(), {method: "PUT", showLoading: false});
 	},
 	/**
 	 * set rank color
@@ -193,9 +199,11 @@ var calculatedDivHeight = 0,
 	 * @param name
 	 */
 	fnFavorite = function(dom, name) {
-		var val = dom.innerHTML == '★';
-		dom.innerHTML = val ? '☆' : '★';
-		actionFrame(PATH + "/video/actress/" + name + "/favorite/" + !val, {}, "PUT", name + " set favorite");
+		var $self = $(dom), val = $self.text() == '★';
+		restCall(PATH + "/rest/actress/" + name + "/favorite/" + !val, {method: "PUT", showLoading: false}, function(result) {
+			console.log("fnFavorite", result, dom.innerHTML);
+			$self.html(result ? '★' : '☆').attr({title: "Favorite " + result});
+		});
 	},
 	/**
 	 * searching content by keyword
@@ -238,7 +246,7 @@ var calculatedDivHeight = 0,
 	 * reload video source
 	 */
 	fnReloadVideoSource = function() {
-		actionFrame(PATH + "/video/reload", {}, "GET", "Source reload");
+		restCall(PATH + "/rest/video/reload", {method: "PUT", title: "Source reload"});
 	},
 	/**
 	 * 비디오 확인을 기억하기 위해 css class를 변경한다.
@@ -257,7 +265,7 @@ var calculatedDivHeight = 0,
 		var tagId = $(dom).attr("data-tagid");
 		var isSet = $(dom).attr("data-tagset") === 'false';
 		$(dom).swapClass("label-default", "label-plain", isSet);
-		actionFrame(PATH + "/video/" + opus + "/tag?id=" + tagId, {}, "POST", opus + (isSet ? " set " : " unset ") + "tagId " + tagId, 0, function() {
+		restCall(PATH + "/rest/video/" + opus + "/tag?id=" + tagId, {method: "PUT", title: opus + (isSet ? " set" : " unset") + " tagId " + tagId}, function() {
 			$(dom).attr("data-tagset", isSet);
 		});
 	},
@@ -269,7 +277,7 @@ var calculatedDivHeight = 0,
 		var opus    = $(frm).find("input[name='opus']").val();
 		var tagname = $(frm).find("input[name='name']").val();
 		var tagdesc = $(frm).find("input[name='description']").val();
-		actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag " + opus + " -> " + tagname, 0, function() {
+		restCall(PATH + "/rest/tag", {method: "POST", data: $(frm).serialize(), title: "add tag " + opus + " -> " + tagname}, function() {
 			$("#tags-"+opus).append(
 					$("<span>").addClass("label label-plain").attr("title", tagdesc).html(tagname)
 			);
@@ -290,8 +298,9 @@ var calculatedDivHeight = 0,
 	 */
 	fnDeleteTag = function(tagId, dom) {
 		if (confirm("Are you sure to delete it?")) {
-			$(dom).parent().hide();
-			actionFrame(PATH + "/video/tag?id=" + tagId, {}, "DELETE", tagId + " tag delete");
+			restCall(PATH + "/video/tag?id=" + tagId, {method: "DELETE", title: tagId + " tag delete"}, function(result) {
+				$(dom).parent().hide();
+			});
 		}
 	},
 	fnSearchOpus = function() {
@@ -327,7 +336,7 @@ var calculatedDivHeight = 0,
 	},
 	goTorrentMove = function(opus) {
 		fnMarkChoice(opus);
-		actionFrame(PATH + "/video/" + opus + "/moveTorrentToSeed", {}, "POST", "Torrent move");
+		restCall(PATH + "/rest/video/" + opus + "/moveTorrentToSeed", {method: "PUT", title: "Torrent move"});
 	},
 	videoCoverSeenHistory = new Array(),
 	getRandomVideoIndex = function() {

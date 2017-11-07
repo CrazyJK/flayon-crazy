@@ -214,7 +214,7 @@ function render() {
 							var imgSrc = $(this).parent().data("src");
 							if (confirm('Delete this image\n' + imgSrc)) {
 								$(this).parent().parent().parent().hide("fade", {}, 500);
-								actionFrame(imgSrc, {}, "DELETE", "this image delete");
+								restCall(imgSrc, {method: "DELETE", title: "this image delete"});
 							}
 							return false;
 						})

@@ -166,12 +166,13 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 		loadInfo();
 		return favorite;
 	}
-	public void setFavorite(Boolean favorite) {
+	public boolean setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 		loadInfo();
 		info.put("favorite", favorite.toString());
 		info.put("newname", name);
 		saveInfo(info);
+		return this.favorite;
 	}
 
 	public void reloadInfo() {

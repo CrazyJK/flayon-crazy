@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,7 +21,11 @@ public class NotiQueue {
 		log.info("push Noti : {}th {}", notiList.size(), noti);
 	}
 	
-	public static String getNoti(Long userid) {
+	public static String getMessage(Long userid) {
+		return getNoti(userid).getMessage();
+	}	
+	
+	public static Noti getNoti(Long userid) {
 		if (!lastNotiIndexByUseridMap.containsKey(userid)) {
 			lastNotiIndexByUseridMap.put(userid, -1); // init
 		}
@@ -36,25 +39,14 @@ public class NotiQueue {
 			if (TIME_OFFSET > System.currentTimeMillis() - noti.getTimeMillis()) {
 				msg = noti.getMessage();
 				log.info("get Noti : userid {}, {}th [{}]", userid, nextNotiIndex+1, msg);
+				return noti;
 			}
 			else {
 				return getNoti(userid);
 			}
 		}
-		return msg;
+		return new Noti();
 	}
+
 }
 
-@Data
-class Noti {
-	
-	long timeMillis;
-	String message;
-	
-	public Noti(long timeMillis, String message) {
-		super();
-		this.timeMillis = timeMillis;
-		this.message = message;
-	}
-	
-}

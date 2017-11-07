@@ -86,10 +86,10 @@ function fnVideoToggle(dom) {
 		<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 		<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
 		<dd><span class="label label-plain ${empty video.etcInfo ? 'hide' : ''}">ETC info : ${video.etcInfo}</span></dd>
-		<dd><span class="label label-plain" onclick="$(this).next().toggleClass('hide')">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
+		<dd><span class="label label-plain" onclick="$(this).next().toggleClass('hide')">Files <em id="filesize-${video.opus}"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
 			<div class="box fileinfoDiv hide">
 				<c:forEach items="${video.videoFileList}" var="file">
-				<p><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
+				<p class="video-file-p-${video.opus}"><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 				</c:forEach>
 				<c:forEach items="${video.subtitlesFileList}" var="file">
 				<p><span class="label label-danger" onclick="opener.fnEditSubtitles('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>

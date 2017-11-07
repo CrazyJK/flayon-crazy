@@ -24,7 +24,7 @@ $(document).ready(function() {
 	$('[href="#${tab}"]').click();
 });
 function fsOpen(folder) {
-	actionFrame('/flayon/openFolder', {'folder' : folder}, 'POST', 'Open folder ' + folder);
+	restCall(PATH + '/flayon/openFolder', {method: "PUT", data: {folder: folder}, title: 'Open folder ' + folder});
 }
 </script>
 </head>
@@ -354,7 +354,7 @@ function fsOpen(folder) {
 			function appendNewTag(frm) {
 				var tagname = $("#newTagName").val();
 				var tagDesc = $("#newTagDesc").val();
-				actionFrame(PATH + "/video/tag", $(frm).serialize(), "PUT", "add tag -> " + tagname, 0, function() {
+				restCall(PATH + "/rest/video/tag", {method: "POST", data: $(frm).serialize(), title: "add tag -> " + tagname}, function() {
 					$("#taglist").append(
 							$("<li>").append(
 									$("<div>", {"class": "box box-small"}).css({backgroundColor: "#000", color: "#eee"}).append(

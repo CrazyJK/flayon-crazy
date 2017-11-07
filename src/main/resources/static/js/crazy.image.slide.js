@@ -139,7 +139,7 @@ var slide = (function() {
 					if (sourceMode.value == 0) { // image
 						var imgSrc = selectedItemUrl;
 						if (confirm('Delete this image\n' + imgSrc)) {
-							actionFrame(imgSrc, {}, "DELETE", "this image delete");
+							restCall(imgSrc, {method: "DELETE", title: "this image delete"});
 							console.log("    delete call -> image.next");
 							image.next();
 						}
