@@ -101,12 +101,6 @@ public class VideoController extends CrazyController {
 		return "video/front";
 	}
 	
-	@RequestMapping("/opus")
-	public String opus(Model model) {
-		model.addAttribute("opus", 	videoService.getOpusList());
-		return "video/opus";
-	}
-	
 	/**
 	 * display video main view
 	 * @param model
@@ -194,68 +188,12 @@ public class VideoController extends CrazyController {
 	}
 
 	/**
-	 * send history list by query
-	 * @param model
-	 * @param query search keyword
-	 * @return view name
-	 */
-	@RequestMapping(value="/history", method=RequestMethod.GET)
-	public String history(Model model, @RequestParam(value="q", required=false, defaultValue="") String query) {
-		model.addAttribute("historyList", videoService.findHistory(query));
-		return "video/history";
-	}
-
-	/**
-	 * display video list view
-	 * @param model
-	 * @param sort default Opus if {@code null}
-	 * @return view name
-	 */
-	@RequestMapping(value="/list", method=RequestMethod.GET)
-	public String videoList(Model model, @RequestParam(value="sort", required=false, defaultValue="O") Sort sort,
-			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
-			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
-			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive,
-			@RequestParam(value="t", required=false, defaultValue="false") Boolean withTorrent) {
-		model.addAttribute("videoList", videoService.getVideoList(sort, reverse, instance, archive, withTorrent));
-		model.addAttribute("sorts", Sort.values());
-		model.addAttribute("sort", sort);
-		model.addAttribute("reverse", reverse);
-		model.addAttribute("instance", instance);
-		model.addAttribute("archive", archive);
-		model.addAttribute("tagList", tagService.getTagList());
-		return "video/videoList";
-	}
-
-	/**
 	 * for single page application
 	 * @return
 	 */
 	@RequestMapping(value="/list_spa", method=RequestMethod.GET)
 	public String videoListBySpa() {
 		return "video/videoListBySpa";
-	}
-	
-	/**
-	 * display video torrent info view
-	 * @param model
-	 * @param getAllTorrents
-	 * @param withData
-	 * @return view name
-	 */
-	@RequestMapping(value="/torrent", method=RequestMethod.GET)
-	public String torrent(Model model, 
-			@RequestParam(value="data", required=false, defaultValue="false") Boolean withData) {
-		if (withData)
-			model.addAttribute("videoList", videoService.torrent(false));
-		return "video/torrent";
-	}
-
-	@RequestMapping(value="/torrent2", method=RequestMethod.GET)
-	public String torrent2(Model model, 
-			@RequestParam(value="getAllTorrents", required=false, defaultValue="false") Boolean getAllTorrents) {
-		model.addAttribute("videoList", videoService.torrent(getAllTorrents));
-		return "video/torrent2";
 	}
 
 	/**
@@ -505,14 +443,8 @@ public class VideoController extends CrazyController {
 		return "video/torrentSearch";
 	}
 
-	@RequestMapping("/list2")
-	public String list2() {
-		return "video/videoList2";
-	}
-
-	@RequestMapping("/history/{pattern}")
-	public String historyMonthly(Model model, @PathVariable String pattern) {
-		model.addAttribute("data", historyService.getGraphData(pattern));
+	@RequestMapping("/history")
+	public String historyGraph() {
 		return "video/historyGraph";
 	}
 

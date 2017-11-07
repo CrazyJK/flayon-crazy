@@ -77,7 +77,7 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/briefing"	 ><s:message code="video.briefing"/></a></li>
 			<li><a href="${PATH}/video/gravia"		 ><s:message code="video.gravia"  /></a></li>
 			<li><a href="${PATH}/video/archive"		 ><s:message code="video.archive" /></a></li>
-			<li><a href="${PATH}/video/history/graph"><s:message code="video.history" /></a></li>
+			<li><a href="${PATH}/video/history"      ><s:message code="video.history" /></a></li>
 			<li><a href="${PATH}/"					 ><s:message code="default.home"  /></a></li>
 			<li class="dropdown">
     			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="default.theme"/><span class="caret"></span></a>

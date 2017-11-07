@@ -68,7 +68,7 @@
 	LightboxApp.prototype.start = function() {
 		var self = this;
 		this.shuffle(1);
-		$.getJSON(PATH + '/image/data.json' ,function(data) {
+		restCall(PATH + '/rest/image/data', {}, function(data) {
 			self.imageCount = data['imageCount'];
 			self.imageMap = data['imageNameMap'];
 			

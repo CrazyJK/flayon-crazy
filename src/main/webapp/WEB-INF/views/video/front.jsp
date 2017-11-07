@@ -121,8 +121,8 @@ var frontApp = (function() {
 				fnVideoDetail(opus);
 			}
 		});
-		$.getJSON("${PATH}/video/opus.json", function(data) {
-			opusList = data['opus'];
+		restCall(PATH + '/rest/video/opus', {}, function(data) {
+			opusList = data;
 			setInterval(function() {
 				var bool = getRandomBoolean();
 				var opusIndex = getRandomInteger(0, opusList.length-1);

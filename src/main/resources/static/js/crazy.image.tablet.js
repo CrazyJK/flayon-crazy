@@ -429,7 +429,7 @@ var slide = (function() {
 	 * initiate moudle
 	 */
 	initModule = function() {
-		$.getJSON(PATH + "/image/data.json" ,function(data) {
+		restCall(PATH + '/rest/image/data', {}, function(data) {
 			imageCount   = data['imageCount'];
 			imageNameMap = data['imageNameMap'];
 			coverCount   = data['coverCount'];

@@ -1,5 +1,6 @@
 package jk.kamoru.flayon.crazy.video;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
@@ -25,6 +28,7 @@ public class RestVideoController {
 
 	@Autowired VideoService videoService;
 	@Autowired VideoBatch videoBatch;
+	@Autowired HistoryService historyService;
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public List<Video> videoList() {
@@ -140,10 +144,19 @@ public class RestVideoController {
 		videoService.saveCover(titles);
 	}
 
-	@RequestMapping("/gravia/data")
+	@RequestMapping("/gravia")
 	public List<TistoryGraviaItem> graviainterviewData() {
 		return videoService.getTistoryItem();
 	}
 
+	@RequestMapping("/history/{pattern}")
+	public Collection<HistoryData> historyData(@PathVariable String pattern) {
+		return historyService.getGraphData(pattern);
+	}
+
+	@RequestMapping("/opus")
+	public List<String> opusList() {
+		return videoService.getOpusList();
+	}
 
 }

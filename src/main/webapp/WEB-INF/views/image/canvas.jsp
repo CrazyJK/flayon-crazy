@@ -115,7 +115,7 @@ var playSlide = false;
 
 $(document).ready(function() {
 
-	$.getJSON(PATH + "/image/data.json" ,function(data) {
+	restCall(PATH + '/rest/image/data', {}, function(data) {
 		imageCount = data['imageCount'];
 		imageMap = data['imageNameMap'];
 

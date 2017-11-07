@@ -48,11 +48,9 @@ $(document).ready(function() {
 });
 
 function requestData() {
-	loading(true, "Loading...");
-	$.getJSON("<c:url value="/video/history/"/>" + historyFormat + ".json" ,function(data) {
-		chartData = data['data'];
+	restCall(PATH + '/rest/video/history/' + historyFormat, {}, function(data) {
+		chartData = data;
 		renderChart();
-		loading(false);
 	});
 }
 

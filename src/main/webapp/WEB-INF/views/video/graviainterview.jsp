@@ -158,31 +158,13 @@ var isCheckedNoCover = false;
 })(jQuery);
 
 function request() {
-	loading(true, "request...");
-	$.getJSON({
-		method: 'GET',
-		url: '${PATH}/video/gravia/data.json',
-		data: {},
-		cache: false,
-		timeout: 60000
-	}).done(function(data) {
-		if (data.exception) {
-			loading(true, data.exception.message, {danger: true});
-		}
-		else {
-			$.each(data.tistoryGraviaItemList, function(i, row) { // 응답 json을 List 배열로 변환
-			//	var itemTitle = row.title;
-			//	var titles = row.titles;
-			//	console.log(itemTitle, titles);
+	restCall(PATH + '/rest/video/gravia', {}, function(list) {
+		$.each(list, function(i, row) {
 				graviaList.push(row);
-			});
-			renderNav();
-			renderContent(0);
-			loading(false);
-		}
-	}).fail(function(jqxhr, textStatus, error) {
-		loading(true, textStatus + ", " + error, {danger: true});
-	}).always(function() {});
+		});
+		renderNav();
+		renderContent(0);
+	});
 }
 
 function renderNav() {
@@ -333,7 +315,7 @@ function fnToggleBtnMode() {
 }
 
 function saveCoverAll() {
-	restCall(PATH + "/rest/video/gravia", method: "POST", data: $("form#graviaForm").serialize(), title: "call saveCoverAll"});
+	restCall(PATH + "/rest/video/gravia", {method: "POST", data: $("form#graviaForm").serialize(), title: "call saveCoverAll"});
 }
 
 function resizeCover(first) {
