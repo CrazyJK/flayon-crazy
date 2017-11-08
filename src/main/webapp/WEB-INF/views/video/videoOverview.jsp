@@ -4,37 +4,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><s:message code="video.overview"/> [${video.opus}]</title>
+<title>${video.opus} :: <s:message code="video.overview"/></title>
 <style type="text/css">
-.overviewTxt {
+.overview {
 	width:100%; 
-	height: 180px;
 }
 </style>
 <script type="text/javascript">
+var opus = '${video.opus}';
 function overviewSave() {
-	var overview = $(".overviewTxt");
-	$("#overview-${video.opus}", opener.document).attr("title", overview.val()).html(overview.val());
-	var frm = document.forms['overviewFrm'];
-	frm.submit();
+	var overview = $(".overview").val();
+	restCall(PATH + '/rest/video/' + opus + '/overview', {
+		method: "PUT", data: {overview: overview}, title: "Save overview"
+	}, function() {
+		$("#overview-" + opus, opener.document).attr("title", overview).html(overview);
+	});
 }
 function resizeSecondDiv() {
-	var offset = 50;
-	var windowHeight = $(window).outerHeight();
-	var header = $(".btn").outerHeight();
-	calculatedDivHeight = windowHeight - header - offset;
-	$(".overviewTxt").outerHeight(calculatedDivHeight);
-
+	$(".overview").outerHeight($(window).outerHeight() - $(".btn").outerHeight() - 60);
 }
 </script>
 </head>
 <body>
 <div class="container-fluid" role="main">
-	<form method="post" name="overviewFrm" action="<c:url value="/video/${video.opus}/overview"/>" class="box">
-		<input type="hidden" name="opus" value="${video.opus}">
-		<textarea class="overviewTxt" name="overViewTxt">${video.overviewText}</textarea>
-		<button class="btn btn-success btn-block" onclick="overviewSave()">Save</button>
-	</form>
+	<div class="box">
+		<textarea class="overview" name="overview">${video.overviewText}</textarea>
+		<button class="btn btn-success btn-block" onclick="overviewSave()">Overview save</button>
+	</div>
 </div>
 </body>
 </html>

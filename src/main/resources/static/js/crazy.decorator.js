@@ -268,7 +268,9 @@ var	resizeDivHeight = function() {
 				callback(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			console.log("restCall fail", '\njqXHR=', jqXHR, '\ntextStatus=', textStatus, '\nerrorThrown=', errorThrown);
-			if (jqXHR.responseJSON)
+			if (jqXHR.getResponseHeader('error') === 'true')
+				displayNotice('Error', jqXHR.getResponseHeader('error.message'));
+			else if (jqXHR.responseJSON)
 				displayNotice('Error', 'Error: ' + jqXHR.responseJSON.message + '<br>' +  'Status: ' + jqXHR.responseJSON.status + '<br>' + 'Path: ' + jqXHR.responseJSON.path);
 			else
 				displayNotice('Error', textStatus + "<br>" + errorThrown);

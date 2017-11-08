@@ -100,6 +100,11 @@ public class RestVideoController {
 		videoService.saveCover(opus, title);
 	}
 	
+	@RequestMapping(value="/{opus}/overview", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void opusOverviewPost(@PathVariable("opus") String opus, @RequestParam("overview") String overview) {
+		videoService.saveVideoOverview(opus, overview);
+	}
 
 	@RequestMapping("/search/{query}")
 	public Map<String, List<Map<String, String>>> searchJson(@PathVariable String query) {

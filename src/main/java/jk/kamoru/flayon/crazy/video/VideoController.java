@@ -210,18 +210,6 @@ public class VideoController extends CrazyController {
 	}
 
 	/**
-	 * display studio detail view
-	 * @param model
-	 * @param studio
-	 * @return view name
-	 */
-	@RequestMapping(value="/studio/{studio}", method=RequestMethod.GET)
-	public String studioDetail(Model model, @PathVariable String studio) {
-		model.addAttribute(videoService.getStudio(studio));
-		return "video/studioDetail";
-	}
-
-	/**
 	 * display studio list view
 	 * @param model
 	 * @param sort default NAME
@@ -236,6 +224,18 @@ public class VideoController extends CrazyController {
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
 		return "video/studioList";
+	}
+
+	/**
+	 * display studio detail view
+	 * @param model
+	 * @param studio
+	 * @return view name
+	 */
+	@RequestMapping(value="/studio/{studio}", method=RequestMethod.GET)
+	public String studioDetail(Model model, @PathVariable String studio) {
+		model.addAttribute(videoService.getStudio(studio));
+		return "video/studioDetail";
 	}
 
 	/**
@@ -325,18 +325,6 @@ public class VideoController extends CrazyController {
 	public String videoOverview(Model model, @PathVariable("opus") String opus) {
 		model.addAttribute("video", videoService.getVideo(opus));
 		return "video/videoOverview";
-	}
-
-	/**
-	 * save video overview
-	 * @param model
-	 * @param opus
-	 * @param overview
-	 */
-	@RequestMapping(value="/{opus}/overview", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void opusOverviewPost(Model model, @PathVariable("opus") String opus, @RequestParam("overViewTxt") String overview) {
-		videoService.saveVideoOverview(opus, overview);
 	}
 
 	/**
