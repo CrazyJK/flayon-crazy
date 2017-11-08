@@ -80,6 +80,7 @@ div#content_div {
 	overflow:auto; 
 	background-position:center center; 
 	background-size:contain;
+	margin-bottom: 0;
 }
 div#header_div, div#content_div, dl.box.box-small, div.box.box-small {
 	transition: background .5s, box-shadow .5s .5s, border .5s 1s;
