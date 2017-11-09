@@ -1,28 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="s"      uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="jk"     tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Archive [${video.opus}] ${video.title}</title>
+<style type="text/css">
+body {
+	background-image: url('${PATH}/video/${video.opus}/cover');
+	background-size: 100%;
+	background-position: left top;
+}
+</style>
 <script type="text/javascript">
 bgContinue = false;
-$(document).ready(function() {
-	$("body").css({
-		"background-image": "url('<c:url value="/video/${video.opus}/cover" />')",
-		"background-size": "100%",
-		"background-position": "left top"
-	});
-});
 function moveToInstance() {
-	loading(true, "Move to instance");
-	$("#hiddenHttpMethod").val('PUT');
-	var actionFrm = document.forms['actionFrm'];
-	actionFrm.action = '<c:url value="/video/${video.opus}/moveToInstance"/>';
-	actionFrm.target = '';
-	actionFrm.submit();
+	restCall(PATH + '/rest/video/${video.opus}/moveToInstance', {method: "PUT", title: "Move to instance"}, function() {
+		location.reload();
+	});
 }
 </script>
 </head>

@@ -25,7 +25,7 @@ public class RestImageController {
 		data.put("imageNameMap", imageService.getImageNameMap());
 		int index = 0;
 		Map<Integer, String> map = new HashMap<>();
-		for (Video video : videoService.getVideoList(null, false, true, false)) {
+		for (Video video : videoService.getVideoList()) {
 			map.put(index++, video.getOpus());
 		}
 		data.put("coverCount",   index);

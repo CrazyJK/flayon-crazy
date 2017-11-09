@@ -48,15 +48,15 @@ body {
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	$("form#renameForm").submit(function(event) {
-		console.log("form submit...");
-		loading(true, "rename...");
-		setInterval(function() {
-			location.reload();
-		}, 1000);
-	});
 	$('[data-toggle="popover"]').popover(); 
 });
+function renameVideoName() {
+	restCall(PATH + '/rest/video/${video.opus}/rename', {
+		method: "PUT", data: $("form#renameForm").serialize(), title: "Rename video name"
+	}, function() {
+		location.reload();
+	});
+}
 function resizeSecondDiv() {
 	var _offsetMargin = 10;
 	var _tagWrapperHeight = $(".tag-wrapper").outerHeight();
@@ -64,10 +64,6 @@ function resizeSecondDiv() {
 	var _calculatedDivHeight = _windowOuterHeight - _tagWrapperHeight - _offsetMargin;
 	console.log(_windowOuterHeight, _offsetMargin, _tagWrapperHeight, _calculatedDivHeight);
 	$(".dl-detail").outerHeight(_calculatedDivHeight);
-}
-// actress video toggle
-function fnVideoToggle(dom) {
-	$(dom).next().next().toggleClass("hide");
 }
 </script>
 </head>
@@ -99,13 +95,13 @@ function fnVideoToggle(dom) {
 				<c:forEach items="${video.etcFileList}" var="file">
 				<p><span class="label label-primary">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 				</c:forEach>
-				<form id="renameForm" method="post" action="<s:url value="/video/${video.opus}/rename"/>" target="ifrm" role="form" class="form-horizontal">
+				<form id="renameForm" class="form-horizontal">
 					<div class="form-group">
 						<div class="col-sm-10">
 							<input type="text" name="newname" value="${video.fullname}" class="form-control input-sm"/>
 						</div>
 						<div class="col-sm-2">
-							<input type="submit" value="rename" class="btn btn-default btn-block btn-xs"/>
+							<button class="btn btn-default btn-block btn-xs" onclick="renameVideoName()">Rename</button>
 						</div>
 					</div>
 				</form>
@@ -115,18 +111,6 @@ function fnVideoToggle(dom) {
 			<c:if test="${actress.name ne 'Amateur'}">
 				<dd>
 					<jk:actress actress="${actress}" view="detail"/>
-					<c:set var="opus" value="${video.opus}"/>
-					<div class="form-group text-center box hide">
-						<ul class="list-inline">
-							<c:forEach items="${actress.videoList}" var="video">
-								<c:choose>
-									<c:when test="${video.opus != opus }">
-										<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-									</c:when>
-								</c:choose>
-							</c:forEach>
-						</ul>
-					</div>
 				</dd>
 			</c:if>
 		</c:forEach>

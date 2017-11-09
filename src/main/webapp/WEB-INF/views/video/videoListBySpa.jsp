@@ -25,7 +25,7 @@
 		      	<button class="btn btn-default" data-toggle="tab" data-target="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-xs btn-group-sort"></div>
-			<button class="btn btn-xs btn-primary" id="getAllTorrents" title="get all torrent">All T</button>
+			<!-- <button class="btn btn-xs btn-primary" id="getAllTorrents" title="get all torrent">All T</button> -->
       	</div>
       	<div class="float-right forTable">
 	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>

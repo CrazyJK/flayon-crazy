@@ -12,7 +12,8 @@
 <c:set var="cssClass" value="${empty css ? 'label label-plain' : css}"/>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
 <%  if (view.equalsIgnoreCase("video")) { %>
-	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" style="margin-right:3px;" onclick="fnPlay('${video.opus}')">
+	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" style="margin-right:3px;" 
+		onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')">
 		${mode eq 's' ? 'V' : 'Video'}
 		<c:if test="${mode eq 'l'}">
 			<em>${video.size}</em>

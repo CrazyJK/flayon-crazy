@@ -71,11 +71,12 @@ function Video(idx, data) {
 					$("<span>", {
 						opus: data.opus, title: candidate, "class": "nowrap btn btn-xs btn-primary"
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
-						var opus = $(this).attr("opus");
-						var candidate = $(this).data("path");
-						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", date: {path: candidate}, title: "accept Candidate"}, function() {
+						var $self = $(this);
+						var opus = $self.attr("opus");
+						var candidate = $self.data("path");
+						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", data: {path: candidate}, showLoading: false}, function() {
 							showSnackbar("accept file " + opus);
-							$(this).off().hide();
+							$self.off().hide();
 						});
 						$("#check-" + opus).addClass("found");
 					})
@@ -92,7 +93,7 @@ function Video(idx, data) {
 						opus: data.opus, title: torrent, "class": "nowrap btn btn-xs btn-warning"
 					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(torrent)).on("click", function() {
 						var opus = $(this).attr("opus");
-						restCall(PATH + "/rest/video/" + opus + "/moveTorrentToSeed", {method: "PUT", title: "Torrent move"});
+						restCall(PATH + "/rest/video/" + opus + "/moveTorrentToSeed", {method: "PUT", showLoading: false});
 						showSnackbar("move torrent " + opus);
 						$("#check-" + opus).addClass("moved");
 						$(this).off().hide();
@@ -105,8 +106,8 @@ function Video(idx, data) {
 		return $("<span>").addClass("label label-info pointer").attr({title: "Search torrent"}).data("opus", data.opus).html("Find").on("click", function() {
 			var opus = $(this).data("opus");
 			$("#check-" + opus).addClass("found");
-			popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-			popup(PATH + '/video/torrent/search/' + opus, 'torrentSearch', 900, 950);
+			fnSearchTorrent(opus);
+//			popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
 		})
 	};
 }

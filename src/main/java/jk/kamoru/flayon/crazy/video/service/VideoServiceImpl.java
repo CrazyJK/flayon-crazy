@@ -40,6 +40,7 @@ import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.dao.VideoDao;
 import jk.kamoru.flayon.crazy.video.domain.Action;
@@ -74,16 +75,89 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	/** sleep time of moving video */
 	private final long SLEEP_TIME = 5 * 1000;
 	
-	/** video dao */
 	@Autowired VideoDao videoDao;
 	@Autowired TagDao tagDao;
 	@Autowired HistoryService historyService;
 	@Autowired WebFileLookupService arzonLookupService;
 	@Autowired WebFileLookupService sukebeiNyaaLookupService;
 
-	// --- private
+	private void fillTorrentInfo(List<Video> list) {
+		List<Video> allInstanceList = list.stream().filter(v -> !v.isArchive()).collect(Collectors.toList());
+		List<Video> nonExistVideoList = allInstanceList.stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
+		log.info("fillTorrentInfo - non exist video file = {}", nonExistVideoList.size());
+		
+		// CANDIDATE_PATHS에서 mp4, avi 등 찾기
+		List<File> foundFiles = new ArrayList<>();
+		for (String candidatePath : CANDIDATE_PATHS) {
+			File candidateDirectory = new File(candidatePath);
+			if (!candidateDirectory.exists() || !candidateDirectory.isDirectory()) {
+				log.warn("fillTorrentInfo - candidate path {} is not valid", candidatePath);
+				continue;
+			}
+			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
+			Collection<File> found = FileUtils.listFiles(candidateDirectory, extensions, true);
+			log.info("fillTorrentInfo - Scan candidate : {}, {} found", candidateDirectory, found.size());
+			foundFiles.addAll(found);
+		}
+		
+		// match candidates file
+		for (Video video : allInstanceList) {
+			video.resetVideoCandidates();
+			String opus = video.getOpus().toLowerCase();
+			for (String key : Arrays.asList(opus, StringUtils.remove(opus, "-"))) {
+				for (File file : foundFiles) {
+					if (StringUtils.containsIgnoreCase(file.getName(), key)) {
+						if (!video.getVideoCandidates().contains(file)) {
+							video.addVideoCandidates(file);
+							log.info("fillTorrentInfo - Add candidate [{}] : {}", opus, file);
+						}
+					}
+				}
+			}
+		}
+		
+		// find torrent
+		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
+		log.info("fillTorrentInfo - Scan torrents : {}, {} found", TORRENT_PATH, foundTorrent.size());
+		
+		// matching torrent file
+		for (Video video : nonExistVideoList) {
+			// torrents
+			video.resetTorrents();
+			String opus = video.getOpus().toLowerCase();
+			for (File file : foundTorrent) {
+				if (StringUtils.containsIgnoreCase(file.getName(), opus)) {
+					video.addTorrents(file);
+					log.info("fillTorrentInfo - Add torrent [{}] : {}", opus, file);
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<Video> getVideoList() {
+		return getVideoList(true, false, null, false, false);
+	}
 	
-	private List<Video> getVideoList(List<Video> list, Sort sort, boolean reverse) {
+	@Override
+	public List<Video> getVideoList(boolean instance, boolean archive) {
+		return getVideoList(instance, archive, null, false, false);
+	}
+
+	@Override
+	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse) {
+		return getVideoList(instance, archive, sort, reverse, false);
+	}
+
+	@Override
+	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withTorrent) {
+		List<Video> list = new ArrayList<>();
+		if (instance)
+			list.addAll(videoDao.getVideoList(instance, false));
+		if (archive)
+			list.addAll(videoDao.getVideoList(false, archive).stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
+		if (withTorrent)
+			fillTorrentInfo(list);
 		if (sort == null)
 			return list;
 		else {
@@ -95,19 +169,23 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 	}
 
-	private List<Studio> getStudioList(List<Studio> list, StudioSort sort, boolean reverse) {
-		if (sort == null)
-			return list;
-		else {
-			for (Studio studio : list)
-				studio.setSort(sort);
-			return list.stream()
-					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-					.collect(Collectors.toList());
-		}
+	@Override
+	public List<Actress> getActressList() {
+		return getActressList(true, false, null, false);
 	}
-
-	private List<Actress> getActressList(List<Actress> list, ActressSort sort, boolean reverse) {
+	
+	@Override
+	public List<Actress> getActressList(boolean instance, boolean archive) {
+		return getActressList(instance, archive, null, false);
+	}
+	
+	@Override
+	public List<Actress> getActressList(boolean instance, boolean archive, ActressSort sort, boolean reverse) {
+		List<Actress> list = new ArrayList<>();
+		if (instance)
+			list.addAll(videoDao.getActressList(instance, false));
+		if (archive)
+			list.addAll(videoDao.getActressList(false, archive).stream().filter(a -> !list.contains(a)).collect(Collectors.toList()));
 		if (sort == null)
 			return list;
 		else {
@@ -119,8 +197,34 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		}
 	}
 
-	// --- public
+	@Override
+	public List<Studio> getStudioList() {
+		return getStudioList(true, false, null, false);
+	}
+
+	@Override
+	public List<Studio> getStudioList(boolean instance, boolean archive) {
+		return getStudioList(instance, archive, null, false);
+	}
 	
+	@Override
+	public List<Studio> getStudioList(boolean instance, boolean archive, StudioSort sort, boolean reverse) {
+		List<Studio> list = new ArrayList<>();
+		if (instance)
+			list.addAll(videoDao.getStudioList(instance, false));
+		if (archive)
+			list.addAll(videoDao.getStudioList(false, archive).stream().filter(s -> !list.contains(s)).collect(Collectors.toList()));
+		if (sort == null)
+			return list;
+		else {
+			for (Studio studio : list)
+				studio.setSort(sort);
+			return list.stream()
+					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
+					.collect(Collectors.toList());
+		}
+	}
+
 	@Override
 	public void removeVideo(String opus) {
 		log.debug(opus);
@@ -299,7 +403,20 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public Video getVideo(String opus) {
-		return videoDao.getVideo(opus);
+		Video video = videoDao.getVideo(opus);
+		if (video == null) {
+			List<History> findByOpus = historyService.findByOpus(opus);
+			if (findByOpus.size() > 0) {
+				TitlePart titlePart = new TitlePart(findByOpus.get(0).getDesc());
+				video = new Video();
+				video.setTitlePart(titlePart);
+				video.setStudio(new Studio(titlePart.getStudio()));
+				video.setArchive(true);
+			}
+			else
+				throw new VideoNotFoundException(opus);
+		}
+		return video;
 	}
 
 	@Override
@@ -804,87 +921,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			videoDao.arrangeVideo(opus);
 		}
 	}
-	
-	@Override
-	public List<Video> torrent(Boolean getAllTorrents) {
-		log.info("Torrent, getAllTorrents = {}", getAllTorrents);
-		
-		List<Video> allInstanceList = videoDao.getVideoList(true, false);
-		List<Video> nonExistVideoList = allInstanceList.stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
-		log.debug("  need torrent videos - {}", nonExistVideoList.size());
-		
-		// CANDIDATE_PATHS에서 찾은 파일들
-		List<File> foundFiles = new ArrayList<>();
-		for (String candidatePath : CANDIDATE_PATHS) {
-		
-			// get downloaded torrent file
-			File candidateDirectory = new File(candidatePath);
-			if (!candidateDirectory.exists() || !candidateDirectory.isDirectory()) {
-				log.warn("{} is not valid", candidatePath);
-				continue;
-			}
-		
-			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
-			Collection<File> found = FileUtils.listFiles(candidateDirectory, extensions, true);
-			log.info("Scan video file {}, found {}", candidateDirectory, found.size());
-			
-			foundFiles.addAll(found);
-		}
-		
-		// find torrent
-		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
-		log.info("Scan torrents file {}, found {}", TORRENT_PATH, foundTorrent.size());
-		
-		for (Video video : allInstanceList) {
-			// candidates
-			video.resetVideoCandidates();
-			String opus = video.getOpus().toLowerCase();
-			log.debug("  OPUS : {}", opus);
-			for (String key : Arrays.asList(opus, StringUtils.remove(opus, "-"))) {
-				for (File file : foundFiles) {
-					String fileName = file.getName().toLowerCase();
-					log.trace("    compare : {} = {}", fileName, key);
-					if (fileName.contains(key)) {
-						video.addVideoCandidates(file);
-						log.debug("    add video candidate {} : {}", opus, file.getAbsolutePath());
-					}
-				}
-			}
-		}
-		
-		// matching video file
-		for (Video video : nonExistVideoList) {
-			// torrents
-			video.resetTorrents();
-			String opus = video.getOpus().toLowerCase();
-			for (File file : foundTorrent) {
-				if (StringUtils.contains(file.getName(), video.getOpus())) {
-					video.addTorrents(file);
-					log.debug("    add Torrent {} : {}", opus, file.getName());
-				}
-			}
-			// find & save torrent
-			if (getAllTorrents) {
-				if (video.getTorrents().isEmpty()) {
-					CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
-					try {
-						File file = completableFuture.get();
-						if (file != null)
-							video.addTorrents(file);
-					} catch (InterruptedException | ExecutionException e) {
-						log.error("sukebeiNyaaLookupService : completableFuture.get()", e);
-					}
-				}
-			}
-		}
-		log.debug("Matching candidates and torrent file complete");
-
-		Comparator<Video> byCandidates = (v2, v1) -> Integer.compare(v1.getVideoCandidates().size(), v2.getVideoCandidates().size());
-		Comparator<Video> byTorrents = (v2, v1) -> Integer.compare(v1.getTorrents().size(), v2.getTorrents().size());
-		Comparator<Video> byOpus = (v1, v2) -> v1.getOpus().compareTo(v2.getOpus());
-		return nonExistVideoList.stream().sorted(byCandidates.thenComparing(byTorrents).thenComparing(byOpus)).collect(Collectors.toList());
-
-	}
 
 	@Override
 	public void confirmCandidate(String opus, String path) {
@@ -1273,42 +1309,6 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 	
 	@Override
-	public List<Actress> getActressList(ActressSort sort, Boolean reverse, Boolean instance, Boolean archive) {
-		List<Actress> list = new ArrayList<>();
-		if (instance)
-			list.addAll(getActressList(videoDao.getActressList(instance, false), sort, reverse));
-		if (archive)
-			list.addAll(getActressList(videoDao.getActressList(false, archive), sort, reverse)
-					.stream().filter(a -> !list.contains(a))
-					.collect(Collectors.toList()));
-		return list;
-	}
-
-	@Override
-	public List<Studio> getStudioList(StudioSort sort, Boolean reverse, Boolean instance, Boolean archive) {
-		List<Studio> list = new ArrayList<>();
-		if (instance)
-			list.addAll(getStudioList(videoDao.getStudioList(instance, false), sort, reverse));
-		if (archive)
-			list.addAll(getStudioList(videoDao.getStudioList(false, archive), sort, reverse)
-					.stream().filter(s -> !list.contains(s))
-					.collect(Collectors.toList()));
-		return list;
-	}
-
-	@Override
-	public List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive) {
-		List<Video> list = new ArrayList<>();
-		if (instance)
-			list.addAll(getVideoList(videoDao.getVideoList(instance, false), sort, reverse));
-		if (archive)
-			list.addAll(getVideoList(videoDao.getVideoList(false, archive), sort, reverse)
-					.stream().filter(v -> !list.contains(v))
-					.collect(Collectors.toList()));
-		return list;
-	}
-
-	@Override
 	public void saveCover(String opus, String title) {
 		log.info("saveCover {}, {}, {}", opus, title, COVER_PATH);
 		CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
@@ -1404,25 +1404,19 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	}
 
 	@Override
-	public List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive, Boolean withTorrent) {
-		if (withTorrent)
-			torrent(false);
-		return getVideoList(sort, reverse, instance, archive);
-	}
-
-	@Override
 	public List<String> getOpusList() {
-		return getVideoList(null, false, true, false).stream().map(v -> v.getOpus()).collect(Collectors.toList());
+		return getVideoList().stream().map(v -> v.getOpus()).collect(Collectors.toList());
 	}
 
 	@Override
-	public int getTorrents(String[] opusArr) {
+	public int downloadTorrents(String[] opusArr) {
 		int found = 0;
 		for (String opus : opusArr) {
 			Video video = videoDao.getVideo(opus);
 			video.getTorrents().clear();
 			sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
-/*			CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
+			/*			
+ 			CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
 			try {
 				File file = completableFuture.get();
 				if (file != null) {
@@ -1431,7 +1425,8 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 				}
 			} catch (InterruptedException | ExecutionException e) {
 				log.error("sukebeiNyaaLookupService : completableFuture.get()", e);
-			}*/
+			}
+ 			*/
 		}
 		return found;
 	}

@@ -319,6 +319,7 @@ var calculatedDivHeight = 0,
 		popup(urlSearchTorrent + query, 'torrentSearch', 900, 950);
 	},
 	showDebug = function(debugDomId, msg) {
+		console.log('showDebug', debugDomId, msg);
 		var resultId = "copyResult";
 		var resultObj = $("#" + resultId);
 		if (resultObj.length == 0)

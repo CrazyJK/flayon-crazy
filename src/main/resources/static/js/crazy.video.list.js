@@ -184,7 +184,12 @@ var videoList = (function() {
 							$("<td>").addClass(shortWidthClass).append(video.label_rank),
 							$("<td>").addClass(shortWidthClass).append(video.label_score),
 							$("<td>").addClass(widthTorrentClass).append(
-									$("<div>").append(video.label_seedFindBtn).append("&nbsp;").append(video.label_videoCandidates).append("&nbsp;").append(video.label_torrentSeed)
+									$("<div>")
+										.append(video.label_seedFindBtn)
+										.append("&nbsp;")
+										.append(video.label_videoCandidates)
+										.append("&nbsp;")
+										.append(video.label_torrentSeed)
 							)
 					)
 			);

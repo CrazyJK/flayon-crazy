@@ -6,22 +6,40 @@
 <html>
 <head>
 <title>Tag : ${tag.id} : ${tag.name}</title>
+<style type="text/css">
+@media (min-width: 1200px) {
+	.container-video-card {
+    	width: 100%;
+	}
+	.container-video-card li {
+		transform: scale(2, 2);
+		margin: 65px 100px;
+	}
+	.video-card {
+		background-color: rgb(171, 116, 91);
+    }
+	.video-card:hover {
+		background-color: rgb(209, 125, 148);
+    	transform: none;
+    }
+}
+</style>
 <script type="text/javascript">
 //bgContinue = false;
 function fnSaveTagInfo() {
-	var tagForm = document.forms['tagForm'];
-	tagForm.submit();
-	if (opener) {
-		if (opener.location.href.indexOf("video/briefing") > -1) {
-			opener.location.href = opener.location.origin + opener.location.pathname + "?tab=tags";
+	restCall(PATH + '/rest/tag', {method: "PUT", data: $("form#tagForm").serialize(), title: "Save tag"}, function() {
+		if (opener) {
+			if (opener.location.href.indexOf("video/briefing") > -1) {
+				opener.location.href = opener.location.origin + opener.location.pathname + "?tab=tags";
+			}
 		}
-	}
+	});
 }
 </script>
 </head>
 <body>
 <div class="container">
-
+	<br>
 	<form id="tagForm" method="post" role="form" class="form-horizontal">
 		<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
 		<input type="hidden" name="id" value="${tag.id}"/>
@@ -36,18 +54,20 @@ function fnSaveTagInfo() {
 				<span class="btn btn-default" onclick="fnSaveTagInfo()">Save</span>
 			</div>
 		</div>
-		<div class="form-group">
-			<span class="label label-info">Video <i class="badge">${fn:length(tag.videoList)}</i></span>
-		</div>
-		<div class="form-group box" style="padding-left: 60px;">
-			<ul class="list-inline">
-				<c:forEach items="${tag.videoList}" var="video">
-					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
-				</c:forEach>
-			</ul>
-		</div>
 	</form>
-
+</div>
+	
+<div class="container container-video-card">
+	<h3>
+		<span class="label label-plain">Video <i class="badge badge-black">${fn:length(tag.videoList)}</i></span>
+	</h3>
+	<div class="box">
+		<ul class="list-inline text-center">
+			<c:forEach items="${tag.videoList}" var="video">
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+			</c:forEach>
+		</ul>
+	</div>
 </div>
 </body>
 </html>

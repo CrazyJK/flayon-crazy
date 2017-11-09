@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
@@ -31,8 +32,8 @@ public class RestVideoController {
 	@Autowired HistoryService historyService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Video> videoList() {
-		return videoService.getVideoList(null, false, true, false);
+	public List<Video> videoList(@RequestParam("t") Boolean withTorrentInfo) {
+		return videoService.getVideoList(true, false, null, false, withTorrentInfo);
 	}
 
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
@@ -106,6 +107,18 @@ public class RestVideoController {
 		videoService.saveVideoOverview(opus, overview);
 	}
 
+	@RequestMapping(value="/{opus}/rename", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void rename(@PathVariable("opus") String opus, @RequestParam("newname") String newName) {
+		videoService.rename(opus, newName);
+	}
+
+	@RequestMapping(value="/{opus}/moveToInstance", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void moveToInstance(@PathVariable String opus) {
+		videoService.moveToInstance(opus);
+	}
+
 	@RequestMapping("/search/{query}")
 	public Map<String, List<Map<String, String>>> searchJson(@PathVariable String query) {
 		Map<String, List<Map<String, String>>> data = new HashMap<>();
@@ -130,17 +143,11 @@ public class RestVideoController {
 	public void reload() {
 		videoService.reload(null);
 	}
-
-	@RequestMapping(value="/torrent/getAll", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void torrentGetAll() {
-		videoService.torrent(true);
-	}
 	
 	@RequestMapping(value="/torrent/get", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void torrentGet(@RequestParam("opus") String[] opusArr) {
-		videoService.getTorrents(opusArr);
+		videoService.downloadTorrents(opusArr);
 	}
 	
 	@RequestMapping(value="/gravia", method=RequestMethod.POST)
@@ -162,6 +169,12 @@ public class RestVideoController {
 	@RequestMapping("/opus")
 	public List<String> opusList() {
 		return videoService.getOpusList();
+	}
+
+	// TODO need to VIEW
+	@RequestMapping("/historyOnDB")
+	public List<History> historyOnDB() {
+		return historyService.findOnDB();
 	}
 
 }

@@ -20,8 +20,10 @@ public class RestActressController {
 	@Autowired VideoService videoService;
 
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Actress> list() {
-		return videoService.getActressList(null, false, true, false);
+	public List<Actress> list(
+			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") boolean archive) {
+		return videoService.getActressList(instance, archive);
 	}
 
 	@RequestMapping(value="/{name}", method=RequestMethod.GET)

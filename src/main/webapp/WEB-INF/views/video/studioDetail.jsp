@@ -13,26 +13,20 @@
 }
 </style>
 <script type="text/javascript">
-//bgContinue = false;
-$(document).ready(function() {
-	$("form#studioForm").submit(function(event) {
-		console.log("form submit...");
-		loading(true, "save...");
-		setInterval(function() {
-			if (opener) {
-				if (opener.location.href.indexOf("video/studio") > -1) 
-					opener.location.reload();
-			}
-			location.href = PATH + "/video/studio/" + $("#newName").val();
-		}, 1000);
+function saveStudioInfo() {
+	restCall(PATH + '/rest/studio', {method: "PUT", data: $("form#studioForm").serialize(), title: "Save studio info"}, function() {
+		if (opener) {
+			if (opener.location.href.indexOf("video/studio") > -1) 
+				opener.location.reload();
+		}
+		location.href = PATH + "/video/studio/" + $("#newName").val();
 	});
-});
+}
 </script>
 </head>
 <body>
 <div class="container">
-
-	<form id="studioForm" method="post" target="ifrm" role="form" action="<s:url value="/video/studio"/>" class="form-horizontal">
+	<form id="studioForm" class="form-horizontal">
 		<input type="hidden" name="name" value="${studio.name}"/>
 		<br/>
 		<div class="form-group">
@@ -40,7 +34,7 @@ $(document).ready(function() {
 				<input class="form-control" type="text" name="newname" value="${studio.name}" id="newName" />
 			</div>
 			<div class="col-sm-1">
-				<span class="label label-info">Score ${studio.score}</span>
+				<span class="label label-primary">Score ${studio.score}</span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -51,14 +45,16 @@ $(document).ready(function() {
 				<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
 			</div>
 			<div class="col-sm-1">
-				<button type="submit" class="btn btn-default">Save</button>
+				<button class="btn btn-default" onclick="saveStudioInfo()">Save</button>
 			</div>
 		</div>
 	</form>
+</div>
 
-	<div class="form-group">
-		<span class="label label-info">Actress <i class="badge">${fn:length(studio.actressList)}</i></span>
-	</div>
+<div class="container">
+	<h3>
+		<span class="label label-plain">Actress <i class="badge badge-black">${fn:length(studio.actressList)}</i></span>
+	</h3>
 	<div class="form-group" style="padding-left:60px;">
 		<ul class="list-inline">
 			<c:forEach items="${studio.actressList}" var="actress">
@@ -70,9 +66,12 @@ $(document).ready(function() {
 			</c:forEach>
 		</ul>
 	</div>
-	<div class="form-group">
-		<span class="label label-info">Video <i class="badge">${fn:length(studio.videoList)}</i></span>
-	</div>
+</div>
+
+<div class="container">
+	<h3>
+		<span class="label label-plain">Video <i class="badge badge-black">${fn:length(studio.videoList)}</i></span>
+	</h3>
 	<div class="form-group text-center">
 		<ul class="list-inline">
 			<c:forEach items="${studio.videoList}" var="video">
@@ -80,7 +79,6 @@ $(document).ready(function() {
 			</c:forEach>
 		</ul>
 	</div>
-
 </div>
 </body>
 </html>

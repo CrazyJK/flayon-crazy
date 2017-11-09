@@ -249,8 +249,8 @@ public class VideoBatch extends CrazyProperties {
 		final String csvFormat = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\"";
 
 		// video list backup to csv
-		List<Video>        videoList =   videoService.getVideoList(null, false, true, false);
-		List<Video> archiveVideoList =   videoService.getVideoList(null, false, false, true);
+		List<Video>        videoList =   videoService.getVideoList(true, false);
+		List<Video> archiveVideoList =   videoService.getVideoList(false, true);
 		List<History>    historyList = historyService.getDeduplicatedList();
 		List<String>    instanceList = new ArrayList<>();
 		List<String>     archiveList = new ArrayList<>();

@@ -20,8 +20,10 @@ public class RestStudioController {
 	@Autowired VideoService videoService;
 
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Studio> list() {
-		return videoService.getStudioList(null, false, true, false);
+	public List<Studio> list(
+			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") boolean archive) {
+		return videoService.getStudioList(instance, archive);
 	}
 
 	@RequestMapping(value="/{name}", method=RequestMethod.GET)

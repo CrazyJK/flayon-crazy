@@ -2,7 +2,6 @@ package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,28 +24,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.base.security.FlayOnUser;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.Utils;
-import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
-import jk.kamoru.flayon.crazy.video.domain.History;
-import jk.kamoru.flayon.crazy.video.domain.HistoryData;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
-import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.TagService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
-import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
@@ -97,6 +88,8 @@ public class VideoController extends CrazyController {
 	
 	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return MAX_ENTIRE_VIDEO; }
 	
+	// --- view mapping
+	
 	@RequestMapping
 	public String front() {
 		return "video/front";
@@ -119,8 +112,8 @@ public class VideoController extends CrazyController {
 		model.addAttribute("videoList", 	videoList);
 		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringWithVideofile(videoList));
 		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList(null, false, true, false));
-			model.addAttribute("studioList", 	videoService.getStudioList(null, false, true, false));
+			model.addAttribute("actressList", 	videoService.getActressList());
+			model.addAttribute("studioList", 	videoService.getStudioList());
 		}
 		else {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
@@ -138,11 +131,12 @@ public class VideoController extends CrazyController {
 	 * @return view name
 	 */
 	@RequestMapping(value="/actress", method=RequestMethod.GET)
-	public String actressList(Model model, @RequestParam(value="sort", required=false, defaultValue="NAME") ActressSort sort,
+	public String actressList(Model model, 
+			@RequestParam(value="sort", required=false, defaultValue="NAME") ActressSort sort,
 			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
 			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
-		model.addAttribute(videoService.getActressList(sort, reverse, instance, archive));
+		model.addAttribute(videoService.getActressList(instance, archive, sort, reverse));
 		model.addAttribute("sorts", ActressSort.values());
 		model.addAttribute("sort", sort);
 		model.addAttribute("reverse", reverse);
@@ -179,9 +173,9 @@ public class VideoController extends CrazyController {
 		model.addAttribute("lengthMap", 	videoService.groupByLength());
 		model.addAttribute("extensionMap", 	videoService.groupByExtension());
 		
-		model.addAttribute(videoService.getStudioList(null, false, true, false));
-		model.addAttribute(videoService.getActressList(null, false, true, false));
-		model.addAttribute(videoService.getVideoList(null, false, true, false));
+		model.addAttribute(videoService.getVideoList());
+		model.addAttribute(videoService.getStudioList());
+		model.addAttribute(videoService.getActressList());
 
 		model.addAttribute("tagList", tagService.getTagListWithVideo());
 
@@ -220,7 +214,7 @@ public class VideoController extends CrazyController {
 	public String studioList(Model model, 
 			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") Boolean archive) {
-		model.addAttribute(videoService.getStudioList(null, false, instance, archive));
+		model.addAttribute(videoService.getStudioList(instance, archive));
 		model.addAttribute("sorts", StudioSort.values());
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
@@ -274,7 +268,7 @@ public class VideoController extends CrazyController {
 	
 	@RequestMapping("/randomVideoCover")
 	public HttpEntity<byte[]> randomVideoCover(HttpServletResponse response) throws IOException {
-		List<Video> videoList = videoService.getVideoList(null, false, true, false);
+		List<Video> videoList = videoService.getVideoList();
 		Random random = new Random();
 		int index = random.nextInt(videoList.size());
 		String opus = videoList.get(index).getOpus();
@@ -337,8 +331,6 @@ public class VideoController extends CrazyController {
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public String videoDetail(Model model, @PathVariable String opus) {
 		Video video = videoService.getVideo(opus);
-		if (video == null)
-			throw new VideoNotFoundException(opus);
 		model.addAttribute(video);
 		model.addAttribute("tagList", tagService.getTagList());
 		if (video.isArchive())
@@ -364,8 +356,8 @@ public class VideoController extends CrazyController {
 		model.addAttribute("sorts", 		Sort.values());
 		model.addAttribute("videoList", 	videoList);
 		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList(null, false, false, true));
-			model.addAttribute("studioList", 	videoService.getStudioList(null, false, false, true));
+			model.addAttribute("actressList", 	videoService.getActressList(false, true));
+			model.addAttribute("studioList", 	videoService.getStudioList(false, true));
 		}
 		else {
 			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
@@ -374,34 +366,6 @@ public class VideoController extends CrazyController {
 		model.addAttribute("tagList", tagService.getTagListWithVideo());
 		
 		return "video/videoArchive";
-	}
-	
-	/**
-	 * rename video title
-	 * @param opus
-	 * @param newName
-	 */
-	@RequestMapping(value="/{opus}/rename", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void rename(@PathVariable("opus") String opus, @RequestParam("newname") String newName) {
-		videoService.rename(opus, newName);
-	}
-	
-	/**
-	 * play count reset in history
-	 */
-	@RequestMapping("/transferPlayCountInfo")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void transferPlayCountInfo() {
-		for (Video video : videoService.getVideoList(null, false, true, false)) {
-			int playCount = 0;
-			List<History> histories = historyService.findByVideo(video);
-			for (History history : histories) {
-				if (history.getAction() == Action.PLAY)
-					playCount++;
-			}
-			video.setPlayCount(playCount);
-		}
 	}
 
 	/**
@@ -419,42 +383,10 @@ public class VideoController extends CrazyController {
 		model.addAttribute("titleData", titleData);
 		return "video/parseToTitle";
 	}
-	
-	/**
-	 * search torrent
-	 * @param model
-	 * @param opus
-	 * @return
-	 */
-	@RequestMapping("/torrent/search/{opus}")
-	public String torrentSearch(Model model, @PathVariable("opus") String opus) {
-		model.addAttribute(videoService.getVideo(opus));
-		return "video/torrentSearch";
-	}
 
 	@RequestMapping("/history")
 	public String historyGraph() {
 		return "video/historyGraph";
-	}
-
-	@RequestMapping("/history/forGoogleChart")
-	public @ResponseBody String historyForGoogleChart() {
-		StringBuilder sb = new StringBuilder("{");
-		sb.append("\"cols\":[{\"label\":\"Date\", \"type\":\"date\"},{\"label\":\"Play\", \"type\":\"number\"}],");
-		sb.append("\"rows\":[");
-		String pattern = "yyyy-MM-dd";
-		Collection<HistoryData> graphData = historyService.getGraphData(pattern);
-		for (HistoryData data : graphData) {
-			String[] datePart = data.getDate().split("-");
-			int year  = Integer.parseInt(datePart[0]);
-			int month = Integer.parseInt(datePart[1]) -1;
-			int day   = Integer.parseInt(datePart[2]);
-			sb.append(String.format("{\"c\":[{\"v\": \"Date(%s, %s, %s)\"},{\"v\":%s}]},", 
-					year, month, day, data.getPlay()));
-		}
-		
-		sb.append("]}");
-		return sb.toString();
 	}
 	
 	@RequestMapping("/gravia")
@@ -462,27 +394,6 @@ public class VideoController extends CrazyController {
 		return "video/graviainterview";
 	}
 
-	@RequestMapping("/historyOnDB")
-	public void historyOnDB(Model model) {
-		model.addAttribute(historyService.findOnDB());
-	}
-	
-	@RequestMapping(value="/{opus}/moveToInstance", method=RequestMethod.PUT)
-	public String moveToInstance(@PathVariable String opus) {
-		videoService.moveToInstance(opus);
-		return "redirect:/video/" + opus;
-	}
-	
-	@RequestMapping("/ping")
-	public void ping(Model model, @AuthenticationPrincipal FlayOnUser flayonUser) {
-		model.addAttribute("noti", NotiQueue.getMessage(flayonUser.getUser().getId()));
-	}
-
-	@RequestMapping("/blank")
-	public String blank() {
-		return "video/blank";
-	}
-	
 	@RequestMapping("/tag/{tagId}")
 	public String viewTag(Model model, @PathVariable Integer tagId) {
 		model.addAttribute("tag", tagService.getTag(tagId));

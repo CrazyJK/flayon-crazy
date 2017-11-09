@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service("sukebeiNyaaLookupService")
+@Deprecated
 public class SukebeiNyaaLookupService implements WebFileLookupService {
 
 	private static final String SUKEBEI_URL = "http://sukebei.nyaa.se";

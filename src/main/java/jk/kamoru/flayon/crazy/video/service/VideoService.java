@@ -174,61 +174,25 @@ public interface VideoService {
 	 */
 	void reloadArchive();
 	
-	/**get all sorted actress list
-	 * @param sort
-	 * @param reverse 
-	 * @return actress list
-	 */
-//	@Deprecated
-//	List<Actress> getActressList(ActressSort sort, boolean reverse);
-
-	/**
-	 * actress list in instance and/or archive
-	 * @param sort
-	 * @param reverse
-	 * @param instance
-	 * @param archive
-	 * @return
-	 */
-	List<Actress> getActressList(ActressSort sort, Boolean reverse, Boolean instance, Boolean archive);
-
-	/**get all sorted studio list
-	 * @param sort
-	 * @param reverse 
-	 * @return studio list
-	 */
-//	@Deprecated
-//	List<Studio> getStudioList(StudioSort sort, boolean reverse);
-
-	/**
-	 * studio list in instance and/or archive
-	 * @param sort
-	 * @param reverse
-	 * @param instance
-	 * @param archive
-	 * @return
-	 */
-	List<Studio> getStudioList(StudioSort sort, Boolean reverse, Boolean instance, Boolean archive);
-
-	/**get all sorted video list
-	 * @param sort
-	 * @param reverse 
-	 * @return video list
-	 */
-//	@Deprecated
-//	List<Video> getVideoList(Sort sort, boolean reverse);
+	List<Actress> getActressList();
 	
-	/**
-	 * video list in instance and/or archive
-	 * @param sort
-	 * @param reverse
-	 * @param instance
-	 * @param archive
-	 * @return
-	 */
-	List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive);
+	List<Actress> getActressList(boolean instance, boolean archive);
+	
+	List<Actress> getActressList(boolean instance, boolean archive, ActressSort sort, boolean reverse);
 
-	List<Video> getVideoList(Sort sort, Boolean reverse, Boolean instance, Boolean archive, Boolean withTorrent);
+	List<Studio> getStudioList();
+
+	List<Studio> getStudioList(boolean instance, boolean archive);
+	
+	List<Studio> getStudioList(boolean instance, boolean archive, StudioSort sort, boolean reverse);
+
+	List<Video> getVideoList();
+	
+	List<Video> getVideoList(boolean instance, boolean archive);
+	
+	List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse);
+
+	List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withTorrent);
 
 	/**
 	 * get play count range
@@ -310,7 +274,7 @@ public interface VideoService {
 	/**get video list with torrent info
 	 * @param getAllTorrents 
 	 */
-	List<Video> torrent(Boolean getAllTorrents);
+//	List<Video> torrent(Boolean getAllTorrents);
 
 	/**move video file. rename to fullname
 	 * @param opus
@@ -433,7 +397,7 @@ public interface VideoService {
 
 	List<String> getOpusList();
 
-	int getTorrents(String[] opusArr);
+	int downloadTorrents(String[] opusArr);
 
 	void toggleTag(VTag tag, String opus);
 

@@ -281,7 +281,7 @@ var	resizeDivHeight = function() {
 
 	},
 	displayNotice = function(title, desc) {
-	    $("#notice > p").append(desc);
+	    $("#notice > p").html(desc);
 	    $("#notice").attr("title", title).dialog();
 	};
 
@@ -443,9 +443,6 @@ var	crazy = (function() {
 						$self.show().removeClass("hide").css({visibility: 'visible'}).addClass(lazy[0]);
 					}, parseInt(lazy[1]));
 				});
-			},
-			removeOnclick = function() {
-				$(".nonExist").attr("onclick", "");
 			};
 		
 			return {
@@ -453,7 +450,6 @@ var	crazy = (function() {
 					rankColor();
 					showNavigation();
 					lazyLoadCssClass();
-					removeOnclick();
 				}
 			};
 		}()),

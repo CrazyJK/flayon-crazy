@@ -23,10 +23,10 @@ input[type='text'].form-control {
 	text-align: center;
 }
 @media (min-width: 1200px) {
-	.container-actress {
+	.container-video-card {
     	width: 100%;
 	}
-	ul.list-inline.list-actress > li {
+	.container-video-card li {
 		transform: scale(2, 2);
 		margin: 65px 100px;
 	}
@@ -42,30 +42,27 @@ input[type='text'].form-control {
 <script type="text/javascript">
 bgContinue = ${!actress.existImage};
 $(document).ready(function() {
-	$("form#actressForm").submit(function(event) {
-		console.log("form submit...");
-		loading(true, "save...");
-		setInterval(function() {
-//			if (opener) {
-//				if (opener.location.href.indexOf("video/actress") > -1) 
-//					opener.location.reload();
-//			}
-			location.href = PATH + "/video/actress/" + $("#newName").val();
-		}, 1000);
-	});
 	!bgContinue && $("body").css({
 		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
 	});	
 });
+function saveActressInfo() {
+	restCall(PATH + '/rest/actress', {method: "PUT", data: $("form#actressForm").serialize(), title: "Save actress info"}, function() {
+		if (opener) {
+			if (opener.location.href.indexOf("video/actress") > -1) 
+				opener.location.reload();
+		}
+		location.href = PATH + "/video/actress/" + $("#newName").val();
+	});
+}
 </script>
 </head>
 <body>
 <div class="container">
-	
-	<form id="actressForm" method="post" role="form" action="${PATH}/video/actress" class="form-horizontal">
+	<br/>
+	<form id="actressForm" role="form" class="form-horizontal" onsubmit="return false;">
 		<input type="hidden" name="name" value="${actress.name}"/>
 		<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
-		<br/>
 		<div class="form-group">
 			<div class="col-sm-2 text-right">
 				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
@@ -81,7 +78,7 @@ $(document).ready(function() {
 					onclick="popup('<c:url value="${urlSearchActress}"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
 			</div>
 			<div class="col-sm-1">
-				<span class="label label-plain float-right">Score ${actress.score}</span>
+				<span class="label label-primary">Score ${actress.score}</span>
 			</div>		
 		</div>
 		<div class="form-group">
@@ -98,7 +95,7 @@ $(document).ready(function() {
 				<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
 			</div>
 			<div class="col-sm-2 text-right">
-				<button type="submit" class="btn btn-default">Save</button>
+				<button class="btn btn-default" onclick="saveActressInfo()">Save</button>
 			</div>
 		</div>
 		<div class="form-group">
@@ -109,7 +106,7 @@ $(document).ready(function() {
 	</form>
 	
 	<h3>
-		<span class="label label-plain">Studio <small class="badge">${fn:length(actress.studioList)}</small></span>
+		<span class="label label-plain">Studio <small class="badge badge-black">${fn:length(actress.studioList)}</small></span>
 	</h3>
 	<div class="form-group" style="padding-left:60px;">
 		<ul class="list-inline">
@@ -124,13 +121,13 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="container container-actress">
+<div class="container container-video-card">
 	<h3>
-		<span class="label label-plain">Video <span class="badge">${fn:length(actress.videoList)}</span></span>
+		<span class="label label-plain">Video <span class="badge badge-black">${fn:length(actress.videoList)}</span></span>
 	</h3>
 	<div class="form-group text-center">
 		<c:if test="${actress.name ne 'Amateur'}">
-			<ul class="list-inline list-actress">
+			<ul class="list-inline">
 				<c:forEach items="${actress.videoList}" var="video">
 					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 				</c:forEach>
