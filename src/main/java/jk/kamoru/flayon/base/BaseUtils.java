@@ -1,4 +1,4 @@
-package jk.kamoru.flayon;
+package jk.kamoru.flayon.base;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class Utils {
+public class BaseUtils {
 
 	/**
 	 * 파일(logpath)을 읽어 구분자, 검색어, 최대수, and/or조건에 맞쳐 split해서 반환한다.
@@ -25,7 +25,7 @@ public class Utils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<String[]> readLines(String logpath, String delimeter, int max, String search, int searchOper, String charset) throws Exception {
+	public static List<String[]> readLogLines(String logpath, String delimeter, int max, String search, int searchOper, String charset) throws Exception {
 		
 		if (logpath.length() == 0)
 			throw new IllegalStateException("log path is empty");

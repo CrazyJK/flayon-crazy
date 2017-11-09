@@ -17,7 +17,7 @@ import javax.crypto.Cipher;
 
 import org.apache.commons.codec.binary.Base64;
 
-import jk.kamoru.flayon.FlayOnException;
+import jk.kamoru.flayon.base.BaseException;
 
 public class RSA implements Crypto {
 
@@ -53,7 +53,7 @@ public class RSA implements Crypto {
 			byte[] encodeBase64 = Base64.encodeBase64(doFinal);
 			return new String(encodeBase64);
 		} catch (Exception e) {
-			throw new FlayOnException("RSA encryption error", e);
+			throw new BaseException("RSA encryption error", e);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class RSA implements Crypto {
 			byte[] doFinal = cipher.doFinal(decodeBase64);
 			return new String(doFinal, charset);
 		} catch (Exception e) {
-			throw new FlayOnException("RSA decryption error", e);
+			throw new BaseException("RSA decryption error", e);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class RSA implements Crypto {
 			generator.initialize(2048, random);
 			return generator.generateKeyPair();
 		} catch (Exception e) {
-			throw new FlayOnException("fail to generate key", e);
+			throw new BaseException("fail to generate key", e);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class RSA implements Crypto {
 			KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
 			return keyFactory.generatePublic(keySpec);
 		} catch (Exception e) {
-			throw new FlayOnException("fail to generate key", e);
+			throw new BaseException("fail to generate key", e);
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class RSA implements Crypto {
 			KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
 			return keyFactory.generatePrivate(keySpec);
 		} catch (Exception e) {
-			throw new FlayOnException("fail to generate key", e);
+			throw new BaseException("fail to generate key", e);
 		}
 	}
 	

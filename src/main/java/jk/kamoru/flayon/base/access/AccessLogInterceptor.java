@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class HandlerAccessLogger implements HandlerInterceptor {
+public class AccessLogInterceptor implements HandlerInterceptor {
 
 	private AccessLogRepository accessLogRepository;
 	private boolean useAccesslogRepository;

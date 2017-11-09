@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>FlayOn Error</title>
+<title>Base Error</title>
 <script type="text/javascript">
 bgContinue = false;
 </script>
@@ -14,7 +14,7 @@ bgContinue = false;
 <div class="container">
 
  	<div class="page-header">
-	    <h1>${exception.message}
+	    <h1>Base error : ${exception.message}
 	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
 	    </h1>
 	</div>

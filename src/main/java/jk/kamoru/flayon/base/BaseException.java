@@ -1,27 +1,17 @@
-package jk.kamoru.flayon;
+package jk.kamoru.flayon.base;
 
-public class FlayOnException extends RuntimeException {
+import jk.kamoru.flayon.FLAYON;
+
+public class BaseException extends RuntimeException {
 
 	private static final long serialVersionUID = FLAYON.SERIAL_VERSION_UID;
 
-	public FlayOnException() {
-		super();
-	}
-
-	public FlayOnException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public FlayOnException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public FlayOnException(String message) {
+	public BaseException(String message) {
 		super(message);
 	}
 
-	public FlayOnException(Throwable cause) {
-		super(cause);
+	public BaseException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

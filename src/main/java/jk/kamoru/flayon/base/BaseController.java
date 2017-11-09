@@ -1,4 +1,4 @@
-package jk.kamoru.flayon;
+package jk.kamoru.flayon.base;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.fields;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -8,7 +8,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
 import java.io.IOException;
-import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -18,8 +17,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.KeyPair;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +63,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping("/flayon")
-public class FlayOnController {
+public class BaseController {
 
 	@Value("${use.repository.accesslog}") boolean useAccesslogRepository;
 
@@ -75,42 +72,17 @@ public class FlayOnController {
 	@Autowired Environment environment;
 
 	@RequestMapping("/requestMappingList")
-	public String requestMapping(Model model, @RequestParam(value="sort", required=false, defaultValue="P") final String sort) {
-
-		RequestMappingHandlerMapping rmhm = context.getBean(RequestMappingHandlerMapping.class);
-
+	public String requestMapping(Model model) {
 		List<Map<String, String>> mappingList = new ArrayList<Map<String, String>>();
-		
+		RequestMappingHandlerMapping rmhm = context.getBean(RequestMappingHandlerMapping.class);
 		for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : rmhm.getHandlerMethods().entrySet()) {
 			Map<String, String> mappingData = new HashMap<String, String>();
 			mappingData.put("reqPattern", StringUtils.substringBetween(entry.getKey().getPatternsCondition().toString(), "[", "]"));
 			mappingData.put("reqMethod",  StringUtils.substringBetween(entry.getKey().getMethodsCondition().toString(), "[", "]"));
 			mappingData.put("beanType",   StringUtils.substringAfterLast(entry.getValue().getBeanType().getName(), "."));
 			mappingData.put("beanMethod", entry.getValue().getMethod().getName());
-
 			mappingList.add(mappingData);
-		}
-		
-		Collections.sort(mappingList, new Comparator<Map<String, String>>() {
-			
-			@Override
-			public int compare(Map<String, String> o1, Map<String, String> o2) {
-				if (sort.equals("P")) {
-					return o1.get("reqPattern").compareTo(o2.get("reqPattern"));
-				}
-				else if (sort.equals("M")) {
-					return o1.get("reqMethod").compareTo(o2.get("reqMethod"));
-				}
-				else if (sort.equals("C")) {
-					int firstCompare = o1.get("beanType").compareTo(o2.get("beanType"));
-					int secondCompare = o1.get("beanMethod").compareTo(o2.get("beanMethod"));
-					return firstCompare == 0 ? secondCompare : firstCompare;
-				}
-				else {
-					return o1.get("reqPattern").compareTo(o2.get("reqPattern"));
-				}
-			}
-		});
+		}		
 		model.addAttribute("mappingList", mappingList);
 		return "flayon/requestMappingList";
 	}
@@ -118,10 +90,9 @@ public class FlayOnController {
 	@RequestMapping("/error")
 	public String error(Model model, @RequestParam(value="k", required=false, defaultValue="") String kind) {
 		if (kind.equals("default"))
-			throw new RuntimeException("default error");
+			throw new RuntimeException("test runtime error");
 		else if (kind.equals("falyon"))
-			throw new FlayOnException("falyon error", new Exception("flayon error"));
-		
+			throw new BaseException("test falyon error", new Exception("test flayon cause"));
 		return "flayon/occurError";
 	}
 
@@ -130,7 +101,7 @@ public class FlayOnController {
 		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 		MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
 		MemoryUsage nonHeapMemoryUsage = memoryMXBean.getNonHeapMemoryUsage();
-		double heapUsedPercent = ((double)heapMemoryUsage.getUsed()/(double)heapMemoryUsage.getMax()) * 100.0D;
+		double heapUsedPercent = ((double)heapMemoryUsage.getUsed() / (double)heapMemoryUsage.getMax()) * 100.0D;
 		double nonHeapUsedPercent = nonHeapMemoryUsage.getMax() == -1 ? 0 :
 				((double)nonHeapMemoryUsage.getUsed()/(double)nonHeapMemoryUsage.getMax()) * 100.0D;
 
@@ -138,7 +109,6 @@ public class FlayOnController {
 		model.addAttribute("nonHeap", nonHeapMemoryUsage);
 		model.addAttribute("heapUsedPercent", heapUsedPercent);
 		model.addAttribute("nonHeapUsedPercent", nonHeapUsedPercent);
-		
 		return "flayon/memory";
 	}
 	
@@ -190,41 +160,21 @@ public class FlayOnController {
 		ThreadInfo[] threadInfoArray = threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), Integer.MAX_VALUE);
 		List<ThreadInfo> threadInfos = new ArrayList<>();
 		for (ThreadInfo threadInfo : threadInfoArray) {
-		
 			// filter the current thread
 			if (threadInfo.getThreadId() == Thread.currentThread().getId()) continue;
-			
 			// filter name
 			if (!StringUtils.isEmpty(info.getName())) {
 				if (!threadInfo.getThreadName().startsWith(info.getName())) continue;
 			}
-			
 			// filter state
 			if (!StringUtils.isEmpty(info.getState())) {
 				if (!threadInfo.getThreadState().toString().equals(info.getState())) continue;
 			}
-			
 			// show only specific thread id
 			if (info.getThreadId() > 0) {
 				if (threadInfo.getThreadId() != info.getThreadId()) continue;
 			}
-			
 			threadInfos.add(threadInfo);
-		}
-		log.info("========== threadInfos size {}", threadInfos.size());
-		Collections.sort(threadInfos, new Comparator<ThreadInfo>() {
-
-			@Override
-				public int compare(ThreadInfo o1, ThreadInfo o2) {
-					if (o1 == null || o2 == null) return 0;
-					return o1.getThreadName().compareTo(o2.getThreadName());
-				}
-				
-			}
-		);
-		List<String> states = new ArrayList<>();
-		for (State _state : Thread.State.values()) {
-			states.add(_state.toString());
 		}
 		
 		model.addAttribute("threadInfos", threadInfos);
@@ -247,7 +197,7 @@ public class FlayOnController {
 		int tdCount = 0;
 		String msg = "";
 		try {
-			lines = Utils.readLines(logpath, delimeter, deliMax, search, oper, charset);
+			lines = BaseUtils.readLogLines(logpath, delimeter, deliMax, search, oper, charset);
 			for (String[] line : lines) {
 				tdCount = Math.max(line.length -1, tdCount);
 			}
@@ -363,7 +313,7 @@ public class FlayOnController {
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			throw new FlayOnException("execute error", e);
+			throw new BaseException("execute error", e);
 		}
 	}
 	

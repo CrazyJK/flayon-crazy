@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
 
-import jk.kamoru.flayon.FlayOnException;
+import jk.kamoru.flayon.base.BaseException;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_CBC;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_CTR;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_ECB;
@@ -37,7 +37,7 @@ public class Seed implements Crypto {
 		try {
 			byte[] keyBytes = key.getBytes(charset);
 			if (keyBytes.length < 16) {
-				throw new FlayOnException("key size must be 16 bytes");
+				throw new BaseException("key size must be 16 bytes");
 			} else if (keyBytes.length > 16) {
 				System.arraycopy(keyBytes, 0, this.key, 0, 16);
 			} else {
@@ -46,13 +46,13 @@ public class Seed implements Crypto {
 			
 			if (iv == null) {
 				if (this.mode == AlgorithmMode.CBC) {
-					throw new FlayOnException("CBC mode need to iv");
+					throw new BaseException("CBC mode need to iv");
 				}
 			}
 			else {
 				byte[] ivBytes = iv.getBytes(charset);
 				if (ivBytes.length < 16) {
-					throw new FlayOnException("iv size must be 16 bytes");
+					throw new BaseException("iv size must be 16 bytes");
 				} else if (ivBytes.length > 16) {
 					System.arraycopy(ivBytes, 0, this.iv, 0, 16);
 				} else {
@@ -60,14 +60,14 @@ public class Seed implements Crypto {
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
-			throw new FlayOnException("Seed initiating error", e);
+			throw new BaseException("Seed initiating error", e);
 		}
 	}
 
 	@Override
 	public String encrypt(String str) {
 		if (str == null)
-			throw new FlayOnException("SEED encryption error : input string null");
+			throw new BaseException("SEED encryption error : input string null");
 		switch (mode) {
 		case ECB:
 			return encryptECB(str);
@@ -76,14 +76,14 @@ public class Seed implements Crypto {
 		case CTR:
 			return encryptCTR(str);
 		default:
-			throw new FlayOnException("Unknown seed algorithmMode");
+			throw new BaseException("Unknown seed algorithmMode");
 		}
 	}
 
 	@Override
 	public String decrypt(String str) {
 		if (str == null)
-			throw new FlayOnException("SEED decryption error : input string null");
+			throw new BaseException("SEED decryption error : input string null");
 		switch (mode) {
 		case ECB:
 			return decryptECB(str);
@@ -92,7 +92,7 @@ public class Seed implements Crypto {
 		case CTR:
 			return decryptCTR(str);
 		default:
-			throw new FlayOnException("Unknown seed algorithmMode");
+			throw new BaseException("Unknown seed algorithmMode");
 		}
 	}
 
@@ -108,7 +108,7 @@ public class Seed implements Crypto {
 			}
 			return new String(Base64.encodeBase64(seed_CBC_Encrypt));
 		} catch (Exception e) {
-			throw new FlayOnException("SEED CBC encryption error", e);
+			throw new BaseException("SEED CBC encryption error", e);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class Seed implements Crypto {
 			}
 			return new String(seed_CBC_Decrypt, charset);
 		} catch (Exception e) {
-			throw new FlayOnException("SEED CBC decryption error", e);
+			throw new BaseException("SEED CBC decryption error", e);
 		}
 	}
 
@@ -140,7 +140,7 @@ public class Seed implements Crypto {
 			}
 			return new String(Base64.encodeBase64(seed_ECB_Encrypt));
 		} catch (Exception e) {
-			throw new FlayOnException("SEED ECB encryption error", e);
+			throw new BaseException("SEED ECB encryption error", e);
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class Seed implements Crypto {
 			}
 			return new String(seed_ECB_Decrypt, charset);
 		} catch (Exception e) {
-			throw new FlayOnException("SEED ECB decryption error", e);
+			throw new BaseException("SEED ECB decryption error", e);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class Seed implements Crypto {
 			}
 			return new String(Base64.encodeBase64(seed_CTR_Encrypt));
 		} catch (Exception e) {
-			throw new FlayOnException("SEED CTR encryption error", e);
+			throw new BaseException("SEED CTR encryption error", e);
 		}
 	}
 
@@ -188,7 +188,7 @@ public class Seed implements Crypto {
 			}
 			return new String(seed_CTR_Decrypt, charset);
 		} catch (Exception e) {
-			throw new FlayOnException("SEED CTR decryption error", e);
+			throw new BaseException("SEED CTR decryption error", e);
 		}
 	}
 

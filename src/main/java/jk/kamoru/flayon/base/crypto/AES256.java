@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import jk.kamoru.flayon.FlayOnException;
+import jk.kamoru.flayon.base.BaseException;
 
 public class AES256 implements Crypto {
 
@@ -59,10 +59,10 @@ public class AES256 implements Crypto {
 				ivParameterSpec = new IvParameterSpec(ivBytes);
 			}
 			else {
-				throw new FlayOnException("Unknown algorithm mode");
+				throw new BaseException("Unknown algorithm mode");
 			}
 		} catch (Exception e) {
-			throw new FlayOnException("AES256 initiating error", e);
+			throw new BaseException("AES256 initiating error", e);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class AES256 implements Crypto {
 			byte[] encodeBase64 = Base64.encodeBase64(doFinal);
 			return new String(encodeBase64);
 		} catch (Exception e) {
-			throw new FlayOnException("AES256 encryption error", e);
+			throw new BaseException("AES256 encryption error", e);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class AES256 implements Crypto {
 			byte[] doFinal = cipher.doFinal(decodeBase64);
 			return new String(doFinal, charset);
 		} catch (Exception e) {
-			throw new FlayOnException("AES256 decryption error", e);
+			throw new BaseException("AES256 decryption error", e);
 		}
 	}
 

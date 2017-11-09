@@ -2,7 +2,7 @@ package jk.kamoru.flayon.base.crypto;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import jk.kamoru.flayon.FlayOnException;
+import jk.kamoru.flayon.base.BaseException;
 
 public class SHA implements Crypto {
 
@@ -24,13 +24,13 @@ public class SHA implements Crypto {
 		case SHA512:
 			return DigestUtils.sha512Hex(str);
 		default:
-			throw new FlayOnException("Unknown sha type");
+			throw new BaseException("Unknown sha type");
 		}
 	}
 
 	@Override
 	public String decrypt(String str) {
-		throw new FlayOnException("Not support");
+		throw new BaseException("Not support");
 	}
 
 	public static enum AlgorithmType {

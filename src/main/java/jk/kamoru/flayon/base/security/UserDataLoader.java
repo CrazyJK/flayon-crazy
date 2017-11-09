@@ -1,5 +1,7 @@
 package jk.kamoru.flayon.base.security;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +10,7 @@ public class UserDataLoader {
 
 	@Autowired private UserRepository userRepository;
 
+	@PostConstruct
 	public void loadInitData() {
 		
 		User admin = new User();

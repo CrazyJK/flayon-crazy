@@ -1,8 +1,6 @@
 package jk.kamoru.flayon.crazy;
 
-import jk.kamoru.flayon.FlayOnException;
-
-public class CrazyException extends FlayOnException {
+public class CrazyException extends RuntimeException {
 
 	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 	

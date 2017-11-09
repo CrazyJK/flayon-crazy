@@ -1,6 +1,10 @@
 package jk.kamoru.flayon.crazy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
 import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
@@ -51,5 +56,14 @@ public class CrazyConfig {
         	
         };
     }
+
+	@Bean
+	public BeanPostProcessor methodExecutionBeanPostProcessor() {
+		Map<String, String> beans = new HashMap<>();
+		beans.put("infoWatch", "start");		
+		MethodExecutionBeanPostProcessor processor = new MethodExecutionBeanPostProcessor();
+		processor.setBeans(beans);
+		return processor;
+	}
 
 }
