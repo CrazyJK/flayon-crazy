@@ -354,7 +354,7 @@ function fsOpen(folder) {
 			function appendNewTag(frm) {
 				var tagname = $("#newTagName").val();
 				var tagDesc = $("#newTagDesc").val();
-				restCall(PATH + "/rest/video/tag", {method: "POST", data: $(frm).serialize(), title: "add tag -> " + tagname}, function() {
+				restCall(PATH + "/rest/tag", {method: "POST", data: $(frm).serialize(), title: "add tag -> " + tagname}, function() {
 					$("#taglist").append(
 							$("<li>").append(
 									$("<div>", {"class": "box box-small"}).css({backgroundColor: "#000", color: "#eee"}).append(
