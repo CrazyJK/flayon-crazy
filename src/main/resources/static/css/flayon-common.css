@@ -53,6 +53,9 @@ body {
 	padding: 0;
 	color: #337ab7;
 }
+.page-content {
+	margin: 10px 20px;
+}
 
 .badge {
 	background-color: #337ab7;

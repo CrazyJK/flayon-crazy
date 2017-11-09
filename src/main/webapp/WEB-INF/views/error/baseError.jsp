@@ -18,10 +18,11 @@ bgContinue = false;
 	    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
 	    </h1>
 	</div>
-    <code>
-    	${exception.cause}
-    </code>
-
+	<div class="page-content">
+	    <code>
+	    	Cause : ${exception.cause}
+	    </code>
+	</div>
 	<div class="text-right">
 		<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
 	</div>

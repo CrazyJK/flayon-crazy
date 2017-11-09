@@ -10,10 +10,7 @@
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript">
-bgContinue = false;
-if (self.innerHeight == 0) {
-	alert('<s:message code="error.video.message" arguments="${exception.video.opus},${exception.message}"/>');
-}
+//bgContinue = false;
 </script>
 </head>
 <body>

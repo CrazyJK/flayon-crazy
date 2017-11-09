@@ -88,8 +88,10 @@ public class BaseController {
 	}
 	
 	@RequestMapping("/error")
-	public String error(Model model, @RequestParam(value="k", required=false, defaultValue="") String kind) {
-		if (kind.equals("default"))
+	public String error(@RequestParam(value="k", required=false, defaultValue="") String kind) throws Exception {
+		if (kind.equals("error"))
+			throw new Exception("test runtime error");
+		else if (kind.equals("runtime"))
 			throw new RuntimeException("test runtime error");
 		else if (kind.equals("falyon"))
 			throw new BaseException("test falyon error", new Exception("test flayon cause"));

@@ -12,9 +12,9 @@
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 <script type="text/javascript">
-bgContinue = false;
-if (self.innerHeight == 0)
-	alert('<s:message code="error.kamoru.message" arguments="${exception.kind},${exception.message}"/>');
+//bgContinue = false;
+//if (self.innerHeight == 0)
+//	alert('<s:message code="error.kamoru.message" arguments="${exception.kind},${exception.message}"/>');
 </script>
 </head>
 <body>

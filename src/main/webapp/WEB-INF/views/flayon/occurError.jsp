@@ -29,10 +29,11 @@
 
 	<div class="text-center">
 		<div class="btn-group btn-group-sm">
-			<a class="btn btn-default" target="errorFrame" href="/UnknownPage">general</a>
+			<a class="btn btn-default" target="errorFrame" href="/UnknownPage">404</a>
 		</div>
 		<div class="btn-group btn-group-sm">
-			<a class="btn btn-default" target="errorFrame" href="?k=default">default</a>
+			<a class="btn btn-default" target="errorFrame" href="?k=error">error</a>
+			<a class="btn btn-default" target="errorFrame" href="?k=runtime">runtime</a>
 			<a class="btn btn-default" target="errorFrame" href="?k=falyon">falyon</a>
 		</div>
 		<div class="btn-group btn-group-sm">

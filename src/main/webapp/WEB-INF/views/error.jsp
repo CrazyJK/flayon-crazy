@@ -24,10 +24,9 @@ response.setHeader("error.cause", "");
 
 	<div class="container">
 	 	<div class="page-header">
-	 		<h1>${status} : ${error}
-		    	<small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
-	 		</h1>
+	 		<h1>Error ${status} : ${error}</h1>
 		</div>
+	    <small style="float:right"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
 		<p>
 			<code>${exception}</code>
 		</p>

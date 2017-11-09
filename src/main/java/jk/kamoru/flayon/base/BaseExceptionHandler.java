@@ -13,11 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 public class BaseExceptionHandler {
 
-	@ExceptionHandler(value = Exception.class)
-	public ModelAndView exception(Exception exception, WebRequest request, HttpServletResponse response) {
-		return modelAndView(exception, request, response, "error/generalError");
-	}
-
 	@ExceptionHandler(value = BaseException.class)
 	public ModelAndView flayonException(BaseException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, request, response, "error/baseError");

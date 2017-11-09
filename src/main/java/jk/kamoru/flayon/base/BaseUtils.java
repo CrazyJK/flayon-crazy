@@ -67,7 +67,7 @@ public class BaseUtils {
 	 * @param str2
 	 * @return
 	 */
-	public static String[] wrapString(String[] strArr, String str1, String str2) {
+	private static String[] wrapString(String[] strArr, String str1, String str2) {
 		String[] retArr = Arrays.copyOf(strArr, strArr.length);
 		for (int i=0; i < strArr.length; i++) {
 			retArr[i] = str1 + strArr[i] + str2;
@@ -83,7 +83,7 @@ public class BaseUtils {
 	 * @param searchOper 'or', 'and'
 	 * @return
 	 */
-	public static boolean containsByOper(String str, String[] searchArr, int searchOper) {
+	private static boolean containsByOper(String str, String[] searchArr, int searchOper) {
 		boolean result = true;
 		for (String search : searchArr) {
 			if (searchOper == 1) {
@@ -101,7 +101,7 @@ public class BaseUtils {
 	 * @param strArr
 	 * @return
 	 */
-	public static String[] trimArray(String[] strArr) {
+	private static String[] trimArray(String[] strArr) {
 		for (int i=0; i < strArr.length; i++) {
 			strArr[i] = StringUtils.trim(strArr[i]);
 		}
