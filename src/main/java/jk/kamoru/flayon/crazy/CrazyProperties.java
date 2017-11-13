@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class CrazyProperties {
 
-    /* Local properties */
+    /* Local properties -------------------------------------------------------------------------------------------------------- */
 
     /** video archive path */                    @Value("${path.video.archive}")         protected String         ARCHIVE_PATH;
-    /** base video path in properties */         @Value("${path.video.storage}")         protected String         STORAGE_PATH;
+    /** base video path */				         @Value("${path.video.storage}")         protected String         STORAGE_PATH;
     /** video path of downloaded file */         @Value("${path.video.candidate}")       protected String[]     CANDIDATE_PATHS;
     /** video Stage path */                      @Value("${path.video.stage}")           protected String[]         STAGE_PATHS;
     /** video cover path */                      @Value("${path.video.cover}")           protected String           COVER_PATH;
@@ -23,10 +23,10 @@ public class CrazyProperties {
     /** video player exec */                     @Value("${app.video-player}")           protected String   PLAYER;
     /** subtitles editer */                      @Value("${app.subtitles-editor}")       protected String   EDITOR;
 
-    /* Common Properties */
+    /* Common Properties ------------------------------------------------------------------------------------------------------- */
 
-    /** minimum rank in properties */            @Value("${rank.minimum}")               protected Integer  MIN_RANK;
-    /** maximum rank in properties */            @Value("${rank.maximum}")               protected Integer  MAX_RANK;
+    /** minimum rank */            				 @Value("${rank.minimum}")               protected Integer  MIN_RANK;
+    /** maximum rank */            				 @Value("${rank.maximum}")               protected Integer  MAX_RANK;
     /** baseline rank */                                                                 protected int     BASE_RANK = 0;
 
     /** maximum size of entire video */          @Value("${size.video.storage}")         protected int      MAX_ENTIRE_VIDEO;

@@ -1,20 +1,17 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.error;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 
-public class VideoNotFoundException extends VideoException {
+public class VideoNotFoundException extends NotFoundException {
 
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
-	private static final String KIND = "VideoNotFound";
+	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 
 	public VideoNotFoundException(String opus, Throwable cause) {
-		super("Video not found : " + opus, cause);
-		super.setKind(KIND);
+		super("Video [" + opus + "] not found", cause, KIND.VideoNotFound);
 	}
 
 	public VideoNotFoundException(String opus) {
-		super("Video not found : " + opus);
-		super.setKind(KIND);
+		super("Video [" + opus + "] not found", KIND.VideoNotFound);
 	}
 	
 }

@@ -1,21 +1,17 @@
-package jk.kamoru.flayon.crazy.image;
+package jk.kamoru.flayon.crazy.error;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 
+public class ImageNotFoundException extends NotFoundException {
 
-public class ImageNotFoundException extends ImageException {
-
-	private static final long serialVersionUID = IMAGE.SERIAL_VERSION_UID;
-
-	private static final String KIND = "ImageNotFound";
+	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 
 	public ImageNotFoundException(int idx) {
-		super(String.format("Image not found : %s", idx));
-		super.setKind(KIND);
+		super("Image [" + idx + "] not found", KIND.ImageNotFound);
 	}
 
 	public ImageNotFoundException(int idx, Throwable cause) {
-		super(String.format("Image not found : %s", idx), cause);
-		super.setKind(KIND);
+		super("Image [" + idx + "] not found", cause, KIND.ImageNotFound);
 	}
 
 }

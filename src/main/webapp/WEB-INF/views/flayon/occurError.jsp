@@ -34,18 +34,21 @@
 		<div class="btn-group btn-group-sm">
 			<a class="btn btn-default" target="errorFrame" href="?k=error">error</a>
 			<a class="btn btn-default" target="errorFrame" href="?k=runtime">runtime</a>
-			<a class="btn btn-default" target="errorFrame" href="?k=falyon">falyon</a>
 		</div>
 		<div class="btn-group btn-group-sm">
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=crazy">crazy</a>
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=video">video</a>
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=videonotfound">videoNotFound</a>
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=studionotfound">studioNotFound</a>
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=actressnotfound">actressNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="?k=base1">base1</a>
+			<a class="btn btn-default" target="errorFrame" href="?k=base2">base2</a>
 		</div>
 		<div class="btn-group btn-group-sm">
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=image">image</a>
-			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=imagenotfound">imageNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=Crazy">crazy</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=Video">video</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=Image">image</a>
+		</div>
+		<div class="btn-group btn-group-sm">
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=VideoNotFound">videoNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=StudioNotFound">studioNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=ActressNotFound">actressNotFound</a>
+			<a class="btn btn-default" target="errorFrame" href="${throwError}?k=ImageNotFound">imageNotFound</a>
 		</div>
 	</div>
 

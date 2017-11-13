@@ -11,9 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 
-import jk.kamoru.flayon.crazy.CrazyException;
-import jk.kamoru.flayon.crazy.image.ImageException;
+import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.error.ImageException;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Image Domain
@@ -21,6 +22,7 @@ import lombok.Getter;
  *
  */
 @Getter
+@ToString
 public class Image {
 
 	public enum Type {

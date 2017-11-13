@@ -1,20 +1,17 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.error;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 
-public class StudioNotFoundException extends VideoException {
+public class StudioNotFoundException extends NotFoundException {
 
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
-	private static final String KIND = "StudioNotFound";
+	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 
 	public StudioNotFoundException(String studioName, Throwable cause) {
-		super("Studio not found : " + studioName, cause);
-		super.setKind(KIND);
+		super("Studio [" + studioName + "] not found", cause, KIND.StudioNotFound);
 	}
 
 	public StudioNotFoundException(String studioName) {
-		super("Studio not found : " + studioName);
-		super.setKind(KIND);
+		super("Studio [" + studioName + "] not found", KIND.StudioNotFound);
 	}
 
 }

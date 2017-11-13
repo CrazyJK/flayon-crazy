@@ -1,31 +1,37 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.crazy.error;
+
+import jk.kamoru.flayon.crazy.CRAZY;
 
 public class CrazyException extends RuntimeException {
 
 	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 	
-	private static final String KIND = "Crazy";
+	private KIND kind = KIND.Crazy;
 	
-	String kind = KIND;
+	public CrazyException(String message, Throwable cause, KIND kind) {
+		super(message, cause);
+		this.kind = kind;
+	}
 	
 	public CrazyException(String message, Throwable cause) {
-		super(message, cause);
+		this(message, cause, KIND.Crazy);
 	}
 
-	public CrazyException(String message) {
+	public CrazyException(String message, KIND kind) {
 		super(message);
+		this.kind = kind;
+	}
+	
+	public CrazyException(String message) {
+		this(message, KIND.Crazy);
 	}
 
-	public CrazyException(Throwable cause) {
-		super(cause);
-	}
-
-	public String getKind() {
+	public KIND getKind() {
 		return kind;
 	}
-
-	public CrazyException setKind(String kind) {
-		this.kind = kind;
-		return this;
+	
+	public static enum KIND {
+		Crazy, Video, Image,
+		VideoNotFound, StudioNotFound, ActressNotFound, ImageNotFound;
 	}
 }

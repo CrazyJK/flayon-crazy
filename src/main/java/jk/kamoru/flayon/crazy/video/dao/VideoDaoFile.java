@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
-import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
-import jk.kamoru.flayon.crazy.video.VideoException;
-import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
+import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;

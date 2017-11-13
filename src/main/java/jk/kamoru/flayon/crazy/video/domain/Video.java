@@ -24,9 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
+import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
@@ -133,25 +133,25 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public int compareTo(Video comp) {
 		switch(sortMethod) {
 		case S:
-			return Utils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
+			return CrazyUtils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
 		case O:
-			return Utils.compareTo(this.getOpus(), comp.getOpus());
+			return CrazyUtils.compareTo(this.getOpus(), comp.getOpus());
 		case T:
-			return Utils.compareTo(this.getTitle(), comp.getTitle());
+			return CrazyUtils.compareTo(this.getTitle(), comp.getTitle());
 		case A:
-			return Utils.compareTo(this.getActressName(), comp.getActressName());
+			return CrazyUtils.compareTo(this.getActressName(), comp.getActressName());
 		case D:
-			return Utils.compareTo(this.getReleaseDate(), comp.getReleaseDate());
+			return CrazyUtils.compareTo(this.getReleaseDate(), comp.getReleaseDate());
 		case M:
-			return Utils.compareTo(this.getDelegateFile().lastModified(), comp.getDelegateFile().lastModified());
+			return CrazyUtils.compareTo(this.getDelegateFile().lastModified(), comp.getDelegateFile().lastModified());
 		case P:
-			return Utils.compareTo(this.getPlayCount(), comp.getPlayCount());
+			return CrazyUtils.compareTo(this.getPlayCount(), comp.getPlayCount());
 		case R:
-			return Utils.compareTo(this.getRank(), comp.getRank());
+			return CrazyUtils.compareTo(this.getRank(), comp.getRank());
 		case L:
-			return Utils.compareTo(this.getLength(), comp.getLength());
+			return CrazyUtils.compareTo(this.getLength(), comp.getLength());
 		case SC:
-			return Utils.compareTo(this.getScore(), comp.getScore());
+			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
 		case VC:
 			if (this.videoCandidates.size() > 0) {
 				if (comp.videoCandidates.size() == 0) {
@@ -163,9 +163,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					return 1;
 				}
 			}
-			return Utils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
+			return CrazyUtils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
 		default:
-			return Utils.compareTo(this, comp);
+			return CrazyUtils.compareTo(this, comp);
 		}
 	}
 	
@@ -258,7 +258,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return 대표 이름
 	 */
 	private String getDelegateFilenameWithoutSuffix() {
-		return Utils.getNameExceptExtension(getDelegateFile());
+		return CrazyUtils.getNameExceptExtension(getDelegateFile());
 	}
 	
 	/**
@@ -294,7 +294,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	@JsonIgnore
 	public String getEtcFileListPath() {
 		if(isExistEtcFileList())
-			return Utils.toStringComma(getEtcFileList());
+			return CrazyUtils.toStringComma(getEtcFileList());
 		return "";
 	}
 	
@@ -419,7 +419,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	@JsonIgnore
 	public String getSubtitlesFileListPath() {
 		if(isExistSubtitlesFileList())
-			return Utils.toStringComma(getSubtitlesFileList());
+			return CrazyUtils.toStringComma(getSubtitlesFileList());
 		return "";
 	}
 
@@ -470,7 +470,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	@JsonIgnore
 	public String getVideoFileListPath() {
 		if(isExistVideoFileList()) 
-			return Utils.toStringComma(getVideoFileList()); 
+			return CrazyUtils.toStringComma(getVideoFileList()); 
 		return "";
 	}
 	
@@ -1041,10 +1041,10 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		int videoCount = getVideoFileList().size();
 		for (File file : VideoUtils.sortFile(getVideoFileList())) {
 			if (videoCount == 1) {
-				videoFileList.add(Utils.renameFile(file, newName));
+				videoFileList.add(CrazyUtils.renameFile(file, newName));
 			}
 			else {
-				videoFileList.add(Utils.renameFile(file, newName + count++));
+				videoFileList.add(CrazyUtils.renameFile(file, newName + count++));
 			}
 		}
 		setVideoFileList(videoFileList);
@@ -1052,7 +1052,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		// cover
 		
 		if (coverFile != null && coverFile.exists())
-			setCoverFile(Utils.renameFile(coverFile, newName));
+			setCoverFile(CrazyUtils.renameFile(coverFile, newName));
 
 		// subtitles, if exist
 		count = 1;
@@ -1060,22 +1060,22 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		int subtitlesCount = getSubtitlesFileList().size();
 		for (File file : VideoUtils.sortFile(getSubtitlesFileList())) {
 			if (subtitlesCount == 1) {
-				subtitlesFileList.add(Utils.renameFile(file, newName));
+				subtitlesFileList.add(CrazyUtils.renameFile(file, newName));
 			}
 			else {
-				subtitlesFileList.add(Utils.renameFile(file, newName + count++));
+				subtitlesFileList.add(CrazyUtils.renameFile(file, newName + count++));
 			}
 		}
 		setSubtitlesFileList(subtitlesFileList);
 		
 		// info file
 		if (infoFile != null && infoFile.exists())
-			setInfoFile(Utils.renameFile(infoFile, newName));
+			setInfoFile(CrazyUtils.renameFile(infoFile, newName));
 			
 		// etc file
 		List<File> etcFileList = new ArrayList<>();
 		for (File file : this.getEtcFileList()) {
-			etcFileList.add(Utils.renameFile(file, newName));
+			etcFileList.add(CrazyUtils.renameFile(file, newName));
 		}
 		setEtcFileList(etcFileList);
 	}
@@ -1100,7 +1100,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public String getExt() {
-		return Utils.getExtension(getDelegateFile());
+		return CrazyUtils.getExtension(getDelegateFile());
 	}
 
 	@Override
@@ -1147,7 +1147,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public void moveOutside() {
 		if (this.isExistVideoFileList()) {
-			File root = Utils.getRootDirectory(this.getDelegateFile());
+			File root = CrazyUtils.getRootDirectory(this.getDelegateFile());
 			for (File file : this.getVideoFileList()) {
 				try {
 					FileUtils.moveFileToDirectory(file, root, false);

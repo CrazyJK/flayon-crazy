@@ -26,4 +26,14 @@ public interface CRAZY extends FLAYON {
 
 	public static final String REGEX_ENGLISH 	 = " ^[a-zA-Z]*$";
 
+	public static final long WEBCACHETIME_SEC    = 86400 * 7l;
+
+	public static final long WEBCACHETIME_MILI   = WEBCACHETIME_SEC * 1000l;
+
+	public static final String      DATE_PATTERN = "yyyy-MM-dd";
+
+	public static final String      TIME_PATTERN = "HH:mm:ss";
+
+	public static final String DATE_TIME_PATTERN = DATE_PATTERN + " " + TIME_PATTERN;
+
 }

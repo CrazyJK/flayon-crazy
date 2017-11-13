@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;

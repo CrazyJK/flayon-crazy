@@ -2,40 +2,55 @@
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s"  uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="jk" tagdir="/WEB-INF/tags"%>
-
+<c:set value="${exception.kind eq 'Video'}" var="isVideo"/>
+<c:set value="${exception.kind eq 'Image'}" var="isImage"/>
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title><s:message code="error.kamoru.title" arguments="${exception.kind}"/></title>
 <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.6/dist/css/bootstrap.min.css"/>"/>
-<link rel="stylesheet" href="<c:url value="/css/bootstrap-crazy.css"/>"/>
+<link rel="stylesheet" href="<c:url value="/css/error.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/jQuery/2.2.3/dist/jquery.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
-<script type="text/javascript">
-//bgContinue = false;
-//if (self.innerHeight == 0)
-//	alert('<s:message code="error.kamoru.message" arguments="${exception.kind},${exception.message}"/>');
-</script>
 </head>
 <body>
+<div class="container">
 
-	<div class="container">
-		<div class="jumbotron">
-			<header id="page-header">
-				<h1>${exception.kind} Error</h1>
-				<h2>${exception.message}</h2>
-			</header>
-		</div>
+	<header class="page-header">
+		<h2><span class="text-danger">${exception.message}</span></h2>
+	</header>
+	
+	<div class="page-content">
+		<c:if test="${isVideo && !empty exception.video}">
+			<div class="video-card-box">
+				<c:set var="video" value="${exception.video}"/>
+				<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+			</div>
+		</c:if>
+	
+	    <p>Error : <code>${exception}</code></p>
+	    
+	    <c:if test="${!empty exception.cause}">
+	    	<p>Cause : <code>${exception.cause}</code></p>
+	    </c:if>
+    	
+    	<c:if test="${isImage && !empty exception.image}">
+		    <p>File : <code>${exception.image.file}</code></p>
+	    </c:if>
+    </div>
+    
+</div>
 
-		<div class="error-detail">
-			<div class="text-right">
-				<button class="btn btn-link" data-toggle="collapse" data-target="#webContext">view Web Attribute</button>
-			</div>
-			<div id="webContext" class="collapse">
-				<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
-			</div>
-		</div>
+<div class="container">
+	<div class="text-right">
+		<button class="btn btn-link" data-toggle="collapse" data-target=".webAttribute">Web Attributes</button>
 	</div>
+	<div class="webAttribute collapse">
+		<%@ include file="/WEB-INF/views/flayon/webAttribute.jspf" %>    
+	</div>
+</div>
 
 </body>
 </html>

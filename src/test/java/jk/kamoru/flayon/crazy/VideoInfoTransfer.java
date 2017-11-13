@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class VideoInfoTransfer {
 		VideoInfoTransfer transfer = new VideoInfoTransfer();
 		String[] paths = {"D:\\Crazy", "E:\\Crazy"};
 
-		Collection<File> listFiles = Utils.listFiles(paths, new String[]{"info"}, true);
+		Collection<File> listFiles = CrazyUtils.listFiles(paths, new String[]{"info"}, true);
 		System.out.println("found " + listFiles.size());
 		int count = 0;
 		for (File file : listFiles) {

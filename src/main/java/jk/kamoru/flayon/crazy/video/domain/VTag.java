@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jk.kamoru.flayon.crazy.CrazyException;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import lombok.Data;
 
 @Data

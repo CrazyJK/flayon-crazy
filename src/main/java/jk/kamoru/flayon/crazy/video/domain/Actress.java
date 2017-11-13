@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 import lombok.Data;
@@ -110,23 +110,23 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public int compareTo(Actress comp) {
 		switch (sort) {
 		case NAME:
-			return Utils.compareTo(this.getName(), comp.getName());
+			return CrazyUtils.compareTo(this.getName(), comp.getName());
 		case BIRTH:
-			return Utils.compareTo(this.getBirth(), comp.getBirth());
+			return CrazyUtils.compareTo(this.getBirth(), comp.getBirth());
 		case BODY:
-			return Utils.compareTo(this.getBodySize(), comp.getBodySize());
+			return CrazyUtils.compareTo(this.getBodySize(), comp.getBodySize());
 		case HEIGHT:
-			return Utils.compareTo(this.getHeight(), comp.getHeight());
+			return CrazyUtils.compareTo(this.getHeight(), comp.getHeight());
 		case DEBUT:
-			return Utils.compareTo(this.getDebut(), comp.getDebut());
+			return CrazyUtils.compareTo(this.getDebut(), comp.getDebut());
 		case VIDEO:
-			return Utils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
+			return CrazyUtils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
 		case SCORE:
-			return Utils.compareTo(this.getScore(), comp.getScore());
+			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
 		case FAVORITE:
-			return Utils.compareTo(this.getFavorite(), comp.getFavorite());
+			return CrazyUtils.compareTo(this.getFavorite(), comp.getFavorite());
 		default:
-			return Utils.compareTo(this.getName(), comp.getName());
+			return CrazyUtils.compareTo(this.getName(), comp.getName());
 		}
 	}
 	
@@ -236,15 +236,15 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 				if (log.isDebugEnabled())
 					log.debug("loadInfo : file {}", file);
 				if (file.isFile()) {
-					info = Utils.readFileToMap(file);
-					this.name      = Utils.trimToDefault(info.get(NEWNAME), name);
-					this.localName = Utils.trimToDefault(info.get(LOCALNAME), localName);
-					this.birth     = Utils.trimToDefault(info.get(BIRTH), birth);
-					this.height    = Utils.trimToDefault(info.get(HEIGHT), height);
-					this.bodySize  = Utils.trimToDefault(info.get(BODYSIZE), bodySize);
-					this.debut     = Utils.trimToDefault(info.get(DEBUT), debut);
+					info = CrazyUtils.readFileToMap(file);
+					this.name      = CrazyUtils.trimToDefault(info.get(NEWNAME), name);
+					this.localName = CrazyUtils.trimToDefault(info.get(LOCALNAME), localName);
+					this.birth     = CrazyUtils.trimToDefault(info.get(BIRTH), birth);
+					this.height    = CrazyUtils.trimToDefault(info.get(HEIGHT), height);
+					this.bodySize  = CrazyUtils.trimToDefault(info.get(BODYSIZE), bodySize);
+					this.debut     = CrazyUtils.trimToDefault(info.get(DEBUT), debut);
 					this.favorite  = Boolean.valueOf(info.get(FAVORITE));
-					this.comment   = Utils.trimToDefault(info.get(COMMENT), comment);
+					this.comment   = CrazyUtils.trimToDefault(info.get(COMMENT), comment);
 					if (!StringUtils.isEmpty(birth))
 						try {
 							Calendar cal = Calendar.getInstance();
@@ -299,7 +299,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 			// info 파일에 내용 저장
 			if (log.isDebugEnabled())
 				log.debug("saveInfo : save file {}", getInfoFile());
-			Utils.saveFileFromMap(getInfoFile(), params);
+			CrazyUtils.saveFileFromMap(getInfoFile(), params);
 		}
 		// 이름이 변했으면
 		else {
@@ -310,7 +310,7 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 				// info 파일에 내용 저장
 				if (log.isDebugEnabled())
 					log.debug("saveInfo : save file {}", getInfoFile(newname));
-				Utils.saveFileFromMap(getInfoFile(newname), params);
+				CrazyUtils.saveFileFromMap(getInfoFile(newname), params);
 			}
 			
 			// actress의 비디오 파일 이름 변경

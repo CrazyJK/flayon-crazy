@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,7 +38,7 @@ public class ImageBatch extends CrazyProperties {
 				if (StringUtils.startsWith(file.getName(), directory.getName()))
 					continue;
 
-				File dest = new File(directory, directory.getName() + "_" + file.lastModified() + "." + Utils.getExtension(file));
+				File dest = new File(directory, directory.getName() + "_" + file.lastModified() + "." + CrazyUtils.getExtension(file));
 				file.renameTo(dest);
 				log.info("rename {} to {}", file.getName(), dest.getName());
 			}

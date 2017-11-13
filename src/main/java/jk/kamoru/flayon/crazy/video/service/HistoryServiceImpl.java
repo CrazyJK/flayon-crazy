@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jk.kamoru.flayon.crazy.CrazyException;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.dao.HistoryDao;
 import jk.kamoru.flayon.crazy.video.dao.HistoryRepository;
 import jk.kamoru.flayon.crazy.video.domain.Action;

@@ -1,0 +1,29 @@
+@charset "UTF-8";
+body {
+	font-family: "D2Coding", "NanumGothicCoding";
+}
+
+.page-header {
+	
+}
+
+.timestamp {
+	float: right;
+}
+
+.page-content {
+	
+}
+
+.webAttribute {
+	
+}
+
+.video-card-box {
+    box-shadow: 3px 3px 3px 0px #6d6262;
+    border-radius: 4px;
+    border: 1px solid #6d6262;
+    background-color: rgba(0,0,0,.75);
+    width: 200px;
+    margin: 10px;
+}

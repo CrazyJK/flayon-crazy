@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.CrazyException;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 import lombok.Data;
 
@@ -109,7 +109,7 @@ public class TitlePart {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = VideoUtils.trimBlank(Utils.removeInvalidFilename(title));
+		this.title = VideoUtils.trimBlank(CrazyUtils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(this.title) || warningTitle(this.title)) {
 			this.check = true;

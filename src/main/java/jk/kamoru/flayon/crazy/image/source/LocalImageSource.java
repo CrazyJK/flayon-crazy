@@ -16,9 +16,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.error.ImageNotFoundException;
 //import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.IMAGE;
-import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
 

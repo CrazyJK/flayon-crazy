@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.CrazyException;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
@@ -38,7 +35,6 @@ import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.TagService;
-import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.util.CoverUtils;
 import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
@@ -53,7 +49,6 @@ public class VideoController extends CrazyController {
 	static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	
 	@Autowired   VideoBatch     videoBatch;
-	@Autowired   VideoService   videoService;
 	@Autowired     TagService     tagService;
 	@Autowired HistoryService historyService;
 
@@ -245,7 +240,7 @@ public class VideoController extends CrazyController {
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile), response, imageFile);
+		return httpEntity(videoService.getVideoCoverByteArray(opus), CrazyUtils.getExtension(imageFile), response, imageFile);
 	}
 
 	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
@@ -254,7 +249,7 @@ public class VideoController extends CrazyController {
 		File imageFile = video.getCoverFile();
 		if(imageFile == null)
 			return null;
-		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), Utils.getExtension(imageFile), response, imageFile);
+		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), CrazyUtils.getExtension(imageFile), response, imageFile);
 	}
 
 	@RequestMapping(value="/actress/{actressName}/cover", method=RequestMethod.GET)
@@ -263,7 +258,7 @@ public class VideoController extends CrazyController {
 		File imageFile = actress.getImage();
 		if(imageFile == null)
 			return null;
-		return httpEntity(FileUtils.readFileToByteArray(imageFile), Utils.getExtension(imageFile), response, imageFile);
+		return httpEntity(FileUtils.readFileToByteArray(imageFile), CrazyUtils.getExtension(imageFile), response, imageFile);
 	}
 	
 	@RequestMapping("/randomVideoCover")
@@ -275,7 +270,7 @@ public class VideoController extends CrazyController {
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), Utils.getExtension(imageFile), response, imageFile);
+		return httpEntity(videoService.getVideoCoverByteArray(opus), CrazyUtils.getExtension(imageFile), response, imageFile);
 	}
 	
 	/**
@@ -337,15 +332,6 @@ public class VideoController extends CrazyController {
 			return "video/videoDetailArchive";
 		else
 			return "video/videoDetail";
-	}
-
-	/**
-	 * Test code. 
-	 */
-	@RequestMapping(value="/{opus}", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void opusPost() {
-		throw new CrazyException(new IllegalStateException("POST do not something yet"));
 	}
 	
 	@RequestMapping("/archive")

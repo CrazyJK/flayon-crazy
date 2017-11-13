@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.Image;
-import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
@@ -98,10 +97,10 @@ public class ImageController extends CrazyController {
 			for (String value : response.getHeaders(name))
 				log.info("HEADER {}: {}", name, value);
 		 */
-		response.setHeader("Cache-Control",    "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
+		response.setHeader("Cache-Control",    "public, max-age=" + IMAGE.WEBCACHETIME_SEC);
 		response.setHeader("Pragma",           "public");
-		response.setDateHeader("Expires",       today + VIDEO.WEBCACHETIME_MILI);
-		response.setDateHeader("Last-Modified", today - VIDEO.WEBCACHETIME_MILI);
+		response.setDateHeader("Expires",       today + IMAGE.WEBCACHETIME_MILI);
+		response.setDateHeader("Last-Modified", today - IMAGE.WEBCACHETIME_MILI);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentLength(imageBytes.length);

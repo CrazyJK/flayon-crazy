@@ -57,6 +57,7 @@ import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
 import jk.kamoru.flayon.base.crypto.Seed;
+import jk.kamoru.flayon.base.error.BaseException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -90,10 +91,12 @@ public class BaseController {
 	@RequestMapping("/error")
 	public String error(@RequestParam(value="k", required=false, defaultValue="") String kind) throws Exception {
 		if (kind.equals("error"))
-			throw new Exception("test runtime error");
+			throw new Exception("test error");
 		else if (kind.equals("runtime"))
 			throw new RuntimeException("test runtime error");
-		else if (kind.equals("falyon"))
+		else if (kind.equals("base1"))
+			throw new BaseException("test falyon error");
+		else if (kind.equals("base2"))
 			throw new BaseException("test falyon error", new Exception("test flayon cause"));
 		return "flayon/occurError";
 	}

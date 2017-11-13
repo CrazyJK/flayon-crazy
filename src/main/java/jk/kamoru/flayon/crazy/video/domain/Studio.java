@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,7 +66,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	@Override
 	public String toString() {
 		return String.format("%s H:%s C:%s S:%s",
-				name, Utils.trimToEmpty(homepage), company, getScore());
+				name, CrazyUtils.trimToEmpty(homepage), company, getScore());
 	}
 
 	public void addVideo(Video video) {
@@ -100,17 +100,17 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	public int compareTo(Studio comp) {
 		switch (sort) {
 		case NAME:
-			return Utils.compareTo(this.getName(), comp.getName());
+			return CrazyUtils.compareTo(this.getName(), comp.getName());
 		case HOMEPAGE:
-			return Utils.compareTo(this.getHomepage(), comp.getHomepage());
+			return CrazyUtils.compareTo(this.getHomepage(), comp.getHomepage());
 		case COMPANY:
-			return Utils.compareTo(this.getCompany(), comp.getCompany());
+			return CrazyUtils.compareTo(this.getCompany(), comp.getCompany());
 		case VIDEO:
-			return Utils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
+			return CrazyUtils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
 		case SCORE:
-			return Utils.compareTo(this.getScore(), comp.getScore());
+			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
 		default:
-			return Utils.compareTo(this.getName(), comp.getName());
+			return CrazyUtils.compareTo(this.getName(), comp.getName());
 		}
 	}
 
@@ -122,9 +122,9 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 			if (log.isDebugEnabled())
 				log.debug("loadInfo : file {}", file);
 			if (file.isFile()) {
-				Map<String, String> info = Utils.readFileToMap(file);
-				name 	 = Utils.trimToDefault(info.get(NEWNAME), name);
-				company  = Utils.trimToDefault(info.get(COMPANY), company);
+				Map<String, String> info = CrazyUtils.readFileToMap(file);
+				name 	 = CrazyUtils.trimToDefault(info.get(NEWNAME), name);
+				company  = CrazyUtils.trimToDefault(info.get(COMPANY), company);
 				homepage = makeURL(info.get(HOMEPAGE));
 			}
 			loaded = true;
@@ -171,7 +171,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 			// info 파일에 내용 저장
 			if (log.isDebugEnabled())
 				log.debug("saveInfo : save file {}", getInfoFile());
-			Utils.saveFileFromMap(getInfoFile(), params);
+			CrazyUtils.saveFileFromMap(getInfoFile(), params);
 		}
 		// 이름이 변했으면
 		else {
@@ -182,7 +182,7 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 				// info 파일에 내용 저장
 				if (log.isDebugEnabled())
 					log.debug("saveInfo : save as file {}", getInfoFile(newname));
-				Utils.saveFileFromMap(getInfoFile(newname), params);
+				CrazyUtils.saveFileFromMap(getInfoFile(newname), params);
 			}
 
 			// studio의 비디오 파일 이름 변경

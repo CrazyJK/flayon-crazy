@@ -18,8 +18,8 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +67,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 	@Override
 	public VTag persist(VTag tag) {
 		if (tags.contains(tag))
-			throw new CrazyException("Fail to persist : already exist " + tag).setKind("Tag");
+			throw new CrazyException("Fail to persist tag : already exist " + tag);
 		tag.setId(findMaxId() + 1);
 		tag.validation();
 		tags.add(tag);

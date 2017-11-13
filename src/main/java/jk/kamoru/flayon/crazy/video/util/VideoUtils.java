@@ -13,7 +13,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import jk.kamoru.flayon.crazy.Utils;
+import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
@@ -246,7 +246,7 @@ public class VideoUtils {
 
 			@Override
 			public int compare(File arg0, File arg1) {
-				return Utils.compareTo(arg0.getName(), arg1.getName());
+				return CrazyUtils.compareTo(arg0.getName(), arg1.getName());
 			}
 
 		});
@@ -266,8 +266,8 @@ public class VideoUtils {
 		int classified = -1;
 		for (File file : found) {
 			String name = file.getName();
-			String filename = Utils.getNameExceptExtension(file);
-			String extname = Utils.getExtension(file);
+			String filename = CrazyUtils.getNameExceptExtension(file);
+			String extname = CrazyUtils.getExtension(file);
 
 			// if(ctrl.listBGImageName.equals(name) ||
 			// ctrl.historyName.equals(name))

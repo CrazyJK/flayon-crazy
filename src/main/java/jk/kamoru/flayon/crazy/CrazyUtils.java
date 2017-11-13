@@ -24,11 +24,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.UsesJava8;
 
 import jk.kamoru.flayon.FLAYON;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Utils extends jk.kamoru.flayon.base.BaseUtils {
+public class CrazyUtils extends jk.kamoru.flayon.base.BaseUtils {
 
 	/**
 	 * 파일의 확장자를 구한다.

@@ -2,7 +2,7 @@ package jk.kamoru.flayon.base.crypto;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import jk.kamoru.flayon.base.BaseException;
+import jk.kamoru.flayon.base.error.BaseException;
 
 public class SHA implements Crypto {
 

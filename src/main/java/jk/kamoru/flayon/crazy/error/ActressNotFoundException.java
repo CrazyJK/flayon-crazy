@@ -1,20 +1,17 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.error;
 
+import jk.kamoru.flayon.crazy.CRAZY;
 
-public class ActressNotFoundException extends VideoException {
+public class ActressNotFoundException extends NotFoundException {
 
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
-	private static final String KIND = "ActressNotFound";
+	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 
 	public ActressNotFoundException(String actressName, Throwable cause) {
-		super("Actress not found : " + actressName, cause);
-		super.setKind(KIND);
+		super("Actress [" + actressName + "] not found", cause, KIND.ActressNotFound);
 	}
 
 	public ActressNotFoundException(String actressName) {
-		super("Actress not found : " + actressName);
-		super.setKind(KIND);
+		super("Actress [" + actressName + "] not found", KIND.ActressNotFound);
 	}
 
 }
