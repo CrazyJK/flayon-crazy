@@ -30,7 +30,7 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CrazyUtils extends jk.kamoru.flayon.base.BaseUtils {
+public class CrazyUtils {
 
 	/**
 	 * 파일의 확장자를 구한다.
@@ -276,19 +276,6 @@ public class CrazyUtils extends jk.kamoru.flayon.base.BaseUtils {
 		} catch (IOException e) {
 			throw new CrazyException("walk file tree error", e);
 		}
-	}
-	
-	/**
-	 * 배열을 합친다.
-	 * @param arr1
-	 * @param arr2
-	 * @return
-	 */
-	public static String[] merge(String[] arr1, String[] arr2) {
-		String[] dst = new String[arr1.length + arr2.length];
-		System.arraycopy(arr1, 0, dst, 0, arr1.length);
-		System.arraycopy(arr2, 0, dst, arr1.length, arr2.length);
-		return dst;
 	}
 
 	/**

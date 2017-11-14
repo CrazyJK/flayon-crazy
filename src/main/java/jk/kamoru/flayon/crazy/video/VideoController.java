@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.util.CoverUtils;
+import jk.kamoru.flayon.crazy.util.ImageUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
@@ -249,7 +249,7 @@ public class VideoController extends CrazyController {
 		File imageFile = video.getCoverFile();
 		if(imageFile == null)
 			return null;
-		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), CrazyUtils.getExtension(imageFile), response, imageFile);
+		return httpEntity(ImageUtils.mergeTextToImage(video.getTitle(), imageFile), CrazyUtils.getExtension(imageFile), response, imageFile);
 	}
 
 	@RequestMapping(value="/actress/{actressName}/cover", method=RequestMethod.GET)

@@ -1,16 +1,10 @@
 package jk.kamoru.flayon.crazy.util;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.video.domain.VTag;
@@ -58,10 +52,9 @@ public class VideoUtils {
 	}
 	
 	/**
-	 * 공백이 들어간 이름을 순차정렬해서 반환
-	 * 
+	 * 공백기준으로 분리후 순차정렬
 	 * @param name
-	 * @return string of sort name
+	 * @return
 	 */
 	public static String sortForwardName(String name) {
 		if (name == null)
@@ -73,7 +66,6 @@ public class VideoUtils {
 
 	/**
 	 * video list을 opus값 배열 스타일로 반환. ["abs-123", "avs-34"]
-	 * 
 	 * @param videoList
 	 * @return string of opus list
 	 */
@@ -90,39 +82,15 @@ public class VideoUtils {
 
 	/**
 	 * video list중 video파일이 있는것만 골라 opus값 배열 스타일로 반환. ["abs-123", "avs-34"]
-	 * 
 	 * @param videoList
 	 * @return string of opus list with file
 	 */
 	public static String getOpusArrayStyleStringWithVideofile(List<Video> videoList) {
-		List<Video> videoListWithVideofile = new ArrayList<Video>();
-		for (Video video : videoList)
-			if (video.isExistVideoFileList())
-				videoListWithVideofile.add(video);
-		return getOpusArrayStyleString(videoListWithVideofile);
-	}
-
-	/**
-	 * 특수문자를 제거한 문자 반환
-	 * 
-	 * @param str
-	 * @return string
-	 */
-	public static String removeSpecialCharacters(String str) {
-		String str_imsi = "";
-		String[] filter_word = { "", "\\.", "\\?", "\\/", "\\~", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\_", "\\+", "\\=",
-				"\\|", "\\\\", "\\}", "\\]", "\\{", "\\[", "\\\"", "\\'", "\\:", "\\;", "\\<", "\\,", "\\>", "\\.", "\\?", "\\/" };
-		for (int i = 0; i < filter_word.length; i++) {
-			// System.out.println(i + "[" + filter_word[i] + "]");
-			str_imsi = str.replaceAll(filter_word[i], "");
-			str = str_imsi;
-		}
-		return str;
+		return getOpusArrayStyleString(videoList.stream().filter(v -> v.isExistVideoFileList()).collect(Collectors.toList()));
 	}
 
 	/**
 	 * 앞 뒤 공백, [ 제거. null이나 공백이면 "" 리턴
-	 * 
 	 * @param str
 	 * @return string
 	 */
@@ -132,7 +100,6 @@ public class VideoUtils {
 
 	/**
 	 * 앞 뒤 공백, [ 제거
-	 * 
 	 * @param str
 	 * @param defaultString
 	 * @return string
@@ -149,7 +116,6 @@ public class VideoUtils {
 
 	/**
 	 * list를 컴마(,)로 구분한 string반환
-	 * 
 	 * @param list
 	 * @return string of list
 	 */
@@ -166,7 +132,6 @@ public class VideoUtils {
 
 	/**
 	 * file list를 컴마(,)로 구분한 string으로 반환
-	 * 
 	 * @param list
 	 * @return string of list
 	 */
@@ -235,108 +200,6 @@ public class VideoUtils {
 	}
 
 	/**
-	 * 파일 이름으로 순차 정렬
-	 * 
-	 * @param files
-	 * @return
-	 */
-	public static List<File> sortFile(List<File> files) {
-		Collections.sort(files, new Comparator<File>() {
-
-			@Override
-			public int compare(File arg0, File arg1) {
-				return CrazyUtils.compareTo(arg0.getName(), arg1.getName());
-			}
-
-		});
-		return files;
-	}
-
-	/**
-	 * <p>
-	 * 단독으로 파일명을 재조합한다. 상황과 조건에 따라 로직이 달라지므로 사용시 수정 필요
-	 * </P>
-	 * 
-	 * @param path
-	 * @param unclassifiedPath
-	 */
-	public static void changeOldNameStyle(String path, String unclassifiedPath) {
-		Collection<File> found = FileUtils.listFiles(new File(path), null, true);
-		int classified = -1;
-		for (File file : found) {
-			String name = file.getName();
-			String filename = CrazyUtils.getNameExceptExtension(file);
-			String extname = CrazyUtils.getExtension(file);
-
-			// if(ctrl.listBGImageName.equals(name) ||
-			// ctrl.historyName.equals(name))
-			// continue;
-
-			String[] filenamepart = StringUtils.split(filename, ']');
-			// System.out.format("%s%n", ArrayUtils.toString(filenamepart));
-			int partCount = filenamepart.length;
-			String studio = "", opus = "", title = "NoTitle", actress = "UnKnown", date = "";
-			switch (partCount) {
-			case 5:
-				date = removeUnnecessaryCharacter(filenamepart[4]);
-			case 4:
-				actress = removeUnnecessaryCharacter(filenamepart[3]);
-			case 3:
-				title = removeUnnecessaryCharacter(filenamepart[2]);
-			case 2:
-				opus = removeUnnecessaryCharacter(filenamepart[1]);
-				String[] opuspart = StringUtils.splitByCharacterType(opus);
-				if (opuspart != null && opuspart.length == 2) {
-					opus = opuspart[0].toUpperCase() + "-" + opuspart[1];
-				}
-				studio = removeUnnecessaryCharacter(filenamepart[0]);
-				classified = 0;
-				break;
-			case 1:
-				classified = 1;
-				break;
-			default:
-				classified = 2;
-				break;
-			}
-			studio = "IDEAPOCKET".equals(studio) ? "IdeaPocket" : studio;
-			if (title.startsWith("20")) {
-				date = title.substring(0, 10);
-				title = title.substring(10);
-			}
-			title = title.replaceAll(opus, "").trim();
-			String uniqueName = "Unknown";
-			if (title.startsWith(uniqueName)) {
-				title = title.replaceAll(uniqueName, "").trim();
-				actress = uniqueName;
-			}
-			if (classified == 0) {
-				System.out.format("정리됨 : %s -> [%s][%s][%s][%s][%s].%s%n", name, studio, opus, title, actress, extname, date);
-				String newName = MessageFormat.format("[{0}][{1}][{2}][{3}][{5}].{4}", studio, opus, title, actress, extname, date);
-				try {
-					if (!name.equals(newName)) {
-						FileUtils.moveFile(file, new File(path, newName));
-						System.out.format("    move : %s -> %s%n", name, newName);
-					}
-				} catch (IOException e) {
-					System.out.format("Error : %s%n", e.getMessage());
-				}
-			} else if (classified == 1) {
-				System.out.format("정리안됨 : %s -> move to %s%n", file.getAbsoluteFile(), unclassifiedPath);
-				try {
-					FileUtils.moveFileToDirectory(file, new File(unclassifiedPath), true);
-				} catch (IOException e) {
-					System.out.format("Error : %s%n", e.getMessage());
-				}
-			} else if (classified == 2) {
-				System.out.format("인자가 많음 : %s%n", file.getAbsolutePath());
-			} else {
-				System.out.format("이건 뭥미 : %s%n", file.getAbsolutePath());
-			}
-		}
-	}
-
-	/**
 	 * 비디오 현재 폴더에서 릴리즈 날자를 기준으로 yyyy-mm 형식의 하위 폴더를 만든다.
 	 * @param video
 	 * @return 생성된 폴더 위치
@@ -373,7 +236,7 @@ public class VideoUtils {
 	 * @param title
 	 * @return
 	 */
-	public static String getOpusInTitle(String title) {
+	public static String findOpusInTitle(String title) {
 		String[] split = StringUtils.split(title, "]", 6);
 		if (split == null || split.length < 2)
 			return "";
@@ -386,18 +249,6 @@ public class VideoUtils {
 	 * @return
 	 */
 	public static String trimBlank(String text) {
-//		String str = "";
-//		boolean pass = false;
-//		for (int i = 0; i < text.length(); i++) {
-//			char ch = text.charAt(i);
-//			int chInt = (int)ch;
-//			if (chInt == 32 || chInt == 160) {
-//			}
-//			else {
-//				str += Character.toString(ch);
-//			}
-//		}
-//		return str;
 		return trimWhitespace(text).replaceAll("(^\\p{Z}+|\\p{Z}+$)", "");
 	}
 
@@ -433,12 +284,12 @@ public class VideoUtils {
 			for (String name : array) {
 				actress += StringUtils.capitalize(name.toLowerCase()) + " ";
 			}
-			actress = VideoUtils.trimBlank(actress);
+			actress = trimBlank(actress);
 		}
 		return actress;
 	}
 
-	public static Object getTagNames(List<VTag> tags) {
+	public static String getTagNames(List<VTag> tags) {
 		StringBuilder names = new StringBuilder();
 		for (VTag tag : tags) {
 			names.append(tag.getName()).append(" ");

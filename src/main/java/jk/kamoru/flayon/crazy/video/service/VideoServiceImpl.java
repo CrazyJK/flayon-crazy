@@ -1349,9 +1349,9 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	public void saveCover(List<String> titles) {
 		log.info("saveCover at {} size={}", COVER_PATH, titles.size());
 
-		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<String, CompletableFuture<File>>();
+		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<>();
 		for (String title : titles) {
-			String opus = VideoUtils.getOpusInTitle(title);
+			String opus = VideoUtils.findOpusInTitle(title);
 			
 			// check opus text
 			if (StringUtils.isBlank(opus)) {

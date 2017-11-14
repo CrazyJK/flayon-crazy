@@ -13,31 +13,35 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CoverUtils {
+public class ImageUtils {
 
-	public static byte[] getCoverWithTitle(File coverFile, String title) {
+	public static byte[] mergeTextToImage(String text, File image) {
+		return mergeTextToImage(image, text, "나눔고딕코딩", 32);
+	}
+	
+	public static byte[] mergeTextToImage(File image, final String TEXT, final String FONTNAME, final int FONTSIZE) {
 		
 		BufferedImage bi = null;
 		try {
-			bi = ImageIO.read(coverFile);
+			bi = ImageIO.read(image);
 		} catch (IOException e) {
-			log.error("ImageIO.read Error", e);
+			throw new CrazyException("ImageIO.read Error", e);
 		}
-		int imgWidth = bi.getWidth();
+		int imgWidth  = bi.getWidth();
 		int imgHeight = bi.getHeight();
-
 		log.debug("loadedImage width : {}, height : {}", imgWidth, imgHeight);
 
 		Graphics2D g2 = bi.createGraphics();
 
-		Font font = new Font("나눔고딕코딩", Font.PLAIN, 32);
 		// 가운데 정렬하기 위해, text의 width구하기
 		FontRenderContext frc = new FontRenderContext(null, true, true);
-		Rectangle2D r2 = font.getStringBounds(title, frc);
-		int textWidth = (int) r2.getWidth();
+		Font font = new Font(FONTNAME, Font.PLAIN, FONTSIZE);
+		Rectangle2D r2 = font.getStringBounds(TEXT, frc);
+		int textWidth  = (int) r2.getWidth();
 		int textHeight = (int) r2.getHeight();
 		log.debug("Text width : {}, height : {}", textWidth, textHeight);
 		
@@ -46,7 +50,6 @@ public class CoverUtils {
 		int paddingleft = (textBound - textWidth) / 2;
 		if (paddingleft < 0)
 			paddingleft = 0;
-
 		log.debug("paddingleft : " + paddingleft);
 
 		// 라운드 사각형 채우기
@@ -61,17 +64,17 @@ public class CoverUtils {
 		g2.setColor(Color.BLACK);
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_LCD_CONTRAST, new Integer(140));
-		g2.drawString(title, paddingleft, rectY + textHeight);
+		g2.drawString(TEXT, paddingleft, rectY + textHeight);
 
 		g2.dispose();
-
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		ImageIO.setUseCache(false);
+		
 		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			ImageIO.setUseCache(false);
 			ImageIO.write(bi, "jpg", outputStream);
+			return outputStream.toByteArray();
 		} catch (IOException e) {
-			log.error("ImageIO.write Error", e);
+			throw new CrazyException("ImageIO.write Error", e);
 		}
-		return outputStream.toByteArray();
 	}
 }

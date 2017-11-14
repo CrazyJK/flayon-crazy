@@ -6,9 +6,11 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
@@ -1035,34 +1037,36 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 
 	public void rename(String newName) {
 		logger.debug("rename {} -> {}", getFullname(), newName);
-		int count = 1;
+
 		// video
 		List<File> videoFileList = new ArrayList<>();
 		int videoCount = getVideoFileList().size();
-		for (File file : VideoUtils.sortFile(getVideoFileList())) {
-			if (videoCount == 1) {
-				videoFileList.add(CrazyUtils.renameFile(file, newName));
-			}
-			else {
+		if (videoCount == 1) {
+			File file = getVideoFileList().get(0);
+			videoFileList.add(CrazyUtils.renameFile(file, newName));
+		}
+		else if (videoCount > 1) {
+			int count = 1;
+			for (File file : sortedFile(getVideoFileList())) {
 				videoFileList.add(CrazyUtils.renameFile(file, newName + count++));
 			}
 		}
 		setVideoFileList(videoFileList);
-		
+
 		// cover
-		
 		if (coverFile != null && coverFile.exists())
 			setCoverFile(CrazyUtils.renameFile(coverFile, newName));
 
 		// subtitles, if exist
-		count = 1;
 		List<File> subtitlesFileList = new ArrayList<>();
 		int subtitlesCount = getSubtitlesFileList().size();
-		for (File file : VideoUtils.sortFile(getSubtitlesFileList())) {
-			if (subtitlesCount == 1) {
-				subtitlesFileList.add(CrazyUtils.renameFile(file, newName));
-			}
-			else {
+		if (subtitlesCount == 1) {
+			File file = getSubtitlesFileList().get(0);
+			subtitlesFileList.add(CrazyUtils.renameFile(file, newName));
+		}
+		else if (subtitlesCount > 1) {
+			int count = 1;
+			for (File file : sortedFile(getSubtitlesFileList())) {
 				subtitlesFileList.add(CrazyUtils.renameFile(file, newName + count++));
 			}
 		}
@@ -1074,12 +1078,17 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			
 		// etc file
 		List<File> etcFileList = new ArrayList<>();
-		for (File file : this.getEtcFileList()) {
+		for (File file : getEtcFileList()) {
 			etcFileList.add(CrazyUtils.renameFile(file, newName));
 		}
 		setEtcFileList(etcFileList);
 	}
 
+	private List<File> sortedFile(List<File> files) {
+		return files.stream()
+				.sorted(Comparator.comparing(File::getName)).collect(Collectors.toList());
+	}
+	
 	public void renameOfActress(String oldName, String newName) {
 		String actressNames = this.getActressName().replace(oldName, newName);
 		String newVideoName = String.format("[%s][%s][%s][%s][%s]", studio.getName(), opus, title, actressNames, StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate);
