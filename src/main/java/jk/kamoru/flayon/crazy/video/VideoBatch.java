@@ -21,12 +21,12 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.util.ZipUtils;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
-import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
-import jk.kamoru.flayon.crazy.video.util.ZipUtils;
+import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
 
 @Component
 public class VideoBatch extends CrazyProperties {

@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.util;
+package jk.kamoru.flayon.crazy.video.service;
 
 import java.net.URL;
 import java.util.ArrayList;

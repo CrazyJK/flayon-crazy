@@ -24,10 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
  * AV Bean class<br>
@@ -469,7 +469,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public String getVideoFileListPath() {
-		if(isExistVideoFileList()) 
+		if (isExistVideoFileList()) 
 			return CrazyUtils.toStringComma(getVideoFileList()); 
 		return "";
 	}
@@ -480,9 +480,9 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public String[] getVideoFileListPathArray() {
-		if(isExistVideoFileList()) {
+		if (isExistVideoFileList()) {
 			String[] filePathes = new String[getVideoFileList().size()];
-			for(int i=0; i<filePathes.length; i++)
+			for (int i = 0; i < filePathes.length; i++)
 				filePathes[i] = getVideoFileList().get(i).getAbsolutePath();
 			return filePathes;
 		}

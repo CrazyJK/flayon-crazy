@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,10 +35,12 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.util.CommandExecutor;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.dao.VideoDao;
@@ -55,10 +56,8 @@ import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
-import jk.kamoru.flayon.crazy.video.service.queue.NotiQueue;
+import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
 import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
-import jk.kamoru.flayon.crazy.video.util.TistoryRSSReader;
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -80,6 +79,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Autowired HistoryService historyService;
 	@Autowired WebFileLookupService arzonLookupService;
 	@Autowired WebFileLookupService sukebeiNyaaLookupService;
+	@Autowired CommandExecutor commandExecutor;
 
 	private void fillTorrentInfo(List<Video> list) {
 		List<Video> allInstanceList = list.stream().filter(v -> !v.isArchive()).collect(Collectors.toList());
@@ -238,31 +238,32 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		callExecutiveCommand(getVideo(opus), Action.SUBTITLES);
 	}
 
-	/**call executive command by action. asynchronous
+	/**
+	 * call executive command by action. asynchronous
 	 * @param video
-	 * @param action PLAY, SUBTITLES in {@link Action}
+	 * @param action {@link Action#PLAY PLAY}, {@link Action#SUBTITLES SUBTITLES}
+	 * @see {@link Action}
 	 */
-	@Async
 	private void callExecutiveCommand(Video video, Action action) {
-		log.debug("{} : {}", video.getOpus(), action);
+		log.info("{} : {}", video.getOpus(), action);
 		String command = null;
-		String[] argumentsArray = null;
+		String[] arguments = null;
 		switch(action) {
-			case PLAY:
-				command = PLAYER;
-				argumentsArray = video.getVideoFileListPathArray();
-				break;
-			case SUBTITLES:
-				command = EDITOR;
-				argumentsArray = video.getSubtitlesFileListPathArray();
-				break;
-			default:
-				throw new VideoException(video, "Unknown Action");
+		case PLAY:
+			command = PLAYER;
+			arguments = video.getVideoFileListPathArray();
+			break;
+		case SUBTITLES:
+			command = EDITOR;
+			arguments = video.getSubtitlesFileListPathArray();
+			break;
+		default:
+			throw new VideoException(video, "Unknown Action");
 		}
-		if(argumentsArray == null)
+		if (arguments == null)
 			throw new VideoException(video, "No arguments for " + action);
 		
-		CrazyUtils.exec(ArrayUtils.addAll(new String[]{command}, argumentsArray));
+		commandExecutor.exec(command, arguments);
 		
 		NotiQueue.pushNoti(action.toString() + " " + video.getOpus());
 	}

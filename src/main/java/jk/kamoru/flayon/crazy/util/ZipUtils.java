@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.util;
+package jk.kamoru.flayon.crazy.util;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

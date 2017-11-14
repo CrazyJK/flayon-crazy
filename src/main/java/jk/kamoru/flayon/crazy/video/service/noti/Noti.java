@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.service.queue;
+package jk.kamoru.flayon.crazy.video.service.noti;
 
 import lombok.Data;
 

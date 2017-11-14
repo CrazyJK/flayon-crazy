@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 
 @SuppressWarnings("unused")
 public class Lambda {

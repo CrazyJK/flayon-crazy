@@ -21,16 +21,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.domain.Video;
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 	
 
 /**

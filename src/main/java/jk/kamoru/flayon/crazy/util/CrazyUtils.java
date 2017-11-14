@@ -1,4 +1,7 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.crazy.util;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +13,6 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
-
-import static java.nio.file.StandardOpenOption.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,18 +174,6 @@ public class CrazyUtils extends jk.kamoru.flayon.base.BaseUtils {
 	 */
 	public static File getRootDirectory(File file) {
 		return file.toPath().getRoot().toFile();
-	}
-
-	/**
-	 * 외부 프로그램 실행
-	 * @param command
-	 */
-	public static void exec(String[] command) {
-		try {
-			Runtime.getRuntime().exec(command);
-		} catch (IOException e) {
-			throw new CrazyException("execute error", e);
-		}
 	}
 
 	/**

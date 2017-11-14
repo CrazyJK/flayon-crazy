@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.CrazyUtils;
 import jk.kamoru.flayon.crazy.error.CrazyException;
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import lombok.Data;
 
 @Data

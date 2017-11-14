@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.CoverUtils;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
@@ -35,8 +37,6 @@ import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.TagService;
-import jk.kamoru.flayon.crazy.video.util.CoverUtils;
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
 
 /**
  * Video controller

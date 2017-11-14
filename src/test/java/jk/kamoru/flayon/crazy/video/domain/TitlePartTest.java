@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import jk.kamoru.flayon.crazy.video.util.VideoUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 
 public class TitlePartTest {
 

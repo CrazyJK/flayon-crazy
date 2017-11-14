@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.util;
+package jk.kamoru.flayon.crazy.util;
 
 import java.awt.Color;
 import java.awt.Font;
