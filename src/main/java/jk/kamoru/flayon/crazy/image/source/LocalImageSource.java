@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,9 @@ import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
  */
 @Repository
 @Slf4j
-public class LocalImageSource extends CrazyProperties implements ImageSource {
+public class LocalImageSource implements ImageSource {
+
+	@Autowired CrazyProperties crazyProperties;
 
 	private List<Image> imageList;
 	
@@ -42,7 +45,7 @@ public class LocalImageSource extends CrazyProperties implements ImageSource {
 			imageList = new ArrayList<>();
 		imageList.clear();
 
-		for (String path : this.IMAGE_PATHS) {
+		for (String path : crazyProperties.getIMAGE_PATHS()) {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
 				log.info("Image scanning ... {}", dir);

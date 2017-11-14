@@ -1,7 +1,6 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.File;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Slf4j
-public class Studio extends CrazyProperties implements Serializable, Comparable<Studio> {
+public class Studio {
 
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
+	@Autowired CrazyProperties crazyProperties;
 
 	private static final String NEWNAME = "NEWNAME";
 	private static final String HOMEPAGE = "HOMEPAGE";
@@ -96,24 +96,6 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 		return company;
 	}
 
-	@Override
-	public int compareTo(Studio comp) {
-		switch (sort) {
-		case NAME:
-			return CrazyUtils.compareTo(this.getName(), comp.getName());
-		case HOMEPAGE:
-			return CrazyUtils.compareTo(this.getHomepage(), comp.getHomepage());
-		case COMPANY:
-			return CrazyUtils.compareTo(this.getCompany(), comp.getCompany());
-		case VIDEO:
-			return CrazyUtils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
-		case SCORE:
-			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
-		default:
-			return CrazyUtils.compareTo(this.getName(), comp.getName());
-		}
-	}
-
 	private void loadInfo() {
 		if (!loaded) {
 			if (log.isDebugEnabled())
@@ -154,11 +136,11 @@ public class Studio extends CrazyProperties implements Serializable, Comparable<
 	}
 
 	private File getInfoFile() {
-		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	public String saveInfo(Map<String, String> params) {

@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.crazy.video.domain.Actress;
+import jk.kamoru.flayon.crazy.video.domain.ActressSort;
+import jk.kamoru.flayon.crazy.video.domain.Sort;
+import jk.kamoru.flayon.crazy.video.domain.Studio;
+import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
@@ -296,5 +301,90 @@ public class VideoUtils {
 		}
 		return names.toString();
 	}
-	
+
+	public static int compareActress(Actress a1, Actress a2, ActressSort sort, boolean reverse) {
+		int result = 0;
+		switch (sort) {
+		case NAME:
+			result = CrazyUtils.compareTo(a1.getName(), a2.getName());
+		case BIRTH:
+			result = CrazyUtils.compareTo(a1.getBirth(), a2.getBirth());
+		case BODY:
+			result = CrazyUtils.compareTo(a1.getBodySize(), a2.getBodySize());
+		case HEIGHT:
+			result = CrazyUtils.compareTo(a1.getHeight(), a2.getHeight());
+		case DEBUT:
+			result = CrazyUtils.compareTo(a1.getDebut(), a2.getDebut());
+		case VIDEO:
+			result = CrazyUtils.compareTo(a1.getVideoList().size(), a2.getVideoList().size());
+		case SCORE:
+			result = CrazyUtils.compareTo(a1.getScore(), a2.getScore());
+		case FAVORITE:
+			result = CrazyUtils.compareTo(a1.getFavorite(), a2.getFavorite());
+		default:
+			result = CrazyUtils.compareTo(a1.getName(), a2.getName());
+		}
+		return result * (reverse ? -1 : 1); 
+	}
+
+	public static int compareVideo(Video v1, Video v2, Sort sort, boolean reverse) {
+		int result = 0;
+		switch(sort) {
+		case S:
+			result = CrazyUtils.compareTo(v1.getStudio().getName(), v2.getStudio().getName());
+		case O:
+			result = CrazyUtils.compareTo(v1.getOpus(), v2.getOpus());
+		case T:
+			result = CrazyUtils.compareTo(v1.getTitle(), v2.getTitle());
+		case A:
+			result = CrazyUtils.compareTo(v1.getActressName(), v2.getActressName());
+		case D:
+			result = CrazyUtils.compareTo(v1.getReleaseDate(), v2.getReleaseDate());
+		case M:
+			result = CrazyUtils.compareTo(v1.getDelegateFile().lastModified(), v2.getDelegateFile().lastModified());
+		case P:
+			result = CrazyUtils.compareTo(v1.getPlayCount(), v2.getPlayCount());
+		case R:
+			result = CrazyUtils.compareTo(v1.getRank(), v2.getRank());
+		case L:
+			result = CrazyUtils.compareTo(v1.getLength(), v2.getLength());
+		case SC:
+			result = CrazyUtils.compareTo(v1.getScore(), v2.getScore());
+		case VC:
+			if (v1.getVideoCandidates().size() > 0) {
+				if (v2.getVideoCandidates().size() == 0) {
+					result = -1;
+				}
+			}
+			else {
+				if (v2.getVideoCandidates().size() > 0) {
+					result = 1;
+				}
+			}
+			result = CrazyUtils.compareTo(v1.getStudio().getName(), v2.getStudio().getName());
+		default:
+			result = CrazyUtils.compareTo(v1, v2);
+		}
+		return result * (reverse ? -1 : 1);
+	}
+
+	public static int compareStudio(Studio s1, Studio s2, StudioSort sort, boolean reverse) {
+		int result = 0;
+		switch (sort) {
+		case NAME:
+			result = CrazyUtils.compareTo(s1.getName(), s2.getName());
+		case HOMEPAGE:
+			result = CrazyUtils.compareTo(s1.getHomepage(), s2.getHomepage());
+		case COMPANY:
+			result = CrazyUtils.compareTo(s1.getCompany(), s2.getCompany());
+		case VIDEO:
+			result = CrazyUtils.compareTo(s1.getVideoList().size(), s2.getVideoList().size());
+		case SCORE:
+			result = CrazyUtils.compareTo(s1.getScore(), s2.getScore());
+		default:
+			result = CrazyUtils.compareTo(s1.getName(), s2.getName());
+		}
+		return result * (reverse ? -1 : 1);
+	}
+
 }

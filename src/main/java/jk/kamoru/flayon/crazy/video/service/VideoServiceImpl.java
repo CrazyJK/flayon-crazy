@@ -24,6 +24,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class VideoServiceImpl extends CrazyProperties implements VideoService {
+public class VideoServiceImpl implements VideoService {
 
 
 	/** minimum free space of disk */
@@ -74,6 +76,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	/** sleep time of moving video */
 	private final long SLEEP_TIME = 5 * 1000;
 	
+	@Autowired CrazyProperties crazyProperties;
 	@Autowired VideoDao videoDao;
 	@Autowired TagDao tagDao;
 	@Autowired HistoryService historyService;
@@ -81,6 +84,43 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 	@Autowired WebFileLookupService sukebeiNyaaLookupService;
 	@Autowired CommandExecutor commandExecutor;
 
+	private String[] CANDIDATE_PATHS;
+	private String TORRENT_PATH;
+	private String PLAYER;
+	private String EDITOR;
+	private String STORAGE_PATH;
+	private String ARCHIVE_PATH;
+	private int MIN_RANK;
+	private int MAX_RANK;
+	private long MAX_ENTIRE_VIDEO;
+	private int BASE_RANK;
+	private String[] STAGE_PATHS;
+	private String COVER_PATH;
+	private String[] REPLACE_OPUS_INFO;
+	private String NO_PARSE_OPUS_PREFIX;
+	private String urlRSS;
+	private String SEED_PATH;
+	
+	@PostConstruct
+	public void post() {
+		CANDIDATE_PATHS 	= crazyProperties.getCANDIDATE_PATHS();
+		TORRENT_PATH 		= crazyProperties.getTORRENT_PATH();
+		PLAYER 				= crazyProperties.getPLAYER();
+		EDITOR 				= crazyProperties.getEDITOR();
+		STORAGE_PATH 		= crazyProperties.getSTORAGE_PATH();
+		ARCHIVE_PATH 		= crazyProperties.getARCHIVE_PATH();
+		MIN_RANK 			= crazyProperties.getMIN_RANK();
+		MAX_RANK 			= crazyProperties.getMAX_RANK();
+		MAX_ENTIRE_VIDEO 	= crazyProperties.getMAX_ENTIRE_VIDEO();
+		BASE_RANK 			= crazyProperties.getBASE_RANK();
+		STAGE_PATHS 		= crazyProperties.getSTAGE_PATHS();
+		COVER_PATH 			= crazyProperties.getCOVER_PATH();
+		REPLACE_OPUS_INFO 	= crazyProperties.getREPLACE_OPUS_INFO();
+		NO_PARSE_OPUS_PREFIX = crazyProperties.getNO_PARSE_OPUS_PREFIX();
+		urlRSS 				= crazyProperties.getUrlRSS();
+		SEED_PATH 			= crazyProperties.getSEED_PATH();
+	}
+	
 	private void fillTorrentInfo(List<Video> list) {
 		List<Video> allInstanceList = list.stream().filter(v -> !v.isArchive()).collect(Collectors.toList());
 		List<Video> nonExistVideoList = allInstanceList.stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
@@ -158,15 +198,13 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			list.addAll(videoDao.getVideoList(false, archive).stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
 		if (withTorrent)
 			fillTorrentInfo(list);
+		return sortVideo(list, sort, reverse);
+	}
+	
+	private List<Video> sortVideo(List<Video> list, Sort sort, boolean reverse) {
 		if (sort == null)
 			return list;
-		else {
-			for (Video video : list) 
-				video.setSortMethod(sort);
-			return list.stream()
-					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-					.collect(Collectors.toList());
-		}
+		return list.stream().sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, sort, reverse)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -186,17 +224,15 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			list.addAll(videoDao.getActressList(instance, false));
 		if (archive)
 			list.addAll(videoDao.getActressList(false, archive).stream().filter(a -> !list.contains(a)).collect(Collectors.toList()));
-		if (sort == null)
-			return list;
-		else {
-			for (Actress actress : list)
-				actress.setSort(sort);
-			return list.stream()
-					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-					.collect(Collectors.toList());
-		}
+		return sortActress(list, sort, reverse);
 	}
 
+	private List<Actress> sortActress(List<Actress> list, ActressSort sort, boolean reverse) {
+		if (sort == null)
+			return list;
+		return list.stream().sorted((a1, a2) -> VideoUtils.compareActress(a1, a2, sort, reverse)).collect(Collectors.toList());
+	}
+	
 	@Override
 	public List<Studio> getStudioList() {
 		return getStudioList(true, false, null, false);
@@ -214,17 +250,15 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			list.addAll(videoDao.getStudioList(instance, false));
 		if (archive)
 			list.addAll(videoDao.getStudioList(false, archive).stream().filter(s -> !list.contains(s)).collect(Collectors.toList()));
-		if (sort == null)
-			return list;
-		else {
-			for (Studio studio : list)
-				studio.setSort(sort);
-			return list.stream()
-					.sorted(reverse ? Comparator.reverseOrder() : Comparator.naturalOrder())
-					.collect(Collectors.toList());
-		}
+		return sortStudio(list, sort, reverse);
 	}
 
+	private List<Studio> sortStudio(List<Studio> list, StudioSort sort, boolean reverse) {
+		if (sort == null)
+			return list;
+		return list.stream().sorted((s1, s2) -> VideoUtils.compareStudio(s1, s2, sort, reverse)).collect(Collectors.toList());
+	}
+	
 	@Override
 	public void removeVideo(String opus) {
 		log.debug(opus);
@@ -371,11 +405,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 					list.add(actress);
 			}
 		}
-		Collections.sort(list);
 
 		if (log.isDebugEnabled())
 			log.debug("getActressListInVideoList found studio size {}", list.size());
-		return list;
+		return sortActress(list, ActressSort.NAME, false);
 	}
 
 	@Override
@@ -395,11 +428,10 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 			if (!list.contains(studio))
 				list.add(studio);
 		}
-		Collections.sort(list);
 		
 		if (log.isDebugEnabled())
 			log.debug("found studio list size {}", list.size());
-		return list;
+		return sortStudio(list, StudioSort.NAME, false);
 	}
 
 	@Override
@@ -474,7 +506,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 		return videoDao.getVideoList(true, false).stream()
 				.filter(v -> v.match(search))
-				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
+				.sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, search.getSortMethod(), search.isSortReverse()))
 				.collect(Collectors.toList());
 /*		
 		return videoDao.getVideoList().stream()
@@ -1154,7 +1186,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		
 		return videoDao.getVideoList(false, true).stream()
 				.filter(v -> v.matchArchive(search))
-				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
+				.sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, search.getSortMethod(), search.isSortReverse()))
 				.collect(Collectors.toList());
 
 /*		

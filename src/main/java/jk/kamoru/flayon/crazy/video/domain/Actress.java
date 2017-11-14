@@ -1,7 +1,6 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.File;
-import java.io.Serializable;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(exclude={"studioList", "videoList"}, callSuper=false)
 @Data
 @Slf4j
-public class Actress extends CrazyProperties implements Serializable, Comparable<Actress> {
+public class Actress {
 
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
+	@Autowired CrazyProperties crazyProperties;
+	
 	private static final String NEWNAME = "NEWNAME";
 	private static final String FAVORITE = "FAVORITE";
 	private static final String LOCALNAME = "LOCALNAME";
@@ -43,39 +43,23 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	private static final String COMMENT = "COMMENT";
 	
 	private String name;
-	@JsonIgnore
-	private String localName;
-	@JsonIgnore
-	private String birth;
-	@JsonIgnore
-	private String bodySize;
-	@JsonIgnore
-	private String debut;
-	@JsonIgnore
-	private String height;
-	@JsonIgnore
-	private String age;
-	@JsonIgnore
-	private String comment;
 	private Boolean favorite;
+	@JsonIgnore private String localName;
+	@JsonIgnore private String birth;
+	@JsonIgnore private String bodySize;
+	@JsonIgnore private String debut;
+	@JsonIgnore private String height;
+	@JsonIgnore private String age;
+	@JsonIgnore private String comment;
 	
-	@JsonIgnore
-	private File image;
+	@JsonIgnore private File image;
 	
-	@JsonIgnore
-	private List<Studio> studioList;
-	@JsonIgnore
-	private List<Video>   videoList;
-	@JsonIgnore
-	private Map<String, String> info;
-	/**
-	 * is loaded actress infomation
-	 */
-	@JsonIgnore
-	private boolean loaded;
-	
-	@JsonIgnore
-	private ActressSort sort = ActressSort.NAME;
+	@JsonIgnore private List<Studio> studioList;
+	@JsonIgnore private List<Video>   videoList;
+	@JsonIgnore private Map<String, String> info;
+
+	/** is loaded actress infomation */
+	@JsonIgnore private boolean loaded;
 
 	public Actress() {
 		name = "";
@@ -104,30 +88,6 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 	public String toString() {
 		return String.format("%s%s %s %s %s %s %ss %sv",
 						name, StringUtils.isEmpty(localName) ? "" : "("+localName+")", birth, bodySize, debut, StringUtils.isEmpty(height) ? "" : height + "cm", getScore(), videoList.size());
-	}
-
-	@Override
-	public int compareTo(Actress comp) {
-		switch (sort) {
-		case NAME:
-			return CrazyUtils.compareTo(this.getName(), comp.getName());
-		case BIRTH:
-			return CrazyUtils.compareTo(this.getBirth(), comp.getBirth());
-		case BODY:
-			return CrazyUtils.compareTo(this.getBodySize(), comp.getBodySize());
-		case HEIGHT:
-			return CrazyUtils.compareTo(this.getHeight(), comp.getHeight());
-		case DEBUT:
-			return CrazyUtils.compareTo(this.getDebut(), comp.getDebut());
-		case VIDEO:
-			return CrazyUtils.compareTo(this.getVideoList().size(), comp.getVideoList().size());
-		case SCORE:
-			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
-		case FAVORITE:
-			return CrazyUtils.compareTo(this.getFavorite(), comp.getFavorite());
-		default:
-			return CrazyUtils.compareTo(this.getName(), comp.getName());
-		}
 	}
 	
 	public boolean contains(String actressName) {
@@ -274,14 +234,14 @@ public class Actress extends CrazyProperties implements Serializable, Comparable
 
 	private File getInfoFile() {
 		try {
-			return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+			return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 		} catch (NullPointerException e) {
 			throw new CrazyException("Why name=[" + name + "]", e);
 		}
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(STORAGE_PATH, "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 	}
 	
 	/**

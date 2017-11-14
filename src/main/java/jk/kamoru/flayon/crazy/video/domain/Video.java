@@ -2,7 +2,6 @@ package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -40,14 +40,12 @@ import jk.kamoru.flayon.crazy.video.VIDEO;
  */
 @Component
 @Scope("prototype")
-public class Video extends CrazyProperties implements Comparable<Video>, Serializable {
-
-	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
+public class Video {
 
 	private static final Logger logger = LoggerFactory.getLogger(Video.class);
 	
-	private Sort sortMethod = VIDEO.DEFAULT_SORTMETHOD;
-	
+	@Autowired CrazyProperties crazyProperties;
+
 	// files
 	private List<File> videoFileList;
 	private List<File> subtitlesFileList;
@@ -130,46 +128,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		}
 
 	}
-
-	@Override
-	public int compareTo(Video comp) {
-		switch(sortMethod) {
-		case S:
-			return CrazyUtils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
-		case O:
-			return CrazyUtils.compareTo(this.getOpus(), comp.getOpus());
-		case T:
-			return CrazyUtils.compareTo(this.getTitle(), comp.getTitle());
-		case A:
-			return CrazyUtils.compareTo(this.getActressName(), comp.getActressName());
-		case D:
-			return CrazyUtils.compareTo(this.getReleaseDate(), comp.getReleaseDate());
-		case M:
-			return CrazyUtils.compareTo(this.getDelegateFile().lastModified(), comp.getDelegateFile().lastModified());
-		case P:
-			return CrazyUtils.compareTo(this.getPlayCount(), comp.getPlayCount());
-		case R:
-			return CrazyUtils.compareTo(this.getRank(), comp.getRank());
-		case L:
-			return CrazyUtils.compareTo(this.getLength(), comp.getLength());
-		case SC:
-			return CrazyUtils.compareTo(this.getScore(), comp.getScore());
-		case VC:
-			if (this.videoCandidates.size() > 0) {
-				if (comp.videoCandidates.size() == 0) {
-					return -1;
-				}
-			}
-			else {
-				if (comp.videoCandidates.size() > 0) {
-					return 1;
-				}
-			}
-			return CrazyUtils.compareTo(this.getStudio().getName(), comp.getStudio().getName());
-		default:
-			return CrazyUtils.compareTo(this, comp);
-		}
-	}
 	
 	/**
 	 * actress 이름이 있는지 확인. 
@@ -240,7 +198,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * video 대표 파일
 	 * @return 대표 파일
 	 */
-	private File getDelegateFile() {
+	public File getDelegateFile() {
 		if (this.isExistVideoFileList()) 
 			return this.getVideoFileList().get(0);
 		else if (this.isExistCoverFile()) 
@@ -676,7 +634,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				else
 					logger.error("delete fail : {}", file.getAbsolutePath());
 		// the others move
-		File archiveDir = new File(ARCHIVE_PATH);
+		File archiveDir = new File(crazyProperties.getARCHIVE_PATH());
 		for (File file : getFileWithoutVideo())
 			if (file != null)
 				try {
@@ -843,15 +801,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 
 	/**
-	 * sort method. 정렬 방식 
-	 * @param sortMethod
-	 */
-	public Video setSortMethod(Sort sortMethod) {
-		this.sortMethod = sortMethod;
-		return this;
-	}
-
-	/**
 	 * studio
 	 * @param studio
 	 */
@@ -945,16 +894,17 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	@JsonIgnore
 	public String getScoreDesc() {
 		return String.format("Rank[%s]*%s + Play[%s]*%s/10 + Actress[%s]*%s/10 + Subtitles[%s]*%s = %s", 
-				getRank(), RANK_RATIO,
-				getPlayCount(), PLAY_RATIO,
-				getActressScoreDesc(), ACTRESS_RATIO,
-				isExistSubtitlesFileList() ? 1 : 0, SUBTITLES_RATIO,
+				getRank(), crazyProperties.getRANK_RATIO(),
+				getPlayCount(), crazyProperties.getPLAY_RATIO(),
+				getActressScoreDesc(), crazyProperties.getACTRESS_RATIO(),
+				isExistSubtitlesFileList() ? 1 : 0, crazyProperties.getSUBTITLES_RATIO(),
 				getScore());
 	}
 	
 	@JsonIgnore
 	public String getScoreRatio() {
-		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", RANK_RATIO, PLAY_RATIO, ACTRESS_RATIO, SUBTITLES_RATIO);
+		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", 
+				crazyProperties.getRANK_RATIO(), crazyProperties.getPLAY_RATIO(), crazyProperties.getACTRESS_RATIO(), crazyProperties.getSUBTITLES_RATIO());
 	}
 	
 	/**환산된 랭킹 점수
@@ -962,7 +912,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public int getRankScore() {
-		return getRank() * RANK_RATIO;
+		return getRank() * crazyProperties.getRANK_RATIO();
 	}
 
 	/**환산된 플레이 점수
@@ -970,7 +920,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public int getPlayScore() {
-		return Math.round(getPlayCount() * PLAY_RATIO / 10);
+		return Math.round(getPlayCount() * crazyProperties.getPLAY_RATIO() / 10);
 	}
 
 	/**환산된 배우 점수
@@ -982,7 +932,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		for (Actress actress : getActressList()) {
 			if (StringUtils.isBlank(actress.getName()) || actress.getName().equals(TitlePart.AMATEUR))
 				continue;
-			actressVideoScore += Math.round(actress.getVideoList().size() * ACTRESS_RATIO / 10);
+			actressVideoScore += Math.round(actress.getVideoList().size() * crazyProperties.getACTRESS_RATIO() / 10);
 		}
 		return actressVideoScore;
 	}
@@ -1004,7 +954,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	@JsonIgnore
 	public int getSubtitlesScore() {
-		return (isExistSubtitlesFileList() ? 1 : 0) * SUBTITLES_RATIO;
+		return (isExistSubtitlesFileList() ? 1 : 0) * crazyProperties.getSUBTITLES_RATIO();
 	}
 
 	/**비디오 파일 후보 추가
@@ -1217,7 +1167,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			&& matchPlay(search.getPlayCount())
 			&& matchTag(search.getSelectedTag())
 			) {
-			setSortMethod(search.getSortMethod());
 			return true;
 		}
 		return false;
@@ -1229,7 +1178,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			&& matchActressList(search.getSelectedActress())
 			&& matchTag(search.getSelectedTag())
 			) {
-			setSortMethod(search.getSortMethod());
 			return true;
 		}
 		return false;

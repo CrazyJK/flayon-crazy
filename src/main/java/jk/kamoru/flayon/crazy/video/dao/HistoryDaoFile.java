@@ -28,7 +28,7 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 
 @Component
 @Slf4j
-public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
+public class HistoryDaoFile implements HistoryDao {
 
 	/** history file */
 	private File historyFile;
@@ -38,6 +38,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	private static boolean isHistoryLoaded = false;
 
 	@Autowired VideoDao videoDao;
+	@Autowired CrazyProperties crazyProperties;
 
 /*	히스토리 파일이 없으면 안되므로, 생성하지 않는다
 	@PostConstruct
@@ -54,7 +55,7 @@ public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 	
 	private File getHistoryFile() {
 		if(historyFile == null)
-			historyFile = new File(STORAGE_PATH, VIDEO.HISTORY_LOG_FILENAME);
+			historyFile = new File(crazyProperties.getSTORAGE_PATH(), VIDEO.HISTORY_LOG_FILENAME);
 		return historyFile;
 	}
 

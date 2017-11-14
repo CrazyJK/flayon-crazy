@@ -26,8 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
-public class VideoDaoFile extends CrazyProperties implements VideoDao {
-	
+public class VideoDaoFile implements VideoDao {
+
+	@Autowired CrazyProperties crazyProperties;
 	@Autowired private VideoSource instanceVideoSource;
 	@Autowired private VideoSource archiveVideoSource;
 
@@ -179,7 +180,7 @@ public class VideoDaoFile extends CrazyProperties implements VideoDao {
 		} 
 		catch(VideoNotFoundException e) {
 			archiveVideo.setArchive(false);
-			archiveVideo.move(STAGE_PATHS[0]);
+			archiveVideo.move(crazyProperties.getSTAGE_PATHS()[0]);
 			archiveVideo.resetScore();
 			instanceVideoSource.addVideo(archiveVideo);
 			archiveVideoSource.removeElement(archiveVideo.getOpus());

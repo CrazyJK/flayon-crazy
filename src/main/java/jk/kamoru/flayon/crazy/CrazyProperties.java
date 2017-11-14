@@ -2,51 +2,65 @@ package jk.kamoru.flayon.crazy;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import lombok.Getter;
+
+@Getter
 public class CrazyProperties {
 
-    /* Local properties -------------------------------------------------------------------------------------------------------- */
+    /* Local properties --------------------------------------------------------------------------- */
 
-    /** video archive path */                    @Value("${path.video.archive}")         protected String         ARCHIVE_PATH;
-    /** base video path */				         @Value("${path.video.storage}")         protected String         STORAGE_PATH;
-    /** video path of downloaded file */         @Value("${path.video.candidate}")       protected String[]     CANDIDATE_PATHS;
-    /** video Stage path */                      @Value("${path.video.stage}")           protected String[]         STAGE_PATHS;
-    /** video cover path */                      @Value("${path.video.cover}")           protected String           COVER_PATH;
-    /** Torrent seed path */                     @Value("${path.video.seed}")            protected String            SEED_PATH;
-    /** queue path */                            @Value("${path.video.queue}")           protected String           QUEUE_PATH;
+    @Value("${path.video.archive}")         String         ARCHIVE_PATH;
+    @Value("${path.video.storage}")         String         STORAGE_PATH;
+    @Value("${path.video.candidate}")       String[]     CANDIDATE_PATHS;
+    @Value("${path.video.stage}")           String[]         STAGE_PATHS;
+    @Value("${path.video.cover}")           String           COVER_PATH;
+    @Value("${path.video.seed}")            String            SEED_PATH;
+    @Value("${path.video.queue}")           String           QUEUE_PATH;
 
-    /** specific file moving info */             @Value("${path.move.file}")             protected String[]     MOVE_FILE_PATHS;
-    /** managed picture path */                  @Value("${path.sora.pictures}")         protected String[] SORA_PICTURES_PATHS;
-    /** image file path */                       @Value("${path.image.storage}")         protected String[]         IMAGE_PATHS;
-    /** torrent file path */                     @Value("${path.video.torrent}")         protected String         TORRENT_PATH;
-    /** backup path */                           @Value("${path.backup}")                protected String          BACKUP_PATH;
+    @Value("${path.move.file}")             String[]     MOVE_FILE_PATHS;
+    @Value("${path.sora.pictures}")         String[] SORA_PICTURES_PATHS;
+    @Value("${path.image.storage}")         String[]         IMAGE_PATHS;
+    @Value("${path.video.torrent}")         public String         TORRENT_PATH;
+    @Value("${path.backup}")                String          BACKUP_PATH;
 
-    /** video player exec */                     @Value("${app.video-player}")           protected String   PLAYER;
-    /** subtitles editer */                      @Value("${app.subtitles-editor}")       protected String   EDITOR;
+    @Value("${app.video-player}")           String   PLAYER;
+    @Value("${app.subtitles-editor}")       String   EDITOR;
 
-    /* Common Properties ------------------------------------------------------------------------------------------------------- */
+	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] INSTANCE_PATHS;
+    
+    /* Common Properties -------------------------------------------------------------------------- */
+	                                        int  BASE_RANK = 0;
+    @Value("${rank.minimum}")               int   MIN_RANK;
+    @Value("${rank.maximum}")               int   MAX_RANK;
 
-    /** minimum rank */            				 @Value("${rank.minimum}")               protected Integer  MIN_RANK;
-    /** maximum rank */            				 @Value("${rank.maximum}")               protected Integer  MAX_RANK;
-    /** baseline rank */                                                                 protected int     BASE_RANK = 0;
+    @Value("${size.video.storage}")         int      MAX_ENTIRE_VIDEO;
 
-    /** maximum size of entire video */          @Value("${size.video.storage}")         protected int      MAX_ENTIRE_VIDEO;
+    @Value("${parse.to.title.no_opus}")     String   NO_PARSE_OPUS_PREFIX;
+    @Value("${parse.to.title.re_opus}")     String[] REPLACE_OPUS_INFO;
 
-    /** specific opus of non studio */           @Value("${parse.to.title.no_opus}")     protected String   NO_PARSE_OPUS_PREFIX;
-    /** replacement opus */                      @Value("${parse.to.title.re_opus}")     protected String[] REPLACE_OPUS_INFO;
+    @Value("${batch.watched.moveVideo}")    boolean        MOVE_WATCHED_VIDEO;
+    @Value("${batch.rank.deleteVideo}")     boolean   DELETE_LOWER_RANK_VIDEO;
+    @Value("${batch.score.deleteVideo}")    boolean  DELETE_LOWER_SCORE_VIDEO;
 
-    /** option for moving video */               @Value("${batch.watched.moveVideo}")    protected boolean        MOVE_WATCHED_VIDEO;
-    /** option for deleting lower rank vidoe */  @Value("${batch.rank.deleteVideo}")     protected boolean   DELETE_LOWER_RANK_VIDEO;
-    /** option for deleting lower score video */ @Value("${batch.score.deleteVideo}")    protected boolean  DELETE_LOWER_SCORE_VIDEO;
+    @Value("${score.ratio.play}")           int      PLAY_RATIO;
+    @Value("${score.ratio.rank}")           int      RANK_RATIO;
+    @Value("${score.ratio.actress}")        int   ACTRESS_RATIO;
+    @Value("${score.ratio.subtitles}")      int SUBTITLES_RATIO;
 
-    /** play ratio for score */                  @Value("${score.ratio.play}")           protected int      PLAY_RATIO;
-    /** rank ratio for score */                  @Value("${score.ratio.rank}")           protected int      RANK_RATIO;
-    /** actress ratio for score */               @Value("${score.ratio.actress}")        protected int   ACTRESS_RATIO;
-    /** subtitles  ratio for score */            @Value("${score.ratio.subtitles}")      protected int SUBTITLES_RATIO;
+    @Value("${url.rss}")                    String urlRSS;
+    @Value("${url.search.video}")           String urlSearchVideo;
+    @Value("${url.search.actress}")         String urlSearchActress;
+    @Value("${url.search.torrent}")         String urlSearchTorrent;
 
-    /** new video RSS feed */                    @Value("${url.rss}")                    protected String urlRSS;
+	public boolean setMOVE_WATCHED_VIDEO(boolean mOVE_WATCHED_VIDEO) {
+		return MOVE_WATCHED_VIDEO = mOVE_WATCHED_VIDEO;
+	}
+	public boolean setDELETE_LOWER_RANK_VIDEO(boolean dELETE_LOWER_RANK_VIDEO) {
+		return DELETE_LOWER_RANK_VIDEO = dELETE_LOWER_RANK_VIDEO;
+	}
+	public boolean setDELETE_LOWER_SCORE_VIDEO(boolean dELETE_LOWER_SCORE_VIDEO) {
+		return DELETE_LOWER_SCORE_VIDEO = dELETE_LOWER_SCORE_VIDEO;
+	}
 
-    /** video info finding url */                @Value("${url.search.video}")           protected String urlSearchVideo;
-    /** actress info finding url */              @Value("${url.search.actress}")         protected String urlSearchActress;
-    /** torrent info finding url*/               @Value("${url.search.torrent}")         protected String urlSearchTorrent;
-
+    
 }

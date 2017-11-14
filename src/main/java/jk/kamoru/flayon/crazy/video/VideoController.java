@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jk.kamoru.flayon.crazy.CrazyController;
+import jk.kamoru.flayon.crazy.CrazyProperties;
 import jk.kamoru.flayon.crazy.util.ImageUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
@@ -51,6 +52,7 @@ public class VideoController extends CrazyController {
 	@Autowired   VideoBatch     videoBatch;
 	@Autowired     TagService     tagService;
 	@Autowired HistoryService historyService;
+	@Autowired CrazyProperties crazyProperties;
 
 	long today = new Date().getTime();
 	
@@ -72,16 +74,16 @@ public class VideoController extends CrazyController {
 		return videoService.maxRank();
 	}
 
-	@ModelAttribute("playRatio")		public int playRatio() { return PLAY_RATIO; }
-	@ModelAttribute("rankRatio")		public int rankRatio() { return RANK_RATIO; }
-	@ModelAttribute("actressRatio")		public int actressRatio() { return ACTRESS_RATIO; }
-	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return SUBTITLES_RATIO; }
+	@ModelAttribute("playRatio")		public int playRatio() { return crazyProperties.getPLAY_RATIO(); }
+	@ModelAttribute("rankRatio")		public int rankRatio() { return crazyProperties.getRANK_RATIO(); }
+	@ModelAttribute("actressRatio")		public int actressRatio() { return crazyProperties.getACTRESS_RATIO(); }
+	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return crazyProperties.getSUBTITLES_RATIO(); }
 
-	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return urlSearchVideo; }
-	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return urlSearchActress; }
-	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return urlSearchTorrent; }
+	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return crazyProperties.getUrlSearchVideo(); }
+	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return crazyProperties.getUrlSearchActress(); }
+	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return crazyProperties.getUrlSearchTorrent(); }
 	
-	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return MAX_ENTIRE_VIDEO; }
+	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return crazyProperties.getMAX_ENTIRE_VIDEO(); }
 	
 	// --- view mapping
 	

@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,8 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 // file dao implementation
 @Slf4j
 @Repository
-public class TagDaoFile extends CrazyProperties implements TagDao {
+public class TagDaoFile implements TagDao {
 	
+	@Autowired CrazyProperties crazyProperties;
+
 	private Path tagDataPath;
 	
 	private List<VTag> tags;
@@ -37,7 +40,7 @@ public class TagDaoFile extends CrazyProperties implements TagDao {
 
 	@PostConstruct
 	public void init() {
-		tagDataPath = Paths.get(STORAGE_PATH, VIDEO.TAG_DATA_FILENAME);
+		tagDataPath = Paths.get(crazyProperties.getSTORAGE_PATH(), VIDEO.TAG_DATA_FILENAME);
 		log.info("load data... {}", tagDataPath);
 		try {
 			if (!Files.exists(tagDataPath)) {

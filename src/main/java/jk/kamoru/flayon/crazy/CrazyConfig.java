@@ -3,7 +3,6 @@ package jk.kamoru.flayon.crazy;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -24,18 +23,19 @@ import jk.kamoru.flayon.crazy.video.source.VideoSource;
 @EnableCaching
 public class CrazyConfig {
 
-	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
-	@Value("${path.video.archive}") String archivePath;
-	@Value("${path.video.torrent}") String torrentPath;
-
+	@Bean
+	public CrazyProperties crazyProperties() {
+		return new CrazyProperties();
+	}
+	
 	@Bean
 	public VideoSource instanceVideoSource() {
-		return new FileBaseVideoSource(false, torrentPath, instancePaths);
+		return new FileBaseVideoSource(false, crazyProperties().TORRENT_PATH, crazyProperties().INSTANCE_PATHS);
 	}
 	
 	@Bean
 	public VideoSource archiveVideoSource() {
-		return new FileBaseVideoSource(true, null, archivePath);
+		return new FileBaseVideoSource(true, null, crazyProperties().ARCHIVE_PATH);
 	}
 
     @Bean
@@ -51,7 +51,7 @@ public class CrazyConfig {
         	 */
 			@Override
 			protected String getPath() {
-				return instancePaths[0] + "/_info";
+				return crazyProperties().STORAGE_PATH + "/_info";
 			}
         	
         };

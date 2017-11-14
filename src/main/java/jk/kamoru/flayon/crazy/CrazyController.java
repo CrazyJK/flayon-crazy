@@ -20,7 +20,7 @@ import jk.kamoru.flayon.crazy.error.CrazyException.KIND;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
-public abstract class CrazyController extends CrazyProperties {
+public abstract class CrazyController {
 
 	@Autowired protected VideoService videoService;
 	@Autowired protected ImageService imageService;

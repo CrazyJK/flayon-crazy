@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImageBatch extends CrazyProperties {
+public class ImageBatch {
+
+	@Autowired CrazyProperties crazyProperties;
 
 	private boolean isSet = true;
 	
@@ -21,13 +24,13 @@ public class ImageBatch extends CrazyProperties {
 	public synchronized void renameSoraPicture() {
 		log.debug("Rename Sora picture Start");
 
-		if (isSet && (SORA_PICTURES_PATHS == null || SORA_PICTURES_PATHS.length < 1)) {
+		if (isSet && (crazyProperties.getSORA_PICTURES_PATHS() == null || crazyProperties.getSORA_PICTURES_PATHS().length < 1)) {
 			isSet = false;
 			log.warn("PATH_SORA_PICTURES is not set");
 			return;
 		}
 		
-		for (String soraPath : SORA_PICTURES_PATHS) {
+		for (String soraPath : crazyProperties.getSORA_PICTURES_PATHS()) {
 			File directory = new File(soraPath);
 			if (!directory.isDirectory()) {
 				log.warn("not directory : {}", soraPath);
