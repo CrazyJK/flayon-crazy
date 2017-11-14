@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.CrazyProperties;
-import jk.kamoru.flayon.crazy.util.ImageUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.ImageUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
@@ -49,43 +49,23 @@ public class VideoController extends CrazyController {
 
 	static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	
-	@Autowired   VideoBatch     videoBatch;
-	@Autowired     TagService     tagService;
+	@Autowired VideoBatch videoBatch;
+	@Autowired TagService tagService;
 	@Autowired HistoryService historyService;
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired CrazyConfig config;
 
-	long today = new Date().getTime();
+	private long today = new Date().getTime();
 	
-	/**
-	 * minimum rank model attrubute by named 'minRank'
-	 * @return model attribute
-	 */
-	@ModelAttribute("minRank")
-	public Integer minRank() {
-		return videoService.minRank();
-	}
-
-	/**
-	 * maximum rank model attrubute by named 'maxRank'
-	 * @return model attribute
-	 */
-	@ModelAttribute("maxRank")
-	public Integer maxRank() {
-		return videoService.maxRank();
-	}
-
-	@ModelAttribute("playRatio")		public int playRatio() { return crazyProperties.getPLAY_RATIO(); }
-	@ModelAttribute("rankRatio")		public int rankRatio() { return crazyProperties.getRANK_RATIO(); }
-	@ModelAttribute("actressRatio")		public int actressRatio() { return crazyProperties.getACTRESS_RATIO(); }
-	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return crazyProperties.getSUBTITLES_RATIO(); }
-
-	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return crazyProperties.getUrlSearchVideo(); }
-	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return crazyProperties.getUrlSearchActress(); }
-	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return crazyProperties.getUrlSearchTorrent(); }
-	
-	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return crazyProperties.getMAX_ENTIRE_VIDEO(); }
-	
-	// --- view mapping
+	@ModelAttribute("minRank") 			public int minRank() { return config.getMinRank(); }
+	@ModelAttribute("maxRank") 			public int maxRank() { return config.getMaxRank(); }
+	@ModelAttribute("playRatio")		public int playRatio() { return config.getPlayRatio(); }
+	@ModelAttribute("rankRatio")		public int rankRatio() { return config.getRankRatio(); }
+	@ModelAttribute("actressRatio")		public int actressRatio() { return config.getActressRatio(); }
+	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return config.getSubtitlesRatio(); }
+	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return config.getMaxEntireVideo(); }
+	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return config.getUrlSearchVideo(); }
+	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return config.getUrlSearchActress(); }
+	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return config.getUrlSearchTorrent(); }
 	
 	@RequestMapping
 	public String front() {
@@ -195,9 +175,9 @@ public class VideoController extends CrazyController {
 	 */
 	@RequestMapping("/search")
 	public String searchView(Model model) {
-		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.getBatchOption(VideoBatch.Option.R));
-		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.getBatchOption(VideoBatch.Option.S));
-		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.getBatchOption(VideoBatch.Option.W));
+		model.addAttribute("deleteLowerScoreVideo", videoBatch.getBatchOption(VideoBatch.Option.R));
+		model.addAttribute("deleteLowerScoreVideo", videoBatch.getBatchOption(VideoBatch.Option.S));
+		model.addAttribute("moveWatchedVideo", 		videoBatch.getBatchOption(VideoBatch.Option.W));
         return "video/search";		
 	}
 

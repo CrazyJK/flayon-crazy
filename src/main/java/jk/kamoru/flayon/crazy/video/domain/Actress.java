@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
@@ -27,11 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Scope("prototype")
 @EqualsAndHashCode(exclude={"studioList", "videoList"}, callSuper=false)
-@Data
 @Slf4j
+@Data
 public class Actress {
 
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired @JsonIgnore CrazyConfig config;
 	
 	private static final String NEWNAME = "NEWNAME";
 	private static final String FAVORITE = "FAVORITE";
@@ -234,14 +234,14 @@ public class Actress {
 
 	private File getInfoFile() {
 		try {
-			return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+			return Paths.get(config.getStoragePath(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 		} catch (NullPointerException e) {
 			throw new CrazyException("Why name=[" + name + "]", e);
 		}
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
+		return Paths.get(config.getStoragePath(), "_info", name + "." + VIDEO.EXT_ACTRESS).toFile();
 	}
 	
 	/**
@@ -289,10 +289,11 @@ public class Actress {
 		reloadInfo();
 		return name;
 	}
+	
 	public void removeVideo(Video video) {
 		if (videoList.contains(video))
 			if (!videoList.remove(video))
 				log.warn("fail to remove {}", video);
 	}
-	
+
 }

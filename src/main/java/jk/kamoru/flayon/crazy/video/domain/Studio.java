@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.Data;
@@ -24,31 +24,25 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Scope("prototype")
-@Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(exclude={"actressList", "videoList"}, callSuper=false)
 @Slf4j
+@Data
 public class Studio {
 
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired @JsonIgnore CrazyConfig config;
 
-	private static final String NEWNAME = "NEWNAME";
+	private static final String NEWNAME  = "NEWNAME";
 	private static final String HOMEPAGE = "HOMEPAGE";
-	private static final String COMPANY = "COMPANY";
+	private static final String COMPANY  = "COMPANY";
 	
 	private String name;
-	@JsonIgnore
-	private URL    homepage;
-	@JsonIgnore
-	private String company;
+	@JsonIgnore	private URL    homepage;
+	@JsonIgnore	private String company;
 
-	@JsonIgnore
-	private List<Video> videoList;
-	@JsonIgnore
-	private List<Actress> actressList;
-	@JsonIgnore
-	private boolean loaded;
-	@JsonIgnore
-	private StudioSort sort = StudioSort.NAME;
+	@JsonIgnore	private List<Video> videoList;
+	@JsonIgnore	private List<Actress> actressList;
+	
+	@JsonIgnore	private boolean loaded;
 	
 	public Studio() {
 		name        = "";
@@ -136,11 +130,11 @@ public class Studio {
 	}
 
 	private File getInfoFile() {
-		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(config.getStoragePath(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	private File getInfoFile(String name) {
-		return Paths.get(crazyProperties.getSTORAGE_PATH(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
+		return Paths.get(config.getStoragePath(), "_info", name + "." + VIDEO.EXT_STUDIO).toFile();
 	}
 
 	public String saveInfo(Map<String, String> params) {
@@ -203,5 +197,5 @@ public class Studio {
 			if (!videoList.remove(video))
 				log.warn("fail to remove {}", video);
 	}
-	
+
 }

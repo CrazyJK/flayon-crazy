@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -15,27 +16,62 @@ import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
 import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
+import lombok.Getter;
 
 @Configuration
 @EnableAsync
 @EnableAspectJAutoProxy
 @EnableScheduling
 @EnableCaching
+@Getter
 public class CrazyConfig {
 
-	@Bean
-	public CrazyProperties crazyProperties() {
-		return new CrazyProperties();
-	}
+    /* Local properties --------------------------------------------------------------------------- */
 	
+	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
+    @Value("${path.video.archive}")         String        archivePath;
+    @Value("${path.video.storage}")         String        storagePath;
+    @Value("${path.video.candidate}")       String[]    candidatePaths;
+    @Value("${path.video.stage}")           String[]        stagePaths;
+    @Value("${path.video.cover}")           String          coverPath;
+    @Value("${path.video.seed}")            String           seedPath;
+    @Value("${path.video.queue}")           String          queuePath;
+    @Value("${path.video.torrent}")         String        torrentPath;
+    @Value("${path.move.file}")             String[]     moveFilePaths;
+    @Value("${path.sora.pictures}")         String[] soraPicturesPaths;
+    @Value("${path.image.storage}")         String[]        imagePaths;
+    @Value("${path.backup}")                String         backupPath;
+    @Value("${app.video-player}")           String   player;
+    @Value("${app.subtitles-editor}")       String   editor;
+    
+    /* Common Properties -------------------------------------------------------------------------- */
+    
+	                                        int baseRank = 0;
+    @Value("${rank.minimum}")               int  minRank;
+    @Value("${rank.maximum}")               int  maxRank;
+    @Value("${size.video.storage}")         int maxEntireVideo;
+    @Value("${score.ratio.play}")           int      playRatio;
+    @Value("${score.ratio.rank}")           int      rankRatio;
+    @Value("${score.ratio.actress}")        int   actressRatio;
+    @Value("${score.ratio.subtitles}")      int subtitlesRatio;
+    @Value("${parse.to.title.no_opus}")     String   noParseOpusPrefix;
+    @Value("${parse.to.title.re_opus}")     String[] replaceOpusInfo;
+    @Value("${url.rss}")                    String urlRSS;
+    @Value("${url.search.video}")           String urlSearchVideo;
+    @Value("${url.search.actress}")         String urlSearchActress;
+    @Value("${url.search.torrent}")         String urlSearchTorrent;
+    @Value("${batch.watched.moveVideo}")    boolean      moveWatchedVideo;
+    @Value("${batch.rank.deleteVideo}")     boolean  deleteLowerRankVideo;
+    @Value("${batch.score.deleteVideo}")    boolean deleteLowerScoreVideo;
+
 	@Bean
 	public VideoSource instanceVideoSource() {
-		return new FileBaseVideoSource(false, crazyProperties().TORRENT_PATH, crazyProperties().INSTANCE_PATHS);
+		return new FileBaseVideoSource(false, torrentPath, instancePaths);
 	}
 	
 	@Bean
 	public VideoSource archiveVideoSource() {
-		return new FileBaseVideoSource(true, null, crazyProperties().ARCHIVE_PATH);
+		return new FileBaseVideoSource(true, null, archivePath);
 	}
 
     @Bean
@@ -51,9 +87,8 @@ public class CrazyConfig {
         	 */
 			@Override
 			protected String getPath() {
-				return crazyProperties().STORAGE_PATH + "/_info";
+				return storagePath + "/_info";
 			}
-        	
         };
     }
 
@@ -64,6 +99,16 @@ public class CrazyConfig {
 		MethodExecutionBeanPostProcessor processor = new MethodExecutionBeanPostProcessor();
 		processor.setBeans(beans);
 		return processor;
+	}
+
+	public boolean setMoveWatchedVideo(boolean moveWatchedVideo) {
+		return this.moveWatchedVideo = moveWatchedVideo;
+	}
+	public boolean setDeleteLowerRankVideo(boolean deleteLowerRankVideo) {
+		return this.deleteLowerRankVideo = deleteLowerRankVideo;
+	}
+	public boolean setDeleteLowerScoreVideo(boolean deleteLowerScoreVideo) {
+		return this.deleteLowerScoreVideo = deleteLowerScoreVideo;
 	}
 
 }

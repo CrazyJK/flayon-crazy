@@ -15,8 +15,6 @@ import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,11 +23,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * AV Bean class<br>
@@ -40,11 +39,10 @@ import jk.kamoru.flayon.crazy.video.VIDEO;
  */
 @Component
 @Scope("prototype")
+@Slf4j
 public class Video {
-
-	private static final Logger logger = LoggerFactory.getLogger(Video.class);
 	
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired @JsonIgnore CrazyConfig config;
 
 	// files
 	private List<File> videoFileList;
@@ -93,7 +91,7 @@ public class Video {
 	 * 아카이브 비디오면, 월별로 구분해 이동
 	 */
 	public void arrange() {
-		logger.trace(opus);
+		log.trace(opus);
 
 		if (StringUtils.isEmpty(studio.getName()) 
 				|| StringUtils.isEmpty(opus)
@@ -101,7 +99,7 @@ public class Video {
 				|| StringUtils.isEmpty(releaseDate)
 				|| !Pattern.matches(CRAZY.REGEX_DATE, releaseDate)
 				) {
-			logger.warn("Check video : [{}] [{}] archive={} [{}]", opus, releaseDate, isArchive, getDelegatePath());
+			log.warn("Check video : [{}] [{}] archive={} [{}]", opus, releaseDate, isArchive, getDelegatePath());
 			return;
 		}
 
@@ -169,7 +167,7 @@ public class Video {
 		try {
 			return FileUtils.readFileToByteArray(coverFile);
 		} catch (IOException e) {
-			logger.error("read cover file error", e);
+			log.error("read cover file error", e);
 			return null;
 		}
 	}
@@ -309,7 +307,7 @@ public class Video {
 			try {
 				infoFile.createNewFile();
 			} catch (IOException e) {
-				logger.error("fail to create info file", e);
+				log.error("fail to create info file", e);
 			}
 		}
 		return infoFile;
@@ -546,7 +544,7 @@ public class Video {
 	 */
 	public synchronized void move(File destDir) {
 		
-		logger.debug("file move from [{}] to [{}]", getDelegateFile(), destDir.getAbsolutePath());
+		log.debug("file move from [{}] to [{}]", getDelegateFile(), destDir.getAbsolutePath());
 		
 		if (isExistVideoFileList()) {
 			List<File> fileList = new ArrayList<>();
@@ -590,17 +588,17 @@ public class Video {
 	 */
 	private void moveVideoFile(File file, File destDir) {
 		if (file.getParentFile().equals(destDir)) {
-			logger.debug("same folder {}", file);
+			log.debug("same folder {}", file);
 			return;
 		}
 		try {
 			FileUtils.moveFileToDirectory(file, destDir, false);
-			logger.info("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
+			log.debug("file moved from [{}] to [{}]", file.getAbsolutePath(), destDir.getAbsolutePath());
 		} catch (FileExistsException fe) {
-			logger.warn("File exist, then delete : {}", fe.getMessage());
+			log.warn("File exist, then delete : {}", fe.getMessage());
 			FileUtils.deleteQuietly(file);
 		} catch (IOException e) {
-			logger.error("Fail move file", e);
+			log.error("Fail move file", e);
 		}
 	}
 	
@@ -630,20 +628,20 @@ public class Video {
 		if (videoFileList != null)
 			for (File file : videoFileList)
 				if(FileUtils.deleteQuietly(file))
-					logger.debug(file.getAbsolutePath());
+					log.debug(file.getAbsolutePath());
 				else
-					logger.error("delete fail : {}", file.getAbsolutePath());
+					log.error("delete fail : {}", file.getAbsolutePath());
 		// the others move
-		File archiveDir = new File(crazyProperties.getARCHIVE_PATH());
+		File archiveDir = new File(config.getArchivePath());
 		for (File file : getFileWithoutVideo())
 			if (file != null)
 				try {
 					FileUtils.moveFileToDirectory(file, archiveDir, false);
 				} catch (FileExistsException e) {
-					logger.warn("file exists in archive dir : {}", e.getMessage());
+					log.warn("file exists in archive dir : {}", e.getMessage());
 					FileUtils.deleteQuietly(file);
 				} catch (IOException e) {
-					logger.error("move fail", e);
+					log.error("move fail", e);
 				}
 	}
 	
@@ -654,17 +652,17 @@ public class Video {
 		for (File file : getFileAll())
 			if (file != null)
 				if(FileUtils.deleteQuietly(file))
-					logger.debug(file.getAbsolutePath());
+					log.debug(file.getAbsolutePath());
 				else
-					logger.error("delete fail : {}", file.getAbsolutePath());
+					log.error("delete fail : {}", file.getAbsolutePath());
 	}
 	
 	/**
 	 * info 내용 저장
 	 */
 	private void saveInfo() {
-		if (logger.isDebugEnabled())
-			logger.debug("saveInfo start");
+		if (log.isDebugEnabled())
+			log.debug("saveInfo start");
 		
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -676,8 +674,8 @@ public class Video {
 
 		try {
 			mapper.writeValue(getInfoFile(), info);
-			if (logger.isDebugEnabled())
-				logger.debug("saveInfo {}", info);
+			if (log.isDebugEnabled())
+				log.debug("saveInfo {}", info);
 		} catch (IOException e) {
 			throw new VideoException(this, "fail to write info", e);
 		}
@@ -728,7 +726,7 @@ public class Video {
 	 * @param overViewText
 	 */
 	public void saveOverView(String overViewText) {
-		logger.trace("{} [{}]", opus, overViewText);
+		log.trace("{} [{}]", opus, overViewText);
 		this.overview = overViewText;
 		this.saveInfo();
 	}
@@ -795,7 +793,7 @@ public class Video {
 	 * @param rank
 	 */
 	public void setRank(int rank) {
-		logger.trace("{} rank is {}", opus, rank);
+		log.trace("{} rank is {}", opus, rank);
 		this.rank = rank;
 		this.saveInfo();
 	}
@@ -894,17 +892,17 @@ public class Video {
 	@JsonIgnore
 	public String getScoreDesc() {
 		return String.format("Rank[%s]*%s + Play[%s]*%s/10 + Actress[%s]*%s/10 + Subtitles[%s]*%s = %s", 
-				getRank(), crazyProperties.getRANK_RATIO(),
-				getPlayCount(), crazyProperties.getPLAY_RATIO(),
-				getActressScoreDesc(), crazyProperties.getACTRESS_RATIO(),
-				isExistSubtitlesFileList() ? 1 : 0, crazyProperties.getSUBTITLES_RATIO(),
+				getRank(), config.getRankRatio(),
+				getPlayCount(), config.getPlayRatio(),
+				getActressScoreDesc(), config.getActressRatio(),
+				isExistSubtitlesFileList() ? 1 : 0, config.getSubtitlesRatio(),
 				getScore());
 	}
 	
 	@JsonIgnore
 	public String getScoreRatio() {
 		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", 
-				crazyProperties.getRANK_RATIO(), crazyProperties.getPLAY_RATIO(), crazyProperties.getACTRESS_RATIO(), crazyProperties.getSUBTITLES_RATIO());
+				config.getRankRatio(), config.getPlayRatio(), config.getActressRatio(), config.getSubtitlesRatio());
 	}
 	
 	/**환산된 랭킹 점수
@@ -912,7 +910,7 @@ public class Video {
 	 */
 	@JsonIgnore
 	public int getRankScore() {
-		return getRank() * crazyProperties.getRANK_RATIO();
+		return getRank() * config.getRankRatio();
 	}
 
 	/**환산된 플레이 점수
@@ -920,7 +918,7 @@ public class Video {
 	 */
 	@JsonIgnore
 	public int getPlayScore() {
-		return Math.round(getPlayCount() * crazyProperties.getPLAY_RATIO() / 10);
+		return Math.round(getPlayCount() * config.getPlayRatio() / 10);
 	}
 
 	/**환산된 배우 점수
@@ -932,7 +930,7 @@ public class Video {
 		for (Actress actress : getActressList()) {
 			if (StringUtils.isBlank(actress.getName()) || actress.getName().equals(TitlePart.AMATEUR))
 				continue;
-			actressVideoScore += Math.round(actress.getVideoList().size() * crazyProperties.getACTRESS_RATIO() / 10);
+			actressVideoScore += Math.round(actress.getVideoList().size() * config.getActressRatio() / 10);
 		}
 		return actressVideoScore;
 	}
@@ -954,7 +952,7 @@ public class Video {
 	 */
 	@JsonIgnore
 	public int getSubtitlesScore() {
-		return (isExistSubtitlesFileList() ? 1 : 0) * crazyProperties.getSUBTITLES_RATIO();
+		return (isExistSubtitlesFileList() ? 1 : 0) * config.getSubtitlesRatio();
 	}
 
 	/**비디오 파일 후보 추가
@@ -986,7 +984,7 @@ public class Video {
 	}
 
 	public void rename(String newName) {
-		logger.debug("rename {} -> {}", getFullname(), newName);
+		log.debug("rename {} -> {}", getFullname(), newName);
 
 		// video
 		List<File> videoFileList = new ArrayList<>();
@@ -1110,12 +1108,12 @@ public class Video {
 			for (File file : this.getVideoFileList()) {
 				try {
 					FileUtils.moveFileToDirectory(file, root, false);
-					logger.info("video file move to {}", root);
+					log.info("video file move to {}", root);
 				} catch (FileExistsException e) {
-					logger.warn("file exists in root dir[{}] : {}", root.getAbsolutePath(), e.getMessage());
+					log.warn("file exists in root dir[{}] : {}", root.getAbsolutePath(), e.getMessage());
 					FileUtils.deleteQuietly(file);
 				} catch (IOException e) {
-					logger.error("move fail", e);
+					log.error("move fail", e);
 				}
 			}
 			videoFileList = new ArrayList<>();
@@ -1124,17 +1122,17 @@ public class Video {
 	}
 
 	public void toggleTag(VTag tag) {
-		if (logger.isDebugEnabled())
-			logger.debug("toggleTag {}", tag);
+		if (log.isDebugEnabled())
+			log.debug("toggleTag {}", tag);
 		if (info.getTags().contains(tag)) {
 			info.getTags().remove(tag);
-			if (logger.isDebugEnabled())
-				logger.debug("toggleTag remove");
+			if (log.isDebugEnabled())
+				log.debug("toggleTag remove");
 		}
 		else {
 			info.getTags().add(tag);
-			if (logger.isDebugEnabled())
-				logger.debug("toggleTag add");
+			if (log.isDebugEnabled())
+				log.debug("toggleTag add");
 		}
 		saveInfo();
 	}
@@ -1148,7 +1146,7 @@ public class Video {
 	}
 	
 	public boolean match(VideoSearch search) {
-		logger.debug("match : {} Query={}, Exist={}, Favorite={}, StudioList={}, ActressList={}, Rank={}, Play={}, Tag={}", opus, 
+		log.debug("match : {} Query={}, Exist={}, Favorite={}, StudioList={}, ActressList={}, Rank={}, Play={}, Tag={}", opus, 
 				matchQuery(search.getSearchText()),
 				matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover()),
 				matchFavorite(search.isFavorite()),

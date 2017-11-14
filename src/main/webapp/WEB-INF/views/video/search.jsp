@@ -185,15 +185,15 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 			<span id="restCallResult" class="label label-warning"></span>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('W', this)"><s:message code="video.mng.move"/></button>
-				<button class="btn btn-default" onclick="fnSetVideoBatchOption('W', this)">${MOVE_WATCHED_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('W', this)">${moveWatchedVideo}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('R', this)"><s:message code="video.mng.rank"/></button>
-				<button class="btn btn-default" onclick="fnSetVideoBatchOption('R', this)">${DELETE_LOWER_RANK_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('R', this)">${deleteLowerScoreVideo}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('S', this)"><s:message code="video.mng.score"/></button>
-				<button class="btn btn-default" onclick="fnSetVideoBatchOption('S', this)">${DELETE_LOWER_SCORE_VIDEO}</button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('S', this)">${deleteLowerScoreVideo}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('I', this)">InstanceVideoBatch</button>

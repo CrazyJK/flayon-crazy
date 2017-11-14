@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
@@ -70,13 +70,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VideoServiceImpl implements VideoService {
 
-
 	/** minimum free space of disk */
-	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
+	private static final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
 	/** sleep time of moving video */
-	private final long SLEEP_TIME = 5 * 1000;
+	private static final long SLEEP_TIME = 1 * 1000;
 	
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired CrazyConfig config;
 	@Autowired VideoDao videoDao;
 	@Autowired TagDao tagDao;
 	@Autowired HistoryService historyService;
@@ -92,8 +91,8 @@ public class VideoServiceImpl implements VideoService {
 	private String ARCHIVE_PATH;
 	private int MIN_RANK;
 	private int MAX_RANK;
-	private long MAX_ENTIRE_VIDEO;
 	private int BASE_RANK;
+	private long MAX_ENTIRE_VIDEO;
 	private String[] STAGE_PATHS;
 	private String COVER_PATH;
 	private String[] REPLACE_OPUS_INFO;
@@ -102,23 +101,23 @@ public class VideoServiceImpl implements VideoService {
 	private String SEED_PATH;
 	
 	@PostConstruct
-	public void post() {
-		CANDIDATE_PATHS 	= crazyProperties.getCANDIDATE_PATHS();
-		TORRENT_PATH 		= crazyProperties.getTORRENT_PATH();
-		PLAYER 				= crazyProperties.getPLAYER();
-		EDITOR 				= crazyProperties.getEDITOR();
-		STORAGE_PATH 		= crazyProperties.getSTORAGE_PATH();
-		ARCHIVE_PATH 		= crazyProperties.getARCHIVE_PATH();
-		MIN_RANK 			= crazyProperties.getMIN_RANK();
-		MAX_RANK 			= crazyProperties.getMAX_RANK();
-		MAX_ENTIRE_VIDEO 	= crazyProperties.getMAX_ENTIRE_VIDEO();
-		BASE_RANK 			= crazyProperties.getBASE_RANK();
-		STAGE_PATHS 		= crazyProperties.getSTAGE_PATHS();
-		COVER_PATH 			= crazyProperties.getCOVER_PATH();
-		REPLACE_OPUS_INFO 	= crazyProperties.getREPLACE_OPUS_INFO();
-		NO_PARSE_OPUS_PREFIX = crazyProperties.getNO_PARSE_OPUS_PREFIX();
-		urlRSS 				= crazyProperties.getUrlRSS();
-		SEED_PATH 			= crazyProperties.getSEED_PATH();
+	public void postConstruct() {
+		CANDIDATE_PATHS 	= config.getCandidatePaths();
+		TORRENT_PATH 		= config.getTorrentPath();
+		PLAYER 				= config.getPlayer();
+		EDITOR 				= config.getEditor();
+		STORAGE_PATH 		= config.getStoragePath();
+		ARCHIVE_PATH 		= config.getArchivePath();
+		MIN_RANK 			= config.getMinRank();
+		MAX_RANK 			= config.getMaxRank();
+		MAX_ENTIRE_VIDEO 	= config.getMaxEntireVideo();
+		BASE_RANK 			= config.getBaseRank();
+		STAGE_PATHS 		= config.getStagePaths();
+		COVER_PATH 			= config.getCoverPath();
+		REPLACE_OPUS_INFO 	= config.getReplaceOpusInfo();
+		NO_PARSE_OPUS_PREFIX = config.getNoParseOpusPrefix();
+		urlRSS 				= config.getUrlRSS();
+		SEED_PATH 			= config.getSeedPath();
 	}
 	
 	private void fillTorrentInfo(List<Video> list) {
@@ -508,136 +507,7 @@ public class VideoServiceImpl implements VideoService {
 				.filter(v -> v.match(search))
 				.sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, search.getSortMethod(), search.isSortReverse()))
 				.collect(Collectors.toList());
-/*		
-		return videoDao.getVideoList().stream()
-			.filter(v -> containsQuery(v, search.getSearchText()))
-			.filter(v -> addCond(v, search.isAddCond(), search.isExistVideo(), search.isExistSubtitles()))
-			.filter(v -> search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(v.getStudio().getName()))
-			.filter(v -> search.getSelectedActress() == null ? true : VideoUtils.containsActress(v, search.getSelectedActress()))
-			.filter(v -> rankMatch(v.getRank(), search.getRankRange()))
-			.filter(v -> playCountMatch(v.getPlayCount(), search.getPlayCount()))
-			.filter(v -> tagMatch(v, search.getSelectedTag()))
-			.map(v -> v.setSortMethod(search.getSortMethod()))
-			.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
-			.collect(Collectors.toList());
-			
-*/
-/*		
-		return videoDao.getVideoList().parallelStream()
-				.filter(new Predicate<Video>(){
-
-					@Override
-					public boolean test(Video video) {
-						if ((VideoUtils.equals(video.getStudio().getName(), search.getSearchText()) 
-								|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
-								|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
-								|| VideoUtils.containsActress(video, search.getSearchText())
-								|| VideoUtils.containsName(video.getReleaseDate(), search.getSearchText())) 
-							&& (search.isAddCond()   
-									? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
-										&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
-									: true)
-							&& (search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(video.getStudio().getName()))
-							&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
-							&& (rankMatch(video.getRank(), search.getRankRange()))
-							&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
-							&& tagMatch(video, search.getSelectedTag())
-							) 
-						{
-							video.setSortMethod(search.getSortMethod());
-							return true;
-						}
-						return false;
-					}
-					
-				})
-				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
-				.collect(Collectors.toList());
-*/		
-/*		
-		List<Video> foundList = new ArrayList<Video>();
-		for (Video video : videoDao.getVideoList()) {
-			if ((VideoUtils.equals(video.getStudio().getName(), search.getSearchText()) 
-					|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
-					|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
-					|| VideoUtils.containsActress(video, search.getSearchText())
-					|| VideoUtils.containsName(video.getReleaseDate(), search.getSearchText())) 
-				&& (search.isAddCond()   
-						? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
-							&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
-						: true)
-				&& (search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(video.getStudio().getName()))
-				&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
-				&& (rankMatch(video.getRank(), search.getRankRange()))
-				&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
-				&& tagMatch(video, search.getSelectedTag())
-				) 
-			{
-				video.setSortMethod(search.getSortMethod());
-				foundList.add(video);
-			}
-		}
-		log.debug("found video list size {}", foundList.size());
-		if (search.isSortReverse()) {
-//			Collections.sort(foundList, Collections.reverseOrder());
-			return foundList.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-		}
-		else {
-//			Collections.sort(foundList);
-			return foundList.stream().sorted().collect(Collectors.toList());
-		}
-*/		
 	}
-/*	
-	private boolean addCond(Video video, boolean addCond, boolean existVideo, boolean existSubtitles) {
-		return addCond   
-				? ((existVideo ? video.isExistVideoFileList() : !video.isExistVideoFileList())
-						&& (existSubtitles ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
-				: true;
-	}
-*/
-/*
-	private boolean containsQuery(Video video, String searchText) {
-		return VideoUtils.equals(video.getStudio().getName(), searchText) 
-				|| VideoUtils.equals(video.getOpus(), searchText) 
-				|| VideoUtils.containsName(video.getTitle(), searchText) 
-				|| VideoUtils.containsActress(video, searchText)
-				|| VideoUtils.containsName(video.getReleaseDate(), searchText);
-	}
-*/
-/*
-	private boolean tagMatch(Video video, List<String> selectedTag) {
-		if (selectedTag == null)
-			return true;
-		if (video.getTags() == null)
-			return false;
-		for (VTag tag : video.getTags()) {
-			if (selectedTag.contains(tag.getId().toString()))
-				return true;
-		}
-		return false;
-	}
-*/
-	/**compare play count. {@code true} if playCount2 is {@code null} or {@code -1}
-	 * @param playCount
-	 * @param playCount2
-	 * @return {@code true} if same of both or playCount2 {@code null}, {@code -1}
-	private boolean playCountMatch(Integer playCount, Integer playCount2) {
-		if (playCount2 == null || playCount2 == -1)
-			return true;
-		else 
-			return playCount == playCount2;
-	}
-	 */
-
-	/**Returns {@code true} if rankRange list contains the specified rank
-	 * @param rank
-	 * @param rankRange rank range list
-	 * @return {@code true} if rankRange list contains the specified rank
-	private boolean rankMatch(int rank, List<Integer> rankRange) {
-		return rankRange.contains(rank);
-	}
-	 */
 
 	@Override
 	public Map<String, Long[]> groupByPath() {
@@ -755,16 +625,6 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public Integer minRank() {
-		return MIN_RANK;
-	}
-
-	@Override
-	public Integer maxRank() {
-		return MAX_RANK;
-	}
-
-	@Override
 	public List<Integer> getRankRange() {
 		List<Integer> rankList = new ArrayList<>();
 		for (Integer i=MIN_RANK; i<=MAX_RANK; i++)
@@ -844,17 +704,6 @@ public class VideoServiceImpl implements VideoService {
 						.reversed()
 						.thenComparing(Comparator.comparing(Video::getReleaseDate)))
 				.collect(Collectors.toList());
-/*
-		List<Video> list = videoDao.getVideoList();
-		Collections.sort(list, new Comparator<Video>(){
-			@Override
-			public int compare(Video o1, Video o2) {
-				return o2.getScore() == o1.getScore() 
-						? Utils.compareTo(o2.getReleaseDate(), o1.getReleaseDate()) 
-								: o2.getScore() - o1.getScore();
-			}});
-		return list;
-*/
 	}
 	
 	@Override
@@ -921,7 +770,7 @@ public class VideoServiceImpl implements VideoService {
 
 			// 비디오를 옮긴다
 			countOfMoveVideo++;
-			log.info("    {} move from [{}] to [{}]", video.getFullname(), video.getDelegatePathFile().getParent(), destDir.getPath());
+			log.info("    move from [{}] to [{}] - {}", video.getDelegatePathFile().getParent(), destDir.getPath(), video.getFullname());
 			videoDao.moveVideo(video.getOpus(), destDir.getAbsolutePath());
 			
 			// 다 옮겼으면 break
@@ -1188,62 +1037,6 @@ public class VideoServiceImpl implements VideoService {
 				.filter(v -> v.matchArchive(search))
 				.sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, search.getSortMethod(), search.isSortReverse()))
 				.collect(Collectors.toList());
-
-/*		
-		return videoDao.getArchiveVideoList().parallelStream()
-				.filter(new Predicate<Video>() {
-
-					@Override
-					public boolean test(Video video) {
-						if ((VideoUtils.equals(video.getStudio().getName(), search.getSearchText()) 
-								|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
-								|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
-								|| VideoUtils.containsActress(video, search.getSearchText())
-								|| VideoUtils.containsName(video.getReleaseDate(), search.getSearchText())) 
-							&& (search.isAddCond()   
-									? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
-										&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
-									: true)
-							) 
-						{
-							video.setSortMethod(search.getSortMethod());
-							return true;
-						}
-						return false;
-					}})
-				.sorted(search.isSortReverse() ? Comparator.reverseOrder() : Comparator.naturalOrder())
-				.collect(Collectors.toList());
-*/
-/*		
-		List<Video> foundList = new ArrayList<Video>();
-		for (Video video : videoDao.getArchiveVideoList()) {
-			if ((VideoUtils.equals(video.getStudio().getName(), search.getSearchText()) 
-					|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
-					|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
-					|| VideoUtils.containsActress(video, search.getSearchText())
-					|| VideoUtils.containsName(video.getReleaseDate(), search.getSearchText())) 
-				&& (search.isAddCond()   
-						? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
-							&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
-						: true)
-//				&& (search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(video.getStudio().getName()))
-//				&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
-//				&& (rankMatch(video.getRank(), search.getRankRange()))
-//				&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
-				) 
-			{
-				video.setSortMethod(search.getSortMethod());
-				foundList.add(video);
-			}
-		}
-		if (search.isSortReverse())
-			Collections.sort(foundList, Collections.reverseOrder());
-		else
-			Collections.sort(foundList);
-
-		log.debug("found video list size {}", foundList.size());
-		return foundList;
-*/		
 	}
 
 	@Override

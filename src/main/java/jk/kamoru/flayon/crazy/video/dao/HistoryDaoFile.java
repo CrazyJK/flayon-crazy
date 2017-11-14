@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -18,17 +16,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
 public class HistoryDaoFile implements HistoryDao {
+
+	@Autowired VideoDao videoDao;
+	@Autowired CrazyConfig config;
 
 	/** history file */
 	private File historyFile;
@@ -36,9 +38,6 @@ public class HistoryDaoFile implements HistoryDao {
 	private List<History> historyList;
 	
 	private static boolean isHistoryLoaded = false;
-
-	@Autowired VideoDao videoDao;
-	@Autowired CrazyProperties crazyProperties;
 
 /*	히스토리 파일이 없으면 안되므로, 생성하지 않는다
 	@PostConstruct
@@ -55,7 +54,7 @@ public class HistoryDaoFile implements HistoryDao {
 	
 	private File getHistoryFile() {
 		if(historyFile == null)
-			historyFile = new File(crazyProperties.getSTORAGE_PATH(), VIDEO.HISTORY_LOG_FILENAME);
+			historyFile = new File(config.getStoragePath(), VIDEO.HISTORY_LOG_FILENAME);
 		return historyFile;
 	}
 

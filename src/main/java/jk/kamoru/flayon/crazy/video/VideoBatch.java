@@ -12,14 +12,12 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.ZipUtils;
 import jk.kamoru.flayon.crazy.video.domain.History;
@@ -27,21 +25,21 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class VideoBatch {
 
-	private static final Logger logger = LoggerFactory.getLogger(VideoBatch.class);
-
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired CrazyConfig config;
 
 	public static enum Option {
-		/** MOVE_WATCHED_VIDEO */ W, /** DELETE_LOWER_RANK_VIDEO */ R, /** DELETE_LOWER_SCORE_VIDEO */ S;
+		/** moveWatchedVideo */ W, /** deleteLowerRankVideo */ R, /** deleteLowerScoreVideo */ S;
 	}
 	
 	public static enum Type {
 		/** InstanceVideoSource */ I, /** ArchiveVideoSource */ A, /** Backup */ B,
-		/** MOVE_WATCHED_VIDEO */ W, /** DELETE_LOWER_RANK_VIDEO */ R, /** DELETE_LOWER_SCORE_VIDEO */ S;
+		/** moveWatchedVideo */ W, /** deleteLowerRankVideo */ R, /** deleteLowerScoreVideo */ S;
 	}
 	
 	@Autowired   VideoService   videoService;
@@ -51,11 +49,11 @@ public class VideoBatch {
 		try {
 			switch (option) {
 			case R:
-				return crazyProperties.setDELETE_LOWER_RANK_VIDEO(setValue);
+				return config.setDeleteLowerRankVideo(setValue);
 			case S:
-				return crazyProperties.setDELETE_LOWER_SCORE_VIDEO(setValue);
+				return config.setDeleteLowerScoreVideo(setValue);
 			case W:
-				return crazyProperties.setMOVE_WATCHED_VIDEO(setValue);
+				return config.setMoveWatchedVideo(setValue);
 			default:
 				throw new VideoException("batch option key is invalid. k=" + option);
 			}
@@ -67,11 +65,11 @@ public class VideoBatch {
 	public Boolean getBatchOption(Option option) {
 		switch (option) {
 		case R:
-			return crazyProperties.isDELETE_LOWER_RANK_VIDEO();
+			return config.isDeleteLowerRankVideo();
 		case S:
-			return crazyProperties.isDELETE_LOWER_SCORE_VIDEO();
+			return config.isDeleteLowerScoreVideo();
 		case W:
-			return crazyProperties.isMOVE_WATCHED_VIDEO();
+			return config.isMoveWatchedVideo();
 		default:
 			throw new VideoException("batch option key is invalid. k=" + option);
 		}
@@ -108,55 +106,55 @@ public class VideoBatch {
 
 	@PostConstruct
 	private void showProperties() {
-		logger.info("Batch properties");
-		logger.info("  - batch.watched.moveVideo = {}", crazyProperties.isMOVE_WATCHED_VIDEO());
-		logger.info("  - batch.rank.deleteVideo  = {}", crazyProperties.isDELETE_LOWER_RANK_VIDEO());
-		logger.info("  - batch.score.deleteVideo = {}", crazyProperties.isDELETE_LOWER_SCORE_VIDEO());
+		log.info("Batch properties");
+		log.info("  - batch.watched.moveVideo = {}", config.isMoveWatchedVideo());
+		log.info("  - batch.rank.deleteVideo  = {}", config.isDeleteLowerRankVideo());
+		log.info("  - batch.score.deleteVideo = {}", config.isDeleteLowerScoreVideo());
 	}
 	
 	// cron every 1h
 	@Scheduled(cron="0 0 */1 * * *")
 	public synchronized void batchInstanceVideoSource() {
-		logger.info("BATCH Instance VideoSource START");
+		log.info("BATCH Instance VideoSource START");
 		StopWatch stopWatch = new StopWatch("Instance VideoSource Batch");
 
-		logger.info(" - delete lower rank video [{}]", crazyProperties.isDELETE_LOWER_RANK_VIDEO());
-		if (crazyProperties.isDELETE_LOWER_RANK_VIDEO()) {
+		log.info(" - delete lower rank video [{}]", config.isDeleteLowerRankVideo());
+		if (config.isDeleteLowerRankVideo()) {
 			stopWatch.start("delete lower rank");
 			videoService.removeLowerRankVideo();
 			stopWatch.stop();
 		}
 		
-		logger.info(" - delete lower score video [{}]", crazyProperties.isDELETE_LOWER_SCORE_VIDEO());
-		if (crazyProperties.isDELETE_LOWER_SCORE_VIDEO()) {
+		log.info(" - delete lower score video [{}]", config.isDeleteLowerScoreVideo());
+		if (config.isDeleteLowerScoreVideo()) {
 			stopWatch.start("delete lower score");
 			videoService.removeLowerScoreVideo();
 			stopWatch.stop();
 		}
 		
-		logger.info(" - delete garbage file");
+		log.info(" - delete garbage file");
 		stopWatch.start("delete garbage file");
 		videoService.deleteGarbageFile();
 		stopWatch.stop();
 		
-		logger.info(" - arrange to same folder");
+		log.info(" - arrange to same folder");
 		stopWatch.start("arrange to same folder");
 		videoService.arrangeVideo();
 		stopWatch.stop();
 		
-		logger.info(" - move watched video [{}]", crazyProperties.isMOVE_WATCHED_VIDEO());
-		if (crazyProperties.isMOVE_WATCHED_VIDEO()) {
+		log.info(" - move watched video [{}]", config.isMoveWatchedVideo());
+		if (config.isMoveWatchedVideo()) {
 			stopWatch.start("move watched video");
 			videoService.moveWatchedVideo();
 			stopWatch.stop();
 		}
 		
-		logger.info(" - delete empty folder");
+		log.info(" - delete empty folder");
 		videoService.deletEmptyFolder();
 
 		videoService.reload(stopWatch);
 
-		logger.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
+		log.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
 		
 		NotiQueue.pushNoti("Instance VideoBatch end");
 	}
@@ -164,14 +162,14 @@ public class VideoBatch {
 	// cron every 2h 13m
 	@Scheduled(cron="0 13 */2 * * *")
 	public synchronized void batchArchiveVideoSource() {
-		logger.info("BATCH Archive VideoSource START");
+		log.info("BATCH Archive VideoSource START");
 		
-		logger.info(" - arrange to DateFormat folder");
+		log.info(" - arrange to DateFormat folder");
 		videoService.arrangeArchiveVideo();
 		
 		videoService.reloadArchive();
 
-		logger.info("BATCH Archive VideoSource END");
+		log.info("BATCH Archive VideoSource END");
 
 		NotiQueue.pushNoti("Archive VideoBatch end");
 	}
@@ -179,54 +177,54 @@ public class VideoBatch {
 	// fixedDelay per 1 min
 	@Scheduled(fixedDelay = 1000 * 60) 
 	public synchronized void moveFile() {
-		logger.trace("BATCH File move START {}", Arrays.toString(crazyProperties.getMOVE_FILE_PATHS()));
+		log.trace("BATCH File move START {}", Arrays.toString(config.getMoveFilePaths()));
 
 		// 설정이 안됬거나
-		if (crazyProperties.getMOVE_FILE_PATHS() == null) {
-			logger.error("PATH_MOVE_FILE is not set");
+		if (config.getMoveFilePaths() == null) {
+			log.error("PATH_MOVE_FILE is not set");
 			return;
 		}
 		// 값이 없으면 pass
-		if (crazyProperties.getMOVE_FILE_PATHS().length == 0)
+		if (config.getMoveFilePaths().length == 0)
 			return;
 		
 		// 3배수가 아니면
-		if (crazyProperties.getMOVE_FILE_PATHS().length % 3 != 0) {
-			logger.error("PATH length is not 3 multiple", Arrays.toString(crazyProperties.getMOVE_FILE_PATHS()));
+		if (config.getMoveFilePaths().length % 3 != 0) {
+			log.error("PATH length is not 3 multiple", Arrays.toString(config.getMoveFilePaths()));
 			return;
 		}
 		// 2,3번째가 폴더가 아니거나
-		for (int i=0; i<crazyProperties.getMOVE_FILE_PATHS().length; i++) {
+		for (int i=0; i<config.getMoveFilePaths().length; i++) {
 			if (i % 3 == 0)
 				continue;
 			else
-				if (!new File(crazyProperties.getMOVE_FILE_PATHS()[i]).isDirectory()) {
-					logger.error("PATH [{}] is not Directory", crazyProperties.getMOVE_FILE_PATHS()[i]);
+				if (!new File(config.getMoveFilePaths()[i]).isDirectory()) {
+					log.error("PATH [{}] is not Directory", config.getMoveFilePaths()[i]);
 					return;
 				}
 		}
-		for (int i=0; i<crazyProperties.getMOVE_FILE_PATHS().length;) {
-			String ext = crazyProperties.getMOVE_FILE_PATHS()[i++];
-			File from = new File(crazyProperties.getMOVE_FILE_PATHS()[i++]);
-			File to   = new File(crazyProperties.getMOVE_FILE_PATHS()[i++]);
+		for (int i=0; i<config.getMoveFilePaths().length;) {
+			String ext = config.getMoveFilePaths()[i++];
+			File from = new File(config.getMoveFilePaths()[i++]);
+			File to   = new File(config.getMoveFilePaths()[i++]);
 			for (File file : FileUtils.listFiles(from, new String[]{ext.toUpperCase(), ext.toLowerCase()}, false)) {
 				try {
-					logger.info("Moving... {} to {}", file.getAbsolutePath(), to.getAbsolutePath());
+					log.info("Moving... {} to {}", file.getAbsolutePath(), to.getAbsolutePath());
 					FileUtils.moveFileToDirectory(file, to, false);
 				}
 				catch (IOException e) {
-					logger.error("File to move", e);
+					log.error("File to move", e);
 				}
 			}
 		}
 		
-		logger.trace("BATCH File move END");
+		log.trace("BATCH File move END");
 	}
 	
 	// fixedRate per 13 min
 	@Scheduled(fixedRate = 1000 * 60 * 13) 
 	public synchronized void deletEmptyFolder() {
-		logger.info("BATCH - delete empty folder");
+		log.info("BATCH - delete empty folder");
 		videoService.deletEmptyFolder();
 
 		NotiQueue.pushNoti("Delete empty folder end");
@@ -238,13 +236,13 @@ public class VideoBatch {
 	@Scheduled(cron="0 0 0 * * *")
 	public synchronized void backup() throws IOException {
 		
-		if (StringUtils.isBlank(crazyProperties.getBACKUP_PATH())) {
-			logger.warn("BATCH - backup path not set");
+		if (StringUtils.isBlank(config.getBackupPath())) {
+			log.warn("BATCH - backup path not set");
 			return;
 		}
-		logger.info("BATCH - backup to {}", crazyProperties.getBACKUP_PATH());
+		log.info("BATCH - backup to {}", config.getBackupPath());
 		
-		File backupPath = new File(crazyProperties.getBACKUP_PATH());
+		File backupPath = new File(config.getBackupPath());
 		if (!backupPath.exists())
 			backupPath.mkdirs();
 
@@ -282,15 +280,15 @@ public class VideoBatch {
 		FileUtils.writeLines(new File(backupPath, VIDEO.BACKUP_ARCHIVE_FILENAME),  "EUC-KR", archiveList,  false); 
 		
 		// history backup
-		FileUtils.copyFileToDirectory(new File(crazyProperties.getSTORAGE_PATH(), VIDEO.HISTORY_LOG_FILENAME), backupPath);
+		FileUtils.copyFileToDirectory(new File(config.getStoragePath(), VIDEO.HISTORY_LOG_FILENAME), backupPath);
 		
 		// tag data backup
-		FileUtils.copyFileToDirectory(new File(crazyProperties.getSTORAGE_PATH(), VIDEO.TAG_DATA_FILENAME), backupPath);
+		FileUtils.copyFileToDirectory(new File(config.getStoragePath(), VIDEO.TAG_DATA_FILENAME), backupPath);
 		
 		// zip to cover, info, subtitles file on instance
 		//File backupTemp = new File(QUEUE_PATH, "backuptemp"); 
 		//Files.createTempDirectory(VIDEO.BACKUP_FILE_FILENAME).toFile();
-		File backupTemp = Files.createDirectory(Paths.get(crazyProperties.getQUEUE_PATH(), "backuptemp")).toFile();
+		File backupTemp = Files.createDirectory(Paths.get(config.getQueuePath(), "backuptemp")).toFile();
 		for (Video video : videoList)
 			for (File file : video.getFileWithoutVideo())
 				if (file != null && file.exists())
@@ -299,7 +297,7 @@ public class VideoBatch {
 		FileUtils.deleteDirectory(backupTemp);
 		
 		// _info folder backup to zip
-		ZipUtils.zip(new File(crazyProperties.getSTORAGE_PATH(), "_info"), backupPath, VIDEO.BACKUP_INFO_FILENAME, VIDEO.ENCODING, true);
+		ZipUtils.zip(new File(config.getStoragePath(), "_info"), backupPath, VIDEO.BACKUP_INFO_FILENAME, VIDEO.ENCODING, true);
 
 		NotiQueue.pushNoti("Backup completed");
 	}

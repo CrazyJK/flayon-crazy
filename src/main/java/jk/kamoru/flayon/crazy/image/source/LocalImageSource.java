@@ -8,20 +8,19 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.ImageNotFoundException;
 //import jk.kamoru.flayon.crazy.Utils;
 import jk.kamoru.flayon.crazy.image.IMAGE;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link ImageSource}
@@ -32,10 +31,9 @@ import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
 @Slf4j
 public class LocalImageSource implements ImageSource {
 
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired CrazyConfig config;
 
 	private List<Image> imageList;
-	
 	private boolean loading = false;
 
 	private synchronized void load() {
@@ -45,7 +43,7 @@ public class LocalImageSource implements ImageSource {
 			imageList = new ArrayList<>();
 		imageList.clear();
 
-		for (String path : crazyProperties.getIMAGE_PATHS()) {
+		for (String path : config.getImagePaths()) {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
 				log.info("Image scanning ... {}", dir);

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
@@ -30,17 +30,15 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class TagDaoFile implements TagDao {
 	
-	@Autowired CrazyProperties crazyProperties;
+	@Autowired CrazyConfig config;
 
 	private Path tagDataPath;
-	
 	private List<VTag> tags;
-
 	private ObjectMapper mapper = new ObjectMapper();
 
 	@PostConstruct
 	public void init() {
-		tagDataPath = Paths.get(crazyProperties.getSTORAGE_PATH(), VIDEO.TAG_DATA_FILENAME);
+		tagDataPath = Paths.get(config.getStoragePath(), VIDEO.TAG_DATA_FILENAME);
 		log.info("load data... {}", tagDataPath);
 		try {
 			if (!Files.exists(tagDataPath)) {

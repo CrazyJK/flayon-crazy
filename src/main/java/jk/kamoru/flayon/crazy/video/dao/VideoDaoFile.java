@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
 
-import jk.kamoru.flayon.crazy.CrazyProperties;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.error.VideoException;
@@ -28,9 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VideoDaoFile implements VideoDao {
 
-	@Autowired CrazyProperties crazyProperties;
-	@Autowired private VideoSource instanceVideoSource;
-	@Autowired private VideoSource archiveVideoSource;
+	@Autowired VideoSource instanceVideoSource;
+	@Autowired VideoSource archiveVideoSource;
+	@Autowired CrazyConfig config;
 
 	@Override
 	public List<Video> getVideoList(Boolean instance, Boolean archive) {
@@ -180,7 +180,7 @@ public class VideoDaoFile implements VideoDao {
 		} 
 		catch(VideoNotFoundException e) {
 			archiveVideo.setArchive(false);
-			archiveVideo.move(crazyProperties.getSTAGE_PATHS()[0]);
+			archiveVideo.move(config.getStagePaths()[0]);
 			archiveVideo.resetScore();
 			instanceVideoSource.addVideo(archiveVideo);
 			archiveVideoSource.removeElement(archiveVideo.getOpus());

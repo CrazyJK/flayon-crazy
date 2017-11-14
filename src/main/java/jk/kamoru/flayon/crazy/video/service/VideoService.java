@@ -55,14 +55,6 @@ public interface VideoService {
 	Actress getActress(String actressName);
 
 	/**
-	 * all actress list
-	 * @return actress list
-	 */
-//	List<Actress> getActressList();
-
-//	List<Actress> getActressListInArchive();
-
-	/**
 	 * actress list in video
 	 * @param videoList
 	 * @return actress list
@@ -75,14 +67,6 @@ public interface VideoService {
 	 * @return studio
 	 */
 	Studio getStudio(String studioName);
-
-	/**
-	 * get all studio list
-	 * @return studio list
-	 */
-//	List<Studio> getStudioList();
-
-//	List<Studio> getStudioListInArchive();
 
 	/** 
 	 * get stuio ilst in video
@@ -111,19 +95,6 @@ public interface VideoService {
 	 * @return cover file
 	 */
 	File getVideoCoverFile(String opus);
-
-	/**
-	 * get all video list
-	 * @return video list
-	 */
-//	List<Video> getVideoList();
-	
-	/**
-	 * get all archive video list
-	 * @return
-	 */
-//	List<Video> getArchiveVideoList();
-
 
 	/**
 	 * get video by search bean
@@ -165,11 +136,6 @@ public interface VideoService {
 	void reload(StopWatch stopWatch);
 
 	/**
-	 * reload video source
-	 */
-//	void reload();
-
-	/**
 	 * reload archive source
 	 */
 	void reloadArchive();
@@ -201,18 +167,6 @@ public interface VideoService {
 	List<Integer> getPlayRange();
 
 	/**
-	 * get minimum rank in properties
-	 * @return rank
-	 */
-	Integer minRank();
-
-	/**
-	 * get maximum rank in properties
-	 * @return rank
-	 */
-	Integer maxRank();
-
-	/**
 	 * get rank range
 	 * @return rank list
 	 */
@@ -237,8 +191,6 @@ public interface VideoService {
 	Map<String, List<Video>> groupByExtension();
 
 	List<TistoryGraviaItem> getTistoryItem();
-
-
 
 	void moveTorrentToSeed(String opus);
 
@@ -270,11 +222,6 @@ public interface VideoService {
 	 * arrange video. move files of video to same directory  
 	 */
 	void arrangeVideo();
-
-	/**get video list with torrent info
-	 * @param getAllTorrents 
-	 */
-//	List<Video> torrent(Boolean getAllTorrents);
 
 	/**move video file. rename to fullname
 	 * @param opus
