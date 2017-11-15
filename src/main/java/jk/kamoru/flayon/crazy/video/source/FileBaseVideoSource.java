@@ -22,6 +22,7 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
@@ -70,7 +71,7 @@ public class FileBaseVideoSource implements VideoSource {
 		this.isArchive = isArchive;
 		this.torrentPath = torrentPath;
 		this.paths = paths;
-		logger.info("init {}, {}, {}", toTypeString(), torrentPath, ArrayUtils.toString(paths, "IS NULL"));
+		logger.info("{} set {}, {}", toTypeString(), torrentPath, ArrayUtils.toString(paths, "IS NULL"));
 	}
 	
 	private String toTypeString() {
@@ -155,6 +156,9 @@ public class FileBaseVideoSource implements VideoSource {
 				}
 				addTitlePart(titlePart, _videoMap, _studioMap, _actressMap);
 			}
+			catch (CrazyException e) {
+				logger.warn("{}\n{}", e.getMessage(), filename);
+			}			
 			catch (Exception e) {
 				logger.error("File loading error : " + filename, e);
 			}
@@ -250,7 +254,7 @@ public class FileBaseVideoSource implements VideoSource {
 			return studioMap.get(name.toUpperCase());
 		else
 			if (isArchive)
-				return new Studio();
+				return new Studio(name + " not exist");
 			else
 				throw new StudioNotFoundException(name);
 	}
@@ -262,7 +266,7 @@ public class FileBaseVideoSource implements VideoSource {
 			return actressMap.get(name);
 		else
 			if (isArchive)
-				return new Actress();
+				return new Actress(name + " not exist");
 			else
 				throw new ActressNotFoundException(name);
 	}
@@ -299,17 +303,13 @@ public class FileBaseVideoSource implements VideoSource {
 
 		Studio studio = video.getStudio();
 		studio.removeVideo(video);
-		Studio studioElement = studioMap.get(studio.getName().toUpperCase());
-		studioElement.removeVideo(video);
-		if (studioElement.getVideoList().size() == 0)
+		if (studio.getVideoList().size() == 0)
 			studioMap.remove(studio.getName().toUpperCase());
 		
 		List<Actress> actressList = video.getActressList();
 		for (Actress actress : actressList) {
 			actress.removeVideo(video);
-			Actress actressElement = actressMap.get(VideoUtils.sortForwardName(actress.getName()));
-			actressElement.removeVideo(video);
-			if (actressElement.getVideoList().size() == 0)
+			if (actress.getVideoList().size() == 0)
 				actressMap.remove(VideoUtils.sortForwardName(actress.getName()));
 		}
 	}
@@ -321,7 +321,7 @@ public class FileBaseVideoSource implements VideoSource {
 	}
 	@Override
 	public void deleteVideo(String opus) {
-		videoMap.get(opus.toUpperCase()).deleteVideo();
+		videoMap.get(opus.toUpperCase()).deleteFileAll();
 		removeElement(opus);
 	}
 
@@ -338,7 +338,12 @@ public class FileBaseVideoSource implements VideoSource {
 		addTitlePart(part);
 	}
 
-	public void addTitlePart(TitlePart titlePart, Map<String, Video> videoMap, Map<String, Studio> studioMap, Map<String, Actress> actressMap) {
+	@Override
+	public void addTitlePart(TitlePart titlePart) {
+		addTitlePart(titlePart, videoMap, studioMap, actressMap);
+	}
+
+	private void addTitlePart(TitlePart titlePart, Map<String, Video> videoMap, Map<String, Studio> studioMap, Map<String, Actress> actressMap) {
 		Video video = videoMap.get(titlePart.getOpus());
 		if (video == null) {
 			video = videoProvider.get();
@@ -364,6 +369,7 @@ public class FileBaseVideoSource implements VideoSource {
 		if (studio == null) {
 			studio = studioProvider.get();
 			studio.setName(titlePart.getStudio());
+			studio.loadAdditionalInfo();
 			studioMap.put(titlePart.getStudio().toUpperCase(), studio);
 		}
 		studio.addVideo(video);
@@ -371,11 +377,11 @@ public class FileBaseVideoSource implements VideoSource {
 
 		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
 			String forwardActressName = VideoUtils.sortForwardName(actressName);
-			actressName = VideoUtils.trimBlank(actressName);
 			Actress actress = actressMap.get(forwardActressName);
 			if (actress == null) {
 				actress = actressProvider.get();
-				actress.setName(actressName);
+				actress.setName(VideoUtils.trimBlank(actressName));
+				actress.loadAdditionalInfo();
 				actressMap.put(forwardActressName, actress);
 			}		
 			actress.addVideo(video);
@@ -385,9 +391,4 @@ public class FileBaseVideoSource implements VideoSource {
 		}
 	}
 	
-	@Override
-	public void addTitlePart(TitlePart titlePart) {
-		addTitlePart(titlePart, videoMap, studioMap, actressMap);
-	}
-
 }

@@ -26,12 +26,12 @@ function saveStudioInfo() {
 </head>
 <body>
 <div class="container">
-	<form id="studioForm" class="form-horizontal">
-		<input type="hidden" name="name" value="${studio.name}"/>
+	<form id="studioForm" class="form-horizontal" onsubmit="return false;">
+		<input type="hidden" name="NAME" value="${studio.name}"/>
 		<br/>
 		<div class="form-group">
 			<div class="col-sm-11">
-				<input class="form-control" type="text" name="newname" value="${studio.name}" id="newName" />
+				<input class="form-control" type="text" name="NEWNAME" value="${studio.name}" id="newName" />
 			</div>
 			<div class="col-sm-1">
 				<span class="label label-primary">Score ${studio.score}</span>
@@ -39,10 +39,10 @@ function saveStudioInfo() {
 		</div>
 		<div class="form-group">
 			<div class="col-sm-6">
-				<input class="form-control" id="homepage" name="homepage" value="${studio.homepage}" placeholder="Homepage"/>
+				<input class="form-control" id="homepage" name="HOMEPAGE" value="${studio.homepage}" placeholder="Homepage"/>
 			</div>
 			<div class="col-sm-5">
-				<input class="form-control" id="company" name="company" value="${studio.company}" placeholder="Company"/>
+				<input class="form-control" id="company" name="COMPANY" value="${studio.company}" placeholder="Company"/>
 			</div>
 			<div class="col-sm-1">
 				<button class="btn btn-default" onclick="saveStudioInfo()">Save</button>

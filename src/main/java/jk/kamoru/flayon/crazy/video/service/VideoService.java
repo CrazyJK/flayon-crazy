@@ -256,7 +256,6 @@ public interface VideoService {
 	// --- action method of actress --------------------------------------
 
 	/**save actress info
-	 * @param name actress name
 	 * @param params map of actress info
 	 * @return 
 	 */

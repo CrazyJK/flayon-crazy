@@ -40,7 +40,7 @@ input[type='text'].form-control {
 }
 </style>
 <script type="text/javascript">
-bgContinue = ${!actress.existImage};
+bgContinue = ${empty actress.image};
 $(document).ready(function() {
 	!bgContinue && $("body").css({
 		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
@@ -61,21 +61,21 @@ function saveActressInfo() {
 <div class="container">
 	<br/>
 	<form id="actressForm" role="form" class="form-horizontal" onsubmit="return false;">
-		<input type="hidden" name="name" value="${actress.name}"/>
-		<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
+		<input type="hidden" name="NAME" value="${actress.name}"/>
+		<input type="hidden" name="FAVORITE" id="favorite" value="${actress.favorite}"/>
 		<div class="form-group">
 			<div class="col-sm-2 text-right">
 				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" type="text" name="newname"   value="${actress.name}"      id="newName" />
+				<input class="form-control" type="text" name="NEWNAME"   value="${actress.name}"      id="newName" />
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" type="text" name="localname" value="${actress.localName}" placeholder="local name"/>
+				<input class="form-control" type="text" name="LOCALNAME" value="${actress.localName}" placeholder="local name"/>
 			</div>
 			<div class="col-sm-1">
 				<img src="${PATH}/img/magnify${status.count%2}.png" width="12px" title="<s:message code="video.find-info.actress"/>"
-					onclick="popup('<c:url value="${urlSearchActress}"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
+					onclick="popup('<c:url value="${urlSearchActress}"/>${actress.name}', 'infoActress', 800, 600)"/>
 			</div>
 			<div class="col-sm-1">
 				<span class="label label-primary">Score ${actress.score}</span>
@@ -83,16 +83,16 @@ function saveActressInfo() {
 		</div>
 		<div class="form-group">
 			<div class="col-sm-3">
-				<input class="form-control" type="text" name="birth"    value="${actress.birth}"    placeholder="Birth"/>
+				<input class="form-control" type="text" name="BIRTH"    value="${actress.birth}"    placeholder="Birth"/>
 			</div>
 			<div class="col-sm-3">
-				<input class="form-control" type="text" name="bodySize" value="${actress.bodySize}" placeholder="Body size"/>
+				<input class="form-control" type="text" name="BODYSIZE" value="${actress.bodySize}" placeholder="Body size"/>
 			</div>
 			<div class="col-sm-2">
-				<input class="form-control" type="text" name="height"   value="${actress.height}"   placeholder="Height"/>
+				<input class="form-control" type="text" name="HEIGHT"   value="${actress.height}"   placeholder="Height"/>
 			</div>
 			<div class="col-sm-2">
-				<input class="form-control" type="text" name="debut"    value="${actress.debut}"    placeholder="Debut"/>
+				<input class="form-control" type="text" name="DEBUT"    value="${actress.debut}"    placeholder="Debut"/>
 			</div>
 			<div class="col-sm-2 text-right">
 				<button class="btn btn-default" onclick="saveActressInfo()">Save</button>
@@ -100,7 +100,7 @@ function saveActressInfo() {
 		</div>
 		<div class="form-group">
 			<div class="col-sm-12">
-				<textarea class="form-control" rows="1" name="comment">${actress.comment}</textarea>
+				<textarea class="form-control" rows="1" name="COMMENT">${actress.comment}</textarea>
 			</div>
 		</div>
 	</form>

@@ -26,6 +26,10 @@ public class CrazyException extends RuntimeException {
 		this(message, KIND.Crazy);
 	}
 
+	public CrazyException(String format, Object...params) {
+		this(String.format(format, params), KIND.Crazy);
+	}
+	
 	public KIND getKind() {
 		return kind;
 	}

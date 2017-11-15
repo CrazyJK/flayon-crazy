@@ -203,6 +203,7 @@ var calculatedDivHeight = 0,
 		restCall(PATH + "/rest/actress/" + name + "/favorite/" + !val, {method: "PUT", showLoading: false}, function(result) {
 			console.log("fnFavorite", result, dom.innerHTML);
 			$self.html(result ? '★' : '☆').attr({title: "Favorite " + result});
+			$("#favorite").val(result);
 		});
 	},
 	/**

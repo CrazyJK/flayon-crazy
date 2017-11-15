@@ -49,7 +49,7 @@
 	<span class="label label-plain" title="Age ${actress.age}">${actress.age}</span> 
 	<span class="label label-plain" title="Score ${actress.score}">S ${actress.score}</span>
 	<span class="label label-plain" title="show this actress video" onclick="fnVideoToggle(this)">Video ${fn:length(actress.videoList)}</span>
-	<span class="label label-plain" title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
+	<span class="label label-plain" title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.name}')"><span class="glyphicon glyphicon-user"></span></span>
 <%
 	} else {
 %>

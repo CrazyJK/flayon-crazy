@@ -648,7 +648,7 @@ public class Video {
 	/**
 	 * 싹다 지운다
 	 */
-	public void deleteVideo() {
+	public void deleteFileAll() {
 		for (File file : getFileAll())
 			if (file != null)
 				if(FileUtils.deleteQuietly(file))
@@ -983,7 +983,7 @@ public class Video {
 		this.videoCandidates.clear();
 	}
 
-	public void rename(String newName) {
+	public void renameFile(String newName) {
 		log.debug("rename {} -> {}", getFullname(), newName);
 
 		// video
@@ -1038,13 +1038,13 @@ public class Video {
 	}
 	
 	public void renameOfActress(String oldName, String newName) {
-		String actressNames = this.getActressName().replace(oldName, newName);
+		String actressNames = StringUtils.replace(getActressName(), oldName, newName);
 		String newVideoName = String.format("[%s][%s][%s][%s][%s]", studio.getName(), opus, title, actressNames, StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate);
-		rename(newVideoName);
+		renameFile(newVideoName);
 	}
 
 	public void renameOfStudio(String newName) {
-		rename(String.format("[%s][%s][%s][%s][%s]", newName, opus, title, getActressName(), StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate));
+		renameFile(String.format("[%s][%s][%s][%s][%s]", newName, opus, title, getActressName(), StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate));
 	}
 
 

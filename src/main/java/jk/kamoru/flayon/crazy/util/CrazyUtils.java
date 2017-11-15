@@ -1,10 +1,13 @@
 package jk.kamoru.flayon.crazy.util;
 
 import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -86,18 +89,18 @@ public class CrazyUtils {
 	 * @return 파일이 없으면 빈 Map
 	 */
 	public static Map<String, String> readFileToMap(File file) {
-		Map<String, String> map = new HashMap<>();
 		try {
+			Map<String, String> map = new HashMap<>();
 			for (String str : Files.readAllLines(file.toPath())) {
 				String[] strs = StringUtils.split(str, "=", 2);
 				if (strs.length > 1)
-					map.put(strs[0], strs[1]);
+					map.put(StringUtils.stripToEmpty(strs[0]), StringUtils.stripToEmpty(strs[1]));
 			}
-		} 
+			return map;
+		}
 		catch (IOException e) {
 			throw new CrazyException("file read error", e);
 		}
-		return map;
 	}
 
 	/**
@@ -192,7 +195,7 @@ public class CrazyUtils {
 			data.add(String.format("%s=%s",entry.getKey().toUpperCase().trim(), entry.getValue().trim()));
 		}
 		try {
-			Files.write(file.toPath(), data, StandardCharsets.UTF_8, CREATE, WRITE);
+			Files.write(file.toPath(), data, StandardCharsets.UTF_8, CREATE, WRITE, TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			log.error("write file error", e);
 			throw new CrazyException("write file error", e);
@@ -336,5 +339,19 @@ public class CrazyUtils {
 		String _str = StringUtils.trimToNull(str);
 		return _str == null ? def : _str;
 	}
-	
+
+	public static URL makeURL(String string) {
+		String str = StringUtils.trimToEmpty(string);
+		if (StringUtils.isNotEmpty(str))
+			if (!str.startsWith("http"))
+				str = "http://" + str;
+		try {
+			return new URL(str);
+		} catch (MalformedURLException e) {
+			if (log.isDebugEnabled() && StringUtils.isNotEmpty(str))
+				log.warn("Malformed URL {}", e.getMessage());
+			return null;
+		}
+	}
+
 }
