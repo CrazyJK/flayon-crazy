@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Map.*" %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
@@ -21,11 +22,22 @@ response.setHeader("error.message", request.getAttribute("status") + " : " + req
 <div class="container">
     <small class="timestamp"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
  	<div class="page-header">
- 		<h1>${path} <code>${status}</code> ${error}</h1>
+ 		<h1><span class="text-danger">${error}</span></h1>
+ 		<h3><code>${status}</code> ${path}</h3>
 	</div>
 	<div class="page-content">
-	    <p>
-			<code>${exception}: ${message}</code>
+	    <p>Error: <code>${exception}: ${message}</code></p>
+	    <p>Param:
+	    	<ol>
+<%
+	for (Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
+		out.println("<li>" + entry.getKey() + " : ");
+		for (String value : entry.getValue()) {
+			out.println("<code>" + value + "</code>");
+		}
+	}
+%>
+	    	</ol>
 	    </p>
 	</div>
 </div>

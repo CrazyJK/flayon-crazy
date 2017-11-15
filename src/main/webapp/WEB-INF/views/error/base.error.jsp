@@ -17,7 +17,8 @@
 <div class="container">
    	<small class="timestamp"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
  	<div class="page-header">
-	    <h1>${exception.message}</h1>
+	    <h1><span class="text-danger">${exception.message}</span></h1>
+ 		<h3><code><%=response.getStatus()%></code> <%=request.getAttribute("javax.servlet.error.request_uri") %></h3>
 	</div>
 	<div class="page-content">
 	    <p>Error : <code>${exception}</code></p>

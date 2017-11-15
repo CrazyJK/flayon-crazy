@@ -268,12 +268,23 @@ var	resizeDivHeight = function() {
 				callback(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			console.log("restCall fail", '\njqXHR=', jqXHR, '\ntextStatus=', textStatus, '\nerrorThrown=', errorThrown);
-			if (jqXHR.getResponseHeader('error') === 'true')
-				displayNotice('Error', jqXHR.getResponseHeader('error.message'));
-			else if (jqXHR.responseJSON)
-				displayNotice('Error', 'Error: ' + jqXHR.responseJSON.message + '<br>' +  'Status: ' + jqXHR.responseJSON.status + '<br>' + 'Path: ' + jqXHR.responseJSON.path);
-			else
+			if (jqXHR.getResponseHeader('error')) {
+				displayNotice('Error', 
+						'Message: ' + jqXHR.getResponseHeader('error.message') + "<br>" + 
+						'Cause: '   + jqXHR.getResponseHeader('error.cause'));
+			}
+			else if (jqXHR.responseJSON) {
+				displayNotice('Error', 
+						'Error: '     + jqXHR.responseJSON.error + '<br>' + 
+						'Exception: ' + jqXHR.responseJSON.exception + '<br>' +
+						'Message: '   + jqXHR.responseJSON.message + '<br>' +
+						'Timestamp: ' + jqXHR.responseJSON.timestamp + '<br>' +
+						'Status: '    + jqXHR.responseJSON.status + '<br>' + 
+						'Path: '      + jqXHR.responseJSON.path);
+			}
+			else {
 				displayNotice('Error', textStatus + "<br>" + errorThrown);
+			}
 		}).always(function(data_jqXHR, textStatus, jqXHR_errorThrown) {
 			if (settings.showLoading)
 				loading(false);

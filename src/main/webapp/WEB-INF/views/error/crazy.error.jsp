@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="s"  uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s"   uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="jk" tagdir="/WEB-INF/tags"%>
 <c:set value="${exception.kind eq 'Video'}" var="isVideo"/>
 <c:set value="${exception.kind eq 'Image'}" var="isImage"/>
@@ -16,10 +17,12 @@
 <script type="text/javascript" src="<c:url value="/webjars/bootstrap/3.3.6/dist/js/bootstrap.min.js"/>"></script>
 </head>
 <body>
-<div class="container">
 
+<div class="container">
+    <small class="timestamp"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
 	<header class="page-header">
-		<h2><span class="text-danger">${exception.message}</span></h2>
+		<h1><span class="text-danger">${exception.message}</span></h1>
+ 		<h3><code><%=response.getStatus()%></code> <%=request.getAttribute("javax.servlet.error.request_uri") %></h3>
 	</header>
 	
 	<div class="page-content">
@@ -40,7 +43,6 @@
 		    <p>File : <code>${exception.image.file}</code></p>
 	    </c:if>
     </div>
-    
 </div>
 
 <div class="container">

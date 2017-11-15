@@ -17,7 +17,8 @@
 <div class="container">
    	<small class="timestamp"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${timestamp}"/></small>
  	<div class="page-header">
-	    <h1>${path} ${error}</h1>
+	    <h1><span class="text-danger">${error}</span></h1>
+	    <h3>${path}</h3>
 	</div>
 	<div class="page-content">
 	</div>
