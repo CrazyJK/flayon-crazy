@@ -13,7 +13,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
-import jk.kamoru.flayon.base.watch.SimpleWatchDirectory;
+import jk.kamoru.flayon.base.watch.AsyncExecutorService;
+import jk.kamoru.flayon.base.watch.DirectoryWatcher;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.Getter;
@@ -75,19 +76,12 @@ public class CrazyConfig {
 	}
 
     @Bean
-    public SimpleWatchDirectory infoWatch() {
-        return new SimpleWatchDirectory() {
-        	/*
-        	 * about Exception, user limit of inotify watches reached
-        	 * Case Ubuntu
-        	 * 1. Add the following line to a new file under /etc/sysctl.d/ directory: 
-        	 *   fs.inotify.max_user_watches = 524288
-        	 * 2. read README in /etc/sysctl.d/
-        	 *   sudo service procps start
-        	 */
+    public AsyncExecutorService directoryWatch() {
+        return new AsyncExecutorService() {
 			@Override
-			protected String getPath() {
-				return storagePath + "/_info";
+			protected Runnable getTask() {
+				DirectoryWatcher task = new DirectoryWatcher(instancePaths);
+				return task;
 			}
         };
     }
@@ -95,7 +89,7 @@ public class CrazyConfig {
 	@Bean
 	public BeanPostProcessor methodExecutionBeanPostProcessor() {
 		Map<String, String> beans = new HashMap<>();
-		beans.put("infoWatch", "start");		
+		beans.put("directoryWatch", "start");
 		MethodExecutionBeanPostProcessor processor = new MethodExecutionBeanPostProcessor();
 		processor.setBeans(beans);
 		return processor;
