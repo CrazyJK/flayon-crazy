@@ -215,7 +215,13 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.2</version>
 		</dependency>
-    	
+
+		<dependency>
+			<groupId>com.wcohen</groupId>
+			<artifactId>com.wcohen.secondstring</artifactId>
+			<version>0.1</version>
+		</dependency>
+
   	</dependencies>
 
 	<dependencyManagement>

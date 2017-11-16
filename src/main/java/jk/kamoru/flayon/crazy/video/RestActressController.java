@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy.video;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jk.kamoru.flayon.crazy.util.NameDistanceChecker;
+import jk.kamoru.flayon.crazy.util.NameDistanceChecker.CheckResult;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
+import jk.kamoru.flayon.crazy.video.domain.TitlePart;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
@@ -41,4 +45,14 @@ public class RestActressController {
 		return videoService.setFavoriteOfActress(name, onOff);
 	}
 
+	@RequestMapping("/namecheck")
+	public List<CheckResult> nameCheck(
+			@RequestParam(value="l", required=false, defaultValue="0.9") double limit,
+			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") boolean archive) {
+		List<String> names = videoService.getActressList(instance, archive).stream()
+				.filter(a -> !a.getName().equals(TitlePart.AMATEUR))
+				.map(a -> a.getName()).collect(Collectors.toList());
+		return NameDistanceChecker.check(names, limit);
+	}
 }
