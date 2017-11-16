@@ -12,6 +12,9 @@
 .active {
 	color: red;
 }
+.selected {
+	color: blue;
+}
 </style>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
@@ -53,7 +56,8 @@ function displayNameCheckResult(list) {
 	},
 	renderActressName = function(name) {
 		return 	$("<span>", {title: name, "class": "pointer"}).html(name).on("click", function() {
-					fnViewActressDetail($(this).html())
+					fnViewActressDetail($(this).html());
+					$("[title='" + $(this).attr("title") + "']").addClass("selected");
 				}).hover(
 					function() {
 						$("[title='" + $(this).attr("title") + "']").addClass("active");

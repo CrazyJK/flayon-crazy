@@ -41,17 +41,22 @@ input[type='text'].form-control {
 </style>
 <script type="text/javascript">
 bgContinue = ${empty actress.image};
+var archive = ${actress.archive};
 $(document).ready(function() {
 	!bgContinue && $("body").css({
 		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
 	});	
+	if (archive) {
+		$("#favoriteTEXT").hide();
+		$(".btn").disabled();
+	}
 });
 function saveActressInfo() {
 	restCall(PATH + '/rest/actress', {method: "PUT", data: $("form#actressForm").serialize(), title: "Save actress info"}, function() {
-		if (opener) {
-			if (opener.location.href.indexOf("video/actress") > -1) 
-				opener.location.reload();
-		}
+//		if (opener) {
+//			if (opener.location.href.indexOf("video/actress") > -1) 
+//				opener.location.reload();
+//		}
 		location.href = PATH + "/video/actress/" + $("#newName").val();
 	});
 }
