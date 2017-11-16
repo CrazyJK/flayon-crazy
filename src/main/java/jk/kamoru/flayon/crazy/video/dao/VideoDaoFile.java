@@ -84,7 +84,7 @@ public class VideoDaoFile implements VideoDao {
 		try {
 			return instanceVideoSource.getActress(name);
 		} catch (ActressNotFoundException e) {
-			return archiveVideoSource.getActress(name);
+			return  archiveVideoSource.getActress(name);
 		}
 	}
 

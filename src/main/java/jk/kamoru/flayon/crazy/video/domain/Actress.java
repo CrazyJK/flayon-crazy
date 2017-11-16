@@ -52,6 +52,7 @@ public class Actress {
 	private String height;
 	private String age;
 	private String comment;
+	private boolean archive;
 	
 	@JsonIgnore private File image;
 	
@@ -66,6 +67,7 @@ public class Actress {
 		height     = "";
 		age        = "";
 		comment    = "";
+		archive  = false;
 		favorite   = new Boolean(false);
 		videoList  = new ArrayList<Video>();
 		studioList = new ArrayList<Studio>();

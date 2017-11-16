@@ -382,6 +382,7 @@ public class FileBaseVideoSource implements VideoSource {
 				actress = actressProvider.get();
 				actress.setName(VideoUtils.trimBlank(actressName));
 				actress.loadAdditionalInfo();
+				actress.setArchive(isArchive);
 				actressMap.put(forwardActressName, actress);
 			}		
 			actress.addVideo(video);
