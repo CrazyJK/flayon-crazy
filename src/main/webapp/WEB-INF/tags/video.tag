@@ -45,7 +45,7 @@
 				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
 				<span title="age">${actress.age}</span> 
-				<span title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.reverseName}')"><span class="glyphicon glyphicon-user"></span></span>
+				<span title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.name}')"><span class="glyphicon glyphicon-user"></span></span>
 			</c:if>
 		</span>
 		${mode eq 'f' ? '</div>' : ''}
