@@ -61,6 +61,14 @@ public class Studio {
 				name, CrazyUtils.trimToEmpty(homepage), company, getScore());
 	}
 
+	public int getVideoCount() {
+		return videoList.size();
+	}
+
+	public int getActressCount() {
+		return actressList.size();
+	}
+
 	public void addVideo(Video video) {
 		if (!videoList.contains(video))
 			this.videoList.add(video);		

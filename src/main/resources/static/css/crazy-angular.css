@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+*[onclick], *[data-ng-click] {
+	cursor: pointer;
+}
+.sortorder:after {
+  content: '\25b2';
+}
+.sortorder.reverse:after {
+  content: '\25bc';
+}

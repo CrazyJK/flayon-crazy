@@ -1,36 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="jk"     tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"   uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="s"    uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="jk"   tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title><s:message code="video.studio"/> <s:message code="video.list"/></title>
-<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
+<link rel="stylesheet" href="<c:url value="/css/crazy-angular.css"/>"/>
+<script type="text/javascript" src="<c:url value="/webjars/angular/1.6.6/angular.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/angular-animate/1.6.6/angular-animate.min.js"/>"></script>
 <script type="text/javascript">
-var table;
-var resizeSecondDiv = function() {
-	table.draw();
-};
+var instance = reqParam.i != 'false';
+var archive  = reqParam.a == 'true';
+
+var app = angular.module("studioApp", ["ngAnimate"]);
+app.controller("studioController", function($scope, $http) {
+	$scope.predicate = 'name';
+	$scope.reverse = false;
+	$scope.order = function(predicate) {
+	    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+	    $scope.predicate = predicate;
+	};
+	$scope.list = [];
+	$scope.videoDetail = function(opus) {
+		fnVideoDetail(opus);
+	}; 
+	$scope.studioDetail = function(name) {
+		fnViewStudioDetail(name);
+	};
+	$scope.reload = function() {
+		$route.reload();
+	}
+
+	$http({
+		url: PATH + "/rest/studio" + "?i=" + instance + "&a=" + archive
+	}).then(function(response) {
+		$scope.list = response.data;
+		$(".list-count").html(response.data.length);
+	}, function(response) {
+		console.log("Error", response);
+	});
+
+});
+
 $(document).ready(function() {
+    instance && $("#checkbox-instance").click();
+    archive  && $("#checkbox-archive").click();
+	
 	$("#viewBtn").on("click", function() {
 		loading(true);
 		location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
 	});
-    table = $('#list').DataTable({
-      	       scrollY: (calculatedDivHeight - 70),
-        scrollCollapse: true,
-                paging: false,
-             searching: false,
-            processing: true,
-                  info: false,
-        fnDrawCallback: function(oSettings) {
-        	$("#studio-list").css({visibility: 'visible'}).addClass("w3-animate-opacity");
-        }
-    });
 });
 </script>
 </head>
@@ -39,16 +60,16 @@ $(document).ready(function() {
 
 	<div id="header_div" class="box form-inline">
 		<label for="search" class="title">
-			<s:message code="video.studio"/> <span class="badge">${fn:length(studioList)}</span>
+			<s:message code="video.studio"/> <span class="badge list-count">0</span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 
 		<label>
-			<input type="checkbox" id="instance" name="i" value="${instance}" ${instance ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<input type="checkbox" id="instance" name="i" class="sr-only"/>
 			<span class="label" id="checkbox-instance">Instance</span>
 		</label>
 		<label>
-			<input type="checkbox" id="archive" name="a" value="${archive}" ${archive ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<input type="checkbox" id="archive" name="a" class="sr-only"/>
 			<span class="label" id="checkbox-archive">Archive</span>
 		</label>
 		
@@ -57,35 +78,27 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<div id="studio-list" style="visibility:hidden;">
-			<table id="list" class="table table-condensed table-hover">
+		<div id="studio-list" data-ng-app="studioApp">
+			<table id="list" class="table table-condensed table-hover" data-ng-controller="studioController">
 				<thead>
 					<tr>
-						<th style="max-width: 20px;">#</th>
-						<c:forEach items="${sorts}" var="s">
-						<th style="max-width: 100px;" title="<s:message code="studio.sort.${s}"/>"><s:message code="studio.sort.short.${s}"/></th>
-						</c:forEach>
-						<th style="max-width: 150px;">Video</th>
+						<th data-ng-click="order('name')"    >Name     <i class="sortorder" data-ng-show="predicate === 'name'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('homepage')">Homepage <i class="sortorder" data-ng-show="predicate === 'homepage'" data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('company')" >Company  <i class="sortorder" data-ng-show="predicate === 'company'"  data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('actress')">Actress <i class="sortorder" data-ng-show="predicate === 'actress'" data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('video')"  >Video   <i class="sortorder" data-ng-show="predicate === 'video'"   data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('score')"  >Score   <i class="sortorder" data-ng-show="predicate === 'score'"   data-ng-class="{reverse:reverse}"></i></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${studioList}" var="studio" varStatus="status">
-					<tr class="nowrap">
-						<td style="max-width:20px;" class="number">${status.count}</td>
-						<td><a onclick="fnViewStudioDetail('${studio.name}')">${studio.name}</a></td>
-						<td><a href="<s:url value="${studio.homepage}" />" target="_blank">${studio.homepage}</a></td>
-						<td>${studio.company}</td>
-						<td class="number">${fn:length(studio.videoList)}</td>
-						<td class="number">${studio.score}</td>
-						<td>
-							<div class="nowrap">
-								<c:forEach items="${studio.videoList}" var="video">
-								<jk:video video="${video}" view="opus"/>
-								</c:forEach>
-							</div>
-						</td>
+					<tr class="nowrap" data-ng-repeat="studio in list | orderBy:predicate:reverse">
+						<td><a data-ng-click="studioDetail(studio.name)">{{studio.name}}</a></td>
+						<td><a href="{{studio.homepage}}" target="_blank">{{studio.homepage}}</a></td>
+						<td>{{studio.company}}</td>
+						<td class="number">{{studio.actressCount}}</td>
+						<td class="number">{{studio.videoCount}}</td>
+						<td class="number">{{studio.score}}</td>
 					</tr>
-					</c:forEach>
 				</tbody>
 			</table>
 		</div>

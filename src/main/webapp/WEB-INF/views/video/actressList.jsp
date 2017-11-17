@@ -7,6 +7,7 @@
 <html>
 <head>
 <title><s:message code="video.actress"/> <s:message code="video.list"/></title>
+<link rel="stylesheet" href="<c:url value="/css/crazy-angular.css"/>"/>
 <style type="text/css">
 .active {
 	color: red;
@@ -14,22 +15,10 @@
 .selected {
 	color: blue;
 }
-*[onclick], *[data-ng-click] {
-	cursor: pointer;
-}
-.sortorder:after {
-  content: '\25b2';
-}
-.sortorder.reverse:after {
-  content: '\25bc';
-}
 </style>
 <script type="text/javascript" src="<c:url value="/webjars/angular/1.6.6/angular.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/angular-animate/1.6.6/angular-animate.min.js"/>"></script>
 <script type="text/javascript">
-var resizeSecondDiv = function() {
-};
-
 var instance = reqParam.i != 'false';
 var archive  = reqParam.a == 'true';
 
@@ -86,22 +75,16 @@ var displayNameCheckResult = function(list) {
 	    	$("<table>", {"class": "table", id: "nameCheckResultTable"}).append(
 		    		$("<thead>").append(
 			    			$("<tr>").append(
-				       				$("<th>").html("Name1"),		
-				       				$("<th>").html("Name2"),		
-				       				$("<th>").html("Score")
+				       				$("<th>").html("Name1"), $("<th>").html("Name2"), $("<th>").html("Score")
 			    			)		
 		    		),
 		   			(function () {
 			    		var tbody = $("<tbody>");
 		    			$.each(list, function(idx, record) {
 		    				$("<tr>").append(
-			       					$("<td>").append(
-		       							renderActressName(record.name1)
-			       					),
-			       					$("<td>").append(
-		       							renderActressName(record.name2)
-			       					),
-			       					$("<td>").html(scoreToFixed(record.score))		
+			       					$("<td>").append(renderActressName(record.name1)),
+			       					$("<td>").append(renderActressName(record.name2)),
+			       					$("<td>").html(scoreToFixed(record.score))
 		    				).appendTo(tbody);
 		    			});
 		    			return tbody;
@@ -110,6 +93,11 @@ var displayNameCheckResult = function(list) {
     );
     var height = $("#content_div").height() - 100;
     $("#notice").attr("title", "Name check result").css({overflowX: "hidden"}).dialog({height: height, width: 600});
+};
+
+var resizeSecondDiv = function() {
+    var height = $("#content_div").height() - 100;
+	$("#notice").css({height: height});
 };
 
 $(document).ready(function() {
@@ -139,7 +127,7 @@ $(document).ready(function() {
 
 	<div id="header_div" class="box form-inline">
 		<label for="search" class="title">
-			<s:message code="video.actress"/> <span class="badge list-count"></span>
+			<s:message code="video.actress"/> <span class="badge list-count">0</span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 		
@@ -166,16 +154,16 @@ $(document).ready(function() {
 			<table id="list" class="table table-condensed table-hover" data-ng-controller="actressController">
 				<thead>
 					<tr>
-						<th style="max-width: 80px;" data-ng-click="order('favorite')" >Favorite <i class="sortorder" data-ng-show="predicate === 'favorite'"  data-ng-class="{reverse:reverse}"></i></th>
-						<th style="" data-ng-click="order('localName')">Local    <i class="sortorder" data-ng-show="predicate === 'localName'" data-ng-class="{reverse:reverse}"></i></th>
-						<th style="" data-ng-click="order('name')"     >Name     <i class="sortorder" data-ng-show="predicate === 'name'"      data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width:200px;" data-ng-click="order('birth')"    >Birth    <i class="sortorder" data-ng-show="predicate === 'birth'"     data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width:200px;" data-ng-click="order('bodySize')" >Body     <i class="sortorder" data-ng-show="predicate === 'bodySize'"  data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 80px;" data-ng-click="order('height')"   >Height   <i class="sortorder" data-ng-show="predicate === 'height'"    data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 80px;" data-ng-click="order('debut')"    >Debut    <i class="sortorder" data-ng-show="predicate === 'debut'"     data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 60px;" data-ng-click="order('age')"      >Age      <i class="sortorder" data-ng-show="predicate === 'age'"       data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 60px;" data-ng-click="order('video')"    >Video    <i class="sortorder" data-ng-show="predicate === 'video'"     data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 60px;" data-ng-click="order('score')"    >Score    <i class="sortorder" data-ng-show="predicate === 'score'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th style="width: 90px;" data-ng-click="order('favorite')" >Favorite <i class="sortorder" data-ng-show="predicate === 'favorite'" data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('localName')">Local Name<i class="sortorder" data-ng-show="predicate === 'localName'" data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('name')"     >Name      <i class="sortorder" data-ng-show="predicate === 'name'"      data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width:200px;" data-ng-click="order('birth')"    >Birth  <i class="sortorder" data-ng-show="predicate === 'birth'"    data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width:200px;" data-ng-click="order('bodySize')" >Body   <i class="sortorder" data-ng-show="predicate === 'bodySize'" data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 80px;" data-ng-click="order('height')"   >Height <i class="sortorder" data-ng-show="predicate === 'height'"   data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 80px;" data-ng-click="order('debut')"    >Debut  <i class="sortorder" data-ng-show="predicate === 'debut'"    data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('age')"  >Age   <i class="sortorder" data-ng-show="predicate === 'age'"   data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('video')">Video <i class="sortorder" data-ng-show="predicate === 'video'" data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('score')">Score <i class="sortorder" data-ng-show="predicate === 'score'" data-ng-class="{reverse:reverse}"></i></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -187,7 +175,7 @@ $(document).ready(function() {
 						<td>{{actress.bodySize}}</td>
 						<td>{{actress.height}}</td>
 						<td>{{actress.debut}}</td>
-						<td>{{actress.age}}</td>
+						<td class="number">{{actress.age}}</td>
 						<td class="number">{{actress.videoCount}}</td> 
 						<td class="number">{{actress.score}}</td>
 					</tr>
