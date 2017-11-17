@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.wcohen.ss.JaroWinkler;
 import com.wcohen.ss.api.StringDistance;
@@ -37,7 +38,7 @@ public class NameDistanceChecker {
 			}
 		}
 		log.info("names {}. limit {}. checking {} times. {} result", names.size(), limit, count, result.size());
-		return result;
+		return result.stream().sorted((s1, s2) -> CrazyUtils.compareTo(s2.getScore(), s1.getScore())).collect(Collectors.toList());
 	}
 	
 	@Data
