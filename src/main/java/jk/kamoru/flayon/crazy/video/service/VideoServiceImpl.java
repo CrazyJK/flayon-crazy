@@ -56,7 +56,7 @@ import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
@@ -441,7 +441,7 @@ public class VideoServiceImpl implements VideoService {
 		if (video == null) {
 			List<History> findByOpus = historyService.findByOpus(opus);
 			if (findByOpus.size() > 0) {
-				TitlePart titlePart = new TitlePart(findByOpus.get(0).getDesc());
+				TitleValidator titlePart = new TitleValidator(findByOpus.get(0).getDesc());
 				video = new Video();
 				video.setTitlePart(titlePart);
 				video.setStudio(new Studio(titlePart.getStudio()));
@@ -858,8 +858,8 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public List<TitlePart> parseToTitleData(String titleData, Boolean saveCoverAll) {
-		List<TitlePart> titlePartList = new ArrayList<>();
+	public List<TitleValidator> parseToTitleData(String titleData, Boolean saveCoverAll) {
+		List<TitleValidator> titlePartList = new ArrayList<>();
 		
 		if (!StringUtils.isEmpty(titleData)) {
 			titleData += System.getProperty("line.separator") + System.getProperty("line.separator") + "eof";
@@ -870,7 +870,7 @@ public class VideoServiceImpl implements VideoService {
 				for (int i = 0; i < titles.length; i++) {
 					if (titles[i].trim().length() > 0) {
 						// make TitlePart
-						TitlePart titlePart = new TitlePart();
+						TitleValidator titlePart = new TitleValidator();
 						// opus
 						text = titles[i++].trim().toUpperCase();
 						titlePart.setOpus(text);
@@ -943,10 +943,10 @@ public class VideoServiceImpl implements VideoService {
 			}
 
 			if (saveCoverAll) {
-				List<TitlePart> _titlePartList = new ArrayList<>();
+				List<TitleValidator> _titlePartList = new ArrayList<>();
 				int count = 0;
 				int total = titlePartList.size();
-				for (TitlePart titlePart : titlePartList) {
+				for (TitleValidator titlePart : titlePartList) {
 					log.info("Save Cover {}/{}", ++count, total);
 					CompletableFuture<File> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), COVER_PATH);
 					try {
@@ -967,7 +967,7 @@ public class VideoServiceImpl implements VideoService {
 		}
 		return titlePartList.stream()
 //				.sorted(Comparator.comparing(TitlePart::getCheckDesc).reversed().thenComparing(Comparator.comparing(TitlePart::toString)))
-				.sorted(Comparator.comparing(TitlePart::toFullLowerName))
+				.sorted(Comparator.comparing(TitleValidator::toFullLowerName))
 				.collect(Collectors.toList());
 	}
 	
@@ -1146,7 +1146,7 @@ public class VideoServiceImpl implements VideoService {
 				throw new CrazyException("not found cover : " + opus);
 			}
 			else { // found
-				TitlePart titlePart = new TitlePart(title);
+				TitleValidator titlePart = new TitleValidator(title);
 				titlePart.setFiles(file);
 				videoDao.buildVideo(titlePart);
 			}
@@ -1178,7 +1178,7 @@ public class VideoServiceImpl implements VideoService {
 
 		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<>();
 		for (String title : titles) {
-			TitlePart part = new TitlePart(title);
+			TitleValidator part = new TitleValidator(title);
 			String opus = part.getOpus();
 			
 			// check opus text
@@ -1192,8 +1192,8 @@ public class VideoServiceImpl implements VideoService {
 				continue;
 			}
 			// check title valid
-			TitlePart titlePart = new TitlePart(title);
-			if (titlePart.isCheck()) {
+			TitleValidator titlePart = new TitleValidator(title);
+			if (titlePart.isInvalid()) {
 				log.warn("saveCover titlePart is invalid. [{}] - {}", titlePart.getCheckDescShort(), title);
 				continue;
 			}
@@ -1214,7 +1214,7 @@ public class VideoServiceImpl implements VideoService {
 				else { // found
 					foundCount++;
 					String title = CrazyUtils.getNameExceptExtension(file);
-					TitlePart savedTitlePart = new TitlePart(title);
+					TitleValidator savedTitlePart = new TitleValidator(title);
 					savedTitlePart.setFiles(file);
 					videoDao.buildVideo(savedTitlePart);
 				}

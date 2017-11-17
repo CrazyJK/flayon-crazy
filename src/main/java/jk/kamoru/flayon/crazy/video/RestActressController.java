@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jk.kamoru.flayon.crazy.util.NameDistanceChecker;
 import jk.kamoru.flayon.crazy.util.NameDistanceChecker.CheckResult;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
@@ -51,7 +51,7 @@ public class RestActressController {
 			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") boolean archive) {
 		List<String> names = videoService.getActressList(instance, archive).stream()
-				.filter(a -> !a.getName().equals(TitlePart.AMATEUR))
+				.filter(a -> !a.getName().equals(TitleValidator.AMATEUR))
 				.map(a -> a.getName()).collect(Collectors.toList());
 		return NameDistanceChecker.check(names, limit);
 	}

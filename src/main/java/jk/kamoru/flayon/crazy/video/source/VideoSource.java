@@ -8,7 +8,7 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
 public interface VideoSource {
@@ -118,6 +118,6 @@ public interface VideoSource {
 
 	void addFile(File file);
 	
-	void addTitlePart(TitlePart part);
+	void addTitlePart(TitleValidator part);
 	
 }

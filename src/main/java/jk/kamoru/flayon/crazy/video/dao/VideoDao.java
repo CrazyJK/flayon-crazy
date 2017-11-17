@@ -7,7 +7,7 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
 /**
@@ -145,7 +145,7 @@ public interface VideoDao {
 	 * @param titlePart
 	 * @param cOVER_PATH
 	 */
-	void buildVideo(TitlePart titlePart);
+	void buildVideo(TitleValidator titlePart);
 
 	/**
 	 * move to instance source

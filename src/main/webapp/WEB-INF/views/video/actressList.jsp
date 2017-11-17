@@ -23,33 +23,6 @@ var table;
 var resizeSecondDiv = function() {
 	table.draw();
 };
-$(document).ready(function() {
-	$("#viewBtn").on("click", function() {
-		loading(true);
-		location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
-	});
-    table = $('#list').DataTable({
-    	       scrollY: (calculatedDivHeight - 70),
-        scrollCollapse: true,
-                paging: false,
-             searching: false,
-            processing: true,
-                  info: false,
-                 order: [[2, 'desc']],
-        fnDrawCallback: function(oSettings) {
-        	$("#actress-list").css({visibility: 'visible'}).addClass("w3-animate-opacity");
-        }
-    });
-    
-    $("#nameCheckBtn").on("click", function() {
-    	var limit = $("#limit").val();
-    	var instance = $("#instance").is(":checked");
-    	var archive = $("#archive").is(":checked");
-    	restCall(PATH + '/rest/actress/namecheck', {data: {l: limit, i: instance, a: archive}}, function(json) {
-    		displayNameCheckResult(json);
-    	});
-    });
-});
 function displayNameCheckResult(list) {
 	var scoreToFixed = function(num) {
 		return num.toFixed(3);	
@@ -98,6 +71,36 @@ function displayNameCheckResult(list) {
     });
     $("#notice").attr("title", "Name check result").css({overflowX: "hidden"}).dialog({height: 600, width: 600});
 }
+
+$(document).ready(function() {
+	
+    table = $('#list').DataTable({
+    	       scrollY: (calculatedDivHeight - 70),
+        scrollCollapse: true,
+                paging: false,
+             searching: false,
+            processing: true,
+                  info: false,
+                 order: [[3, 'desc']],
+        fnDrawCallback: function(oSettings) {
+        	$("#actress-list").css({visibility: 'visible'}).addClass("w3-animate-opacity");
+        }
+    });
+
+	$("#viewBtn").on("click", function() {
+		loading(true);
+		location.href = location.pathname + "?i=" + $("#instance").is(":checked") + "&a=" + $("#archive").is(":checked");
+	});
+
+    $("#nameCheckBtn").on("click", function() {
+    	var limit = $("#limit").val();
+    	var instance = $("#instance").is(":checked");
+    	var archive = $("#archive").is(":checked");
+    	restCall(PATH + '/rest/actress/namecheck', {data: {l: limit, i: instance, a: archive}}, function(json) {
+    		displayNameCheckResult(json);
+    	});
+    });
+});
 </script>
 </head>
 <body>

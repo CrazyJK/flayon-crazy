@@ -228,7 +228,7 @@ function renderContent(idx) {
 			stateClass += "bg-success";
 			novideoCount++;
 		}
-		if (title.check) {
+		if (title.invalid) {
 			stateClass += " bg-danger";
 			checkCount++;
 		}

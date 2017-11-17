@@ -47,7 +47,7 @@ public class TistoryGraviaItem implements Serializable {
 	private Date pubDate;
 	@JsonIgnore
 	private String description;
-	private List<TitlePart> titles;
+	private List<TitleValidator> titles;
 	
 	private Map<String, String> studioMap;
 	
@@ -73,7 +73,7 @@ public class TistoryGraviaItem implements Serializable {
             	Elements ps = td.select("p");
 //        		if (debug && debugStart < debugMax) log.info("p html = [{}]", ps);
             	if (ps.size() == 4) {
-            		TitlePart title = new TitlePart();
+            		TitleValidator title = new TitleValidator();
 
                 	// p[1] : img
             		org.jsoup.nodes.Element img = ps.get(0).select("img").first();
@@ -132,7 +132,7 @@ public class TistoryGraviaItem implements Serializable {
             }
 		}
 		log.debug("[{}] found {}", title, titles.size());
-		titles = titles.stream().sorted(Comparator.comparing(TitlePart::toString)).collect(Collectors.toList());
+		titles = titles.stream().sorted(Comparator.comparing(TitleValidator::toString)).collect(Collectors.toList());
 	}
 	
 	private String findStudio(String opus) {

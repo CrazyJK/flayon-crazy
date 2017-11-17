@@ -12,7 +12,7 @@ import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
 import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
@@ -318,7 +318,7 @@ public interface VideoService {
 	 * @param saveCoverAll
 	 * @return
 	 */
-	List<TitlePart> parseToTitleData(String titleData, Boolean saveCoverAll);
+	List<TitleValidator> parseToTitleData(String titleData, Boolean saveCoverAll);
 
 	/**
 	 * move to instance source

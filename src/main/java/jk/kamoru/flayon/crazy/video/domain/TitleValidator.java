@@ -7,15 +7,18 @@ import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import lombok.Data;
 
 @Data
-public class TitlePart {
+public class TitleValidator {
 	
 	public static final String AMATEUR = "Amateur";
-	
+
+	String rowData;
+
 	String studio;
 	String opus;
 	String title;
@@ -24,35 +27,43 @@ public class TitlePart {
 	String etcInfo;
 	
 	String imgSrc;
-	String rowData;
 
 	File[] files;
 	
-	boolean check;
+	boolean invalid;
 	String checkDesc;
 	String checkDescShort;
 	
 	boolean exist;
 	
-	public TitlePart() {
+	public TitleValidator() {
 		this.checkDesc = "";
 		this.checkDescShort = "";
 	}
 	
-	public TitlePart(String title) {
+	public TitleValidator(String rowData) {
 		this();
-		String[] parts = StringUtils.split(title, "]");
-		if (parts != null && parts.length > 4)
+		this.rowData = rowData;
+		validate();
+	}
+
+	public void validate() {
+		if (StringUtils.isBlank(rowData))
+			throw new CrazyException("TitleValidator rowData is not set");
+		
+		String[] parts = StringUtils.split(rowData, "]");
+		if (parts != null && parts.length > 4) {
 			for (int i = 0; i < parts.length; i++) {
 				setData(i, StringUtils.replace(parts[i], "[", ""));
 			}
+		}
 		else {
-			check = true;
+			invalid = true;
 			checkDesc += "Unclassified ";
 			checkDescShort += "U ";
 		}
 	}
-
+	
 	private void setData(int i, String data) {
 		switch (i) {
 		case 0:
@@ -86,7 +97,7 @@ public class TitlePart {
 		// valid check
 		if (invalidStudio(this.studio)) {
 			this.studio = "";
-			this.check = true;
+			this.invalid = true;
 			this.checkDesc += "Studio ";
 			this.checkDescShort += "S ";
 		}
@@ -99,7 +110,7 @@ public class TitlePart {
 		this.opus = VideoUtils.trimBlank(opus).toUpperCase();
 		// valid check
 		if (invalidOpus(this.opus)) {
-			this.check = true;
+			this.invalid = true;
 			this.checkDesc += "Opus ";
 			this.checkDescShort += "O ";
 		}
@@ -112,7 +123,7 @@ public class TitlePart {
 		this.title = VideoUtils.trimBlank(CrazyUtils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(this.title) || warningTitle(this.title)) {
-			this.check = true;
+			this.invalid = true;
 			this.checkDesc += "Title ";
 			this.checkDescShort += "T ";
 		}
@@ -126,11 +137,11 @@ public class TitlePart {
 			this.actress = AMATEUR;
 		}
 		else {
-			this.actress = VideoUtils.capitalizeActressName(StringUtils.remove(actress, "외"));
+			this.actress = ActressUtils.refineName(actress);
 		}
 		// valid check
 		if (invalidActress(this.actress)) {
-			this.check = true;
+			this.invalid = true;
 			this.checkDesc += "Actress ";
 			this.checkDescShort += "A ";
 		}
@@ -143,7 +154,7 @@ public class TitlePart {
 		this.releaseDate = VideoUtils.trimBlank(releaseDate);
 		// valid check
 		if (invalidReleaseDate(this.releaseDate)) {
-			this.check = true;
+			this.invalid = true;
 			this.checkDesc += "Date ";
 			this.checkDescShort += "D ";
 		}
@@ -167,7 +178,7 @@ public class TitlePart {
 	}
 	
 	public void setSeen() {
-		this.check = true;
+		this.invalid = true;
 		this.checkDesc += "Seen ";
 		this.checkDescShort += "Seen ";
 	}

@@ -926,7 +926,7 @@ public class Video {
 	public int getActressScore() {
 		int actressVideoScore = 0;
 		for (Actress actress : getActressList()) {
-			if (StringUtils.isBlank(actress.getName()) || actress.getName().equals(TitlePart.AMATEUR))
+			if (StringUtils.isBlank(actress.getName()) || actress.getName().equals(TitleValidator.AMATEUR))
 				continue;
 			actressVideoScore += Math.round(actress.getVideoList().size() * config.getActressRatio() / 10);
 		}
@@ -1267,7 +1267,7 @@ public class Video {
 	 * opus, title, releaseDate, etcInfo 설정 
 	 * @param titlePart
 	 */
-	public void setTitlePart(TitlePart titlePart) {
+	public void setTitlePart(TitleValidator titlePart) {
 		this.setOpus(titlePart.getOpus());
 		this.setTitle(titlePart.getTitle());
 		this.setReleaseDate(titlePart.getReleaseDate());

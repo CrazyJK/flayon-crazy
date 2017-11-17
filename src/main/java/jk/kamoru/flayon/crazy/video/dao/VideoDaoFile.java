@@ -18,7 +18,7 @@ import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.extern.slf4j.Slf4j;
@@ -193,14 +193,14 @@ public class VideoDaoFile implements VideoDao {
 		List<File> fileAll = video.getFileAll();
 		instanceVideoSource.removeElement(opus);
 		
-		TitlePart titlePart = new TitlePart(newName);
+		TitleValidator titlePart = new TitleValidator(newName);
 		log.info("renameVideo : titlePart = {}", titlePart.getStyleString());
 		titlePart.setFiles(fileAll.toArray(new File[fileAll.size()]));
 		buildVideo(titlePart);
 	}
 
 	@Override
-	public void buildVideo(TitlePart titlePart) {
+	public void buildVideo(TitleValidator titlePart) {
 		instanceVideoSource.addTitlePart(titlePart);
 	}
 

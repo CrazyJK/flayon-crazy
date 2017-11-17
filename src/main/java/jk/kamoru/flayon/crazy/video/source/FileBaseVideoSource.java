@@ -30,7 +30,7 @@ import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
-import jk.kamoru.flayon.crazy.video.domain.TitlePart;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 	
 
@@ -147,9 +147,9 @@ public class FileBaseVideoSource implements VideoSource {
 				
 				/*  1       2     3      4        5       6
 				   [studio][opus][title][actress][release]etc...*/
-				TitlePart titlePart = new TitlePart(name);
+				TitleValidator titlePart = new TitleValidator(name);
 				titlePart.setFiles(file);
-				if (titlePart.isCheck()) {
+				if (titlePart.isInvalid()) {
 					logger.warn("wrong file : {}, {}, {}", file.getCanonicalPath(), titlePart.getCheckDescShort(), titlePart.getStyleString());
 					wrongFileNames.add(String.format("[%s] : %s, %s, %s", file.getPath(), file.getName(), titlePart.getCheckDescShort(), titlePart.getStyleString()));
 					continue;
@@ -157,7 +157,7 @@ public class FileBaseVideoSource implements VideoSource {
 				addTitlePart(titlePart, _videoMap, _studioMap, _actressMap);
 			}
 			catch (CrazyException e) {
-				logger.warn("{}\n{}", e.getMessage(), filename);
+				logger.warn("{} in file {}", e.getMessage(), filename);
 			}			
 			catch (Exception e) {
 				logger.error("File loading error : " + filename, e);
@@ -329,17 +329,17 @@ public class FileBaseVideoSource implements VideoSource {
 
 	@Override
 	public void addFile(File file) {
-		TitlePart part = new TitlePart(file.getName());
+		TitleValidator part = new TitleValidator(file.getName());
 		part.setFiles(file);
 		addTitlePart(part);
 	}
 
 	@Override
-	public void addTitlePart(TitlePart titlePart) {
+	public void addTitlePart(TitleValidator titlePart) {
 		addTitlePart(titlePart, videoMap, studioMap, actressMap);
 	}
 
-	private void addTitlePart(TitlePart titlePart, Map<String, Video> videoMap, Map<String, Studio> studioMap, Map<String, Actress> actressMap) {
+	private void addTitlePart(TitleValidator titlePart, Map<String, Video> videoMap, Map<String, Studio> studioMap, Map<String, Actress> actressMap) {
 		Video video = videoMap.get(titlePart.getOpus());
 		if (video == null) {
 			video = videoProvider.get();
