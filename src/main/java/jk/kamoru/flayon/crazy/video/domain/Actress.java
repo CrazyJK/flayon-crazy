@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
-import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -84,8 +83,8 @@ public class Actress {
 						name, StringUtils.isEmpty(localName) ? "" : "("+localName+")", birth, bodySize, debut, StringUtils.isEmpty(height) ? "" : height + "cm", getScore(), videoList.size());
 	}
 	
-	public boolean contains(String actressName) {
-		return VideoUtils.equalsActress(name, actressName);
+	public boolean equalsName(String actressName) {
+		return StringUtils.equals(name, actressName);
 	}
 
 	public boolean setFavorite(Boolean favorite) {
@@ -173,7 +172,7 @@ public class Actress {
 		// check name, newname
 		String name = params.get(NAME);
 		String newname = params.get(NEWNAME);
-		if (StringUtils.isNotBlank(newname) && !StringUtils.equalsIgnoreCase(name, newname)) {
+		if (StringUtils.isNotBlank(newname) && !StringUtils.equals(name, newname)) {
 			params.put(NAME, newname);
 		}
 		CrazyUtils.saveFileFromMap(getInfoFile(), params);
