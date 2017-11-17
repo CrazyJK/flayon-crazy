@@ -164,6 +164,10 @@ public class TitleValidator {
 		this.files = files;
 	}
 	
+	/**
+	 * [%s][%s][%s][%s][%s] partten
+	 * @return
+	 */
 	public String getStyleString() {
 		return String.format("[%s][%s][%s][%s][%s]", studio, opus, title, actress, releaseDate);
 	}

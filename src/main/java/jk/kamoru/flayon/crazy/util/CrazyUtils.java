@@ -111,11 +111,25 @@ public class CrazyUtils {
 	 * @throws 실패시 에러
 	 */
 	public static File renameFile(File srcFile, String newName) {
+			String suffix = getExtension(srcFile);
+			if (StringUtils.isNotEmpty(suffix))
+				newName = newName + "." + suffix;
+			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
+			
+			File destFile = new File(srcFile.getParent(), newName);
+			if (srcFile.renameTo(destFile))
+				return destFile;
+			else
+				throw new CrazyException("file rename fail: " + srcFile.getAbsolutePath());
+	}
+
+	public static File renameFile2(File srcFile, String newName) {
 		try {
 			String suffix = getExtension(srcFile);
 			if (StringUtils.isNotEmpty(suffix))
 				newName = newName + "." + suffix;
 			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
+			
 			return Files.move(srcFile.toPath(), Paths.get(srcFile.getParent(), newName), StandardCopyOption.REPLACE_EXISTING).toFile();
 		} catch (IOException e) {
 			log.error("rename fail", e);
@@ -388,5 +402,12 @@ public class CrazyUtils {
 		return sb.toString();
 	}
 
+	public static String capitalize(String str) {
+		String result = "";
+		for (String s : StringUtils.split(str)) {
+			result += StringUtils.capitalize(s.toLowerCase()) + " ";
+		}
+		return result.trim();
+	}
 
 }

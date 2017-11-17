@@ -32,10 +32,36 @@ public class ActressUtils {
 		return result * (reverse ? -1 : 1); 
 	}
 
+	/**
+	 * '외' 제거, stripToEmpty
+	 * @param name
+	 * @return
+	 */
 	public static String refineName(String name) {
 		name = StringUtils.remove(name, "외");
 		name = StringUtils.stripToEmpty(name);
 		return name;
 	}
-
+/*
+ * 		StringBuilder sb = new StringBuilder("[");
+		for (int i = 0, iEnd = videoList.size(); i < iEnd; i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append("\"").append(videoList.get(i).getOpus()).append("\"");
+		}
+		sb.append("]");
+*/
+	public static String refineAndCapitalizeName(String name) {
+		StringBuilder sb = new StringBuilder();
+		String refineName = refineName(name);
+		String[] split = StringUtils.split(refineName, ",");
+		for (int i = 0, iEnd = split.length; i < iEnd; i++) {
+			String capitalize = CrazyUtils.capitalize(split[i]);
+			if (i > 0)
+				sb.append(", ");
+			sb.append(capitalize);
+		}
+		return sb.toString();
+	}
+	
 }

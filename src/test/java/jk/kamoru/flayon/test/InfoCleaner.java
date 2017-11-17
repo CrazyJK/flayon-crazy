@@ -1,20 +1,27 @@
 package jk.kamoru.flayon.test;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 
 public class InfoCleaner {
 
-	public static void main(String[] args) {
-		File path = new File("F:\\Crazy\\Storage\\_info");
+	static File crazyPath = new File("F:\\Crazy");
+	static File infoPath = new File("F:\\Crazy\\Storage\\_info");
 
-		Collection<File> listFiles = FileUtils.listFiles(path, new String[] {"actress", "studio"}, false);
+	public static void  nameAndNewname() {
+
+		Collection<File> listFiles = FileUtils.listFiles(infoPath, new String[] {"actress", "studio"}, false);
 		
 		for (File file : listFiles) {
 			Map<String, String> data = CrazyUtils.readFileToMap(file);
@@ -63,6 +70,68 @@ public class InfoCleaner {
 				}
 			}
 		}
+	}
+
+	/**
+	 * actress info의 파일 이름과 내용의 NAME 값을 Capitalizing
+	 */
+	public static void capitalizeAtInfoFile() {
+		Collection<File> listFiles = FileUtils.listFiles(infoPath, new String[] {"actress"}, false);
+		for (File file : listFiles) {
+			Map<String, String> data = CrazyUtils.readFileToMap(file);
+			data.remove("NEWNAME");
+			String name = CrazyUtils.capitalize(data.get("NAME"));
+			data.put("NAME", name);
+
+			String filename = CrazyUtils.capitalize(CrazyUtils.getNameExceptExtension(file));
+			File newFile = new File(file.getParentFile(), filename + "." + VIDEO.EXT_ACTRESS);
+			file.renameTo(newFile);
+			System.out.format("%20s => %20s%n", file.getName(), newFile.getName());
+			
+			CrazyUtils.saveFileFromMap(newFile, data);
+		}
+	}
+	
+	/**
+	 * 파일의 배우 이름 정리해서 이름 바꾸기
+	 * 정리 : 앞뒤 공백 제거, 이름 Capitalizing
+	 */
+	public static void capitalizeAtVideoFiles() {
+		
+		List<String> exceptList = Arrays.asList(VIDEO.EXT_ACTRESS, VIDEO.EXT_STUDIO, "txt", "log", "data", "ini", "exe");
+		
+		Collection<File> listFiles = FileUtils.listFiles(crazyPath, null, true);
+		int count = 0;
+		for (File file : listFiles) {
+			count++;
+			String filename = CrazyUtils.getNameExceptExtension(file);
+			String extension = CrazyUtils.getExtension(file);
+			TitleValidator validator = new TitleValidator(filename);
+			if (exceptList.contains(extension)) {
+				continue;
+			}
+			else if (validator.isInvalid()) {
+				System.out.println("invalid : " + file.getAbsolutePath());
+			}
+			else {
+				String actressName = validator.getActress();
+				String refineAndCapitalizeName = ActressUtils.refineAndCapitalizeName(actressName);
+				if (StringUtils.equals(actressName, refineAndCapitalizeName))
+					continue;
+//				System.out.format("%-30s -> [%s]%n", actressName, refineAndCapitalizeName);
+				validator.setActress(refineAndCapitalizeName);
+				try {
+					CrazyUtils.renameFile(file, validator.getStyleString());
+					System.out.format("%-5s. %s%n", count, validator.getStyleString());
+				} catch(Exception e) {
+					System.err.format("%-5s. %s : %s%n", count, e.getClass().getName(), e.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		InfoCleaner.capitalizeAtVideoFiles();
 	}
 
 }
