@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
-import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -70,7 +69,7 @@ public class Studio {
 	public void addActress(Actress actress) {
 		boolean found = false;
 		for (Actress actressInList : actressList) {
-			if (VideoUtils.equalsActress(actressInList.getName(), actress.getName())) {
+			if (actressInList.equalsName(actress.getName())) {
 				actressInList = actress;
 				found = true;
 				break;

@@ -40,8 +40,10 @@ import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CommandExecutor;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.StudioUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
@@ -229,7 +231,7 @@ public class VideoServiceImpl implements VideoService {
 	private List<Actress> sortActress(List<Actress> list, ActressSort sort, boolean reverse) {
 		if (sort == null)
 			return list;
-		return list.stream().sorted((a1, a2) -> VideoUtils.compareActress(a1, a2, sort, reverse)).collect(Collectors.toList());
+		return list.stream().sorted((a1, a2) -> ActressUtils.compareActress(a1, a2, sort, reverse)).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -255,7 +257,7 @@ public class VideoServiceImpl implements VideoService {
 	private List<Studio> sortStudio(List<Studio> list, StudioSort sort, boolean reverse) {
 		if (sort == null)
 			return list;
-		return list.stream().sorted((s1, s2) -> VideoUtils.compareStudio(s1, s2, sort, reverse)).collect(Collectors.toList());
+		return list.stream().sorted((s1, s2) -> StudioUtils.compareStudio(s1, s2, sort, reverse)).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -1176,7 +1178,8 @@ public class VideoServiceImpl implements VideoService {
 
 		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<>();
 		for (String title : titles) {
-			String opus = VideoUtils.findOpusInTitle(title);
+			TitlePart part = new TitlePart(title);
+			String opus = part.getOpus();
 			
 			// check opus text
 			if (StringUtils.isBlank(opus)) {

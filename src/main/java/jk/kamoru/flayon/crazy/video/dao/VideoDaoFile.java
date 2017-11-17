@@ -193,7 +193,6 @@ public class VideoDaoFile implements VideoDao {
 		List<File> fileAll = video.getFileAll();
 		instanceVideoSource.removeElement(opus);
 		
-		log.info("renameVideo : opus={}, newName={}", opus, newName);
 		TitlePart titlePart = new TitlePart(newName);
 		log.info("renameVideo : titlePart = {}", titlePart.getStyleString());
 		titlePart.setFiles(fileAll.toArray(new File[fileAll.size()]));

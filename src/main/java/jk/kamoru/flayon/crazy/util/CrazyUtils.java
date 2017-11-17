@@ -190,14 +190,16 @@ public class CrazyUtils {
 	public static void saveFileFromMap(File file, Map<String, String> params) {
 		if (params == null || params.size() == 0)
 			throw new CrazyException("params is null or size 0");
+		
 		List<String> data = new ArrayList<>();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
-			data.add(String.format("%s=%s",entry.getKey().toUpperCase().trim(), entry.getValue().trim()));
+			data.add(String.format("%s=%s", entry.getKey(), entry.getValue().trim()));
 		}
+		
 		try {
 			Files.write(file.toPath(), data, StandardCharsets.UTF_8, CREATE, WRITE, TRUNCATE_EXISTING);
 		} catch (IOException e) {
-			log.error("write file error", e);
+			log.error("saveFileFromMap : {}, {}", e.getMessage(), file);
 			throw new CrazyException("write file error", e);
 		}
 	}
@@ -353,5 +355,38 @@ public class CrazyUtils {
 			return null;
 		}
 	}
+
+	/**
+	 * list를 컴마(,)로 구분한 string반환
+	 * @param list
+	 * @return string of list
+	 */
+	public static <T> String listToSimpleString(List<T> list) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, e = list.size(); i < e; i++) {
+			T object = list.get(i);
+			if (i > 0)
+				sb.append(", ");
+			sb.append(object);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * file list를 컴마(,)로 구분한 string으로 반환
+	 * @param list
+	 * @return string of list
+	 */
+	public static String listFileToSimpleString(List<File> list) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, e = list.size(); i < e; i++) {
+			File file = list.get(i);
+			if (i > 0)
+				sb.append(", ");
+			sb.append(file.getAbsolutePath());
+		}
+		return sb.toString();
+	}
+
 
 }

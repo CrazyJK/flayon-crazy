@@ -261,14 +261,10 @@ public class FileBaseVideoSource implements VideoSource {
 	@Override
 	public Actress getActress(String name) {
 		videoSource();
-		name = VideoUtils.sortForwardName(name);
 		if (actressMap.containsKey(name))
 			return actressMap.get(name);
 		else
-			if (isArchive)
-				return new Actress(name + " not exist");
-			else
-				throw new ActressNotFoundException(name);
+			throw new ActressNotFoundException(name);
 	}
 	@Override
 	public List<Video> getVideoList() {
@@ -310,7 +306,7 @@ public class FileBaseVideoSource implements VideoSource {
 		for (Actress actress : actressList) {
 			actress.removeVideo(video);
 			if (actress.getVideoList().size() == 0)
-				actressMap.remove(VideoUtils.sortForwardName(actress.getName()));
+				actressMap.remove(actress.getName());
 		}
 	}
 	
@@ -376,14 +372,14 @@ public class FileBaseVideoSource implements VideoSource {
 		video.setStudio(studio);
 
 		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
-			String forwardActressName = VideoUtils.sortForwardName(actressName);
-			Actress actress = actressMap.get(forwardActressName);
+			actressName = VideoUtils.trimBlank(actressName);
+			Actress actress = actressMap.get(actressName);
 			if (actress == null) {
 				actress = actressProvider.get();
-				actress.setName(VideoUtils.trimBlank(actressName));
+				actress.setName(actressName);
 				actress.loadAdditionalInfo();
 				actress.setArchive(isArchive);
-				actressMap.put(forwardActressName, actress);
+				actressMap.put(actressName, actress);
 			}		
 			actress.addVideo(video);
 			actress.addStudio(studio);

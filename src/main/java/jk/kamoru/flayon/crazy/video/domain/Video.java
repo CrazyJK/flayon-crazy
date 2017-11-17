@@ -134,7 +134,7 @@ public class Video {
 	 */
 	public boolean containsActress(String actressName) {
 //		return actressList.stream().allMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
-		return actressList.stream().anyMatch(a -> VideoUtils.containsActress(a.getName(), actressName));
+		return actressList.stream().anyMatch(a -> a.equalsName(actressName));
 	}
 	
 	/**
@@ -142,11 +142,9 @@ public class Video {
 	 * @return 배우이름 문자열
 	 */
 	public String getActressName() {
-		List<String> list = new ArrayList<String>();
-		for(Actress actress : actressList) {
-			list.add(actress.getName());
-		}
-		return VideoUtils.listToSimpleString(list);
+		return CrazyUtils.listToSimpleString(
+				actressList.stream()
+				.map(Actress::getName).collect(Collectors.toList()));
 	}
 
 	/**
@@ -609,7 +607,7 @@ public class Video {
 	public void addActress(Actress actress) {
 		boolean notFound = true;
 		for (Actress actressInList : this.actressList) {
-			if (actressInList.contains(actress.getName())) {
+			if (actressInList.equalsName(actress.getName())) {
 				notFound = false;
 				actressInList = actress;
 				break;
@@ -1214,7 +1212,7 @@ public class Video {
 	}
 
 	private boolean equalsActress(String actressName) {
-		return actressList.stream().anyMatch(a -> VideoUtils.equalsActress(a.getName(), actressName));
+		return actressList.stream().anyMatch(a -> a.equalsName(actressName));
 	}
 
 	private boolean matchStudioList(List<String> selectedStudio) {
