@@ -77,6 +77,9 @@ public class CrazyUtils {
 	public static int compareTo(long x, long y) {
 		return (x < y) ? -1 : ((x == y) ? 0 : 1);
 	}
+	public static int compareTo(double x, double y) {
+		return (x < y) ? -1 : ((x == y) ? 0 : 1);
+	}
 	public static int compareTo(int x, int y) {
 		return (x < y) ? -1 : ((x == y) ? 0 : 1);
 	}
