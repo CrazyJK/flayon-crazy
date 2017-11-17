@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.test;
 
 import static org.junit.Assert.assertFalse;
 

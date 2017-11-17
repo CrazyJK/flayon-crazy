@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;

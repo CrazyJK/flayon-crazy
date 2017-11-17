@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy;
+package jk.kamoru.flayon.test;
 
 import com.wcohen.ss.BasicStringWrapper;
 import com.wcohen.ss.JaroWinkler;
