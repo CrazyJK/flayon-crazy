@@ -113,8 +113,6 @@ public class Lambda {
 		
 		System.out.println(StringUtils.containsIgnoreCase("Asuka Kirara", "asu kirara"));
 
-		System.out.println(VideoUtils.containsActress("Asuka Kirara", "kirara asu"));
-
 		Arrays.asList(Arrays.asList(1,2), Arrays.asList(3, 4), Arrays.asList(1, 5, 6)).stream()
 		.flatMap(i -> i.stream())
 		.forEach(System.out::println);
