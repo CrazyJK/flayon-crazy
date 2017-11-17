@@ -83,21 +83,21 @@ $(document).ready(function() {
 				<thead>
 					<tr>
 						<th data-ng-click="order('name')"    >Name     <i class="sortorder" data-ng-show="predicate === 'name'"     data-ng-class="{reverse:reverse}"></i></th>
-						<th data-ng-click="order('homepage')">Homepage <i class="sortorder" data-ng-show="predicate === 'homepage'" data-ng-class="{reverse:reverse}"></i></th>
-						<th data-ng-click="order('company')" >Company  <i class="sortorder" data-ng-show="predicate === 'company'"  data-ng-class="{reverse:reverse}"></i></th>
 						<th class="number" style="max-width: 80px;" data-ng-click="order('actress')">Actress <i class="sortorder" data-ng-show="predicate === 'actress'" data-ng-class="{reverse:reverse}"></i></th>
 						<th class="number" style="max-width: 80px;" data-ng-click="order('video')"  >Video   <i class="sortorder" data-ng-show="predicate === 'video'"   data-ng-class="{reverse:reverse}"></i></th>
 						<th class="number" style="max-width: 80px;" data-ng-click="order('score')"  >Score   <i class="sortorder" data-ng-show="predicate === 'score'"   data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('homepage')">Homepage <i class="sortorder" data-ng-show="predicate === 'homepage'" data-ng-class="{reverse:reverse}"></i></th>
+						<th data-ng-click="order('company')" >Company  <i class="sortorder" data-ng-show="predicate === 'company'"  data-ng-class="{reverse:reverse}"></i></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="nowrap" data-ng-repeat="studio in list | orderBy:predicate:reverse">
 						<td><a data-ng-click="studioDetail(studio.name)">{{studio.name}}</a></td>
-						<td><a href="{{studio.homepage}}" target="_blank">{{studio.homepage}}</a></td>
-						<td>{{studio.company}}</td>
 						<td class="number">{{studio.actressCount}}</td>
 						<td class="number">{{studio.videoCount}}</td>
 						<td class="number">{{studio.score}}</td>
+						<td><a href="{{studio.homepage}}" target="_blank">{{studio.homepage}}</a></td>
+						<td>{{studio.company}}</td>
 					</tr>
 				</tbody>
 			</table>
