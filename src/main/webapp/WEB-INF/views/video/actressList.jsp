@@ -131,6 +131,7 @@ function displayNameCheckResult(list) {
 				<thead>
 					<tr>
 						<th style="max-width: 20px;">#</th>
+						<th style="max-width: 60px;">Local</th>
 						<c:forEach items="${sorts}" var="s">
 						<th style="max-width: 50px;" title="<s:message code="actress.sort.${s}"/>"><s:message code="actress.sort.short.${s}"/></th>
 						</c:forEach>
@@ -142,6 +143,7 @@ function displayNameCheckResult(list) {
 					<c:forEach items="${actressList}" var="actress" varStatus="status">
 					<tr class="nowrap">
 						<td class="number">${status.count}</td>
+						<td>${actress.localName}</td>
 						<td><a onclick="fnViewActressDetail('${actress.name}')" title="${actress.name}">${actress.name}</a></td>
 						<td class="text-center">${actress.favorite ? '★' : ''}</td>
 						<td>${actress.birth}</td>
