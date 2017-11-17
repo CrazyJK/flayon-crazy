@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 
@@ -92,11 +93,12 @@ public class InfoCleaner {
 		}
 	}
 	
-	/**
-	 * 파일의 배우 이름 정리해서 이름 바꾸기
-	 * 정리 : 앞뒤 공백 제거, 이름 Capitalizing
+	/**<pre>
+	 * 파일 이름 정리
+	 *  - 전체 : NBSP(u-00a0) 제거
+	 *  - 배우이름 : 앞뒤 공백 제거, 이름 Capitalizing
 	 */
-	public static void capitalizeAtVideoFiles() {
+	public static void 파일이름정리() {
 		
 		List<String> exceptList = Arrays.asList(VIDEO.EXT_ACTRESS, VIDEO.EXT_STUDIO, "txt", "log", "data", "ini", "exe");
 		
@@ -105,8 +107,9 @@ public class InfoCleaner {
 		for (File file : listFiles) {
 			count++;
 			String filename = CrazyUtils.getNameExceptExtension(file);
+			String replaceNBSP = VideoUtils.replaceNBSP(filename);
 			String extension = CrazyUtils.getExtension(file);
-			TitleValidator validator = new TitleValidator(filename);
+			TitleValidator validator = new TitleValidator(replaceNBSP);
 			if (exceptList.contains(extension)) {
 				continue;
 			}
@@ -131,7 +134,7 @@ public class InfoCleaner {
 	}
 	
 	public static void main(String[] args) {
-		InfoCleaner.capitalizeAtVideoFiles();
+		InfoCleaner.파일이름정리();
 	}
 
 }
