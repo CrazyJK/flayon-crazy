@@ -172,6 +172,7 @@ public class Actress {
 		saveInfo(data);
 	}
 
+	// TODO 정보 업어쳐지지 않게 하기
 	public void saveInfo(Map<String, String> params) {
 		// check name, newname
 		String name = params.get(NAME);
