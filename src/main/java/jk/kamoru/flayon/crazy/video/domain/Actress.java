@@ -83,6 +83,10 @@ public class Actress {
 						name, StringUtils.isEmpty(localName) ? "" : "("+localName+")", birth, bodySize, debut, StringUtils.isEmpty(height) ? "" : height + "cm", getScore(), videoList.size());
 	}
 	
+	public int getVideoCount() {
+		return videoList.size();
+	}
+	
 	public boolean equalsName(String actressName) {
 		return StringUtils.equals(name, actressName);
 	}

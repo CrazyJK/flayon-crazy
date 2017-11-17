@@ -7,7 +7,6 @@
 <html>
 <head>
 <title><s:message code="video.actress"/> <s:message code="video.list"/></title>
-<link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <style type="text/css">
 .active {
 	color: red;
@@ -15,15 +14,58 @@
 .selected {
 	color: blue;
 }
+*[onclick], *[data-ng-click] {
+	cursor: pointer;
+}
+.sortorder:after {
+  content: '\25b2';
+}
+.sortorder.reverse:after {
+  content: '\25bc';
+}
 </style>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/dataTables.bootstrap.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/angular/1.6.6/angular.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/webjars/angular-animate/1.6.6/angular-animate.min.js"/>"></script>
 <script type="text/javascript">
-var table;
 var resizeSecondDiv = function() {
-	table.draw();
 };
-function displayNameCheckResult(list) {
+
+var instance = reqParam.i != 'false';
+var archive  = reqParam.a == 'true';
+
+var app = angular.module("actressApp", ["ngAnimate"]);
+app.controller("actressController", function($scope, $http) {
+	$scope.predicate = 'favorite';
+	$scope.reverse = true;
+	$scope.order = function(predicate) {
+	    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+	    $scope.predicate = predicate;
+	};
+	$scope.list = [];
+	$scope.videoDetail = function(opus) {
+		fnVideoDetail(opus);
+	}; 
+	$scope.actressDetail = function(actressName) {
+		console.log(actressName);
+		fnViewActressDetail(actressName);
+	};
+	$scope.reload = function() {
+		consoloe.log("reload");
+		$route.reload();
+	}
+
+	$http({
+		url: PATH + "/rest/actress" + "?i=" + instance + "&a=" + archive
+	}).then(function(response) {
+		$scope.list = response.data;
+		$(".list-count").html(response.data.length);
+	}, function(response) {
+		console.log("Error", response);
+	});
+
+});
+
+var displayNameCheckResult = function(list) {
 	var scoreToFixed = function(num) {
 		return num.toFixed(3);	
 	},
@@ -66,26 +108,14 @@ function displayNameCheckResult(list) {
 		    		}())
 	    	)
     );
-    $("#nameCheckResultTable").DataTable({
-        order: [[2, 'desc']]
-    });
-    $("#notice").attr("title", "Name check result").css({overflowX: "hidden"}).dialog({height: 600, width: 600});
-}
+    var height = $("#content_div").height() - 100;
+    $("#notice").attr("title", "Name check result").css({overflowX: "hidden"}).dialog({height: height, width: 600});
+};
 
 $(document).ready(function() {
-	
-    table = $('#list').DataTable({
-    	       scrollY: (calculatedDivHeight - 70),
-        scrollCollapse: true,
-                paging: false,
-             searching: false,
-            processing: true,
-                  info: false,
-                 order: [[3, 'desc']],
-        fnDrawCallback: function(oSettings) {
-        	$("#actress-list").css({visibility: 'visible'}).addClass("w3-animate-opacity");
-        }
-    });
+
+    instance && $("#checkbox-instance").click();
+    archive  && $("#checkbox-archive").click();
 
 	$("#viewBtn").on("click", function() {
 		loading(true);
@@ -94,12 +124,13 @@ $(document).ready(function() {
 
     $("#nameCheckBtn").on("click", function() {
     	var limit = $("#limit").val();
-    	var instance = $("#instance").is(":checked");
-    	var archive = $("#archive").is(":checked");
-    	restCall(PATH + '/rest/actress/namecheck', {data: {l: limit, i: instance, a: archive}}, function(json) {
+    	var _instance = $("#instance").is(":checked");
+    	var _archive  = $("#archive").is(":checked");
+    	restCall(PATH + '/rest/actress/namecheck', {data: {l: limit, i: _instance, a: _archive}}, function(json) {
     		displayNameCheckResult(json);
     	});
     });
+
 });
 </script>
 </head>
@@ -108,63 +139,58 @@ $(document).ready(function() {
 
 	<div id="header_div" class="box form-inline">
 		<label for="search" class="title">
-			<s:message code="video.actress"/> <span class="badge">${fn:length(actressList)}</span>
+			<s:message code="video.actress"/> <span class="badge list-count"></span>
 		</label>
 		<input type="search" name="search" id="search" class="form-control input-sm" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
 		
 		<label>
-			<input type="checkbox" id="instance" name="i" value="${instance}" ${instance ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<input type="checkbox" id="instance" name="i" class="sr-only"/>
 			<span class="label" id="checkbox-instance">Instance</span>
 		</label>
 		<label>
-			<input type="checkbox" id="archive" name="a" value="${archive}" ${archive ? 'checked=\"checked\"' : ''} class="sr-only"/>
+			<input type="checkbox" id="archive" name="a" class="sr-only"/>
 			<span class="label" id="checkbox-archive">Archive</span>
 		</label>
 		
 		<button class="btn btn-xs btn-default" id="viewBtn">View</button>
 		
-		<input type="number" id="limit" name="limit" value="0.9" class="form-control input-sm" style="width:50px !important;"/>
-		<button class="btn btn-xs btn-primary" id="nameCheckBtn">Name check</button>
+		<div class="float-right">
+			<input type="number" id="limit" name="limit" value="0.95" class="form-control input-sm" style="width:55px !important;"/>
+			<button class="btn btn-xs btn-primary" id="nameCheckBtn">Name check</button>
+		</div>
 		
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<div id="actress-list">
-			<table id="list" class="table table-condensed table-hover">
+		<div id="actress-list" data-ng-app="actressApp">
+			<table id="list" class="table table-condensed table-hover" data-ng-controller="actressController">
 				<thead>
 					<tr>
-						<th style="max-width: 20px;">#</th>
-						<th style="max-width: 60px;">Local</th>
-						<c:forEach items="${sorts}" var="s">
-						<th style="max-width: 50px;" title="<s:message code="actress.sort.${s}"/>"><s:message code="actress.sort.short.${s}"/></th>
-						</c:forEach>
-						<th style="max-width: 50px;" title="<s:message code="actress.sort.AGE"/>"><s:message code="actress.sort.short.AGE"/></th>
-						<th style="max-width:150px;">Video</th>
+						<th style="max-width: 80px;" data-ng-click="order('favorite')" >Favorite <i class="sortorder" data-ng-show="predicate === 'favorite'"  data-ng-class="{reverse:reverse}"></i></th>
+						<th style="" data-ng-click="order('localName')">Local    <i class="sortorder" data-ng-show="predicate === 'localName'" data-ng-class="{reverse:reverse}"></i></th>
+						<th style="" data-ng-click="order('name')"     >Name     <i class="sortorder" data-ng-show="predicate === 'name'"      data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width:200px;" data-ng-click="order('birth')"    >Birth    <i class="sortorder" data-ng-show="predicate === 'birth'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width:200px;" data-ng-click="order('bodySize')" >Body     <i class="sortorder" data-ng-show="predicate === 'bodySize'"  data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 80px;" data-ng-click="order('height')"   >Height   <i class="sortorder" data-ng-show="predicate === 'height'"    data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 80px;" data-ng-click="order('debut')"    >Debut    <i class="sortorder" data-ng-show="predicate === 'debut'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 60px;" data-ng-click="order('age')"      >Age      <i class="sortorder" data-ng-show="predicate === 'age'"       data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 60px;" data-ng-click="order('video')"    >Video    <i class="sortorder" data-ng-show="predicate === 'video'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th style="max-width: 60px;" data-ng-click="order('score')"    >Score    <i class="sortorder" data-ng-show="predicate === 'score'"     data-ng-class="{reverse:reverse}"></i></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${actressList}" var="actress" varStatus="status">
-					<tr class="nowrap">
-						<td class="number">${status.count}</td>
-						<td>${actress.localName}</td>
-						<td><a onclick="fnViewActressDetail('${actress.name}')" title="${actress.name}">${actress.name}</a></td>
-						<td class="text-center">${actress.favorite ? '★' : ''}</td>
-						<td>${actress.birth}</td>
-						<td>${actress.bodySize}</td>
-						<td class="number">${actress.height}</td>
-						<td class="number">${actress.debut}</td>
-						<td class="number">${fn:length(actress.videoList)}</td> 
-						<td class="number">${actress.score}</td>
-						<td class="number">${actress.age}</td>
-						<td style="max-width:150px;">
-							<div class="nowrap">
-								<c:forEach items="${actress.videoList}" var="video">
-								<jk:video video="${video}" view="opus"/>
-								</c:forEach>
-							</div>
-						</td>
+					<tr class="nowrap" data-ng-repeat="actress in list | orderBy:predicate:reverse">
+						<td class="text-center">{{actress.favorite ? '★' : ''}}</td>
+						<td>{{actress.localName}}</td>
+						<td><a data-ng-click="actressDetail(actress.name)" title="{{actress.name}}">{{actress.name}}</a></td>
+						<td>{{actress.birth}}</td>
+						<td>{{actress.bodySize}}</td>
+						<td>{{actress.height}}</td>
+						<td>{{actress.debut}}</td>
+						<td>{{actress.age}}</td>
+						<td class="number">{{actress.videoCount}}</td> 
+						<td class="number">{{actress.score}}</td>
 					</tr>
-					</c:forEach>
 				</tbody>
 			</table>
 		</div>

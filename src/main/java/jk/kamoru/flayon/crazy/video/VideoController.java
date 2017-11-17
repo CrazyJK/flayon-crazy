@@ -100,15 +100,20 @@ public class VideoController extends CrazyController {
 
 		return "video/videoMain";
 	}
-	
+
+	@RequestMapping(value="/actress", method=RequestMethod.GET)
+	public String actressList() {
+		return "video/actressList";
+	}
+
 	/**
 	 * display actress list view
 	 * @param model
 	 * @param sort default NAME if {@code null}
 	 * @return view name
 	 */
-	@RequestMapping(value="/actress", method=RequestMethod.GET)
-	public String actressList(Model model, 
+	@RequestMapping(value="/actress2", method=RequestMethod.GET)
+	public String actressList2(Model model, 
 			@RequestParam(value="sort", required=false, defaultValue="NAME") ActressSort sort,
 			@RequestParam(value="r", required=false, defaultValue="false") Boolean reverse,
 			@RequestParam(value="i", required=false, defaultValue="true") Boolean instance,
@@ -119,7 +124,7 @@ public class VideoController extends CrazyController {
 		model.addAttribute("reverse", reverse);
 		model.addAttribute("instance", instance);
 		model.addAttribute("archive", archive);
-		return "video/actressList";
+		return "video/actressList2";
 	}
 
 	/**
