@@ -74,7 +74,8 @@ public class VideoUtils {
 	}
 
 	/**
-	 * 공백, nbsp 등등 지우기
+	 * 공백 등등 지우기
+	 * replace regex로는 뭘 지우는지 모르겟다.
 	 * @param text
 	 * @return
 	 */
@@ -102,6 +103,22 @@ public class VideoUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * 유니코드 u00A0 NBSP공백을 일반 공백u0020 으로 교체
+	 * @param str
+	 * @return
+	 */
+	public static String replaceNBSP(String str) {
+		StringBuilder sb = new StringBuilder(str);
+		for (int i=0; i<sb.length(); i++) {
+			if (160 == (int)sb.charAt(i)) {
+				sb.deleteCharAt(i);
+				sb.insert(i, (char)32);
+			}
+		}
+		return sb.toString();
+	}
+	
 	public static int compareVideo(Video v1, Video v2, Sort sort, boolean reverse) {
 		int result = 0;
 		switch(sort) {
