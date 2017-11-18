@@ -1,5 +1,7 @@
 package jk.kamoru.flayon.crazy.util;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.video.domain.Actress;
@@ -42,15 +44,12 @@ public class ActressUtils {
 		name = StringUtils.stripToEmpty(name);
 		return name;
 	}
-/*
- * 		StringBuilder sb = new StringBuilder("[");
-		for (int i = 0, iEnd = videoList.size(); i < iEnd; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append("\"").append(videoList.get(i).getOpus()).append("\"");
-		}
-		sb.append("]");
-*/
+
+	/**
+	 * refineName 후 Capitalize
+	 * @param name
+	 * @return
+	 */
 	public static String refineAndCapitalizeName(String name) {
 		StringBuilder sb = new StringBuilder();
 		String refineName = refineName(name);
@@ -62,6 +61,20 @@ public class ActressUtils {
 			sb.append(capitalize);
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * 정렬후에 이름이 같은지
+	 * @param name
+	 * @param name2
+	 * @return
+	 */
+	public static boolean equalsBySort(String name1, String name2) {
+		String[] split1 = StringUtils.split(name1);
+		Arrays.sort(split1);
+		String[] split2 = StringUtils.split(name2);
+		Arrays.sort(split2);
+		return StringUtils.equals(Arrays.toString(split1), Arrays.toString(split2));
 	}
 	
 }

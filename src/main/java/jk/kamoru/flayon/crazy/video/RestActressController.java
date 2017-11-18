@@ -50,9 +50,7 @@ public class RestActressController {
 			@RequestParam(value="l", required=false, defaultValue="0.9") double limit,
 			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") boolean archive) {
-		List<String> names = videoService.getActressList(instance, archive).stream()
-				.filter(a -> !a.getName().equals(TitleValidator.AMATEUR))
-				.map(a -> a.getName()).collect(Collectors.toList());
-		return NameDistanceChecker.check(names, limit);
+		return NameDistanceChecker.check(videoService.getActressList(instance, archive).stream()
+				.filter(a -> !a.getName().equals(TitleValidator.AMATEUR)).collect(Collectors.toList()), limit);
 	}
 }

@@ -60,6 +60,14 @@ function saveActressInfo() {
 		location.href = PATH + "/video/actress/" + $("#newName").val();
 	});
 }
+function searchActressInfo() {
+	var name = '${actress.name}';
+	var localName = $("#localName").val();
+	if (localName != '') {
+		name = localName;
+	}
+	popup('<c:url value="${urlSearchActress}"/>' + name, 'infoActress', 1400, 900);
+}
 </script>
 </head>
 <body>
@@ -73,14 +81,13 @@ function saveActressInfo() {
 				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" type="text" name="NEWNAME"   value="${actress.name}"      id="newName" />
+				<input class="form-control" type="text" name="NEWNAME" value="${actress.name}" id="newName"/>
 			</div>
 			<div class="col-sm-4">
-				<input class="form-control" type="text" name="LOCALNAME" value="${actress.localName}" placeholder="local name"/>
+				<input class="form-control" type="text" name="LOCALNAME" value="${actress.localName}" placeholder="local name" id="localName"/>
 			</div>
 			<div class="col-sm-1">
-				<img src="${PATH}/img/magnify${status.count%2}.png" width="12px" title="<s:message code="video.find-info.actress"/>"
-					onclick="popup('<c:url value="${urlSearchActress}"/>${actress.name}', 'infoActress', 800, 600)"/>
+				<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>" onclick="searchActressInfo()"/>
 			</div>
 			<div class="col-sm-1">
 				<span class="label label-primary">Score ${actress.score}</span>

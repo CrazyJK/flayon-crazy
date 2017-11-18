@@ -58,9 +58,9 @@ var displayNameCheckResult = function(list) {
 	var scoreToFixed = function(num) {
 		return num.toFixed(3);	
 	},
-	renderActressName = function(name) {
-		return 	$("<span>", {title: name, "class": "pointer"}).html(name).on("click", function() {
-					fnViewActressDetail($(this).html());
+	renderActressName = function(actress, right) {
+		return 	$("<span>", {title: actress.name, "class": "pointer"}).on("click", function() {
+					fnViewActressDetail($(this).attr("title"));
 					$("[title='" + $(this).attr("title") + "']").addClass("selected");
 				}).hover(
 					function() {
@@ -68,22 +68,23 @@ var displayNameCheckResult = function(list) {
 					}, function() {
 						$("[title='" + $(this).attr("title") + "']").removeClass("active");
 					}
-				)
+				).append(right ? $("<span>", {"class": "label label-info"}).html(actress.localName) : actress.name + "&nbsp;")
+				 .append(right ? "&nbsp;" + actress.name : $("<span>", {"class": "label label-info"}).html(actress.localName))
 	};
 	
     $("#notice > p").empty().append(
 	    	$("<table>", {"class": "table", id: "nameCheckResultTable"}).append(
 		    		$("<thead>").append(
 			    			$("<tr>").append(
-				       				$("<th>").html("Name1"), $("<th>").html("Name2"), $("<th>").html("Score")
+				       				$("<th>", {"class": "text-right"}).html("Name1"), $("<th>").html("Name2"), $("<th>").html("Score")
 			    			)		
 		    		),
 		   			(function () {
 			    		var tbody = $("<tbody>");
 		    			$.each(list, function(idx, record) {
 		    				$("<tr>").append(
-			       					$("<td>").append(renderActressName(record.name1)),
-			       					$("<td>").append(renderActressName(record.name2)),
+			       					$("<td>", {"class": "text-right"}).append(renderActressName(record.actress1, true)),
+			       					$("<td>").append(renderActressName(record.actress2)),
 			       					$("<td>").html(scoreToFixed(record.score))
 		    				).appendTo(tbody);
 		    			});

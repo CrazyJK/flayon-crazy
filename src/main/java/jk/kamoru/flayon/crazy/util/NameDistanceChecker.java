@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.wcohen.ss.JaroWinkler;
 import com.wcohen.ss.api.StringDistance;
 
+import jk.kamoru.flayon.crazy.video.domain.Actress;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -18,22 +19,29 @@ public class NameDistanceChecker {
 	public static JaroWinkler jaro = new JaroWinkler();
 	public static StringDistance distanceChecker = jaro.getDistance();
 
-	public static List<CheckResult> check(List<String> names) {
+	public static List<CheckResult> check(List<Actress> names) {
 		return check(names, LIMIT);
 	}
 	
-	public static List<CheckResult> check(List<String> names, double limit) {
+	public static List<CheckResult> check(List<Actress> names, double limit) {
 		long count = 0;
 		List<CheckResult> result = new ArrayList<>();
 		for (int i = 0; i < names.size(); i++) {
-			String name1 = names.get(i);
+			Actress actress1 = names.get(i);
 			for (int j = i+1; j < names.size(); j++) {
-				String name2 = names.get(j);
+				Actress actress2 = names.get(j);
 			
 				count++;
-				double score = distanceChecker.score(name1, name2);
+
+				double score = 0.0;
+				if (ActressUtils.equalsBySort(actress1.getName(), actress2.getName())) {
+					score = 1.0;
+				}
+				else {
+					score = distanceChecker.score(actress1.getName(), actress2.getName());
+				}
 				if (score > limit) {
-					result.add(new CheckResult(name1, name2, score));
+					result.add(new CheckResult(actress1, actress2, score));
 				}
 			}
 		}
@@ -44,8 +52,8 @@ public class NameDistanceChecker {
 	@Data
 	@AllArgsConstructor
 	public static class CheckResult {
-		String name1;
-		String name2;
+		Actress actress1;
+		Actress actress2;
 		double score;
 	}
 }

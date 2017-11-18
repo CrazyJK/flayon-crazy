@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -207,6 +208,22 @@ public class CrazyUtils {
 	public static void saveFileFromMap(File file, Map<String, String> params) {
 		if (params == null || params.size() == 0)
 			throw new CrazyException("params is null or size 0");
+
+		// 파일이 있다면,내용 merge
+		if (file.exists()) {
+			Map<String, String> readFileToMap = readFileToMap(file);
+			for (Entry<String, String> entry : readFileToMap.entrySet()) {
+				String oldKey = entry.getKey();
+				String oldVal = entry.getValue();
+				String newVal = params.get(oldKey);
+				
+				boolean oldNotBlank = StringUtils.isNotBlank(oldVal);
+				boolean newNotBlank = StringUtils.isNotBlank(newVal);
+				if (oldNotBlank && !newNotBlank) { // 기존 내용은 있고 새 내용이 없으면, 기존내용을 update 
+					params.put(oldKey, oldVal);
+				}
+			}
+		}
 		
 		List<String> data = new ArrayList<>();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
