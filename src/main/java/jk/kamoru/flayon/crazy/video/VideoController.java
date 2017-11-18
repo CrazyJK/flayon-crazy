@@ -180,7 +180,7 @@ public class VideoController extends CrazyController {
 	 */
 	@RequestMapping("/search")
 	public String searchView(Model model) {
-		model.addAttribute("deleteLowerScoreVideo", videoBatch.getBatchOption(VideoBatch.Option.R));
+		model.addAttribute("deleteLowerRankVideo",  videoBatch.getBatchOption(VideoBatch.Option.R));
 		model.addAttribute("deleteLowerScoreVideo", videoBatch.getBatchOption(VideoBatch.Option.S));
 		model.addAttribute("moveWatchedVideo", 		videoBatch.getBatchOption(VideoBatch.Option.W));
         return "video/search";		

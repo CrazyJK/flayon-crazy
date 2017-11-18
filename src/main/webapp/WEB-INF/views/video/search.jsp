@@ -75,8 +75,10 @@ $(document).ready(function() {
 									function() {
 										var objs = [], actor = actress.split(",");
 										if (actor.length > 0)
-											for (var i=0; i<actor.length; i++)
-												objs.push($("<span>", {"class": "label label-plain", "onclick": "fnViewActressDetail('" + actor[i] +"')"}).html(actor[i]));
+											for (var i=0; i<actor.length; i++) {
+												var name = $.trim(actor[i]);
+												objs.push($("<span>", {"class": "label label-plain", "onclick": "fnViewActressDetail('" + name + "')"}).html(name));
+											}
 										return objs; 
 									}	
 								),
@@ -189,7 +191,7 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 			</div>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('R', this)"><s:message code="video.mng.rank"/></button>
-				<button class="btn btn-default" onclick="fnSetVideoBatchOption('R', this)">${deleteLowerScoreVideo}</button>
+				<button class="btn btn-default" onclick="fnSetVideoBatchOption('R', this)">${deleteLowerRankVideo}</button>
 			</div>
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('S', this)"><s:message code="video.mng.score"/></button>
