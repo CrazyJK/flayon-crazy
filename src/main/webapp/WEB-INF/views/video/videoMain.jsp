@@ -558,15 +558,16 @@ listViewType = '${videoSearch.listViewType}';
 				</div>
 				<div class="panel panel-primary" style="background-color:rgba(255,255,255,.5);">
 					<div class="panel-heading">
-						No video list
+						More than 2 actress video list
 					</div>
 					<div class="panel-body">
 						<ol>
 							<c:forEach items="${videoList}" var="video">
-								<c:if test="${video.videoFileList.size() < 1 }">
+								<c:if test="${video.actressList.size() > 1 }">
 									<li>
 										<span class="glyphicon glyphicon-film text-red"></span>
-										<span class="label label-plain" onclick="fnVideoDetail('${video.opus}')">${video.fullname}</span>
+										<span class="label label-plain" onclick="fnVideoDetail('${video.opus}')">${video.opus}</span>
+										<jk:video view="actress" video="${video}"/>
 									</li>
 								</c:if>
 							</c:forEach>
