@@ -18,6 +18,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,11 @@ public class CrazyUtils {
 		if (obj1 == null || obj2 == null)
 			return 0;
 		return obj1.toString().compareToIgnoreCase(obj2.toString());
+	}
+	public static int compareTo(Date date1, Date date2) {
+		if (date1 == null || date2 == null)
+			return 0;
+		return date1.compareTo(date2);
 	}
 	public static int compareTo(String str1, String str2) {
 		if (str1 == null || str2 == null)

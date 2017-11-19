@@ -69,13 +69,13 @@ public class Video {
 
 
 	public Video() {
-		videoFileList 		= new ArrayList<File>();
-		subtitlesFileList 	= new ArrayList<File>();
-		etcFileList 		= new ArrayList<File>();
-		videoCandidates		= new ArrayList<File>();
+		videoFileList 		= new ArrayList<>();
+		subtitlesFileList 	= new ArrayList<>();
+		etcFileList 		= new ArrayList<>();
+		videoCandidates		= new ArrayList<>();
 		torrents			= new ArrayList<>();
 		
-		actressList = new ArrayList<Actress>();
+		actressList = new ArrayList<>();
 
 		playCount 	= 0;
 		rank 		= 0;

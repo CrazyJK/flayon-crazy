@@ -1,11 +1,15 @@
 package jk.kamoru.flayon.crazy.util;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
@@ -124,24 +128,34 @@ public class VideoUtils {
 		switch(sort) {
 		case S:
 			result = CrazyUtils.compareTo(v1.getStudio().getName(), v2.getStudio().getName());
+			break;
 		case O:
 			result = CrazyUtils.compareTo(v1.getOpus(), v2.getOpus());
+			break;
 		case T:
 			result = CrazyUtils.compareTo(v1.getTitle(), v2.getTitle());
+			break;
 		case A:
 			result = CrazyUtils.compareTo(v1.getActressName(), v2.getActressName());
+			break;
 		case D:
-			result = CrazyUtils.compareTo(v1.getReleaseDate(), v2.getReleaseDate());
+			result = compareToRelease(v1.getReleaseDate(), v2.getReleaseDate());
+			break;
 		case M:
 			result = CrazyUtils.compareTo(v1.getDelegateFile().lastModified(), v2.getDelegateFile().lastModified());
+			break;
 		case P:
-			result = CrazyUtils.compareTo(v1.getPlayCount(), v2.getPlayCount());
+			result = CrazyUtils.compareTo(v1.getPlayCount().intValue(), v2.getPlayCount().intValue());
+			break;
 		case R:
 			result = CrazyUtils.compareTo(v1.getRank(), v2.getRank());
+			break;
 		case L:
 			result = CrazyUtils.compareTo(v1.getLength(), v2.getLength());
+			break;
 		case SC:
 			result = CrazyUtils.compareTo(v1.getScore(), v2.getScore());
+			break;
 		case VC:
 			if (v1.getVideoCandidates().size() > 0) {
 				if (v2.getVideoCandidates().size() == 0) {
@@ -154,10 +168,25 @@ public class VideoUtils {
 				}
 			}
 			result = CrazyUtils.compareTo(v1.getStudio().getName(), v2.getStudio().getName());
+			break;
 		default:
 			result = CrazyUtils.compareTo(v1, v2);
 		}
 		return result * (reverse ? -1 : 1);
+	}
+
+	public static SimpleDateFormat releaseDateFotmat = new SimpleDateFormat(VIDEO.VIDEO_DATE_PATTERN);
+	
+	public static Date parseReleaseDate(String source) {
+		try {
+			return releaseDateFotmat.parse(source);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	public static int compareToRelease(String release1, String release2) {
+		return CrazyUtils.compareTo(parseReleaseDate(release1), parseReleaseDate(release2));
 	}
 
 }

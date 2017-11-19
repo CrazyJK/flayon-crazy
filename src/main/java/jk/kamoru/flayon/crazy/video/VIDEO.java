@@ -31,4 +31,6 @@ public interface VIDEO extends CRAZY {
 
 	public static final String       BACKUP_FILE_FILENAME  = "flayon-file.zip";
 
+	public static final String VIDEO_DATE_PATTERN = "yyyy.MM.dd";
+
 }
