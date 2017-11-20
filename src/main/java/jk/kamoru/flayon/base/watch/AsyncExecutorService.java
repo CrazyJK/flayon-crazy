@@ -25,7 +25,7 @@ public abstract class AsyncExecutorService {
 	public void start() {
 		Runnable task = getTask();
 		ExecutorService service = Executors.newSingleThreadExecutor();
-		service.submit(task);
+		service.execute(task);
 		log.info("AsyncExecutorService Start : {}", task.getClass().getName());
 	}
 	

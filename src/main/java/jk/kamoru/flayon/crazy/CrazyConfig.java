@@ -80,8 +80,7 @@ public class CrazyConfig {
         return new AsyncExecutorService() {
 			@Override
 			protected Runnable getTask() {
-				DirectoryWatcher task = new DirectoryWatcher(instancePaths);
-				return task;
+				return new DirectoryWatcher(instancePaths);
 			}
         };
     }
