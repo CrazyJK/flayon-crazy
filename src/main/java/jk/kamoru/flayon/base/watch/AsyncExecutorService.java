@@ -3,25 +3,25 @@ package jk.kamoru.flayon.base.watch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.springframework.scheduling.annotation.Async;
+import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * {@link AsyncExecutorService#getTask() getTask()}의 {@link Runnable}을 실행시킨다
+ * @author kamoru
+ *
+ */
 @Slf4j
 public abstract class AsyncExecutorService {
 
+	/**
+	 * Async로 구동할 Task
+	 * @return
+	 */
 	protected abstract Runnable getTask();
 	
-	/**
-	 * async method<br>
-	 * <code>@</code>EnableAsync 설정 필요
-	 * <pre>
-	 *   <code>@</code>SpringBootApplication
-	 *   <code>@</code>EnableAsync
-	 *   public class FlayOnApplication {
-	 * </pre>
-	 */
-	@Async
+	@PostConstruct
 	public void start() {
 		Runnable task = getTask();
 		ExecutorService service = Executors.newSingleThreadExecutor();
