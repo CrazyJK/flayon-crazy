@@ -89,7 +89,7 @@ public class CrazyConfig {
 	@Bean
 	public BeanPostProcessor methodExecutionBeanPostProcessor() {
 		Map<String, String> beans = new HashMap<>();
-		beans.put("directoryWatch", "start");
+		beans.put("instanceVideoSource", "reload");
 		MethodExecutionBeanPostProcessor processor = new MethodExecutionBeanPostProcessor();
 		processor.setBeans(beans);
 		return processor;
