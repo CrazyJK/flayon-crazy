@@ -35,9 +35,9 @@ public class CrazyConfig {
     @Value("${path.video.candidate}")       String[]    candidatePaths;
     @Value("${path.video.stage}")           String[]        stagePaths;
     @Value("${path.video.cover}")           String          coverPath;
-    @Value("${path.video.seed}")            String           seedPath;
     @Value("${path.video.queue}")           String          queuePath;
-    @Value("${path.video.torrent}")         String        torrentPath;
+    @Value("${path.torrent.queue}")         String   torrentQueuePath;
+    @Value("${path.torrent.seed}")          String    torrentSeedPath;
     @Value("${path.move.file}")             String[]     moveFilePaths;
     @Value("${path.sora.pictures}")         String[] soraPicturesPaths;
     @Value("${path.image.storage}")         String[]        imagePaths;
@@ -67,7 +67,7 @@ public class CrazyConfig {
 
 	@Bean
 	public VideoSource instanceVideoSource() {
-		return new FileBaseVideoSource(false, torrentPath, instancePaths);
+		return new FileBaseVideoSource(false, torrentQueuePath, instancePaths);
 	}
 	
 	@Bean

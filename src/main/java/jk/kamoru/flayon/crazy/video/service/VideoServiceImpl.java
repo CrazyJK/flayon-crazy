@@ -86,7 +86,7 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired CommandExecutor commandExecutor;
 
 	private String[] CANDIDATE_PATHS;
-	private String TORRENT_PATH;
+	private String TORRENT_QUEUE_PATH;
 	private String PLAYER;
 	private String EDITOR;
 	private String STORAGE_PATH;
@@ -100,12 +100,11 @@ public class VideoServiceImpl implements VideoService {
 	private String[] REPLACE_OPUS_INFO;
 	private String NO_PARSE_OPUS_PREFIX;
 	private String urlRSS;
-	private String SEED_PATH;
+	private String TORRENT_SEED_PATH;
 	
 	@PostConstruct
 	public void postConstruct() {
 		CANDIDATE_PATHS 	= config.getCandidatePaths();
-		TORRENT_PATH 		= config.getTorrentPath();
 		PLAYER 				= config.getPlayer();
 		EDITOR 				= config.getEditor();
 		STORAGE_PATH 		= config.getStoragePath();
@@ -119,7 +118,8 @@ public class VideoServiceImpl implements VideoService {
 		REPLACE_OPUS_INFO 	= config.getReplaceOpusInfo();
 		NO_PARSE_OPUS_PREFIX = config.getNoParseOpusPrefix();
 		urlRSS 				= config.getUrlRSS();
-		SEED_PATH 			= config.getSeedPath();
+		TORRENT_QUEUE_PATH  = config.getTorrentQueuePath();
+		TORRENT_SEED_PATH 	= config.getTorrentSeedPath();
 	}
 	
 	private void fillTorrentInfo(List<Video> list) {
@@ -158,8 +158,8 @@ public class VideoServiceImpl implements VideoService {
 		}
 		
 		// find torrent
-		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
-		log.info("fillTorrentInfo - Scan torrents : {}, {} found", TORRENT_PATH, foundTorrent.size());
+		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_QUEUE_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
+		log.info("fillTorrentInfo - Scan torrents : {}, {} found", TORRENT_QUEUE_PATH, foundTorrent.size());
 		
 		// matching torrent file
 		for (Video video : nonExistVideoList) {
@@ -1159,7 +1159,7 @@ public class VideoServiceImpl implements VideoService {
 	public void moveTorrentToSeed(String opus) {
 		for (File file : videoDao.getVideo(opus).getTorrents()) {
 			try {
-				FileUtils.moveFileToDirectory(file, new File(SEED_PATH), false);
+				FileUtils.moveFileToDirectory(file, new File(TORRENT_SEED_PATH), false);
 			} catch (IOException e) {
 				log.error("Fail to move torrent to seed dir" + opus, e);
 			}
@@ -1243,7 +1243,7 @@ public class VideoServiceImpl implements VideoService {
 		for (String opus : opusArr) {
 			Video video = videoDao.getVideo(opus);
 			video.getTorrents().clear();
-			sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
+			sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_QUEUE_PATH);
 			/*			
  			CompletableFuture<File> completableFuture = sukebeiNyaaLookupService.get(video.getOpus(), video.getTitle(), TORRENT_PATH);
 			try {
