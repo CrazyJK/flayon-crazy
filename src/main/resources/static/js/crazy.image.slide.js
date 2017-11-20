@@ -55,10 +55,10 @@ var slide = (function() {
 					}
 					else {
 						hideEffect = "fade";
-						hideDuration = 500;
+						hideDuration = 300;
 						hideOptions = {};
 						showEffect = "fade";
-						showDuration = 500;
+						showDuration = 300;
 						showOptions = {};
 						$(".effectInfo").hide();
 					}
@@ -119,6 +119,9 @@ var slide = (function() {
 						setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 					}
 					
+					$("#thumbnailUL").show(hideEffect, hideOptions, hideDuration, function() {
+						$(this).empty();
+					});
 					$("#imageDiv").hide(hideEffect, hideOptions, hideDuration, function() {
 						$("#currNo").val(currentIndex);
 						$("#endNo").html(image.maxCount(-1));
@@ -193,7 +196,7 @@ var slide = (function() {
 					console.log("    displayThumbnail START", currentIndex);
 					if (currentIndex < 0)
 						return;
-					$("#thumbnailUL").empty();
+//					$("#thumbnailUL").empty();
 					var itemCount = image.maxCount();
 					var thumbnailRange = parseInt($(window).width() / (150 * 2));
 					for (var current = currentIndex - thumbnailRange; current <= currentIndex + thumbnailRange; current++) {
