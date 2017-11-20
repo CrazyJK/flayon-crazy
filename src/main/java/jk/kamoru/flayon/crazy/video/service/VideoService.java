@@ -194,6 +194,8 @@ public interface VideoService {
 
 	void moveTorrentToSeed(String opus);
 
+	void moveTorrentToSeed(File file);
+
 	// --- action method of video --------------------------------------
 
 	/**play video
@@ -346,5 +348,7 @@ public interface VideoService {
 	int downloadTorrents(String[] opusArr);
 
 	void toggleTag(VTag tag, String opus);
+
+	List<Map<String, String>> findTorrent(String query);
 
 }

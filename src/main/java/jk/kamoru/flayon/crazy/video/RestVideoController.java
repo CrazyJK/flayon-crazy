@@ -1,5 +1,6 @@
 package jk.kamoru.flayon.crazy.video;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -124,6 +125,7 @@ public class RestVideoController {
 		Map<String, List<Map<String, String>>> data = new HashMap<>();
 		data.put("videoResult",   videoService.findVideoList(query));
 		data.put("historyResult", videoService.findHistory(query));
+		data.put("torrentResult", videoService.findTorrent(query));
 		return data;
 	}
 	
@@ -148,6 +150,12 @@ public class RestVideoController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void torrentGet(@RequestParam("opus") String[] opusArr) {
 		videoService.downloadTorrents(opusArr);
+	}
+	
+	@RequestMapping(value="/torrent/seed/move", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void torrentMove(@RequestParam("seed") File seed) {
+		videoService.moveTorrentToSeed(seed);
 	}
 	
 	@RequestMapping(value="/gravia", method=RequestMethod.POST)

@@ -5,7 +5,10 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
+
+import com.turn.ttorrent.client.SharedTorrent;
+import com.turn.ttorrent.common.Torrent;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyConfig;
@@ -1158,11 +1164,16 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void moveTorrentToSeed(String opus) {
 		for (File file : videoDao.getVideo(opus).getTorrents()) {
-			try {
-				FileUtils.moveFileToDirectory(file, new File(TORRENT_SEED_PATH), false);
-			} catch (IOException e) {
-				log.error("Fail to move torrent to seed dir" + opus, e);
-			}
+			moveTorrentToSeed(file);
+		}
+	}
+	
+	@Override
+	public void moveTorrentToSeed(File file) {
+		try {
+			FileUtils.moveFileToDirectory(file, new File(TORRENT_SEED_PATH), false);
+		} catch (IOException e) {
+			log.error("Fail to move torrent to seed dir", e);
 		}
 	}
 
@@ -1264,6 +1275,33 @@ public class VideoServiceImpl implements VideoService {
 	public void toggleTag(VTag tag, String opus) {
 		VTag _tag = tagDao.findById(tag.getId());
 		videoDao.getVideo(opus).toggleTag(_tag);
+	}
+
+	@Override
+	public List<Map<String, String>> findTorrent(String query) {
+		try {
+			return Files.walk(Paths.get(TORRENT_SEED_PATH))
+					.filter(p -> CrazyUtils.containsAny(p.toString(), query, query.replace("-", "")))
+					.flatMap(p -> {
+						List<Map<String, String>> result = new ArrayList<>();
+						Map<String, String> map = new HashMap<>();
+						map.put("name", p.toFile().getName());
+						map.put("path", p.toFile().getAbsolutePath());
+						
+						try {
+							Torrent torrent = SharedTorrent.load(p.toFile());
+							map.put("size", FileUtils.byteCountToDisplaySize(torrent.getSize()));
+						} catch (NoSuchAlgorithmException | IOException e) {
+							log.error("Fail to findTorrent", e);
+						}
+						
+						result.add(map);
+						return result.stream();
+					}).collect(Collectors.toList());
+		} catch (IOException e) {
+			log.error("Fail to findTorrent", e);
+			return null;
+		}
 	}
 
 }

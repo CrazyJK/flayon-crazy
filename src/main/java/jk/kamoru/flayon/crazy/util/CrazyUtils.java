@@ -436,4 +436,11 @@ public class CrazyUtils {
 		return result.trim();
 	}
 
+	public static boolean containsAny(String str, String...searches) {
+		for (String search : searches) {
+			if (StringUtils.containsIgnoreCase(str, search))
+				return true;
+		}
+		return false;
+	}
 }

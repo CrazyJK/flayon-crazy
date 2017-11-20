@@ -119,6 +119,23 @@ $(document).ready(function() {
 			});
  			$("#resultHistoryDiv > table").toggle(historyRow.length > 0);
 
+ 			var torrents = result.torrentResult;
+			$(".torrent-count").html(torrents.length);
+			$("#torrentList").empty();
+ 			$.each(torrents, function(entryIndex, torrent) {
+ 				$("#torrentList").append(
+ 						$("<li>").append(
+ 							$("<a>", {title: "move to seed : " + torrent.path, "class": "label label-primary"}).append(
+ 									torrent.name,
+ 									"&nbsp;&nbsp;&nbsp;",
+ 									$("<small>").html(torrent.size)
+ 							)
+ 						).data("path", torrent.path).on("click", function() {
+ 							restCall(PATH + '/rest/video/torrent/seed/move', {method: "PUT", data: {"seed": $(this).data("path")}, title: "move seed"});
+ 						})
+ 				);
+ 			});
+ 			
  		    var rexp = eval('/' + keyword + '/gi');
  		    $("tbody > tr > td > span").each(function() {
  				$(this).html($(this).text().replace(rexp, "<mark>" + keyword + "</mark>"));
@@ -225,6 +242,9 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 					</thead>
 					<tbody id="foundVideoList"></tbody>
 				</table>
+				<h4 class="title">Torrent archives <span class="badge torrent-count"></span></h4>
+				<ol id="torrentList" class="list-unstyled" style="font-size: 1.5em;">
+				</ol>
 			</div>
 		</div>
 		<div class="col-lg-6">		
