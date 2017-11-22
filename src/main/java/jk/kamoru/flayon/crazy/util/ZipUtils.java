@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Stack;
 
@@ -58,7 +56,7 @@ public class ZipUtils {
 	 * @throws IOException
 	 */
 	public static void unzip(File zippedFile, File destDir) throws IOException {
-		unzip(new FileInputStream(zippedFile), destDir, Charset.defaultCharset().name());
+		unzip(zippedFile, destDir, Charset.defaultCharset().name());
 	}
 
 	/**<pre>
@@ -69,30 +67,10 @@ public class ZipUtils {
 	 * @throws IOException
 	 */
 	public static void unzip(File zippedFile, File destDir, String charsetName) throws IOException {
-		unzip(new FileInputStream(zippedFile), destDir, charsetName);
-	}
-
-	/**<pre>
- 	 * 압축 해제
-	 * jvm default charset 사용
-	 * @param zippedInputStrean
-	 * @param destDir 압축풀 폴더
-	 * @throws IOException
-	 */
-	public static void unzip(InputStream zippedInputStrean, File destDir) throws IOException {
-		unzip(zippedInputStrean, destDir, Charset.defaultCharset().name());
-	}
-
-	/**<pre>
- 	 * 압축 해제
-	 * @param zippedInputStrean
-	 * @param destDir 압축풀 폴더
-	 * @param charsetName
-	 * @throws IOException
-	 */
-	public static void unzip(InputStream zippedInputStrean, File destDir, String charsetName) throws IOException {
+		log.info("unzip {} to {}. {}", zippedFile, destDir, charsetName);
+		
 		byte[] buf = new byte[1024 * 8];
-		ZipArchiveInputStream zipInputStream = new ZipArchiveInputStream(zippedInputStrean, charsetName, false);
+		ZipArchiveInputStream zipInputStream = new ZipArchiveInputStream(new FileInputStream(zippedFile), charsetName, false);
 		ZipArchiveEntry zipEntry;
 		while ((zipEntry = zipInputStream.getNextZipEntry()) != null) {
 			String name = zipEntry.getName();
@@ -156,18 +134,6 @@ public class ZipUtils {
 
 	/**<pre>
 	 * 소스 파일/폴더를 압축
-	 * charset은 jvm default charset
-	 * src가 폴더면, zip에 폴더 포함
-	 * @param src
-	 * @param os zip파일의 OutputStream
-	 * @throws IOException
-	 */
-	public static void zip(File src, OutputStream os) throws IOException {
-		zip(src, os, Charset.defaultCharset().name(), true);
-	}
-
-	/**<pre>
-	 * 소스 파일/폴더를 압축
 	 * zip파일 이름은 src가 폴더이면 폴더이름으로, 파일이면 파일 이름으로 결정 
 	 * @param src 소스
 	 * @param destDir zip파일 위치
@@ -193,22 +159,13 @@ public class ZipUtils {
 	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
 	 * @throws IOException
 	 */
-	public static void zip(File src, File destDir, String destFileName, String charSetName, boolean includeSrc) throws IOException {
+	public static void zip(File src, File destDir, String destFileName, String charsetName, boolean includeSrc) throws IOException {
+		log.info("zip {} to {}/{}. {} {}", src, destDir, destFileName, charsetName, includeSrc);
+
 		File zippedFile = new File(destDir, destFileName);
 		if (!zippedFile.exists())
 			zippedFile.createNewFile();
-		zip(src, new FileOutputStream(zippedFile), charSetName, includeSrc);
-	}
 
-	/**
-	 * 소스 파일/폴더를 압축
-	 * @param src 소스 파일/폴더
-	 * @param os zip 파일 outputstream
-	 * @param charsetName 
-	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
-	 * @throws IOException
-	 */
-	public static void zip(File src, OutputStream os, String charsetName, boolean includeSrc) throws IOException {
 		File rootPath;
 		Stack<File> stackFile = new Stack<>();
 		if (src.isDirectory()) {
@@ -229,7 +186,7 @@ public class ZipUtils {
 		}
 
 		byte[] buf = new byte[8 * 1024];
-		ZipArchiveOutputStream zipOutputStrean = new ZipArchiveOutputStream(os);
+		ZipArchiveOutputStream zipOutputStrean = new ZipArchiveOutputStream(new FileOutputStream(zippedFile));
 		zipOutputStrean.setEncoding(charsetName);
 		while (!stackFile.isEmpty()) {
 			File popFile = stackFile.pop();
