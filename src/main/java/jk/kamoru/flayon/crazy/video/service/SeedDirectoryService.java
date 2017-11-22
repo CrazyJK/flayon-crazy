@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.source;
+package jk.kamoru.flayon.crazy.video.service;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -19,12 +19,12 @@ import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SeedRepository extends AsyncExecutorService implements DirectoryRepository {
+public class SeedDirectoryService extends AsyncExecutorService implements DirectoryService {
 
 	private List<Path> pathList;
 	private String root;
 	
-	public SeedRepository(String root) {
+	public SeedDirectoryService(String root) {
 		this.root = root;
 		try {
 			pathList = Files.walk(Paths.get(root)).collect(Collectors.toList());

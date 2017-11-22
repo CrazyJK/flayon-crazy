@@ -17,9 +17,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
 import jk.kamoru.flayon.base.watch.AsyncExecutorService;
 import jk.kamoru.flayon.base.watch.DirectoryWatcher;
-import jk.kamoru.flayon.crazy.video.source.DirectoryRepository;
+import jk.kamoru.flayon.crazy.video.service.DirectoryService;
+import jk.kamoru.flayon.crazy.video.service.SeedDirectoryService;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
-import jk.kamoru.flayon.crazy.video.source.SeedRepository;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.Getter;
 
@@ -110,8 +110,8 @@ public class CrazyConfig {
     }
     
     @Bean
-    public DirectoryRepository seedRepository() {
-    	return new SeedRepository(torrentSeedPath);
+    public DirectoryService seedDirectoryService() {
+    	return new SeedDirectoryService(torrentSeedPath);
     }
 
 	@Bean

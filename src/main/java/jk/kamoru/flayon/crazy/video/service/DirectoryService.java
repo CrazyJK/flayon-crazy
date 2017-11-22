@@ -1,9 +1,9 @@
-package jk.kamoru.flayon.crazy.video.source;
+package jk.kamoru.flayon.crazy.video.service;
 
 import java.io.File;
 import java.util.List;
 
-public interface DirectoryRepository {
+public interface DirectoryService {
 
 	File find(String name);
 	
