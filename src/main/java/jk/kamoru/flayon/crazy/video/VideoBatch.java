@@ -236,14 +236,15 @@ public class VideoBatch {
 //	@Scheduled(fixedDelay = 1000 * 60 * 60 * 24) // fixedDelay per day 
 //	@PreDestroy
 	// cron every 2h 13m
-	@Scheduled(cron="0 0 0 * * *")
+	@Scheduled(cron="0 15 0 * * *")
 	public synchronized void backup() throws IOException {
-		
+		StopWatch stopWatch = new StopWatch("Backup");
+
 		if (StringUtils.isBlank(config.getBackupPath())) {
-			log.warn("BATCH - backup path not set");
+			log.warn("Backup path not set");
 			return;
 		}
-		log.info("BATCH - backup to {}", config.getBackupPath());
+		log.info("Backup START [{}]", config.getBackupPath());
 		
 		File backupPath = new File(config.getBackupPath());
 		if (!backupPath.exists())
@@ -260,10 +261,15 @@ public class VideoBatch {
 		List<String>     archiveList = new ArrayList<>();
 
 		// instance
+		stopWatch.start("make csv of instance list");
 		instanceList.add(csvHeader);
 		for (Video video : videoList)
 			instanceList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), video.getRank(), video.getFullname()));
+		writeFileWithUTF8BOM(new File(backupPath, VIDEO.BACKUP_INSTANCE_FILENAME), instanceList); 
+		stopWatch.stop();
+		
 		// archive
+		stopWatch.start("make csv of archive, history list");
 		archiveList.add(csvHeader);
 		for (Video video : archiveVideoList)
 			archiveList.add(String.format(csvFormat, video.getStudio().getName(), video.getOpus(), video.getTitle(), video.getActressName(), video.getReleaseDate(), "", video.getFullname()));
@@ -279,20 +285,21 @@ public class VideoBatch {
 			if (!foundInArchive)
 				archiveList.add(String.format(csvFormat, "", history.getOpus(), "", "", "", "", history.getDesc()));
 		}
-		writeFileWithUTF8BOM(new File(backupPath, VIDEO.BACKUP_INSTANCE_FILENAME), instanceList); 
-		log.info("BATCH - backup. {} {}", VIDEO.BACKUP_INSTANCE_FILENAME, instanceList.size());
 		writeFileWithUTF8BOM(new File(backupPath, VIDEO.BACKUP_ARCHIVE_FILENAME),  archiveList);
-		log.info("BATCH - backup. {} {}", VIDEO.BACKUP_ARCHIVE_FILENAME, archiveList.size());
-		
+		stopWatch.stop();
+
 		// history backup
+		stopWatch.start("copy history.log");
 		FileUtils.copyFileToDirectory(new File(config.getStoragePath(), VIDEO.HISTORY_LOG_FILENAME), backupPath);
-		log.info("BATCH - backup. {}", VIDEO.HISTORY_LOG_FILENAME);
+		stopWatch.stop();
 		
 		// tag data backup
+		stopWatch.start("copy tag.data");
 		FileUtils.copyFileToDirectory(new File(config.getStoragePath(), VIDEO.TAG_DATA_FILENAME), backupPath);
-		log.info("BATCH - backup. {}", VIDEO.TAG_DATA_FILENAME);
+		stopWatch.stop();
 		
 		// zip to cover, info, subtitles file on instance
+		stopWatch.start("zip instance files");
 		File backupTempPath = new File(config.getQueuePath(), "backuptemp");
 		if (backupTempPath.isDirectory())
 			FileUtils.cleanDirectory(backupTempPath);
@@ -304,11 +311,14 @@ public class VideoBatch {
 					FileUtils.copyFileToDirectory(file, backupTempPath, false);
 		ZipUtils.zip(backupTempPath, backupPath, VIDEO.BACKUP_FILE_FILENAME, VIDEO.ENCODING, true);
 		FileUtils.deleteDirectory(backupTempPath);
-		log.info("BATCH - backup. {}", VIDEO.BACKUP_FILE_FILENAME);
+		stopWatch.stop();
 		
 		// _info folder backup to zip
+		stopWatch.start("zip info folder");
 		ZipUtils.zip(new File(config.getStoragePath(), "_info"), backupPath, VIDEO.BACKUP_INFO_FILENAME, VIDEO.ENCODING, true);
-		log.info("BATCH - backup. {}", VIDEO.BACKUP_INFO_FILENAME);
+		stopWatch.stop();
+
+		log.info("Backup END\n\n{}", stopWatch.prettyPrint());
 
 		NotiQueue.pushNoti("Backup completed");
 	}
