@@ -1,5 +1,7 @@
 package jk.kamoru.flayon.crazy;
 
+import java.nio.file.Path;
+import java.nio.file.WatchEvent.Kind;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
 import jk.kamoru.flayon.base.watch.AsyncExecutorService;
 import jk.kamoru.flayon.base.watch.DirectoryWatcher;
+import jk.kamoru.flayon.crazy.video.source.DirectoryRepository;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
+import jk.kamoru.flayon.crazy.video.source.SeedRepository;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.Getter;
 
@@ -76,13 +80,38 @@ public class CrazyConfig {
 	}
 
     @Bean
-    public AsyncExecutorService directoryWatch() {
+    public AsyncExecutorService instanceDirectoryWatch() {
         return new AsyncExecutorService() {
 			@Override
 			protected Runnable getTask() {
-				return new DirectoryWatcher(instancePaths);
+				return new DirectoryWatcher("Instance", instancePaths) {
+
+					@Override
+					public void action(Kind<Path> kind, Path file) {
+						// nothing
+					}};
 			}
         };
+    }
+
+    @Bean
+    public AsyncExecutorService archiveDirectoryWatch() {
+        return new AsyncExecutorService() {
+			@Override
+			protected Runnable getTask() {
+				return new DirectoryWatcher("Archive", archivePath) {
+
+					@Override
+					public void action(Kind<Path> kind, Path file) {
+						// nothing
+					}};
+			}
+        };
+    }
+    
+    @Bean
+    public DirectoryRepository seedRepository() {
+    	return new SeedRepository(torrentSeedPath);
     }
 
 	@Bean

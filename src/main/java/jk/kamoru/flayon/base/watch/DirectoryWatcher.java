@@ -18,13 +18,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import jk.kamoru.flayon.base.error.BaseException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Directory watcher<br>
+ * need to override {@link #action(Kind, Path)}
  * <pre>
  * about Exception, user limit of inotify watches reached
  * Case Ubuntu
@@ -36,15 +35,27 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class DirectoryWatcher implements Runnable {
+public abstract class DirectoryWatcher implements Runnable {
 
 	private WatchService watcher;
 	private Map<WatchKey, Path> keys;
 	private String[] paths;
+	private String taskName;
 	
-	public DirectoryWatcher(String[] paths) {
+	public abstract void action(Kind<Path> kind, Path file);
+	
+	/**
+	 * @param taskName task name
+	 * @param paths directory to watched
+	 */
+	public DirectoryWatcher(String taskName, String... paths) {
+		this.taskName = taskName;
 		this.paths = paths;
-		log.info("DirectoryWatcher init : " + ArrayUtils.toString(paths));
+		log.info("{} DirectoryWatcher init", taskName);
+	}
+	
+	public String getTaskName() {
+		return taskName;
 	}
 	
 	@Override
@@ -84,7 +95,7 @@ public class DirectoryWatcher implements Runnable {
 	private void registerDirectory(Path dir) throws IOException {
 		WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE);
 		keys.put(key, dir);
-		log.info("Watch directory : " + dir);
+		log.info("{} watch : {}", taskName, dir);
 	}
 
 	private void processEvents() throws InterruptedException, IOException {
@@ -106,8 +117,9 @@ public class DirectoryWatcher implements Runnable {
 				Path child = dir.resolve(file);
 
 				// print out event
-				log.info("{}: {}", kind.name(), child);
-
+				log.info("{} {}: {}", taskName, kind.name(), child);
+				action(kind, child);
+				
 				// if directory is created, and watching recursively, then register it and its sub-directories
 				if (kind == ENTRY_CREATE)
 					if (Files.isDirectory(child))
@@ -121,7 +133,7 @@ public class DirectoryWatcher implements Runnable {
 
 				// all directories are inaccessible
 				if (keys.isEmpty()) {
-					log.warn("all directories are inaccessible");
+					log.warn("{} all directories are inaccessible", taskName);
 					break;
 				}
 			}

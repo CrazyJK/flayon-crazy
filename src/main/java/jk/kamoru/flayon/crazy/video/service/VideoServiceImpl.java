@@ -5,9 +5,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +66,7 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
 import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
+import jk.kamoru.flayon.crazy.video.source.DirectoryRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -90,6 +89,7 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired WebFileLookupService arzonLookupService;
 	@Autowired WebFileLookupService sukebeiNyaaLookupService;
 	@Autowired CommandExecutor commandExecutor;
+	@Autowired DirectoryRepository seedRepository;
 
 	private String[] CANDIDATE_PATHS;
 	private String TORRENT_QUEUE_PATH;
@@ -1279,29 +1279,23 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public List<Map<String, String>> findTorrent(String query) {
-		try {
-			return Files.walk(Paths.get(TORRENT_SEED_PATH))
-					.filter(p -> CrazyUtils.containsAny(p.toString(), query, query.replace("-", "")))
-					.flatMap(p -> {
-						List<Map<String, String>> result = new ArrayList<>();
-						Map<String, String> map = new HashMap<>();
-						map.put("name", p.toFile().getName());
-						map.put("path", p.toFile().getAbsolutePath());
-						
-						try {
-							Torrent torrent = SharedTorrent.load(p.toFile());
-							map.put("size", FileUtils.byteCountToDisplaySize(torrent.getSize()));
-						} catch (NoSuchAlgorithmException | IOException e) {
-							log.error("Fail to findTorrent", e);
-						}
-						
-						result.add(map);
-						return result.stream();
-					}).collect(Collectors.toList());
-		} catch (IOException e) {
-			log.error("Fail to findTorrent", e);
-			return null;
+		return seedRepository.query(query).stream()
+				.flatMap(file -> {
+					List<Map<String, String>> result = new ArrayList<>();
+					Map<String, String> map = new HashMap<>();
+					map.put("name", file.getName());
+					map.put("path", file.getAbsolutePath());
+					
+					try {
+						Torrent torrent = SharedTorrent.load(file);
+						map.put("size", FileUtils.byteCountToDisplaySize(torrent.getSize()));
+					} catch (NoSuchAlgorithmException | IOException e) {
+						log.error("Fail to findTorrent", e);
+					}
+					
+					result.add(map);
+					return result.stream();
+				}).collect(Collectors.toList());
 		}
-	}
 
 }

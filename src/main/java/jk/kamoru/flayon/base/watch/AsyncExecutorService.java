@@ -22,7 +22,7 @@ public abstract class AsyncExecutorService {
 	protected abstract Runnable getTask();
 	
 	@PostConstruct
-	public void start() {
+	public void post() {
 		Runnable task = getTask();
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		service.execute(task);
