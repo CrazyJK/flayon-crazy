@@ -28,140 +28,169 @@ public class ZipUtils {
 //		zip.zip(src, destDir, charSetName, includeSrc);
 //	}
 
+	/**<pre>
+	 * 압축 해제
+	 * zip파일의 현재 위치에 푼다
+	 * jvm default charset 사용
+	 * @param zippedFile
+	 * @throws IOException
+	 */
 	public static void unzip(File zippedFile) throws IOException {
 		unzip(zippedFile, Charset.defaultCharset().name());
 	}
 
+	/**<pre>
+	 * 압축 해제
+	 * zip파일의 현재 위치에 푼다
+	 * @param zippedFile
+	 * @param charsetName
+	 * @throws IOException
+	 */
 	public static void unzip(File zippedFile, String charsetName) throws IOException {
 		unzip(zippedFile, zippedFile.getParentFile(), charsetName);
 	}
 
+	/**<pre>
+ 	 * 압축 해제
+	 * jvm default charset 사용
+	 * @param zippedFile
+	 * @param destDir 압축풀 폴더
+	 * @throws IOException
+	 */
 	public static void unzip(File zippedFile, File destDir) throws IOException {
 		unzip(new FileInputStream(zippedFile), destDir, Charset.defaultCharset().name());
 	}
 
+	/**<pre>
+ 	 * 압축 해제
+	 * @param zippedFile
+	 * @param destDir 압축풀 폴더
+	 * @param charsetName
+	 * @throws IOException
+	 */
 	public static void unzip(File zippedFile, File destDir, String charsetName) throws IOException {
 		unzip(new FileInputStream(zippedFile), destDir, charsetName);
 	}
 
-	public static void unzip(InputStream is, File destDir) throws IOException {
-		unzip(is, destDir, Charset.defaultCharset().name());
+	/**<pre>
+ 	 * 압축 해제
+	 * jvm default charset 사용
+	 * @param zippedInputStrean
+	 * @param destDir 압축풀 폴더
+	 * @throws IOException
+	 */
+	public static void unzip(InputStream zippedInputStrean, File destDir) throws IOException {
+		unzip(zippedInputStrean, destDir, Charset.defaultCharset().name());
 	}
 
-	public static void unzip(InputStream is, File destDir, String charsetName) throws IOException {
-		ZipArchiveInputStream zis;
-		ZipArchiveEntry entry;
-		String name;
-		File target;
-		int nWritten = 0;
-		BufferedOutputStream bos;
+	/**<pre>
+ 	 * 압축 해제
+	 * @param zippedInputStrean
+	 * @param destDir 압축풀 폴더
+	 * @param charsetName
+	 * @throws IOException
+	 */
+	public static void unzip(InputStream zippedInputStrean, File destDir, String charsetName) throws IOException {
 		byte[] buf = new byte[1024 * 8];
-
-		zis = new ZipArchiveInputStream(is, charsetName, false);
-		while ((entry = zis.getNextZipEntry()) != null) {
-			name = entry.getName();
-			target = new File(destDir, name);
-			if (entry.isDirectory()) {
-				target.mkdirs(); /* does it always work? */
-				log.debug("dir  : " + name);
-			} else {
-				target.createNewFile();
-				bos = new BufferedOutputStream(new FileOutputStream(target));
-				while ((nWritten = zis.read(buf)) >= 0) {
-					bos.write(buf, 0, nWritten);
+		ZipArchiveInputStream zipInputStream = new ZipArchiveInputStream(zippedInputStrean, charsetName, false);
+		ZipArchiveEntry zipEntry;
+		while ((zipEntry = zipInputStream.getNextZipEntry()) != null) {
+			String name = zipEntry.getName();
+			File targetFile = new File(destDir, name);
+			if (zipEntry.isDirectory()) {
+				targetFile.mkdirs();
+			} 
+			else {
+				targetFile.createNewFile();
+				BufferedOutputStream outputStrean = new BufferedOutputStream(new FileOutputStream(targetFile));
+				int nWritten = 0;
+				while ((nWritten = zipInputStream.read(buf)) >= 0) {
+					outputStrean.write(buf, 0, nWritten);
 				}
-				bos.close();
-				log.debug("file : " + name);
+				outputStrean.close();
 			}
 		}
-		zis.close();
+		zipInputStream.close();
 	}
 
-	/**
-	 * compresses the given file(or dir) and creates new file under the same
-	 * directory.
-	 * 
-	 * @param src
-	 *            file or directory
+	// ---------------- zip
+	
+	/**<pre>
+	 * 소스 파일/폴더를 압축
+	 * zip파일 위치는 현재 폴더
+	 * zip파일 이름은 src가 폴더이면 폴더이름으로, 파일이면 파일 이름으로 결정 
+	 * charset은 jvm default charset
+	 * src가 폴더면, zip에 폴더 포함
+	 * @param src file or directory
 	 * @throws IOException
 	 */
 	public static void zip(File src) throws IOException {
 		zip(src, Charset.defaultCharset().name(), true);
 	}
 
-	/**
-	 * zips the given file(or dir) and create
-	 * 
-	 * @param src
-	 *            file or directory to compress
-	 * @param includeSrc
-	 *            if true and src is directory, then src is not included in the
-	 *            compression. if false, src is included.
+	/**<pre>
+	 * 소스 파일/폴더를 압축
+	 * zip파일 위치는 현재 폴더
+	 * zip파일 이름은 src가 폴더이면 폴더이름으로, 파일이면 파일 이름으로 결정 
+	 * charset은 jvm default charset
+	 * @param src file or directory to compress
+	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
 	 * @throws IOException
 	 */
 	public static void zip(File src, boolean includeSrc) throws IOException {
 		zip(src, Charset.defaultCharset().name(), includeSrc);
 	}
 
-	/**
-	 * compresses the given src file (or directory) with the given encoding
-	 * 
+	/**<pre>
+	 * 소스 파일/폴더를 압축
+	 * zip파일 위치는 현재 폴더
+	 * zip파일 이름은 src가 폴더이면 폴더이름으로, 파일이면 파일 이름으로 결정 
 	 * @param src
 	 * @param charSetName
-	 * @param includeSrc
+	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
 	 * @throws IOException
 	 */
 	public static void zip(File src, String charSetName, boolean includeSrc) throws IOException {
 		zip(src, src.getParentFile(), charSetName, includeSrc);
 	}
 
-	/**
-	 * compresses the given src file(or directory) and writes to the given
-	 * output stream.
-	 * 
+	/**<pre>
+	 * 소스 파일/폴더를 압축
+	 * charset은 jvm default charset
+	 * src가 폴더면, zip에 폴더 포함
 	 * @param src
-	 * @param os
+	 * @param os zip파일의 OutputStream
 	 * @throws IOException
 	 */
 	public static void zip(File src, OutputStream os) throws IOException {
 		zip(src, os, Charset.defaultCharset().name(), true);
 	}
 
-	/**
-	 * compresses the given src file(or directory) and create the compressed
-	 * file under the given destDir.
-	 * 
-	 * @param src
-	 * @param destDir
+	/**<pre>
+	 * 소스 파일/폴더를 압축
+	 * zip파일 이름은 src가 폴더이면 폴더이름으로, 파일이면 파일 이름으로 결정 
+	 * @param src 소스
+	 * @param destDir zip파일 위치
 	 * @param charSetName
-	 * @param includeSrc
+	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
 	 * @throws IOException
 	 */
 	public static void zip(File src, File destDir, String charSetName, boolean includeSrc) throws IOException {
 		String fileName = src.getName();
-		if (!src.isDirectory()) {
-			int pos = fileName.lastIndexOf(".");
-			if (pos > 0) {
-				fileName = fileName.substring(0, pos);
-			}
+		if (src.isFile()) {
+			fileName = CrazyUtils.getNameExceptExtension(src);
 		}
 		fileName += ".zip";
-
-		File zippedFile = new File(destDir, fileName);
-		if (!zippedFile.exists())
-			zippedFile.createNewFile();
-		zip(src, new FileOutputStream(zippedFile), charSetName, includeSrc);
+		zip(src, destDir, fileName, charSetName, includeSrc);
 	}
 
 	/**
-	 * compresses the given src file(or directory) and create the compressed
-	 * file under the given destDir, destFileName.
-	 * 
-	 * @param src
-	 * @param destDir
-	 * @param destFileName
+	 * 소스 파일/폴더를 압축
+	 * @param src 압축 소스
+	 * @param destDir zip파일 위치
+	 * @param destFileName zip파일 이름
 	 * @param charSetName
-	 * @param includeSrc
+	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
 	 * @throws IOException
 	 */
 	public static void zip(File src, File destDir, String destFileName, String charSetName, boolean includeSrc) throws IOException {
@@ -171,67 +200,76 @@ public class ZipUtils {
 		zip(src, new FileOutputStream(zippedFile), charSetName, includeSrc);
 	}
 
+	/**
+	 * 소스 파일/폴더를 압축
+	 * @param src 소스 파일/폴더
+	 * @param os zip 파일 outputstream
+	 * @param charsetName 
+	 * @param includeSrc src가 폴더이고 true이면, zip에 폴더 포함
+	 * @throws IOException
+	 */
 	public static void zip(File src, OutputStream os, String charsetName, boolean includeSrc) throws IOException {
-		ZipArchiveOutputStream zos = new ZipArchiveOutputStream(os);
-		zos.setEncoding(charsetName);
-		FileInputStream fis;
-
-		int length;
-		ZipArchiveEntry ze;
-		byte[] buf = new byte[8 * 1024];
-		String name;
-
-		Stack<File> stack = new Stack<File>();
-		File root;
+		File rootPath;
+		Stack<File> stackFile = new Stack<>();
 		if (src.isDirectory()) {
 			if (includeSrc) {
-				stack.push(src);
-				root = src.getParentFile();
-			} else {
-				File[] fs = src.listFiles();
-				for (int i = 0; i < fs.length; i++) {
-					stack.push(fs[i]);
+				stackFile.push(src);
+				rootPath = src.getParentFile();
+			} 
+			else {
+				for (File file : src.listFiles()) {
+					stackFile.push(file);
 				}
-				root = src;
+				rootPath = src;
 			}
-		} else {
-			stack.push(src);
-			root = src.getParentFile();
+		} 
+		else {
+			stackFile.push(src);
+			rootPath = src.getParentFile();
 		}
 
-		while (!stack.isEmpty()) {
-			File f = stack.pop();
-			name = toPath(root, f);
-			if (f.isDirectory()) {
-				File[] fs = f.listFiles();
-				for (int i = 0; i < fs.length; i++) {
-					if (fs[i].isDirectory())
-						stack.push(fs[i]);
+		byte[] buf = new byte[8 * 1024];
+		ZipArchiveOutputStream zipOutputStrean = new ZipArchiveOutputStream(os);
+		zipOutputStrean.setEncoding(charsetName);
+		while (!stackFile.isEmpty()) {
+			File popFile = stackFile.pop();
+			if (popFile.isDirectory()) {
+				for (File file : popFile.listFiles()) {
+					if (file.isDirectory())
+						stackFile.push(file);
 					else
-						stack.add(0, fs[i]);
+						stackFile.add(0, file);
 				}
-			} else {
-				ze = new ZipArchiveEntry(name);
-				zos.putArchiveEntry(ze);
-				fis = new FileInputStream(f);
-				while ((length = fis.read(buf, 0, buf.length)) >= 0) {
-					zos.write(buf, 0, length);
+			} 
+			else {
+				String entryName = toRelativePath(rootPath, popFile);
+				zipOutputStrean.putArchiveEntry(new ZipArchiveEntry(entryName));
+				FileInputStream fileInputStream = new FileInputStream(popFile);
+				int length = -1;
+				while ((length = fileInputStream.read(buf, 0, buf.length)) >= 0) {
+					zipOutputStrean.write(buf, 0, length);
 				}
-				fis.close();
-				zos.closeArchiveEntry();
+				fileInputStream.close();
+				zipOutputStrean.closeArchiveEntry();
 			}
 		}
-		zos.close();
+		zipOutputStrean.close();
 	}
 
-	private static String toPath(File root, File dir) {
-		String path = dir.getAbsolutePath();
-		path = path.substring(root.getAbsolutePath().length()).replace(File.separatorChar, '/');
-		if (path.startsWith("/"))
-			path = path.substring(1);
-		if (dir.isDirectory() && !path.endsWith("/"))
-			path += "/";
-		return path;
+	/**
+	 * root로 부터 시작하는 file의 상대 경로. file이 폴더면 '/'를 붙인다.
+	 * @param root
+	 * @param file
+	 * @return relative Path
+	 */
+	private static String toRelativePath(File root, File file) {
+		String relativePath = file.getAbsolutePath();
+		relativePath = relativePath.substring(root.getAbsolutePath().length()).replace(File.separatorChar, '/');
+		if (relativePath.startsWith("/"))
+			relativePath = relativePath.substring(1);
+		if (file.isDirectory() && !relativePath.endsWith("/"))
+			relativePath += "/";
+		return relativePath;
 	}
 
 }
