@@ -5,23 +5,34 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jk.kamoru.flayon.base.watch.AsyncExecutorService;
-import jk.kamoru.flayon.base.watch.DirectoryWatcher;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import jk.kamoru.flayon.base.watch.DirectoryWatchService;
+import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SeedDirectoryService extends AsyncExecutorService implements DirectoryService {
+@Service
+public class SeedDirectoryService extends DirectoryWatchService implements DirectoryService {
 
-	private List<Path> pathList;
-	private String root;
+	private static final String TASKNAME = "Seed Directory Service";
 	
-	public SeedDirectoryService(String root) {
-		this.root = root;
+	@Autowired CrazyConfig config;
+
+	private List<Path> pathList = new ArrayList<>();;
+	
+	@PostConstruct
+	public void load() {
+		String root = config.getTorrentSeedPath();
 		try {
 			pathList = Files.walk(Paths.get(root)).collect(Collectors.toList());
 			log.info("Seed load {} files", pathList.size());
@@ -29,7 +40,7 @@ public class SeedDirectoryService extends AsyncExecutorService implements Direct
 			throw new CrazyException("seed loading error", e);
 		}
 	}
-		
+	
 	@Override
 	public File find(String name) {
 		throw new CrazyException("find is not supported");
@@ -45,22 +56,25 @@ public class SeedDirectoryService extends AsyncExecutorService implements Direct
 	}
 
 	@Override
-	protected Runnable getTask() {
-		return new DirectoryWatcher("Seed", root) {
+	public void created(Path path) {
+		pathList.add(path);
+		log.info("add seed {}", path);
+	}
 
-			@Override
-			public void deleteEvent(Path file) {
-				pathList.add(file);
-				log.info("add seed {}", file);
-			}
+	@Override
+	public void deleted(Path path) {
+		pathList.remove(path);
+		log.info("remove seed {}", path);
+	}
 
-			@Override
-			public void createEvent(Path file) {
-				pathList.remove(file);
-				log.info("remove seed {}", file);
-			}
+	@Override
+	protected String getTaskName() {
+		return TASKNAME;
+	}
 
-		};
+	@Override
+	protected String[] getPath() {
+		return new String[] {config.getTorrentSeedPath()};
 	}
 
 }
