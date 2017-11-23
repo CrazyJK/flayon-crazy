@@ -40,13 +40,13 @@ public abstract class DirectoryWatcher implements Runnable {
 
 	private WatchService watcher;
 	private Map<WatchKey, Path> keys;
-	private String[] paths;
 	private String taskName;
+	private String[] paths;
 	
 	// override
-	protected void modifyEvent(Path path) {}
-	protected void deleteEvent(Path path) {}
 	protected void createEvent(Path path) {}
+	protected void deleteEvent(Path path) {}
+	protected void modifyEvent(Path path) {}
 
 	/**
 	 * @param taskName task name
