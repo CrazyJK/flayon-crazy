@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImageBatch extends DirectoryWatchService {
+public class ImageRenameBatch extends DirectoryWatchService {
 
 	private static final String TASKNAME = "Rename Sora picture";
 	
