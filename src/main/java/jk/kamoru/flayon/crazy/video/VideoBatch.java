@@ -89,7 +89,7 @@ public class VideoBatch {
 		case B:
 			try {
 				backup();
-				 break;
+				break;
 			} catch (IOException e) {
 				throw new VideoException("batch.backup error", e);
 			}
