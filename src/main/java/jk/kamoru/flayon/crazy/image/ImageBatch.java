@@ -45,7 +45,8 @@ public class ImageBatch extends AsyncExecutorService{
 		String folderName = file.getParentFile().getName();
 		if (StringUtils.startsWith(file.getName(), folderName))
 			return;
-		CrazyUtils.renameFile(path, folderName + "-" + file.lastModified());
+		Path renamed = CrazyUtils.renameFile(path, folderName + "-" + file.lastModified());
+		log.info("rename {} -> {}", path, renamed);
 	}
 
 	@Override

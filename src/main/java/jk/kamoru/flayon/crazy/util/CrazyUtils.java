@@ -124,7 +124,7 @@ public class CrazyUtils {
 			String suffix = getExtension(srcFile);
 			if (StringUtils.isNotEmpty(suffix))
 				newName = newName + "." + suffix;
-			log.info("renameFile {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
+			log.debug("renameFile {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
 			
 			File destFile = new File(srcFile.getParent(), newName);
 			if (srcFile.renameTo(destFile))
@@ -144,7 +144,7 @@ public class CrazyUtils {
 		try {
 			String suffix = getExtension(srcFile.toFile());
 			String targetName = newName + (StringUtils.isNotEmpty(suffix) ? "." + suffix : "");
-			log.info("renameFile {} -> {}", srcFile, targetName);
+			log.debug("renameFile {} -> {}", srcFile, targetName);
 			
 			return Files.move(srcFile, srcFile.resolveSibling(targetName));
 		} catch (FileAlreadyExistsException e) {
