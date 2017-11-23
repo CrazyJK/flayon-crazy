@@ -1,7 +1,5 @@
 package jk.kamoru.flayon.crazy;
 
-import java.nio.file.Path;
-import java.nio.file.WatchEvent.Kind;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,12 +82,7 @@ public class CrazyConfig {
         return new AsyncExecutorService() {
 			@Override
 			protected Runnable getTask() {
-				return new DirectoryWatcher("Instance", instancePaths) {
-
-					@Override
-					public void action(Kind<Path> kind, Path file) {
-						// nothing
-					}};
+				return new DirectoryWatcher("Instance", instancePaths) {};
 			}
         };
     }
@@ -99,12 +92,7 @@ public class CrazyConfig {
         return new AsyncExecutorService() {
 			@Override
 			protected Runnable getTask() {
-				return new DirectoryWatcher("Archive", archivePath) {
-
-					@Override
-					public void action(Kind<Path> kind, Path file) {
-						// nothing
-					}};
+				return new DirectoryWatcher("Archive", archivePath) {};
 			}
         };
     }

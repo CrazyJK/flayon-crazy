@@ -1,14 +1,10 @@
 package jk.kamoru.flayon.crazy.video.service;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.WatchEvent.Kind;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,16 +49,17 @@ public class SeedDirectoryService extends AsyncExecutorService implements Direct
 		return new DirectoryWatcher("Seed", root) {
 
 			@Override
-			public void action(Kind<Path> kind, Path file) {
-				if (kind == ENTRY_CREATE) {
-					pathList.add(file);
-					log.info("add seed {}", file);
-				}
-				else if (kind == ENTRY_DELETE) {
-					pathList.remove(file);
-					log.info("remove seed {}", file);
-				}
+			public void deleteEvent(Path file) {
+				pathList.add(file);
+				log.info("add seed {}", file);
 			}
+
+			@Override
+			public void createEvent(Path file) {
+				pathList.remove(file);
+				log.info("remove seed {}", file);
+			}
+
 		};
 	}
 
