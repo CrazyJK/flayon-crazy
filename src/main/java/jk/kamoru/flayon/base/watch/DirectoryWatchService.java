@@ -4,8 +4,8 @@ import java.nio.file.Path;
 
 public abstract class DirectoryWatchService extends AsyncExecutorService {
 
-	abstract String getTaskName();
-	abstract String[] getPath();
+	protected abstract String getTaskName();
+	protected abstract String[] getPath();
 
 	protected void created(Path path) {}
 	protected void deleted(Path path) {}
