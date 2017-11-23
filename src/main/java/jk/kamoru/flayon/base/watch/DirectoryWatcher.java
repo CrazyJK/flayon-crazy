@@ -2,6 +2,7 @@ package jk.kamoru.flayon.base.watch;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -42,8 +43,11 @@ public abstract class DirectoryWatcher implements Runnable {
 	private String[] paths;
 	private String taskName;
 	
-	public abstract void action(Kind<Path> kind, Path file);
-	
+	// override
+	protected void modifyEvent(Path path) {}
+	protected void deleteEvent(Path path) {}
+	protected void createEvent(Path path) {}
+
 	/**
 	 * @param taskName task name
 	 * @param paths directory to watched
@@ -118,7 +122,16 @@ public abstract class DirectoryWatcher implements Runnable {
 
 				// print out event
 				log.info("{} {}: {}", taskName, kind.name(), child);
-				action(kind, child);
+				
+				if (kind == ENTRY_CREATE) {
+					createEvent(child);
+				}
+				else if (kind == ENTRY_DELETE) {
+					deleteEvent(child);
+				}
+				else if (kind == ENTRY_MODIFY) {
+					modifyEvent(child);
+				}
 				
 				// if directory is created, and watching recursively, then register it and its sub-directories
 				if (kind == ENTRY_CREATE)
