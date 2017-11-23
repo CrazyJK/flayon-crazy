@@ -1,52 +1,62 @@
 package jk.kamoru.flayon.crazy.image;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import jk.kamoru.flayon.base.watch.AsyncExecutorService;
+import jk.kamoru.flayon.base.watch.DirectoryWatcher;
 import jk.kamoru.flayon.crazy.CrazyConfig;
+import jk.kamoru.flayon.crazy.error.ImageException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImageBatch {
+public class ImageBatch extends AsyncExecutorService{
 
 	@Autowired CrazyConfig config;
 
-	private boolean isSet = true;
-	
-	@Scheduled(fixedDelay = 1000 * 60)
+	@PostConstruct
 	public synchronized void renameSoraPicture() {
-		log.debug("Rename Sora picture Start");
-
-		if (isSet && (config.getSoraPicturesPaths() == null || config.getSoraPicturesPaths().length < 1)) {
-			isSet = false;
-			log.warn("PATH_SORA_PICTURES is not set");
-			return;
-		}
-		
+		log.info("Rename Sora picture Start");
 		for (String soraPath : config.getSoraPicturesPaths()) {
-			File directory = new File(soraPath);
-			if (!directory.isDirectory()) {
-				log.warn("not directory : {}", soraPath);
-				continue;
-			}
-			
-			for (File file : FileUtils.listFiles(directory, IMAGE.SUFFIX_IMAGE_ARRAY, false)) {
-				if (StringUtils.startsWith(file.getName(), directory.getName()))
-					continue;
-
-				File dest = new File(directory, directory.getName() + "_" + file.lastModified() + "." + CrazyUtils.getExtension(file));
-				file.renameTo(dest);
-				log.info("rename {} to {}", file.getName(), dest.getName());
+			try {
+				Files.walk(Paths.get(soraPath)).forEach(path -> renameImageFile(path));
+			} catch (IOException e) {
+				throw new ImageException("sora path walk error", e);
 			}
 		}
-		log.debug("Rename Sora picture End");
+		log.info("Rename Sora picture End");
+	}
+	
+	private void renameImageFile(Path path) {
+		File file = path.toFile();
+		if (file.isDirectory())
+			return;
+		String folderName = file.getParentFile().getName();
+		if (StringUtils.startsWith(file.getName(), folderName))
+			return;
+		CrazyUtils.renameFile(path, folderName + "-" + file.lastModified());
+	}
+
+	@Override
+	protected Runnable getTask() {
+		return new DirectoryWatcher("Sora rename", config.getSoraPicturesPaths()) {
+
+			@Override
+			protected void createEvent(Path path) {
+				renameImageFile(path);
+			}
+		};
 	}
 	
 }

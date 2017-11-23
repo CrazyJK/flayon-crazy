@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class CrazyUtils {
 			String suffix = getExtension(srcFile);
 			if (StringUtils.isNotEmpty(suffix))
 				newName = newName + "." + suffix;
-			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
+			log.info("renameFile {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
 			
 			File destFile = new File(srcFile.getParent(), newName);
 			if (srcFile.renameTo(destFile))
@@ -133,14 +133,22 @@ public class CrazyUtils {
 				throw new CrazyException("file rename fail: " + srcFile.getAbsolutePath());
 	}
 
-	public static File renameFile2(File srcFile, String newName) {
+	/**<pre>
+	 * 이름 바꾸기
+	 * 이미 파일이 있으면, hashcode를 붙여 다시 시도한다.
+	 * @param srcFile
+	 * @param newName 확정자 제외 이름
+	 * @return
+	 */
+	public static Path renameFile(Path srcFile, String newName) {
 		try {
-			String suffix = getExtension(srcFile);
-			if (StringUtils.isNotEmpty(suffix))
-				newName = newName + "." + suffix;
-			log.debug("rename {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
+			String suffix = getExtension(srcFile.toFile());
+			String targetName = newName + (StringUtils.isNotEmpty(suffix) ? "." + suffix : "");
+			log.info("renameFile {} -> {}", srcFile, targetName);
 			
-			return Files.move(srcFile.toPath(), Paths.get(srcFile.getParent(), newName), StandardCopyOption.REPLACE_EXISTING).toFile();
+			return Files.move(srcFile, srcFile.resolveSibling(targetName));
+		} catch (FileAlreadyExistsException e) {
+			return renameFile(srcFile, newName + "_" + srcFile.hashCode());
 		} catch (IOException e) {
 			log.error("rename fail", e);
 			throw new CrazyException("file rename fail", e);

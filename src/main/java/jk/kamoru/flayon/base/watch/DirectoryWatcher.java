@@ -121,7 +121,7 @@ public abstract class DirectoryWatcher implements Runnable {
 				Path child = dir.resolve(file);
 
 				// print out event
-				log.info("{} {}: {}", taskName, kind.name(), child);
+				log.debug("{} {}: {}", taskName, kind.name(), child);
 				
 				if (kind == ENTRY_CREATE) {
 					createEvent(child);
