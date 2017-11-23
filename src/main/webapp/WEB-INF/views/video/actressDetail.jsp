@@ -48,7 +48,7 @@ $(document).ready(function() {
 	});	
 	if (archive) {
 		$("#favoriteTEXT").hide();
-		$(".btn").disabled();
+		$(".btn").hide();
 	}
 });
 function saveActressInfo() {
