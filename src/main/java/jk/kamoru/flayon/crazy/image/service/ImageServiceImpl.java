@@ -39,11 +39,6 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void reload() {
-		imageSource.reload();
-	}
-
-	@Override
 	public Image getImageByRandom() {
 		return imageSource.getImage(getRandomImageNo());
 	}

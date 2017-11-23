@@ -29,11 +29,6 @@ public interface ImageSource {
 	 * @return
 	 */
 	int getImageSourceSize();
-	
-	/**
-	 * image source reload
-	 */
-	void reload();
 
 	/**
 	 * delete image

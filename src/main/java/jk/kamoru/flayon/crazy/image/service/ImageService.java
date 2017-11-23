@@ -27,11 +27,6 @@ public interface ImageService {
 	int getImageSourceSize();
 
 	/**
-	 * image source reload
-	 */
-	void reload();
-
-	/**
 	 * random image
 	 * @return
 	 */

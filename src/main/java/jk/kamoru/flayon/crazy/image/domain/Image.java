@@ -14,7 +14,6 @@ import org.imgscalr.Scalr.Method;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.ImageException;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * Image Domain
@@ -22,7 +21,6 @@ import lombok.ToString;
  *
  */
 @Getter
-@ToString
 public class Image {
 
 	public enum Type {
@@ -87,6 +85,8 @@ public class Image {
 		}
 	}
 
+	
+	
 	/**
 	 * {@link BufferedImage}를 읽어 byte[]로 반환 
 	 * @param bi
@@ -100,6 +100,36 @@ public class Image {
 		} catch (IOException e) {
 			throw new CrazyException("read bufferedImage error", e);
 		}
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Image other = (Image) obj;
+		if (file == null) {
+			if (other.file != null)
+				return false;
+		} else if (!file.getName().equals(other.file.getName()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Image [" + file + "]";
 	}
 
 }
