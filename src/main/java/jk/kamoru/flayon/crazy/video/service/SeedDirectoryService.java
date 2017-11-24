@@ -40,7 +40,7 @@ public class SeedDirectoryService extends DirectoryWatchService implements Direc
 			throw new CrazyException("seed loading error", e);
 		}
 	}
-	
+
 	@Override
 	public File find(String name) {
 		throw new CrazyException("find is not supported");

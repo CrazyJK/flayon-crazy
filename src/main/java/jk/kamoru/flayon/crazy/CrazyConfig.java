@@ -28,9 +28,8 @@ import lombok.Getter;
 public class CrazyConfig {
 
     /* Local properties --------------------------------------------------------------------------- */
-	
-	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
-    @Value("${path.video.archive}")         String        archivePath;
+
+	@Value("${path.video.archive}")         String        archivePath;
     @Value("${path.video.storage}")         String        storagePath;
     @Value("${path.video.candidate}")       String[]    candidatePaths;
     @Value("${path.video.stage}")           String[]        stagePaths;
@@ -44,7 +43,9 @@ public class CrazyConfig {
     @Value("${path.backup}")                String         backupPath;
     @Value("${app.video-player}")           String   player;
     @Value("${app.subtitles-editor}")       String   editor;
-    
+	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;
+	@Value("${path.video.archive},${path.video.stage},${path.video.cover}") String[] emptyManagedPath;
+
     /* Common Properties -------------------------------------------------------------------------- */
     
 	                                        int baseRank = 0;

@@ -1,7 +1,6 @@
 package jk.kamoru.flayon.crazy.video.service;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1044,40 +1043,6 @@ public class VideoServiceImpl implements VideoService {
 				.filter(v -> v.matchArchive(search))
 				.sorted((v1, v2) -> VideoUtils.compareVideo(v1, v2, search.getSortMethod(), search.isSortReverse()))
 				.collect(Collectors.toList());
-	}
-
-	@Override
-	public void deletEmptyFolder() {
-		log.debug("deletEmptyFolder START");
-		
-		List<File> folders = new ArrayList<>();
-		folders.add(new File(ARCHIVE_PATH));
-		folders.add(new File(COVER_PATH));
-//		folders.add(new File(STORAGE_PATH));
-		for (String stage : STAGE_PATHS)
-			folders.add(new File(stage));
-			
-		for (File path : folders) {
-			if (path == null || !path.exists()) {
-				log.warn("deletEmptyFolder : wrong path [{}]", path);
-				continue;
-			}
-			File[] dirs = path.listFiles(new FileFilter() {
-				@Override
-				public boolean accept(File file) {
-					return file.isDirectory();
-				}
-			});
-			log.debug("deletEmptyFolder : {} scan - {}", path, dirs);
-
-			for (File dir : dirs) {
-				if (CrazyUtils.isEmptyDirectory(dir)) {
-					dir.delete();
-					log.info("deletEmptyFolder : delete {}", dir);
-				}
-			}
-		}
-		log.debug("deletEmptyFolder END");
 	}
 
 	@Override

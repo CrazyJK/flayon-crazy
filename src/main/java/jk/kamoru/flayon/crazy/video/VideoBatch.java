@@ -7,7 +7,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,9 +21,11 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.ZipUtils;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.crazy.video.service.DirectoryService;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
@@ -47,6 +48,7 @@ public class VideoBatch {
 	
 	@Autowired   VideoService   videoService;
 	@Autowired HistoryService historyService;
+	@Autowired DirectoryService emptyDirectoryService;
 
 	public Boolean setBatchOption(Option option, boolean setValue) {
 		try {
@@ -153,7 +155,7 @@ public class VideoBatch {
 		}
 		
 		log.info(" - delete empty folder");
-		videoService.deletEmptyFolder();
+		CrazyUtils.deleteEmptyDirectory(config.getEmptyManagedPath());
 
 		videoService.reload(stopWatch);
 
@@ -176,60 +178,12 @@ public class VideoBatch {
 
 		NotiQueue.pushNoti("Archive VideoBatch end");
 	}
-
-	// fixedDelay per 1 min
-	@Scheduled(fixedDelay = 1000 * 60) 
-	public synchronized void moveFile() {
-		log.trace("BATCH File move START {}", Arrays.toString(config.getMoveFilePaths()));
-
-		// 설정이 안됬거나
-		if (config.getMoveFilePaths() == null) {
-			log.error("PATH_MOVE_FILE is not set");
-			return;
-		}
-		// 값이 없으면 pass
-		if (config.getMoveFilePaths().length == 0)
-			return;
-		
-		// 3배수가 아니면
-		if (config.getMoveFilePaths().length % 3 != 0) {
-			log.error("PATH length is not 3 multiple", Arrays.toString(config.getMoveFilePaths()));
-			return;
-		}
-		// 2,3번째가 폴더가 아니거나
-		for (int i=0; i<config.getMoveFilePaths().length; i++) {
-			if (i % 3 == 0)
-				continue;
-			else
-				if (!new File(config.getMoveFilePaths()[i]).isDirectory()) {
-					log.error("PATH [{}] is not Directory", config.getMoveFilePaths()[i]);
-					return;
-				}
-		}
-		for (int i=0; i<config.getMoveFilePaths().length;) {
-			String ext = config.getMoveFilePaths()[i++];
-			File from = new File(config.getMoveFilePaths()[i++]);
-			File to   = new File(config.getMoveFilePaths()[i++]);
-			for (File file : FileUtils.listFiles(from, new String[]{ext.toUpperCase(), ext.toLowerCase()}, false)) {
-				try {
-					log.info("Moving... {} to {}", file.getAbsolutePath(), to.getAbsolutePath());
-					FileUtils.moveFileToDirectory(file, to, false);
-				}
-				catch (IOException e) {
-					log.error("File to move", e);
-				}
-			}
-		}
-		
-		log.trace("BATCH File move END");
-	}
 	
 	// fixedRate per 13 min
 	@Scheduled(fixedRate = 1000 * 60 * 13) 
-	public synchronized void deletEmptyFolder() {
+	public synchronized void deleteEmptyFolder() {
 		log.info("BATCH - delete empty folder");
-		videoService.deletEmptyFolder();
-
+		CrazyUtils.deleteEmptyDirectory(config.getEmptyManagedPath());
 		NotiQueue.pushNoti("Delete empty folder end");
 	}
 	

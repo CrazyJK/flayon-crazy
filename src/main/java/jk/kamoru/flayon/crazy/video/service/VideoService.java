@@ -337,11 +337,6 @@ public interface VideoService {
 
 	
 	// --- for batch ----------------------------------------------------
-	
-	/**
-	 * 하위에 속이 빈 폴더를 지운다
-	 */
-	void deletEmptyFolder();
 
 	List<String> getOpusList();
 
