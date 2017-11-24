@@ -2,6 +2,14 @@ package jk.kamoru.flayon.base.watch;
 
 import java.nio.file.Path;
 
+/**<pre>
+ * Abstract Directory watch service
+ * can override, if need
+ * {@link #created(Path)} 
+ * {@link #modified(Path)} 
+ * {@link #deleted(Path)} 
+ * @author kamoru
+ */
 public abstract class DirectoryWatchService extends AsyncExecutorService {
 
 	protected abstract String getTaskName();
@@ -32,6 +40,5 @@ public abstract class DirectoryWatchService extends AsyncExecutorService {
 
 		};
 	}
-
 
 }
