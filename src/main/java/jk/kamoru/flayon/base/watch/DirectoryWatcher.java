@@ -125,6 +125,11 @@ public abstract class DirectoryWatcher implements Runnable {
 				
 				if (kind == ENTRY_CREATE) {
 					createEvent(child);
+					
+					if (Files.isDirectory(child)) {
+						// if directory is created, and watching recursively, then register it and its sub-directories
+						walkAndRegisterDirectories(child);
+					}
 				}
 				else if (kind == ENTRY_DELETE) {
 					deleteEvent(child);
@@ -133,16 +138,13 @@ public abstract class DirectoryWatcher implements Runnable {
 					modifyEvent(child);
 				}
 				
-				// if directory is created, and watching recursively, then register it and its sub-directories
-				if (kind == ENTRY_CREATE)
-					if (Files.isDirectory(child))
-						walkAndRegisterDirectories(child);
 			}
 
 			// reset key and remove from set if directory no longer accessible
 			boolean valid = key.reset();
 			if (!valid) {
-				keys.remove(key);
+				Path removed = keys.remove(key);
+				log.warn("{} watchkey reset fail. remove this {}:{}. watching {} dir", taskName, key, removed, keys.size());
 
 				// all directories are inaccessible
 				if (keys.isEmpty()) {
