@@ -58,13 +58,11 @@ public class SeedDirectoryService extends DirectoryWatchService implements Direc
 	@Override
 	public void created(Path path) {
 		pathList.add(path);
-		log.info("add seed {}", path);
 	}
 
 	@Override
 	public void deleted(Path path) {
 		pathList.remove(path);
-		log.info("remove seed {}", path);
 	}
 
 	@Override

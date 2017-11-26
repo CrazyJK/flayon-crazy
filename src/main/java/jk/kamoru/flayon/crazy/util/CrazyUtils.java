@@ -452,20 +452,30 @@ public class CrazyUtils {
 		return false;
 	}
 	
-	public static void deleteEmptyDirectory(String[] dirs) {
+	public static synchronized void deleteEmptyDirectory(String... dirs) {
+		List<Path> paths = new ArrayList<>();
 		for (String dir : dirs) {
 			try {
-				Files.walkFileTree(Paths.get(dir), new SimpleFileVisitor<Path>() {
+				Path start = Paths.get(dir);
+				Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
 					@Override
 					public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-						if (!Files.newDirectoryStream(dir).iterator().hasNext()) {
-							Files.delete(dir);
-							log.info("empty directory deleted {}", dir);
+						if (!start.equals(dir) 
+								&& !Files.newDirectoryStream(dir).iterator().hasNext()) {
+							paths.add(dir);
 						}
 						return super.preVisitDirectory(dir, attrs);
 					}});
 			} catch (IOException e) {
 				throw new CrazyException("deleteEmptyFolder walk fail", e);
+			}
+		}
+		for (Path dir : paths) {
+			try {
+				Files.delete(dir);
+				log.info("empty directory deleted {}", dir);
+			} catch (IOException e) {
+				throw new CrazyException("deleteEmptyFolder delete fail", e);
 			}
 		}
 	}

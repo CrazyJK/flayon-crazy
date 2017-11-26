@@ -13,8 +13,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
-import jk.kamoru.flayon.base.watch.AsyncExecutorService;
-import jk.kamoru.flayon.base.watch.DirectoryWatcher;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.Getter;
@@ -75,26 +73,6 @@ public class CrazyConfig {
 	public VideoSource archiveVideoSource() {
 		return new FileBaseVideoSource(true, null, archivePath);
 	}
-
-    @Bean
-    public AsyncExecutorService instanceDirectoryWatch() {
-        return new AsyncExecutorService() {
-			@Override
-			protected Runnable getTask() {
-				return new DirectoryWatcher("Instance", instancePaths) {};
-			}
-        };
-    }
-
-    @Bean
-    public AsyncExecutorService archiveDirectoryWatch() {
-        return new AsyncExecutorService() {
-			@Override
-			protected Runnable getTask() {
-				return new DirectoryWatcher("Archive", archivePath) {};
-			}
-        };
-    }
 
 	@Bean
 	public BeanPostProcessor methodExecutionBeanPostProcessor() {

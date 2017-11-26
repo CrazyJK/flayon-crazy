@@ -101,20 +101,20 @@ public class FileMoveService extends DirectoryWatchService {
 	}
 
 	private void move(Path path) {
-		File file = path.toFile();
-		if (file.isDirectory())
-			return;
-		
-		String suffix = CrazyUtils.getExtension(file).toUpperCase();
-		MoveInfo moveInfo = infoMap.get(suffix);
-
-		if (moveInfo != null) {
-			try {
+		try {
+			File file = path.toFile();
+			if (file.isDirectory())
+				return;
+			
+			String suffix = CrazyUtils.getExtension(file).toUpperCase();
+			MoveInfo moveInfo = infoMap.get(suffix);
+	
+			if (moveInfo != null) {
 				FileUtils.moveFileToDirectory(file, moveInfo.getDestPath(), false);
 				log.info("{}... {} to {}", TASKNAME, file.getAbsolutePath(), moveInfo.getDestPath());
-			} catch (IOException e) {
-				log.error("File to move", e);
 			}
+		} catch (IOException | CrazyException e) {
+			log.error("File to move", e);
 		}
 	}
 	
