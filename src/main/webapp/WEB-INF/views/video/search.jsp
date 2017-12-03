@@ -26,6 +26,9 @@ mark {
 #content_div {
 	background-color: transparent !important;
 }
+.input-title > input:before {
+	content: '[';
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -145,6 +148,19 @@ $(document).ready(function() {
 		});
 		
 	});
+	
+	$(".input-title > input").on("keyup", function() {
+		var fullname = "";
+		$(".input-title > input").each(function() {
+			var value = $(this).val();
+			value = $.trim(value);
+			if ($(this).attr("id") === "opus")
+				value = value.toUpperCase();
+			fullname += '[' + value + ']';
+		});	
+		$(".output-title > input").val(fullname);
+	});
+	
 });
 
 var	fnSetVideoBatchOption = function(type, dom) {
@@ -198,6 +214,22 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 		
 		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch <span class="caret"></span></button>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
+
+		<button class="btn btn-xs btn-primary float-right" onclick="$('#findMode').toggle(0, resizeDivHeight);">Find mode</button>
+
+		<div id="findMode" style="display:none; padding-top:5px;">
+			<hr style="margin: 3px 0;"/>
+			<div class="input-title">
+				[<input class="form-control input-sm" id="studio"  style="width: 150px !important;"/>]		
+				[<input class="form-control input-sm" id="opus"    style="width: 100px !important;"/>]		
+				[<input class="form-control input-sm" id="title"   style="width: 300px !important;"/>]	
+				[<input class="form-control input-sm" id="actress" style="width: 150px !important;"/>]		
+				[<input class="form-control input-sm" id="release" style="width: 100px !important;"/>]
+			</div>
+			<div class="output-title">
+				<input class="form-control input-sm" id="fullname" style="width: 800px !important;"/>		
+			</div>
+		</div>
 
 		<div id="batchGroup" style="display:none; padding-top:5px; text-align:right;">
 			<hr style="margin: 3px 0;"/>
