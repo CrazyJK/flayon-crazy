@@ -153,9 +153,6 @@ public class VideoBatch {
 			videoService.moveWatchedVideo();
 			stopWatch.stop();
 		}
-		
-		log.info(" - delete empty folder");
-		CrazyUtils.deleteEmptyDirectory(config.getEmptyManagedPath());
 
 		videoService.reload(stopWatch);
 

@@ -471,7 +471,9 @@ public class CrazyUtils {
 			}
 		}
 		for (Path dir : paths) {
+//			dir.toFile().delete();
 			try {
+//				FileUtils.deleteDirectory(dir.toFile());
 				Files.delete(dir);
 				log.info("empty directory deleted {}", dir);
 			} catch (IOException e) {
