@@ -1109,6 +1109,10 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void saveCover(String opus, String title) {
 		log.info("saveCover {}, {}, {}", opus, title, COVER_PATH);
+		TitleValidator titlePart = new TitleValidator(title);
+		if (titlePart.isInvalid()) {
+			throw new CrazyException("title is invalid");
+		}
 		CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
 		try {
 			File file = result.get(); 
@@ -1116,7 +1120,6 @@ public class VideoServiceImpl implements VideoService {
 				throw new CrazyException("not found cover : " + opus);
 			}
 			else { // found
-				TitleValidator titlePart = new TitleValidator(title);
 				titlePart.setFiles(file);
 				videoDao.buildVideo(titlePart);
 			}
