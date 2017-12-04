@@ -26,14 +26,29 @@ mark {
 #content_div {
 	background-color: transparent !important;
 }
-.input-title > input:before {
-	content: '[';
+#findMode input {
+	font-family: D2Coding;
+	border: 1px solid #cacaca;
+}
+input#fullname.input-sm {
+	color: #337ab7;
+	font-size: 14px;
+	width: 100% !important;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16) inset, 0 0 0 1px rgba(0,0,0,0.08) inset;
+	height: 22px;
+}
+.save-history {
+    font-family: D2Coding;
+    font-size: 12px;
+    margin: 6px 0 0 0;
+    padding-left: 30px;
+	color: #337ab7;
 }
 </style>
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function() {
-	
+
 	$("#query").on("keyup", function(e) {
 		var event = window.event || e;
 		$("#debug").html(event.keyCode);
@@ -41,12 +56,10 @@ $(document).ready(function() {
 			return;
 		}
 
-		loading(true, 'Searching');
-
 		var keyword = $(this).val();
-		var queryUrl = PATH + '/rest/video/search/' + keyword; 
+		var queryUrl = PATH + '/rest/video/search/' + keyword;
 		$("#url").html(queryUrl);
-		
+
 		restCall(queryUrl, {}, function(result) {
 			$('#foundVideoList, #foundHistoryList').empty();
 
@@ -82,8 +95,8 @@ $(document).ready(function() {
 												var name = $.trim(actor[i]);
 												objs.push($("<span>", {"class": "label label-plain", "onclick": "fnViewActressDetail('" + name + "')"}).html(name));
 											}
-										return objs; 
-									}	
+										return objs;
+									}
 								),
 								$("<td>").append(
 										$("<span>", {"class": "label label-plain"}).html(releaseDate)
@@ -107,13 +120,13 @@ $(document).ready(function() {
 						$("<tr>").append(
 								$("<td>").append(
 										$("<span>", {"class": "label label-plain"}).html(date)
-								),		
+								),
 								$("<td>").append(
 										$("<span>", {"class": "label label-plain", "onclick": "fnVideoDetail('" + opus +"')"}).html(opus)
-								),		
+								),
 								$("<td>").append(
 										$("<span>", {"class": "label label-plain"}).html(act)
-								),		
+								),
 								$("<td>").append(
 										$("<span>", {"class": "label label-plain"}).html(desc)
 								)
@@ -138,36 +151,37 @@ $(document).ready(function() {
  						})
  				);
  			});
- 			
+
  		    var rexp = eval('/' + keyword + '/gi');
  		    $("tbody > tr > td > span").each(function() {
  				$(this).html($(this).text().replace(rexp, "<mark>" + keyword + "</mark>"));
  			});
 
-			loading(false);
 		});
-		
+
 	});
-	
+
 	$(".input-title > input").on("keyup", function() {
 		var fullname = "";
 		$(".input-title > input").each(function() {
 			var value = $(this).val();
 			value = $.trim(value);
-			if ($(this).attr("id") === "opus")
+			if ($(this).attr("id") === "opus") {
 				value = value.toUpperCase();
+				$("#query").val(value);
+			}
 			fullname += '[' + value + ']';
-		});	
+		});
 		$(".output-title > input").val(fullname);
 	});
-	
+
 });
 
 var	fnSetVideoBatchOption = function(type, dom) {
 		var $self = $(dom), newValue = !($self.text() == 'true'), name = $self.prev().text();
 		restCall(PATH + '/rest/video/batch/option', {
-			method: "PUT", 
-			data: {k: type, v: newValue}, 
+			method: "PUT",
+			data: {k: type, v: newValue},
 			title: name,
 			showLoading: false
 		}, function(result) {
@@ -184,13 +198,24 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 	resizeSecondDiv = function() {
 		$("#content_div").css("background-color", "transparent");
 		$("#resultVideoDiv, #resultHistoryDiv").outerHeight(
-				$("#content_div").width() > BOOTSTRAP_COL_LG_6 
-					? $("#content_div").outerHeight() - 20 
+				$("#content_div").width() > BOOTSTRAP_COL_LG_6
+					? $("#content_div").outerHeight() - 20
 					: $("#content_div").outerHeight() / 2 - 15
 		).each(function() {
 			$(this).css("background-color", getRandomColor(0.3));
-		});	
+		});
 	};
+
+function fnSaveCover() {
+	var opus = $("#opus").val();
+	var title = $("#fullname").val();
+	restCall(PATH + '/rest/video/' + opus + '/saveCover', {method: "POST", data: {title: title}}, function() {
+		$(".save-history").append(
+				$("<li>").html(title)	
+		);
+		resizeSecondDiv();
+	});
+}
 </script>
 </head>
 <body>
@@ -206,28 +231,28 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 			<a class="btn btn-default" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
 			<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
-		</div>		
+		</div>
+		<button class="btn btn-xs btn-default" onclick="$('#findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
 
 		<span class="close" style="margin-left:10px;" onclick="parent.viewInnerSearchPage()">&times;</span>
-		
+
 		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch <span class="caret"></span></button>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
-
-		<button class="btn btn-xs btn-primary float-right" onclick="$('#findMode').toggle(0, resizeDivHeight);">Find mode</button>
 
 		<div id="findMode" style="display:none; padding-top:5px;">
 			<hr style="margin: 3px 0;"/>
 			<div class="input-title">
-				[<input class="form-control input-sm" id="studio"  style="width: 150px !important;"/>]		
-				[<input class="form-control input-sm" id="opus"    style="width: 100px !important;"/>]		
-				[<input class="form-control input-sm" id="title"   style="width: 300px !important;"/>]	
-				[<input class="form-control input-sm" id="actress" style="width: 150px !important;"/>]		
-				[<input class="form-control input-sm" id="release" style="width: 100px !important;"/>]
+				<input class="form-control input-sm" id="studio"  style="width: 100px !important;" placeholder="Studio"/>
+				<input class="form-control input-sm" id="opus"    style="width:  70px !important;" placeholder="Opus"/>
+				<input class="form-control input-sm" id="title"   style="width: 300px !important;" placeholder="Title"/>
+				<input class="form-control input-sm" id="actress" style="width: 100px !important;" placeholder="Actress"/>
+				<input class="form-control input-sm" id="release" style="width:  80px !important;" placeholder="Release"/>
+				<button class="btn btn-xs btn-default" onclick="fnSaveCover()">Save cover</button>
 			</div>
 			<div class="output-title">
-				<input class="form-control input-sm" id="fullname" style="width: 800px !important;"/>		
+				<input class="form-control input-sm" id="fullname" placeholder="Full name"/>
 			</div>
 		</div>
 
@@ -254,7 +279,6 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 				<button class="btn btn-default" onclick="fnStartVideoBatch('B', this)">Backup Batch</button>
 			</div>
 		</div>
-		
 	</div>
 
 	<div id="content_div" class="row">
@@ -274,12 +298,15 @@ var BOOTSTRAP_COL_LG_6 = 1200,
 					</thead>
 					<tbody id="foundVideoList"></tbody>
 				</table>
+				
 				<h4 class="title">Torrent archives <span class="badge torrent-count"></span></h4>
-				<ol id="torrentList" class="list-unstyled" style="font-size: 1.5em;">
-				</ol>
+				<ol id="torrentList" class="list-unstyled"></ol>
+				
+				<h4 class="title">Save history</h4>
+				<ol class="save-history"></ol>
 			</div>
 		</div>
-		<div class="col-lg-6">		
+		<div class="col-lg-6">
 			<div id="resultHistoryDiv" class="box" style="overflow:auto">
 				<h4 class="title"><s:message code="video.history"/> <span id="history-count" class="badge"></span></h4>
 				<table class="table table-condensed table-hover table-bordered" style="display:none;">
