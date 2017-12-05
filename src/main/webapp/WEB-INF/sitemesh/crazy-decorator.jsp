@@ -78,6 +78,7 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/gravia"		 ><s:message code="video.gravia"  /></a></li>
 			<li><a href="${PATH}/video/archive"		 ><s:message code="video.archive" /></a></li>
 			<li><a href="${PATH}/video/history"      ><s:message code="video.history" /></a></li>
+			<li><a href="${PATH}/video/historyOnDB"  >Today's</a></li>
 			<li><a href="${PATH}/video/parseToTitle" >PTT</a></li>
 			<li><a href="${PATH}/"					 ><s:message code="default.home"  /></a></li>
 			<li class="dropdown">

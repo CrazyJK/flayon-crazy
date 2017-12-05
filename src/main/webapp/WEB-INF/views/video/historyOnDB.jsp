@@ -7,14 +7,18 @@
 <meta charset="UTF-8"/>
 <title><s:message code="video.video"/> <s:message code="video.history"/> On DB</title>
 <style type="text/css">
+th {
+	text-transform: capitalize;
+}
 </style>
 <script type="text/javascript" src="<c:url value="/js/jquery.jsontotable.js"/>"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
 	restCall(PATH + '/rest/video/historyOnDB', {}, function(data) {
-		console.log(data);
-		$.jsontotable(data, { id: '#content_div', header: false });
+		$.jsontotable(data, {
+			id: '#content_div', header: true, className: 'table table-hover', dateColumn: ['date'], hideColumn: ['video']
+		});
 	});
 });
 
@@ -24,7 +28,7 @@ $(document).ready(function() {
 <div class="container-fluid">
 
 <div id="header_div" class="box form-inline">
-	<label class="title">History On DB</label>
+	<label class="title">Today History</label>
 </div>
 
 <div id="content_div" class="box">
