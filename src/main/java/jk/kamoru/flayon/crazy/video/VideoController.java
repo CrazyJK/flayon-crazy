@@ -362,6 +362,11 @@ public class VideoController extends CrazyController {
 		return "video/historyGraph";
 	}
 	
+	@RequestMapping("/historyOnDB")
+	public String historyOnDB() {
+		return "video/historyOnDB";
+	}
+	
 	@RequestMapping("/gravia")
 	public String graviainterview() {
 		return "video/graviainterview";
