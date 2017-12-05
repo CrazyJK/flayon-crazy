@@ -43,7 +43,8 @@ public class VideoBatch {
 	
 	public static enum Type {
 		/** InstanceVideoSource */ I, /** ArchiveVideoSource */ A, /** Backup */ B,
-		/** moveWatchedVideo */ W, /** deleteLowerRankVideo */ R, /** deleteLowerScoreVideo */ S;
+		/** moveWatchedVideo */ W, /** deleteLowerRankVideo */ R, /** deleteLowerScoreVideo */ S,
+		/** deleteEmptyFolder */ D;
 	}
 	
 	@Autowired   VideoService   videoService;
@@ -104,6 +105,9 @@ public class VideoBatch {
 		case W:
 			videoService.moveWatchedVideo();
 			break;
+		case D:
+			deleteEmptyFolder();
+			break;
 		default:
 			throw new VideoException("unknown videobatch type : " + type);
 		}
@@ -154,10 +158,10 @@ public class VideoBatch {
 			stopWatch.stop();
 		}
 
+		log.info(" - reload instance source");
 		videoService.reload(stopWatch);
 
 		log.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
-		
 		NotiQueue.pushNoti("Instance VideoBatch end");
 	}
 
@@ -169,10 +173,10 @@ public class VideoBatch {
 		log.info(" - arrange to DateFormat folder");
 		videoService.arrangeArchiveVideo();
 		
+		log.info(" - reload archive source");
 		videoService.reloadArchive();
 
 		log.info("BATCH Archive VideoSource END");
-
 		NotiQueue.pushNoti("Archive VideoBatch end");
 	}
 	

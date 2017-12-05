@@ -26,7 +26,10 @@ mark {
 #content_div {
 	background-color: transparent !important;
 }
-#findMode input {
+.findMode {
+	display: none;
+}
+.findMode input {
 	font-family: D2Coding;
 	border: 1px solid #cacaca;
 }
@@ -232,7 +235,7 @@ function fnSaveCover() {
 			<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
-		<button class="btn btn-xs btn-default" onclick="$('#findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
+		<button class="btn btn-xs btn-default" onclick="$('.findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
 
@@ -241,7 +244,7 @@ function fnSaveCover() {
 		<button class="btn btn-xs btn-danger float-right" onclick="$('#batchGroup').toggle(0, resizeDivHeight);">Batch <span class="caret"></span></button>
 		<button class="btn btn-xs btn-primary float-right" onclick="fnReloadVideoSource()">Reload</button>
 
-		<div id="findMode" style="display:none; padding-top:5px;">
+		<div class="findMode" style="padding-top:5px;">
 			<hr style="margin: 3px 0;"/>
 			<div class="input-title">
 				<input class="form-control input-sm" id="studio"  style="width: 100px !important;" placeholder="Studio"/>
@@ -278,6 +281,9 @@ function fnSaveCover() {
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('B', this)">Backup Batch</button>
 			</div>
+			<div class="btn-group btn-group-xs">
+				<button class="btn btn-default" onclick="fnStartVideoBatch('D', this)">Delete Empty Folder</button>
+			</div>
 		</div>
 	</div>
 
@@ -302,8 +308,10 @@ function fnSaveCover() {
 				<h4 class="title">Torrent archives <span class="badge torrent-count"></span></h4>
 				<ol id="torrentList" class="list-unstyled"></ol>
 				
-				<h4 class="title">Save history</h4>
-				<ol class="save-history"></ol>
+				<div class="findMode">
+					<h4 class="title">Save history</h4>
+					<ol class="save-history"></ol>
+				</div>
 			</div>
 		</div>
 		<div class="col-lg-6">
