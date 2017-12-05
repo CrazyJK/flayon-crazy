@@ -168,6 +168,7 @@ var frontApp = (function() {
 		var minSize = 100, maxSize = 300;
 		var	aperture = function($obj, imgSrc) {
 			var TIMING_PROPERTIES = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
+			var calcCount = 0;
 			var	imageballPosition = function() {
 				var offset = 50;
 				var left  = getRandomInteger(1, $(window).innerWidth()  - maxSize);
@@ -178,8 +179,10 @@ var frontApp = (function() {
 				var eY    = sY + $("#front").height() + offset*2;
 				var _left = left + (maxSize /2);
 				var _top  = top  + (maxSize /2);
-				if (sX < _left && _left < eX && sY < _top && _top < eY) {
-					return imageballPosition();
+				if (++calcCount < 10) {
+					if (sX < _left && _left < eX && sY < _top && _top < eY) {
+						return imageballPosition();
+					}
 				}
 				return [left, top];
 			};
