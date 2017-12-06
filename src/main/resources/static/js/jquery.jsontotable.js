@@ -60,12 +60,6 @@
 			return row;
 		};
 
-		var capitalize = function(str) {
-			return str.replace(/\w\S*/g, function(txt) {
-				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-			});
-		};
-		
 		return this.each(function() {
 			var obj = data;
 			if (typeof obj === "string") {

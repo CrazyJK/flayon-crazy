@@ -12,7 +12,7 @@
 var instance = reqParam.i != 'false';
 var archive  = reqParam.a == 'true';
 
-var convertDataForDataTable = function(json, options) {
+var convertDataForDataTable = function(json, columns, options) {
 
 	var opts = $.extend({}, {
 		dateColumn: []
@@ -21,9 +21,10 @@ var convertDataForDataTable = function(json, options) {
 	var dataSet = [];
 	$.each(json, function(idx, row) {
 		var record = [];
-		for (var key in row) {
-			var value = row[key] == null ? "" : row[key];
-			if (opts.dateColumn.includes(key)) {
+		for (var key in columns) {
+			var column = columns[key];
+			var value = row[column] == null ? "" : row[column];
+			if (opts.dateColumn.includes(column)) {
 				value = new Date(value).format('yyyy.MM.dd HH:mm:ss');
 			}
 			record.push(value);
@@ -44,19 +45,18 @@ $(document).ready(function() {
 		
 		$(".list-count").html(json.length);
 		
-		var dataSet = convertDataForDataTable(json);
+		var columnKeys = ["name", "company", "homepage", "videoCount", "actressCount", "score"];
+		var columns = [];
+		for (var i=0; i<columnKeys.length; i++) {
+			columns.push({title: capitalize(columnKeys[i]).replace("count", "")});
+		}
+
+		var dataSet = convertDataForDataTable(json, columnKeys);
 		
 		var table = $("#list").DataTable({
 	    	data: dataSet,
-	    	columns: [
-	    		{title: "Name"},
-	    		{title: "Homepage"},
-	    		{title: "Company"},
-	    		{title: "Score"},
-	    		{title: "Video"},
-	    		{title: "Actress"}
-	    	],
-	    	order: [[0, 'desc']],
+	    	columns: columns,
+	    	order: [[3, 'desc']],
 	        paging: false,
 	        info: false,
 	        initComplete: function() {
