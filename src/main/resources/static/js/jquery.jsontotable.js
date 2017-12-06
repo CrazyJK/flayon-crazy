@@ -2,111 +2,91 @@
  * https://github.com/jongha/jquery-jsontotable
  */
 (function($) {
-	$.jsontotable = function(data, options) {
-		var settings = $.extend({
-			id: null, // target element id
+	
+	$.fn.jsontotable = function(data, options) {
+		
+		var opts = $.extend({}, {
 			header: true,
 			className: null,
 			dateColumn: [],
 			hideColumn: [],
 		}, options);
 
-		options = $.extend(settings, options);
+		var clone = function(obj) {
+			if (obj == null || typeof(obj) !== "object")
+				return obj;
+			var temp = obj.constructor();
+			for (var key in obj)
+				if (obj.hasOwnProperty(key))
+					temp[key] = clone(obj[key]);
+			return temp;
+		};
+		
+		var appendTr = function($table, rowData, isHeader) {
+			var rowTag = isHeader ? "th" : "td";
+			var row = $("<tr>");
 
-		var obj = data;
-		if (typeof obj === "string") {
-			obj = $.parseJSON(obj);
-		}
-
-		if (options.id && obj.length) {
-			var i, row;
-			var table = $("<table></table>");
-
-			if (options.className) {
-				table.addClass(options.className);
-			}
-
-			$.fn.appendTr = function(rowData, isHeader) {
-				var frameTag = isHeader ? "thead" : "tbody";
-				var rowTag = isHeader ? "th" : "td";
-				var rowi, key, cellObj, cell, j;
-
-				row = $("<tr></tr>");
-
-				for (key in rowData) {
-					cellObj = rowData[key];
-					if (options.hideColumn.includes(key)) {
-						continue;
+			for (var key in rowData) {
+				if (opts.hideColumn.includes(key)) {
+					continue;
+				}
+	  
+				var cellValue = rowData[key];
+				if (typeof cellValue !== "function") {
+					if (cellValue == null) {
+						cellValue = "";
 					}
-          
-					if (typeof cellObj !== "function") { /* ADDED: this wrapper to account for people bootstrapping the ECMA Array model otherwise functions get converted to strings and show up in the object list / output */
-						var text = cellObj;
-						if (!isHeader && options.dateColumn.includes(key)) {
-							text = new Date(cellObj).format('yyyy.MM.dd HH:mm:ss');
+					if (!isHeader) {
+						if (opts.dateColumn.includes(key)) {
+							cellValue = new Date(cellValue).format('yyyy.MM.dd HH:mm:ss');
 						}
-						cell = "<" + rowTag + ">" + text + "</" + rowTag + ">";
-						row.append(cell);
 					}
+					row.append("<" + rowTag + ">" + cellValue + "</" + rowTag + ">");
 				}
-
-				if (isHeader) { /* ADDED: IF/ELSE to eliminate repetitive TBODY tags for every row */
-					$(this).append($("<" + frameTag + "></" + frameTag + ">").append(row));
-				} 
-				else {
-					var tbody = $(this).find("tbody");
-					if (tbody.length === 0) {
-						tbody = $(this).append("<tbody></tbody>");
-					}
-					tbody.append(row); //always append data rows to the first tbody tag
-				}
-				return this;
-			};
-
-			// from http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-clone-an-object
-			var clone = function (obj) {
-				if(obj == null || typeof(obj) !== "object") {
-					return obj;
-				}
-
-				var temp = obj.constructor(); // changed
-				for(var key in obj) {
-					if(obj.hasOwnProperty(key)) {
-						temp[key] = clone(obj[key]);
-					}
-				}
-				return temp;
-			};
-
-			var dictType = false, headerObj = {}, key = null;
-			if (options.header) {
-				headerObj = obj[0]._data ? clone(obj[0]._data) : clone(obj[0]);
-				if (headerObj.toString() === "[object Object]") { // data type is dictonary
-					dictType = true;
-					for (key in headerObj) { 
-						headerObj[key] = key; 
-					}
-				}
-				table.appendTr(headerObj, true);
 			}
 
-			/**
-	      	 * MODIFIED: options.header ? 1 : 0
-	      	 * to eliminate duplicating header as the first row of data 
-	         */
-			for (i = 0; i < obj.length; i++) { 
-				if (dictType && headerObj) {
-					var bodyItem = {};
-					for (key in headerObj) {
-						bodyItem[key] = (obj[i] && obj[i][key] != null) ? obj[i][key] : "";
-					}
-					table.appendTr(bodyItem, false);
+			if (isHeader) {
+				$table.append($("<thead>").append(row));
+			} 
+			else {
+				var tbody = $table.find("tbody");
+				if (tbody.length == 0) {
+					tbody = $table.append("<tbody>");
 				}
-				else {
-					table.appendTr(obj[i], false);
-				}
+				tbody.append(row);
 			}
-			$(options.id).append(table);
-		}
-		return this;
+		};
+
+		return this.each(function() {
+			var obj = data;
+			if (typeof obj === "string") {
+				obj = $.parseJSON(obj);
+			}
+
+			if (obj.length) {
+				var $table = $("<table>");
+				opts.className && $table.addClass(opts.className);
+
+				// for header show
+				if (opts.header) {
+					var headerObj = clone(obj[0]);
+					if (headerObj.toString() === "[object Object]") { // data type is dictonary
+						for (var key in headerObj) { 
+							headerObj[key] = key; 
+						}
+					}
+					appendTr($table, headerObj, true);
+				}
+
+				// for data
+				for (var i = 0; i < obj.length; i++) { 
+					appendTr($table, obj[i], false);
+				}
+				
+				$(this).append($table);
+			}
+		});
+
 	};
+	
 }(jQuery));
