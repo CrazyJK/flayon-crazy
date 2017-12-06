@@ -327,7 +327,7 @@ var	crazy = (function() {
 					bgContinue && $("#bgChangeInterval").on("keyup", function() {
 						bgChangeInterval = parseInt($(this).val());
 						clearInterval(bgImageChanger);
-						setBackgroundImage();
+//						setBackgroundImage();
 						bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
 						console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
 					}).val(bgChangeInterval).trigger("keyup");
