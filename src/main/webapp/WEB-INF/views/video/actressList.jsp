@@ -41,7 +41,7 @@ app.controller("actressController", function($scope, $http) {
 	$scope.reload = function() {
 		consoloe.log("reload");
 		$route.reload();
-	}
+	};
 
 	$http({
 		url: PATH + "/rest/actress" + "?i=" + instance + "&a=" + archive
