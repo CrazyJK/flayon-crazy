@@ -148,10 +148,10 @@ $(document).ready(function() {
  									torrent.name,
  									"&nbsp;&nbsp;&nbsp;",
  									$("<small>").html(torrent.size)
- 							)
- 						).data("path", torrent.path).on("click", function() {
- 							restCall(PATH + '/rest/video/torrent/seed/move', {method: "PUT", data: {"seed": $(this).data("path")}, title: "move seed"});
- 						})
+ 							).data("path", torrent.path).on("click", function() {
+ 	 							restCall(PATH + '/rest/video/torrent/seed/move', {method: "PUT", data: {"seed": $(this).data("path")}, title: "move seed"});
+ 	 						})
+ 						)
  				);
  			});
 
