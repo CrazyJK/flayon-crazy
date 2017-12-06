@@ -410,7 +410,7 @@ var videoList = (function() {
 		restCall(PATH + '/rest/tag', {showLoading: false}, function(list) {
 			tagList = list;
 			fn.setTagKeys();
-			console.log("tagKeys", tagKeys);
+//			console.log("tagKeys", tagKeys);
 		});
 		   
 		restCall(PATH + '/rest/video', {data : {t: withTorrent}, title: "request video"}, function(list) {
