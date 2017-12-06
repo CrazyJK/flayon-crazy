@@ -179,10 +179,14 @@ public class RestVideoController {
 		return videoService.getOpusList();
 	}
 
-	// TODO need to VIEW
 	@RequestMapping("/historyOnDB")
 	public List<History> historyOnDB() {
 		return historyService.findOnDB();
+	}
+
+	@RequestMapping("/history")
+	public List<History> history() {
+		return historyService.getAll();
 	}
 
 }
