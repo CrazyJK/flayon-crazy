@@ -7,9 +7,9 @@
 		
 		var opts = $.extend({}, {
 			header: true,
-			className: null,
 			dateColumn: [],
 			hideColumn: [],
+			createdRow: null
 		}, options);
 
 		var clone = function(obj) {
@@ -41,7 +41,9 @@
 							cellValue = new Date(cellValue).format('yyyy.MM.dd HH:mm:ss');
 						}
 					}
-					row.append("<" + rowTag + ">" + cellValue + "</" + rowTag + ">");
+					row.append(
+							$("<" + rowTag + ">").addClass(key).html(cellValue)
+					);
 				}
 			}
 
@@ -55,24 +57,30 @@
 				}
 				tbody.append(row);
 			}
+			return row;
 		};
 
+		var capitalize = function(str) {
+			return str.replace(/\w\S*/g, function(txt) {
+				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+			});
+		};
+		
 		return this.each(function() {
 			var obj = data;
 			if (typeof obj === "string") {
 				obj = $.parseJSON(obj);
 			}
 
+			var $table = $(this);
+			
 			if (obj.length) {
-				var $table = $("<table>");
-				opts.className && $table.addClass(opts.className);
-
 				// for header show
 				if (opts.header) {
 					var headerObj = clone(obj[0]);
 					if (headerObj.toString() === "[object Object]") { // data type is dictonary
 						for (var key in headerObj) { 
-							headerObj[key] = key; 
+							headerObj[key] = capitalize(key);
 						}
 					}
 					appendTr($table, headerObj, true);
@@ -80,11 +88,16 @@
 
 				// for data
 				for (var i = 0; i < obj.length; i++) { 
-					appendTr($table, obj[i], false);
+					var row = appendTr($table, obj[i], false);
+
+					if (opts.createdRow) 
+						opts.createdRow(row, obj[i], i);
 				}
-				
-				$(this).append($table);
 			}
+			else { // data empty
+				$table.append("<tfoot><tr><th>No data</th></tr></tfoot>");
+			}
+			
 		});
 
 	};
