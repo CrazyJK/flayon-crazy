@@ -85,7 +85,7 @@ public class VideoController extends CrazyController {
 		model.addAttribute("views", 		View.values());
 		model.addAttribute("sorts", 		Sort.values());
 		model.addAttribute("rankRange", 	videoService.getRankRange());
-		model.addAttribute("playRange", 	videoService.getPlayRange());
+		model.addAttribute("playRange", 	VideoUtils.getPlayRange(videoList));
 		model.addAttribute("videoList", 	videoList);
 		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringIfVideofile(videoList));
 		if (videoSearch.isWholeActressStudioView()) {

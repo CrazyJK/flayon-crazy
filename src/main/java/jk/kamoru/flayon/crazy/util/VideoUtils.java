@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy.util;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -187,6 +188,17 @@ public class VideoUtils {
 	
 	public static int compareToRelease(String release1, String release2) {
 		return CrazyUtils.compareTo(parseReleaseDate(release1), parseReleaseDate(release2));
+	}
+
+	public static List<Integer> getPlayRange(List<Video> videoList) {
+		List<Integer> range = new ArrayList<>();
+		range.add(new Integer(-1));
+		for (Video video : videoList) {
+			Integer count = video.getPlayCount();
+			if (!range.contains(count))
+				range.add(count);
+		}
+		return range.stream().sorted().collect(Collectors.toList());
 	}
 
 }

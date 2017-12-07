@@ -617,23 +617,11 @@ public class VideoServiceImpl implements VideoService {
 	public Studio saveStudioInfo(Map<String, String> params) {
 		return videoDao.renameStudio(params);
 	}
-	
-	@Override
-	public List<Integer> getPlayRange() {
-		int maxPlayCount = 0;
-		for (Video video : videoDao.getVideoList(true, false))
-			maxPlayCount = maxPlayCount - video.getPlayCount() > 0 ? maxPlayCount : video.getPlayCount();
-
-		List<Integer> playList = new ArrayList<>();
-		for (int i=-1; i<=maxPlayCount; i++)
-			playList.add(i);
-		return playList;
-	}
 
 	@Override
 	public List<Integer> getRankRange() {
 		List<Integer> rankList = new ArrayList<>();
-		for (Integer i=MIN_RANK; i<=MAX_RANK; i++)
+		for (Integer i = MIN_RANK; i <= MAX_RANK; i++)
 			rankList.add(i);
 		return rankList;
 	}

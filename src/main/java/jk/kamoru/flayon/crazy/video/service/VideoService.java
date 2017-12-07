@@ -161,12 +161,6 @@ public interface VideoService {
 	List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withTorrent);
 
 	/**
-	 * get play count range
-	 * @return play count list
-	 */
-	List<Integer> getPlayRange();
-
-	/**
 	 * get rank range
 	 * @return rank list
 	 */
