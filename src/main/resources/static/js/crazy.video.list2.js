@@ -19,29 +19,16 @@ var videoList = (function() {
 	var    candidateCount = 0;		// candidate 파일 개수
 	var lastPage   = false;			// 마지막 페이지까지 다 보여줬는지
 	var pageSize   = 12;			// 한페이지에 보여줄 개수
-	var page = 1;
 
 	var currentVideoNo    = -1;		// table 뷰에서 커서/키가 위치한 tr번호. 커버 보여주기 위해
-	var withTorrent       = false;	// table 뷰에서 torrent 정보 컬럼 보여줄지 여부
-
+	var withTorrent       = false;	// table 뷰에서 torrent 정보 컬럼 보여줄지 여부 
 	var isCheckedFavorite = false;	// favorite 체크박스가 체크되어 있는지 여부
 	var isCheckedNoVideo  = false;	// novideo  체크박스가 체크되어 있는지 여부
-	var isCheckedTags     = false;	// tags     체크박스가 체크되어 있는지 여부
-
+	var isCheckedTags     = false;
 	var isShowCover       = false;
 	var currentView   = '#table';	// 현재 보여지고 있는 뷰. #table or #box
 	var coverPosition = {};
-	
-	/*
-	 * init button
-	 * 
-	 * need more ?
-	 *   request
-	 *     -> render
-	 *   
-	 * */
-	
-	
+
 	var fn = {
 			isrequiredMoreRendering: function() {
 				var isScrollBottom = function() {

@@ -33,10 +33,23 @@ public class RestVideoController {
 	@Autowired HistoryService historyService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Video> videoList(@RequestParam("t") Boolean withTorrentInfo) {
-		return videoService.getVideoList(true, false, null, false, withTorrentInfo);
+	public List<Video> videoList(
+			@RequestParam(value="t", required=false, defaultValue="false") Boolean withTorrentInfo,
+			@RequestParam(value="p", required=false, defaultValue="1") Integer page,
+			@RequestParam(value="s", required=false, defaultValue="10") Integer size) {
+		return paging(videoService.getVideoList(true, false, null, false, withTorrentInfo), page, size);
 	}
 
+	<T> List<T> paging(List<T> list, int page, int size) {
+		if (page == 0)
+			return list;
+		
+		int total = list.size();
+		int from = Math.min((page - 1) * size, total);
+		int to   = Math.min(from + size, total);		
+		return list.subList(from, to);
+	}
+	
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public Video video(@PathVariable String opus) {
 		return videoService.getVideo(opus);
