@@ -32,16 +32,6 @@ var videoList = (function() {
 	var currentView   = '#table';	// 현재 보여지고 있는 뷰. #table or #box
 	var coverPosition = {};
 	
-	/*
-	 * init button
-	 * 
-	 * need more ?
-	 *   request
-	 *     -> render
-	 *   
-	 * */
-	
-	
 	var fn = {
 			isrequiredMoreRendering: function() {
 				var isScrollBottom = function() {
