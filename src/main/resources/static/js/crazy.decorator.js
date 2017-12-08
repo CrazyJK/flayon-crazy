@@ -10,7 +10,7 @@ var PATH = '',
 	urlSearchTorrent,
     locationPathname = window.location.pathname,
     currBGImageNo = 0,
-    bgContinue = true,	/** content_div에 이미지를 보여줄지 여부 */
+    bgContinue = true,	// content_div에 이미지를 보여줄지 여부
     bgChangeInterval = 60,
     bgImageChanger,
     listViewType,
@@ -42,7 +42,7 @@ var	resizeDivHeight = function() {
 		try {
 			resizeSecondDiv(); // if it exist
 		} catch (e) {
-			//console.log("resizeSecondDiv Error", e.message);
+			console.log("resizeSecondDiv Error", e.message);
 		}
 	},
 	/**
@@ -94,7 +94,7 @@ var	resizeDivHeight = function() {
 		var defaults = {interval: 0, detail: "", danger: false},
 			opts = $.extend({}, defaults, options),
 			timerControl = function(start) {
-				//console.log("loading timerControl", start, tSec);
+				console.log("loading timerControl", start, tSec);
 				if (start)
 					$("#loading-timer").html(tSec++);
 				else
@@ -263,7 +263,7 @@ var	resizeDivHeight = function() {
 		if (settings.showLoading)
 			loading(true, settings.title);
 		$.ajax(url, settings).done(function(data) {
-			console.log("restCall done", data);
+			console.log("restCall done", url, data);
 			if (callback)
 				callback(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
@@ -427,7 +427,7 @@ var	crazy = (function() {
 				console.log("crazy_manipulateDom : show navigation")
 				var found = false;
 				$("nav#deco_nav ul li a").each(function() {
-					// console.log($(this).attr("href"), locationPathname);
+					console.log($(this).attr("href"), locationPathname);
 					var href = $(this).attr("href");
 					if (href === locationPathname || href + '/' === locationPathname) {
 						$(this).parent().addClass("active");
@@ -483,7 +483,6 @@ var	crazy = (function() {
 					}).fail(function(jqxhr, textStatus, error) {
 						console.log("ping : fail", textStatus + ", " + error);
 					}).always(function() {
-						//console.log("ping.json", new Date());
 					});	
 				}, pingInterval);
 			}
