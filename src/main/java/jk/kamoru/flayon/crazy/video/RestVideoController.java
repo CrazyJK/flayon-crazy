@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
+import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.TistoryGraviaItem;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
@@ -34,10 +35,14 @@ public class RestVideoController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public List<Video> videoList(
+			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
+			@RequestParam(value="a", required=false, defaultValue="false") boolean archive,
+			@RequestParam(value="o", required=false, defaultValue="M") Sort sort,
+			@RequestParam(value="r", required=false, defaultValue="true") boolean reverse,
 			@RequestParam(value="t", required=false, defaultValue="false") Boolean withTorrentInfo,
 			@RequestParam(value="p", required=false, defaultValue="1") Integer page,
 			@RequestParam(value="s", required=false, defaultValue="10") Integer size) {
-		return paging(videoService.getVideoList(true, false, null, false, withTorrentInfo), page, size);
+		return paging(videoService.getVideoList(true, false, sort, reverse, withTorrentInfo), page, size);
 	}
 
 	<T> List<T> paging(List<T> list, int page, int size) {

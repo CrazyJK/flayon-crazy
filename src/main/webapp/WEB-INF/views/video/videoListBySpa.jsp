@@ -15,9 +15,9 @@
 	   		<span class="label label-default" id="favorite" role="checkbox" data-role-value="false" title="only favorite">Fav</span>
 	   		<span class="label label-default" id="novideo"  role="checkbox" data-role-value="false" title="only no video">NoV</span>
 	   		<span class="label label-default" id="tags"     role="checkbox" data-role-value="false" title="filter by tags">Tags</span>
-			<span class="label label-info count pointer" id="request" title="re-request">Initialize...</span>
-			<span class="label label-warning videoCount" title="video count"></span>
-			<span class="label label-primary candidate" title="candidate count"></span>
+			<span class="label label-info status">0 / 0</span>
+			<span class="label label-warning videoCount" title="video count">0</span>
+			<span class="label label-primary candidate" title="candidate count">0</span>
 		</div>
       	<div class="float-right">
 			<div class="btn-group btn-group-xs">
@@ -25,7 +25,6 @@
 		      	<button class="btn btn-default" data-toggle="tab" data-target="#box">Box</button>
 			</div>
 			<div class="btn-group btn-group-xs btn-group-sort"></div>
-			<!-- <button class="btn btn-xs btn-primary" id="getAllTorrents" title="get all torrent">All T</button> -->
       	</div>
       	<div class="float-right forTable">
 	   		<span class="label label-default" id="torrent"  role="checkbox" data-role-value="false" title="view torrent">T</span>
