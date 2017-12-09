@@ -15,7 +15,7 @@
 	   		<span class="label label-default" id="favorite" role="checkbox" data-role-value="false" title="only favorite">Fav</span>
 	   		<span class="label label-default" id="novideo"  role="checkbox" data-role-value="false" title="only no video">NoV</span>
 	   		<span class="label label-default" id="tags"     role="checkbox" data-role-value="false" title="filter by tags">Tags</span>
-			<span class="label label-info pointer status">0 / 0</span>
+			<span class="label label-info pointer status" id="request">0 / 0</span>
 			<span class="label label-warning videoCount" title="video count">0</span>
 			<span class="label label-primary candidate" title="candidate count">0</span>
 		</div>
