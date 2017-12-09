@@ -6,7 +6,7 @@ var VideoList = (function() {
 	'use strict';
 	
 	var sortList    = [{code: "S", name: "Studio"}, {code: "O", name: "Opus"}, {code: "T", name: "Title"}, {code: "A", name: "Actress"}, {code: "D", name: "Release"}, {code: "M", name: "Modified"}, 
-		{code: "R", name: "Rank"}, {code: "Sc", name: "Score"}, {code: "To", name: "Torrrent"}, {code: "F", name: "Favorite"}, {code: "C", name: "Candidated"}];
+		{code: "R", name: "Rank"}, {code: "Sc", name: "Score"}, {code: "C", name: "Candidated"}];
 	var currentSort = {code: 'M', reverse: false}; // 현재 정렬 방법
 	var videoList   = new Array(); 	// 비디오 배열
 	var   tagList   = [];
@@ -60,7 +60,7 @@ var VideoList = (function() {
 						return compareTo(video1.videoDate, video2.videoDate, sort.reverse); 
 					case 'R':
 						return compareTo(video1.rank, video2.rank, sort.reverse); 
-					case 'SC':
+					case 'Sc':
 						return compareTo(video1.score, video2.score, sort.reverse); 
 					case 'T':
 						return compareTo(video1.torrents.length, video2.torrents.length, sort.reverse); 
