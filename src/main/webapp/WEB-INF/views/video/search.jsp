@@ -52,7 +52,7 @@ input#fullname.input-sm {
 bgContinue = false;
 $(document).ready(function() {
 
-	$("#query").on("keyup", function(e) {
+	$("#query, #opus").on("keyup", function(e) {
 		var event = window.event || e;
 		$("#debug").html(event.keyCode);
 		if (event.keyCode != 13) {
