@@ -181,7 +181,7 @@ public class VideoBatch {
 	}
 	
 	// fixedRate per 13 min
-	@Scheduled(fixedRate = 1000 * 60 * 13) 
+//	@Scheduled(fixedRate = 1000 * 60 * 13) 
 	public synchronized void deleteEmptyFolder() {
 		log.info("BATCH - delete empty folder");
 		CrazyUtils.deleteEmptyDirectory(config.getEmptyManagedPath());
