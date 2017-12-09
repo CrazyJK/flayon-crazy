@@ -11,7 +11,6 @@
 .img-card {
 	position: fixed;
 	visibility: hidden;
-	transition: unset;
 }
 .img-card-focus {
 	border: 1px solid #337ab7;
@@ -22,6 +21,7 @@
 		 3px -3px 3px 3px rgba(0, 255, 0, 0.25), 
 		 3px  3px 3px 3px rgba(0, 0, 255, 0.25), 
 		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
+	transition: top 0s, left 0s;
 }
 </style>
 <script src="${PATH}/js/crazy.image.timer.engine.js"></script>
@@ -29,7 +29,7 @@
 <script type="text/javascript">
 bgContinue = false;
 $(function() {
-	slide.init();
+	tablet.init();
 });
 </script>
 </head>
@@ -105,6 +105,40 @@ $(function() {
 						Play     <span class="label label-info   playMode"></span>
 						Interval <span class="label label-info   interval"></span>
 						<button class="btn btn-plain btn-sm float-right btn-shuffle">Shuffle</button>
+					</div>
+					<div class="box box-small text-left">
+						<div class="row">
+  							<div class="col-xs-6">
+  								<kbd>Left</kbd> <kbd>Up</kbd> Show previous image
+  							</div>
+  							<div class="col-xs-6">
+  								<kbd>Right</kbd> <kbd>Down</kbd> Show next image
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-6">
+  								<kbd>Space</kbd> Play image
+  							</div>
+  							<div class="col-xs-6">
+  								<kbd>PageDown</kbd> Shuffle image
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-6">
+  								<kbd>Insert</kbd> Change Source Mode
+  							</div>
+  							<div class="col-xs-6">
+  								<kbd>Home</kbd> Change Effect
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-6">
+  								<kbd>PageUp</kbd> Change Play Mode
+  							</div>
+  							<div class="col-xs-6">
+  								<kbd>Keypad 1 ~ 9</kbd> Change Play Interval
+  							</div>
+						</div>
 					</div>
 				</div>
 			</div>

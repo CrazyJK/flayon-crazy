@@ -2,7 +2,7 @@
  *image/tablet module
  */
 
-var slide = (function() {
+var tablet = (function() {
 
 	var SLIDE_SOURCE_MODE   = "slide.source.mode",
 		SLIDE_EFFECT_MODE   = "slide.effect.mode",
@@ -168,7 +168,12 @@ var slide = (function() {
 						$(this).addClass("img-card-focus").randomBG(0.5).appendTo($("#imageDiv"));
 					}).appendTo(
 							$("#imageDiv")
-					).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration);
+					).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration, function() {
+						$(this).css({
+							transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05) .5s",
+							transform: "rotateZ(" + getRandomInteger(-15, 15) + "deg)"
+						});
+					});
 
 					$(".title").html(selectedItemTitle).data("data", $image.data("data"));
 					$(".displayCount").html($("#imageDiv").children().length + " / " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
@@ -265,12 +270,12 @@ var slide = (function() {
 				switch(signal) {
 					case 1 : // mousewheel : up
 					case 37: // key : left
-					case 40: // key : down
+					case 38: // key : up
 						image.prev();
 						break;
 					case -1 : // mousewheel : down
 					case 39: // key : right
-					case 38: // key : up
+					case 40: // key : down
 						image.next();
 						break;
 					case 32: // key : space
