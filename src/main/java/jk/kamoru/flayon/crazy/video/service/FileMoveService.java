@@ -94,6 +94,7 @@ public class FileMoveService extends DirectoryWatchService {
 			
 			srcFolders.add(srcPath.getAbsolutePath());
 			infoMap.put(suffix, new MoveInfo(suffix, srcPath, destPath));
+			log.info("{} : [{}] {} -> {}", TASKNAME, suffix, srcPath, destPath);
 		}
 		
 		watchPaths = srcFolders.stream().distinct().collect(Collectors.toList()).toArray(new String[] {});
@@ -101,8 +102,8 @@ public class FileMoveService extends DirectoryWatchService {
 	}
 
 	private void move(Path path) {
+		File file = path.toFile();
 		try {
-			File file = path.toFile();
 			if (file.isDirectory())
 				return;
 			
@@ -110,8 +111,8 @@ public class FileMoveService extends DirectoryWatchService {
 			MoveInfo moveInfo = infoMap.get(suffix);
 	
 			if (moveInfo != null) {
-				FileUtils.moveFileToDirectory(file, moveInfo.getDestPath(), false);
 				log.info("{}... {} to {}", TASKNAME, file.getAbsolutePath(), moveInfo.getDestPath());
+				FileUtils.moveFileToDirectory(file, moveInfo.getDestPath(), false);
 			}
 		} catch (IOException | CrazyException e) {
 			log.error("File to move", e);
