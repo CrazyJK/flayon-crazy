@@ -32,6 +32,7 @@ body {
 	box-shadow: rgba(249, 0, 0, 0.8) 0px 0px 70px, rgba(249, 0, 0, 0.8) 0px 0px 70px inset;
 }
 #front-wrapper {
+	margin-top: 20px;
 }
 #front {
 	height: 419px;
@@ -78,6 +79,14 @@ h1 > b.neon {
 p > span.neon {
 	text-shadow: rgba(38, 90, 136, 0.8) 3px 3px 0;
     color: rgb(238, 238, 238);
+}
+.ui-draggable-dragging {
+	box-shadow: 
+		-3px -3px 3px 3px rgba(255, 0, 0, 0.25), 
+		 3px -3px 3px 3px rgba(0, 255, 0, 0.25), 
+		 3px  3px 3px 3px rgba(0, 0, 255, 0.25), 
+		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
+	transition: top 0s, left 0s !important;
 }
 </style>
 <script type="text/javascript" src="${PATH}/js/flayon.effect.aperture.js"></script>
@@ -126,11 +135,17 @@ var frontApp = (function() {
 			setInterval(function() {
 				var bool = getRandomBoolean();
 				var opusIndex = getRandomInteger(0, opusList.length-1);
-				$("#front").attr({
-					src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
-				}).css({
-					borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%"
-				}).data("opus", (bool ? "" : opusList[opusIndex]));
+				$("#front").hide("fade", {}, 2000, function() {
+					$(this).attr({
+						src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
+					}).data("opus", (bool ? "" : opusList[opusIndex])).show("fade", {}, 1000, function() {
+						$(this).css({
+							borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%",
+							transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05), opacity 1s, border-radius 3s",
+							transform: "rotateZ(" + getRandomInteger(-15, 15) + "deg)"
+						});
+					});
+				});
 			}, 1000 * getRandomInteger(3, 30));
 		});
 	},
@@ -280,7 +295,7 @@ $(document).ready(function() {
 </head>
 <body>
 
-<div class="container text-center">
+<div class="container-fluid text-center">
 	<div class="jumbotron title-panel">
 		<h1>
 			<b class="neon">FlayOn</b>
