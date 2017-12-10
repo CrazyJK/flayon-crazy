@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -123,6 +124,7 @@ public class VideoBatch {
 	
 	// cron every 1h
 	@Scheduled(cron="0 0 */1 * * *")
+	@CacheEvict(value = "flayon-cover-cache", allEntries=true)
 	public synchronized void batchInstanceVideoSource() {
 		log.info("BATCH Instance VideoSource START");
 		StopWatch stopWatch = new StopWatch("Instance VideoSource Batch");

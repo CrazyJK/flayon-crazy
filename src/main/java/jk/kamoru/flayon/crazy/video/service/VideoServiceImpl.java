@@ -607,7 +607,6 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	@CacheEvict(value = "flayon-cover-cache", allEntries=true)
 	public void reload(StopWatch stopWatch) {
 		log.debug("reload");
 		videoDao.reload(stopWatch, true, false);
