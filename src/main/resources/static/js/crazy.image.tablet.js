@@ -247,7 +247,9 @@ var tablet = (function() {
 			},
 			playCallback: function(status) {
 				console.log("    playCallback", status);
-				$("body, .progress-bar, .label, code").toggleClass("label-black", status);
+				$(".container-fluid").toggleClass("label-black", status);
+				$(".progress-bar, .label, code", ".container-fluid").toggleClass("label-black", status);
+				$(".modal-content", "#configModal").toggleClass("label-black", status);
 				image.resize();
 			},
 			resize: function() {

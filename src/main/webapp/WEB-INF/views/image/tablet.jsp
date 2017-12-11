@@ -8,6 +8,9 @@
 <title>Image Tablet</title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
 <style type="text/css">
+.container-fluid, #configModal {
+	transition: background 1s;
+}
 .img-card {
 	position: fixed;
 	visibility: hidden;
@@ -22,6 +25,9 @@
 		 3px  3px 3px 3px rgba(0, 0, 255, 0.25), 
 		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
 	transition: top 0s, left 0s;
+}
+.key-map {
+	margin-top: 20px;
 }
 </style>
 <script src="${PATH}/js/crazy.image.timer.engine.js"></script>
@@ -106,7 +112,7 @@ $(function() {
 						Interval <span class="label label-info   interval"></span>
 						<button class="btn btn-plain btn-sm float-right btn-shuffle">Shuffle</button>
 					</div>
-					<div class="box box-small text-left">
+					<div class="box box-small text-left key-map">
 						<div class="row">
   							<div class="col-xs-6">
   								<kbd>Left</kbd> <kbd>Up</kbd> Show previous image
