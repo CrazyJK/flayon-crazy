@@ -29,7 +29,7 @@
 <script type="text/javascript" src="${PATH}/js/crazy.jquery.js"></script>
 <script type="text/javascript" src="${PATH}/js/crazy.video.fn.js"></script>
 <script type="text/javascript">
-var console = {}; console.log = function(){};
+//var console = {}; console.log = function(){};
 $(document).ready(function() {
     crazy.ready('${PATH}', '${bgImageCount}', '${urlSearchVideo}', '${urlSearchActress}', '${urlSearchTorrent}');
 });

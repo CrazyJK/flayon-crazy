@@ -6,6 +6,7 @@ var tablet = (function() {
 
 	var SLIDE_SOURCE_MODE   = "slide.source.mode",
 		SLIDE_EFFECT_MODE   = "slide.effect.mode",
+		SLIDE_ROTATE_DEG    = "slide.rotate.deg",
 		SLIDE_PLAY_MODE     = "slide.play.mode",
 		SLIDE_PLAY_INTERVAL = "slide.play.interval",
 		selectedItemUrl   = "",
@@ -26,6 +27,7 @@ var tablet = (function() {
 			saveConfig: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
 				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
+				setLocalStorageItem(SLIDE_ROTATE_DEG, rotateDeg.value);
 				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
 				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
 				timerEngine.setTime(interval.value);
@@ -165,14 +167,16 @@ var tablet = (function() {
 						var data = $(this).data("data");
 						$(".title").html(data.title).data("data", data);
 						$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
-						$(this).addClass("img-card-focus").randomBG(0.5).appendTo($("#imageDiv"));
+						$(this).css({transform: "rotateZ(0deg)"}).randomBG(0.5).addClass("img-card-focus").appendTo($("#imageDiv"));
 					}).appendTo(
 							$("#imageDiv")
 					).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration, function() {
-						$(this).css({
-							transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05) .5s",
-							transform: "rotateZ(" + getRandomInteger(-15, 15) + "deg)"
-						});
+						if (rotateDeg.value > 0) {
+							$(this).css({
+								transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05) .3s",
+								transform: "rotateZ(" + getRandomInteger(-rotateDeg.value, rotateDeg.value) + "deg)"
+							});
+						}
 					});
 
 					$(".title").html(selectedItemTitle).data("data", $image.data("data"));
@@ -262,6 +266,9 @@ var tablet = (function() {
 			toggleEffect: function() {
 				$("#effectMode").val(effectMode.value == 0 ? 1 : 0).trigger("click");
 			},
+			toggleRotateDeg: function(deg) {
+				$("#rotateDeg").val(deg).trigger("click");
+			},
 			togglePlayMode: function() {
 				$("#playMode").val(playMode.value == 0 ? 1 : 0).trigger("click");
 			},
@@ -283,7 +290,7 @@ var tablet = (function() {
 					case 32: // key : space
 						timerEngine.toggle(image.playCallback);
 						break;
-					case 46 : // key delete
+					case 46 : // key Delete
 						image.clear();
 						break;
 					case 34 : // key PageDown
@@ -339,10 +346,11 @@ var tablet = (function() {
 				}
 			},
 			displayConfigInfo: function() {
-				$(".configInfo > code.sourceInfo"  ).html(sourceMode.value == 0 ? "Image"    : "Cover");
-				$(".configInfo > code.effectInfo"  ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
-				$(".configInfo > code.playInfo"    ).html(playMode.value == 0   ? "Sequence" : "Random");
-				$(".configInfo > code.intervalInfo").html(interval.value);
+				$(".configInfo > code.sourceInfo"   ).html(sourceMode.value == 0 ? "Image"    : "Cover");
+				$(".configInfo > code.effectInfo"   ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
+				$(".configInfo > code.rotateDegInfo").html(rotateDeg.value + '˚');
+				$(".configInfo > code.playInfo"     ).html(playMode.value == 0   ? "Sequence" : "Random");
+				$(".configInfo > code.intervalInfo" ).html(interval.value + 's');
 			}
 	},
 	/**
@@ -383,6 +391,14 @@ var tablet = (function() {
 			e.preventDefault();
 			e.stopPropagation();
 		});
+		$("#rotateDeg").on('click keyup', function(e) {
+			var value = $(this).val();
+			$(".rotateDeg").html(value);
+			image.saveConfig();
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			e.stopPropagation();
+		});
 		$("#interval").on('click keyup', function(e) {
 			var value = $(this).val();
 			$(".interval").html(value);
@@ -395,6 +411,7 @@ var tablet = (function() {
 			var shuffleOnce = function shuffleOnce() {
 				$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 				$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+				$("#rotateDeg").val(getRandomInteger(0, 360)).trigger("click");
 				$("[data-target=  'playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 				$("#interval").val(getRandomInteger(5, 20)).trigger("click");
 			};
@@ -419,11 +436,13 @@ var tablet = (function() {
 		console.log("  manipulateDom START");
 		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
 		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
+		var slideRotateDeg    = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
 		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
 		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
 
 		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
 		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
+		$("#rotateDeg").val(slideRotateDeg).trigger("click");
 		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
 		$("#interval").val(slidePlayInterval).trigger("click");
 

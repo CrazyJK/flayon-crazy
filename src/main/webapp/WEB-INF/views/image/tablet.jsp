@@ -27,7 +27,17 @@
 	transition: top 0s, left 0s;
 }
 .key-map {
+	padding: 15px 5px;
 	margin-top: 20px;
+	font-family: D2Coding;
+}
+.key-map .row {
+	margin: 0;
+	color: rgb(35, 82, 124);
+}
+.key-map td {
+	padding: 0 3px;
+	color: rgb(35, 82, 124);
 }
 </style>
 <script src="${PATH}/js/crazy.image.timer.engine.js"></script>
@@ -49,6 +59,7 @@ $(function() {
 				<div class="configInfo">
 					<code class="label label-plain sourceInfo"></code>
 					<code class="label label-plain effectInfo"></code>
+					<code class="label label-plain rotateDegInfo"></code>
 					<code class="label label-plain playInfo"></code>
 					<code class="label label-plain intervalInfo"></code>
 				</div>
@@ -91,6 +102,12 @@ $(function() {
 							</td>
 						</tr>
 						<tr>
+							<th>Effect Rotate</th>
+							<td class="text-center">
+								<input type="range" id="rotateDeg" value="15" min="0" max="360"/>
+							</td>
+						</tr>
+						<tr>
 							<th>Play mode</th>
 							<td class="text-center">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="playMode">Sequencial</span>
@@ -108,41 +125,72 @@ $(function() {
 					<div class="text-center">
 						Source   <span class="label label-info sourceMode"></span> 
 						Effect   <span class="label label-info effectMode"></span> 
+						Rotate   <span class="label label-info  rotateDeg"></span>˚
 						Play     <span class="label label-info   playMode"></span>
-						Interval <span class="label label-info   interval"></span>
+						Interval <span class="label label-info   interval"></span>s
 						<button class="btn btn-plain btn-sm float-right btn-shuffle">Shuffle</button>
 					</div>
-					<div class="box box-small text-left key-map">
+					<div class="box box-small box-inset text-left key-map">
 						<div class="row">
-  							<div class="col-xs-6">
-  								<kbd>Left</kbd> <kbd>Up</kbd> Show previous image
+  							<div class="col-xs-4">
+  								<kbd>Insert</kbd> Source mode
   							</div>
-  							<div class="col-xs-6">
-  								<kbd>Right</kbd> <kbd>Down</kbd> Show next image
+  							<div class="col-xs-3">
+  								<kbd>Home</kbd> Effect
+  							</div>
+  							<div class="col-xs-5">
+  								<kbd>PageUp</kbd> Play mode
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-4">
+  								<kbd>Delete</kbd> Image clear
+  							</div>
+  							<div class="col-xs-3">
+  								<kbd>End</kbd>
+  							</div>
+  							<div class="col-xs-5">
+  								<kbd>PageDown</kbd> Shuffle image
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-12 text-center">
+  								<table style="display:inline-block;">
+  									<tr>
+  										<td rowspan="2">
+  											Prev image
+  											 <kbd>Left</kbd> 
+  										</td>
+  										<td>
+  										</td>
+  										<td style="border-right: 2px solid #222; border-bottom: 2px solid #222; padding-bottom:2px;">
+  											<kbd>Up</kbd>
+  										</td>
+  										<td style="width:5px; border-top: 2px solid #222;">
+  										</td>
+  										<td rowspan="2">
+  											<kbd>Right</kbd> 
+  											Next image
+  										</td>
+  									</tr>
+  									<tr>
+  										<td style="width:5px; border-bottom: 2px solid #222;">
+  										</td>
+  										<td style="border-left: 2px solid #222;">
+  											<kbd>Down</kbd>
+  										</td>
+  										<td>
+  										</td>
+  									</tr>
+  								</table>
   							</div>
 						</div>
 						<div class="row">
   							<div class="col-xs-6">
   								<kbd>Space</kbd> Play image
   							</div>
-  							<div class="col-xs-6">
-  								<kbd>PageDown</kbd> Shuffle image
-  							</div>
-						</div>
-						<div class="row">
-  							<div class="col-xs-6">
-  								<kbd>Insert</kbd> Change Source Mode
-  							</div>
-  							<div class="col-xs-6">
-  								<kbd>Home</kbd> Change Effect
-  							</div>
-						</div>
-						<div class="row">
-  							<div class="col-xs-6">
-  								<kbd>PageUp</kbd> Change Play Mode
-  							</div>
-  							<div class="col-xs-6">
-  								<kbd>Keypad 1 ~ 9</kbd> Change Play Interval
+  							<div class="col-xs-6 text-right">
+  								<kbd>Keypad 1 ~ 9</kbd> Play interval
   							</div>
 						</div>
 					</div>
