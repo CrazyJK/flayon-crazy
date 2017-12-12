@@ -36,14 +36,13 @@ var VideoList = (function() {
 					var containerScrollTop = $("#content_div").scrollTop();
 					var documentHeight     = $("ul.nav-tabs").height() + $("div.tab-content").height();
 					var scrollMargin       = $("p.more").height();
-					console.log("fn.isrequiredMoreRendering.isScrollBottom", '(containerHeight[',containerHeight,'] + containerScrollTop[',containerScrollTop,'])[',(containerHeight+containerScrollTop),'] > (documentHeight[',documentHeight,'] - scrollMargin[',scrollMargin,'])[',(documentHeight-scrollMargin),'] => ', (containerHeight + containerScrollTop) > (documentHeight - scrollMargin));
+					//console.log("fn.isrequiredMoreRendering.isScrollBottom", '(containerHeight[',containerHeight,'] + containerScrollTop[',containerScrollTop,'])[',(containerHeight+containerScrollTop),'] > (documentHeight[',documentHeight,'] - scrollMargin[',scrollMargin,'])[',(documentHeight-scrollMargin),'] => ', (containerHeight + containerScrollTop) > (documentHeight - scrollMargin));
 					return (containerHeight + containerScrollTop) > (documentHeight - scrollMargin);
 				}();
-				console.log('fn.isrequiredMoreRendering', '!lastPage[',!lastPage,'] && isScrollBottom[',isScrollBottom,'] => ', !lastPage && isScrollBottom);
+				//console.log('fn.isrequiredMoreRendering', '!lastPage[',!lastPage,'] && isScrollBottom[',isScrollBottom,'] => ', !lastPage && isScrollBottom);
 				return !lastPage && isScrollBottom;
 			},
 			sortVideo: function(list, sort) {
-				console.log("fn.sortVideo", sort);
 				list.sort(function(video1, video2) {
 					switch(sort.code) {
 					case 'S':
@@ -371,7 +370,6 @@ var VideoList = (function() {
 
 		$(window).on({
 			"resize": function() {
-				console.log("window resize");
 				var setCoverPositionOnTableView = function() {
 					windowWidth = $(window).width();
 					var imgWidth = Math.floor(windowWidth / 2);
@@ -380,7 +378,7 @@ var VideoList = (function() {
 					var imgLeft = Math.floor(windowWidth / 4);
 					//$(".tbl-cover").css({left: imgLeft, width: imgWidth});
 					coverPosition = {left: imgLeft, width: imgWidth};
-					console.log("setCoverPositionOnTableView", coverPosition);
+					//console.log("setCoverPositionOnTableView", coverPosition);
 				};
 				
 				setCoverPositionOnTableView();
@@ -404,8 +402,6 @@ var VideoList = (function() {
 	};
 	
 	var request = function() {
-		console.log("request");
-
 		// reset variables
 		hadVideoFileCount = 0;
 		  hadTorrentCount = 0;

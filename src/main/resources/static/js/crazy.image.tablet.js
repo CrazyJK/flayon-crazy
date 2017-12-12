@@ -9,20 +9,22 @@ var tablet = (function() {
 		SLIDE_ROTATE_DEG    = "slide.rotate.deg",
 		SLIDE_PLAY_MODE     = "slide.play.mode",
 		SLIDE_PLAY_INTERVAL = "slide.play.interval",
+		IMAGE_DIV = "#imageDiv",
 		selectedItemUrl   = "",
 		selectedItemTitle = "",
-		imageIndex        = 0,
-		imageCount        = 0,
-		imageNameMap      = [],
-		imageIndexMap     = [],
-		coverIndex        = 0,
-		coverCount        = 0,
-		coverNameMap      = [],
-		coverIndexMap     = [],
+		imageIndex    = 0,
+		imageCount    = 0, 
+		imageNameMap  = [], 
+		imageIndexMap = [],
+		coverIndex    = 0, 
+		coverCount    = 0, 
+		coverNameMap  = [], 
+		coverIndexMap = [],
 		showEffect, showDuration, showOptions;
-		/**
-		 * main
-		 */
+
+	/**
+	 * main
+	 */
 	var	image = {
 		saveConfig: function() {
 			setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
@@ -32,7 +34,6 @@ var tablet = (function() {
 			setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
 			timerEngine.setTime(interval.value);
 			image.displayConfigInfo();
-			console.log("    setLocalStorage", sourceMode.value, effectMode.value, playMode.value, interval.value);
 		},
 		setEffect: function setEffect() {
 			var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
@@ -53,38 +54,37 @@ var tablet = (function() {
 					showOptions = {};
 			}
 			$(".effectInfo").html(showEffect);
-			console.log("    setEffect", showEffect, showDuration, showOptions);
+			//console.log("    setEffect", showEffect, showDuration, showOptions);
 		},
 		prev: function() {
-			console.log("    prev");
 			// 다 지웠으면 끝
-			if ($("#imageDiv").children().length < 1)
+			if ($(IMAGE_DIV).children().length < 1)
 				return;
 
 			image.setEffect();
 
 			// 마지막 이미지 삭제 및 map배열 복원
-			var $last = $("#imageDiv").children().last();
+			var $last = $(IMAGE_DIV).children().last();
 			var data = $last.data("data");
 			var mode = data.mode;
 			var arrIdx = data.arrayIndex;
 			var index = data.imageIndex;
 			if (mode == 0) {
 				imageIndexMap.splice(arrIdx, 0, index);
-				console.log("    prev image", arrIdx, index);
+				//console.log("    prev image", arrIdx, index);
 			}
 			else {
 				coverIndexMap.splice(arrIdx, 0, index);
-				console.log("    prev cover", arrIdx, index);
+				//console.log("    prev cover", arrIdx, index);
 			}
 			$last.remove();
 
 			// 새로운 마지막 이미지 설정
-			var $imageDivChildren = $("#imageDiv").children();
+			var $imageDivChildren = $(IMAGE_DIV).children();
 			if ($imageDivChildren.length > 0) {
 				var data = $imageDivChildren.last().addClass("img-card-focus").randomBG(0.5).data("data");
 				$(".title").html(data.title).data("data", data);
-				$(".displayCount").html($("#imageDiv").children().length + " / " + (mode == 0 ? imageIndexMap.length : coverIndexMap.length));
+				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 			}
 			else {
 				$(".title").html("&nbsp;").data("data", {});
@@ -92,8 +92,7 @@ var tablet = (function() {
 			}
 		},
 		next: function() {
-			console.log("    next");
-			var currentIndex      = -1;
+			var currentIndex = -1;
 			if (sourceMode.value == 0) { // image
 				if (playMode.value == 0) { // sequencial
 					if (imageIndex >= imageIndexMap.length)
@@ -107,7 +106,7 @@ var tablet = (function() {
 					return;
 				}
 				currentIndex = imageIndexMap.splice(imageIndex, 1)[0];
-				console.log("    next imageIndex", imageIndex, "currentIndex", currentIndex);
+				//console.log("    next imageIndex", imageIndex, "currentIndex", currentIndex);
 				selectedItemUrl = PATH + "/image/" + currentIndex;
 				selectedItemTitle = imageNameMap[currentIndex];
 				setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
@@ -125,7 +124,7 @@ var tablet = (function() {
 					return;
 				}
 				currentIndex = coverIndexMap.splice(coverIndex, 1)[0];
-				console.log("    next coverIndex", coverIndex, "currentIndex", currentIndex);
+				//console.log("    next coverIndex", coverIndex, "currentIndex", currentIndex);
 				selectedItemUrl = PATH + "/video/" + coverNameMap[currentIndex] + "/cover";
 				selectedItemTitle = coverNameMap[currentIndex];
 				setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
@@ -135,16 +134,16 @@ var tablet = (function() {
 			
 			// FIFO 오래된 이미지 지우기. 성능 때문에
 			var IMAGE_DISPLAY_LIMIT = 30;
-			var currentImageCount = $("#imageDiv").children().length;
+			var currentImageCount = $(IMAGE_DIV).children().length;
 			var diffCount = currentImageCount - IMAGE_DISPLAY_LIMIT + 1;
 			if (diffCount > 0) {
 				for (var i=0; i < diffCount; i++) {
-					$("#imageDiv").children().first().remove();
+					$(IMAGE_DIV).children().first().remove();
 				}
 			}
 			
 			// 기존 이미지의 테두리 초기화
-			$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
+			$(IMAGE_DIV).children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
 			
 			var preloader = new Image();
 			preloader.onload = function() {
@@ -152,7 +151,7 @@ var tablet = (function() {
 					src: preloader.src,
 					"class": "img-thumbnail img-card img-card-focus" 
 				}).css(
-					image.refactorImageInfo($("#imageDiv").width(), $("#imageDiv").height(), preloader.width, preloader.height, 0, $("#imageDiv").offset().top)	
+					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top)	
 				).css({
 					visibility: "visible"
 				}).data("data", {
@@ -166,10 +165,10 @@ var tablet = (function() {
 				}).on("mousedown", function() {
 					var data = $(this).data("data");
 					$(".title").html(data.title).data("data", data);
-					$("#imageDiv").children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
-					$(this).css({transform: "rotateZ(0deg)"}).randomBG(0.5).addClass("img-card-focus").appendTo($("#imageDiv"));
+					$(IMAGE_DIV).children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
+					$(this).randomBG(0.5).addClass("img-card-focus").appendTo($(IMAGE_DIV)).css({transform: "rotateZ(0deg)"});
 				}).appendTo(
-						$("#imageDiv")
+						$(IMAGE_DIV)
 				).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration, function() {
 					if (rotateDeg.value > 0) {
 						$(this).css({
@@ -180,17 +179,16 @@ var tablet = (function() {
 				});
 
 				$(".title").html(selectedItemTitle).data("data", $image.data("data"));
-				$(".displayCount").html($("#imageDiv").children().length + " / " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
+				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
 				
-				console.log("    next", selectedItemUrl, selectedItemTitle);
+				//console.log("    next", selectedItemUrl, selectedItemTitle);
 			};
 			preloader.src = selectedItemUrl;
 		},
 		clear: function() {
-			$("#imageDiv").empty();
+			$(IMAGE_DIV).empty();
 			$(".displayCount").html("&nbsp;");
 			$(".title").html("&nbsp;").data("data", {});
-			console.log("    clear");
 		},
 		refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop) {
 			var imgWidth  = originalWidth;
@@ -211,6 +209,7 @@ var tablet = (function() {
 			if (divWidth > imgWidth) { // 이미지가 작으면
 				imgLeft += getRandomInteger(0, divWidth - imgWidth);
 			}
+			//console.log("refactorImageInfo", imgWidth, imgHeight, imgLeft, imgTop);
 			return {
 				width: imgWidth,
 				height: imgHeight,
@@ -219,12 +218,11 @@ var tablet = (function() {
 			};
 		},
 		shuffleImage: function() {
-			$("#imageDiv").children().each(function() {
+			$(IMAGE_DIV).children().each(function() {
 				$(this).animate(
-					image.refactorImageInfo($("#imageDiv").width(), $("#imageDiv").height(), $(this).data("data").width, $(this).data("data").height, 0, $("#imageDiv").offset().top)		
+					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top)		
 				);
 			});
-			console.log("    shuffleImage");
 		},
 		remove: function(willDelete) {
 			console.log("delete", willDelete);
@@ -235,13 +233,13 @@ var tablet = (function() {
 						restCall(data.src, {method: "DELETE", title: "this image delete"});
 				}
 				$("img[src='" + data.src + "']").remove();
-				$(".displayCount").html($("#imageDiv").children().length + " / " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
+				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 				$(".title").html("&nbsp;");
 			}
 		},
 		popup: function(e) {
 			var data = $(e.target).data("data");
-			console.log("    popup", data);
+			//console.log("    popup", data);
 			if (data.mode == 0) { // image
 				popupImage(data.src);
 			}
@@ -250,15 +248,13 @@ var tablet = (function() {
 			}
 		},
 		playCallback: function(status) {
-			console.log("    playCallback", status);
 			$(".container-fluid").toggleClass("label-black", status);
 			$(".progress-bar, .label, code", ".container-fluid").toggleClass("label-black", status);
 			$(".modal-content", "#configModal").toggleClass("label-black", status);
 			image.resize();
 		},
 		resize: function() {
-			console.log("    resize");
-			$("#imageDiv").height($(window).height() - 30);
+			$(IMAGE_DIV).height($(window).height() - 30);
 		},
 		toggleSourceMode: function() {
 			$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
@@ -352,11 +348,12 @@ var tablet = (function() {
 			$(".configInfo > code.playInfo"     ).html(playMode.value == 0   ? "Sequence" : "Random");
 			$(".configInfo > code.intervalInfo" ).html(interval.value + 's');
 		}
-	},
+	};
+	
 	/**
 	 * add event listener
 	 */
-	addEventListener = function() {
+	var addEventListener = function() {
 
 		$(window).on("resize", image.resize);
 
@@ -365,11 +362,10 @@ var tablet = (function() {
 		$(".popup-image" ).on("click", image.popup);
 		
 		// for #imageDiv
-		$("#imageDiv").navEvent(image.nav);
+		$(IMAGE_DIV).navEvent(image.nav);
 		
 		// for #configModal
 		$("#configModal").on("hidden.bs.modal", function() {
-			console.log("#configModal hidden.bs.modal", sourceMode.value, interval.value);
 			$(".delete-image").toggle(sourceMode.value == 0);
 		});
 		$("[data-role='switch']").on('click', function() {
@@ -383,7 +379,6 @@ var tablet = (function() {
 			image.saveConfig();
 		});
 		$("input[type='range'][role='switch']").on('click keyup', function(e) {
-			console.log("input range", e);
 			var value = $(this).val();
 			var target = $(this).attr("id");
 			$("[data-target='" + target + "'][data-value='" + value + "']").click();
@@ -422,12 +417,12 @@ var tablet = (function() {
 		$(".configInfo > code.sourceInfo").on("click", image.toggleSourceMode);
 		$(".configInfo > code.effectInfo").on("click", image.toggleEffect);
 		$(".configInfo > code.playInfo"  ).on("click", image.togglePlayMode);
-	},
+	};
+	
 	/**
 	 * manipulate dom element
 	 */
-	manipulateDom = function() {
-		console.log("  manipulateDom START");
+	var manipulateDom = function() {
 		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
 		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
 		var slideRotateDeg    = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
@@ -440,15 +435,13 @@ var tablet = (function() {
 		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
 		$("#interval").val(slidePlayInterval).trigger("click");
 
-		console.log("  manipulateDom call -> image.resize");
 		image.resize();
-		
-		console.log("  manipulateDom END", slideSourceMode, slideEffectMode, slidePlayMode, slidePlayInterval);
-	},
+	};
+
 	/**
 	 * initiate moudle
 	 */
-	initModule = function() {
+	var start = function() {
 		restCall(PATH + '/rest/image/data', {}, function(data) {
 			imageCount   = data['imageCount'];
 			imageNameMap = data['imageNameMap'];
@@ -472,33 +465,20 @@ var tablet = (function() {
 				if (coverIndex < 0 || coverIndex >= coverCount)
 					coverIndex = getRandomInteger(0, coverCount-1);
 			}
-			console.log("initModule", "getJSON", imageIndex, '/', imageCount, coverIndex, '/', coverCount);
+			//console.log("initModule", "getJSON", imageIndex, '/', imageCount, coverIndex, '/', coverCount);
 
 			// play engine
 			timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
 			image.next();
 		});
-	},
-	/**
-	 * initiate
-	 */
-	init = function() {
-		console.log("init START");
-		
-		console.log("init call -> addEventListener");
-		addEventListener();
-		
-		console.log("init call -> manipulateDom");
-		manipulateDom();
-
-		console.log("init call -> initModule");
-		initModule();
-		
-		console.log("init END");
 	};
 
 	return {
-		init: init
+		init: function() {
+			addEventListener();
+			manipulateDom();
+			start();
+		}
 	};
 }());
 

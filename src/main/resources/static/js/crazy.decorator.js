@@ -32,7 +32,7 @@ var	resizeDivHeight = function() {
 		windowWidth  = $(window).width();
 		calculatedDivHeight = windowHeight - headerHeight - offsetMargin;
 		$("#content_div").outerHeight(calculatedDivHeight);
-		console.log("resizeDivHeight", calculatedDivHeight);
+		//console.log("resizeDivHeight", calculatedDivHeight);
 		
 		$("#innerSearchPage").css({
 			width: windowWidth - offsetMargin * 2, 
@@ -42,7 +42,7 @@ var	resizeDivHeight = function() {
 		try {
 			resizeSecondDiv(); // if it exist
 		} catch (e) {
-			console.log("resizeSecondDiv Error", e.message);
+			//console.log("resizeSecondDiv Error", e.message);
 		}
 	},
 	/**
@@ -94,13 +94,13 @@ var	resizeDivHeight = function() {
 		var defaults = {interval: 0, detail: "", danger: false},
 			opts = $.extend({}, defaults, options),
 			timerControl = function(start) {
-				console.log("loading timerControl", start, tSec);
+				//console.log("loading timerControl", start, tSec);
 				if (start)
 					$("#loading-timer").html(tSec++);
 				else
 					clearInterval(timer);
 			};
-		console.log("loading", show, msg, options, opts);
+		//console.log("loading", show, msg, options, opts);
 
 		if (show) {
 			tSec = 1;
@@ -159,7 +159,7 @@ var	resizeDivHeight = function() {
 	setBackgroundImage = function(imgIdx) {
 		currBGImageNo = typeof imgIdx === 'number' ? imgIdx : getRandomInteger(0, bgImageCount-1);
 		currBGImageUrl = PATH + "/image/" + currBGImageNo;
-		console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
+		//console.log("setBackgroundImage", imgIdx, currBGImageNo, bgImageCount, currBGImageUrl);
 		$("body").css("background-image", "url(" + currBGImageUrl + ")");
 		setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currBGImageNo);
 	},
@@ -263,7 +263,7 @@ var	resizeDivHeight = function() {
 		if (settings.showLoading)
 			loading(true, settings.title);
 		$.ajax(url, settings).done(function(data) {
-			console.log("restCall done", url, data);
+			//console.log("restCall done", url, data);
 			if (callback)
 				callback(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
@@ -304,11 +304,11 @@ var	crazy = (function() {
 	     */
 		crazy_listener = (function() {
 			var resize = function() {
-					console.log("crazy_listener : resize listener start");
+					//console.log("crazy_listener : resize listener start");
 					$(window).on("resize", resizeDivHeight).trigger("resize");
 				},
 				pageMove = function() {
-					console.log("crazy_listener : pageMove listener start");
+					//console.log("crazy_listener : pageMove listener start");
 					$("#deco_nav a[href]").on("click", function() {
 						console.log("nav click...");
 						loading(true, 'new request call');
@@ -319,7 +319,7 @@ var	crazy = (function() {
 					});
 				},
 				background = function() {
-					console.log("crazy_listener : background listener start");
+					//console.log("crazy_listener : background listener start");
 					$("#backMenu"  ).on("click", toggleBody);
 					$("#deleteBgBtn").on("click", deleteBGImage);
 					$("#nextBgBtn" ).on("click", setBackgroundImage);
@@ -329,14 +329,14 @@ var	crazy = (function() {
 						clearInterval(bgImageChanger);
 //						setBackgroundImage();
 						bgImageChanger = setInterval(setBackgroundImage, bgChangeInterval * 1000);
-						console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
+						//console.log("bgChangeInterval", bgChangeInterval, bgImageChanger);
 					}).val(bgChangeInterval).trigger("keyup");
 				},
 				searchPage = function() {
 					$("#searchMenu").on("click", viewInnerSearchPage);
 				},
 				checkbox = function() {
-					console.log("crazy_listener : implement checkbox element");
+					//console.log("crazy_listener : implement checkbox element");
 					$('span[id^="checkbox"]')
 						.css("cursor", "pointer")
 						.on("click", function() {
@@ -352,7 +352,7 @@ var	crazy = (function() {
 						});
 				},
 				radioBtn = function() {
-					console.log("crazy_listener : implement radio element");
+					//console.log("crazy_listener : implement radio element");
 					$('span[id^="radio"]')
 						.on("click", function() {
 							var idArr = $(this).attr("id").split("-");
@@ -375,7 +375,7 @@ var	crazy = (function() {
 				 * ex) <span class="label label-default" role="checkbox" data-role-value="false">Favorite</span> 
 				 * */
 				checkbox_role = function() {
-					console.log("crazy_listener : implement role=checkbox");
+					//console.log("crazy_listener : implement role=checkbox");
 					$("[role='checkbox']").each(function() {
 						var checked = $(this).attr("data-role-value") === 'true';
 						$(this).addClass('pointer').toggleClass("label-success", checked).data("checked", checked);
@@ -414,7 +414,7 @@ var	crazy = (function() {
 		
 			var 
 			rankColor = function() {
-				console.log("crazy_manipulateDom : set rank color");
+				//console.log("crazy_manipulateDom : set rank color");
 			 	$('input[type="range"].rank-range').each(function() {
 					var opus = $(this).attr("data-opus");
 					fnRankColor($(this), $("#Rank-" + opus + "-label"));
@@ -424,10 +424,10 @@ var	crazy = (function() {
 			 * 현재 url비교하여 메뉴 선택 효과를 주고, 메뉴 이외의 창에서는 nav를 보이지 않게
 			 */
 			showNavigation = function() {
-				console.log("crazy_manipulateDom : show navigation")
+				//console.log("crazy_manipulateDom : show navigation")
 				var found = false;
 				$("nav#deco_nav ul li a").each(function() {
-					console.log($(this).attr("href"), locationPathname);
+					//console.log($(this).attr("href"), locationPathname);
 					var href = $(this).attr("href");
 					if (href === locationPathname || href + '/' === locationPathname) {
 						$(this).parent().addClass("active");
@@ -446,7 +446,7 @@ var	crazy = (function() {
 			 * 3초후에 클래스를 추가한다.
 			 */
 			lazyLoadCssClass = function() {
-				console.log("crazy_manipulateDom : lazyLoadCssClass");
+				//console.log("crazy_manipulateDom : lazyLoadCssClass");
 				$("[data-lazy-class]").each(function() {
 					var $self = $(this);
 					var lazy = $self.attr("data-lazy-class").split(",");
@@ -508,7 +508,7 @@ var	crazy = (function() {
 	}());
 
 window.onerror = function(e) {
-    console.log('Error', e);
+    console.error('Error', e);
     displayNotice('Error', e);
     loading(false);
 };

@@ -11,7 +11,7 @@ var timerEngine = (function($) {
 		labelText = "timer",
 		engine,
 		initiate = function(invokedMethod, second, progressWrapperSelector, progressStyle, text, toggleCallback) {
-			console.log("timerEngine.initiate");
+			console.log("timerEngine.initiate start");
 	
 			timerInterval = currentSecond = second;
 			labelText = text;
@@ -54,10 +54,10 @@ var timerEngine = (function($) {
 			},	1000);
 			initiated = true;
 	
-			console.log("timerEngine.initiate", "engine start");
+			console.log("timerEngine.initiate end, engine start");
 		},
 		display = function(second, text) {
-			console.log("timerEngine.display");
+			//console.log("timerEngine.display");
 			$(".progress-bar").css({width: second / timerInterval * 100 + "%"}).attr({"aria-valuenow": second});
 			$(".progress-label").html(text);
 		},
