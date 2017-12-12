@@ -7,39 +7,7 @@
 <meta charset="UTF-8">
 <title>Image Tablet</title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
-<style type="text/css">
-.container-fluid, #configModal {
-	transition: background 1s;
-}
-.img-card {
-	position: fixed;
-	visibility: hidden;
-}
-.img-card-focus {
-	border: 1px solid #337ab7;
-}
-.ui-draggable-dragging {
-	box-shadow: 
-		-3px -3px 3px 3px rgba(255, 0, 0, 0.25), 
-		 3px -3px 3px 3px rgba(0, 255, 0, 0.25), 
-		 3px  3px 3px 3px rgba(0, 0, 255, 0.25), 
-		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
-	transition: top 0s, left 0s;
-}
-.key-map {
-	padding: 15px 5px;
-	margin-top: 20px;
-	font-family: D2Coding;
-}
-.key-map .row {
-	margin: 0;
-	color: rgb(35, 82, 124);
-}
-.key-map td {
-	padding: 0 3px;
-	color: rgb(35, 82, 124);
-}
-</style>
+<link rel="stylesheet" href="${PATH}/css/app/image/tablet.css"/>
 <script src="${PATH}/js/crazy.image.timer.engine.js"></script>
 <script src="${PATH}/js/crazy.image.tablet.js"></script>
 <script type="text/javascript">
@@ -198,6 +166,5 @@ $(function() {
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>
