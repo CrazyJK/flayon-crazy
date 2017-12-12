@@ -82,7 +82,7 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/parseToTitle" >PTT</a></li>
 			<li><a href="${PATH}/"					 ><s:message code="default.home"  /></a></li>
 			<li class="dropdown">
-    			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="default.theme"/><span class="caret"></span></a>
+    			<a class="dropdown-toggle" data-toggle="dropdown" id="themeMenu"><s:message code="default.theme"/><span class="caret"></span></a>
     			<ul class="dropdown-menu">
 					<li><a id="themeSwitchNormal"><s:message code="default.theme.normal"/></a></li>
 					<li><a id="themeSwitchPlain" ><s:message code="default.theme.plain"/></a></li>

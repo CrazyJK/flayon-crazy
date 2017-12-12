@@ -196,7 +196,18 @@ var agent = navigator.userAgent.toLowerCase(),
 	}).reduce(function(obj, pairArray) {
 		obj[pairArray[0]] = pairArray[1];
 		return obj;
-	}, {});
+	}, {}),
+	stopEvent = function(event) {
+		event.stopImmediatePropagation();
+		event.preventDefault();
+		event.stopPropagation();
+	},
+	capitalize = function(str) {
+		return str.replace(/\w\S*/g, function(txt) {
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
+	};
+
 
 !String.prototype.startsWith && (String.prototype.startsWith = function(searchString, position) {
 	return this.substr(position || 0, searchString.length) === searchString;
@@ -231,11 +242,3 @@ Date.prototype.format = function(f) {
 String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
 String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
 Number.prototype.zf = function(len){return this.toString().zf(len);};
-
-var capitalize = function(str) {
-	return str.replace(/\w\S*/g, function(txt) {
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-	});
-};
-
-

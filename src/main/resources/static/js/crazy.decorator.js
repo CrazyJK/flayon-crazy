@@ -437,8 +437,8 @@ var	crazy = (function() {
 				!found && $("nav#deco_nav").hide();
 				
 				if (locationPathname.startsWith(PATH + '/image')) {
-					console.log("current " + locationPathname + " background menu hide");
-					$("#backMenu").parent().hide();
+					console.log("current " + locationPathname + " background, theme menu hide");
+					$("#backMenu, #themeMenu").parent().hide();
 				}
 			},
 			/**
