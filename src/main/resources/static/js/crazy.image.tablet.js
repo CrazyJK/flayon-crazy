@@ -22,7 +22,8 @@ var tablet = (function() {
 		coverNameMap  = [], 
 		coverIndexMap = [],
 		showEffect, showDuration, showOptions,
-		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"];
+		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
+		TOP_MARGIN = 30;
 ;
 
 	/**
@@ -155,7 +156,7 @@ var tablet = (function() {
 				}).css({
 					display: "none"
 				}).randomBG(0.5).css(
-					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top)	
+					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
 				).data("data", {
 					"src": preloader.src,
 					"mode": parseInt(sourceMode.value),
@@ -167,6 +168,16 @@ var tablet = (function() {
 					"imageTypeClass": imageTypeClass
 				}).on("mousedown", function() {
 					image.removeFocus();
+					if ($(this).data("type") === 'tile') {
+						var data = $(this).data("data");
+						var position = image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
+						$(this).data("type", "").animate({
+							width: position.width,
+							height: position.height,
+							left: ($(IMAGE_DIV).width() - position.width) / 2, 
+							top: ($(IMAGE_DIV).height() - position.height) / 2 + TOP_MARGIN
+						});
+					}
 					$(this).css({transform: "rotateZ(0deg)"}).appendTo($(IMAGE_DIV));
 					image.setLastInfo();
 				}).appendTo(
@@ -190,17 +201,17 @@ var tablet = (function() {
 			$(".title").html("&nbsp;").data("data", {});
 			$(".displayCount").html("&nbsp;");
 		},
-		refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop) {
+		refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop, ratio) {
 			var imgWidth  = originalWidth;
 			var imgHeight = originalHeight;
 			var imgLeft   = offsetLeft;
 			var imgTop    = offsetTop;
 			if (divHeight < imgHeight) { // 이미지 높이가 더 크면
-				imgHeight = divHeight * .9;
+				imgHeight = divHeight * ratio;
 				imgWidth = Math.floor(imgHeight * originalWidth / originalHeight);
 			}
 			if (divWidth < imgWidth) { // 이미지 넓이가 더 크면
-				imgWidth = divWidth * .9;
+				imgWidth = divWidth * ratio;
 				imgHeight = Math.floor(imgWidth * originalHeight / originalWidth);
 			}
 			if (divHeight > imgHeight) { // 이미지 높이가 작으면
@@ -227,10 +238,28 @@ var tablet = (function() {
 					$(this).appendTo($(IMAGE_DIV));
 				}
 				$(this).animate(
-					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top)		
-				);
+					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
+				).data("type", "");
 			});
 			image.setLastInfo();
+		},
+		tile: function() {
+			image.removeFocus();
+			var width = $(IMAGE_DIV).width(), height = $(IMAGE_DIV).height() - TOP_MARGIN;
+			var boxWidth = width / 6, boxHeight = height / 5;
+			$(IMAGE_DIV).children().each(function(index) {
+				var xOffset = index % 6;
+				var yOffset = parseInt(index / 6);
+				var position = image.refactorImageInfo(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
+				$(this).css({
+					transform: "rotateZ(0deg)"
+				}).animate({
+					width: position.width,
+					height: position.height,
+					left: xOffset * boxWidth + (boxWidth - position.width) / 2,
+					top: yOffset * boxHeight + TOP_MARGIN + (boxHeight - position.height) / 2
+				}).data("type", "tile");
+			});
 		},
 		remove: function(willDelete) {
 			console.log("delete", willDelete);
@@ -262,7 +291,7 @@ var tablet = (function() {
 			image.resize();
 		},
 		resize: function() {
-			$(IMAGE_DIV).height($(window).height() - 30);
+			$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);
 		},
 		toggleSourceMode: function() {
 			$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
@@ -308,6 +337,7 @@ var tablet = (function() {
 					image.clear();
 					break;
 				case 35 : // key End
+					image.tile();
 					break;
 				case 34 : // key PageDown
 					image.shuffleImage();
@@ -374,7 +404,7 @@ var tablet = (function() {
 		$(".popup-image" ).on("click", image.popup);
 		
 		// for #imageDiv
-		$(IMAGE_DIV).navEvent(image.nav);
+		$(IMAGE_DIV).navEvent(image.nav).off("mouseup"); // remove for draggable event
 		
 		// for #configModal
 		$("#configModal").on({
