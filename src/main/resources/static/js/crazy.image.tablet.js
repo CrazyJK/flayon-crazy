@@ -6,6 +6,7 @@ var tablet = (function() {
 
 	var SLIDE_SOURCE_MODE   = "slide.source.mode",
 		SLIDE_EFFECT_MODE   = "slide.effect.mode",
+		SLIDE_EFFECT_SPEC   = "slide.effect.specific",
 		SLIDE_ROTATE_DEG    = "slide.rotate.deg",
 		SLIDE_PLAY_MODE     = "slide.play.mode",
 		SLIDE_PLAY_INTERVAL = "slide.play.interval",
@@ -20,7 +21,9 @@ var tablet = (function() {
 		coverCount    = 0, 
 		coverNameMap  = [], 
 		coverIndexMap = [],
-		showEffect, showDuration, showOptions;
+		showEffect, showDuration, showOptions,
+		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"];
+;
 
 	/**
 	 * main
@@ -32,29 +35,27 @@ var tablet = (function() {
 			setLocalStorageItem(SLIDE_ROTATE_DEG, rotateDeg.value);
 			setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
 			setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
+			setLocalStorageItem(SLIDE_EFFECT_SPEC, $("#effectTypes option:selected").val());
 			timerEngine.setTime(interval.value);
 			image.displayConfigInfo();
 		},
 		setEffect: function setEffect() {
-			var effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "highlight", "puff", "pulsate", "scale", "shake", "size", "slide"];
-			
 			if (effectMode.value == 0) {
-				showEffect   = "fade";
+				showEffect   = $("#effectTypes option:selected").val();
 				showDuration = 500;
-				showOptions  = {};
 			}
 			else {
 				showEffect   = effects[getRandomInteger(0, effects.length-1)];
 				showDuration = getRandomInteger(100, 2000);
-				if (showEffect === "scale")
-					showOptions = { percent: getRandomInteger(10, 50) };
-				else if (showEffect === "size")
-					showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
-				else
-					showOptions = {};
 			}
+			if (showEffect === "scale")
+				showOptions = { percent: getRandomInteger(10, 50) };
+			else if (showEffect === "size")
+				showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
+			else
+				showOptions = {};
 			$(".effectInfo").html(showEffect);
-			//console.log("    setEffect", showEffect, showDuration, showOptions);
+			console.log("    setEffect", showEffect, showDuration, showOptions);
 		},
 		prev: function() {
 			// 다 지웠으면 끝
@@ -151,11 +152,11 @@ var tablet = (function() {
 				var $image = $("<img>", {
 					src: preloader.src,
 					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
-				}).css(
+				}).css({
+					display: "none"
+				}).randomBG(0.5).css(
 					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top)	
-				).css({
-					visibility: "visible"
-				}).data("data", {
+				).data("data", {
 					"src": preloader.src,
 					"mode": parseInt(sourceMode.value),
 					"title": selectedItemTitle,
@@ -165,23 +166,22 @@ var tablet = (function() {
 					"height": preloader.height,
 					"imageTypeClass": imageTypeClass
 				}).on("mousedown", function() {
-					var data = $(this).data("data");
-					$(".title").html(data.title).data("data", data);
 					image.removeFocus();
-					$(this).randomBG(0.5).addClass("img-card-focus").appendTo($(IMAGE_DIV)).css({transform: "rotateZ(0deg)"});
+					$(this).css({transform: "rotateZ(0deg)"}).appendTo($(IMAGE_DIV));
+					image.setLastInfo();
 				}).appendTo(
 						$(IMAGE_DIV)
-				).draggable().randomBG(0.5).hide().show(showEffect, showOptions, showDuration, function() {
+				).show(showEffect, showOptions, showDuration, function() {
 					if (rotateDeg.value > 0) {
 						$(this).css({
 							transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05) .3s",
 							transform: "rotateZ(" + getRandomInteger(-rotateDeg.value, rotateDeg.value) + "deg)"
 						});
 					}
+					$(this).draggable();
 				});
 
-				$(".title").html(selectedItemTitle).data("data", $image.data("data"));
-				$(".displayCount").html($("." + imageTypeClass, IMAGE_DIV).length + " in " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
+				image.setLastInfo();
 			};
 			preloader.src = selectedItemUrl;
 		},
@@ -429,6 +429,7 @@ var tablet = (function() {
 				}
 			}, 500);
 		});
+		$("#effectTypes").on("change", image.saveConfig);
 		$(".configInfo > code.sourceInfo").on("click", image.toggleSourceMode);
 		$(".configInfo > code.effectInfo").on("click", image.toggleEffect);
 		$(".configInfo > code.playInfo"  ).on("click", image.togglePlayMode);
@@ -443,6 +444,7 @@ var tablet = (function() {
 		var slideRotateDeg    = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
 		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
 		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
+		var specificEffect    = getLocalStorageItem(SLIDE_EFFECT_SPEC,   effects[getRandomInteger(0, effects.length-1)]);
 
 		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
 		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
@@ -451,6 +453,13 @@ var tablet = (function() {
 		$("#interval").val(slidePlayInterval).trigger("click");
 
 		image.resize();
+		
+		for (var i in effects) {
+			$("#effectTypes").append(
+					$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
+			);
+		}
+		$("#effectTypes").val(specificEffect).prop("selected", true).trigger("change");
 	};
 
 	/**

@@ -64,7 +64,9 @@ $(function() {
 						<tr>
 							<th>Effect</th>
 							<td class="text-center">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Fade</span>
+								<select id="effectTypes">
+								</select>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Specific</span>
 								<input type="range" role="switch" id="effectMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMode">Random</span>
 							</td>

@@ -5,7 +5,7 @@
 }
 .img-card {
 	position: fixed;
-	visibility: hidden;
+	transition: unset;
 }
 .img-card-focus {
 	border: 1px solid #337ab7;
