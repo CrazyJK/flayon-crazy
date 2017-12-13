@@ -72,7 +72,7 @@ var lastPage = false;
 var imageSizePerPage = 50;
 var displaycount = 0;
 var mode;
-var url = '${PATH}/image/data.json';
+var url = PATH + '/rest/image/data';
 var scrollBottomChecker;
 
 $(document).ready(function() {
