@@ -81,7 +81,7 @@
 				detectEvent(e, callback);
 			});
 			browser === FIREFOX && self.on("contextmenu", function(e) {
-					detectEvent(e, callback);
+				detectEvent(e, callback);
 			});
 			$(window).on("keyup", function(e) {
 				detectEvent(e, callback);
