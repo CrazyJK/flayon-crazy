@@ -392,6 +392,16 @@ var	crazy = (function() {
 					$("#themeSwitchPlain").on("click", function() {
 						toggleTheme('plain');
 					});
+				},
+				blind = function() {
+					$(window).on({
+						"keyup": function(e) {
+							if (e.keyCode == 27) {
+								console.log("blind toggle");
+								$("#blinders").toggleClass("blind");
+							}
+						}
+					});
 				};
 				
 			return {
@@ -404,6 +414,7 @@ var	crazy = (function() {
 					radioBtn();
 					checkbox_role();
 					themeSwitch();
+					blind();
 				}
 			};
 		}()),

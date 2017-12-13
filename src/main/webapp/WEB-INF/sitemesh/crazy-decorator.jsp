@@ -113,7 +113,7 @@ $(document).ready(function() {
 		<div id="innerSearchPage" class="box">
 			<iframe></iframe>
 		</div>
-		<div id="notice" title="Error">
+		<div id="notice" title="Error" style="display:none;">
 			<p></p>
 		</div>
 		<div id="snackbar">
@@ -123,6 +123,7 @@ $(document).ready(function() {
 			<div id="plainStyle"></div>
 			<div id="coverSizeStyle"></div>
 		</div>
+		<div id="blinders"></div>
 	</div>
 
 </body>
