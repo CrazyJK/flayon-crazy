@@ -61,30 +61,28 @@ var tablet = (function() {
 			if ($(IMAGE_DIV).children().length < 1)
 				return;
 
-			image.setEffect();
-
 			// 마지막 이미지 삭제 및 map배열 복원
-			var $last = $(IMAGE_DIV).children().last();
-			var data = $last.data("data");
-			var mode = data.mode;
-			var arrIdx = data.arrayIndex;
-			var index = data.imageIndex;
-			if (mode == 0) {
-				imageIndexMap.splice(arrIdx, 0, index);
+			var $lastImage = $(IMAGE_DIV).children().last();
+			var lastData = $lastImage.data("data");
+			if (lastData.mode == 0) {
+				imageIndexMap.splice(lastData.arrayIndex, 0, lastData.imageIndex);
 				//console.log("    prev image", arrIdx, index);
 			}
 			else {
-				coverIndexMap.splice(arrIdx, 0, index);
+				coverIndexMap.splice(lastData.arrayIndex, 0, lastData.imageIndex);
 				//console.log("    prev cover", arrIdx, index);
 			}
-			$last.remove();
+			$lastImage.remove();
 
+			image.setLastInfo();
+		},
+		setLastInfo: function() {
 			// 새로운 마지막 이미지 설정
 			var $imageDivChildren = $(IMAGE_DIV).children();
 			if ($imageDivChildren.length > 0) {
 				var data = $imageDivChildren.last().addClass("img-card-focus").randomBG(0.5).data("data");
 				$(".title").html(data.title).data("data", data);
-				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (mode == 0 ? imageIndexMap.length : coverIndexMap.length));
+				$(".displayCount").html($("." + data.imageTypeClass, IMAGE_DIV).length + " in " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 			}
 			else {
 				$(".title").html("&nbsp;").data("data", {});
@@ -93,7 +91,9 @@ var tablet = (function() {
 		},
 		next: function() {
 			var currentIndex = -1;
+			var imageTypeClass = "";
 			if (sourceMode.value == 0) { // image
+				imageTypeClass = "img-image";
 				if (playMode.value == 0) { // sequencial
 					if (imageIndex >= imageIndexMap.length)
 						imageIndex = 0;
@@ -112,6 +112,7 @@ var tablet = (function() {
 				setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
 			}
 			else { // cover
+				imageTypeClass = "img-cover";
 				if (playMode.value == 0) { // sequencial
 					if (coverIndex >= coverIndexMap.length)
 						coverIndex = 0;
@@ -143,13 +144,13 @@ var tablet = (function() {
 			}
 			
 			// 기존 이미지의 테두리 초기화
-			$(IMAGE_DIV).children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
+			image.removeFocus();
 			
 			var preloader = new Image();
 			preloader.onload = function() {
 				var $image = $("<img>", {
 					src: preloader.src,
-					"class": "img-thumbnail img-card img-card-focus" 
+					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
 				}).css(
 					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top)	
 				).css({
@@ -161,11 +162,12 @@ var tablet = (function() {
 					"imageIndex": currentIndex,
 					"arrayIndex": (sourceMode.value == 0 ? imageIndex : coverIndex),
 					"width": preloader.width,
-					"height": preloader.height
+					"height": preloader.height,
+					"imageTypeClass": imageTypeClass
 				}).on("mousedown", function() {
 					var data = $(this).data("data");
 					$(".title").html(data.title).data("data", data);
-					$(IMAGE_DIV).children().removeClass("img-card-focus").css({backgroundColor: "#fff"});
+					image.removeFocus();
 					$(this).randomBG(0.5).addClass("img-card-focus").appendTo($(IMAGE_DIV)).css({transform: "rotateZ(0deg)"});
 				}).appendTo(
 						$(IMAGE_DIV)
@@ -179,34 +181,32 @@ var tablet = (function() {
 				});
 
 				$(".title").html(selectedItemTitle).data("data", $image.data("data"));
-				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
-				
-				//console.log("    next", selectedItemUrl, selectedItemTitle);
+				$(".displayCount").html($("." + imageTypeClass, IMAGE_DIV).length + " in " + (sourceMode.value == 0 ? imageIndexMap.length : coverIndexMap.length));
 			};
 			preloader.src = selectedItemUrl;
 		},
 		clear: function() {
 			$(IMAGE_DIV).empty();
-			$(".displayCount").html("&nbsp;");
 			$(".title").html("&nbsp;").data("data", {});
+			$(".displayCount").html("&nbsp;");
 		},
 		refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop) {
 			var imgWidth  = originalWidth;
 			var imgHeight = originalHeight;
 			var imgLeft   = offsetLeft;
 			var imgTop    = offsetTop;
-			if (divHeight < imgHeight) { // 이미지가 더 크면
-				imgHeight = divHeight;
+			if (divHeight < imgHeight) { // 이미지 높이가 더 크면
+				imgHeight = divHeight * .9;
 				imgWidth = Math.floor(imgHeight * originalWidth / originalHeight);
 			}
-			if (divWidth < imgWidth) {
-				imgWidth = divWidth;
+			if (divWidth < imgWidth) { // 이미지 넓이가 더 크면
+				imgWidth = divWidth * .9;
 				imgHeight = Math.floor(imgWidth * originalHeight / originalWidth);
 			}
-			if (divHeight > imgHeight) { // 이미지가 작으면
+			if (divHeight > imgHeight) { // 이미지 높이가 작으면
 				imgTop += getRandomInteger(0, divHeight - imgHeight);
 			}
-			if (divWidth > imgWidth) { // 이미지가 작으면
+			if (divWidth > imgWidth) { // 이미지 넓이가 작으면
 				imgLeft += getRandomInteger(0, divWidth - imgWidth);
 			}
 			//console.log("refactorImageInfo", imgWidth, imgHeight, imgLeft, imgTop);
@@ -217,12 +217,20 @@ var tablet = (function() {
 				top: imgTop
 			};
 		},
+		removeFocus: function() {
+			$(".img-card-focus", IMAGE_DIV).removeClass("img-card-focus").css({backgroundColor: "#fff"});
+		},
 		shuffleImage: function() {
+			image.removeFocus();
 			$(IMAGE_DIV).children().each(function() {
+				if (getRandomBoolean()) {
+					$(this).appendTo($(IMAGE_DIV));
+				}
 				$(this).animate(
 					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top)		
 				);
 			});
+			image.setLastInfo();
 		},
 		remove: function(willDelete) {
 			console.log("delete", willDelete);
@@ -248,8 +256,8 @@ var tablet = (function() {
 			}
 		},
 		playCallback: function(status) {
-			$(".container-fluid").toggleClass("label-black", status);
-			$(".progress-bar, .label, code", ".container-fluid").toggleClass("label-black", status);
+			$(".container-tablet").toggleClass("label-black", status);
+			$(".progress-bar, .label, code", ".container-tablet").toggleClass("label-black", status);
 			$(".modal-content", "#configModal").toggleClass("label-black", status);
 			image.resize();
 		},
@@ -272,6 +280,7 @@ var tablet = (function() {
 			$("#interval").val(sec).trigger("click");
 		},
 		nav: function(signal) {
+			//console.log("nav", signal);
 			switch(signal) {
 				case 1 : // mousewheel : up
 				case 37: // key : left
@@ -286,20 +295,22 @@ var tablet = (function() {
 				case 32: // key : space
 					timerEngine.toggle(image.playCallback);
 					break;
-				case 46 : // key Delete
-					image.clear();
-					break;
-				case 34 : // key PageDown
-					image.shuffleImage();
-					break;
 				case 45 : // key : Insert
 					image.toggleSourceMode();
 					break;
-				case 36 : // key : home
+				case 36 : // key : Home
 					image.toggleEffect();
 					break;
 				case 33 : // key : PageUp
 					image.togglePlayMode();
+					break;
+				case 46 : // key Delete
+					image.clear();
+					break;
+				case 35 : // key End
+					break;
+				case 34 : // key PageDown
+					image.shuffleImage();
 					break;
 				case 97 : // key : keypad 1
 					image.toggleInterval(1);
@@ -337,7 +348,8 @@ var tablet = (function() {
 					break;
 				case 1003 : // click : right
 					break;
-				case 83 : // key : 's'
+				case 67 : // key : 'c'
+					$("#configModal").modal("toggle");
 					break;
 			}
 		},
@@ -365,8 +377,11 @@ var tablet = (function() {
 		$(IMAGE_DIV).navEvent(image.nav);
 		
 		// for #configModal
-		$("#configModal").on("hidden.bs.modal", function() {
-			$(".delete-image").toggle(sourceMode.value == 0);
+		$("#configModal").on({
+			"hidden.bs.modal": function() {
+				$(".delete-image").toggle(sourceMode.value == 0);
+			},
+			"shown.bs.modal": function() {}
 		});
 		$("[data-role='switch']").on('click', function() {
 			var target = $(this).attr("data-target");
@@ -455,22 +470,18 @@ var tablet = (function() {
 				coverIndexMap.push(i);
 			}
 			
-			if (sourceMode.value == 0) { // image
-				imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
-				if (imageIndex < 0 || imageIndex >= imageCount)
-					imageIndex = getRandomInteger(0, imageCount-1);
-			}
-			else { // cover
-				coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
-				if (coverIndex < 0 || coverIndex >= coverCount)
-					coverIndex = getRandomInteger(0, coverCount-1);
-			}
-			//console.log("initModule", "getJSON", imageIndex, '/', imageCount, coverIndex, '/', coverCount);
+			imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
+			if (imageIndex < 0 || imageIndex >= imageCount)
+				imageIndex = getRandomInteger(0, imageCount-1);
 
-			// play engine
-			timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
+			coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
+			if (coverIndex < 0 || coverIndex >= coverCount)
+				coverIndex = getRandomInteger(0, coverCount-1);
+
 			image.next();
 		});
+		// play engine
+		timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
 	};
 
 	return {

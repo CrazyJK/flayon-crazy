@@ -18,7 +18,7 @@ $(function() {
 </script>
 </head>
 <body>
-	<div class="container-fluid">
+	<div class="container-fluid container-tablet">
 		<div>
 			<div id="leftTop">
 				<div id="progressWrapper"></div>
@@ -103,10 +103,10 @@ $(function() {
   							<div class="col-xs-4">
   								<kbd>Insert</kbd> Source mode
   							</div>
-  							<div class="col-xs-3">
+  							<div class="col-xs-4">
   								<kbd>Home</kbd> Effect
   							</div>
-  							<div class="col-xs-5">
+  							<div class="col-xs-4">
   								<kbd>PageUp</kbd> Play mode
   							</div>
 						</div>
@@ -114,13 +114,25 @@ $(function() {
   							<div class="col-xs-4">
   								<kbd>Delete</kbd> Image clear
   							</div>
-  							<div class="col-xs-3">
+  							<div class="col-xs-4">
   								<kbd>End</kbd>
   							</div>
-  							<div class="col-xs-5">
-  								<kbd>PageDown</kbd> Shuffle image
+  							<div class="col-xs-4">
+  								<kbd>PageDown</kbd> Shuffle
   							</div>
 						</div>
+						<div class="row">
+  							<div class="col-xs-4">
+  								<kbd>Space</kbd> Play image
+  							</div>
+  							<div class="col-xs-4">
+  								<kbd>c</kbd> Config
+  							</div>
+  							<div class="col-xs-4">
+  								<kbd>Numpad</kbd> Interval
+  							</div>
+						</div>
+						<hr/>
 						<div class="row">
   							<div class="col-xs-12 text-center">
   								<table style="display:inline-block;">
@@ -153,12 +165,19 @@ $(function() {
   								</table>
   							</div>
 						</div>
+						<hr/>
 						<div class="row">
-  							<div class="col-xs-6">
-  								<kbd>Space</kbd> Play image
+  							<div class="col-xs-2">
+  								Mouse
   							</div>
-  							<div class="col-xs-6 text-right">
-  								<kbd>Keypad 1 ~ 9</kbd> Play interval
+  							<div class="col-xs-3">
+  								<kbd>Left</kbd> Drag
+  							</div>
+  							<div class="col-xs-4">
+  								<kbd>Middle</kbd> Shuffle
+  							</div>
+  							<div class="col-xs-3">
+  								<kbd>Right</kbd>
   							</div>
 						</div>
 					</div>

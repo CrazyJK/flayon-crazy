@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.container-fluid, #configModal {
+.container-tablet, #configModal {
 	transition: background 1s;
 }
 .img-card {
@@ -26,6 +26,7 @@
 .key-map .row {
 	margin: 0;
 	color: rgb(35, 82, 124);
+	margin-bottom: 5px;
 }
 .key-map td {
 	padding: 0 3px;
