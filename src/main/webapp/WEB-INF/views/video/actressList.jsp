@@ -155,30 +155,30 @@ $(document).ready(function() {
 			<table id="list" class="table table-condensed table-hover" data-ng-controller="actressController">
 				<thead>
 					<tr>
-						<th style="width: 90px;" data-ng-click="order('favorite')" >Favorite <i class="sortorder" data-ng-show="predicate === 'favorite'" data-ng-class="{reverse:reverse}"></i></th>
-						<th data-ng-click="order('localName')">Local Name<i class="sortorder" data-ng-show="predicate === 'localName'" data-ng-class="{reverse:reverse}"></i></th>
-						<th data-ng-click="order('name')"     >Name      <i class="sortorder" data-ng-show="predicate === 'name'"      data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width:200px;" data-ng-click="order('birth')"    >Birth  <i class="sortorder" data-ng-show="predicate === 'birth'"    data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width:200px;" data-ng-click="order('bodySize')" >Body   <i class="sortorder" data-ng-show="predicate === 'bodySize'" data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 80px;" data-ng-click="order('height')"   >Height <i class="sortorder" data-ng-show="predicate === 'height'"   data-ng-class="{reverse:reverse}"></i></th>
-						<th style="max-width: 80px;" data-ng-click="order('debut')"    >Debut  <i class="sortorder" data-ng-show="predicate === 'debut'"    data-ng-class="{reverse:reverse}"></i></th>
-						<th class="number" style="max-width: 80px;" data-ng-click="order('age')"  >Age   <i class="sortorder" data-ng-show="predicate === 'age'"   data-ng-class="{reverse:reverse}"></i></th>
-						<th class="number" style="max-width: 80px;" data-ng-click="order('video')">Video <i class="sortorder" data-ng-show="predicate === 'video'" data-ng-class="{reverse:reverse}"></i></th>
-						<th class="number" style="max-width: 80px;" data-ng-click="order('score')">Score <i class="sortorder" data-ng-show="predicate === 'score'" data-ng-class="{reverse:reverse}"></i></th>
+						<th                style="width: 90px;"     data-ng-click="order('favorite')" >Favorite   <i class="sortorder" data-ng-show="predicate === 'favorite'"  data-ng-class="{reverse:reverse}"></i></th>
+						<th                                         data-ng-click="order('localName')">Local Name <i class="sortorder" data-ng-show="predicate === 'localName'" data-ng-class="{reverse:reverse}"></i></th>
+						<th                                         data-ng-click="order('name')"     >Name       <i class="sortorder" data-ng-show="predicate === 'name'"      data-ng-class="{reverse:reverse}"></i></th>
+						<th                style="max-width:200px;" data-ng-click="order('birth')"    >Birth      <i class="sortorder" data-ng-show="predicate === 'birth'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th                style="max-width:200px;" data-ng-click="order('bodySize')" >Body       <i class="sortorder" data-ng-show="predicate === 'bodySize'"  data-ng-class="{reverse:reverse}"></i></th>
+						<th                style="max-width: 80px;" data-ng-click="order('height')"   >Height     <i class="sortorder" data-ng-show="predicate === 'height'"    data-ng-class="{reverse:reverse}"></i></th>
+						<th                style="max-width: 80px;" data-ng-click="order('debut')"    >Debut      <i class="sortorder" data-ng-show="predicate === 'debut'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('age')"      >Age        <i class="sortorder" data-ng-show="predicate === 'age'"       data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('video')"    >Video      <i class="sortorder" data-ng-show="predicate === 'video'"     data-ng-class="{reverse:reverse}"></i></th>
+						<th class="number" style="max-width: 80px;" data-ng-click="order('score')"    >Score      <i class="sortorder" data-ng-show="predicate === 'score'"     data-ng-class="{reverse:reverse}"></i></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="nowrap" data-ng-repeat="actress in list | orderBy:predicate:reverse">
 						<td class="text-center">{{actress.favorite ? '★' : ''}}</td>
-						<td>{{actress.localName}}</td>
-						<td><a data-ng-click="actressDetail(actress.name)" title="{{actress.name}}">{{actress.name}}</a></td>
-						<td>{{actress.birth}}</td>
-						<td>{{actress.bodySize}}</td>
-						<td>{{actress.height}}</td>
-						<td>{{actress.debut}}</td>
-						<td class="number">{{actress.age}}</td>
-						<td class="number">{{actress.videoCount}}</td> 
-						<td class="number">{{actress.score}}</td>
+						<td                    >{{actress.localName}}</td>
+						<td                    ><a data-ng-click="actressDetail(actress.name)" title="{{actress.name}}">{{actress.name}}</a></td>
+						<td                    >{{actress.birth}}</td>
+						<td                    >{{actress.bodySize}}</td>
+						<td                    >{{actress.height}}</td>
+						<td                    >{{actress.debut}}</td>
+						<td class="number"     >{{actress.age}}</td>
+						<td class="number"     >{{actress.videoCount}}</td> 
+						<td class="number"     >{{actress.score}}</td>
 					</tr>
 				</tbody>
 			</table>
