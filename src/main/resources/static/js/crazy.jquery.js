@@ -50,29 +50,13 @@
 			case  105 : // key : keypad 9 
 		 */
 		var detectEvent = function(e, method) {
-		/*	var signal = 0;
-			if (e.type === 'mousewheel' || e.type === 'DOMMouseScroll') 
-				signal = mousewheel(e);
-			else if (e.type === 'keyup') 
-				signal = e.keyCode;
-			else if (e.type === 'mousedown' || e.type === 'mouseup') 
-				signal = e.which + 1000;
-			else if (e.type === 'contextmenu')
-				signal = 1003;
-			console.log("$.fn.navEvent.detectEvent eventSignal", e.type, signal, e);
-			e.stopImmediatePropagation();
-			e.preventDefault();
-			e.stopPropagation();
-			method(signal); */
-			e.stopImmediatePropagation();
-			e.preventDefault();
-			e.stopPropagation();
 			method(
 				(e.type === 'mousewheel' || e.type === 'DOMMouseScroll') ? mousewheel(e) :
 					(e.type === 'keyup') ? e.keyCode :
-						(e.type === 'mousedown' || e.type === 'mouseup') ? e.which + 1000 :
+						(e.type === 'mouseup' || e.type === 'mousedown') ? e.which + 1000 :
 							(e.type === 'contextmenu') ? 1003 : 0
 			);
+			stopEvent(e);
 		};
 
 		return this.each(function() {
