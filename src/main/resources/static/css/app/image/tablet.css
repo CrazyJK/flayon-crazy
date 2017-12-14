@@ -18,6 +18,31 @@
 		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
 	transition: top 0s, left 0s;
 }
+#configBox > .row {
+	margin: 3px 5px;
+	padding: 5px 0;	
+}
+#configBox > .row > .col-xs-1,
+#configBox > .row > .col-xs-4 {
+	padding: 0;
+}
+#effectTypes {
+    border: 0;
+    font-size: 12px;
+    background-color: #fff;
+}
+
+.config-summary {
+	font-family: D2Coding;
+	text-align: center;
+}
+.config-summary .config-key {
+	font-weight: bold;
+}
+.config-summary .config-value {
+	color: #a94442;	
+}
+
 .key-map {
 	padding: 15px 5px;
 	margin-top: 20px;
@@ -35,10 +60,4 @@
 
 .rotate0 {
 	transform: rotateZ(0deg) !important;
-}
-
-#effectTypes {
-    border: 0;
-    font-size: 12px;
-    background-color: #fff;
 }

@@ -49,56 +49,70 @@ $(function() {
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Configuration</h4>
+					<h4 class="modal-title">Configuration
+					<button class="btn btn-plain btn-sm btn-shuffle">Shuffle</button>
+					</h4>
 				</div>
 				<div class="modal-body">
-					<table class="table">
-						<tr>
-							<th>Source Mode</th>
-							<td class="text-center">
+					<div id="configBox">
+						<div class="row">
+							<div class="col-xs-3 text-bold">Source Mode</div>
+							<div class="col-xs-4 text-right">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="sourceMode">Image</span>
+							</div>
+							<div class="col-xs-1 text-center">
 								<input type="range" role="switch" id="sourceMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+							</div>
+							<div class="col-xs-4 text-left">
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="sourceMode">Cover</span>
-							</td>
-						</tr>
-						<tr>
-							<th>Effect</th>
-							<td class="text-center">
-								<select id="effectTypes">
-								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 text-bold">Effect</div>
+							<div class="col-xs-4 text-right">
+								<select id="effectTypes"></select>
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Specific</span>
+							</div>
+							<div class="col-xs-1 text-center">
 								<input type="range" role="switch" id="effectMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+							</div>
+							<div class="col-xs-4 text-left">
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMode">Random</span>
-							</td>
-						</tr>
-						<tr>
-							<th>Effect Rotate</th>
-							<td class="text-center">
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-xs-3 text-bold">Effect Rotate</div>
+							<div class="col-xs-9 text-right">
 								<input type="range" id="rotateDeg" value="15" min="0" max="360"/>
-							</td>
-						</tr>
-						<tr>
-							<th>Play mode</th>
-							<td class="text-center">
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-xs-3 text-bold">Play mode</div>
+							<div class="col-xs-4 text-right">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="playMode">Sequencial</span>
+							</div>
+							<div class="col-xs-1 text-center">
 								<input type="range" role="switch" id="playMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+							</div>
+							<div class="col-xs-4 text-left">
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="playMode">Random</span>
-							</td>
-						</tr>
-						<tr>
-							<th>Play interval</th>
-							<td><input type="range" id="interval" value="10" min="1" max="20"/></td>
-						</tr>
-					</table>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-xs-3 text-bold">Play interval</div>
+							<div class="col-xs-9 text-right">
+								<input type="range" id="interval" value="10" min="1" max="20"/>
+							</div>
+						</div>	
+					</div>
 				</div>
 				<div class="modal-footer">
-					<div class="text-center">
-						Source   <span class="label label-info sourceMode"></span> 
-						Effect   <span class="label label-info effectMode"></span> 
-						Rotate   <span class="label label-info  rotateDeg"></span>˚
-						Play     <span class="label label-info   playMode"></span>
-						Interval <span class="label label-info   interval"></span>s
-						<button class="btn btn-plain btn-sm float-right btn-shuffle">Shuffle</button>
+					<div class="config-summary">
+						<span class="config-key">Source  </span> <span class="config-value sourceMode"></span> 
+						<span class="config-key">Effect  </span> <span class="config-value effectMode"></span> 
+						<span class="config-key">Rotate  </span> <span class="config-value  rotateDeg"></span>˚
+						<span class="config-key">Play    </span> <span class="config-value   playMode"></span>
+						<span class="config-key">Interval</span> <span class="config-value   interval"></span>s
 					</div>
 					<div class="box box-small box-inset text-left key-map">
 						<div class="row">
