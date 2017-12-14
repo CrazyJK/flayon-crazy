@@ -36,3 +36,9 @@
 .rotate0 {
 	transform: rotateZ(0deg) !important;
 }
+
+#effectTypes {
+    border: 0;
+    font-size: 12px;
+    background-color: #fff;
+}
