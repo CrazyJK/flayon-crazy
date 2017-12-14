@@ -71,6 +71,16 @@
 				detectEvent(e, callback);
 			});
 		});
-	}
+	};
+	
+	$.fn.rotate = function(degree, duration, timing, delay) {
+		return this.each(function() {
+			var $element = $(this);
+			$element.css({
+				transition: "transform " + duration + "s " + timing + " " + delay + "s",
+				transform: "rotateZ(" + degree + "deg)"
+			});
+		});
+	};
 
 }(jQuery));
