@@ -24,22 +24,122 @@ var tablet = (function() {
 		showEffect, showDuration, showOptions,
 		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
 		TOP_MARGIN = 30;
-;
 
+	var config = {
+			display: function() {
+				$(".configInfo > code.sourceInfo"   ).html(sourceMode.value == 0 ? "Image"    : "Cover");
+				$(".configInfo > code.effectInfo"   ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
+				$(".configInfo > code.rotateDegInfo").html(rotateDeg.value + '˚');
+				$(".configInfo > code.playInfo"     ).html(playMode.value == 0   ? "Sequence" : "Random");
+				$(".configInfo > code.intervalInfo" ).html(interval.value + 's');
+			},
+			save: function() {
+				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
+				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
+				setLocalStorageItem(SLIDE_ROTATE_DEG, rotateDeg.value);
+				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
+				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
+				setLocalStorageItem(SLIDE_EFFECT_SPEC, $("#effectTypes option:selected").val());
+				timerEngine.setTime(interval.value);
+				config.display();
+			},
+			toggleSourceMode: function() {
+				$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleEffect: function() {
+				$("#effectMode").val(effectMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleRotateDeg: function(deg) {
+				$("#rotateDeg").val(deg).trigger("click");
+			},
+			togglePlayMode: function() {
+				$("#playMode").val(playMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleInterval: function(sec) {
+				$("#interval").val(sec).trigger("click");
+			},
+			eventListener: function() {
+				$("#configModal").on({
+					"hidden.bs.modal": function() {
+						$(".delete-image").toggle(sourceMode.value == 0);
+					},
+					"shown.bs.modal": function() {}
+				});
+				$("[data-role='switch']").on('click', function() {
+					var target = $(this).attr("data-target");
+					var value  = $(this).attr("data-value");
+					var text   = $(this).text();
+					$("#" + target).val(value);
+					$("." + target).html(text);
+					$("[data-target='" + target + "']").removeClass("active-switch");
+					$(this).addClass("active-switch");
+					config.save();
+				});
+				$("input[type='range'][role='switch']").on('click keyup', function(e) {
+					var value = $(this).val();
+					var target = $(this).attr("id");
+					$("[data-target='" + target + "'][data-value='" + value + "']").click();
+					stopEvent(e);
+				});
+				$("#rotateDeg").on('click keyup', function(e) {
+					var value = $(this).val();
+					$(".rotateDeg").html(value);
+					config.save();
+					stopEvent(e);
+				});
+				$("#interval").on('click keyup', function(e) {
+					var value = $(this).val();
+					$(".interval").html(value);
+					config.save();
+					stopEvent(e);
+				});
+				$(".btn-shuffle").on("click", function() {
+					var shuffleOnce = function shuffleOnce() {
+						$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+						$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+						$("#rotateDeg").val(getRandomInteger(0, 360)).trigger("click");
+						$("[data-target=  'playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+						$("#interval").val(getRandomInteger(5, 20)).trigger("click");
+					};
+					showSnackbar("shuffle start", 1000);
+					var count = 0, maxShuffle = getRandomInteger(3, 9);
+					var shuffler = setInterval(function() {
+						shuffleOnce();
+						if (++count > maxShuffle) {
+						 	clearInterval(shuffler);
+						 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
+						}
+					}, 500);
+				});
+				$("#effectTypes").on("change", config.save);
+			},
+			initiate: function() {
+				var sourceMode     = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
+				var effectMode     = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
+				var rotateDeg      = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
+				var playMode       = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
+				var playInterval   = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
+				var specificEffect = getLocalStorageItem(SLIDE_EFFECT_SPEC,   effects[getRandomInteger(0, effects.length-1)]);
+
+				$("[data-role='switch'][data-target='sourceMode'][data-value='" + sourceMode + "']").trigger("click");
+				$("[data-role='switch'][data-target='effectMode'][data-value='" + effectMode + "']").trigger("click");
+				$("[data-role='switch'][data-target=  'playMode'][data-value='" + playMode   + "']").trigger("click");
+				$("#interval").val(playInterval).trigger("click");
+				$("#rotateDeg").val(rotateDeg).trigger("click");
+				
+				for (var i in effects) {
+					$("#effectTypes").append(
+							$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
+					);
+				}
+				$("#effectTypes").val(specificEffect).prop("selected", true).trigger("change");
+			}
+	};
+	
 	/**
 	 * main
 	 */
 	var	image = {
-		saveConfig: function() {
-			setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
-			setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
-			setLocalStorageItem(SLIDE_ROTATE_DEG, rotateDeg.value);
-			setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
-			setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
-			setLocalStorageItem(SLIDE_EFFECT_SPEC, $("#effectTypes option:selected").val());
-			timerEngine.setTime(interval.value);
-			image.displayConfigInfo();
-		},
 		setEffect: function setEffect() {
 			if (effectMode.value == 0) {
 				showEffect   = $("#effectTypes option:selected").val();
@@ -56,7 +156,7 @@ var tablet = (function() {
 			else
 				showOptions = {};
 			$(".effectInfo").html(showEffect);
-			console.log("    setEffect", showEffect, showDuration, showOptions);
+			//console.log("    setEffect", showEffect, showDuration, showOptions);
 		},
 		prev: function() {
 			// 다 지웠으면 끝
@@ -146,7 +246,7 @@ var tablet = (function() {
 			}
 			
 			// 기존 이미지의 테두리 초기화
-			image.removeFocus();
+			image.defocus();
 			
 			var preloader = new Image();
 			preloader.onload = function() {
@@ -156,7 +256,7 @@ var tablet = (function() {
 				}).css({
 					display: "none"
 				}).randomBG(0.5).css(
-					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
+					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
 				).data("data", {
 					"src": preloader.src,
 					"mode": parseInt(sourceMode.value),
@@ -167,29 +267,25 @@ var tablet = (function() {
 					"height": preloader.height,
 					"imageTypeClass": imageTypeClass
 				}).on("mousedown", function() {
-					image.removeFocus();
+					image.defocus();
 					if ($(this).data("type") === 'tile') {
-						var data = $(this).data("data");
-						var position = image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
-						$(this).data("type", "").animate({
+						var data = $(this).data("type", "").data("data");
+						var position = image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
+						$(this).animate(position);
+						/* for center
+						$(this).animate({
 							width: position.width,
 							height: position.height,
 							left: ($(IMAGE_DIV).width() - position.width) / 2, 
 							top: ($(IMAGE_DIV).height() - position.height) / 2 + TOP_MARGIN
-						});
+						}); */
 					}
-					$(this).css({transform: "rotateZ(0deg)"}).appendTo($(IMAGE_DIV));
+					$(this).appendTo($(IMAGE_DIV)).addClass("rotate0");
 					image.setLastInfo();
 				}).appendTo(
 						$(IMAGE_DIV)
 				).show(showEffect, showOptions, showDuration, function() {
-					if (rotateDeg.value > 0) {
-						$(this).css({
-							transition: "transform " + getRandomInteger(1, 3) + "s cubic-bezier(0.6, -0.28, 0.74, 0.05) .3s",
-							transform: "rotateZ(" + getRandomInteger(-rotateDeg.value, rotateDeg.value) + "deg)"
-						});
-					}
-					$(this).draggable();
+					$(this).rotateR(rotateDeg.value).draggable();
 				});
 
 				image.setLastInfo();
@@ -201,7 +297,7 @@ var tablet = (function() {
 			$(".title").html("&nbsp;").data("data", {});
 			$(".displayCount").html("&nbsp;");
 		},
-		refactorImageInfo: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop, ratio) {
+		position: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop, ratio) {
 			var imgWidth  = originalWidth;
 			var imgHeight = originalHeight;
 			var imgLeft   = offsetLeft;
@@ -220,7 +316,7 @@ var tablet = (function() {
 			if (divWidth > imgWidth) { // 이미지 넓이가 작으면
 				imgLeft += getRandomInteger(0, divWidth - imgWidth);
 			}
-			//console.log("refactorImageInfo", imgWidth, imgHeight, imgLeft, imgTop);
+			//console.log("position", imgWidth, imgHeight, imgLeft, imgTop);
 			return {
 				width: imgWidth,
 				height: imgHeight,
@@ -228,37 +324,29 @@ var tablet = (function() {
 				top: imgTop
 			};
 		},
-		removeFocus: function() {
-			$(".img-card-focus", IMAGE_DIV).removeClass("img-card-focus").css({backgroundColor: "#fff"});
+		defocus: function() {
+			$(".img-card-focus", IMAGE_DIV).css({backgroundColor: "#fff"}).removeClass("img-card-focus");
 		},
-		shuffleImage: function() {
-			image.removeFocus();
+		shuffle: function() {
+			image.defocus();
 			$(IMAGE_DIV).children().each(function() {
 				if (getRandomBoolean()) {
 					$(this).appendTo($(IMAGE_DIV));
 				}
 				$(this).animate(
-					image.refactorImageInfo($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
+					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
 				).data("type", "");
 			});
 			image.setLastInfo();
 		},
 		tile: function() {
-			image.removeFocus();
-			var width = $(IMAGE_DIV).width(), height = $(IMAGE_DIV).height() - TOP_MARGIN;
-			var boxWidth = width / 6, boxHeight = height / 5;
+			image.defocus();
+			var boxWidth = $(IMAGE_DIV).width() / 6, boxHeight = ($(IMAGE_DIV).height() - TOP_MARGIN) / 5;
 			$(IMAGE_DIV).children().each(function(index) {
-				var xOffset = index % 6;
-				var yOffset = parseInt(index / 6);
-				var position = image.refactorImageInfo(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
-				$(this).css({
-					transform: "rotateZ(0deg)"
-				}).animate({
-					width: position.width,
-					height: position.height,
-					left: xOffset * boxWidth + (boxWidth - position.width) / 2,
-					top: yOffset * boxHeight + TOP_MARGIN + (boxHeight - position.height) / 2
-				}).data("type", "tile");
+				var position = image.position(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
+				position.left =         (index % 6) * boxWidth  + (boxWidth  - position.width)  / 2;
+				position.top  = parseInt(index / 6) * boxHeight + (boxHeight - position.height) / 2 + TOP_MARGIN;
+				$(this).animate(position).data("type", "tile").rotateR(0);
 			});
 		},
 		remove: function(willDelete) {
@@ -293,23 +381,8 @@ var tablet = (function() {
 		resize: function() {
 			$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);
 		},
-		toggleSourceMode: function() {
-			$("#sourceMode").val(sourceMode.value == 0 ? 1 : 0).trigger("click");
-		},
-		toggleEffect: function() {
-			$("#effectMode").val(effectMode.value == 0 ? 1 : 0).trigger("click");
-		},
-		toggleRotateDeg: function(deg) {
-			$("#rotateDeg").val(deg).trigger("click");
-		},
-		togglePlayMode: function() {
-			$("#playMode").val(playMode.value == 0 ? 1 : 0).trigger("click");
-		},
-		toggleInterval: function(sec) {
-			$("#interval").val(sec).trigger("click");
-		},
 		nav: function(signal) {
-			console.log("nav", signal);
+			//console.log("nav", signal);
 			switch(signal) {
 				case 1 : // mousewheel : up
 				case 37: // key : left
@@ -325,13 +398,13 @@ var tablet = (function() {
 					timerEngine.toggle(image.playCallback);
 					break;
 				case 45 : // key : Insert
-					image.toggleSourceMode();
+					config.toggleSourceMode();
 					break;
 				case 36 : // key : Home
-					image.toggleEffect();
+					config.toggleEffect();
 					break;
 				case 33 : // key : PageUp
-					image.togglePlayMode();
+					config.togglePlayMode();
 					break;
 				case 46 : // key Delete
 					image.clear();
@@ -340,34 +413,34 @@ var tablet = (function() {
 					image.tile();
 					break;
 				case 34 : // key PageDown
-					image.shuffleImage();
+					image.shuffle();
 					break;
 				case 97 : // key : keypad 1
-					image.toggleInterval(1);
+					config.toggleInterval(1);
 					break;
 				case 98 : // key : keypad 2 
-					image.toggleInterval(2);
+					config.toggleInterval(2);
 					break;
 				case 99 : // key : keypad 3
-					image.toggleInterval(3);
+					config.toggleInterval(3);
 					break;
 				case 100 : // key : keypad 4 
-					image.toggleInterval(4);
+					config.toggleInterval(4);
 					break;
 				case 101 : // key : keypad 5 
-					image.toggleInterval(5);
+					config.toggleInterval(5);
 					break;
 				case 102 : // key : keypad 6 
-					image.toggleInterval(6);
+					config.toggleInterval(6);
 					break;
 				case 103 : // key : keypad 7 
-					image.toggleInterval(7);
+					config.toggleInterval(7);
 					break;
 				case 104 : // key : keypad 8 
-					image.toggleInterval(8);
+					config.toggleInterval(8);
 					break;
 				case 105 : // key : keypad 9 
-					image.toggleInterval(9);
+					config.toggleInterval(9);
 					break;
 				case 13: // key : enter
 					break;
@@ -382,152 +455,58 @@ var tablet = (function() {
 					break;
 			}
 		},
-		displayConfigInfo: function() {
-			$(".configInfo > code.sourceInfo"   ).html(sourceMode.value == 0 ? "Image"    : "Cover");
-			$(".configInfo > code.effectInfo"   ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
-			$(".configInfo > code.rotateDegInfo").html(rotateDeg.value + '˚');
-			$(".configInfo > code.playInfo"     ).html(playMode.value == 0   ? "Sequence" : "Random");
-			$(".configInfo > code.intervalInfo" ).html(interval.value + 's');
-		}
-	};
-	
-	/**
-	 * add event listener
-	 */
-	var addEventListener = function() {
+		eventListener: function() {
+			$(window).on("resize", image.resize);
 
-		$(window).on("resize", image.resize);
-
-		// for #navDiv
-		$(".delete-image").on("click", image.remove);
-		$(".popup-image" ).on("click", image.popup);
-		
-		// for #imageDiv
-		$(IMAGE_DIV).navEvent(image.nav).off("mouseup"); // remove for draggable event
-		
-		// for #configModal
-		$("#configModal").on({
-			"hidden.bs.modal": function() {
-				$(".delete-image").toggle(sourceMode.value == 0);
-			},
-			"shown.bs.modal": function() {}
-		});
-		$("[data-role='switch']").on('click', function() {
-			var target = $(this).attr("data-target");
-			var value  = $(this).attr("data-value");
-			var text   = $(this).text();
-			$("#" + target).val(value);
-			$("." + target).html(text);
-			$("[data-target='" + target + "']").removeClass("active-switch");
-			$(this).addClass("active-switch");
-			image.saveConfig();
-		});
-		$("input[type='range'][role='switch']").on('click keyup', function(e) {
-			var value = $(this).val();
-			var target = $(this).attr("id");
-			$("[data-target='" + target + "'][data-value='" + value + "']").click();
-			stopEvent(e);
-		});
-		$("#rotateDeg").on('click keyup', function(e) {
-			var value = $(this).val();
-			$(".rotateDeg").html(value);
-			image.saveConfig();
-			stopEvent(e);
-		});
-		$("#interval").on('click keyup', function(e) {
-			var value = $(this).val();
-			$(".interval").html(value);
-			image.saveConfig();
-			stopEvent(e);
-		});
-		$(".btn-shuffle").on("click", function() {
-			var shuffleOnce = function shuffleOnce() {
-				$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
-				$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
-				$("#rotateDeg").val(getRandomInteger(0, 360)).trigger("click");
-				$("[data-target=  'playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
-				$("#interval").val(getRandomInteger(5, 20)).trigger("click");
-			};
-			showSnackbar("shuffle start", 1000);
-			var count = 0, maxShuffle = getRandomInteger(3, 9);
-			var shuffler = setInterval(function() {
-				shuffleOnce();
-				if (++count > maxShuffle) {
-				 	clearInterval(shuffler);
-				 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
-				}
-			}, 500);
-		});
-		$("#effectTypes").on("change", image.saveConfig);
-		$(".configInfo > code.sourceInfo").on("click", image.toggleSourceMode);
-		$(".configInfo > code.effectInfo").on("click", image.toggleEffect);
-		$(".configInfo > code.playInfo"  ).on("click", image.togglePlayMode);
-	};
-	
-	/**
-	 * manipulate dom element
-	 */
-	var manipulateDom = function() {
-		var slideSourceMode   = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
-		var slideEffectMode   = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
-		var slideRotateDeg    = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
-		var slidePlayMode     = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
-		var slidePlayInterval = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
-		var specificEffect    = getLocalStorageItem(SLIDE_EFFECT_SPEC,   effects[getRandomInteger(0, effects.length-1)]);
-
-		$("[data-role='switch'][data-target='sourceMode'][data-value='" + slideSourceMode + "']").trigger("click");
-		$("[data-role='switch'][data-target='effectMode'][data-value='" + slideEffectMode + "']").trigger("click");
-		$("#rotateDeg").val(slideRotateDeg).trigger("click");
-		$("[data-role='switch'][data-target=  'playMode'][data-value='" + slidePlayMode   + "']").trigger("click");
-		$("#interval").val(slidePlayInterval).trigger("click");
-
-		image.resize();
-		
-		for (var i in effects) {
-			$("#effectTypes").append(
-					$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
-			);
-		}
-		$("#effectTypes").val(specificEffect).prop("selected", true).trigger("change");
-	};
-
-	/**
-	 * initiate moudle
-	 */
-	var start = function() {
-		restCall(PATH + '/rest/image/data', {}, function(data) {
-			imageCount   = data['imageCount'];
-			imageNameMap = data['imageNameMap'];
-			coverCount   = data['coverCount'];
-			coverNameMap = data['coverNameMap'];
-
-			for (var i=0; i < imageCount; i++) {
-				imageIndexMap.push(i);
-			}
-			for (var i=0; i < coverCount; i++) {
-				coverIndexMap.push(i);
-			}
+			// for #navDiv
+			$(".delete-image").on("click", image.remove);
+			$(".popup-image" ).on("click", image.popup);
 			
-			imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
-			if (imageIndex < 0 || imageIndex >= imageCount)
-				imageIndex = getRandomInteger(0, imageCount-1);
+			// for #imageDiv
+			$(IMAGE_DIV).navEvent(image.nav).off("mouseup"); // remove for draggable event
+		},
+		start: function() {
+			restCall(PATH + '/rest/image/data', {}, function(data) {
+				imageCount   = data['imageCount'];
+				imageNameMap = data['imageNameMap'];
+				coverCount   = data['coverCount'];
+				coverNameMap = data['coverNameMap'];
 
-			coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
-			if (coverIndex < 0 || coverIndex >= coverCount)
-				coverIndex = getRandomInteger(0, coverCount-1);
+				for (var i=0; i < imageCount; i++) {
+					imageIndexMap.push(i);
+				}
+				for (var i=0; i < coverCount; i++) {
+					coverIndexMap.push(i);
+				}
+				
+				imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
+				if (imageIndex < 0 || imageIndex >= imageCount)
+					imageIndex = getRandomInteger(0, imageCount-1);
 
-			image.next();
-		});
-		// play engine
-		timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
+				coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
+				if (coverIndex < 0 || coverIndex >= coverCount)
+					coverIndex = getRandomInteger(0, coverCount-1);
+
+				image.next();
+			});
+			// play engine
+			timerEngine.init(image.next, interval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
+			image.resize();
+		}
 	};
 
 	return {
 		init: function() {
-			addEventListener();
-			manipulateDom();
-			start();
+			config.eventListener();
+			config.initiate();
+			image.eventListener();
+			image.start();
 		}
 	};
 }());
 
+$.fn.rotateR = function(degree) {
+	return this.each(function() {
+		$(this).rotate(getRandomInteger(-degree, degree), getRandomInteger(1, 3), "cubic-bezier(0.6, -0.28, 0.74, 0.05)", .3);
+	});
+};
