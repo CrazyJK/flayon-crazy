@@ -327,7 +327,7 @@ var tablet = (function() {
 		defocus: function() {
 			$(".img-card-focus", IMAGE_DIV).css({backgroundColor: "#fff"}).removeClass("img-card-focus");
 		},
-		shuffle: function() {
+		shake: function() {
 			image.defocus();
 			$(IMAGE_DIV).children().each(function() {
 				if (getRandomBoolean()) {
@@ -413,7 +413,7 @@ var tablet = (function() {
 					image.tile();
 					break;
 				case 34 : // key PageDown
-					image.shuffle();
+					image.shake();
 					break;
 				case 97 : // key : keypad 1
 					config.toggleInterval(1);

@@ -134,7 +134,7 @@ $(function() {
   								<kbd>End</kbd> Tile
   							</div>
   							<div class="col-xs-4">
-  								<kbd>PageDown</kbd> Shuffle
+  								<kbd>PageDown</kbd> Shake
   							</div>
 						</div>
 						<div class="row">
