@@ -309,7 +309,7 @@ var tablet = (function() {
 			$("#interval").val(sec).trigger("click");
 		},
 		nav: function(signal) {
-			//console.log("nav", signal);
+			console.log("nav", signal);
 			switch(signal) {
 				case 1 : // mousewheel : up
 				case 37: // key : left
@@ -374,7 +374,6 @@ var tablet = (function() {
 				case 1001 : // click : left
 					break;
 				case 1002 : // click : middle
-					image.shuffleImage();
 					break;
 				case 1003 : // click : right
 					break;

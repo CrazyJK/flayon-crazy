@@ -117,7 +117,7 @@ $(function() {
   								<kbd>Delete</kbd> Image clear
   							</div>
   							<div class="col-xs-4">
-  								<kbd>End</kbd>
+  								<kbd>End</kbd> Tile
   							</div>
   							<div class="col-xs-4">
   								<kbd>PageDown</kbd> Shuffle
@@ -176,7 +176,7 @@ $(function() {
   								<kbd>Left</kbd> Drag
   							</div>
   							<div class="col-xs-4">
-  								<kbd>Middle</kbd> Shuffle
+  								<kbd>Middle</kbd>
   							</div>
   							<div class="col-xs-3">
   								<kbd>Right</kbd>
