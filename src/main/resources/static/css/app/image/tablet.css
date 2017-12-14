@@ -32,3 +32,7 @@
 	padding: 0 3px;
 	color: rgb(35, 82, 124);
 }
+
+.rotate0 {
+	transform: rotateZ(0deg) !important;
+}
