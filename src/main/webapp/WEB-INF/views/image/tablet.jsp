@@ -25,11 +25,11 @@ $(function() {
 			</div>
 			<div id="leftBottom">
 				<div class="configInfo">
-					<code class="label label-plain sourceInfo"></code>
-					<code class="label label-plain effectInfo"></code>
-					<code class="label label-plain rotateDegInfo"></code>
-					<code class="label label-plain playInfo"></code>
-					<code class="label label-plain intervalInfo"></code>
+					<code class="label label-plain sourceMode"></code>
+					<code class="label label-plain effectMode"></code>
+					<code class="label label-plain rotateDeg"></code>
+					<code class="label label-plain playMode"></code>
+					<code class="label label-plain interval"></code>
 				</div>
 			</div>
 			<div id="rightTop"></div>
@@ -110,9 +110,9 @@ $(function() {
 					<div class="config-summary">
 						<span class="config-key">Source  </span> <span class="config-value sourceMode"></span> 
 						<span class="config-key">Effect  </span> <span class="config-value effectMode"></span> 
-						<span class="config-key">Rotate  </span> <span class="config-value  rotateDeg"></span>˚
+						<span class="config-key">Rotate  </span> <span class="config-value  rotateDeg"></span>
 						<span class="config-key">Play    </span> <span class="config-value   playMode"></span>
-						<span class="config-key">Interval</span> <span class="config-value   interval"></span>s
+						<span class="config-key">Interval</span> <span class="config-value   interval"></span>
 					</div>
 					<div class="box box-small box-inset text-left key-map">
 						<div class="row">

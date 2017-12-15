@@ -27,11 +27,11 @@ var tablet = (function() {
 
 	var config = {
 			display: function() {
-				$(".configInfo > code.sourceInfo"   ).html(sourceMode.value == 0 ? "Image"    : "Cover");
-				$(".configInfo > code.effectInfo"   ).html(effectMode.value == 0 ? "Fade"     : "Radndom");
-				$(".configInfo > code.rotateDegInfo").html(rotateDeg.value + '˚');
-				$(".configInfo > code.playInfo"     ).html(playMode.value == 0   ? "Sequence" : "Random");
-				$(".configInfo > code.intervalInfo" ).html(interval.value + 's');
+				$(".sourceMode").html(sourceMode.value == 0 ? "Image" : "Cover");
+				$(".effectMode").html((effectMode.value == 0 ? "Specific[" : "Radndom[") + showEffect + "]");
+				$(".rotateDeg" ).html(rotateDeg.value + '˚');
+				$(".playMode"  ).html(playMode.value == 0 ? "Sequencial" : "Random");
+				$(".interval"  ).html(interval.value + 's');
 			},
 			save: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
@@ -65,7 +65,7 @@ var tablet = (function() {
 					},
 					"shown.bs.modal": function() {}
 				});
-				$("[data-role='switch']").on('click', function() {
+				$("[data-role='switch']").on('click', function() { // switch label
 					var target = $(this).attr("data-target");
 					var value  = $(this).attr("data-value");
 					var text   = $(this).text();
@@ -75,30 +75,26 @@ var tablet = (function() {
 					$(this).addClass("active-switch");
 					config.save();
 				});
-				$("input[type='range'][role='switch']").on('click keyup', function(e) {
+				$("input[type='range'][role='switch']").on('click keyup', function(e) { // range for switch 
 					var value = $(this).val();
 					var target = $(this).attr("id");
 					$("[data-target='" + target + "'][data-value='" + value + "']").click();
 					stopEvent(e);
 				});
-				$("#rotateDeg").on('click keyup', function(e) {
+				$("#rotateDeg, #interval").on('click keyup', function(e) {
 					var value = $(this).val();
-					$(".rotateDeg").html(value);
+					var target = $(this).attr("id");
+					$("." + target).html(value);
 					config.save();
 					stopEvent(e);
 				});
-				$("#interval").on('click keyup', function(e) {
-					var value = $(this).val();
-					$(".interval").html(value);
-					config.save();
-					stopEvent(e);
-				});
+				$("#effectTypes").on("change", config.save);
 				$(".btn-shuffle").on("click", function() {
 					var shuffleOnce = function shuffleOnce() {
 						$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("#rotateDeg").val(getRandomInteger(0, 360)).trigger("click");
-						$("[data-target=  'playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+						$("[data-target='playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("#interval").val(getRandomInteger(5, 20)).trigger("click");
 					};
 					showSnackbar("shuffle start", 1000);
@@ -111,7 +107,6 @@ var tablet = (function() {
 						}
 					}, 500);
 				});
-				$("#effectTypes").on("change", config.save);
 			},
 			initiate: function() {
 				var sourceMode     = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
@@ -155,8 +150,8 @@ var tablet = (function() {
 				showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
 			else
 				showOptions = {};
-			$(".effectInfo").html(showEffect);
 			//console.log("    setEffect", showEffect, showDuration, showOptions);
+			config.display();
 		},
 		prev: function() {
 			// 다 지웠으면 끝
