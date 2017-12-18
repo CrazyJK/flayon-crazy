@@ -29,7 +29,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -363,7 +362,7 @@ public class VideoServiceImpl implements VideoService {
 
 		query = query.toLowerCase();
 		for(Video video : videoDao.getVideoList(true, false)) {
-			if(StringUtils.containsIgnoreCase(video.getOpus(), query)
+			if (StringUtils.containsIgnoreCase(video.getOpus(), query)
 					|| StringUtils.containsIgnoreCase(video.getStudio().getName(), query)
 					|| StringUtils.containsIgnoreCase(video.getTitle(), query)
 					|| StringUtils.containsIgnoreCase(video.getActressName(), query)) {
@@ -1251,5 +1250,29 @@ public class VideoServiceImpl implements VideoService {
 					return result.stream();
 				}).collect(Collectors.toList());
 		}
+
+	@Override
+	public List<Map<String, String>> findStudio(String query) {
+		List<Map<String, String>> found = new ArrayList<>();
+
+		// is opus part?
+		String[] split = StringUtils.split(query, "-");
+		final String key = split.length > 0 ? split[0] : query;
+
+		// find studio in videolist
+		List<Video> videoList = new ArrayList<>();
+		for (Video video : videoDao.getVideoList(true, false)) {
+			if (StringUtils.startsWithIgnoreCase(video.getOpus(), key)) {
+				videoList.add(video);
+			}
+		}
+		Video video = sortVideo(videoList, Sort.M, true).get(0);
+		if (video != null) {
+			Map<String, String> map = new HashMap<>();
+			map.put("studio", video.getStudio().getName());
+			found.add(map);
+		}
+		return found;
+	}
 
 }

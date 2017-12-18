@@ -1,15 +1,17 @@
 /**
  *image/tablet module
  */
-
 var tablet = (function() {
 
-	var SLIDE_SOURCE_MODE   = "slide.source.mode",
-		SLIDE_EFFECT_MODE   = "slide.effect.mode",
-		SLIDE_EFFECT_SPEC   = "slide.effect.specific",
-		SLIDE_ROTATE_DEG    = "slide.rotate.deg",
-		SLIDE_PLAY_MODE     = "slide.play.mode",
-		SLIDE_PLAY_INTERVAL = "slide.play.interval",
+	var SLIDE_SOURCE_MODE      = "slide.source.mode",
+		SLIDE_EFFECT_MODE      = "slide.effect.mode",
+		SLIDE_EFFECT_HIDE_MODE = "slide.effect.hide.mode",
+		SLIDE_EFFECT_SPEC      = "slide.effect.specific",
+		SLIDE_EFFECT_HIDE_SPEC = "slide.effect.hide.specific",
+		SLIDE_ROTATE_DEG       = "slide.rotate.deg",
+		SLIDE_PLAY_MODE        = "slide.play.mode",
+		SLIDE_PLAY_INTERVAL    = "slide.play.interval",
+		SLIDE_DISPLAY_MODE     = "slide.display.mode",
 		IMAGE_DIV = "#imageDiv",
 		selectedItemUrl   = "",
 		selectedItemTitle = "",
@@ -28,19 +30,24 @@ var tablet = (function() {
 	var config = {
 			display: function() {
 				$(".sourceMode").html(sourceMode.value == 0 ? "Image" : "Cover");
-				$(".effectMode").html((effectMode.value == 0 ? "Specific[" : "Radndom[") + showEffect + "]");
+				$(".effectMode").html(effectMode.value == 0 ? "Specific[" + $("#effectTypes option:selected").val() + "]" : "Radndom[" + showEffect + "]");
+				$(".effectHideMode").html(effectHideMode.value == 0 ? "Effect[" + $("#effectHideTypes option:selected").val() + "]" : "Remove");
 				$(".rotateDeg" ).html(rotateDeg.value + '˚');
 				$(".playMode"  ).html(playMode.value == 0 ? "Sequencial" : "Random");
 				$(".interval"  ).html(interval.value + 's');
+				$(".displayMode").html(displayMode.value == 0 ? "Tablet" : "Tile");
 			},
 			save: function() {
 				setLocalStorageItem(SLIDE_SOURCE_MODE, sourceMode.value);
 				setLocalStorageItem(SLIDE_EFFECT_MODE, effectMode.value);
+				setLocalStorageItem(SLIDE_EFFECT_HIDE_MODE, effectHideMode.value);
 				setLocalStorageItem(SLIDE_ROTATE_DEG, rotateDeg.value);
 				setLocalStorageItem(SLIDE_PLAY_MODE,     playMode.value);
 				setLocalStorageItem(SLIDE_PLAY_INTERVAL, interval.value);
 				setLocalStorageItem(SLIDE_EFFECT_SPEC, $("#effectTypes option:selected").val());
+				setLocalStorageItem(SLIDE_EFFECT_HIDE_SPEC, $("#effectHideTypes option:selected").val());
 				timerEngine.setTime(interval.value);
+				setLocalStorageItem(SLIDE_DISPLAY_MODE, displayMode.value);
 				config.display();
 			},
 			toggleSourceMode: function() {
@@ -57,6 +64,12 @@ var tablet = (function() {
 			},
 			toggleInterval: function(sec) {
 				$("#interval").val(sec).trigger("click");
+			},
+			toggleHideMethod: function() {
+				$("#effectHideMode").val(effectHideMode.value == 0 ? 1 : 0).trigger("click");
+			},
+			toggleDisplayMode: function() {
+				$("#displayMode").val(displayMode.value == 0 ? 1 : 0).trigger("click");
 			},
 			eventListener: function() {
 				$("#configModal").on({
@@ -88,14 +101,16 @@ var tablet = (function() {
 					config.save();
 					stopEvent(e);
 				});
-				$("#effectTypes").on("change", config.save);
+				$("#effectTypes, #effectHideTypes").on("change", config.save);
 				$(".btn-shuffle").on("click", function() {
 					var shuffleOnce = function shuffleOnce() {
 						$("[data-target='sourceMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("[data-target='effectMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
+						$("[data-target='effectHideMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("#rotateDeg").val(getRandomInteger(0, 360)).trigger("click");
 						$("[data-target='playMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 						$("#interval").val(getRandomInteger(5, 20)).trigger("click");
+						$("[data-target='displayMode'][data-value='" + getRandomInteger(0, 1) + "']").trigger("click");
 					};
 					showSnackbar("shuffle start", 1000);
 					var count = 0, maxShuffle = getRandomInteger(3, 9);
@@ -109,25 +124,31 @@ var tablet = (function() {
 				});
 			},
 			initiate: function() {
-				var sourceMode     = getLocalStorageItem(SLIDE_SOURCE_MODE,   getRandomInteger(0, 1));
-				var effectMode     = getLocalStorageItem(SLIDE_EFFECT_MODE,   getRandomInteger(0, 1));
-				var rotateDeg      = getLocalStorageItem(SLIDE_ROTATE_DEG,    getRandomInteger(0, 360));
-				var playMode       = getLocalStorageItem(SLIDE_PLAY_MODE,     getRandomInteger(0, 1));
-				var playInterval   = getLocalStorageItem(SLIDE_PLAY_INTERVAL, getRandomInteger(5, 20));
-				var specificEffect = getLocalStorageItem(SLIDE_EFFECT_SPEC,   effects[getRandomInteger(0, effects.length-1)]);
+				var sourceMode         = getLocalStorageItem(SLIDE_SOURCE_MODE,      getRandomInteger(0, 1));
+				var effectMode         = getLocalStorageItem(SLIDE_EFFECT_MODE,      getRandomInteger(0, 1));
+				var effectHideMode     = getLocalStorageItem(SLIDE_EFFECT_HIDE_MODE, getRandomInteger(0, 1));
+				var rotateDeg          = getLocalStorageItem(SLIDE_ROTATE_DEG,       getRandomInteger(0, 360));
+				var playMode           = getLocalStorageItem(SLIDE_PLAY_MODE,        getRandomInteger(0, 1));
+				var playInterval       = getLocalStorageItem(SLIDE_PLAY_INTERVAL,    getRandomInteger(5, 20));
+				var specificEffect     = getLocalStorageItem(SLIDE_EFFECT_SPEC,      effects[getRandomInteger(0, effects.length-1)]);
+				var specificHideEffect = getLocalStorageItem(SLIDE_EFFECT_HIDE_SPEC, effects[getRandomInteger(0, effects.length-1)]);
+				var displayMode        = getLocalStorageItem(SLIDE_DISPLAY_MODE,     getRandomInteger(0, 1));
 
 				$("[data-role='switch'][data-target='sourceMode'][data-value='" + sourceMode + "']").trigger("click");
 				$("[data-role='switch'][data-target='effectMode'][data-value='" + effectMode + "']").trigger("click");
-				$("[data-role='switch'][data-target=  'playMode'][data-value='" + playMode   + "']").trigger("click");
+				$("[data-role='switch'][data-target='effectHideMode'][data-value='" + effectHideMode + "']").trigger("click");
+				$("[data-role='switch'][data-target='playMode'][data-value='" + playMode + "']").trigger("click");
+				$("[data-role='switch'][data-target='displayMode'][data-value='" + displayMode + "']").trigger("click");
 				$("#interval").val(playInterval).trigger("click");
 				$("#rotateDeg").val(rotateDeg).trigger("click");
 				
 				for (var i in effects) {
-					$("#effectTypes").append(
+					$("#effectTypes, #effectHideTypes").append(
 							$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
 					);
 				}
 				$("#effectTypes").val(specificEffect).prop("selected", true).trigger("change");
+				$("#effectHideTypes").val(specificHideEffect).prop("selected", true).trigger("change");
 			}
 	};
 	
@@ -169,9 +190,29 @@ var tablet = (function() {
 				coverIndexMap.splice(lastData.arrayIndex, 0, lastData.imageIndex);
 				//console.log("    prev cover", arrIdx, index);
 			}
-			$lastImage.remove();
-
-			image.setLastInfo();
+			
+			if (effectHideMode.value == 0) {
+				var effectHideTypes = $("#effectHideTypes option:selected").val();
+				if (effectHideTypes === "own") {
+					$lastImage.hide(lastData.effect, lastData.options, lastData.duration, function() {
+						$(this).remove();
+						image.setLastInfo();
+					});
+				}
+				else {
+					$lastImage.hide(effectHideTypes, {}, 500, function() {
+						$(this).remove();
+						image.setLastInfo();
+					});
+				}
+			}
+			else {
+				$lastImage.remove();
+				image.setLastInfo();
+			}
+		},
+		defocus: function() {
+			$(".img-card", IMAGE_DIV).css({backgroundColor: "#fff"}).removeClass("img-card-focus");
 		},
 		setLastInfo: function() {
 			// 새로운 마지막 이미지 설정
@@ -228,8 +269,73 @@ var tablet = (function() {
 				setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 			}
 			
-			image.setEffect();
-			
+			var preloader = new Image();
+			preloader.onload = function() {
+				image.removeOld();
+				image.defocus(); // 기존 이미지의 테두리 초기화
+
+				console.log("displayMode.value", displayMode.value);
+				if (displayMode.value == 1) {
+					image.tile();
+				}
+
+				var $image = $("<img>", {
+					src: preloader.src,
+					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
+				}).randomBG(0.5).css({
+					display: "none"
+				}).css(
+					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
+				).data("data", {
+					src: preloader.src,
+					mode: parseInt(sourceMode.value),
+					title: selectedItemTitle,
+					imageIndex: currentIndex,
+					arrayIndex: (sourceMode.value == 0 ? imageIndex : coverIndex),
+					width: preloader.width,
+					height: preloader.height,
+					imageTypeClass: imageTypeClass,
+					effect: showEffect,
+					options: showOptions,
+					duration: showDuration
+				}).on("mousedown", function(e) {
+					if (e.which == 1) { // mouse left
+						image.defocus();
+						if (displayMode.value == 1 || $(this).data("tile")) {
+							displayMode.value == 1 && image.tile();
+							var data = $(this).data("data");
+							var position = image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
+							$(this).animate(position).data("tile", false);
+							/* for center
+							$(this).animate({
+								width: position.width,
+								height: position.height,
+								left: ($(IMAGE_DIV).width() - position.width) / 2, 
+								top: ($(IMAGE_DIV).height() - position.height) / 2 + TOP_MARGIN
+							}); */
+						}
+						$(this).appendTo($(IMAGE_DIV)).addClass("rotate0");
+						image.setLastInfo();
+					} 
+					else if (e.which == 2) { // mouse middle
+						image.shake();
+					} 
+					else if (e.which == 3) { // mouse right
+						// do nothing
+					} 
+				}).appendTo(
+						$(IMAGE_DIV)
+				);
+				image.setLastInfo();
+
+				image.setEffect();
+				$image.show(showEffect, showOptions, showDuration, function() {
+					$(this).rotateR(rotateDeg.value).draggable();
+				});
+			};
+			preloader.src = selectedItemUrl;
+		},
+		removeOld: function() {
 			// FIFO 오래된 이미지 지우기. 성능 때문에
 			var IMAGE_DISPLAY_LIMIT = 30;
 			var currentImageCount = $(IMAGE_DIV).children().length;
@@ -239,53 +345,6 @@ var tablet = (function() {
 					$(IMAGE_DIV).children().first().remove();
 				}
 			}
-			
-			// 기존 이미지의 테두리 초기화
-			image.defocus();
-			
-			var preloader = new Image();
-			preloader.onload = function() {
-				var $image = $("<img>", {
-					src: preloader.src,
-					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
-				}).css({
-					display: "none"
-				}).randomBG(0.5).css(
-					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
-				).data("data", {
-					"src": preloader.src,
-					"mode": parseInt(sourceMode.value),
-					"title": selectedItemTitle,
-					"imageIndex": currentIndex,
-					"arrayIndex": (sourceMode.value == 0 ? imageIndex : coverIndex),
-					"width": preloader.width,
-					"height": preloader.height,
-					"imageTypeClass": imageTypeClass
-				}).on("mousedown", function() {
-					image.defocus();
-					if ($(this).data("type") === 'tile') {
-						var data = $(this).data("type", "").data("data");
-						var position = image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
-						$(this).animate(position);
-						/* for center
-						$(this).animate({
-							width: position.width,
-							height: position.height,
-							left: ($(IMAGE_DIV).width() - position.width) / 2, 
-							top: ($(IMAGE_DIV).height() - position.height) / 2 + TOP_MARGIN
-						}); */
-					}
-					$(this).appendTo($(IMAGE_DIV)).addClass("rotate0");
-					image.setLastInfo();
-				}).appendTo(
-						$(IMAGE_DIV)
-				).show(showEffect, showOptions, showDuration, function() {
-					$(this).rotateR(rotateDeg.value).draggable();
-				});
-
-				image.setLastInfo();
-			};
-			preloader.src = selectedItemUrl;
 		},
 		clear: function() {
 			$(IMAGE_DIV).empty();
@@ -319,10 +378,8 @@ var tablet = (function() {
 				top: imgTop
 			};
 		},
-		defocus: function() {
-			$(".img-card-focus", IMAGE_DIV).css({backgroundColor: "#fff"}).removeClass("img-card-focus");
-		},
 		shake: function() {
+//			$("#displayMode").val(0).trigger("click");
 			image.defocus();
 			$(IMAGE_DIV).children().each(function() {
 				if (getRandomBoolean()) {
@@ -330,18 +387,19 @@ var tablet = (function() {
 				}
 				$(this).animate(
 					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
-				).data("type", "");
+				).data("tile", false);
 			});
 			image.setLastInfo();
 		},
 		tile: function() {
+//			$("#displayMode").val(1).trigger("click");
 			image.defocus();
 			var boxWidth = $(IMAGE_DIV).width() / 6, boxHeight = ($(IMAGE_DIV).height() - TOP_MARGIN) / 5;
 			$(IMAGE_DIV).children().each(function(index) {
 				var position = image.position(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
 				position.left =         (index % 6) * boxWidth  + (boxWidth  - position.width)  / 2;
 				position.top  = parseInt(index / 6) * boxHeight + (boxHeight - position.height) / 2 + TOP_MARGIN;
-				$(this).animate(position).data("type", "tile").rotateR(0);
+				$(this).animate(position).rotateR(0).data("tile", true);
 			});
 		},
 		remove: function(willDelete) {
@@ -377,7 +435,7 @@ var tablet = (function() {
 			$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);
 		},
 		nav: function(signal) {
-			//console.log("nav", signal);
+			console.log("nav signal", signal);
 			switch(signal) {
 				case 1 : // mousewheel : up
 				case 37: // key : left
@@ -392,12 +450,15 @@ var tablet = (function() {
 				case 32: // key : space
 					timerEngine.toggle(image.playCallback);
 					break;
+				case 73 : // key : i
 				case 45 : // key : Insert
 					config.toggleSourceMode();
 					break;
+				case 83 : // key : s
 				case 36 : // key : Home
 					config.toggleEffect();
 					break;
+				case 78 : // key : n
 				case 33 : // key : PageUp
 					config.togglePlayMode();
 					break;
@@ -445,8 +506,14 @@ var tablet = (function() {
 					break;
 				case 1003 : // click : right
 					break;
-				case 67 : // key : 'c'
+				case 67 : // key : c
 					$("#configModal").modal("toggle");
+					break;
+				case 72 : // key : h
+					config.toggleHideMethod();
+					break;
+				case 68 :
+					config.toggleDisplayMode();
 					break;
 			}
 		},

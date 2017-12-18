@@ -340,4 +340,6 @@ public interface VideoService {
 
 	List<Map<String, String>> findTorrent(String query);
 
+	List<Map<String, String>> findStudio(String query);
+
 }

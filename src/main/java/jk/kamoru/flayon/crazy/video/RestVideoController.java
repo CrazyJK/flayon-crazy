@@ -144,6 +144,7 @@ public class RestVideoController {
 		data.put("videoResult",   videoService.findVideoList(query));
 		data.put("historyResult", videoService.findHistory(query));
 		data.put("torrentResult", videoService.findTorrent(query));
+		data.put("studioResult",  videoService.findStudio(query));
 		return data;
 	}
 	

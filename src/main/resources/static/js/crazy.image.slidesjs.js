@@ -225,8 +225,8 @@ bgContinue = false;
 			start: function() {
 				console.log("SlidejsApp.start START");
 				$.ajax({
-					type: 'GET',
-					url: PATH + "/image/data.json"
+					type: "GET",
+					url: PATH + "/rest/image/data"
 				}).done(function(data, textStatus, jqXHR) {
 					coverCount = data['coverCount'];
 					coverMap   = data['coverNameMap'];

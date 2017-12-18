@@ -30,6 +30,8 @@ $(function() {
 					<code class="label label-plain rotateDeg"></code>
 					<code class="label label-plain playMode"></code>
 					<code class="label label-plain interval"></code>
+					<code class="label label-plain effectHideMode"></code>
+					<code class="label label-plain displayMode"></code>
 				</div>
 			</div>
 			<div id="rightTop"></div>
@@ -56,7 +58,7 @@ $(function() {
 				<div class="modal-body">
 					<div id="configBox">
 						<div class="row">
-							<div class="col-xs-3 text-bold">Source Mode</div>
+							<div class="col-xs-3 text-bold"><span class="shortcuts">I</span>mage Source</div>
 							<div class="col-xs-4 text-right">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="sourceMode">Image</span>
 							</div>
@@ -68,9 +70,9 @@ $(function() {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-3 text-bold">Effect</div>
+							<div class="col-xs-3 text-bold"><span class="shortcuts">S</span>how Mode</div>
 							<div class="col-xs-4 text-right">
-								<select id="effectTypes"></select>
+								<select id="effectTypes" class="effectTypes"></select>
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Specific</span>
 							</div>
 							<div class="col-xs-1 text-center">
@@ -81,13 +83,13 @@ $(function() {
 							</div>
 						</div>	
 						<div class="row">
-							<div class="col-xs-3 text-bold">Effect Rotate</div>
+							<div class="col-xs-3 text-bold">Show Rotate</div>
 							<div class="col-xs-9 text-right">
 								<input type="range" id="rotateDeg" value="15" min="0" max="360"/>
 							</div>
-						</div>	
+						</div>
 						<div class="row">
-							<div class="col-xs-3 text-bold">Play mode</div>
+							<div class="col-xs-3 text-bold"><span class="shortcuts">N</span>ext Method</div>
 							<div class="col-xs-4 text-right">
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="playMode">Sequencial</span>
 							</div>
@@ -99,9 +101,36 @@ $(function() {
 							</div>
 						</div>	
 						<div class="row">
-							<div class="col-xs-3 text-bold">Play interval</div>
+							<div class="col-xs-3 text-bold">Play Interval</div>
 							<div class="col-xs-9 text-right">
 								<input type="range" id="interval" value="10" min="1" max="20"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 text-bold"><span class="shortcuts">H</span>ide Method</div>
+							<div class="col-xs-4 text-right">
+								<select id="effectHideTypes" class="effectTypes">
+									<option value="own">Own</option>
+								</select>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectHideMode">Effect</span>
+							</div>
+							<div class="col-xs-1 text-center">
+								<input type="range" role="switch" id="effectHideMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+							</div>
+							<div class="col-xs-4 text-left">
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectHideMode">Remove</span>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-xs-3 text-bold"><span class="shortcuts">D</span>isplay Method</div>
+							<div class="col-xs-4 text-right">
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="displayMode">Tablet</span>
+							</div>
+							<div class="col-xs-1 text-center">
+								<input type="range" role="switch" id="displayMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+							</div>
+							<div class="col-xs-4 text-left">
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="displayMode">Tile</span>
 							</div>
 						</div>	
 					</div>
@@ -109,21 +138,23 @@ $(function() {
 				<div class="modal-footer">
 					<div class="config-summary">
 						<span class="config-key">Source  </span> <span class="config-value sourceMode"></span> 
-						<span class="config-key">Effect  </span> <span class="config-value effectMode"></span> 
+						<span class="config-key">Show    </span> <span class="config-value effectMode"></span> 
 						<span class="config-key">Rotate  </span> <span class="config-value  rotateDeg"></span>
-						<span class="config-key">Play    </span> <span class="config-value   playMode"></span>
+						<span class="config-key">Next    </span> <span class="config-value   playMode"></span>
 						<span class="config-key">Interval</span> <span class="config-value   interval"></span>
+						<span class="config-key">Hide    </span> <span class="config-value effectHideMode"></span> 
+						<span class="config-key">Display </span> <span class="config-value displayMode"></span> 
 					</div>
 					<div class="box box-small box-inset text-left key-map">
 						<div class="row">
   							<div class="col-xs-4">
-  								<kbd>Insert</kbd> Source mode
+  								<kbd>Insert</kbd> <kbd>I</kbd> Source
   							</div>
   							<div class="col-xs-4">
-  								<kbd>Home</kbd> Effect
+  								<kbd>Home</kbd> <kbd>S</kbd> Show
   							</div>
   							<div class="col-xs-4">
-  								<kbd>PageUp</kbd> Play mode
+  								<kbd>PageUp</kbd> <kbd>N</kbd> Next
   							</div>
 						</div>
 						<div class="row">
@@ -131,10 +162,10 @@ $(function() {
   								<kbd>Delete</kbd> Image clear
   							</div>
   							<div class="col-xs-4">
-  								<kbd>End</kbd> Tile
+  								<kbd>End</kbd> <kbd>D</kbd> Tile
   							</div>
   							<div class="col-xs-4">
-  								<kbd>PageDown</kbd> Shake
+  								<kbd>PageDown</kbd> <kbd>D</kbd> Shake
   							</div>
 						</div>
 						<div class="row">
@@ -142,7 +173,7 @@ $(function() {
   								<kbd>Space</kbd> Play image
   							</div>
   							<div class="col-xs-4">
-  								<kbd>c</kbd> Config
+  								<kbd>C</kbd> Config
   							</div>
   							<div class="col-xs-4">
   								<kbd>Numpad</kbd> Interval
@@ -172,7 +203,7 @@ $(function() {
   									<tr>
   										<td style="width:5px; border-bottom: 2px solid #222;">
   										</td>
-  										<td style="border-left: 2px solid #222;">
+  										<td style="border-left: 2px solid #222; padding-top:2px;">
   											<kbd>Down</kbd>
   										</td>
   										<td>
@@ -190,7 +221,7 @@ $(function() {
   								<kbd>Left</kbd> Drag
   							</div>
   							<div class="col-xs-4">
-  								<kbd>Middle</kbd>
+  								<kbd>Middle</kbd> Shake
   							</div>
   							<div class="col-xs-3">
   								<kbd>Right</kbd>

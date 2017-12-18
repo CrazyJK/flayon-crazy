@@ -35,7 +35,6 @@ mark {
 }
 input#fullname.input-sm {
 	color: #337ab7;
-	font-size: 14px;
 	width: 100% !important;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16) inset, 0 0 0 1px rgba(0,0,0,0.08) inset;
 	height: 22px;
@@ -155,6 +154,11 @@ $(document).ready(function() {
  				);
  			});
 
+ 			var studioList = result.studioResult;
+ 			if (studioList.length > 0) {
+ 				$("#studio").val(studioList[0].studio);
+ 			}
+ 			
  		    var rexp = eval('/' + keyword + '/gi');
  		    $("tbody > tr > td > span").each(function() {
  				$(this).html($(this).text().replace(rexp, "<mark>" + keyword + "</mark>"));

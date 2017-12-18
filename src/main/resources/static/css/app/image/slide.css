@@ -97,6 +97,9 @@ body, .label-info, .progress, .paging {
 .btn-config:hover, .delete-image:hover {
 	opacity: 1;
 }
+.close:focus, .close:hover {
+	color: #a94442;
+}
 .modal-body > .table {
 	margin: 0;
 }

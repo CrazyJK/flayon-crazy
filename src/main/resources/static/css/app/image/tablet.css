@@ -12,10 +12,10 @@
 }
 .ui-draggable-dragging {
 	box-shadow: 
-		-3px -3px 3px 3px rgba(255, 0, 0, 0.25), 
-		 3px -3px 3px 3px rgba(0, 255, 0, 0.25), 
-		 3px  3px 3px 3px rgba(0, 0, 255, 0.25), 
-		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
+		-1px -1px 1px 1px rgba(255, 0, 0, 0.25), 
+		 1px -1px 1px 1px rgba(0, 255, 0, 0.25), 
+		 1px  1px 1px 1px rgba(0, 0, 255, 0.25), 
+		-1px  1px 1px 1px rgba(255, 255, 0, 0.25);
 	transition: top 0s, left 0s;
 }
 #configBox > .row {
@@ -26,7 +26,7 @@
 #configBox > .row > .col-xs-4 {
 	padding: 0;
 }
-#effectTypes {
+.effectTypes {
     border: 0;
     font-size: 12px;
     background-color: #fff;
@@ -35,6 +35,7 @@
 .config-summary {
 	font-family: D2Coding;
 	text-align: center;
+	font-size: 12px;
 }
 .config-summary .config-key {
 	font-weight: bold;
@@ -60,4 +61,12 @@
 
 .rotate0 {
 	transform: rotateZ(0deg) !important;
+}
+
+.active-switch {
+	background-color: #d9534f;
+}
+.shortcuts {
+	color: #d9534f;
+	text-decoration: underline;
 }

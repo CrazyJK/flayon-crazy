@@ -67,6 +67,11 @@ public class History implements Serializable {
 				CRAZY.LINE);
 	}
 
+	public String getStudio() {
+		TitleValidator validator = new TitleValidator(desc);
+		return validator.isInvalid() ? "" : validator.getStudio();
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("History [date=%s, opus=%s, action=%s, desc=%s]", date, opus, action, desc);
