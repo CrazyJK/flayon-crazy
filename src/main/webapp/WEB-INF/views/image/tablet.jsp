@@ -25,13 +25,13 @@ $(function() {
 			</div>
 			<div id="leftBottom">
 				<div class="configInfo">
-					<code class="label label-plain sourceMode"></code>
-					<code class="label label-plain effectMode"></code>
-					<code class="label label-plain rotateDeg"></code>
-					<code class="label label-plain playMode"></code>
-					<code class="label label-plain interval"></code>
-					<code class="label label-plain effectHideMode"></code>
-					<code class="label label-plain displayMode"></code>
+					<code class="label label-plain   imageSource"></code>
+					<code class="label label-plain    showMethod"></code>
+					<code class="label label-plain  rotateDegree"></code>
+					<code class="label label-plain    nextMethod"></code>
+					<code class="label label-plain  playInterval"></code>
+					<code class="label label-plain    hideMethod"></code>
+					<code class="label label-plain displayMethod"></code>
 				</div>
 			</div>
 			<div id="rightTop"></div>
@@ -47,136 +47,141 @@ $(function() {
 	</div>
 	
 	<div id="configModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Configuration
-					<button class="btn btn-plain btn-sm btn-shuffle">Shuffle</button>
+					<h4 class="modal-title"><i class="shortcuts">C</i>onfiguration
+					<button class="btn btn-plain btn-sm btn-shuffle">Shu<i class="shortcuts">f</i>fle</button>
 					</h4>
 				</div>
 				<div class="modal-body">
 					<div id="configBox">
 						<div class="row">
-							<div class="col-xs-3 text-bold"><span class="shortcuts">I</span>mage Source</div>
+							<div class="col-xs-2 text-bold">Image Source</div>
+							<div class="col-xs-1"><kbd>Insert</kbd></div>
 							<div class="col-xs-4 text-right">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="sourceMode">Image</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="imageSource">Image</span>
 							</div>
 							<div class="col-xs-1 text-center">
-								<input type="range" role="switch" id="sourceMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<input type="range" role="switch" id="imageSource" value="1" min="0" max="1" class="config-switch-range"/>
 							</div>
 							<div class="col-xs-4 text-left">
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="sourceMode">Cover</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="imageSource">Cover</span>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-3 text-bold"><span class="shortcuts">S</span>how Mode</div>
+							<div class="col-xs-2 text-bold">Show Method</div>
+							<div class="col-xs-1"><kbd>Home</kbd></div>
 							<div class="col-xs-4 text-right">
-								<select id="effectTypes" class="effectTypes"></select>
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectMode">Specific</span>
+								<select id="effectShowTypes" class="config-select"></select>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="showMethod">Specific</span>
 							</div>
 							<div class="col-xs-1 text-center">
-								<input type="range" role="switch" id="effectMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<input type="range" role="switch" id="showMethod" value="1" min="0" max="1" class="config-switch-range"/>
 							</div>
 							<div class="col-xs-4 text-left">
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectMode">Random</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="showMethod">Random</span>
 							</div>
 						</div>	
 						<div class="row">
-							<div class="col-xs-3 text-bold">Show Rotate</div>
-							<div class="col-xs-9 text-right">
-								<input type="range" id="rotateDeg" value="15" min="0" max="360"/>
+							<div class="col-xs-2 text-bold">Show Rotate</div>
+							<div class="col-xs-1"><kbd>&nbsp;0&nbsp;</kbd></div>
+							<div class="col-xs-1 text-right"><kbd>&nbsp;-&nbsp;</kbd></div>
+							<div class="col-xs-7">
+								<input type="range" id="rotateDegree" class="config-range" value="15" min="0" max="360"/>
 							</div>
+							<div class="col-xs-1"><kbd>&nbsp;+&nbsp;</kbd></div>
 						</div>
 						<div class="row">
-							<div class="col-xs-3 text-bold"><span class="shortcuts">N</span>ext Method</div>
+							<div class="col-xs-2 text-bold">Next Method</div>
+							<div class="col-xs-1"><kbd>PageUp</kbd></div>
 							<div class="col-xs-4 text-right">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="playMode">Sequencial</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="nextMethod">Sequencial</span>
 							</div>
 							<div class="col-xs-1 text-center">
-								<input type="range" role="switch" id="playMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<input type="range" role="switch" id="nextMethod" value="1" min="0" max="1" class="config-switch-range"/>
 							</div>
 							<div class="col-xs-4 text-left">
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="playMode">Random</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="nextMethod">Random</span>
 							</div>
 						</div>	
 						<div class="row">
-							<div class="col-xs-3 text-bold">Play Interval</div>
-							<div class="col-xs-9 text-right">
-								<input type="range" id="interval" value="10" min="1" max="20"/>
+							<div class="col-xs-2 text-bold">Play Interval</div>
+							<div class="col-xs-1"><kbd>Numpad</kbd></div>
+							<div class="col-xs-1 text-right"><kbd>Numpad -</kbd></div>
+							<div class="col-xs-7">
+								<input type="range" id="playInterval" class="config-range" value="10" min="1" max="20"/>
 							</div>
+							<div class="col-xs-1"><kbd>Numpad +</kbd></div>
 						</div>
 						<div class="row">
-							<div class="col-xs-3 text-bold"><span class="shortcuts">H</span>ide Method</div>
+							<div class="col-xs-2 text-bold">Hide Method</div>
+							<div class="col-xs-1"><kbd>End</kbd></div>
 							<div class="col-xs-4 text-right">
-								<select id="effectHideTypes" class="effectTypes">
+								<select id="effectHideTypes" class="config-select">
 									<option value="own">Own</option>
 								</select>
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="effectHideMode">Effect</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="hideMethod">Effect</span>
 							</div>
 							<div class="col-xs-1 text-center">
-								<input type="range" role="switch" id="effectHideMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<input type="range" role="switch" id="hideMethod" value="1" min="0" max="1" class="config-switch-range"/>
 							</div>
 							<div class="col-xs-4 text-left">
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="effectHideMode">Remove</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="hideMethod">Remove</span>
 							</div>
 						</div>	
 						<div class="row">
-							<div class="col-xs-3 text-bold"><span class="shortcuts">D</span>isplay Method</div>
+							<div class="col-xs-2 text-bold">Display Method</div>
+							<div class="col-xs-1"><kbd>PageDown</kbd></div>
 							<div class="col-xs-4 text-right">
-								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="displayMode">Tablet</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="displayMethod">Tablet</span>
 							</div>
 							<div class="col-xs-1 text-center">
-								<input type="range" role="switch" id="displayMode" value="1" min="0" max="1" style="width: 35px; display: inline-block; height: 8px;"/>
+								<input type="range" role="switch" id="displayMethod" value="1" min="0" max="1" class="config-switch-range"/>
 							</div>
 							<div class="col-xs-4 text-left">
-								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="displayMode">Tile</span>
+								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="displayMethod">Tile</span>
 							</div>
 						</div>	
 					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="config-summary">
-						<span class="config-key">Source  </span> <span class="config-value sourceMode"></span> 
-						<span class="config-key">Show    </span> <span class="config-value effectMode"></span> 
-						<span class="config-key">Rotate  </span> <span class="config-value  rotateDeg"></span>
-						<span class="config-key">Next    </span> <span class="config-value   playMode"></span>
-						<span class="config-key">Interval</span> <span class="config-value   interval"></span>
-						<span class="config-key">Hide    </span> <span class="config-value effectHideMode"></span> 
-						<span class="config-key">Display </span> <span class="config-value displayMode"></span> 
+						<span class="config-key">Source  </span> <span class="config-value   imageSource"></span> 
+						<span class="config-key">Show    </span> <span class="config-value    showMethod"></span> 
+						<span class="config-key">Rotate  </span> <span class="config-value  rotateDegree"></span>
+						<span class="config-key">Next    </span> <span class="config-value    nextMethod"></span>
+						<span class="config-key">Interval</span> <span class="config-value  playInterval"></span>
+						<span class="config-key">Hide    </span> <span class="config-value    hideMethod"></span> 
+						<span class="config-key">Display </span> <span class="config-value displayMethod"></span> 
 					</div>
 					<div class="box box-small box-inset text-left key-map">
 						<div class="row">
-  							<div class="col-xs-4">
-  								<kbd>Insert</kbd> <kbd>I</kbd> Source
+  							<div class="col-xs-3">
+  								<kbd>Esc</kbd> Blind
   							</div>
-  							<div class="col-xs-4">
-  								<kbd>Home</kbd> <kbd>S</kbd> Show
+  							<div class="col-xs-3">
   							</div>
-  							<div class="col-xs-4">
-  								<kbd>PageUp</kbd> <kbd>N</kbd> Next
-  							</div>
-						</div>
-						<div class="row">
-  							<div class="col-xs-4">
-  								<kbd>Delete</kbd> Image clear
-  							</div>
-  							<div class="col-xs-4">
-  								<kbd>End</kbd> <kbd>D</kbd> Tile
-  							</div>
-  							<div class="col-xs-4">
-  								<kbd>PageDown</kbd> <kbd>D</kbd> Shake
-  							</div>
-						</div>
-						<div class="row">
-  							<div class="col-xs-4">
-  								<kbd>Space</kbd> Play image
-  							</div>
-  							<div class="col-xs-4">
+  							<div class="col-xs-3">
   								<kbd>C</kbd> Config
   							</div>
-  							<div class="col-xs-4">
-  								<kbd>Numpad</kbd> Interval
+  							<div class="col-xs-3">
+  								<kbd>F</kbd> Shuffle
+  							</div>
+						</div>
+						<div class="row">
+  							<div class="col-xs-3">
+  								<kbd>E</kbd> Empty image 
+  							</div>
+  							<div class="col-xs-3">
+  								<kbd>Shift</kbd> Tile
+  							</div>
+  							<div class="col-xs-3">
+  								<kbd>Ctrl</kbd> Shake
+  							</div>
+  							<div class="col-xs-3">
+  								<kbd>Space</kbd> Play image<br>
   							</div>
 						</div>
 						<hr/>
@@ -214,13 +219,13 @@ $(function() {
 						</div>
 						<hr/>
 						<div class="row">
-  							<div class="col-xs-2">
+  							<div class="col-xs-3">
   								Mouse
   							</div>
   							<div class="col-xs-3">
-  								<kbd>Left</kbd> Drag
+  								<kbd>Left</kbd> Drag, Focus
   							</div>
-  							<div class="col-xs-4">
+  							<div class="col-xs-3">
   								<kbd>Middle</kbd> Shake
   							</div>
   							<div class="col-xs-3">

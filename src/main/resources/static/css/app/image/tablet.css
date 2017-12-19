@@ -21,17 +21,22 @@
 #configBox > .row {
 	margin: 3px 5px;
 	padding: 5px 0;	
+	color: rgb(35, 82, 124);
 }
 #configBox > .row > .col-xs-1,
 #configBox > .row > .col-xs-4 {
 	padding: 0;
 }
-.effectTypes {
+select.config-select {
     border: 0;
     font-size: 12px;
     background-color: #fff;
 }
-
+input[type=range][role=switch].config-switch-range {
+	width: 40px; 
+	height: 8px;
+	display: inline-block; 
+}
 .config-summary {
 	font-family: D2Coding;
 	text-align: center;
@@ -58,6 +63,9 @@
 	padding: 0 3px;
 	color: rgb(35, 82, 124);
 }
+.key-map hr {
+	margin: 10px 0;
+}
 
 .rotate0 {
 	transform: rotateZ(0deg) !important;
@@ -66,7 +74,8 @@
 .active-switch {
 	background-color: #d9534f;
 }
-.shortcuts {
+i.shortcuts {
 	color: #d9534f;
+	font-style: normal;
 	text-decoration: underline;
 }
