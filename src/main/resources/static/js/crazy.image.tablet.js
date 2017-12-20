@@ -3,258 +3,16 @@
  */
 var tablet = (function() {
 
-	var IMAGE_SOURCE         = "image.source",
-		IMAGE_SHOW_METHOD    = "image.show.method",
-		IMAGE_SHOW_SPECIFIC  = "image.show.specific",
-		IMAGE_ROTATE_DEGREE  = "image.rotate.degree",
-		IMAGE_NEXT_METHOD    = "image.next.method",
-		IMAGE_PLAY_INTERVAL  = "image.play.interval",
-		IMAGE_HIDE_METHOD    = "image.hide.method",
-		IMAGE_HIDE_SPECIFIC  = "image.hide.specific",
-		IMAGE_TABLET_DISPLAY = "image.tablet.display.method",
-		IMAGE_DIV = "#imageDiv",
+	var IMAGE_DIV = "#imageDiv",
+		TOP_MARGIN = 30,
 		selectedItemUrl = "", selectedItemTitle = "",
 		imageIndex = 0,	imageCount = 0,	imageNameMap = [], imageIndexMap = [],
-		coverIndex = 0, coverCount = 0,	coverNameMap = [], coverIndexMap = [],
-		showEffect, showDuration, showOptions,
-		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
-		TOP_MARGIN = 30;
-
-	var config = {
-			display: function() {
-				$(".imageSource"  ).html(imageSource.value == 0 ? "Image" : "Cover");
-				$(".showMethod"   ).html(showMethod.value == 0 ? "Specific[" + $("#effectShowTypes option:selected").val() + "]" : "Radndom[" + showEffect + "]");
-				$(".rotateDegree" ).html(rotateDegree.value + '˚');
-				$(".nextMethod"   ).html(nextMethod.value == 0 ? "Sequencial" : "Random");
-				$(".playInterval" ).html(playInterval.value + 's');
-				$(".hideMethod"   ).html(hideMethod.value == 0 ? "Effect[" + $("#effectHideTypes option:selected").val() + "]" : "Remove");
-				$(".displayMethod").html(displayMethod.value == 0 ? "Tablet" : "Tile");
-			},
-			save: function() {
-				setLocalStorageItem(IMAGE_SOURCE,           imageSource.value);
-				setLocalStorageItem(IMAGE_SHOW_METHOD,       showMethod.value);
-				setLocalStorageItem(IMAGE_HIDE_METHOD,       hideMethod.value);
-				setLocalStorageItem(IMAGE_ROTATE_DEGREE,   rotateDegree.value);
-				setLocalStorageItem(IMAGE_NEXT_METHOD,       nextMethod.value);
-				setLocalStorageItem(IMAGE_PLAY_INTERVAL,   playInterval.value);
-				setLocalStorageItem(IMAGE_TABLET_DISPLAY, displayMethod.value);
-				setLocalStorageItem(IMAGE_SHOW_SPECIFIC,  $("#effectShowTypes option:selected").val());
-				setLocalStorageItem(IMAGE_HIDE_SPECIFIC,  $("#effectHideTypes option:selected").val());
-				
-				timerEngine.setTime(playInterval.value);
-				config.display();
-			},
-			toggleImageSource: function() {
-				$("#imageSource").val(imageSource.value == 0 ? 1 : 0).trigger("click");
-			},
-			toggleShowEffect: function() {
-				$("#showMethod").val(showMethod.value == 0 ? 1 : 0).trigger("click");
-			},
-			setRotateDegree: function(deg) {
-				var val;
-				if (typeof deg === 'number')
-					val = deg;
-				else if (deg === '-')
-					val = parseInt($("#rotateDegree").val()) - 1;
-				else if (deg === '+')
-					val = parseInt($("#rotateDegree").val()) + 1;
-				else 
-					val = 0;
-				$("#rotateDegree").val(val).trigger("click");
-			},
-			toggleNextMethod: function() {
-				$("#nextMethod").val(nextMethod.value == 0 ? 1 : 0).trigger("click");
-			},
-			togglePlayInterval: function(sec) {
-				var val;
-				if (typeof sec === 'number')
-					val = sec;
-				else if (sec === '-')
-					val = parseInt($("#playInterval").val()) - 1;
-				else if (sec === '+')
-					val = parseInt($("#playInterval").val()) + 1;
-				else 
-					val = 0;
-				$("#playInterval").val(val).trigger("click");
-			},
-			toggleHideMethod: function() {
-				$("#hideMethod").val(hideMethod.value == 0 ? 1 : 0).trigger("click");
-			},
-			toggleDisplayMethod: function() {
-				$("#displayMethod").val(displayMethod.value == 0 ? 1 : 0).trigger("click");
-			},
-			eventListener: function() {
-				$("#configModal").on({
-					"hidden.bs.modal": function() {
-						$(".delete-image").toggle(imageSource.value == 0);
-					},
-					"shown.bs.modal": function() {}
-				});
-				$(".label-switch").on('click', function() { // switch label
-					var target = $(this).attr("data-target");
-					var value  = $(this).attr("data-value");
-					var text   = $(this).text();
-					$("#" + target).val(value);
-					$("." + target).html(text);
-					$("[data-target='" + target + "']").removeClass("active-switch");
-					$(this).addClass("active-switch");
-					config.save();
-				});
-				$(".config-switch-range").on('click keyup', function(e) { // range for switch 
-					var value = $(this).val();
-					var target = $(this).attr("id");
-					$("[data-target='" + target + "'][data-value='" + value + "']").click();
-					stopEvent(e);
-				});
-				$(".config-range").on('click keyup', function(e) {
-					var value = $(this).val();
-					var target = $(this).attr("id");
-					$("." + target).html(value);
-					config.save();
-					stopEvent(e);
-				});
-				$(".config-select").on("change", function() {
-					config.save();
-				});
-				$(".btn-shuffle").on("click", function() {
-					var shuffleOnce = function shuffleOnce() {
-						$("#imageSource"  ).val(getRandomInteger(0, 1)).trigger("click");
-						$("#showMethod"   ).val(getRandomInteger(0, 1)).trigger("click");
-						$("#hideMethod"   ).val(getRandomInteger(0, 1)).trigger("click");
-						$("#nextMethod"   ).val(getRandomInteger(0, 1)).trigger("click");
-						$("#displayMethod").val(getRandomInteger(0, 1)).trigger("click");
-						$("#rotateDegree" ).val(getRandomInteger(0, 360)).trigger("click");
-						$("#playInterval" ).val(getRandomInteger(5, 20)).trigger("click");
-					};
-					showSnackbar("shuffle start", 1000);
-					var count = 0, maxShuffle = getRandomInteger(3, 9);
-					var shuffler = setInterval(function() {
-						shuffleOnce();
-						if (++count > maxShuffle) {
-						 	clearInterval(shuffler);
-						 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
-						}
-					}, 500);
-				});
-			},
-			initiate: function() {
-				var imageSource        = getLocalStorageItem(IMAGE_SOURCE,         getRandomInteger(0, 1));
-				var showMethod         = getLocalStorageItem(IMAGE_SHOW_METHOD,    getRandomInteger(0, 1));
-				var hideMethod         = getLocalStorageItem(IMAGE_HIDE_METHOD,    getRandomInteger(0, 1));
-				var rotateDegree       = getLocalStorageItem(IMAGE_ROTATE_DEGREE,  getRandomInteger(0, 360));
-				var nextMethod         = getLocalStorageItem(IMAGE_NEXT_METHOD,    getRandomInteger(0, 1));
-				var playInterval       = getLocalStorageItem(IMAGE_PLAY_INTERVAL,  getRandomInteger(5, 20));
-				var displayMethod      = getLocalStorageItem(IMAGE_TABLET_DISPLAY, getRandomInteger(0, 1));
-				var showSpecificEffect = getLocalStorageItem(IMAGE_SHOW_SPECIFIC,  effects[getRandomInteger(0, effects.length-1)]);
-				var hideSpecificEffect = getLocalStorageItem(IMAGE_HIDE_SPECIFIC,  effects[getRandomInteger(0, effects.length-1)]);
-
-				$("#imageSource"  ).val(imageSource  ).trigger("click");
-				$("#showMethod"   ).val(showMethod   ).trigger("click");
-				$("#hideMethod"   ).val(hideMethod   ).trigger("click");
-				$("#nextMethod"   ).val(nextMethod   ).trigger("click");
-				$("#displayMethod").val(displayMethod).trigger("click");
-				$("#playInterval" ).val(playInterval ).trigger("click");
-				$("#rotateDegree" ).val(rotateDegree ).trigger("click");
-				
-				for (var i in effects) {
-					$("#effectShowTypes, #effectHideTypes").append(
-							$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
-					);
-				}
-				$("#effectShowTypes").val(showSpecificEffect).prop("selected", true).trigger("change");
-				$("#effectHideTypes").val(hideSpecificEffect).prop("selected", true).trigger("change");
-			},
-			nav: function(signal) {
-				switch(signal) {
-				case 67 : // key : c
-					$("#configModal").modal("toggle");
-					break;
-				case 70 : // key : f
-					$(".btn-shuffle").trigger("click");
-					break;
-				case 45 : // key : Insert
-					config.toggleImageSource();
-					break;
-				case 36 : // key : Home
-					config.toggleShowEffect();
-					break;
-				case 33 : // key : PageUp
-					config.toggleNextMethod();
-					break;
-				case 35 : // key : End
-					config.toggleHideMethod();
-					break;
-				case 34 : // key : PageDown
-					config.toggleDisplayMethod();
-					break;
-				case 48 : // key : 0
-					config.setRotateDegree(0);
-					break;
-				case 189 : // key : -
-					config.setRotateDegree('-');
-					break;
-				case 187 : // key : +
-					config.setRotateDegree('+');
-					break;
-				case 97 : // key : keypad 1
-					config.togglePlayInterval(1);
-					break;
-				case 98 : // key : keypad 2 
-					config.togglePlayInterval(2);
-					break;
-				case 99 : // key : keypad 3
-					config.togglePlayInterval(3);
-					break;
-				case 100 : // key : keypad 4 
-					config.togglePlayInterval(4);
-					break;
-				case 101 : // key : keypad 5 
-					config.togglePlayInterval(5);
-					break;
-				case 102 : // key : keypad 6 
-					config.togglePlayInterval(6);
-					break;
-				case 103 : // key : keypad 7 
-					config.togglePlayInterval(7);
-					break;
-				case 104 : // key : keypad 8 
-					config.togglePlayInterval(8);
-					break;
-				case 105 : // key : keypad 9 
-					config.togglePlayInterval(9);
-					break;
-				case 109 : // key : keypad - 
-					config.togglePlayInterval('-');
-					break;
-				case 107 : // key : keypad + 
-					config.togglePlayInterval('+');
-					break;
-				}
-			}
-	};
+		coverIndex = 0, coverCount = 0,	coverNameMap = [], coverIndexMap = [];
 	
 	/**
 	 * main
 	 */
-	var	image = {
-		setEffect: function setEffect() {
-			if (showMethod.value == 0) {
-				showEffect   = $("#effectShowTypes option:selected").val();
-				showDuration = 500;
-			}
-			else {
-				showEffect   = effects[getRandomInteger(0, effects.length-1)];
-				showDuration = getRandomInteger(100, 2000);
-			}
-			if (showEffect === "scale")
-				showOptions = { percent: getRandomInteger(10, 50) };
-			else if (showEffect === "size")
-				showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
-			else
-				showOptions = {};
-			//console.log("    setEffect", showEffect, showDuration, showOptions);
-			config.display();
-		},
+	var	fn = {
 		prev: function() {
 			// 다 지웠으면 끝
 			if ($(IMAGE_DIV).children().length < 1)
@@ -277,19 +35,19 @@ var tablet = (function() {
 				if (effectHideTypes === "own") {
 					$lastImage.hide(lastData.effect, lastData.options, lastData.duration, function() {
 						$(this).remove();
-						image.setLastInfo();
+						fn.setLastInfo();
 					});
 				}
 				else {
 					$lastImage.hide(effectHideTypes, {}, 500, function() {
 						$(this).remove();
-						image.setLastInfo();
+						fn.setLastInfo();
 					});
 				}
 			}
 			else {
 				$lastImage.remove();
-				image.setLastInfo();
+				fn.setLastInfo();
 			}
 		},
 		defocus: function() {
@@ -354,12 +112,16 @@ var tablet = (function() {
 			
 			var preloader = new Image();
 			preloader.onload = function() {
-				image.removeOld();
-				image.defocus(); // 기존 이미지의 테두리 초기화
+				fn.removeOld();
+				fn.defocus(); // 기존 이미지의 테두리 초기화
 
+				var effectInfo = config.effect();
+				var showEffect = effectInfo.name, showDuration = effectInfo.duration, showOptions = effectInfo.options;
+
+				
 				console.log("displayMethod.value", displayMethod.value);
 				if (displayMethod.value == 1) {
-					image.tile();
+					fn.tile();
 				}
 
 				var $image = $("<img>", {
@@ -368,7 +130,7 @@ var tablet = (function() {
 				}).randomBG(0.5).css({
 					display: "none"
 				}).css(
-					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
+					fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
 				).data("data", {
 					src: preloader.src,
 					mode: parseInt(imageSource.value),
@@ -383,11 +145,11 @@ var tablet = (function() {
 					duration: showDuration
 				}).on("mousedown", function(e) {
 					if (e.which == 1) { // mouse left
-						image.defocus();
+						fn.defocus();
 						if (displayMethod.value == 1 || $(this).data("tile")) {
-							displayMethod.value == 1 && image.tile();
+							displayMethod.value == 1 && fn.tile();
 							var data = $(this).data("data");
-							var position = image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
+							var position = fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
 							$(this).animate(position).data("tile", false);
 							/* for center
 							$(this).animate({
@@ -398,10 +160,10 @@ var tablet = (function() {
 							}); */
 						}
 						$(this).appendTo($(IMAGE_DIV)).addClass("rotate0");
-						image.setLastInfo();
+						fn.setLastInfo();
 					} 
 					else if (e.which == 2) { // mouse middle
-						image.shake();
+						fn.shake();
 					} 
 					else if (e.which == 3) { // mouse right
 						// do nothing
@@ -409,9 +171,8 @@ var tablet = (function() {
 				}).appendTo(
 						$(IMAGE_DIV)
 				);
-				image.setLastInfo();
+				fn.setLastInfo();
 
-				image.setEffect();
 				$image.show(showEffect, showOptions, showDuration, function() {
 					$(this).rotateR(rotateDegree.value).draggable();
 				});
@@ -463,23 +224,23 @@ var tablet = (function() {
 		},
 		shake: function() {
 //			$("#displayMethod").val(0).trigger("click");
-			image.defocus();
+			fn.defocus();
 			$(IMAGE_DIV).children().each(function() {
 				if (getRandomBoolean()) {
 					$(this).appendTo($(IMAGE_DIV));
 				}
 				$(this).animate(
-					image.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
+					fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
 				).data("tile", false);
 			});
-			image.setLastInfo();
+			fn.setLastInfo();
 		},
 		tile: function() {
 //			$("#displayMethod").val(1).trigger("click");
-			image.defocus();
+			fn.defocus();
 			var boxWidth = $(IMAGE_DIV).width() / 6, boxHeight = ($(IMAGE_DIV).height() - TOP_MARGIN) / 5;
 			$(IMAGE_DIV).children().each(function(index) {
-				var position = image.position(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
+				var position = fn.position(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
 				position.left =         (index % 6) * boxWidth  + (boxWidth  - position.width)  / 2;
 				position.top  = parseInt(index / 6) * boxHeight + (boxHeight - position.height) / 2 + TOP_MARGIN;
 				$(this).animate(position).rotateR(0).data("tile", true);
@@ -512,7 +273,7 @@ var tablet = (function() {
 			$(".container-tablet").toggleClass("label-black", status);
 			$(".progress-bar, .label, code", ".container-tablet").toggleClass("label-black", status);
 			$(".modal-content", "#configModal").toggleClass("label-black", status);
-			image.resize();
+			fn.resize();
 		},
 		resize: function() {
 			$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);
@@ -523,38 +284,38 @@ var tablet = (function() {
 				case 1 : // mousewheel : up
 				case 37: // key : left
 				case 38: // key : up
-					image.prev();
+					fn.prev();
 					break;
 				case -1 : // mousewheel : down
 				case 39: // key : right
 				case 40: // key : down
-					image.next();
+					fn.next();
 					break;
 				case 32: // key : space
-					timerEngine.toggle(image.playCallback);
+					timerEngine.toggle(fn.playCallback);
 					break;
 				case 69: // key : e
-					image.empty();
+					fn.empty();
 					break;
 				case 16: // numpad : -
-					image.tile();
+					fn.tile();
 					break;
 				case 17: // numpad : +
-					image.shake();
+					fn.shake();
 					break;
 				default :
 					config.nav(signal);
 			}
 		},
 		eventListener: function() {
-			$(window).on("resize", image.resize);
+			$(window).on("resize", fn.resize);
 
 			// for #navDiv
-			$(".delete-image").on("click", image.remove);
-			$(".popup-image" ).on("click", image.popup);
+			$(".delete-image").on("click", fn.remove);
+			$(".popup-image" ).on("click", fn.popup);
 			
 			// for #imageDiv
-			$(IMAGE_DIV).navEvent(image.nav).off("mouseup"); // remove for draggable event
+			$(IMAGE_DIV).off("mouseup"); // remove for draggable event
 		},
 		start: function() {
 			restCall(PATH + '/rest/image/data', {}, function(data) {
@@ -578,20 +339,27 @@ var tablet = (function() {
 				if (coverIndex < 0 || coverIndex >= coverCount)
 					coverIndex = getRandomInteger(0, coverCount-1);
 
-				image.next();
+				fn.next();
 			});
 			// play engine
-			timerEngine.init(image.next, playInterval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", image.playCallback);
-			image.resize();
+			timerEngine.init(fn.next, playInterval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", fn.playCallback);
+			
+			// config
+			config.init();
+			config.setTimer(timerEngine);
+			
+			fn.resize();
 		}
 	};
 
 	return {
 		init: function() {
-			config.eventListener();
-			config.initiate();
-			image.eventListener();
-			image.start();
+			
+			config.init(fn.next, );
+			
+			
+			fn.eventListener();
+			fn.start();
 		}
 	};
 }());

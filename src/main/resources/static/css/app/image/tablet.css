@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.container-tablet, #configModal {
+.container-tablet {
 	transition: background 1s;
 }
 .img-card {
@@ -18,64 +18,7 @@
 		-1px  1px 1px 1px rgba(255, 255, 0, 0.25);
 	transition: top 0s, left 0s;
 }
-#configBox > .row {
-	margin: 3px 5px;
-	padding: 5px 0;	
-	color: rgb(35, 82, 124);
-}
-#configBox > .row > .col-xs-1,
-#configBox > .row > .col-xs-4 {
-	padding: 0;
-}
-select.config-select {
-    border: 0;
-    font-size: 12px;
-    background-color: #fff;
-}
-input[type=range][role=switch].config-switch-range {
-	width: 40px; 
-	height: 8px;
-	display: inline-block; 
-}
-.config-summary {
-	font-family: D2Coding;
-	text-align: center;
-	font-size: 12px;
-}
-.config-summary .config-key {
-	font-weight: bold;
-}
-.config-summary .config-value {
-	color: #a94442;	
-}
-
-.key-map {
-	padding: 15px 5px;
-	margin-top: 20px;
-	font-family: D2Coding;
-}
-.key-map .row {
-	margin: 0;
-	color: rgb(35, 82, 124);
-	margin-bottom: 5px;
-}
-.key-map td {
-	padding: 0 3px;
-	color: rgb(35, 82, 124);
-}
-.key-map hr {
-	margin: 10px 0;
-}
 
 .rotate0 {
 	transform: rotateZ(0deg) !important;
-}
-
-.active-switch {
-	background-color: #d9534f;
-}
-i.shortcuts {
-	color: #d9534f;
-	font-style: normal;
-	text-decoration: underline;
 }
