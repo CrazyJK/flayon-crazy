@@ -66,7 +66,7 @@ var tablet = (function() {
 				$(".displayCount").html("&nbsp;");
 			}
 		},
-		next: function() {
+		next: function(showEffect, showOptions, showDuration) {
 			var currentIndex = -1;
 			var imageTypeClass = "";
 			if (imageSource.value == 0) { // image
@@ -114,12 +114,7 @@ var tablet = (function() {
 			preloader.onload = function() {
 				fn.removeOld();
 				fn.defocus(); // 기존 이미지의 테두리 초기화
-
-				var effectInfo = config.effect();
-				var showEffect = effectInfo.name, showDuration = effectInfo.duration, showOptions = effectInfo.options;
-
 				
-				console.log("displayMethod.value", displayMethod.value);
 				if (displayMethod.value == 1) {
 					fn.tile();
 				}
@@ -146,7 +141,7 @@ var tablet = (function() {
 				}).on("mousedown", function(e) {
 					if (e.which == 1) { // mouse left
 						fn.defocus();
-						if (displayMethod.value == 1 || $(this).data("tile")) {
+						if (displayMethod.value == 1 && $(this).data("tile")) {
 							displayMethod.value == 1 && fn.tile();
 							var data = $(this).data("data");
 							var position = fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
@@ -279,32 +274,18 @@ var tablet = (function() {
 			$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);
 		},
 		nav: function(signal) {
-			console.log("nav signal", signal);
+			console.log("table.fn.nav", signal);
 			switch(signal) {
-				case 1 : // mousewheel : up
-				case 37: // key : left
-				case 38: // key : up
-					fn.prev();
-					break;
-				case -1 : // mousewheel : down
-				case 39: // key : right
-				case 40: // key : down
-					fn.next();
-					break;
-				case 32: // key : space
-					timerEngine.toggle(fn.playCallback);
-					break;
 				case 69: // key : e
 					fn.empty();
 					break;
-				case 16: // numpad : -
+				case 16: // Shift
 					fn.tile();
 					break;
-				case 17: // numpad : +
+				case 17: // l Ctrl
+				case 25: // r Ctrl
 					fn.shake();
 					break;
-				default :
-					config.nav(signal);
 			}
 		},
 		eventListener: function() {
@@ -317,49 +298,35 @@ var tablet = (function() {
 			// for #imageDiv
 			$(IMAGE_DIV).off("mouseup"); // remove for draggable event
 		},
-		start: function() {
-			restCall(PATH + '/rest/image/data', {}, function(data) {
-				imageCount   = data['imageCount'];
-				imageNameMap = data['imageNameMap'];
-				coverCount   = data['coverCount'];
-				coverNameMap = data['coverNameMap'];
+		init: function(data) {
+			imageCount   = data['imageCount'];
+			imageNameMap = data['imageNameMap'];
+			coverCount   = data['coverCount'];
+			coverNameMap = data['coverNameMap'];
 
-				for (var i=0; i < imageCount; i++) {
-					imageIndexMap.push(i);
-				}
-				for (var i=0; i < coverCount; i++) {
-					coverIndexMap.push(i);
-				}
-				
-				imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
-				if (imageIndex < 0 || imageIndex >= imageCount)
-					imageIndex = getRandomInteger(0, imageCount-1);
-
-				coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
-				if (coverIndex < 0 || coverIndex >= coverCount)
-					coverIndex = getRandomInteger(0, coverCount-1);
-
-				fn.next();
-			});
-			// play engine
-			timerEngine.init(fn.next, playInterval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", fn.playCallback);
+			for (var i=0; i < imageCount; i++) {
+				imageIndexMap.push(i);
+			}
+			for (var i=0; i < coverCount; i++) {
+				coverIndexMap.push(i);
+			}
 			
-			// config
-			config.init();
-			config.setTimer(timerEngine);
-			
+			imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
+			if (imageIndex < 0 || imageIndex >= imageCount)
+				imageIndex = getRandomInteger(0, imageCount-1);
+
+			coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
+			if (coverIndex < 0 || coverIndex >= coverCount)
+				coverIndex = getRandomInteger(0, coverCount-1);
+
 			fn.resize();
 		}
 	};
 
 	return {
 		init: function() {
-			
-			config.init(fn.next, );
-			
-			
-			fn.eventListener();
-			fn.start();
+			// prev, next, playCallback, extraNav, containerSelector, extraEventListener, start
+			config.init(IMAGE_DIV, fn.prev, fn.next, fn.playCallback, fn.nav, fn.eventListener, fn.init);
 		}
 	};
 }());

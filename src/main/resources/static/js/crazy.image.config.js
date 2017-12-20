@@ -12,20 +12,24 @@ var config = (function() {
 		IMAGE_HIDE_METHOD    = "image.hide.method",
 		IMAGE_HIDE_SPECIFIC  = "image.hide.specific",
 		IMAGE_TABLET_DISPLAY = "image.tablet.display.method",
-		effects = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
-		showEffect, showDuration, showOptions,
-		prevFunction, 
-		nextFunction, 
-		playFunction,
-		playCallbackFunction,
-		extraFunction, 
-		IMAGE_DIV,
-		extraEventListener;
+		JQUERY_UI_EFFECTs = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
+		effect = {
+			name: "", options: {}, duration: 500
+		},
+		app = {
+			selector: "",
+			prev: null,
+			next: null,
+			playCallback: null,
+			nav: null,
+			eventListener: null,
+			init: null
+		};
 	
 	var fn = {
 			display: function() {
 				$(".imageSource"  ).html(imageSource.value == 0 ? "Image" : "Cover");
-				$(".showMethod"   ).html(showMethod.value == 0 ? "Specific[" + $("#effectShowTypes option:selected").val() + "]" : "Radndom[" + showEffect + "]");
+				$(".showMethod"   ).html(showMethod.value == 0 ? "Specific[" + $("#effectShowTypes option:selected").val() + "]" : "Radndom[" + effect.name + "]");
 				$(".rotateDegree" ).html(rotateDegree.value + '˚');
 				$(".nextMethod"   ).html(nextMethod.value == 0 ? "Sequencial" : "Random");
 				$(".playInterval" ).html(playInterval.value + 's');
@@ -48,20 +52,19 @@ var config = (function() {
 			},
 			setEffect: function setEffect() {
 				if (showMethod.value == 0) {
-					showEffect   = $("#effectShowTypes option:selected").val();
-					showDuration = 500;
+					effect.name = $("#effectShowTypes option:selected").val();
+					effect.duration = 500;
 				}
 				else {
-					showEffect   = effects[getRandomInteger(0, effects.length-1)];
-					showDuration = getRandomInteger(100, 2000);
+					effect.name = JQUERY_UI_EFFECTs[getRandomInteger(0, JQUERY_UI_EFFECTs.length-1)];
+					effect.duration = getRandomInteger(100, 2000);
 				}
-				if (showEffect === "scale")
-					showOptions = { percent: getRandomInteger(10, 50) };
-				else if (showEffect === "size")
-					showOptions = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
+				if (effect.name === "scale")
+					effect.options = { percent: getRandomInteger(10, 50) };
+				else if (effect.name === "size")
+					effect.options = { to: { width: getRandomInteger(50, 200), height: getRandomInteger(50, 200) } };
 				else
-					showOptions = {};
-				//console.log("    setEffect", showEffect, showDuration, showOptions);
+					effect.options = {};
 				fn.display();
 			},
 			toggleImageSource: function() {
@@ -157,9 +160,9 @@ var config = (function() {
 					}, 500);
 				});
 				
-				$(IMAGE_DIV).navEvent(config.nav);
+				$(app.selector).navEvent(fn.nav);
 
-				extraEventListener();
+				app.eventListener();
 			},
 			initiate: function() {
 				var imageSource        = getLocalStorageItem(IMAGE_SOURCE,         getRandomInteger(0, 1));
@@ -169,8 +172,8 @@ var config = (function() {
 				var nextMethod         = getLocalStorageItem(IMAGE_NEXT_METHOD,    getRandomInteger(0, 1));
 				var playInterval       = getLocalStorageItem(IMAGE_PLAY_INTERVAL,  getRandomInteger(5, 20));
 				var displayMethod      = getLocalStorageItem(IMAGE_TABLET_DISPLAY, getRandomInteger(0, 1));
-				var showSpecificEffect = getLocalStorageItem(IMAGE_SHOW_SPECIFIC,  effects[getRandomInteger(0, effects.length-1)]);
-				var hideSpecificEffect = getLocalStorageItem(IMAGE_HIDE_SPECIFIC,  effects[getRandomInteger(0, effects.length-1)]);
+				var showSpecificEffect = getLocalStorageItem(IMAGE_SHOW_SPECIFIC,  JQUERY_UI_EFFECTs[getRandomInteger(0, JQUERY_UI_EFFECTs.length-1)]);
+				var hideSpecificEffect = getLocalStorageItem(IMAGE_HIDE_SPECIFIC,  JQUERY_UI_EFFECTs[getRandomInteger(0, JQUERY_UI_EFFECTs.length-1)]);
 
 				$("#imageSource"  ).val(imageSource  ).trigger("click");
 				$("#showMethod"   ).val(showMethod   ).trigger("click");
@@ -180,41 +183,43 @@ var config = (function() {
 				$("#playInterval" ).val(playInterval ).trigger("click");
 				$("#rotateDegree" ).val(rotateDegree ).trigger("click");
 				
-				for (var i in effects) {
+				for (var i in JQUERY_UI_EFFECTs) {
 					$("#effectShowTypes, #effectHideTypes").append(
-							$("<option>", {value: effects[i]}).html(capitalize(effects[i]))
+							$("<option>", {value: JQUERY_UI_EFFECTs[i]}).html(capitalize(JQUERY_UI_EFFECTs[i]))
 					);
 				}
 				$("#effectShowTypes").val(showSpecificEffect).prop("selected", true).trigger("change");
 				$("#effectHideTypes").val(hideSpecificEffect).prop("selected", true).trigger("change");
 				
-				timerEngine.init(fn.next, playInterval.value, "#progressWrapper", {width: 136, margin: 0}, "Play", playCallbackFunction);
+				timerEngine.init(fn.next, playInterval, "#progressWrapper", {width: 136, margin: 0}, "Play", app.playCallback);
 
 			},
 			prev: function() {
-				prevFunction();
+				app.prev();
 			},
 			next: function() {
-				setEffect();				
-				nextFunction(showEffect, showOptions, showDuration);
+				fn.setEffect();	
+				console.log("config.fn.next", effect.name, effect.options, effect.duration);
+				app.next(effect.name, effect.options, effect.duration);
 			},
 			play: function() {
-				timerEngine.toggle(playCallbackFunction);
+				timerEngine.toggle(app.playCallback);
 			},
 			nav: function(signal) {
+				console.log("config.fn.nav signal", signal);
 				switch(signal) {
 				case 1 : // mousewheel : up
 				case 37: // key : left
 				case 38: // key : up
-					prevFunction();
+					fn.prev();
 					break;
 				case -1 : // mousewheel : down
 				case 39: // key : right
 				case 40: // key : down
-					nextFunction();
+					fn.next();
 					break;
 				case 32: // key : space
-					playFunction();
+					fn.play();
 					break;
 				case 67 : // key : c
 					$("#configModal").modal("toggle");
@@ -280,47 +285,28 @@ var config = (function() {
 					fn.togglePlayInterval('+');
 					break;
 				default:
-					extraNavFunction(signal);
+					app.nav(signal);
 				}
 			},
 			start: function() {
 				restCall(PATH + '/rest/image/data', {}, function(data) {
-					imageCount   = data['imageCount'];
-					imageNameMap = data['imageNameMap'];
-					coverCount   = data['coverCount'];
-					coverNameMap = data['coverNameMap'];
-
-					for (var i=0; i < imageCount; i++) {
-						imageIndexMap.push(i);
-					}
-					for (var i=0; i < coverCount; i++) {
-						coverIndexMap.push(i);
-					}
-					
-					imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
-					if (imageIndex < 0 || imageIndex >= imageCount)
-						imageIndex = getRandomInteger(0, imageCount-1);
-
-					coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
-					if (coverIndex < 0 || coverIndex >= coverCount)
-						coverIndex = getRandomInteger(0, coverCount-1);
-
-					nextFunction();
+					app.init(data);
+					fn.next();
 				});
-
 			}
-	}
+	};
 	
 	return {
-		init : function(prev, next, playCallback, extraNav, containerSelector, extraEventListener) {
+		init : function(selector, prev, next, playCallback, nav, eventListener, init) {
 			$("#configModal").appendTo($("body"));
 			
-			prevFunction = prev;
-			nextFunction = next;
-			playCallbackFunction = playCallback;
-			extraNavFunction = extraNav;
-			IAMGE_DIV = containerSelector;
-			extraEventListener = extraEventListener
+			app.selector = selector;
+			app.prev = prev;
+			app.next = next;
+			app.playCallback = playCallback;
+			app.nav = nav;
+			app.eventListener = eventListener;
+			app.init = init;
 			
 			fn.eventListener();
 			fn.initiate();

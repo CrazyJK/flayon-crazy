@@ -34,7 +34,7 @@ var timerEngine = (function($) {
 								"aria-valuemax": timerInterval, 
 								"aria-valuenow": timerInterval
 							}).append(
-										$("<span>").addClass("progress-label").html(labelText)
+									$("<span>").addClass("progress-label").html(labelText)
 							)
 					)
 			);
