@@ -77,4 +77,5 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center center;
+	transition: background .5s;
 }

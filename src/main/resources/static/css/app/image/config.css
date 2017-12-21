@@ -59,3 +59,63 @@ i.shortcuts {
 	font-style: normal;
 	text-decoration: underline;
 }
+
+.delete-image {
+	margin: 0 5px;
+	cursor: pointer;
+	opacity: 0;
+	z-index: 1001;
+	font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;	
+}
+.btn-config {
+	opacity: 0;
+	z-index: 1001;
+}
+.btn-config:hover, .delete-image:hover {
+	opacity: 1;
+}
+.close:focus, .close:hover {
+	color: #a94442;
+}
+.label-switch {
+	cursor: pointer;
+}
+
+body, .label-info, .progress, .paging {
+	overflow: hidden;
+	transition: background .5s ease, background-image .5s ease;
+}
+#leftTop, #leftBottom, #rightTop, #rightBottom, #fixedBox {
+	position: fixed;
+	padding: 4px;
+	z-index: 1000;
+}
+#leftTop {
+	left: 0;
+	top: 0;
+	cursor: pointer;
+}
+#leftBottom {
+	left: 0;
+	bottom: 0;
+	cursor: pointer;
+}
+#rightTop {
+	right: 0;
+	top: 0;
+	cursor: pointer;
+}
+#rightBottom {
+	right: 0;
+	bottom: 0;
+	cursor: pointer;
+}
+#fixedBox {
+	left: 145px;
+	top: 0;
+	cursor: pointer;
+}

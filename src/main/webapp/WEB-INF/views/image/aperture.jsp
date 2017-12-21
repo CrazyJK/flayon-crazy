@@ -10,31 +10,38 @@
 body, .label-info, .progress, .paging, .img-circle {
 	transition: background .5s ease, background-image .5s ease;
 }
-#navDiv > * {
-	cursor: pointer;
-}
 </style>
 <script src="${PATH}/js/flayon.effect.aperture.js"></script>
-<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
 <script src="${PATH}/js/crazy.image.aperture.js"></script>
 </head>
 <body>
-<div class="container-fluid">
-
-<div id="navDiv">
-	<span class="label label-info paging paging-first"><span id="firstNo"></span></span>
-	<span class="label label-info paging paging-prev" ><i class="glyphicon glyphicon-menu-left"></i><span id="leftNo"></span></span>
-	<span class="label label-info paging"><span id="currNo"></span></span>
-	<span class="label label-info paging paging-next" ><span id="rightNo"></span><i class="glyphicon glyphicon-menu-right"></i></span>
-	<span class="label label-info paging paging-end"  ><span id="endNo"></span></span>
-	<span class="label label-info" id="imageTitle"></span>
-	<div id="progressWrapper"></div>
-</div>
-
-<div id="imageDiv">
-	<div id="aperture"></div>
-</div>
-
-</div>
+	<div class="container-fluid">
+		<div>
+			<div id="leftTop">
+				<div id="progressWrapper"></div>
+				<div id="pagingArea" class="text-center">
+					<span class="label label-primary paging paging-first"><span id="firstNo">0</span></span>
+					<span class="label label-primary paging"><span id="currNo"></span></span>
+					<span class="label label-primary paging paging-end"  ><span id="endNo"></span></span>
+				</div>		
+			</div>
+			<div id="leftBottom">
+				<div class="configInfo">
+					<code class="label label-plain   imageSource"></code>
+					<code class="label label-plain    nextMethod"></code>
+					<code class="label label-plain  playInterval"></code>
+				</div>
+			</div>
+			<div id="rightTop"></div>
+			<div id="rightBottom"></div>
+			<div id="fixedBox">
+				<%@ include file="/WEB-INF/views/image/config.jspf"%>
+				<span class="label label-plain" id="imageTitle"></span>
+			</div>
+		</div>
+		<div id="imageDiv">
+			<div id="aperture"></div>
+		</div>
+	</div>
 </body>
 </html>

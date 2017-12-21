@@ -193,4 +193,6 @@
 			</div>
 		</div>
 	</div>
+	<link rel="stylesheet" href="${PATH}/css/app/image/config.css"/>
+	<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
 	<script src="${PATH}/js/crazy.image.config.js"></script>

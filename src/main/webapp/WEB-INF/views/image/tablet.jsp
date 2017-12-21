@@ -7,9 +7,7 @@
 <meta charset="UTF-8">
 <title>Image Tablet</title>
 <link rel="stylesheet" href="${PATH}/css/app/image/slide.css"/>
-<link rel="stylesheet" href="${PATH}/css/app/image/config.css"/>
 <link rel="stylesheet" href="${PATH}/css/app/image/tablet.css"/>
-<script src="${PATH}/js/crazy.image.timer.engine.js"></script>
 <script src="${PATH}/js/crazy.image.tablet.js"></script>
 <script type="text/javascript">
 bgContinue = false;

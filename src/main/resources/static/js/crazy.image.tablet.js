@@ -31,15 +31,15 @@ var tablet = (function() {
 			}
 			
 			if (hideMethod.value == 0) {
-				var effectHideTypes = $("#effectHideTypes option:selected").val();
-				if (effectHideTypes === "own") {
+				var effectHideType = $("#effectHideTypes option:selected").val();
+				if (effectHideType === "own") {
 					$lastImage.hide(lastData.effect, lastData.options, lastData.duration, function() {
 						$(this).remove();
 						fn.setLastInfo();
 					});
 				}
 				else {
-					$lastImage.hide(effectHideTypes, {}, 500, function() {
+					$lastImage.hide(effectHideType, {}, 500, function() {
 						$(this).remove();
 						fn.setLastInfo();
 					});
@@ -250,8 +250,7 @@ var tablet = (function() {
 						restCall(data.src, {method: "DELETE", title: "this image delete"});
 				}
 				$("img[src='" + data.src + "']").remove();
-				$(".displayCount").html($(IMAGE_DIV).children().length + " / " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
-				$(".title").html("&nbsp;");
+				fn.setLastInfo();
 			}
 		},
 		popup: function(e) {

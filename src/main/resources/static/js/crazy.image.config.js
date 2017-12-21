@@ -195,11 +195,11 @@ var config = (function() {
 
 			},
 			prev: function() {
-				app.prev();
+				fn.setEffect();	
+				app.prev(effect.name, effect.options, effect.duration);
 			},
 			next: function() {
 				fn.setEffect();	
-				console.log("config.fn.next", effect.name, effect.options, effect.duration);
 				app.next(effect.name, effect.options, effect.duration);
 			},
 			play: function() {
@@ -297,6 +297,23 @@ var config = (function() {
 	};
 	
 	return {
+		/* sample
+		  	var fn = {
+				prev: function(showEffect, showOptions, showDuration) {
+				},
+				next: function(showEffect, showOptions, showDuration) {
+				},
+				playCallback: function(status) {
+				},
+				nav: function(signal) {
+				},
+				eventListener: function() {
+				},
+				init: function(data) {
+				}
+			};
+			config.init("#imageDiv", fn.prev, fn.next, fn.playCallback, fn.nav, fn.eventListener, fn.init);
+		 */
 		init : function(selector, prev, next, playCallback, nav, eventListener, init) {
 			$("#configModal").appendTo($("body"));
 			
