@@ -26,7 +26,8 @@
 			<div id="rightBottom"></div>
 			<div id="fixedBox">
 				<%@ include file="/WEB-INF/views/image/config.jspf"%>
-				<span class="label label-plain title popup-image">&nbsp;</span>
+				<span class="label label-plain page-no"></span>
+				<span class="label label-plain title popup-image"></span>
 			</div>
 		</div>
 		<div id="container-slidesjs"></div>

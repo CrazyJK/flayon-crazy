@@ -21,26 +21,23 @@ bgContinue = false;
 		SlidejsApp = function() {
 			this.init();
 		},
-		slidesjs,
-		prevImageSource;
+		slidesjs;
 		
 	var	slidesWrapper = {
 			build: function buildSlidesJS() {
 				console.log("slidesWrapper.build");
 				var slideHeight = $(window).height() - topOffset;
-				var itemCount;
+				var itemCount = Math.max(imageCount, coverCount);
 	
 				if (imageSource.value == 0) { // image
 					currentIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0)) - 1;
 					if (currentIndex >= imageCount)
 						currentIndex = getRandomInteger(0, imageCount-1);
-					itemCount = imageCount;
 				}
 				else { // cover
 					currentIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0)) - 1;
 					if (currentIndex >= coverCount)
 						currentIndex = getRandomInteger(0, coverCount-1);
-					itemCount = coverCount;
 				}
 				
 				$("#container-slidesjs").empty().append(
@@ -56,15 +53,13 @@ bgContinue = false;
 					start: currentIndex + 1,
 					width: $(window).width(),
 					height: slideHeight,
-				    navigation: {active: true},
+				    navigation: {active: false},
+				    pagination: {active: false},
 				    play: {active: false, interval: playInterval.value * 1000, auto: false},
 				    callback: {
 				    	loaded: function(number) {
-				    		//console.log("slidejs callback loaded", number-1);
-				    		//slidesWrapper.view(number-1);
 				    	},
 				    	start: function(number) {
-				    		//console.log("slidejs callback start", number-1);
 				    	},
 				    	complete: function(number) {
 				    		console.log("slidejs callback complete", number-1);
@@ -73,12 +68,15 @@ bgContinue = false;
 				    }
 				});
 				slidesjs = $slides.data("plugin_slidesjs");
-				
-				prevImageSource = imageSource.value;
 			},
 			next: function() {
 				if (nextMethod.value == 0) {
-					slidesjs.next();
+					if (currentIndex < (imageSource.value == 0 ? imageCount : coverCount)) {
+						slidesjs.next();
+					}
+					else {
+						slidesjs.goto(1);
+					}
 				}
 				else {
 					currentIndex = getRandomInteger(1, (imageSource.value == 0 ? imageCount : coverCount));
@@ -98,19 +96,7 @@ bgContinue = false;
 			    
 				$("div[slidesjs-index='" + currentIndex + "']").css({"background-image": "url(" + slideSrc + ")"});
 			    $(".title").html(slideTitle);
-			      
-			    var range = 0;
-			    $("li.slidesjs-pagination-item").each(function() {
-			    	var itemIdx = parseInt($(this).children().attr("data-slidesjs-item"));
-			    	if (itemIdx > currentIndex + range || itemIdx < currentIndex - range) {
-			    		$(this).hide();
-			    	}
-			    	else {
-			    		$(this).css({display: "inline-block"});
-			    	}
-			    });
-			    $("ul.slidesjs-pagination").children().first().css({display: "inline-block"});
-			    $("ul.slidesjs-pagination").children().last().css({display: "inline-block"});
+			    $(".page-no").html(currentIndex);
 
 				setLocalStorageItem((imageSource.value == 0 ? THUMBNAMILS_IMAGE_INDEX : THUMBNAMILS_COVER_INDEX), currentIndex);
 				console.log("slidesWrapper.view", currentIndex);
@@ -130,25 +116,17 @@ bgContinue = false;
 
   	var fn = {
 			prev: function(showEffect, showOptions, showDuration) {
-				if (prevImageSource != imageSource.value)
-					slidesWrapper.build();
 				slidesWrapper.prev(); 
 			},
 			next: function(showEffect, showOptions, showDuration) {
-				if (prevImageSource != imageSource.value)
-					slidesWrapper.build();
 				slidesWrapper.next(); 
 			},
 			playCallback: function(status) {
 				if (status) {
-					$("body, .progress-bar, .label").addClass("label-black");
-					$(".slidesjs-pagination").hide();
-					$(".slidesjs-navigation").css("background-color", "#000");
+					$("body, .progress-bar, .label, .page-no").addClass("label-black");
 				}
 				else {
-					$("body, .progress-bar, .label").removeClass("label-black");
-					$(".slidesjs-pagination").show();
-					$(".slidesjs-navigation").css("background-color", "#5bc0de");
+					$("body, .progress-bar, .label, .page-no").removeClass("label-black");
 				}
 			},
 			nav: function(signal) {

@@ -71,30 +71,3 @@ li.slidesjs-pagination-item a.active {
 	background-size: contain; 
 	background-repeat: no-repeat;
 }
-
-.label-switch {
-	cursor: pointer;
-	padding: 4px;
-}
-.active-switch {
-	background-color: #5bc0de;
-}
-#config-box {
-	position: fixed;
-	left: 40px;
-	top: 0;
-	margin: 5px;
-	cursor: pointer;
-	opacity: 0.3;
-}
-#config-box:hover {
-	opacity: 1;
-}
-
-div.title {
-	padding: 5px;
-	text-align: center;
-}
-div.title > span.label-title {
-	cursor: pointer;
-}
