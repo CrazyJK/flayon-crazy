@@ -144,12 +144,7 @@ var slide = (function() {
 				}
 				image.resize();
 			},
-			nav: function(signal) { // TODO find e
-				switch(signal) {
-				case 13: // key : enter
-					image.view($(e.target).val());
-					break;
-				}
+			nav: function(signal) {
 			},
 			eventListener: function() {
 				$(window).on("resize", image.resize);

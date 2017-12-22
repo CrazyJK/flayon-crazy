@@ -207,85 +207,88 @@ var config = (function() {
 			},
 			nav: function(signal) {
 				console.log("config.fn.nav signal", signal);
-				switch(signal) {
-				case 1 : // mousewheel : up
-				case 37: // key : left
-				case 38: // key : up
-					fn.prev();
-					break;
-				case -1 : // mousewheel : down
-				case 39: // key : right
-				case 40: // key : down
-					fn.next();
-					break;
-				case 32: // key : space
-					fn.play();
-					break;
-				case 67 : // key : c
-					$("#configModal").modal("toggle");
-					break;
-				case 70 : // key : f
-					$(".btn-shuffle").trigger("click");
-					break;
-				case 45 : // key : Insert
-					fn.toggleImageSource();
-					break;
-				case 36 : // key : Home
-					fn.toggleShowEffect();
-					break;
-				case 33 : // key : PageUp
-					fn.toggleNextMethod();
-					break;
-				case 35 : // key : End
-					fn.toggleHideMethod();
-					break;
-				case 34 : // key : PageDown
-					fn.toggleDisplayMethod();
-					break;
-				case 48 : // key : 0
-					fn.setRotateDegree(0);
-					break;
-				case 189 : // key : -
-					fn.setRotateDegree('-');
-					break;
-				case 187 : // key : +
-					fn.setRotateDegree('+');
-					break;
-				case 97 : // key : keypad 1
-					fn.togglePlayInterval(1);
-					break;
-				case 98 : // key : keypad 2 
-					fn.togglePlayInterval(2);
-					break;
-				case 99 : // key : keypad 3
-					fn.togglePlayInterval(3);
-					break;
-				case 100 : // key : keypad 4 
-					fn.togglePlayInterval(4);
-					break;
-				case 101 : // key : keypad 5 
-					fn.togglePlayInterval(5);
-					break;
-				case 102 : // key : keypad 6 
-					fn.togglePlayInterval(6);
-					break;
-				case 103 : // key : keypad 7 
-					fn.togglePlayInterval(7);
-					break;
-				case 104 : // key : keypad 8 
-					fn.togglePlayInterval(8);
-					break;
-				case 105 : // key : keypad 9 
-					fn.togglePlayInterval(9);
-					break;
-				case 109 : // key : keypad - 
-					fn.togglePlayInterval('-');
-					break;
-				case 107 : // key : keypad + 
-					fn.togglePlayInterval('+');
-					break;
-				default:
-					app.nav(signal);
+				if (app.nav(signal)) {
+					// nothing
+				}
+				else {
+					switch(signal) {
+					case 1 : // mousewheel : up
+					case 37: // key : left
+					case 38: // key : up
+						fn.prev();
+						break;
+					case -1 : // mousewheel : down
+					case 39: // key : right
+					case 40: // key : down
+						fn.next();
+						break;
+					case 32: // key : space
+						fn.play();
+						break;
+					case 67 : // key : c
+						$("#configModal").modal("toggle");
+						break;
+					case 70 : // key : f
+						$(".btn-shuffle").trigger("click");
+						break;
+					case 45 : // key : Insert
+						fn.toggleImageSource();
+						break;
+					case 36 : // key : Home
+						fn.toggleShowEffect();
+						break;
+					case 33 : // key : PageUp
+						fn.toggleNextMethod();
+						break;
+					case 35 : // key : End
+						fn.toggleHideMethod();
+						break;
+					case 34 : // key : PageDown
+						fn.toggleDisplayMethod();
+						break;
+					case 48 : // key : 0
+						fn.setRotateDegree(0);
+						break;
+					case 189 : // key : -
+						fn.setRotateDegree('-');
+						break;
+					case 187 : // key : +
+						fn.setRotateDegree('+');
+						break;
+					case 97 : // key : keypad 1
+						fn.togglePlayInterval(1);
+						break;
+					case 98 : // key : keypad 2 
+						fn.togglePlayInterval(2);
+						break;
+					case 99 : // key : keypad 3
+						fn.togglePlayInterval(3);
+						break;
+					case 100 : // key : keypad 4 
+						fn.togglePlayInterval(4);
+						break;
+					case 101 : // key : keypad 5 
+						fn.togglePlayInterval(5);
+						break;
+					case 102 : // key : keypad 6 
+						fn.togglePlayInterval(6);
+						break;
+					case 103 : // key : keypad 7 
+						fn.togglePlayInterval(7);
+						break;
+					case 104 : // key : keypad 8 
+						fn.togglePlayInterval(8);
+						break;
+					case 105 : // key : keypad 9 
+						fn.togglePlayInterval(9);
+						break;
+					case 109 : // key : keypad - 
+						fn.togglePlayInterval('-');
+						break;
+					case 107 : // key : keypad + 
+						fn.togglePlayInterval('+');
+						break;
+					}
 				}
 			},
 			start: function() {
