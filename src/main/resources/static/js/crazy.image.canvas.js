@@ -1,15 +1,15 @@
+bgContinue = false;
 /**
  * image canvas
  */
-
 var canvasApp = (function() {
 
 	var canvas, context, tool;
-	var selectedNumber = 0;
+	var selectedIndex = 0;
 	var imageCount;
 	var imageMap;
 
-	var imageRatio = 1.0, originalImageRatio = 1.0;
+	var imagePercent = 100;
 	var xPositionOffset = 0;
 	var yPositionOffset = 0;
 	
@@ -19,9 +19,9 @@ var canvasApp = (function() {
 	    var pencil = null, diameter = null, color = null;
 	    // 마우스를 누르는 순간 그리기 작업을 시작 한다. 
 	    this.mousedown = function(ev) {
-	    	pencil = $(':radio[name="pencil"]:checked').val();
+	    	pencil   = $(':radio[name="pencil"]:checked').val();
+	    	color    = $(':text[name="color"]').val();
 	    	diameter = $(':text[name="diameter"]').val();
-	    	color = $(':text[name="color"]').val();
 	    	context.strokeStyle = color;
 	    	context.fillStyle = color;
 	        context.beginPath();
@@ -53,145 +53,140 @@ var canvasApp = (function() {
 	var imgOriginView = function() {
 		xPositionOffset = 0;
 		yPositionOffset = 0;
-		imageRatio = 1.0;
+		imagePercent = 100;
+		
 		var preImage = new Image();
-		preImage.src = image.url();
 		preImage.onload = function(){
 			var canW = canvas.width;
 			var canH = canvas.height;
 			var imgW = parseInt(preImage.width);
 			var imgH = parseInt(preImage.height);
-			var xRatio = 1.0;
-			var yRatio = 1.0;
-			if(canW < imgW){
-				xRatio = canW / imgW;
-				imgH = parseInt(imgH * xRatio);
+			var xRatio = 100;
+			var yRatio = 100;
+			if (canW < imgW) {
+				xRatio = parseInt(canW / imgW * 100);
 			}
-			if(canH < imgH){
-				yRatio = canH / imgH;
+			if (canH < imgH) {
+				yRatio = parseInt(canH / imgH * 100);
 			}
-			imageRatio = Math.min(xRatio, yRatio).toFixed(1);
-			originalImageRatio = imageRatio;
+			//console.log("imgOriginView xRatio", xRatio, "yRatio", yRatio);
+			imagePercent = Math.min(xRatio, yRatio);
+
 			drawImage(preImage);
 		};
-	};
-	
-	var imgLandscape = function() {
-		xPositionOffset = 0;
-		yPositionOffset = 0;
-		imageRatio = 1.0;
-		var preImage = new Image();
 		preImage.src = image.url();
-		preImage.onload = function(){
-			var canW = canvas.width;
-			var canH = canvas.height;
-			var imgW = parseInt(preImage.width);
-			var imgH = parseInt(preImage.height);
-			var landscape = false;
-			if(canW < imgW){
-				imageRatio = canW / imgW;
-				imgH = parseInt(imgH * imageRatio);
-			}
-			if(canH < imgH){
-				landscape = true;
-			}
-			drawImage(preImage, landscape);
-		};
 	};
 	
-	var drawImage = function(image, landscape) {
-		var imgW = parseInt(image.width * imageRatio);
-		var imgH = parseInt(image.height * imageRatio);
+	var drawImage = function(image) {
+		var imgW = parseInt(image.width * imagePercent / 100);
+		var imgH = parseInt(image.height * imagePercent / 100);
 
 		var xPos = parseInt((canvas.width  - imgW) / 2 + xPositionOffset);
 		var yPos = parseInt((canvas.height - imgH) / 2 + yPositionOffset);
-		if (landscape) {
-			yPositionOffset = -yPos;
-			yPos = 0;
-		}
 
-		canvas.width = canvas.width;        
+		canvas.width = canvas.width; // canvas clear
 		context.drawImage(image, xPos, yPos, imgW, imgH);
 
 		/*
-		var debug = "x:" + xPos + " y:" + yPos + " w:" + imgW + " h:" + imgH 
-			+ " R:" + imageRatio + " xOff:" + xPositionOffset + " yOff:" + yPositionOffset;
-		context.font = "20px '맑은 고딕'";
-		context.fillText(debug, 10 , 760);
+		var debug = "x:" + xPos + " y:" + yPos + " w:" + imgW + " h:" + imgH + " P:" + imagePercent + " xOff:" + xPositionOffset + " yOff:" + yPositionOffset;
+		context.font = "20px D2Coding";
+		context.fillText(debug, 10 , 50);
 		*/
-		$(':text[name="ratio"]').val(imageRatio);
 		
 		displayImageNav();
 	};
 
 	var displayImageNav = function() {
-		$("#imageName").html(imageMap[selectedNumber]);
-		$("#goNumber").val(selectedNumber+1);
+		$("#imageName").html(imageMap[selectedIndex]);
+		$("#goNumber").val(selectedIndex+1);
+		$("#imagePercent").val(imagePercent + "%");
+
 		var ul = $("#navUL");
 		ul.empty();
 
-		var startIdx = 0;
-		var endIdx = 13;
-		if (selectedNumber >= 7) {
-			startIdx = selectedNumber - 6;
-			endIdx = selectedNumber + 7;
-		}
-		if (endIdx > imageCount) {
-			startIdx = imageCount - 13;
-			if (startIdx < 0) startIdx = 0;
+		var range = parseInt($(window).width() / 70 / 2);
+		var startIdx = selectedIndex - range;
+		var   endIdx = selectedIndex + range + 1;
+		if (startIdx < 0) 
+			startIdx = 0;
+		if (endIdx > imageCount)
 			endIdx = imageCount;
-		}
-		ul.append("<li><a onclick='viewPrevImage();'>Prev</a></li>");
-		ul.append("<li><a onclick='loadImage(0);'>First</a></li>");
-		for (var i=startIdx; i<endIdx; i++) {
-			ul.append("<li><a onclick='loadImage(" + i + ");' " + (i==selectedNumber ? "class='selected'" : "") + ">" + (i+1) + "</a></li>");
-		}
-		ul.append("<li><a onclick='loadImage(" + (imageCount-1) + ");'>Last</a></li>");
-		ul.append("<li><a onclick='viewNextImage();'>Next</a></li>");
 
+		ul.append(
+				$("<li>").append(
+						$("<a>").html("First").on("click", function() {
+							image.goto(null, 1);
+						})
+				)
+		);
+		for (var i = startIdx; i < endIdx; i++) {
+			ul.append(
+					$("<li>").append(
+							$("<a>", {
+								"class": (i == selectedIndex ? "selected" : ""), 
+								imageNo: (i+1)
+							}).html(i+1).on("click", function() {
+								image.goto(null, $(this).attr("imageNo"));
+							})
+					)
+			);
+		}
+		ul.append(
+				$("<li>").append(
+						$("<a>").html("Last").on("click", function() {
+							image.goto(null, imageCount);
+						})
+				)
+		);
 	};
 	
 	var container = {
 			resize: function() {
-				var windowWidth  = $(window).width();
-				var windowHeight = $(window).height();
-				var imgNavHeight = $("#img-nav").outerHeight();
-				console.log("container", windowWidth, windowHeight, imgNavHeight);
-				$("#cv").attr("width", windowWidth);
-				$("#cv").attr("height", windowHeight - imgNavHeight - 25);
+				displayImageNav();
+				var margin = 4;
+				$("#cv").attr("width",  $(window).width() - margin * 2);
+				$("#cv").attr("height", $(window).height() - $("#img-nav").outerHeight() - margin * 3);
 			},
 			init: function() {
+				container.resize();
+				
 				// Pencil tool 객체를 생성 한다.
 				tool = new tool_pencil();
 			
 				canvas = document.getElementById("cv");
 				context = canvas.getContext("2d");
-
-				container.resize();
 			},
 			canvasEvent: function(e) {
-			    if (e.layerX || e.layerX == 0) {   	// Firefox 브라우저
-			      	e._x = e.layerX;
-			      	e._y = e.layerY;
-			    } 
-			    else if (e.offsetX || e.offsetX == 0) { // Opera 브라우저
-			      	e._x = e.offsetX;
-			      	e._y = e.offsetY;
-			    }
-			    // tool의 이벤트 핸들러를 호출한다.
-			    var func = tool[e.type];        
-			    if (func) {
-			        func(e);
-			    }
+				if (e.which == 1) {
+				    if (e.layerX || e.layerX == 0) {   	// Firefox 브라우저
+				      	e._x = e.layerX;
+				      	e._y = e.layerY;
+				    } 
+				    else if (e.offsetX || e.offsetX == 0) { // Opera 브라우저
+				      	e._x = e.offsetX;
+				      	e._y = e.offsetY;
+				    }
+				    // tool의 이벤트 핸들러를 호출한다.
+				    var func = tool[e.type];        
+				    if (func) {
+				        func(e);
+				    }
+				}
+				else if (e.which == 2) {
+					image.center();
+				}
+				else if (e.which == 3) {
+					// nothing
+				}
 			} 
 	};
 	
 	var number = {
 			prev: function() {
-				return selectedNumber == 0 ? imageCount - 1 : selectedNumber - 1;
+				return selectedIndex == 0 ? imageCount - 1 : selectedIndex - 1;
 			},
 			next: function() {
-				return selectedNumber == imageCount -1 ? 0 : selectedNumber + 1;
+				return selectedIndex == imageCount -1 ? 0 : selectedIndex + 1;
 			},
 			random: function() {
 				return Math.floor(Math.random() * imageCount);
@@ -200,43 +195,49 @@ var canvasApp = (function() {
 	
 	var image = {
 			prev: function() {
-				selectedNumber = number.prev();
+				selectedIndex = number.prev();
 				imgOriginView();
 			},
 			next: function() {
 				if (nextMethod.value == 0) {
-					selectedNumber = number.next();
+					selectedIndex = number.next();
 				}
 				else {
-					selectedNumber = number.random();
+					selectedIndex = number.random();
 				}
 				imgOriginView();
 			},
-			goto: function() {
-				var pNo = $("#goNumber").val();
+			goto: function(e, idx) {
+				var pNo;
+				if (idx) {
+					pNo = idx;
+				}
+				else if (e) {
+					if (e.type === 'keyup') {
+						if (e.keyCode == 13) {
+							pNo = $("#goNumber").val();
+						}
+					}
+					else if (e.type === 'click') {
+						pNo = $("#goNumber").val();
+					} 
+				}
+				
 				if (pNo > 0 || pNo < imageCount + 1) {
-					selectedNumber = pNo - 1;
+					selectedIndex = pNo - 1;
 					imgOriginView();
 				}
 			},
 			zoomIn: function() {
-				imageRatio = imageRatio + 0.1;
+				imagePercent = imagePercent + 10;
 				image.load();
 			},
 			zoomOut: function() {
-				imageRatio = imageRatio - 0.1;
+				imagePercent = imagePercent - 10;
 				image.load();
 			},
-			zoomFit: function() {
-				xPositionOffset = 0;
-				yPositionOffset = 0;
-				imageRatio = originalImageRatio;
-				image.load();
-			},
-			moveCenter: function() {
-				xPositionOffset = 0;
-				yPositionOffset = 0;
-				image.load();
+			center: function() {
+				imgOriginView();
 			},
 			moveUp: function() {
 				yPositionOffset = yPositionOffset - 100;
@@ -254,49 +255,70 @@ var canvasApp = (function() {
 				xPositionOffset = xPositionOffset + 100;
 				image.load();
 			},
+			moveLeftDown: function() {
+				xPositionOffset = xPositionOffset - 100;
+				yPositionOffset = yPositionOffset + 100;
+				image.load();
+			},
+			moveRightDown: function() {
+				xPositionOffset = xPositionOffset + 100;
+				yPositionOffset = yPositionOffset + 100;
+				image.load();
+			},
+			moveLeftUp: function() {
+				xPositionOffset = xPositionOffset - 100;
+				yPositionOffset = yPositionOffset - 100;
+				image.load();
+			},
+			moveRightUp: function() {
+				xPositionOffset = xPositionOffset + 100;
+				yPositionOffset = yPositionOffset - 100;
+				image.load();
+			},
 			load: function(nextNumber) {
 				if (parseInt(nextNumber) > -1)
-					selectedNumber = parseInt(nextNumber);
-				var image = new Image();
-				image.src = PATH + "/image/" + selectedNumber;
-				image.onload = function(){
-					drawImage(image, true);
+					selectedIndex = parseInt(nextNumber);
+				var preImage = new Image();
+				preImage.src = PATH + "/image/" + selectedIndex;
+				preImage.onload = function() {
+					drawImage(preImage);
 				};
 			},
 			nav: function(signal) {
 				console.log("canvas.image.nav", signal);
 				switch (signal) {
-				case 96: // numpad 0
-					image.zoomFit();
+				case 97: // numpad 1
+					image.moveLeftDown(); 
 					return true;
 				case 98: // numpad 2
 					image.moveDown(); 
+					return true;
+				case 99: // numpad 3
+					image.moveRightDown();
 					return true;
 				case 100: // numpad 4
 					image.moveLeft(); 
 					return true;
 				case 101: // numpad 5
-					image.moveCenter();
+					image.center();
 					return true;
 				case 102: // numpad 6
 					image.moveRight(); 
 					return true;
 				case 103: // numpad 7
+					image.moveLeftUp();
 					return true;
 				case 104: // numpad 8
 					image.moveUp(); 
 					return true;
 				case 105: // numpad 9
-					imgLandscape(); 
+					image.moveRightUp();
 					return true;
 				case 107: // numpad +
 					image.zoomIn(); 
 					return true;
 				case 109: // numpad -
 					image.zoomOut();
-					return true;
-				case 46: // delete
-					fnDelete();
 					return true;
 				default:
 					return false;
@@ -306,8 +328,8 @@ var canvasApp = (function() {
 				popupImage(image.url());
 			},
 			url: function() {
-				setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedNumber);
-				return PATH + "/image/" + selectedNumber + "?_t=" + new Date().getTime();
+				setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedIndex);
+				return PATH + "/image/" + selectedIndex + "?_t=" + new Date().getTime();
 			}
 	};
 	
@@ -326,12 +348,21 @@ var canvasApp = (function() {
 			eventListener: function() {
 				$(window).on("resize", container.resize);
 				$("#cv").on("mousedown mousemove mouseup", container.canvasEvent);
+				$("#imageName").on("click", image.popup);
+				$("#goNumber").on("keyup", image.goto);
+				$(".btn-goto").on("click", image.goto);
+				$(".move-up").on("click", image.moveUp);
+				$(".move-down").on("click", image.moveDown);
+				$(".move-left").on("click", image.moveLeft);
+				$(".move-right").on("click", image.moveRight);
+				$(".zoom-in").on("click", image.zoomIn);
+				$(".zoom-out").on("click", image.zoomOut);
 			},
 			init: function(data) {
 				imageCount = data['imageCount'];
 				imageMap = data['imageNameMap'];
 
-				selectedNumber = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount)));
+				selectedIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount))) - 1;
 
 				container.init();
 			}
@@ -348,7 +379,3 @@ var canvasApp = (function() {
 $(document).ready(function() {
 	canvasApp.init();
 });
-
-function fnDelete() {
-	window.location.href = '<s:url value="/image/canvas" />?d=' + selectedNumber;
-}

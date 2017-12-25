@@ -14,9 +14,11 @@
 <%  if (view.equalsIgnoreCase("video")) { %>
 	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" style="margin-right:3px;" 
 		onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')">
+		<c:if test="${video.size > 1}">
+			<em class="badge-black">${video.size}</em>
+		</c:if>
 		${mode eq 's' ? 'V' : 'Video'}
 		<c:if test="${mode eq 'l'}">
-			<em>${video.size}</em>
 			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.#GB"/></em>
 		</c:if>
 	</span>

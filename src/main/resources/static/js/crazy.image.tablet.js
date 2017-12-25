@@ -244,7 +244,7 @@ var tablet = (function() {
 		remove: function(willDelete) {
 			console.log("delete", willDelete);
 			var data = $(".title").data("data");
-			if (confirm('remove this image?\n' + data.src + "\n" + data.title)) {
+			if (data.src && confirm('remove this image?\n' + data.src + "\n" + data.title)) {
 				if (data && data.mode == 0) { // image
 					if (willDelete)
 						restCall(data.src, {method: "DELETE", title: "this image delete"});

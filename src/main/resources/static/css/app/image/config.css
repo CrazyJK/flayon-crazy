@@ -74,6 +74,7 @@ i.shortcuts {
 .btn-config {
 	opacity: 0;
 	z-index: 1001;
+	cursor: pointer;
 }
 .btn-config:hover, .delete-image:hover {
 	opacity: 1;
