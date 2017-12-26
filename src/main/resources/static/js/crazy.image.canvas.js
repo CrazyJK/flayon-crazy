@@ -4,367 +4,387 @@ bgContinue = false;
  */
 var canvasApp = (function() {
 
-	var canvas, context, tool;
-	var selectedIndex = 0;
-	var imageCount;
-	var imageMap;
+	var canvas, context, pencil;
+	var imageIndex = 0, imageCount, imageNameMap;
+	var coverIndex = 0, coverCount, coverNameMap;
 
-	var imagePercent = 100;
-	var xPositionOffset = 0;
-	var yPositionOffset = 0;
-	
-	var tool_pencil = function() {
-	    var tool = this;
-	    this.started = false;
-	    var pencil = null, diameter = null, color = null;
-	    // 마우스를 누르는 순간 그리기 작업을 시작 한다. 
-	    this.mousedown = function(ev) {
-	    	pencil   = $(':radio[name="pencil"]:checked').val();
-	    	color    = $(':text[name="color"]').val();
-	    	diameter = $(':text[name="diameter"]').val();
-	    	context.strokeStyle = color;
-	    	context.fillStyle = color;
-	        context.beginPath();
-	        if (pencil != 'cursor')
-	        	tool.started = true;
-	    };
-	    // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
-	    this.mousemove = function(ev) {
-	        if (tool.started) {
-	            if (pencil == 'circle')
-		            context.arc(ev._x, ev._y, diameter/2, 0, 2*Math.PI, true);
-	            else if (pencil == 'rubber')
-	            	context.clearRect(ev._x - diameter/2, ev._y - diameter/2, diameter, diameter);
-
-	            context.closePath();
-	            //context.lineWidth = 5;
-	            context.fill();
-	        }
-	    };
-	    // 마우스 떼면 그리기 작업을 중단한다
-	    this.mouseup = function(ev) {
-	    	if (tool.started) {
-	            tool.mousemove(ev);
-	            tool.started = false;
-	    	}
-	    };
-	};
-	
-	var imgOriginView = function() {
-		xPositionOffset = 0;
-		yPositionOffset = 0;
-		imagePercent = 100;
-		
-		var preImage = new Image();
-		preImage.onload = function(){
-			var canW = canvas.width;
-			var canH = canvas.height;
-			var imgW = parseInt(preImage.width);
-			var imgH = parseInt(preImage.height);
-			var xRatio = 100;
-			var yRatio = 100;
-			if (canW < imgW) {
-				xRatio = parseInt(canW / imgW * 100);
-			}
-			if (canH < imgH) {
-				yRatio = parseInt(canH / imgH * 100);
-			}
-			//console.log("imgOriginView xRatio", xRatio, "yRatio", yRatio);
-			imagePercent = Math.min(xRatio, yRatio);
-
-			drawImage(preImage);
-		};
-		preImage.src = image.url();
-	};
-	
-	var drawImage = function(image) {
-		var imgW = parseInt(image.width * imagePercent / 100);
-		var imgH = parseInt(image.height * imagePercent / 100);
-
-		var xPos = parseInt((canvas.width  - imgW) / 2 + xPositionOffset);
-		var yPos = parseInt((canvas.height - imgH) / 2 + yPositionOffset);
-
-		canvas.width = canvas.width; // canvas clear
-		context.drawImage(image, xPos, yPos, imgW, imgH);
-
-		/*
-		var debug = "x:" + xPos + " y:" + yPos + " w:" + imgW + " h:" + imgH + " P:" + imagePercent + " xOff:" + xPositionOffset + " yOff:" + yPositionOffset;
-		context.font = "20px D2Coding";
-		context.fillText(debug, 10 , 50);
-		*/
-		
-		displayImageNav();
-	};
-
-	var displayImageNav = function() {
-		$("#imageName").html(imageMap[selectedIndex]);
-		$("#goNumber").val(selectedIndex+1);
-		$("#imagePercent").val(imagePercent + "%");
-
-		var ul = $("#navUL");
-		ul.empty();
-
-		var range = parseInt($(window).width() / 70 / 2);
-		var startIdx = selectedIndex - range;
-		var   endIdx = selectedIndex + range + 1;
-		if (startIdx < 0) 
-			startIdx = 0;
-		if (endIdx > imageCount)
-			endIdx = imageCount;
-
-		ul.append(
-				$("<li>").append(
-						$("<a>").html("First").on("click", function() {
-							image.goto(null, 1);
-						})
-				)
-		);
-		for (var i = startIdx; i < endIdx; i++) {
-			ul.append(
-					$("<li>").append(
-							$("<a>", {
-								"class": (i == selectedIndex ? "selected" : ""), 
-								imageNo: (i+1)
-							}).html(i+1).on("click", function() {
-								image.goto(null, $(this).attr("imageNo"));
-							})
-					)
-			);
-		}
-		ul.append(
-				$("<li>").append(
-						$("<a>").html("Last").on("click", function() {
-							image.goto(null, imageCount);
-						})
-				)
-		);
-	};
-	
-	var container = {
-			resize: function() {
-				displayImageNav();
-				var margin = 4;
-				$("#cv").attr("width",  $(window).width() - margin * 2);
-				$("#cv").attr("height", $(window).height() - $("#img-nav").outerHeight() - margin * 3);
-			},
-			init: function() {
-				container.resize();
-				
-				// Pencil tool 객체를 생성 한다.
-				tool = new tool_pencil();
-			
-				canvas = document.getElementById("cv");
-				context = canvas.getContext("2d");
-			},
-			canvasEvent: function(e) {
-				if (e.which == 1) {
-				    if (e.layerX || e.layerX == 0) {   	// Firefox 브라우저
-				      	e._x = e.layerX;
-				      	e._y = e.layerY;
-				    } 
-				    else if (e.offsetX || e.offsetX == 0) { // Opera 브라우저
-				      	e._x = e.offsetX;
-				      	e._y = e.offsetY;
-				    }
-				    // tool의 이벤트 핸들러를 호출한다.
-				    var func = tool[e.type];        
-				    if (func) {
-				        func(e);
-				    }
-				}
-				else if (e.which == 2) {
-					image.center();
-				}
-				else if (e.which == 3) {
-					// nothing
-				}
-			} 
-	};
-	
-	var number = {
-			prev: function() {
-				return selectedIndex == 0 ? imageCount - 1 : selectedIndex - 1;
-			},
-			next: function() {
-				return selectedIndex == imageCount -1 ? 0 : selectedIndex + 1;
-			},
-			random: function() {
-				return Math.floor(Math.random() * imageCount);
-			}
-	};
+	var xPositionOffset = 0, yPositionOffset = 0;
+	var imagePercent = 100, loadedImage;
 	
 	var image = {
-			prev: function() {
-				selectedIndex = number.prev();
-				imgOriginView();
+			canvas: {
+				pencil: {
+					type: {
+						circle: function() {
+							$(":radio[name=pencil][value=circle]").click();
+						},
+						rubber: function() {
+							$(":radio[name=pencil][value=rubber]").click();
+						}
+					},
+					init: function() {
+						var pencilType = null, diameter = null, color = null;
+					    this.started = false;
+					    // 마우스를 누르는 순간 그리기 작업을 시작 한다. 
+					    this.mousedown = function(ev) {
+					    	pencilType = $('input[name="pencil"]:checked').val();
+					    	color      = $("#color").val();
+					    	diameter   = $("#diameter").val();
+					    	//console.log("color", color, "diameter", diameter);
+					    	context.strokeStyle = color;
+					    	context.fillStyle = color;
+					        context.beginPath();
+				        	pencil.started = true;
+					    };
+					    // 마우스가 이동하는 동안 계속 호출하여 Canvas에 Line을 그려 나간다
+					    this.mousemove = function(ev) {
+					        if (pencil.started) {
+					            if (pencilType == 'circle')
+						            context.arc(ev._x, ev._y, diameter/2, 0, 2*Math.PI, true);
+					            else if (pencilType == 'rubber')
+					            	context.clearRect(ev._x - diameter/2, ev._y - diameter/2, diameter, diameter);
+
+					            context.closePath();
+					            //context.lineWidth = 5;
+					            context.fill();
+					        }
+					    };
+					    // 마우스 떼면 그리기 작업을 중단한다
+					    this.mouseup = function(ev) {
+					    	if (pencil.started) {
+					    		pencil.mousemove(ev);
+					    		pencil.started = false;
+					    	}
+					    };
+					}
+				},
+				resize: function() {
+					image.canvas.info();
+					var margin = 4;
+					$("#cv").attr("width",  $(window).width() - margin * 2);
+					$("#cv").attr("height", $(window).height() - $("#img-nav").outerHeight() - margin * 3);
+				},
+				popup: function() {
+					if (imageSource.value == 0)
+						popupImage(image.canvas.url());
+					else
+						fnVideoDetail(coverNameMap[coverIndex]);
+				},
+				url: function() {
+					return imageSource.value == 0 ? PATH + "/image/" + imageIndex : PATH + "/video/" + coverNameMap[coverIndex] + "/cover";
+				},
+				event: function(e) {
+					if (e.which == 1) {
+					    if (e.layerX || e.layerX == 0) {   	// Firefox 브라우저
+					      	e._x = e.layerX;
+					      	e._y = e.layerY;
+					    } 
+					    else if (e.offsetX || e.offsetX == 0) { // Opera 브라우저
+					      	e._x = e.offsetX;
+					      	e._y = e.offsetY;
+					    }
+					    // tool의 이벤트 핸들러를 호출한다.
+					    var func = pencil[e.type];        
+					    if (func) {
+					        func(e);
+					    }
+					}
+					else if (e.which == 2) {
+						image.move.center();
+					}
+					else if (e.which == 3) {
+						// nothing
+					}
+				},
+				load: function() {
+					xPositionOffset = 0;
+					yPositionOffset = 0;
+					imagePercent = 100;
+					
+					loadedImage = new Image();
+					loadedImage.onload = function(){
+						var canW = canvas.width;
+						var canH = canvas.height;
+						var imgW = parseInt(loadedImage.width);
+						var imgH = parseInt(loadedImage.height);
+						var xRatio = 100;
+						var yRatio = 100;
+						if (canW < imgW) {
+							xRatio = parseInt(canW / imgW * 100);
+						}
+						if (canH < imgH) {
+							yRatio = parseInt(canH / imgH * 100);
+						}
+						//console.log("image.load xRatio", xRatio, "yRatio", yRatio);
+						imagePercent = Math.min(xRatio, yRatio);
+
+						image.canvas.draw();
+					};
+					loadedImage.src = image.canvas.url();
+				},
+				draw: function() {
+					var imgW = parseInt(loadedImage.width * imagePercent / 100);
+					var imgH = parseInt(loadedImage.height * imagePercent / 100);
+
+					var xPos = parseInt((canvas.width  - imgW) / 2 + xPositionOffset);
+					var yPos = parseInt((canvas.height - imgH) / 2 + yPositionOffset);
+
+					canvas.width = canvas.width; // canvas clear
+					context.drawImage(loadedImage, xPos, yPos, imgW, imgH);
+
+					/*
+					var debug = "x:" + xPos + " y:" + yPos + " w:" + imgW + " h:" + imgH + " P:" + imagePercent + " xOff:" + xPositionOffset + " yOff:" + yPositionOffset;
+					context.font = "20px D2Coding";
+					context.fillText(debug, 10 , 50);
+					*/
+					if (imageSource.value == 0)
+						setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, imageIndex);
+					else
+						setLocalStorageItem(THUMBNAMILS_COVER_INDEX, coverIndex);
+					
+					image.canvas.info();
+				},
+				info: function() {
+					var currentIndex = imageSource.value == 0 ? imageIndex : coverIndex;
+					var currentCount = imageSource.value == 0 ? imageCount : coverCount;
+					
+					$("#imageName").html(imageSource.value == 0 ? imageNameMap[imageIndex] : coverNameMap[coverIndex]);
+					$("#imagePercent").html(imagePercent + "%");
+					$("#goto").val(currentIndex + 1);
+
+					var ul = $("#navUL");
+					ul.empty();
+
+					var range = parseInt($(window).width() / 70 / 2);
+					var startIdx = currentIndex - range;
+					var   endIdx = currentIndex + range + 1;
+					if (startIdx < 0) 
+						startIdx = 1;
+					if (endIdx > currentCount)
+						endIdx = currentCount - 1;
+
+					var pagingNo = [1];
+					for (var i = startIdx; i < endIdx; i++)
+						pagingNo.push(i + 1);
+					pagingNo.push(currentCount);
+					
+					for (var k in pagingNo) {
+						ul.append(
+								$("<li>", {"class": pagingNo[k] == currentIndex+1 ? "selected" : ""}).append(
+										$("<a>").html(pagingNo[k])
+								).on("click", function() {
+									image.go.to(null, $(this).children().html());
+								})
+						);
+					}
+				},
+				nav: function(signal) {
+					//console.log("canvas.image.nav", signal);
+					switch (signal) {
+					case 97: // numpad 1
+						image.move.leftDown(); 
+						return true;
+					case 98: // numpad 2
+						image.move.down(); 
+						return true;
+					case 99: // numpad 3
+						image.move.rightDown();
+						return true;
+					case 100: // numpad 4
+						image.move.left(); 
+						return true;
+					case 101: // numpad 5
+						image.move.center();
+						return true;
+					case 102: // numpad 6
+						image.move.right(); 
+						return true;
+					case 103: // numpad 7
+						image.move.leftUp();
+						return true;
+					case 104: // numpad 8
+						image.move.up(); 
+						return true;
+					case 105: // numpad 9
+						image.move.rightUp();
+						return true;
+					case 107: // numpad +
+						image.zoom.in(); 
+						return true;
+					case 109: // numpad -
+						image.zoom.out();
+						return true;
+					case 46: // Delete
+						image.canvas.pencil.type.circle();
+						return true;
+					case 35: // End
+						image.canvas.pencil.type.rubber();
+						return true;
+					case 34: // PageDown
+						return true;
+					default:
+						return false;
+					}
+				},
+				init: function() {
+					image.canvas.resize();
+					
+					canvas  = document.getElementById("cv");
+					context = canvas.getContext("2d");
+					pencil  = new image.canvas.pencil.init();
+					
+					$("#color").val("#" + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2));
+				}
 			},
-			next: function() {
-				if (nextMethod.value == 0) {
-					selectedIndex = number.next();
+			number: {
+				prev: function() {
+					if (imageSource.value == 0)
+						imageIndex = imageIndex == 0 ? imageCount - 1 : imageIndex - 1;
+					else
+						coverIndex = coverIndex == 0 ? coverCount - 1 : coverIndex - 1;
+				},
+				next: function() {
+					if (imageSource.value == 0)
+						imageIndex = imageIndex == imageCount -1 ? 0 : imageIndex + 1;
+					else
+						coverIndex = coverIndex == coverCount -1 ? 0 : coverIndex + 1;
+				},
+				random: function() {
+					if (imageSource.value == 0)
+						imageIndex = Math.floor(Math.random() * imageCount);
+					else
+						coverIndex = Math.floor(Math.random() * coverCount);
 				}
-				else {
-					selectedIndex = number.random();
-				}
-				imgOriginView();
 			},
-			goto: function(e, idx) {
-				var pNo;
-				if (idx) {
-					pNo = idx;
-				}
-				else if (e) {
-					if (e.type === 'keyup') {
-						if (e.keyCode == 13) {
-							pNo = $("#goNumber").val();
+			go: {
+				prev: function() {
+					image.number.prev();
+					image.canvas.load();
+				},
+				next: function() {
+					if (nextMethod.value == 0)
+						image.number.next();
+					else
+						image.number.random();
+					image.canvas.load();
+				},
+				to: function(e, idx) {
+					var pNo;
+					if (idx) {
+						pNo = idx;
+					}
+					else if (e) {
+						if (e.type === 'keyup') {
+							if (e.keyCode == 13) {
+								pNo = $("#goto").val();
+							}
+						}
+						else if (e.type === 'click') {
+							pNo = $("#goto").val();
+						} 
+					}
+					
+					if (imageSource.value == 0) {
+						if (pNo > 0 || pNo < imageCount + 1) {
+							imageIndex = pNo - 1;
+							image.canvas.load();
 						}
 					}
-					else if (e.type === 'click') {
-						pNo = $("#goNumber").val();
-					} 
-				}
-				
-				if (pNo > 0 || pNo < imageCount + 1) {
-					selectedIndex = pNo - 1;
-					imgOriginView();
+					else {
+						if (pNo > 0 || pNo < coverCount + 1) {
+							coverIndex = pNo - 1;
+							image.canvas.load();
+						}
+					}
 				}
 			},
-			zoomIn: function() {
-				imagePercent = imagePercent + 10;
-				image.load();
-			},
-			zoomOut: function() {
-				imagePercent = imagePercent - 10;
-				image.load();
-			},
-			center: function() {
-				imgOriginView();
-			},
-			moveUp: function() {
-				yPositionOffset = yPositionOffset - 100;
-				image.load();
-			},
-			moveDown: function() {
-				yPositionOffset = yPositionOffset + 100;
-				image.load();
-			},
-			moveLeft: function() {
-				xPositionOffset = xPositionOffset - 100;
-				image.load();
-			},
-			moveRight: function() {
-				xPositionOffset = xPositionOffset + 100;
-				image.load();
-			},
-			moveLeftDown: function() {
-				xPositionOffset = xPositionOffset - 100;
-				yPositionOffset = yPositionOffset + 100;
-				image.load();
-			},
-			moveRightDown: function() {
-				xPositionOffset = xPositionOffset + 100;
-				yPositionOffset = yPositionOffset + 100;
-				image.load();
-			},
-			moveLeftUp: function() {
-				xPositionOffset = xPositionOffset - 100;
-				yPositionOffset = yPositionOffset - 100;
-				image.load();
-			},
-			moveRightUp: function() {
-				xPositionOffset = xPositionOffset + 100;
-				yPositionOffset = yPositionOffset - 100;
-				image.load();
-			},
-			load: function(nextNumber) {
-				if (parseInt(nextNumber) > -1)
-					selectedIndex = parseInt(nextNumber);
-				var preImage = new Image();
-				preImage.src = PATH + "/image/" + selectedIndex;
-				preImage.onload = function() {
-					drawImage(preImage);
-				};
-			},
-			nav: function(signal) {
-				console.log("canvas.image.nav", signal);
-				switch (signal) {
-				case 97: // numpad 1
-					image.moveLeftDown(); 
-					return true;
-				case 98: // numpad 2
-					image.moveDown(); 
-					return true;
-				case 99: // numpad 3
-					image.moveRightDown();
-					return true;
-				case 100: // numpad 4
-					image.moveLeft(); 
-					return true;
-				case 101: // numpad 5
-					image.center();
-					return true;
-				case 102: // numpad 6
-					image.moveRight(); 
-					return true;
-				case 103: // numpad 7
-					image.moveLeftUp();
-					return true;
-				case 104: // numpad 8
-					image.moveUp(); 
-					return true;
-				case 105: // numpad 9
-					image.moveRightUp();
-					return true;
-				case 107: // numpad +
-					image.zoomIn(); 
-					return true;
-				case 109: // numpad -
-					image.zoomOut();
-					return true;
-				default:
-					return false;
+			zoom: {
+				in: function() {
+					imagePercent = imagePercent + 10;
+					image.canvas.draw();
+				},
+				out: function() {
+					imagePercent = imagePercent - 10;
+					image.canvas.draw();
 				}
 			},
-			popup: function() {
-				popupImage(image.url());
-			},
-			url: function() {
-				setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, selectedIndex);
-				return PATH + "/image/" + selectedIndex + "?_t=" + new Date().getTime();
+			move: {
+				center: function() {
+					image.canvas.load();
+				},
+				up: function() {
+					yPositionOffset = yPositionOffset - 100;
+					image.canvas.draw();
+				},
+				down: function() {
+					yPositionOffset = yPositionOffset + 100;
+					image.canvas.draw();
+				},
+				left: function() {
+					xPositionOffset = xPositionOffset - 100;
+					image.canvas.draw();
+				},
+				right: function() {
+					xPositionOffset = xPositionOffset + 100;
+					image.canvas.draw();
+				},
+				leftDown: function() {
+					xPositionOffset = xPositionOffset - 100;
+					yPositionOffset = yPositionOffset + 100;
+					image.canvas.draw();
+				},
+				rightDown: function() {
+					xPositionOffset = xPositionOffset + 100;
+					yPositionOffset = yPositionOffset + 100;
+					image.canvas.draw();
+				},
+				leftUp: function() {
+					xPositionOffset = xPositionOffset - 100;
+					yPositionOffset = yPositionOffset - 100;
+					image.canvas.draw();
+				},
+				rightUp: function() {
+					xPositionOffset = xPositionOffset + 100;
+					yPositionOffset = yPositionOffset - 100;
+					image.canvas.draw();
+				}
 			}
 	};
 	
   	var fn = {
-			prev: function(showEffect, showOptions, showDuration) {
-				image.prev();
+			prev: function() {
+				image.go.prev();
 			},
-			next: function(showEffect, showOptions, showDuration) {
-				image.next();
+			next: function() {
+				image.go.next();
 			},
 			playCallback: function(status) {
 			},
 			nav: function(signal) {
-				return image.nav(signal);
+				return image.canvas.nav(signal);
 			},
 			eventListener: function() {
-				$(window).on("resize", container.resize);
-				$("#cv").on("mousedown mousemove mouseup", container.canvasEvent);
-				$("#imageName").on("click", image.popup);
-				$("#goNumber").on("keyup", image.goto);
-				$(".btn-goto").on("click", image.goto);
-				$(".move-up").on("click", image.moveUp);
-				$(".move-down").on("click", image.moveDown);
-				$(".move-left").on("click", image.moveLeft);
-				$(".move-right").on("click", image.moveRight);
-				$(".zoom-in").on("click", image.zoomIn);
-				$(".zoom-out").on("click", image.zoomOut);
+				$(window).on("resize", image.canvas.resize);
+				$("#cv").on("mousedown mousemove mouseup", image.canvas.event);
+				$("#imageName" ).on("click", image.canvas.popup);
+				$("#goto"      ).on("keyup", image.go.to);
+				$(".move-up"   ).on("click", image.move.up);
+				$(".move-down" ).on("click", image.move.down);
+				$(".move-left" ).on("click", image.move.left);
+				$(".move-right").on("click", image.move.right);
+				$(".zoom-in"   ).on("click", image.zoom.in);
+				$(".zoom-out"  ).on("click", image.zoom.out);
 			},
 			init: function(data) {
-				imageCount = data['imageCount'];
-				imageMap = data['imageNameMap'];
+				imageCount   = data['imageCount'];
+				imageNameMap = data['imageNameMap'];
+				coverCount   = data['coverCount'];
+				coverNameMap = data['coverNameMap'];
 
-				selectedIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount))) - 1;
+				imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, getRandomInteger(0, imageCount))) - 1;
+				coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, getRandomInteger(0, coverCount))) - 1;
 
-				container.init();
+				image.canvas.init();
 			}
 	};
 	

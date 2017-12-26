@@ -18,49 +18,46 @@
 
 		<nav id="img-nav">
 			<table>
-				<colgroup>
-					<col width="220px"/>
-					<col/>
-					<col width="220px"/>
-				</colgroup>
 				<tr>
-					<td align="left">
-						<div class="configInfo">
-							<label class="label   nextMethod"></label>
-							<label class="label playInterval"></label>
+					<td width="220px" align="left">
+						<div class="label-wrapper">
+							<label>
+								<input type="radio" name="pencil" value="circle" class="sr-only" checked="checked"/>
+								<span>Circle</span>
+							</label>
+						</div>
+						<div class="label-wrapper">
+							<label>
+								<input type="radio" name="pencil" value="rubber" class="sr-only"/>
+								<span>Rubber</span>
+							</label>
 						</div>
 					</td>
-					<td class="EllipsText">
+					<td class="text-ellipsis">
+						<span class="label  imageSource"></span>
+						<span class="label   nextMethod"></span>
+						<span class="label playInterval"></span>
 						<span class="label label-default pointer" id="imageName" title="reload image"></span>
+						<span class="label label-default" id="imagePercent"></span>
 						<%@ include file="/WEB-INF/views/image/config.jspf"%>
 					</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td align="left">
-						<label><input type="radio" name="pencil" value="circle"/><span>Circle</span></label>
-						<label><input type="radio" name="pencil" value="rubber"/><span>Rubber</span></label>
-						<label><input type="radio" name="pencil" value="cursor" checked="checked"/><span>Cursor</span></label>
-					</td>
-					<td>
-						<a class="moveBtn move-left " title="Move left;  Numpad 6"><span class="glyphicon glyphicon-arrow-left"></span></a>
-						<a class="moveBtn move-right" title="Move right; Numpad 4"><span class="glyphicon glyphicon-arrow-right"></span></a>
-						<a class="moveBtn move-up   " title="Move up;    Numpad 8"><span class="glyphicon glyphicon-arrow-up"></span></a>
-						<a class="moveBtn move-down " title="Move down;  Numpad 2"><span class="glyphicon glyphicon-arrow-down"></span></a>
-						<a class="moveBtn zoom-in   " title="Zoom In;    Numpad +"><span class="glyphicon glyphicon-plus"></span></a>
-						<a class="moveBtn zoom-out  " title="Zoom Out;   Numpad -"><span class="glyphicon glyphicon-minus"></span></a>
-					</td>
-					<td align="right">
-						<input type="text" name="diameter" value="50" style="width:30px" title="Diameter"/>
-						<input type="text" id="imagePercent" value="" style="width:40px" title="Image percent" readonly="readonly"/>
-						<input type="text" name="color" value="white" style="width:40px" title="Color"/>
-						<input type="text" id='goNumber' title="Image No"/>
-						<a class="moveBtn btn-goto">Go</a>
+					<td width="220px" align="right">
+						<input type="color" id="color" value="#ffffff" title="Color"/>
+						<div class="label-wrapper">
+							<label>
+								d<input type="number" id="diameter" value="30" min="10" step="10" title="Diameter"/>
+							</label>
+						</div>
+						<div class="label-wrapper">
+							<label>
+								p<input type="number" id="goto" min="0" title="Image No"/>
+							</label>
+						</div>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3">
-						<ul id="navUL"></ul>
+						<ul id="navUL" class="list-inline"></ul>
 					</td>
 				</tr>
 			</table>

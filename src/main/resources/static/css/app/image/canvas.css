@@ -6,24 +6,21 @@ body {
 section#img-section {
 	margin:0;
 }
-canvas#cv {
+section#img-section > canvas#cv {
 	border: 0px solid #888;
 	border-radius: 4px;	
-	/* background-color: rgba(255, 255, 255, 0.5); */
 	margin: 4px;
+	cursor: pointer;
 }
-canvas#cv:hover {
-	cursor:pointer;
-}
+
 nav#img-nav {
 	position: absolute;
 	left: 0;
 	bottom: 0;
-	text-align:center;
-	margin:0;
+	text-align: center;
     border-radius: 4px;
     background: rgba(255,255,255,.5);
-    padding: 0 5px 5px;
+    padding: 5px;
 	margin: 4px;
 }
 nav#img-nav table {
@@ -32,69 +29,69 @@ nav#img-nav table {
 	margin:0;
 	table-layout:fixed;
 }
-nav#img-nav table td {
-	border:0px solid orange;
-}
 nav#img-nav ul {
-	list-style: none;
 	padding: 0;
-	display: block;
-	clear: right;
-	text-align: center;
-	margin-top:3px;
-	margin-bottom:0;
+	margin:3px 0 0;
 	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 10px;
+	border-radius: 8px;
 }
-nav#img-nav ul li {
-	display: inline-block;
-	padding: 0;
-	border-right: 0px solid #ccc;
+nav#img-nav li {
 	width: 55px;
+}
+nav#img-nav li:hover, input ~ span:hover {
+   	text-shadow: 2px 2px 2px #123;
+}
+nav#img-nav li.selected > a, :checked ~ span {
+	color: #D11E11;
+   	text-shadow: 2px 2px 2px #123;
 }
 nav#img-nav a, input ~ span {
 	color: #EFD3D3;
 	text-decoration: none;
 	font-size: 13px;
 	font-weight: bold;
-	cursor:pointer;
+	cursor: pointer;
+	padding: 2px 5px;
 }
-nav#img-nav a:hover, input ~ span:hover {
-	color: #fff;
-   	text-shadow: 2px 2px 2px #123;
+
+.label-wrapper {
+	display: inline-block;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	color: #eee;
+	padding: 0 4px;	
 }
-nav#img-nav a.selected, :checked ~ span {
-	color: #D11E11;
-	border-radius: 10px;
-	padding: 0 10px;
-}
-input[type=text] {
+
+#diameter, #goto {
 	color: #EFD3D3;
 	margin:0;
 	padding:0;
 	border:0;
 	font-size: 12px;
-	text-align:center;
-	height:15px;
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 10px;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0);
+	width: 50px;
 }
-input#goNumber {
-	width:25pt;
-}
-.moveBtn, input ~ span {
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 10px;
-	padding: 0 10px;
-}
-.EllipsText{
+
+.text-ellipsis {
 	overflow : hidden;
 	white-space: nowrap;
-	text-overflow:ellipsis;
-	-o-text-overflow:ellipsis;
-	-ms-text-overflow:ellipsis;
-	-moz-binding:url(/xe/ellipsis.xml#ellipsis)
+	text-overflow: ellipsis;
+	font-size: 16px;
 }
-input[type=radio] {
-	display:none;
+
+#color {
+	background-color: rgba(0,0,0,.5);
+	border-radius: 4px;
+	border: 1px solid rgba(0,0,0,0);
+	margin: 0;
+	padding: 4px;
+	width: 50px;
+	height: 20px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
 }

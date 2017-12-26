@@ -115,6 +115,9 @@ var agent = navigator.userAgent.toLowerCase(),
 	getRandomInteger = function(start, end) {
 		return Math.round(getRandom(start, end));
 	},
+	getRandomHex = function(start, end) {
+		return getRandomInteger(start, end).toString(16);
+	},
 	getRandomBoolean = function() {
 		return getRandomInteger(1, 2) === 1;
 	},
