@@ -119,14 +119,18 @@ var tablet = (function() {
 					fn.tile();
 				}
 
+				var position = fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9);	
+
 				var $image = $("<img>", {
 					src: preloader.src,
 					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
 				}).randomBG(0.5).css({
-					display: "none"
-				}).css(
-					fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), preloader.width, preloader.height, 0, $(IMAGE_DIV).offset().top, .9)	
-				).data("data", {
+					display: "none",
+					width: 200,
+					height: 100,
+					left: getRandomInteger(0, $(IMAGE_DIV).width()),
+					top: $(IMAGE_DIV).height()
+				}).data("data", {
 					src: preloader.src,
 					mode: parseInt(imageSource.value),
 					title: selectedItemTitle,
@@ -139,38 +143,57 @@ var tablet = (function() {
 					options: showOptions,
 					duration: showDuration
 				}).on("mousedown", function(e) {
-					if (e.which == 1) { // mouse left
-						fn.defocus();
-						if (displayMethod.value == 1 && $(this).data("tile")) {
-							displayMethod.value == 1 && fn.tile();
+					fn.defocus();
+					var isTile = $(this).data("tile");
+					if (e.which == 1) { // mouse left : 선택
+						if (isTile) {
+						}
+						else {
+							$(this).appendTo($(IMAGE_DIV));
+							fn.setLastInfo();
+						}
+					} 
+					else if (e.which == 2) { // mouse middle : 확대/축소
+						//fn.shake();
+						if (isTile) {
+							$(this).appendTo($(IMAGE_DIV));
+							fn.setLastInfo();
 							var data = $(this).data("data");
 							var position = fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), data.width, data.height, 0, $(IMAGE_DIV).offset().top, .9);
 							$(this).animate(position).data("tile", false);
-							/* for center
-							$(this).animate({
-								width: position.width,
-								height: position.height,
-								left: ($(IMAGE_DIV).width() - position.width) / 2, 
-								top: ($(IMAGE_DIV).height() - position.height) / 2 + TOP_MARGIN
-							}); */
 						}
-						$(this).appendTo($(IMAGE_DIV)).addClass("rotate0");
-						fn.setLastInfo();
+						else {
+							fn.tile();
+							fn.setLastInfo();
+						}
 					} 
-					else if (e.which == 2) { // mouse middle
-						fn.shake();
-					} 
-					else if (e.which == 3) { // mouse right
-						// do nothing
-					} 
+					else if (e.which == 3) { // mouse right : 회전 0
+						if (isTile) {
+						}
+						else {
+							$(this).appendTo($(IMAGE_DIV));
+							fn.setLastInfo();
+						}
+						$(this).addClass("rotate0");
+					}
 				}).appendTo(
 						$(IMAGE_DIV)
 				);
 				fn.setLastInfo();
 
-				$image.show(showEffect, showOptions, showDuration, function() {
-					$(this).rotateR(rotateDegree.value).draggable();
-				});
+				if (showEffect === 'throw') {
+					$image.show().animate({left: position.left + position.width / 2 - 100, top: position.top + position.height / 2 - 100}, {
+						complete: function() {
+							$(this).animate(position).rotateR(rotateDegree.value).draggable();
+						}
+					});
+				}
+				else {
+					$image.css(position).show(showEffect, showOptions, showDuration, function() {
+						$(this).rotateR(rotateDegree.value).draggable();
+					});
+				}
+				
 			};
 			preloader.src = selectedItemUrl;
 		},
@@ -218,27 +241,29 @@ var tablet = (function() {
 			};
 		},
 		shake: function() {
-//			$("#displayMethod").val(0).trigger("click");
 			fn.defocus();
 			$(IMAGE_DIV).children().each(function() {
 				if (getRandomBoolean()) {
 					$(this).appendTo($(IMAGE_DIV));
 				}
-				$(this).animate(
-					fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9)		
-				).data("tile", false);
+				var position = fn.position($(IMAGE_DIV).width(), $(IMAGE_DIV).height(), $(this).data("data").width, $(this).data("data").height, 0, $(IMAGE_DIV).offset().top, .9);
+				$(this).animate(position, {
+					duration: getRandomInteger(200, 1000)
+				}).data("tile", false);
 			});
 			fn.setLastInfo();
 		},
 		tile: function() {
-//			$("#displayMethod").val(1).trigger("click");
 			fn.defocus();
 			var boxWidth = $(IMAGE_DIV).width() / 6, boxHeight = ($(IMAGE_DIV).height() - TOP_MARGIN) / 5;
 			$(IMAGE_DIV).children().each(function(index) {
 				var position = fn.position(boxWidth, boxHeight, $(this).data("data").width, $(this).data("data").height, 0, 0, 1);
 				position.left =         (index % 6) * boxWidth  + (boxWidth  - position.width)  / 2;
 				position.top  = parseInt(index / 6) * boxHeight + (boxHeight - position.height) / 2 + TOP_MARGIN;
-				$(this).animate(position).rotateR(0).data("tile", true);
+
+				$(this).animate(position, {
+					duration: getRandomInteger(200, 1000),
+				}).data("tile", true);
 			});
 		},
 		remove: function(willDelete) {
