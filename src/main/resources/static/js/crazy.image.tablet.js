@@ -126,10 +126,9 @@ var tablet = (function() {
 					"class": "img-thumbnail img-card img-card-focus " + imageTypeClass 
 				}).randomBG(0.5).css({
 					display: "none",
-					width: 200,
-					height: 100,
-					left: getRandomInteger(0, $(IMAGE_DIV).width()),
-					top: $(IMAGE_DIV).height()
+					width: $(IMAGE_DIV).width() / 6,
+					left: parseInt($(IMAGE_DIV).width() / 6 * 5),
+					top: parseInt($(IMAGE_DIV).height() / 5 * 4) + TOP_MARGIN
 				}).data("data", {
 					src: preloader.src,
 					mode: parseInt(imageSource.value),
@@ -182,7 +181,11 @@ var tablet = (function() {
 				fn.setLastInfo();
 
 				if (showEffect === 'throw') {
-					$image.show().animate({left: position.left + position.width / 2 - 100, top: position.top + position.height / 2 - 100}, {
+					$image.show().animate({
+						left: position.left + position.width / 2, 
+						top: position.top + position.height / 2
+					}, {
+						duration: getRandomInteger(400, 1000),
 						complete: function() {
 							$(this).animate(position).rotateR(rotateDegree.value).draggable();
 						}
@@ -263,6 +266,7 @@ var tablet = (function() {
 
 				$(this).animate(position, {
 					duration: getRandomInteger(200, 1000),
+					easing: getRandomBoolean() ? "easeOutBounce" : "swing"
 				}).data("tile", true);
 			});
 		},
