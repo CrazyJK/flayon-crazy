@@ -30,7 +30,9 @@
 							<div class="col-xs-2 text-bold">Show Method</div>
 							<div class="col-xs-1"><kbd>Home</kbd></div>
 							<div class="col-xs-4 text-right">
-								<select id="effectShowTypes" class="config-select"></select>
+								<select id="effectShowTypes" class="config-select">
+									<option value="throw">Throw</option>
+								</select>
 								<span class="label label-default label-switch" data-role="switch" data-value="0" data-target="showMethod">Specific</span>
 							</div>
 							<div class="col-xs-1 text-center">
