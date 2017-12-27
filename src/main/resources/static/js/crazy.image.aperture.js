@@ -59,6 +59,9 @@ var apertureApp = (function() {
 					$("#imageTitle").html(selectedItemTitle);
 				},
 				resize: function resizeImage(playStatus) {
+					if (typeof playStatus != 'boolean')
+						playStatus = timerEngine.isOn();
+
 					var windowHeight = $(window).height();
 					var windowWidth  = $(window).width();
 					var navHeight = $('div#navDiv').height();
