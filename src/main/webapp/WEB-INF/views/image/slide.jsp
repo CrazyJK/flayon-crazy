@@ -20,11 +20,6 @@ $(function() {
 		<div>
 			<div id="leftTop">
 				<div id="progressWrapper"></div>
-			  	<div id="pagingArea" class="text-center">
-					<span class="label label-primary paging paging-first">0</span>
-					<span class="label label-primary paging paging-curr">0</span>
-					<span class="label label-primary paging paging-end">0</span>
-			  	</div>
 			</div>
 			<div id="leftBottom">
 				<div class="configInfo">
@@ -35,7 +30,13 @@ $(function() {
 				</div>
 			</div>
 			<div id="rightTop"></div>
-			<div id="rightBottom"></div>
+			<div id="rightBottom">
+			  	<div id="pagingArea" class="text-center">
+					<span class="label label-primary paging paging-first">0</span>
+					<span class="label label-primary paging paging-curr">0</span>
+					<span class="label label-primary paging paging-end">0</span>
+			  	</div>
+			</div>
 			<div id="fixedBox">
 				<%@ include file="/WEB-INF/views/image/config.jspf"%>
 				<span class="label label-plain title popup-image">&nbsp;</span>
