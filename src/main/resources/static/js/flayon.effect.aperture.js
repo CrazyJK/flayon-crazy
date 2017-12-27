@@ -54,7 +54,7 @@
 		// set css
 		var _style = "<style>" + 
 				cssId+".circle-wrapper, "+cssId+" div.circle:before, "+cssId+" div.circle:after {" +
-					"transition: all " + opts.duration + " " + opts.timing + " " + opts.delay + ";" +
+					"transition: box-shadow " + opts.duration + " " + opts.timing + " " + opts.delay + ";" +
 				"}" +
 				""+cssId+".circle-wrapper {" +
 					"width: "  + opts.width + ";" +
