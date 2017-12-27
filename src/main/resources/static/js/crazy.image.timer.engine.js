@@ -104,6 +104,9 @@ var timerEngine = (function($) {
 			labelText = text;
 			$(".progress-label").html(labelText);
 			return this;
+		},
+		isOn = function() {
+			return timerStatus;
 		};
 	
 	return {
@@ -113,7 +116,8 @@ var timerEngine = (function($) {
 		toggle: toggle,
 		css: css,
 		setTime: setTime,
-		setLabel: setLabel
+		setLabel: setLabel,
+		isOn: isOn
 	};
 
 }(jQuery));
