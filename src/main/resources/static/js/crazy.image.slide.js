@@ -99,7 +99,7 @@ var slide = (function() {
 								backgroundImage: "url('" + itemUrl + "')"
 							}).data("imgNo", thumbNo).on("click", function() {
 								image.view($(this).data("imgNo"));
-							})
+							}).attr("title", imageSource.value == 0 ? imageMap[thumbNo] : coverMap[thumbNo])
 					).appendTo($("ul#thumbnailUL"));
 				}
 			},
