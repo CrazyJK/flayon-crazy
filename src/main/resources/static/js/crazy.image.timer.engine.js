@@ -11,7 +11,7 @@ var timerEngine = (function($) {
 		labelText = "timer",
 		engine,
 		initiate = function(invokedMethod, second, progressWrapperSelector, progressStyle, text, toggleCallback) {
-			console.log("timerEngine.initiate start");
+			//console.log("timerEngine.initiate start");
 	
 			timerInterval = currentSecond = second;
 			labelText = text;
@@ -38,7 +38,7 @@ var timerEngine = (function($) {
 							)
 					)
 			);
-			console.log("timerEngine.initiate", "render progress");
+			//console.log("timerEngine.initiate", "render progress");
 			
 			// engine startup
 			engine = setInterval(function() {
@@ -54,7 +54,7 @@ var timerEngine = (function($) {
 			},	1000);
 			initiated = true;
 	
-			console.log("timerEngine.initiate end, engine start");
+			//console.log("timerEngine.initiate end, engine start");
 		},
 		display = function(second, text) {
 			//console.log("timerEngine.display");
@@ -62,7 +62,7 @@ var timerEngine = (function($) {
 			$(".progress-label").html(text);
 		},
 		on = function(callback) {
-			console.log("timerEngine.on");
+			//console.log("timerEngine.on");
 			if (!initiated) {
 				console.log("timer not initiated. fitst call timerEngine.init");
 				return;
@@ -72,7 +72,7 @@ var timerEngine = (function($) {
 				callback();
 		},
 		off = function(callback) {
-			console.log("timerEngine.off");
+			//console.log("timerEngine.off");
 			if (!initiated) {
 				console.log("timer not initiated. fitst call timerEngine.init");
 				return;
@@ -84,23 +84,23 @@ var timerEngine = (function($) {
 				callback();
 		},
 		toggle = function(callback) {
-			console.log("timerEngine.toggle");
+			//console.log("timerEngine.toggle");
 			!timerStatus ? on() : off();
 			if (callback)
 				callback(timerStatus);
 		},
 		setTime = function(second) {
-			console.log("timerEngine.setTime", second);
+			//console.log("timerEngine.setTime", second);
 			timerInterval = second;
 			return this;
 		},
 		css = function(style) {
-			console.log("timerEngine.css", style);
+			//console.log("timerEngine.css", style);
 			$(".progress").css(style);
 			return this;
 		},
 		setLabel = function(text) {
-			console.log("timerEngine.setLabel", text);
+			//console.log("timerEngine.setLabel", text);
 			labelText = text;
 			$(".progress-label").html(labelText);
 			return this;
