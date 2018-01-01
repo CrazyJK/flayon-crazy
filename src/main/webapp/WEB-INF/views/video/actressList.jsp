@@ -15,6 +15,10 @@
 .selected {
 	color: blue;
 }
+.same-localname {
+	font-weight: bold;
+	color: green;
+}
 </style>
 <script type="text/javascript" src="<c:url value="/webjars/angular/1.6.6/angular.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/webjars/angular-animate/1.6.6/angular-animate.min.js"/>"></script>
@@ -70,6 +74,9 @@ var displayNameCheckResult = function(list) {
 					}
 				).append(right ? $("<span>", {"class": "label label-info"}).html(actress.localName) : actress.name + "&nbsp;")
 				 .append(right ? "&nbsp;" + actress.name : $("<span>", {"class": "label label-info"}).html(actress.localName))
+	},
+	sameLocalName = function(actress1, actress2) {
+		return actress1.localName != '' && actress2.localName != '' && actress1.localName === actress2.localName ? "same-localname" : "normal";
 	};
 	
     $("#notice > p").empty().append(
@@ -82,7 +89,7 @@ var displayNameCheckResult = function(list) {
 		   			(function () {
 			    		var tbody = $("<tbody>");
 		    			$.each(list, function(idx, record) {
-		    				$("<tr>").append(
+		    				$("<tr>", {"class": sameLocalName(record.actress1, record.actress2)}).append(
 			       					$("<td>", {"class": "text-right"}).append(renderActressName(record.actress1, true)),
 			       					$("<td>").append(renderActressName(record.actress2)),
 			       					$("<td>").html(scoreToFixed(record.score))

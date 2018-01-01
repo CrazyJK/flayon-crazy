@@ -34,7 +34,7 @@ body {
 	width: 100%;
 	height: 100%;
 	background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     background-position: center center;
     background-color: rgba(255,255,255,.25);
 }

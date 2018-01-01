@@ -129,6 +129,8 @@ var slide = (function() {
 				image.view(image.prevNumber(), showEffect, showOptions, showDuration);
 			},
 			next: function(showEffect, showOptions, showDuration) {
+				if (showEffect === 'throw')
+					showEffect = 'puff';
 				image.view(image.nextNumber(), showEffect, showOptions, showDuration);
 			},
 			playCallback: function(status) {
