@@ -299,7 +299,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnDeleteTag = function(tagId, dom) {
 		if (confirm("Are you sure to delete it?")) {
-			restCall(PATH + "/video/tag?id=" + tagId, {method: "DELETE", title: tagId + " tag delete"}, function(result) {
+			restCall(PATH + "/rest/tag?id=" + tagId, {method: "DELETE", title: tagId + " tag delete"}, function(result) {
 				$(dom).parent().hide();
 			});
 		}
