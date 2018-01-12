@@ -1,6 +1,8 @@
 package jk.kamoru.flayon.crazy.image;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +53,14 @@ public class RestImageController {
 		return imageService.getImageSourceSize();
 	}
 
+	@RequestMapping("/paths")
+	public List<String> getImagePathList() {
+		List<String> paths = new ArrayList<>();
+		for (Image image : imageService.getImageList()) {
+			String path = image.getFile().getParent();
+			if (!paths.contains(path))
+				paths.add(path);
+		}
+		return paths;
+	}
 }
