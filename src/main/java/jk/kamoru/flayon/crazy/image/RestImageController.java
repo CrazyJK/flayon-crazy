@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
@@ -31,6 +33,22 @@ public class RestImageController {
 		data.put("coverCount",   index);
 		data.put("coverNameMap", map);
 		return data;
+	}
+
+	@RequestMapping("/info/{index}")
+	public Map<String, Object> getImageInfo(@PathVariable int index) {
+		Image image = imageService.getImage(index);
+		Map<String, Object> info = new HashMap<>();
+		info.put("name", image.getName());
+		info.put("path", image.getFile().getParent());
+		info.put("length", image.getFile().length());
+		info.put("modified", image.getFile().lastModified());
+		return info;
+	}
+	
+	@RequestMapping("/count")
+	public Integer getCount() {
+		return imageService.getImageSourceSize();
 	}
 
 }

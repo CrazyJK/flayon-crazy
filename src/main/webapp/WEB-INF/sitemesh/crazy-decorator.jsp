@@ -76,6 +76,7 @@ $(document).ready(function() {
 					<li><a href="${PATH}/image/lightbox"  ><s:message code="video.lightbox"  /></a></li>
 					<li><a href="${PATH}/image/thumbnails"><s:message code="video.thumbnails"/></a></li>
 					<li><a href="${PATH}/image/tablet"    ><s:message code="video.tablet"    /></a></li>
+					<li><a href="${PATH}/image/series"    ><s:message code="video.series"    /></a></li>
     			</ul>
   			</li>
 			<li><a href="${PATH}/video/briefing"	 ><s:message code="video.briefing"/></a></li>

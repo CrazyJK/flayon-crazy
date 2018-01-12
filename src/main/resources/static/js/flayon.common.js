@@ -209,6 +209,25 @@ var agent = navigator.userAgent.toLowerCase(),
 		return str.replace(/\w\S*/g, function(txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		});
+	},
+	KB = 1024,
+	MB = KB * KB,
+	GB = MB * KB,
+	TB = GB * KB,
+	toFixed = function(num, x) {
+		return num.toFixed(x);
+	}
+	formatFileSize = function(length) {
+		if (length < KB)
+			return length + " B";
+		else if (length < MB)
+			return toFixed(length / KB, 0) + " kB";
+		else if (length < GB)
+			return toFixed(length / MB, 1) + " MB";
+		else if (length < TB)
+			return toFixed(length / GB, 2) + " GB";
+		else
+			return length;
 	};
 
 
