@@ -67,12 +67,12 @@ public class ImageController extends CrazyController {
 	@Deprecated
 	public HttpEntity<byte[]> getImageOnType(@PathVariable int idx, @PathVariable Image.Type imageType, HttpServletResponse response) {
 		log.warn("this method is deprecated");
-		return getImageEntity(imageService.getBytes(idx, imageType), MediaType.IMAGE_JPEG, response);
+		return getImageEntity(imageService.getImage(idx), MediaType.IMAGE_JPEG, response);
 	}
 
 	@RequestMapping("/{idx}")
 	public HttpEntity<byte[]> getImage(@PathVariable int idx, HttpServletResponse response) {
-		return getImageEntity(imageService.getBytes(idx, Image.Type.MASTER), MediaType.IMAGE_JPEG, response);
+		return getImageEntity(imageService.getImage(idx), MediaType.IMAGE_JPEG, response);
 	}
 
 	@RequestMapping(value = "/{idx}", method = RequestMethod.DELETE)
@@ -92,16 +92,28 @@ public class ImageController extends CrazyController {
 		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
 
-	private HttpEntity<byte[]> getImageEntity(byte[] imageBytes, MediaType type, HttpServletResponse response) {
+	@RequestMapping("/byPath/{pathIndex}/{imageIndex}")
+	public HttpEntity<byte[]> getImageByPath(@PathVariable int pathIndex, @PathVariable int imageIndex, HttpServletResponse response) throws IOException {
+		return getImageEntity(imageService.getImage(pathIndex, imageIndex), MediaType.IMAGE_JPEG, response);
+	}
+	
+	private HttpEntity<byte[]> getImageEntity(Image image, MediaType type, HttpServletResponse response) {
 		/*
 		for (String name : response.getHeaderNames())
 			for (String value : response.getHeaders(name))
 				log.info("HEADER {}: {}", name, value);
 		 */
+		
+		byte[] imageBytes = image.getByteArray(Image.Type.MASTER);
+		
 		response.setHeader("Cache-Control",    "public, max-age=" + IMAGE.WEBCACHETIME_SEC);
 		response.setHeader("Pragma",           "public");
 		response.setDateHeader("Expires",       today + IMAGE.WEBCACHETIME_MILI);
 		response.setDateHeader("Last-Modified", today - IMAGE.WEBCACHETIME_MILI);
+
+		response.setHeader("name", image.getName());
+		response.setHeader("path", image.getFile().getParent());
+		response.setDateHeader("modified", image.getFile().lastModified());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentLength(imageBytes.length);

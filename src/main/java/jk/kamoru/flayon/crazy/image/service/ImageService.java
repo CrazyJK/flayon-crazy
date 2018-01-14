@@ -20,6 +20,8 @@ public interface ImageService {
 	 */
 	Image getImage(int idx);
 
+	Image getImage(int pathIndex, int imageIndex);
+
 	/**
 	 * total image size
 	 * @return
@@ -59,5 +61,9 @@ public interface ImageService {
 	byte[] getBytes(int idx, Type imageType);
 
 	int getRandomImageNo();
+
+	List<String> getPathList();
+
+	List<Map<String, Object>> getImageInfoByPath();
 	
 }

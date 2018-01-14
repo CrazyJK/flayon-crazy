@@ -1,5 +1,6 @@
 package jk.kamoru.flayon.crazy.image.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,5 +85,34 @@ public class ImageServiceImpl implements ImageService {
 	public byte[] getBytes(int idx, Type imageType) {
 		log.debug("getBytes {}, {}", idx, imageType);
 		return imageSource.getImage(idx).getByteArray(imageType);
+	}
+
+	@Override
+	public Image getImage(int pathIndex, int imageIndex) {
+		return imageSource.getImage(pathIndex, imageIndex);
+	}
+
+	@Override
+	public List<String> getPathList() {
+		return imageSource.getPathList();
+	}
+
+	@Override
+	public List<Map<String, Object>> getImageInfoByPath() {
+		List<Map<String, Object>> infos = new ArrayList<>();
+		int index = -1;
+		Map<String, Object> pathInfo0 = new HashMap<>();
+		pathInfo0.put("index", index++);
+		pathInfo0.put("path", "ALL");
+		pathInfo0.put("size", imageSource.getImageList().size());
+		infos.add(pathInfo0);
+		for (Map.Entry<String, List<Image>> entry : imageSource.getImageMapByPath().entrySet()) {
+			Map<String, Object> pathInfo = new HashMap<>();
+			pathInfo.put("index", index++);
+			pathInfo.put("path", entry.getKey());
+			pathInfo.put("size", entry.getValue().size());
+			infos.add(pathInfo);
+		}
+		return infos;
 	}
 }

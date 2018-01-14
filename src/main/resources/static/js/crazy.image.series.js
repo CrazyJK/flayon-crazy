@@ -3,8 +3,8 @@
  */
 
 var series = (function() {
-	var imageCount = 0, imageIndex = 0;
 	var MARGIN_TOP = 30, MARGIN_LEFT = 100;
+	var pathInfos;
 	var fn = {
 			resize: function() {
 				var $imageDiv = $("#imageDiv");					
@@ -38,9 +38,11 @@ var series = (function() {
 			event: function() {	
 				$("#imageDiv").navEvent(function(signal) {
 					switch(signal) {
+					case -1:
 					case 39:
 						fn.next();
 						break;
+					case 1:
 					case 37:
 						fn.prev();
 						break;
@@ -54,16 +56,15 @@ var series = (function() {
 			start: function() {
 				fn.resize();
 
-				restCall(PATH + '/rest/image/paths', {}, function(paths) {
-					$.each(paths, function(idx, path) {
+				restCall(PATH + '/rest/image/pathInfo', {}, function(infos) {
+					pathInfos = infos;
+					$.each(pathInfos, function(idx, info) {
 						$("#paths").append(
-								$("<option>").attr("value", path).html(path)
+								$("<option>").attr("value", info.index).html(info.path + " [" + info.size + "]")
 						);
+						info.current = 0;
 					});
-				});
-				
-				restCall(PATH + '/rest/image/count', {}, function(count) {
-					imageCount = count;
+					console.log("pathInfos", pathInfos);
 					fn.next();
 				});
 			},
@@ -74,10 +75,7 @@ var series = (function() {
 				var $rightOverImage = $(".img-series-right", "#imageDiv");
 				if ($rightOverImage.length > 0) {
 					var position = $rightOverImage.data("position");
-					$rightOverImage.removeClass("img-series-right").addClass("img-series-right-over")
-					.css({
-						left: $imageDiv.width() * 2
-					});
+					$rightOverImage.removeClass("img-series-right").addClass("img-series-right-over");
 				}
 
 				// 중간을 오른쪽으로
@@ -94,6 +92,7 @@ var series = (function() {
 				var $centerImage = $(".img-series-left:last", "#imageDiv");
 				if ($centerImage.length > 0) {
 					var position = $centerImage.data("position");
+					
 					$centerImage.removeClass("img-series-left").addClass("img-series-center")
 					.css({
 						left: position.left
@@ -157,9 +156,12 @@ var series = (function() {
 				}
 				else { // 새 이미지
 					var preloader = new Image();
-					preloader.onload = function() {
-						console.log("div", $imageDiv.width(), $imageDiv.height());
+					preloader.onload = function(args) {
+
 						var position = fn.position.calc($imageDiv.width(), $imageDiv.height(), preloader.width, preloader.height, MARGIN_LEFT, MARGIN_TOP, 0.9);
+						var urlSplit = preloader.src.split("/");
+						var pathIndex = urlSplit[urlSplit.length -2];
+						var imageIndex = urlSplit[urlSplit.length -1];
 						
 						var $image = $("<img>", {src: preloader.src})
 						.css({
@@ -170,29 +172,39 @@ var series = (function() {
 						})
 						.addClass("img-responsive img-thumbnail img-series img-series-right")
 						.data("position", position)
-						.data("index", imageIndex)
+						.data("pathIndex", pathIndex)
+						.data("imageIndex", imageIndex)
 						.animate({
 							left: $(window).width() - MARGIN_LEFT
 						})
 						.appendTo($imageDiv);
 
-						restCall(PATH + '/rest/image/info/' + imageIndex, {showLoading: false}, function(info) {
-							$image.data("info", info);
+						var infoURL = preloader.src.replace("/image", "/rest/image/info");
+						restCall(infoURL, {showLoading: false}, function(imageInfo) {
+							$image.data("imageInfo", imageInfo);
 						});
 						
-						imageIndex++;
 					};
-					preloader.src = PATH + "/image/" + imageIndex;
+
+					var pathIndex = parseInt($("#paths option:selected").val());
+					var pathInfo = pathInfos[pathIndex + 1];
+					preloader.src = PATH + "/image/byPath/" + pathIndex + "/" + pathInfo.current++;
+					if (pathInfo.current == pathInfo.size)
+						pathInfo.current = 0;
+
+					console.log("image src", preloader.src);
 				}
-			},
+			},	
 			displayInfo: function($image) {
-				var index = $image.data("index");
-				var info = $image.data("info");
-				$("#index").html(index);
-				$("#name").html(info.name);
-				$("#path").html(info.path);
-				$("#length").html(formatFileSize(info.length));
-				$("#modified").html(new Date(info.modified).format('yyyy-MM-dd hh:mm'));
+				var pathIndex  = $image.data("pathIndex");
+				var imageIndex = $image.data("imageIndex");
+				var imageInfo  = $image.data("imageInfo");
+				var pathInfo   = pathInfos[parseInt(pathIndex) + 1];
+				$("#index").html((parseInt(imageIndex) + 1) + " / " + pathInfo.size);
+				$("#name").html(imageInfo.name);
+				$("#path").html(imageInfo.path);
+				$("#length").html(formatFileSize(imageInfo.length));
+				$("#modified").html(new Date(imageInfo.modified).format('yyyy-MM-dd hh:mm'));
 			},
 			position: {
 				calc: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop, ratio) {

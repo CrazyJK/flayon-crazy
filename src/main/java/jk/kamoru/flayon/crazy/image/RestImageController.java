@@ -1,6 +1,5 @@
 package jk.kamoru.flayon.crazy.image;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,19 +47,24 @@ public class RestImageController {
 		return info;
 	}
 	
+	@RequestMapping("/info/byPath/{pathIndex}/{imageIndex}")
+	public Map<String, Object> getImageInfoByPath(@PathVariable int pathIndex, @PathVariable int imageIndex) {
+		Image image = imageService.getImage(pathIndex, imageIndex);
+		Map<String, Object> info = new HashMap<>();
+		info.put("name", image.getName());
+		info.put("path", image.getFile().getParent());
+		info.put("length", image.getFile().length());
+		info.put("modified", image.getFile().lastModified());
+		return info;
+	}
+
 	@RequestMapping("/count")
 	public Integer getCount() {
 		return imageService.getImageSourceSize();
 	}
 
-	@RequestMapping("/paths")
-	public List<String> getImagePathList() {
-		List<String> paths = new ArrayList<>();
-		for (Image image : imageService.getImageList()) {
-			String path = image.getFile().getParent();
-			if (!paths.contains(path))
-				paths.add(path);
-		}
-		return paths;
+	@RequestMapping("/pathInfo")
+	public List<Map<String, Object>> getImagePathInfo() {
+		return imageService.getImageInfoByPath();
 	}
 }

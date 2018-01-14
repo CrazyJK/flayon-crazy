@@ -14,4 +14,8 @@ public class ImageNotFoundException extends NotFoundException {
 		super("Image [" + idx + "] not found", cause, KIND.ImageNotFound);
 	}
 
+	public ImageNotFoundException(String message, Throwable cause) {
+		super(message, cause, KIND.ImageNotFound);
+	}
+
 }

@@ -31,12 +31,17 @@ body {
 .img-series {
 	position: fixed;
 }
+.img-series-left-over {
+}
 .img-series-left {
 }
 .img-series-center {
 }
 .img-series-right {
 }
+.img-series-right-over {
+	left: calc(100% * 2) !important;
+} 
 </style>
 <script src="${PATH}/js/crazy.image.series.js"></script>
 <script type="text/javascript">
@@ -49,14 +54,12 @@ $(function() {
 <body>
 	<div class="container-fluid container-series">
 		<div id="pathInfo">
-			<select id="paths" class="label-black">
-				<option value="all">ALL</option>
-			</select>
+			<select id="paths" class="label-black"></select>
 		</div>
 		<div id="imageInfo">
-			<span id="index" class="label label-black"></span>
-			<span id="name" class="label label-black"></span>
 			<span id="path" class="label label-black"></span>
+			<span id="name" class="label label-black"></span>
+			<span id="index" class="label label-black"></span>
 			<span id="length" class="label label-black"></span>
 			<span id="modified" class="label label-black"></span>
 		</div>
