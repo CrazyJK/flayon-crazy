@@ -81,9 +81,19 @@ public class LocalImageSource extends AsyncExecutorService implements ImageSourc
 	public void delete(int idx) {
 		Image image = imageList.get(idx);
 		imageList.remove(image);
+		loadAfter();
 		FileUtils.deleteQuietly(image.getFile());
 	}
 
+	@Override
+	@CacheEvict(value = "flayon-image-cache", allEntries=true)
+	public void delete(int pathIndex, int imageIndex) {
+		Image image = getImage(pathIndex, imageIndex);
+		imageList.remove(image);
+		loadAfter();
+		FileUtils.deleteQuietly(image.getFile());
+	}
+	
 	@Override
 	protected Runnable getTask() {
 		return new DirectoryWatcher("Image", config.getImagePaths()) {

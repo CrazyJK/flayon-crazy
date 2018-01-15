@@ -96,7 +96,14 @@ public class ImageController extends CrazyController {
 	public HttpEntity<byte[]> getImageByPath(@PathVariable int pathIndex, @PathVariable int imageIndex, HttpServletResponse response) throws IOException {
 		return getImageEntity(imageService.getImage(pathIndex, imageIndex), MediaType.IMAGE_JPEG, response);
 	}
-	
+
+	@RequestMapping(value = "/byPath/{pathIndex}/{imageIndex}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteByPath(@PathVariable int pathIndex, @PathVariable int imageIndex) {
+		log.info("DeleteByPath image {} / {}", pathIndex, imageIndex);
+		imageService.deleteByPath(pathIndex, imageIndex);
+	}
+
 	private HttpEntity<byte[]> getImageEntity(Image image, MediaType type, HttpServletResponse response) {
 		/*
 		for (String name : response.getHeaderNames())

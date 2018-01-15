@@ -76,6 +76,11 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
+	public void deleteByPath(int pathIndex, int imageIndex) {
+		imageSource.delete(pathIndex, imageIndex);
+	}
+	
+	@Override
 	public int getRandomImageNo() {
 		return (int)(Math.random() * imageSource.getImageSourceSize());
 	}

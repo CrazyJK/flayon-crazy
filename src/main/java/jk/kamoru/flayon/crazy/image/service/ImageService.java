@@ -52,6 +52,8 @@ public interface ImageService {
 	 */
 	void delete(int idx);
 
+	void deleteByPath(int pathIndex, int imageIndex);
+
 	/**
 	 * map of whole image by idx, name
 	 * @return
@@ -65,5 +67,6 @@ public interface ImageService {
 	List<String> getPathList();
 
 	List<Map<String, Object>> getImageInfoByPath();
+
 	
 }

@@ -37,6 +37,8 @@ public interface ImageSource {
 	 */
 	void delete(int idx);
 
+	void delete(int pathIndex, int imageIndex);
+
 	Image getImage(int pathIndex, int imageIndex);
 	
 	List<String> getPathList();
