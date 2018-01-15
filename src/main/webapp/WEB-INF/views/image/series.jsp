@@ -32,15 +32,20 @@ body {
 	position: fixed;
 }
 .img-series-left-over {
+	filter: grayscale(100%);
 }
 .img-series-left {
+	filter: grayscale(100%);
 }
 .img-series-center {
+	filter: grayscale(0);
 }
 .img-series-right {
+	filter: grayscale(100%);
 }
 .img-series-right-over {
 	left: calc(100% * 2) !important;
+	filter: grayscale(100%);
 } 
 </style>
 <script src="${PATH}/js/crazy.image.series.js"></script>
