@@ -92,10 +92,9 @@ var series = (function() {
 				var $centerImage = $(".img-series-left:last", "#imageDiv");
 				if ($centerImage.length > 0) {
 					var position = $centerImage.data("position");
-					
 					$centerImage.removeClass("img-series-left").addClass("img-series-center")
 					.css({
-						left: position.left
+						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
 					this.displayInfo($centerImage);
 				}
@@ -140,7 +139,7 @@ var series = (function() {
 					var position = $centerImage.data("position");
 					$centerImage.removeClass("img-series-right").addClass("img-series-center")
 					.css({
-						left: position.left
+						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
 					this.displayInfo($centerImage);
 				}
