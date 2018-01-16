@@ -9,22 +9,15 @@ body {
 #thumbnailDiv {
     text-align: center;
 }
-#thumbnailUL > li {
-	margin: 0 3px  3px 0;
-	padding: 4px;
-	width: 120px;
-	height: 100px;
-	background-color: transparent;
+ul#thumbnailUL > li {
 	transition: all .5s;
 }
-#thumbnailUL > li > a {
-	width: 100%;
-	height: 100%;
+ul#thumbnailUL > li > a.img-thumbnail {
+	margin: 2px;
+	background-color: rgba(255, 255, 255, .5);	
 	text-decoration: none;
 }
-#thumbnailUL > li > a > div {
-	width: 100%;
-	height: 100%;
+ul#thumbnailUL > li > a > div {
 	background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -32,9 +25,6 @@ body {
 }
 .box-hover {
 	transform: scale(1.5, 1.5);
-}
-input[type='range'] {
-	box-shadow: rgba(255, 255, 255, 0) 0px 0px 5px 1px inset;
 }
 span.input-group-addon {
     background-color: transparent;

@@ -151,15 +151,12 @@ var agent = navigator.userAgent.toLowerCase(),
 	},
 	getLocalStorageItem = function(itemName, notfoundDefault) {
 		return typeof(Storage) !== "undefined" && (localStorage.getItem(itemName) || notfoundDefault);
-	/*	if (typeof(Storage) !== "undefined") {
-			var _value = localStorage.getItem(itemName);
-			if (_value == null || _value === 'NaN' || _value === 'undefined')
-				return notfoundDefault;
-			return _value;
-		}
-		else {
-			return notfoundDefault;
-		} */
+	},
+	getLocalStorageItemInteger = function(itemName, notfoundDefault) {
+		return parseInt(getLocalStorageItem(itemName, notfoundDefault));
+	},
+	getLocalStorageItemBoolean = function(itemName, notfoundDefault) {
+		return getLocalStorageItem(itemName, notfoundDefault.toString()) === 'true';
 	},
 	/**
 	 * ref. http://ohgyun.com/340

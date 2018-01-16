@@ -4,10 +4,6 @@
 
 var thumbnails = (function() {
 
-	var IMAGE_PATH_INDEX = "image.path.index";
-	var storageItemIndexName;
-	var storageItemWidthName;
-	var storageItemHeightName;
 	var currentIndex = 0;
 	var coverCount = 0;
 	var coverMap;
@@ -25,21 +21,18 @@ var thumbnails = (function() {
 				$("input:radio[name='mode']").on('change', fn.toggleMode);
 				$("#paths").on("change", fn.toggleMode);
 				$("#img-width, #img-height").on("change", fn.resizeImage);
-				
-				$("#content_div").scroll(function() {
-					if (fn.isScrollBottom())
-						fn.render();
-				});
-
 				$("#magnify").on("click", function() {
 					onMagnify = $(this).data("checked");
 					setLocalStorageItem(THUMBNAMILS_BTN_MAGNIFY, onMagnify);
 				});
-				
+				$("#content_div").scroll(function() {
+					if (fn.isScrollBottom())
+						fn.render();
+				});
 			},
 			initiate: function() {
 				mode      = getLocalStorageItem(THUMBNAMILS_MODE, "image");
-				onMagnify = getLocalStorageItem(THUMBNAMILS_BTN_MAGNIFY, false) === 'true';
+				onMagnify = getLocalStorageItemBoolean(THUMBNAMILS_BTN_MAGNIFY, false);
 				
 				$("input:radio[name='mode'][value='" + mode + "']").attr("checked", true).parent().addClass("active");
 				onMagnify && $("#magnify").click();
@@ -71,25 +64,20 @@ var thumbnails = (function() {
 				setLocalStorageItem(THUMBNAMILS_MODE, mode);
 
 				if (mode === 'cover') {
-					storageItemIndexName  = THUMBNAMILS_COVER_INDEX;
-					storageItemWidthName  = THUMBNAMILS_COVER_WIDTH;
-					storageItemHeightName = THUMBNAMILS_COVER_HEIGHT;
 					$("#paths").hide();
-					currentIndex  = parseInt(getLocalStorageItem(storageItemIndexName, getRandomInteger(0, coverCount-1)));
+					currentIndex  = getLocalStorageItemInteger(THUMBNAMILS_COVER_INDEX, getRandomInteger(0, coverCount-1));
+					imgWidth      = getLocalStorageItemInteger(THUMBNAMILS_COVER_WIDTH, 100);
+					imgHeight     = getLocalStorageItemInteger(THUMBNAMILS_COVER_HEIGHT, 100);
 				}
 				else { // image
-					storageItemIndexName  = THUMBNAMILS_IMAGE_INDEX;
-					storageItemWidthName  = THUMBNAMILS_IMAGE_WIDTH;
-					storageItemHeightName = THUMBNAMILS_IMAGE_HEIGHT;
 					$("#paths").show();
 					currentIndex = 0;
+					imgWidth  = getLocalStorageItemInteger(THUMBNAMILS_IMAGE_WIDTH, 100);
+					imgHeight = getLocalStorageItemInteger(THUMBNAMILS_IMAGE_HEIGHT, 100);
 					pathIndex = parseInt($("#paths option:selected").val());
-					pathInfo = pathInfos[pathIndex + 1];
+					pathInfo  = pathInfos[pathIndex + 1];
 					setLocalStorageItem(IMAGE_PATH_INDEX, pathIndex);
 				}
-				
-				imgWidth  = getLocalStorageItem(storageItemWidthName, 100);
-				imgHeight = getLocalStorageItem(storageItemHeightName, 100);
 				
 				$("#img-width").val(imgWidth);
 				$("#img-height").val(imgHeight);
@@ -111,8 +99,8 @@ var thumbnails = (function() {
 				$(".current-index").html("I " + currentIndex);
 				$(".debug").html("render..." + currentIndex).show().hide("fade", {}, 2000);
 
-				imgWidth  = $("#img-width").val(); 
-				imgHeight = $("#img-height").val();
+				var $thumbnailUL = $("ul#thumbnailUL");
+				var bgColor = getRandomColor(.1);
 				var start = currentIndex;
 				var end   = start + imageSizePerPage;
 				for (var i = start; i < end; i++) {
@@ -141,33 +129,28 @@ var thumbnails = (function() {
 						}
 					}
 						
-					$("ul#thumbnailUL").append(
-							$("<li>", {
-								dataIndex: i,
-								"class": "img-thumbnail"
-							}).css({
-								width: imgWidth, height: imgHeight
+					$("<li>").append(
+							$("<a>", {
+								'href': imgSrc,
+								'rel': 'lightboxSet',
+								'data-index': i,
+								'class': 'img-thumbnail'
+							}).data("title", imgTitle).css({
+								backgroundColor: bgColor
 							}).hover(
 								function(event) {
-									if (onMagnify)
-										$(this).addClass("box-hover");
+									if (onMagnify) $(this).addClass("box-hover");
 								}, function() {
-									if (onMagnify)
-										$(this).removeClass("box-hover");
+									if (onMagnify) $(this).removeClass("box-hover");
 								}
 							).append(
-									$("<a>" ,{
-										'href': imgSrc,
-										'data-lightbox': 'lightbox-set',
-										'data-title': imgTitle,
-										'data-index': i,
-									}).append(
-										$("<div>").addClass("nowrap").css({
-											backgroundImage: "url('" + imgSrc + "')"
-										})
-									)
+									$("<div>").css({
+										backgroundImage: "url('" + imgSrc + "')",
+										width: imgWidth, 
+										height: imgHeight
+									})
 							)
-					);
+					).appendTo($thumbnailUL);
 					
 					displayCount++;
 					currentIndex = i;
@@ -182,7 +165,7 @@ var thumbnails = (function() {
 				
 				currentIndex++;
 				if (mode === 'cover') {
-					setLocalStorageItem(storageItemIndexName, currentIndex);
+					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 					$(".total-count").html(displayCount + " / " + coverCount);
 				}
 				else {
@@ -200,16 +183,22 @@ var thumbnails = (function() {
 			resizeImage: function() {
 				imgWidth  = $("#img-width").val();
 				imgHeight = $("#img-height").val();
-				$("#thumbnailUL > li").css({
+				$(".img-thumbnail > div").css({
 					width: imgWidth,
 					height: imgHeight
 				});
 				$(".debug").html("Size : " + imgWidth + " x " + imgHeight).show().hide("fade", {}, 3000);
 				$(".addon-width" ).html("W " + imgWidth);
 				$(".addon-height").html("H " + imgHeight);
-				
-				setLocalStorageItem(storageItemWidthName,  imgWidth);
-				setLocalStorageItem(storageItemHeightName, imgHeight);
+
+				if (mode === 'cover') {
+					setLocalStorageItem(THUMBNAMILS_COVER_WIDTH,  imgWidth);
+					setLocalStorageItem(THUMBNAMILS_COVER_HEIGHT, imgHeight);
+				}
+				else { // image
+					setLocalStorageItem(THUMBNAMILS_IMAGE_WIDTH,  imgWidth);
+					setLocalStorageItem(THUMBNAMILS_IMAGE_HEIGHT, imgHeight);
+				}
 			},
 			setLightBoxOption: function() {
 				lightbox.option({
@@ -236,7 +225,7 @@ var thumbnails = (function() {
 var fnDeleteImage = function(imgSrc, imgIdx) {
 	if (confirm('Delete this image\n' + imgSrc)) {
 		restCall(imgSrc, {method: "DELETE", title: "this image delete"}, function() {
-			$("[dataindex=" + imgIdx + "]").hide("fade", {}, 500);
+			$("[data-index=" + imgIdx + "]").parent().remove(); //hide("fade", {}, 500);
 			lightbox.nextImage();
 		});
 	}

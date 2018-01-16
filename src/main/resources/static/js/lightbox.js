@@ -205,7 +205,7 @@
 	    	return false;
 	    });
 	};
-
+	
 	// Show overlay and lightbox. If the image is part of a set, add siblings to album array.
 	Lightbox.prototype.start = function($link) {
 		var self    = this;
@@ -224,10 +224,10 @@
 
 		function addToAlbum($link) {
 			self.album.push({
-				link: $link.attr('href'),
-				title: $link.attr('data-title') || $link.attr('title'),
+				link:  $link.attr('href'),
+				title: $link.attr('data-title') || $link.attr('title') || $link.data("title"),
 				index: $link.attr('data-index'),
-				type: $link.attr('data-type')
+				type:  $link.attr('data-type')
 			});
 		}
 

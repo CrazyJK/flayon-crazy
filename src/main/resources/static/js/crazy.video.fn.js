@@ -12,6 +12,7 @@ var calculatedDivHeight = 0,
 	GRAVIAINTERVIEW_IMAGE_WIDTH = 'graviainterview.image.width',
 	VIDEOLISTBYSPA_IMAGE_WIDTH  = 'videolistbyspa.image.width',
 	VIDEOMAIN_JK_COVER_WIDTH    = 'videomain.jk.cover.width',
+	IMAGE_PATH_INDEX 			= "image.path.index",
 	/**
 	 * toggle studio div
 	 */
