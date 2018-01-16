@@ -126,6 +126,8 @@ var slide = (function() {
 	
 	var fn = {
 			prev: function(showEffect, showOptions, showDuration) {
+				if (showEffect === 'throw')
+					showEffect = 'puff';
 				image.view(image.prevNumber(), showEffect, showOptions, showDuration);
 			},
 			next: function(showEffect, showOptions, showDuration) {
