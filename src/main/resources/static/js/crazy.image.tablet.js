@@ -333,11 +333,11 @@ var tablet = (function() {
 			for (var i = 0; i < coverCount; i++)
 				coverIndexMap.push(i);
 			
-			imageIndex = parseInt(getLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, 0));
+			imageIndex = getLocalStorageItemInteger(THUMBNAMILS_IMAGE_INDEX, 0);
 			if (imageIndex < 0 || imageIndex >= imageCount)
 				imageIndex = getRandomInteger(0, imageCount-1);
 
-			coverIndex = parseInt(getLocalStorageItem(THUMBNAMILS_COVER_INDEX, 0));
+			coverIndex = getLocalStorageItemInteger(THUMBNAMILS_COVER_INDEX, 0);
 			if (coverIndex < 0 || coverIndex >= coverCount)
 				coverIndex = getRandomInteger(0, coverCount-1);
 
