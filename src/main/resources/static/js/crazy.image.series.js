@@ -48,9 +48,18 @@ var series = (function() {
 						break;
 					}
 				});
+				$("body").on("click", ".img-series-left", function() {
+					fn.prev();
+				});
+				$("body").on("click", ".img-series-right", function() {
+					fn.next();
+				});
 				$(window).on("resize", fn.resize);
 				$("#pathInfo").on("change", function() {
-					path = $("#pathInfo option:selected").val();
+					var pathIndex = $("#pathInfo option:selected").val();
+					setLocalStorageItem(IMAGE_PATH_INDEX, pathIndex);
+					$("#imageDiv").empty();
+					fn.next();
 				});
 			},
 			start: function() {
@@ -65,6 +74,10 @@ var series = (function() {
 						info.current = 0;
 					});
 					console.log("pathInfos", pathInfos);
+					
+					var pathIndex = getLocalStorageItem(IMAGE_PATH_INDEX, '-1');
+					$("#paths").val(pathIndex).prop("selected", true);
+
 					fn.next();
 				});
 			},
