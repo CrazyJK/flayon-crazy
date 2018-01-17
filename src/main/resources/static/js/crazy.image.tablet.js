@@ -50,6 +50,9 @@ var tablet = (function() {
 				fn.container.setLastInfo();
 			},
 			next: function(showEffect, showOptions, showDuration) {
+				
+				$(".container-tablet").toggleClass("throw", showEffect === 'throw');
+				
 				var currentIndex = -1;
 				var imageTypeClass = "";
 				if (imageSource.value == 0) { // image
