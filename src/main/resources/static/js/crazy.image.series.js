@@ -13,28 +13,17 @@ var series = (function() {
 				$imageDiv.height($(window).height() - MARGIN_TOP * 2);
 				$imageDiv.children().each(function() {
 					var $this = $(this);
-					var position = $this.data("position");
-					var calcPosition = fn.position.calc($imageDiv.width(), $imageDiv.height(), position.width, position.height, MARGIN_LEFT, MARGIN_TOP, 0.9);
-					$this.css({
-						width: calcPosition.width,
-						height: calcPosition.height,
-						top: calcPosition.top
-					});
-					if ($this.hasClass("img-series-left")) {
-						$this.css({
-							left: MARGIN_LEFT - calcPosition.width
-						});
-					}
-					else if ($this.hasClass("img-series-center")) {
-						$this.css({
-							left: calcPosition.left
-						});
-					}
-					else if ($this.hasClass("img-series-right")) {
-						$this.css({
-							left: $(window).width() - MARGIN_LEFT
-						});
-					}
+					var size = $this.data("size");
+					var position = fn.position.calc($imageDiv.width(), $imageDiv.height(), size.width, size.height, MARGIN_LEFT, MARGIN_TOP, 0.9);
+					if ($this.hasClass("img-series-left-over"))
+						position.left = MARGIN_LEFT - position.width * 2;
+					else if ($this.hasClass("img-series-left"))
+						position.left = MARGIN_LEFT - position.width;
+					else if ($this.hasClass("img-series-center"))
+						position.left = position.left;
+					else if ($this.hasClass("img-series-right"))
+						position.left = $(window).width() - MARGIN_LEFT;
+					$this.css(position).data("position", position);
 				});
 			},
 			init: function() {
@@ -229,6 +218,7 @@ var series = (function() {
 							height: position.height
 						})
 						.addClass("img-responsive img-thumbnail img-series img-series-right")
+						.data("size", {width: preloader.width, height: preloader.height})
 						.data("position", position)
 						.data("pathIndex", pathIndex)
 						.data("imageIndex", imageIndex)
@@ -247,10 +237,10 @@ var series = (function() {
 					var pathIndex = parseInt($("#paths option:selected").val());
 					var pathInfo = pathInfos[pathIndex + 1];
 					preloader.src = PATH + "/image/byPath/" + pathIndex + "/" + pathInfo.current++;
+					//console.log("image src", preloader.src);
 					if (pathInfo.current == pathInfo.size)
 						pathInfo.current = 0;
 
-					console.log("image src", preloader.src);
 				}
 			},	
 			displayInfo: function($image) {
