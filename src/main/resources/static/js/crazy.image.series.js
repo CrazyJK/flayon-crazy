@@ -3,8 +3,10 @@
  */
 
 var series = (function() {
+	var IMAGE_PLAY_INTERVAL = "image.play.interval";
 	var MARGIN_TOP = 30, MARGIN_LEFT = 100;
 	var pathInfos;
+	var playInterval = 9;
 	var fn = {
 			resize: function() {
 				var $imageDiv = $("#imageDiv");					
@@ -35,7 +37,31 @@ var series = (function() {
 					}
 				});
 			},
+			init: function() {
+				var playInterval = getLocalStorageItemInteger(IMAGE_PLAY_INTERVAL, 5);
+				timerEngine.init(fn.next, playInterval, "#progressWrapper", {width: 136, margin: 0}, "Play", fn.playCallback);
+				fn.setPlayInterval(playInterval);
+				fn.resize();
+			},
+			setPlayInterval: function(sec) {
+				var val;
+				if (typeof sec === 'number')
+					val = sec;
+				else if (sec === '-')
+					val = parseInt($("#playInterval").data("no")) - 1;
+				else if (sec === '+')
+					val = parseInt($("#playInterval").data("no")) + 1;
+				else 
+					val = parseInt(sec);
+				
+				if (val < 3) val = 3; // set mininum
+				
+				$("#playInterval").data("no", val).html(val + "s");
+				timerEngine.setTime(val);
+				setLocalStorageItem(IMAGE_PLAY_INTERVAL, val);
+			},
 			event: function() {	
+				$(window).on("resize", fn.resize);
 				$("#imageDiv").navEvent(function(signal) {
 					switch(signal) {
 					case -1:
@@ -46,25 +72,36 @@ var series = (function() {
 					case 37:
 						fn.prev();
 						break;
+					case 32: // key : space
+						fn.play();
+						break;
+					case 99 : // key : keypad 3
+					case 100 : // key : keypad 4 
+					case 101 : // key : keypad 5 
+					case 102 : // key : keypad 6 
+					case 103 : // key : keypad 7 
+					case 104 : // key : keypad 8 
+					case 105 : // key : keypad 9 
+						fn.setPlayInterval(signal - 96);
+						break;
+					case 109 : // key : keypad - 
+						fn.setPlayInterval('-');
+						break;
+					case 107 : // key : keypad + 
+						fn.setPlayInterval('+');
+						break;
 					}
 				});
-				$("body").on("click", ".img-series-left", function() {
-					fn.prev();
-				});
-				$("body").on("click", ".img-series-right", function() {
-					fn.next();
-				});
-				$(window).on("resize", fn.resize);
-				$("#pathInfo").on("change", function() {
-					var pathIndex = $("#pathInfo option:selected").val();
+				$("body").on("click", ".img-series-left", fn.prev);
+				$("body").on("click", ".img-series-right", fn.next);
+				$("#paths").on("change", function() {
+					var pathIndex = $("#paths option:selected").val();
 					setLocalStorageItem(IMAGE_PATH_INDEX, pathIndex);
 					$("#imageDiv").empty();
 					fn.next();
 				});
 			},
 			start: function() {
-				fn.resize();
-
 				restCall(PATH + '/rest/image/pathInfo', {}, function(infos) {
 					pathInfos = infos;
 					$.each(pathInfos, function(idx, info) {
@@ -80,6 +117,12 @@ var series = (function() {
 
 					fn.next();
 				});
+			},
+			play: function() {
+				timerEngine.toggle(fn.playCallback);
+			},
+			playCallback: function() {
+				$(".container-series, .progress-bar, .label, code, .modal-content, #configModal").toggleClass("label-black", status);
 			},
 			prev: function() {
 				var $imageDiv = $("#imageDiv");					
@@ -109,7 +152,10 @@ var series = (function() {
 					.css({
 						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
-					this.displayInfo($centerImage);
+					fn.displayInfo($centerImage);
+				}
+				else {
+					$("#index, #name, #path, #length, #modified").html("");
 				}
 				
 				// 왼쪽 얼리있는걸 왼쪽으로
@@ -154,7 +200,7 @@ var series = (function() {
 					.css({
 						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
-					this.displayInfo($centerImage);
+					fn.displayInfo($centerImage);
 				}
 				
 				// 오른쪽 멀리서 오른쪽으로
@@ -251,6 +297,7 @@ var series = (function() {
 	
 	return {
 		init : function() {
+			fn.init();
 			fn.event();
 			fn.start();
 		}
