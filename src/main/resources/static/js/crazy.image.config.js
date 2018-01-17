@@ -256,31 +256,15 @@ var config = (function() {
 						fn.setRotateDegree('+');
 						break;
 					case 97 : // key : keypad 1
-						fn.togglePlayInterval(1);
-						break;
 					case 98 : // key : keypad 2 
-						fn.togglePlayInterval(2);
-						break;
 					case 99 : // key : keypad 3
-						fn.togglePlayInterval(3);
-						break;
 					case 100 : // key : keypad 4 
-						fn.togglePlayInterval(4);
-						break;
 					case 101 : // key : keypad 5 
-						fn.togglePlayInterval(5);
-						break;
 					case 102 : // key : keypad 6 
-						fn.togglePlayInterval(6);
-						break;
 					case 103 : // key : keypad 7 
-						fn.togglePlayInterval(7);
-						break;
 					case 104 : // key : keypad 8 
-						fn.togglePlayInterval(8);
-						break;
 					case 105 : // key : keypad 9 
-						fn.togglePlayInterval(9);
+						fn.togglePlayInterval(signal - 96);
 						break;
 					case 109 : // key : keypad - 
 						fn.togglePlayInterval('-');
