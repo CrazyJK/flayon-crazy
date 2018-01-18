@@ -6,16 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jk.kamoru.flayon.crazy.image.domain.Image;
-import jk.kamoru.flayon.crazy.image.domain.Image.Type;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link ImageService}
@@ -23,78 +17,33 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Service
-@Slf4j
 public class ImageServiceImpl implements ImageService {
 
-	@Autowired
-	private ImageSource imageSource;
+	@Autowired ImageSource imageSource;
 	
 	@Override
 	public Image getImage(int idx) {
-		return imageSource.getImage(idx);
-	}
-
-	@Override
-	public int getImageSourceSize() {
-		return imageSource.getImageSourceSize();
-	}
-
-	@Override
-	public Image getImageByRandom() {
-		return imageSource.getImage(getRandomImageNo());
-	}
-
-	@Override
-	public List<Image> getImageList() {
-		return imageSource.getImageList();
-	}
-
-	@Override
-	public String getImageNameJSON() {
-		ObjectMapper mapper = new ObjectMapper();
-		Map<Integer, String> nameMap = getImageNameMap();
-		try {
-			return mapper.writeValueAsString(nameMap);
-		} catch (JsonProcessingException e) {
-			return "{error: \"" + e.getMessage() + "\"}";
-		}
-	}
-
-	@Override
-	public Map<Integer, String> getImageNameMap() {
-		Map<Integer, String> map = new HashMap<>();
-		int index = 0;
-		for (Image image : imageSource.getImageList()) {
-			map.put(index++, image.getName());
-		}
-		return map;
-	}
-
-	@Override
-	public void delete(int idx) {
-		imageSource.delete(idx);
-	}
-
-	@Override
-	public void deleteByPath(int pathIndex, int imageIndex) {
-		imageSource.delete(pathIndex, imageIndex);
-	}
-	
-	@Override
-	public int getRandomImageNo() {
-		return (int)(Math.random() * imageSource.getImageSourceSize());
-	}
-
-	@Override
-	@Cacheable(value="flayon-image-cache")
-	public byte[] getBytes(int idx, Type imageType) {
-		log.debug("getBytes {}, {}", idx, imageType);
-		return imageSource.getImage(idx).getByteArray(imageType);
+		return imageSource.get(idx);
 	}
 
 	@Override
 	public Image getImage(int pathIndex, int imageIndex) {
-		return imageSource.getImage(pathIndex, imageIndex);
+		return imageSource.get(pathIndex, imageIndex);
+	}
+
+	@Override
+	public Image getImageByRandom() {
+		return imageSource.get(getRandomImageNo());
+	}
+
+	@Override
+	public int getImageSourceSize() {
+		return imageSource.size();
+	}
+
+	@Override
+	public List<Image> getImageList() {
+		return imageSource.getList();
 	}
 
 	@Override
@@ -109,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
 		Map<String, Object> pathInfo0 = new HashMap<>();
 		pathInfo0.put("index", index++);
 		pathInfo0.put("path", "ALL");
-		pathInfo0.put("size", imageSource.getImageList().size());
+		pathInfo0.put("size", imageSource.getList().size());
 		infos.add(pathInfo0);
 		for (Map.Entry<String, List<Image>> entry : imageSource.getImageMapByPath().entrySet()) {
 			Map<String, Object> pathInfo = new HashMap<>();
@@ -120,4 +69,29 @@ public class ImageServiceImpl implements ImageService {
 		}
 		return infos;
 	}
+
+	@Override
+	public Map<Integer, String> getImageNameMap() {
+		Map<Integer, String> map = new HashMap<>();
+		int index = 0;
+		for (Image image : imageSource.getList()) {
+			map.put(index++, image.getInfo().getName());
+		}
+		return map;
+	}
+
+	@Override
+	public void delete(int idx) {
+		imageSource.delete(idx);
+	}
+
+	@Override
+	public void deleteByPath(int pathIndex, int imageIndex) {
+		imageSource.delete(pathIndex, imageIndex);
+	}
+
+	private int getRandomImageNo() {
+		return (int)(Math.random() * imageSource.size());
+	}
+
 }

@@ -10,12 +10,12 @@ public class ImageException extends CrazyException {
 	private Image image; 
 	
 	public ImageException(Image image, String message, Throwable cause) {
-		super(String.format("%s [%s]", message, image.getName()), cause, KIND.Image);
+		super(String.format("%s [%s]", message, image.getInfo().getName()), cause, KIND.Image);
 		this.image = image;
 	}
 
 	public ImageException(Image image, String message) {
-		super(String.format("%s [%s]", message, image.getName()), KIND.Image);
+		super(String.format("%s [%s]", message, image.getInfo().getName()), KIND.Image);
 		this.image = image;
 	}
 	
@@ -30,11 +30,5 @@ public class ImageException extends CrazyException {
 	public Image getImage() {
 		return image;
 	}
-
-//	@Override
-//    public String toString() {
-//        String message = getClass().getName() + ": " + getLocalizedMessage();
-//        return (image != null) ? (message + ": " + image) : message;
-//    }
 
 }

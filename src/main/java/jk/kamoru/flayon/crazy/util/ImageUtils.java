@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -22,15 +23,27 @@ public class ImageUtils {
 	public static byte[] mergeTextToImage(String text, File image) {
 		return mergeTextToImage(image, text, "나눔고딕코딩", 32);
 	}
-	
-	public static byte[] mergeTextToImage(File image, final String TEXT, final String FONTNAME, final int FONTSIZE) {
-		
-		BufferedImage bi = null;
+
+	public static byte[] mergeTextToImage(File image, String text, String fontname, int fontsize) {
 		try {
-			bi = ImageIO.read(image);
+			BufferedImage bi = ImageIO.read(image);
+			return mergeTextToImage(bi, text, fontname, fontsize);
 		} catch (IOException e) {
 			throw new CrazyException("ImageIO.read Error", e);
 		}
+	}
+	
+	public static byte[] mergeTextToImage(InputStream image, String text, String fontname, int fontsize) {
+		try {
+			BufferedImage bi = ImageIO.read(image);
+			return mergeTextToImage(bi, text, fontname, fontsize);
+		} catch (IOException e) {
+			throw new CrazyException("ImageIO.read Error", e);
+		}
+	}
+	
+	public static byte[] mergeTextToImage(BufferedImage bi, final String TEXT, final String FONTNAME, final int FONTSIZE) {
+		
 		int imgWidth  = bi.getWidth();
 		int imgHeight = bi.getHeight();
 		log.debug("loadedImage width : {}, height : {}", imgWidth, imgHeight);

@@ -1,17 +1,18 @@
 package jk.kamoru.flayon.crazy.image;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.Image;
-import jk.kamoru.flayon.crazy.video.domain.Video;
-import jk.kamoru.flayon.crazy.video.service.VideoService;
+import jk.kamoru.flayon.crazy.image.domain.Image.Type;
+import jk.kamoru.flayon.crazy.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,8 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageController extends CrazyController {
 
 	private long today = new Date().getTime();
-
-	@Autowired private VideoService videoService;
 
 	@Scheduled(cron="0 0 0 * * *")
 	public void updateDate() {
@@ -48,31 +47,35 @@ public class ImageController extends CrazyController {
 	@RequestMapping("/tablet")     public String tablet()     { return "image/tablet"; }
 	@RequestMapping("/series")     public String series()     { return "image/series"; }
 
-	@RequestMapping("/data")
-	public Map<String, Object> getData() {
-		Map<String, Object> data = new HashMap<>();
-		data.put("imageCount",   imageService.getImageSourceSize());
-		data.put("imageNameMap", imageService.getImageNameMap());
-		int index = 0;
-		Map<Integer, String> map = new HashMap<>();
-		for (Video video : videoService.getVideoList()) {
-			map.put(index++, video.getOpus());
-		}
-		data.put("coverCount",   index);
-		data.put("coverNameMap", map);
-		return data;
+	@RequestMapping("/{idx}")
+	public HttpEntity<byte[]> getImage(@PathVariable int idx, HttpServletResponse response) {
+		return getImageEntity(imageService.getImage(idx), response);
 	}
 
 	@RequestMapping("/{idx}/{imageType}")
-	@Deprecated
 	public HttpEntity<byte[]> getImageOnType(@PathVariable int idx, @PathVariable Image.Type imageType, HttpServletResponse response) {
-		log.warn("this method is deprecated");
-		return getImageEntity(imageService.getImage(idx), MediaType.IMAGE_JPEG, response);
+		return getImageEntity(imageService.getImage(idx), imageType, response);
 	}
 
-	@RequestMapping("/{idx}")
-	public HttpEntity<byte[]> getImage(@PathVariable int idx, HttpServletResponse response) {
-		return getImageEntity(imageService.getImage(idx), MediaType.IMAGE_JPEG, response);
+	@RequestMapping("/byPath/{pathIndex}/{imageIndex}")
+	public HttpEntity<byte[]> getImageByPath(@PathVariable int pathIndex, @PathVariable int imageIndex, HttpServletResponse response) {
+		return getImageEntity(imageService.getImage(pathIndex, imageIndex), response);
+	}
+
+	@RequestMapping("/byPath/{pathIndex}/{imageIndex}/{imageType}")
+	public HttpEntity<byte[]> getImageByPathOnType(@PathVariable int pathIndex, @PathVariable int imageIndex, @PathVariable Image.Type imageType, HttpServletResponse response) {
+		return getImageEntity(imageService.getImage(pathIndex, imageIndex), imageType, response);
+	}
+
+	@RequestMapping("/random")
+	public HttpEntity<byte[]> getImageRandom() throws IOException {
+		Image image = imageService.getImageByRandom();
+		return ResponseEntity
+				.ok()
+				.cacheControl(CacheControl.noCache())
+				.contentLength(image.getFile().length())
+				.contentType(getMediaType(image.getFile()))
+				.body(image.getByteArray());
 	}
 
 	@RequestMapping(value = "/{idx}", method = RequestMethod.DELETE)
@@ -82,21 +85,6 @@ public class ImageController extends CrazyController {
 		imageService.delete(idx);
 	}
 
-	@RequestMapping("/random")
-	public HttpEntity<byte[]> getImageRandom() throws IOException {
-		byte[] imageBytes = imageService.getBytes(imageService.getRandomImageNo(), Image.Type.MASTER);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setCacheControl("max-age=1");
-		headers.setContentLength(imageBytes.length);
-		headers.setContentType(MediaType.IMAGE_JPEG);
-		return new HttpEntity<byte[]>(imageBytes, headers);
-	}
-
-	@RequestMapping("/byPath/{pathIndex}/{imageIndex}")
-	public HttpEntity<byte[]> getImageByPath(@PathVariable int pathIndex, @PathVariable int imageIndex, HttpServletResponse response) throws IOException {
-		return getImageEntity(imageService.getImage(pathIndex, imageIndex), MediaType.IMAGE_JPEG, response);
-	}
-
 	@RequestMapping(value = "/byPath/{pathIndex}/{imageIndex}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteByPath(@PathVariable int pathIndex, @PathVariable int imageIndex) {
@@ -104,33 +92,39 @@ public class ImageController extends CrazyController {
 		imageService.deleteByPath(pathIndex, imageIndex);
 	}
 
-	private HttpEntity<byte[]> getImageEntity(Image image, MediaType type, HttpServletResponse response) {
+	private HttpEntity<byte[]> getImageEntity(Image image, HttpServletResponse response) {
+		return getImageEntity(image, Type.MASTER, response);
+	}
+	
+	private HttpEntity<byte[]> getImageEntity(Image image, Image.Type type, HttpServletResponse response) {
 		/*
 		for (String name : response.getHeaderNames())
 			for (String value : response.getHeaders(name))
 				log.info("HEADER {}: {}", name, value);
 		 */
-		
-		byte[] imageBytes = image.getByteArray(Image.Type.MASTER);
-		
 		response.setHeader("Cache-Control",    "public, max-age=" + IMAGE.WEBCACHETIME_SEC);
 		response.setHeader("Pragma",           "public");
 		response.setDateHeader("Expires",       today + IMAGE.WEBCACHETIME_MILI);
 		response.setDateHeader("Last-Modified", today - IMAGE.WEBCACHETIME_MILI);
+		response.setHeader("info", JsonUtils.toJsonString(image.getInfo()));
 
-		response.setHeader("name", image.getName());
-		response.setHeader("path", image.getFile().getParent());
-		response.setDateHeader("modified", image.getFile().lastModified());
-
+		byte[] byteArray = image.getByteArray(type);
+		
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentLength(imageBytes.length);
-		headers.setContentType(type);
-//		headers.setCacheControl("public, max-age=" + VIDEO.WEBCACHETIME_SEC);
-//		headers.setDate(today + VIDEO.WEBCACHETIME_MILI);
-//		headers.setExpires(today + VIDEO.WEBCACHETIME_MILI);
-//		headers.setLastModified(today + VIDEO.WEBCACHETIME_MILI);
+		headers.setContentLength(byteArray.length);
+ 		headers.setContentType(getMediaType(image.getFile()));
 
-		return new HttpEntity<byte[]>(imageBytes, headers);
+		return new HttpEntity<byte[]>(byteArray, headers);
+	}
+
+	private MediaType getMediaType(File file) {
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			MediaType mediaType = MediaType.valueOf(contentType);
+			return mediaType;
+		} catch (IOException e) {
+			return MediaType.IMAGE_JPEG;
+		}
 	}
 
 }

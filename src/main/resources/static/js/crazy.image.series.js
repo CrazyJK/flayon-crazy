@@ -252,7 +252,7 @@ var series = (function() {
 				$("#name").html(imageInfo.name);
 				$("#path").html(imageInfo.path);
 				$("#length").html(formatFileSize(imageInfo.length));
-				$("#modified").html(new Date(imageInfo.modified).format('yyyy-MM-dd hh:mm'));
+				$("#modified").html(new Date(imageInfo.lastModified).format('yyyy-MM-dd hh:mm'));
 			},
 			position: {
 				calc: function(divWidth, divHeight, originalWidth, originalHeight, offsetLeft, offsetTop, ratio) {

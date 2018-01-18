@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +14,9 @@ import org.imgscalr.Scalr.Method;
 
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.ImageException;
+import jk.kamoru.flayon.crazy.image.IMAGE;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.util.ImageUtils;
 import lombok.Getter;
 
 /**
@@ -21,7 +25,9 @@ import lombok.Getter;
  *
  */
 @Getter
-public class Image {
+public class Image implements Serializable {
+
+	private static final long serialVersionUID = IMAGE.SERIAL_VERSION_UID;
 
 	public enum Type {
 
@@ -29,6 +35,8 @@ public class Image {
 		MASTER(0), 
 		/** width 500px size */
 		WEB(500), 
+		/** width 500px, with Title */
+		TITLE(500),
 		/**  width 100px size */
 		THUMBNAIL(100);
 		
@@ -42,15 +50,33 @@ public class Image {
 			return size;
 		}
 	}
+
+	@Getter
+	public class Info implements Serializable {
+		private static final long serialVersionUID = IMAGE.SERIAL_VERSION_UID;
+		String name;
+		String path;
+		long length;
+		long lastModified;
+		
+		public Info(File file) {
+			this.name = file.getName();
+			this.path = file.getParent();
+			this.length = file.length();
+			this.lastModified = file.lastModified();
+		}
+	}
 	
 	private File file;
+	private Info info;
 
 	public Image(File file) {
-		this.file  = file;
+		this.file = file;
+		this.info = new Info(file);
 	}
 
-	public String getName() {
-		return file.getName();
+	public byte[] getByteArray() {
+		return getByteArray(Type.MASTER);
 	}
 	
 	/**
@@ -63,6 +89,14 @@ public class Image {
 			switch (type) {
 			case MASTER:
 				return FileUtils.readFileToByteArray(file);
+			case TITLE:
+				return ImageUtils.mergeTextToImage(
+						Scalr.resize(
+								ImageIO.read(file), 
+								Scalr.Mode.FIT_TO_WIDTH, 
+								Type.TITLE.getSize()), 
+						info.getName(), 
+						"D2Coding", 18);
 			case WEB:
 				return readBufferedImageToByteArray(
 						Scalr.resize(
@@ -85,8 +119,6 @@ public class Image {
 		}
 	}
 
-	
-	
 	/**
 	 * {@link BufferedImage}를 읽어 byte[]로 반환 
 	 * @param bi
@@ -95,7 +127,7 @@ public class Image {
 	private byte[] readBufferedImageToByteArray(BufferedImage bi) {
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			ImageIO.setUseCache(false);
-			ImageIO.write(bi, "gif", outputStream);
+			ImageIO.write(bi, CrazyUtils.getExtension(file), outputStream);
 			return outputStream.toByteArray();
 		} catch (IOException e) {
 			throw new CrazyException("read bufferedImage error", e);

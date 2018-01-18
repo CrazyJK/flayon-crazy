@@ -37,25 +37,13 @@ public class RestImageController {
 	}
 
 	@RequestMapping("/info/{index}")
-	public Map<String, Object> getImageInfo(@PathVariable int index) {
-		Image image = imageService.getImage(index);
-		Map<String, Object> info = new HashMap<>();
-		info.put("name", image.getName());
-		info.put("path", image.getFile().getParent());
-		info.put("length", image.getFile().length());
-		info.put("modified", image.getFile().lastModified());
-		return info;
+	public Image.Info getImageInfo(@PathVariable int index) {
+		return imageService.getImage(index).getInfo();
 	}
 	
 	@RequestMapping("/info/byPath/{pathIndex}/{imageIndex}")
-	public Map<String, Object> getImageInfoByPath(@PathVariable int pathIndex, @PathVariable int imageIndex) {
-		Image image = imageService.getImage(pathIndex, imageIndex);
-		Map<String, Object> info = new HashMap<>();
-		info.put("name", image.getName());
-		info.put("path", image.getFile().getParent());
-		info.put("length", image.getFile().length());
-		info.put("modified", image.getFile().lastModified());
-		return info;
+	public Image.Info getImageInfoByPath(@PathVariable int pathIndex, @PathVariable int imageIndex) {
+		return imageService.getImage(pathIndex, imageIndex).getInfo();
 	}
 
 	@RequestMapping("/count")

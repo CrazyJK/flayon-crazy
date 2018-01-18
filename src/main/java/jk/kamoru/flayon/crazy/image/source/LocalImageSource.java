@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
 import jk.kamoru.flayon.base.watch.AsyncExecutorService;
@@ -51,49 +50,61 @@ public class LocalImageSource extends AsyncExecutorService implements ImageSourc
 			}
 		}
 		loadAfter();
-		log.info("{} images found", imageList.size());
-		
-		NotiQueue.pushNoti("Image loading " + imageList.size());
+		log.info("{} images found", size());
+		NotiQueue.pushNoti("Image loading " + size());
 	}
 
 	@Override
-	public Image getImage(int idx) {
+	public List<Image> getList() {
+		return imageList;
+	}
+
+	@Override
+	public Image get(int idx) {
 		try {
 			return imageList.get(idx);
-		}
-		catch(IndexOutOfBoundsException e) {
+		} catch(IndexOutOfBoundsException e) {
 			throw new ImageNotFoundException(idx, e);
 		}
 	}
 
 	@Override
-	public List<Image> getImageList() {
-		return imageList;
+	public Image get(int pathIndex, int imageIndex) {
+		try {
+			if (pathIndex < 0)
+				return get(imageIndex);
+			else
+				return imageMapByPath.get(pathList.get(pathIndex)).get(imageIndex);
+		} catch(Exception e) {
+			throw new ImageNotFoundException(String.format("NotFound %s %s ", pathIndex, imageIndex), e);
+		}
 	}
 
 	@Override
-	public int getImageSourceSize() {
+	public int size() {
 		return imageList.size();
 	}
 
 	@Override
-	@CacheEvict(value = "flayon-image-cache", allEntries=true)
 	public void delete(int idx) {
-		Image image = imageList.get(idx);
-		imageList.remove(image);
-		loadAfter();
-		FileUtils.deleteQuietly(image.getFile());
+		delete(get(idx));
 	}
 
 	@Override
-	@CacheEvict(value = "flayon-image-cache", allEntries=true)
 	public void delete(int pathIndex, int imageIndex) {
-		Image image = getImage(pathIndex, imageIndex);
-		imageList.remove(image);
-		loadAfter();
-		FileUtils.deleteQuietly(image.getFile());
+		delete(get(pathIndex, imageIndex));
+	}
+
+	@Override
+	public List<String> getPathList() {
+		return pathList;
 	}
 	
+	@Override
+	public Map<String, List<Image>> getImageMapByPath() {
+		return imageMapByPath;
+	}
+
 	@Override
 	protected Runnable getTask() {
 		return new DirectoryWatcher("Image", config.getImagePaths()) {
@@ -113,28 +124,12 @@ public class LocalImageSource extends AsyncExecutorService implements ImageSourc
 			}};
 	}
 
-	@Override
-	public Image getImage(int pathIndex, int imageIndex) {
-		try {
-			if (pathIndex < 0)
-				return getImage(imageIndex);
-			else
-				return imageMapByPath.get(pathList.get(pathIndex)).get(imageIndex);
-		} catch(Exception e) {
-			throw new ImageNotFoundException(String.format("NotFound %s %s ", pathIndex, imageIndex), e);
-		}
-	}
-
-	@Override
-	public List<String> getPathList() {
-		return pathList;
+	private void delete(Image image) {
+		imageList.remove(image);
+		FileUtils.deleteQuietly(image.getFile());
+		loadAfter();
 	}
 	
-	@Override
-	public Map<String, List<Image>> getImageMapByPath() {
-		return imageMapByPath;
-	}
-
 	private void loadAfter() {
 		imageMapByPath = new HashMap<>();
 		for (Image image : imageList) {

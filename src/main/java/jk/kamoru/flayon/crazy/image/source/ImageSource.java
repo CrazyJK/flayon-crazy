@@ -12,34 +12,17 @@ import jk.kamoru.flayon.crazy.image.domain.Image;
  */
 public interface ImageSource {
 
-	/**
-	 * image
-	 * @param idx
-	 * @return
-	 */
-	Image getImage(int idx);
+	List<Image> getList();
+
+	Image get(int idx);
 	
-	/**
-	 * total image list
-	 * @return
-	 */
-	List<Image> getImageList();
+	Image get(int pathIndex, int imageIndex);
 
-	/**
-	 * total image size
-	 * @return
-	 */
-	int getImageSourceSize();
+	int size();
 
-	/**
-	 * delete image
-	 * @param idx
-	 */
 	void delete(int idx);
 
 	void delete(int pathIndex, int imageIndex);
-
-	Image getImage(int pathIndex, int imageIndex);
 	
 	List<String> getPathList();
 
