@@ -207,8 +207,10 @@ var series = (function() {
 
 						var position = fn.position.calc($imageDiv.width(), $imageDiv.height(), preloader.width, preloader.height, MARGIN_LEFT, MARGIN_TOP, 0.9);
 						var urlSplit = preloader.src.split("/");
-						var pathIndex = urlSplit[urlSplit.length -2];
-						var imageIndex = urlSplit[urlSplit.length -1];
+						var pathSplitLength = PATH.split("/").length;
+						var  pathIndex = urlSplit[pathSplitLength + 4];
+						var imageIndex = urlSplit[pathSplitLength + 5];
+						//console.log(preloader.src, urlSplit, pathSplitLength);
 						
 						var $image = $("<img>", {src: preloader.src})
 						.css({
@@ -227,7 +229,7 @@ var series = (function() {
 						})
 						.appendTo($imageDiv);
 
-						var infoURL = preloader.src.replace("/image", "/rest/image/info");
+						var infoURL = PATH + "/rest/image/info/byPath/" + pathIndex + "/" + imageIndex;
 						restCall(infoURL, {showLoading: false}, function(imageInfo) {
 							$image.data("imageInfo", imageInfo);
 						});
