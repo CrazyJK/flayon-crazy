@@ -64,67 +64,71 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 	}
 
 	private void getAccesslog(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView, Exception ex) {
-		long startTime = (Long)request.getAttribute("startTime");
-		long elapsedtime = System.currentTimeMillis() - startTime;
+		final long startTime = (Long)request.getAttribute("startTime");
 
-		String handlerlInfo = "";
-		// for Controller
-		if (handler instanceof org.springframework.web.method.HandlerMethod) {
+		Date   logDate = new Date();
+		String remoteAddr = request.getRemoteAddr();
+		String reqMethod = request.getMethod();
+		String requestUri = request.getRequestURI();
+		String contentType = trim(response.getContentType());
+		long   elapsedtime = System.currentTimeMillis() - startTime;
+		String handlerInfo = "";
+		String exceptionInfo = ex == null ? "" : ex.getMessage();
+		String modelAndViewInfo = "";
+		User   user = null;
+		int    status = response.getStatus();
+
+		// for handlerInfo
+		if (handler instanceof org.springframework.web.method.HandlerMethod) { // for Controller
 			HandlerMethod method = (HandlerMethod) handler;
-			handlerlInfo = String.format("%s.%s", method.getBean().getClass().getSimpleName(), method.getMethod().getName());
+			handlerInfo = String.format("%s.%s", method.getBean().getClass().getSimpleName(), method.getMethod().getName());
 		} 
-		// for static resources. No additional information
-		else if (handler instanceof ResourceHttpRequestHandler) {
+		else if (handler instanceof ResourceHttpRequestHandler) { // for static resources. No additional information
 			// do nothing
 		}
-		// another handler 
-		else {
-			handlerlInfo = String.format("%s", handler);
+		else { // another handler
+			handlerInfo = String.format("%s", handler);
 		}
 
+		boolean exclude = contentType.startsWith("image") 
+				|| requestUri.contains("ping.json") 
+				|| handlerInfo.startsWith("ImageController.image")
+				|| handlerInfo.startsWith("RestImageController.getImageInfoByPath");
+		if (exclude) {
+			return;
+		}
+		
 		// for modelAndView
-		String modelAndViewInfo = "";
 		if (modelAndView != null) {
 			String viewName = modelAndView.getViewName();
 			String modelNames = Arrays.toString(modelAndView.getModel().keySet().toArray(new String[0]));
 			modelAndViewInfo = String.format("view=%s model=%s", viewName, modelNames);
 		}
 		
-		String exceptionInfo = "";
-		if (ex != null) {
-			exceptionInfo = "Error : " + ex.getMessage();
-		}
-		
 		// user
-		User user = null;
 		SecurityContextImpl securityContext = (SecurityContextImpl) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 		if (securityContext != null) {
-			FlayOnUser flayOnUser = (FlayOnUser)securityContext.getAuthentication().getPrincipal();
+			FlayOnUser flayOnUser = (FlayOnUser) securityContext.getAuthentication().getPrincipal();
 			user = flayOnUser.getUser();
 		}
-		String contentType = trim(response.getContentType());
-		String requestUri = request.getRequestURI();
-		int status = response.getStatus();
+		
 		AccessLog accessLog = new AccessLog(
-				new Date(),
-				request.getRemoteAddr(),
-				request.getMethod(), 
+				logDate,
+				remoteAddr,
+				reqMethod, 
 				requestUri,
 				contentType,
 				elapsedtime,
-				handlerlInfo,
+				handlerInfo,
 				exceptionInfo,
 				modelAndViewInfo,
 				user,
 				status);
-
-		if (useAccesslogRepository) {
-			if (!requestUri.contains("ping.json"))
-				accessLogRepository.save(accessLog);
-		}
 		
-		if (!(contentType.startsWith("image") || requestUri.contains("ping.json") || handlerlInfo.startsWith("ImageController.image")))
-			log.info(accessLog.toLogString());
+		if (useAccesslogRepository)
+			accessLogRepository.save(accessLog);
+		log.info(accessLog.toLogString());
+		
 	}
 
 	private String trim(String str) {
