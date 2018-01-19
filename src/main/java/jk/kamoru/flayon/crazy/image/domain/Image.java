@@ -90,13 +90,7 @@ public class Image implements Serializable {
 			case MASTER:
 				return FileUtils.readFileToByteArray(file);
 			case TITLE:
-				return ImageUtils.mergeTextToImage(
-						Scalr.resize(
-								ImageIO.read(file), 
-								Scalr.Mode.FIT_TO_WIDTH, 
-								Type.TITLE.getSize()), 
-						info.getName(), 
-						"D2Coding", 18);
+				return ImageUtils.mergeTextToImage(ImageIO.read(file), info.getName(), "D2Coding", 18);
 			case WEB:
 				return readBufferedImageToByteArray(
 						Scalr.resize(
