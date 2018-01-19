@@ -41,10 +41,9 @@ body {
 select.label-black {
 	border: 0;
 }
-input[type=text].label-black {
-	border: 0;
-	width: 30px;
-	text-align: right;
+.progress-bar {
+	background: #000;
+	color: #fff;
 }
 </style>
 <script src="${PATH}/js/crazy.image.series.js"></script>
@@ -62,15 +61,15 @@ $(function() {
 			<div id="progressWrapper"></div>
 		</div>
 		<div id="leftBottom">
-			<span id="path" class="label label-black"></span>
+			<span id="playInterval" class="label label-black"></span>
+			<select id="paths" class="label label-black"></select>
+			<%-- <span id="path" class="label label-black"></span> --%>
 			<span id="name" class="label label-black"></span>
 			<span id="index" class="label label-black"></span>
 			<span id="length" class="label label-black"></span>
 			<span id="modified" class="label label-black"></span>
 		</div>
 		<div id="rightBottom">
-			<span id="playInterval" class="label-black"></span>
-			<select id="paths" class="label-black"></select>
 		</div>
 		<div id="imageDiv"></div>
 	</div>
