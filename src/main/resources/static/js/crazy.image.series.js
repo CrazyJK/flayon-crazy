@@ -111,7 +111,7 @@ var series = (function() {
 				timerEngine.toggle(fn.playCallback);
 			},
 			playCallback: function() {
-				$(".container-series, .progress-bar, .label, code, .modal-content, #configModal").toggleClass("label-black", status);
+				$(".progress-bar").toggleClass("bg-black", status);
 			},
 			prev: function() {
 				var $imageDiv = $("#imageDiv");					
@@ -128,7 +128,7 @@ var series = (function() {
 				if ($rightImage.length > 0) {
 					var position = $rightImage.data("position");
 					$rightImage.removeClass("img-series-center").addClass("img-series-right")
-					.css({
+					.animate({
 						left: $(window).width() - MARGIN_LEFT
 					});
 				}
@@ -138,7 +138,7 @@ var series = (function() {
 				if ($centerImage.length > 0) {
 					var position = $centerImage.data("position");
 					$centerImage.removeClass("img-series-left").addClass("img-series-center")
-					.css({
+					.animate({
 						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
 					fn.displayInfo($centerImage);
@@ -152,7 +152,7 @@ var series = (function() {
 				if ($leftImage.length > 0) {
 					var position = $leftImage.data("position");
 					$leftImage.removeClass("img-series-left-over").addClass("img-series-left")
-					.css({
+					.animate({
 						left: MARGIN_LEFT - position.width
 					});
 				}
@@ -176,7 +176,7 @@ var series = (function() {
 				if ($leftImage.length > 0) {
 					var position = $leftImage.data("position");
 					$leftImage.removeClass("img-series-center").addClass("img-series-left")
-					.css({
+					.animate({
 						left: MARGIN_LEFT - position.width
 					});
 				}
@@ -186,7 +186,7 @@ var series = (function() {
 				if ($centerImage.length > 0) {
 					var position = $centerImage.data("position");
 					$centerImage.removeClass("img-series-right").addClass("img-series-center")
-					.css({
+					.animate({
 						left: ($imageDiv.width() - position.width) / 2 + MARGIN_LEFT
 					});
 					fn.displayInfo($centerImage);
@@ -196,10 +196,9 @@ var series = (function() {
 				var $rightImage = $(".img-series-right-over:first", "#imageDiv");
 				if ($rightImage.length > 0) {
 					var position = $rightImage.data("position");
-					$rightImage.removeClass("img-series-right-over").addClass("img-series-right")
-					.css({
+					$rightImage.animate({
 						left: $(window).width() - MARGIN_LEFT
-					});
+					}).removeClass("img-series-right-over").addClass("img-series-right");
 				}
 				else { // 새 이미지
 					var preloader = new Image();
@@ -219,7 +218,7 @@ var series = (function() {
 							width: position.width,
 							height: position.height
 						})
-						.addClass("img-responsive img-thumbnail img-series img-series-right")
+						.addClass("img-responsive img-rounded img-series img-series-right")
 						.data("size", {width: preloader.width, height: preloader.height})
 						.data("position", position)
 						.data("pathIndex", pathIndex)

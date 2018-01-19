@@ -144,7 +144,14 @@ var agent = navigator.userAgent.toLowerCase(),
 			: alpha === 'r' 
 				? getRandom(0, 1) 
 				: alpha */
-		return "rgba(" + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + getRandomInteger(0,255) + "," + (alpha ? alpha : alpha === 'r' ? getRandom(0, 1) : 1) + ")";
+		if (alpha)
+			return "rgba(" 
+					+ getRandomInteger(0,255) + "," 
+					+ getRandomInteger(0,255) + "," 
+					+ getRandomInteger(0,255) + "," 
+					+ (alpha === 'r' ? getRandom(0, 1) : alpha) + ")";
+		else
+			return "#" + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2);
 	},
 	setLocalStorageItem = function(itemName, itemValue) {
 		typeof(Storage) !== "undefined" && localStorage.setItem(itemName, itemValue);

@@ -37,6 +37,12 @@
 }
 #thumbnailDiv > ul#thumbnailUL li > div.img-thumbnail:not(.active) {
 	cursor: pointer;
+	opacity: .8;
+	filter: grayscale(100%);
+}
+#thumbnailDiv > ul#thumbnailUL li > div.img-thumbnail:not(.active):hover {
+	opacity: 1;
+	filter: brightness(200%);
 }
 .active {
 	opacity: 1;

@@ -137,12 +137,12 @@ var slide = (function() {
 			},
 			playCallback: function(status) {
 				if (status) {
-					$("body, .progress-bar, .label").addClass("label-black");
+					$("body, .progress-bar, .label").addClass("bg-black");
 					$("#thumbnailDiv").css('height', '5px').hide();
 					$("#pagingArea, #effectInfoBox").hide();
 				}
 				else {
-					$("body, .progress-bar, .label").removeClass("label-black");
+					$("body, .progress-bar, .label").removeClass("bg-black");
 					$("#thumbnailDiv").css('height', '105px').show('fade', {}, 1000);
 					$("#pagingArea, #effectInfoBox").show();
 				}

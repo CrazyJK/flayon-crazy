@@ -123,10 +123,10 @@ bgContinue = false;
 			},
 			playCallback: function(status) {
 				if (status) {
-					$("body, .progress-bar, .label, .page-no").addClass("label-black");
+					$("body, .progress-bar, .label, .page-no").addClass("bg-black");
 				}
 				else {
-					$("body, .progress-bar, .label, .page-no").removeClass("label-black");
+					$("body, .progress-bar, .label, .page-no").removeClass("bg-black");
 				}
 			},
 			nav: function(signal) {

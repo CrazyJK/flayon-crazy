@@ -103,12 +103,12 @@ var apertureApp = (function() {
 			},
 			playCallback: function(status) {
 				if (status) {
-					$("body, .progress-bar, .label").addClass("label-black");
+					$("body, .progress-bar, .label").addClass("bg-black");
 					$("#pagingArea, #effectInfoBox").hide();
 					$(".circle").css({'background-color': '#000'});
 				}
 				else {
-					$("body, .progress-bar, .label").removeClass("label-black");
+					$("body, .progress-bar, .label").removeClass("bg-black");
 					$("#pagingArea, #effectInfoBox").show();
 					$(".circle").css({'background-color': '#fff'});
 				}

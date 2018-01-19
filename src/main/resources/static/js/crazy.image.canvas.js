@@ -233,7 +233,7 @@ var canvasApp = (function() {
 					context = canvas.getContext("2d");
 					pencil  = new image.canvas.pencil.init();
 					
-					$("#color").val("#" + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2) + getRandomHex(0, 255).zf(2));
+					$("#color").val(getRandomColor());
 				}
 			},
 			number: {

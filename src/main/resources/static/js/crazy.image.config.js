@@ -12,6 +12,7 @@ var config = (function() {
 		IMAGE_HIDE_METHOD    = "image.hide.method",
 		IMAGE_HIDE_SPECIFIC  = "image.hide.specific",
 		IMAGE_TABLET_DISPLAY = "image.tablet.display.method",
+		IMAGE_BACKGROUND_COLOR = "image.background.color",
 		JQUERY_UI_EFFECTs = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"],
 		effect = {
 			name: "", options: {}, duration: 500
@@ -46,6 +47,7 @@ var config = (function() {
 				setLocalStorageItem(IMAGE_TABLET_DISPLAY, displayMethod.value);
 				setLocalStorageItem(IMAGE_SHOW_SPECIFIC,  $("#effectShowTypes option:selected").val());
 				setLocalStorageItem(IMAGE_HIDE_SPECIFIC,  $("#effectHideTypes option:selected").val());
+				setLocalStorageItem(IMAGE_BACKGROUND_COLOR, bgColor.value);
 				
 				timerEngine.setTime(playInterval.value);
 				fn.display();
@@ -148,6 +150,7 @@ var config = (function() {
 						$("#displayMethod").val(getRandomInteger(0, 1)).trigger("click");
 						$("#rotateDegree" ).val(getRandomInteger(0, 360)).trigger("click");
 						$("#playInterval" ).val(getRandomInteger(5, 20)).trigger("click");
+						$("#bgColor"      ).val(getRandomColor()).trigger("change");
 					};
 					showSnackbar("shuffle start", 1000);
 					var count = 0, maxShuffle = getRandomInteger(3, 9);
@@ -158,6 +161,16 @@ var config = (function() {
 						 	showSnackbar("shuffle completed. try " + maxShuffle, 1000);
 						}
 					}, 500);
+				});
+				$("#bgColor").on("change", function() {
+					var color = $(this).val();
+					console.log(color);
+					$("body, .label-color").css({
+						backgroundColor: color
+					});
+					$(".label-color").html(color);
+					$(this).css({borderColor: color});
+					fn.save();
 				});
 				
 				$(app.selector).navEvent(fn.nav);
@@ -174,7 +187,8 @@ var config = (function() {
 				var displayMethod      = getLocalStorageItem(IMAGE_TABLET_DISPLAY, getRandomInteger(0, 1));
 				var showSpecificEffect = getLocalStorageItem(IMAGE_SHOW_SPECIFIC,  JQUERY_UI_EFFECTs[getRandomInteger(0, JQUERY_UI_EFFECTs.length-1)]);
 				var hideSpecificEffect = getLocalStorageItem(IMAGE_HIDE_SPECIFIC,  JQUERY_UI_EFFECTs[getRandomInteger(0, JQUERY_UI_EFFECTs.length-1)]);
-
+				var backgroundColor = getLocalStorageItem(IMAGE_BACKGROUND_COLOR, "#FFFFFF");
+				
 				$("#imageSource"  ).val(imageSource  ).trigger("click");
 				$("#showMethod"   ).val(showMethod   ).trigger("click");
 				$("#hideMethod"   ).val(hideMethod   ).trigger("click");
@@ -182,6 +196,7 @@ var config = (function() {
 				$("#displayMethod").val(displayMethod).trigger("click");
 				$("#playInterval" ).val(playInterval ).trigger("click");
 				$("#rotateDegree" ).val(rotateDegree ).trigger("click");
+				$("#bgColor"      ).val(backgroundColor).trigger("change");
 				
 				for (var i in JQUERY_UI_EFFECTs) {
 					$("#effectShowTypes, #effectHideTypes").append(

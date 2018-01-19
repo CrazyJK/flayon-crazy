@@ -97,7 +97,7 @@ var tablet = (function() {
 				var preloader = new Image();
 				preloader.onload = function() {
 					fn.container.removeOld();
-					fn.container.defocus(); // 기존 이미지의 테두리 초기화
+					fn.container.defocus();
 					
 					if (displayMethod.value == 1) {
 						fn.tablet.tile();
@@ -106,7 +106,7 @@ var tablet = (function() {
 					var $image = $("<img>", {
 						src: preloader.src,
 						"class": "img-thumbnail img-card img-card-focus " + imageTypeClass
-					}).randomBG(0.5).css({
+					}).css({
 						display: "none",
 						height: tileHeight,
 						right: 0,
@@ -148,14 +148,14 @@ var tablet = (function() {
 								fn.tablet.tile();
 							}
 						} 
-						else if (e.which == 3) { // mouse right : 회전 0
+						else if (e.which == 3) { // mouse right : 회전 toggle
 							if (isTile) {
 							}
 							else {
 								$(this).appendTo($(IMAGE_DIV));
 								fn.container.setLastInfo();
 							}
-							$(this).addClass("rotate0");
+							$(this).toggleClass("rotate0");
 						}
 					}).appendTo(
 							$(IMAGE_DIV)
@@ -206,12 +206,12 @@ var tablet = (function() {
 				this.setLastInfo();
 			},
 			defocus: function() {
-				$(".img-card", IMAGE_DIV).css({backgroundColor: "transparent"}).removeClass("img-card-focus");
+				$(".img-card", IMAGE_DIV).removeClass("img-card-focus");
 			},
 			setLastInfo: function() { // 새로운 마지막 이미지 설정
 				var $imageDivChildren = $(IMAGE_DIV).children();
 				if ($imageDivChildren.length > 0) {
-					var data = $imageDivChildren.last().addClass("img-card-focus").randomBG(0.5).data("data");
+					var data = $imageDivChildren.last().addClass("img-card-focus").data("data");
 					$(".title").html(data.title).data("data", data);
 					$(".displayCount").html($("." + data.imageTypeClass, IMAGE_DIV).length + " in " + (data.mode == 0 ? imageIndexMap.length : coverIndexMap.length));
 				}
@@ -264,7 +264,7 @@ var tablet = (function() {
 				}
 			},
 			playCallback: function(status) {
-				$(".container-tablet, .progress-bar, .label, code, .container-tablet, .modal-content, #configModal").toggleClass("label-black", status);
+				$(".container-tablet, .progress-bar, .label:not(.label-switch), code").toggleClass("bg-black", status);
 			},
 			resize: function() {
 				$(IMAGE_DIV).height($(window).height() - TOP_MARGIN);

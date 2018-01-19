@@ -124,12 +124,12 @@
 			self.view();
 			$("body").css({backgroundColor: getRandomColor('r')});
 			$(".lightboxOverlay").css({opacity: 1});
-			$(".progress-bar").addClass("label-black");
+			$(".progress-bar").addClass("bg-black");
 		}
 		else { // stop
 			$("body").css({backgroundColor: "#fff"});
 			$(".lightboxOverlay").css({opacity: 0.8});
-			$(".progress-bar").removeClass("label-black");
+			$(".progress-bar").removeClass("bg-black");
 		}
 	};
 	

@@ -21,22 +21,22 @@ body {
 	position: fixed;
 }
 .img-series-left-over {
-	filter: grayscale(100%);
 }
 .img-series-left {
 	filter: grayscale(100%);
 	cursor: e-resize;
+	/* opacity: 0.6; */
 }
 .img-series-center {
-	filter: grayscale(0);
+	box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5);
 }
 .img-series-right {
 	filter: grayscale(100%);
 	cursor: w-resize;
+	opacity: 0.6;
 }
 .img-series-right-over {
 	left: calc(100% * 2) !important;
-	filter: grayscale(100%);
 }
 select.label-black {
 	border: 0;
@@ -63,7 +63,7 @@ $(function() {
 		<div id="leftBottom">
 			<span id="playInterval" class="label label-black"></span>
 			<select id="paths" class="label label-black"></select>
-			<%-- <span id="path" class="label label-black"></span> --%>
+			<span id="path" class="label label-black hide"></span>
 			<span id="name" class="label label-black"></span>
 			<span id="index" class="label label-black"></span>
 			<span id="length" class="label label-black"></span>

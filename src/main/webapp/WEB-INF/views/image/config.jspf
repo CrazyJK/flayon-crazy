@@ -102,6 +102,14 @@
 								<span class="label label-default label-switch" data-role="switch" data-value="1" data-target="displayMethod">Tile</span>
 							</div>
 						</div>	
+						<div class="row">
+							<div class="col-xs-3 text-bold">Background Color
+								<span class="label label-plain label-color"></span>
+							</div>
+							<div class="col-xs-9 text-left">
+								<input type="color" id="bgColor" class="form-control input-sm input-color" value="#ffffff"/>
+							</div>
+						</div>	
 					</div>
 				</div>
 				<div class="modal-footer">

@@ -120,3 +120,22 @@ body, .label-info, .progress, .paging {
 	top: 0;
 	cursor: pointer;
 }
+input.input-color {
+	background-color: rgba(0,0,0,0);
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.5);
+    margin: 0;
+    padding: 4px;	
+}
+input.input-color[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input.input-color[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+.label-color {
+	color: #ffff;
+	font-weight: 700;
+	text-shadow: 0 0 3px #000;
+	padding: .3em .7em;
+}
