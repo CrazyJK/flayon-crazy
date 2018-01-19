@@ -5,8 +5,7 @@
 var thumbnails = (function() {
 
 	var currentIndex = 0;
-	var coverCount = 0;
-	var coverMap;
+	var coverCount = 0, coverMap;
 	var lastPage = false;
 	var imageSizePerPage = 30;
 	var displayCount = 0;
