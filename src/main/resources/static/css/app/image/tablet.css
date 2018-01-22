@@ -26,7 +26,6 @@
 }
 .img-card-tile:hover {
 	opacity: 1;
-	filter: brightness(150%);
 }
 .ui-draggable-dragging {
 	box-shadow: 

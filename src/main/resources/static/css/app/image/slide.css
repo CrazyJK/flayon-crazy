@@ -42,7 +42,7 @@
 }
 #thumbnailDiv > ul#thumbnailUL li > div.img-thumbnail:not(.active):hover {
 	opacity: 1;
-	filter: brightness(200%);
+	filter: none;
 }
 .active {
 	opacity: 1;
