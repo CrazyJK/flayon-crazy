@@ -116,7 +116,7 @@ function Video(idx, data) {
 			$("#check-" + opus).addClass("found");
 			fnSearchTorrent(opus);
 //			popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
-		})
+		});
 	};
 }
 
