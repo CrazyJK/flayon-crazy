@@ -51,8 +51,16 @@ function Video(idx, data) {
 	this.label_modified        = VideoUtils.wrapLabel(this.videoDate);
 	this.label_score           = VideoUtils.wrapLabel('S ' + this.score);
 	this.label_rank            = VideoUtils.wrapLabel("R " + this.rank);
-	this.label_video           = VideoUtils.wrapLabel("Video", '', this.existVideoFileList     ? "fnPlay('" + this.opus + "')" : "",          this.existVideoFileList ? "exist" : "nonExist");
-	this.label_subtitles       = VideoUtils.wrapLabel("Sub",   '', this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", this.existSubtitlesFileList ? "exist" : "nonExist");
+	this.label_video           = VideoUtils.wrapLabel(
+									"Video", 
+									this.existVideoFileList ? formatFileSize(this.fileLength) : '', 
+									this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "",          
+									this.existVideoFileList ? "exist" : "nonExist");
+	this.label_subtitles       = VideoUtils.wrapLabel(
+									"Sub",   
+									'', 
+									this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", 
+									this.existSubtitlesFileList ? "exist" : "nonExist");
 	this.label_overview		   = VideoUtils.wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
 	this.label_favorite        = this.favorite ? VideoUtils.wrapLabel("Fav", "", "", "label-success") : "";
 	this.label_actress         = function() {

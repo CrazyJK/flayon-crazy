@@ -1050,7 +1050,8 @@ public class Video {
 		removeVideo();
 	}
 	
-	/**대표 파일의 확장자
+	/**
+	 * 대표 파일의 확장자
 	 * @return
 	 */
 	@JsonIgnore
@@ -1082,6 +1083,10 @@ public class Video {
 		this.isArchive = isArchive;
 	}
 
+	/**
+	 * 비디오 파일 개수
+	 * @return
+	 */
 	@JsonIgnore
 	public int getSize() {
 		if (isExistVideoFileList()) {

@@ -222,6 +222,8 @@ var agent = navigator.userAgent.toLowerCase(),
 		return num.toFixed(x);
 	}
 	formatFileSize = function(length) {
+		if (typeof length === 'string')
+			length = parseInt(length);
 		if (length < KB)
 			return length + " B";
 		else if (length < MB)

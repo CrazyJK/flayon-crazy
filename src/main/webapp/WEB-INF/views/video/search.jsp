@@ -68,14 +68,15 @@ $(document).ready(function() {
 			var videoRow = result.videoResult;
 			$("#video-count").html(videoRow.length);
 			$.each(videoRow, function(entryIndex, entry) {
-				var studio 		   = entry['studio'],
-					opus 		   = entry['opus'],
-					title 		   = entry['title'],
-					actress 	   = entry['actress'],
-					existVideo 	   = entry['existVideo'],
-					existCover 	   = entry['existCover'],
-					existSubtitles = entry['existSubtitles'],
-					releaseDate    = entry['releaseDate'];
+				var studio 		= entry['studio'],
+					opus 		= entry['opus'],
+					title 		= entry['title'],
+					actress 	= entry['actress'],
+					existV 	    = entry['existVideo'] === "true" ? "success" : "default",
+					existC 	    = entry['existCover'] === "true" ? "success" : "default",
+					existS      = entry['existSubtitles'] === "true" ? "success" : "default",
+					releaseDate = entry['releaseDate'],
+					videoLength = entry['length'];
 				$('#foundVideoList').append(
 						$("<tr>").append(
 								$("<td>").append(
@@ -85,9 +86,10 @@ $(document).ready(function() {
 										$("<span>", {"class": "label label-plain", "onclick": "fnVideoDetail('" + opus +"')"}).html(opus)
 								),
 								$("<td>").append(
-										$("<span>", {"class": "label " + (existVideo === "true" ? "label-success" : "label-default")}).html("V"),
-										$("<span>", {"class": "label " + (existCover === "true" ? "label-success" : "label-default")}).html("C"),
-										$("<span>", {"class": "label " + (existSubtitles === "true" ? "label-success" : "label-default")}).html("S")
+										$("<span>", {"class": "label label-" + existV}).html("V"),
+										$("<span>", {"class": "label label-" + existC}).html("C"),
+										$("<span>", {"class": "label label-" + existS}).html("S"),
+										$("<span>", {"class": "label label-plain"}).html(formatFileSize(videoLength))
 								),
 								$("<td>").append(
 									function() {
@@ -217,11 +219,15 @@ function fnSaveCover() {
 	var opus = $("#opus").val();
 	var title = $("#fullname").val();
 	restCall(PATH + '/rest/video/' + opus + '/saveCover', {method: "POST", data: {title: title}}, function() {
-		$(".save-history").append(
-				$("<li>").html(title)	
-		);
+		fnAddHistory();
 		resizeSecondDiv();
 	});
+}
+function fnAddHistory() {
+	var title = $("#fullname").val();
+	$(".save-history").append(
+			$("<li>").html(title)	
+	);
 }
 </script>
 </head>
@@ -257,6 +263,7 @@ function fnSaveCover() {
 				<input class="form-control input-sm" id="actress" style="width: 100px !important;" placeholder="Actress"/>
 				<input class="form-control input-sm" id="release" style="width:  80px !important;" placeholder="Release"/>
 				<button class="btn btn-xs btn-default" onclick="fnSaveCover()">Save cover</button>
+				<button class="btn btn-xs btn-default" onclick="fnAddHistory()">Add history</button>
 			</div>
 			<div class="output-title">
 				<input class="form-control input-sm" id="fullname" placeholder="Full name"/>
@@ -295,7 +302,7 @@ function fnSaveCover() {
 		<div class="col-lg-6">
 			<div id="resultVideoDiv" class="box" style="overflow:auto">
 				<h4 class="title"><s:message code="video.video"/> <span id="video-count" class="badge"></span></h4>
-				<table class="table table-condensed table-hover table-bordered" style="display:none;">
+				<table class="table table-condensed table-hover table-bordered table-responsive" style="display:none;">
 					<thead>
 						<tr>
 							<th>Studio</th>

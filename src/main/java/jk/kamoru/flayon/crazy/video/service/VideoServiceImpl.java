@@ -375,6 +375,7 @@ public class VideoServiceImpl implements VideoService {
 				map.put("existCover", String.valueOf(video.isExistCoverFile()));
 				map.put("existSubtitles", String.valueOf(video.isExistSubtitlesFileList()));
 				map.put("releaseDate", video.getReleaseDate());
+				map.put("length", String.valueOf(video.getLength()));
 				foundMapList.add(map);
 			} 
 		}
