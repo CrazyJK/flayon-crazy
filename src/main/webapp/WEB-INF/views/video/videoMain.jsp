@@ -401,16 +401,6 @@ listViewType = '${videoSearch.listViewType}';
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
 			<link rel="stylesheet" href="${PATH}/css/videoMain.large.css"/>
-			<style type="text/css">
-			@media screen and (max-width: 1390px) {
-				.prevCover, .nextCover {
-					display: none;
-				}
-			}
-			.box-detail .label-plain, .box-detail .input-group {
-    			box-shadow: 0 3px 9px rgba(0,0,0,.3);
-			}
-			</style>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.large.js"></script>
 			<script type="text/javascript">
 				$("#slides").largeview();

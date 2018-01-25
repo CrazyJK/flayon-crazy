@@ -51,11 +51,10 @@
 		</div>
 		<p class="more text-center"><button class="btn btn-warning" id="viewMore">View More</button></p>
 	</div>
-
+	<script type="text/javascript" src="<c:url value="/js/crazy.video.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/js/crazy.video.list.js"/>"></script>
+	<script type="text/javascript">$(function(){VideoList.init()})</script>
 </div>
 
-<script type="text/javascript" src="<c:url value="/js/crazy.video.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/crazy.video.list.js"/>"></script>
-<script type="text/javascript">$(function(){VideoList.init()})</script>
 </body>
 </html>

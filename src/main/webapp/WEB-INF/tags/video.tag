@@ -23,9 +23,19 @@
 		</c:if>
 	</span>
 <%  } else if (view.equalsIgnoreCase("cover")) { %>
-	<span class="${cssClass} ${video.existCoverFile ? 'exist' : 'nonExist'}" onclick="fnCoverView('${video.opus}')">${mode eq 's' ? 'C' : 'Cover'}</span>
+	<c:if test="${video.existCoverFile}">
+		<span class="${cssClass} exist" onclick="fnCoverView('${video.opus}')">${mode eq 's' ? 'C' : 'Cover'}</span>
+	</c:if>
+	<c:if test="${!video.existCoverFile}">
+		<span class="${cssClass} nonExist">${mode eq 's' ? 'C' : 'Cover'}</span>
+	</c:if>
 <%  } else if (view.equalsIgnoreCase("subtitles")) { %>
-	<span class="${cssClass} ${video.existSubtitlesFileList ? 'exist' : 'nonExist'}" onclick="fnEditSubtitles('${video.opus}')">${mode eq 's' ? 's' : 'smi'}</span>
+	<c:if test="${video.existSubtitlesFileList}">
+		<span class="${cssClass} exist" onclick="fnEditSubtitles('${video.opus}')">${mode eq 's' ? 's' : 'smi'}</span>
+	</c:if>
+	<c:if test="${!video.existSubtitlesFileList}">
+		<span class="${cssClass} nonExist">${mode eq 's' ? 's' : 'smi'}</span>
+	</c:if>	
 <%  } else if (view.equalsIgnoreCase("overview")) { %>
 	<span class="${cssClass}" title="${video.overviewText}" id="overview-${video.opus}" style="${video.existOverview ? 'color:red' : ''}" onclick="fnEditOverview('${video.opus}', event)">${mode eq 's' ? 'O' : (video.existOverview ? video.overviewText : 'Overview')}</span>
 <%  } else if (view.equalsIgnoreCase("download")) { %>

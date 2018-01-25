@@ -47,8 +47,8 @@ var agent = navigator.userAgent.toLowerCase(),
 		specs = "width=" + width + ",height=" + height + ",top=" + position.top + ",left=" + position.left + "," + (specs || DEFAULT_SPECS);
 	
 		try {
-			console.log("[popup] open param", url, name, specs);
 			var popupWindow = window.open(url, name, specs);
+			//console.log("[popup] open param", url, name, specs, popupWindow);
 			popupWindow.focus();
 		} catch (e) {
 			console.log("[popup] error", e);
@@ -58,10 +58,10 @@ var agent = navigator.userAgent.toLowerCase(),
 	popupImage = function(url, name, event) {
 		//console.log("[popupImage]", url, name, event);
 		var img = new Image();
-		img.src = url;
 		img.onload = function() {
-			popup(url, name || url, this.width + 20, this.height + 20, 'Center');
-		}
+			popup(url, name || url, this.naturalWidth + 20, this.naturalHeight + 20, 'Center');
+		};
+		img.src = url;
 	},
 	/**
 	 * @return 1 : wheel up, -1 : wheel down, 0 : undetermined
