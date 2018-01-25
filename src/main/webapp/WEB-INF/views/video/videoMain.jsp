@@ -158,12 +158,12 @@ listViewType = '${videoSearch.listViewType}';
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li style="margin:5px;">
-					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom" style="width:400px; height:269px;"><a href="#">
-	        			<div class="img"><img class="lazy" src="${PATH}/video/${video.opus}/cover" style="height:253px;"></div>
-	        			<div class="info">
-	          				<div class="info-back">
+					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom" style="width:400px; height:269px;">
+						<div>
+		        			<div class="img"><img class="lazy" src="${PATH}/video/${video.opus}/cover" style="height:253px;"></div>
+	    	    			<div class="info">
 	            				<h3 class="nowrap"><jk:video video="${video}" view="title" mode="s"/></h3>
-	            				<p>
+	            				<div>
 		            				<jk:video video="${video}" view="studio"    mode="s"/>
 									<jk:video video="${video}" view="opus"      mode="s"/><br/><br/>
 									<jk:video video="${video}" view="actress"   mode="s"/><br/><br/>
@@ -172,14 +172,14 @@ listViewType = '${videoSearch.listViewType}';
 									<jk:video video="${video}" view="overview"  mode="s"/>
 									<jk:video video="${video}" view="rank"      mode="s"/>
 									<jk:video video="${video}" view="score"     mode="s"/>
-								</p>
-	          				</div>
-	        			</div></a>
+								</div>
+		        			</div>
+		        		</div>
 	        		</div>
         		</li>
 				</c:forEach>
 			</ul>
-			<link rel="stylesheet" href="${PATH}/css/ihover.min.css"/>
+			<link rel="stylesheet" href="${PATH}/css/ihover.css"/>
 			<script type="text/javascript">
 			$(".ih-item").each(function() {
 				var _randomNumber = getRandomInteger(1, 15);

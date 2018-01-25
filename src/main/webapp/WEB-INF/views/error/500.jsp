@@ -27,7 +27,7 @@ response.setHeader("error.message", request.getAttribute("status") + " : " + req
 	</div>
 	<div class="page-content">
 	    <p>Error: <code>${exception}: ${message}</code></p>
-	    <p>Param:
+	    <div>Param:
 	    	<ol>
 <%
 	for (Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
@@ -38,7 +38,7 @@ response.setHeader("error.message", request.getAttribute("status") + " : " + req
 	}
 %>
 	    	</ol>
-	    </p>
+	    </div>
 	</div>
 </div>
 
