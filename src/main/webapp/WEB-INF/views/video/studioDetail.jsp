@@ -8,8 +8,28 @@
 <head>
 <title>${studio.name}</title>
 <style type="text/css">
+body {
+	background-position: top center;
+	min-height: 700px;
+}
 #studioForm .form-control {
 	background-color: rgba(255,255,255,.75);
+}
+@media (min-width: 1200px) {
+	.container-video-card {
+    	width: 100%;
+	}
+	.container-video-card li {
+		transform: scale(2, 2);
+		margin: 65px 100px;
+	}
+	.video-card {
+		background-color: rgb(171, 116, 91);
+    }
+	.video-card:hover {
+		background-color: rgb(209, 125, 148);
+    	transform: none;
+    }
 }
 </style>
 <script type="text/javascript">
@@ -53,9 +73,9 @@ function saveStudioInfo() {
 
 <div class="container">
 	<h3>
-		<span class="label label-plain">Actress <i class="badge badge-black">${fn:length(studio.actressList)}</i></span>
+		<span class="label label-plain" onclick="$('.actress-list').toggleClass('hide')">Actress <i class="badge badge-black">${fn:length(studio.actressList)}</i></span>
 	</h3>
-	<div class="form-group" style="padding-left:60px;">
+	<div class="form-group hide actress-list" style="padding-left:60px;">
 		<ul class="list-inline">
 			<c:forEach items="${studio.actressList}" var="actress">
 				<li>
@@ -68,11 +88,11 @@ function saveStudioInfo() {
 	</div>
 </div>
 
-<div class="container">
+<div class="container container-video-card">
 	<h3>
-		<span class="label label-plain">Video <i class="badge badge-black">${fn:length(studio.videoList)}</i></span>
+		<span class="label label-plain" onclick="$('.video-list').toggleClass('hide')">Video <i class="badge badge-black">${fn:length(studio.videoList)}</i></span>
 	</h3>
-	<div class="form-group text-center">
+	<div class="form-group text-center video-list">
 		<ul class="list-inline">
 			<c:forEach items="${studio.videoList}" var="video">
 				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>

@@ -79,8 +79,15 @@ public class Actress {
 	
 	@Override
 	public String toString() {
-		return String.format("%s%s %s %s %s %s %ss %sv",
-						name, StringUtils.isEmpty(localName) ? "" : "("+localName+")", birth, bodySize, debut, StringUtils.isEmpty(height) ? "" : height + "cm", getScore(), videoList.size());
+		return String.format("%s%s %s%s %s %s %s v%s",
+						name, 
+						StringUtils.isEmpty(localName) ? "" : "("+localName+")", 
+						birth, 
+						StringUtils.isEmpty(age) ? "" : "(" + age + ")",
+						debut, 
+						bodySize, 
+						StringUtils.isEmpty(height) ? "" : height + "cm", 
+						videoList.size());
 	}
 	
 	public int getVideoCount() {

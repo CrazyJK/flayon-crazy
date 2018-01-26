@@ -391,7 +391,9 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public Actress getActress(String actressName) {
-		return videoDao.getActress(actressName);
+		Actress actress = videoDao.getActress(actressName);
+		Collections.sort(actress.getVideoList(), Comparator.comparing(Video::getReleaseDate).reversed());
+		return actress;
 	}
 
 	/* 

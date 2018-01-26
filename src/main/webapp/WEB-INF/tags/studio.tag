@@ -44,7 +44,7 @@
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
 	<span class="label label-plain" title="${studio}" onclick="fnViewStudioDetail('${studio.name}')">${studio.name}</span>
-	<span class="label label-plain">${fn:length(studio.videoList)}</span>
+	<span class="label label-plain">Video ${fn:length(studio.videoList)}</span>
 	<span class="label label-plain">Score ${studio.score}</span>
 	
 <%

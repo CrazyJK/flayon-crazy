@@ -27,7 +27,7 @@ input[type='text'].form-control {
     	width: 100%;
 	}
 	.container-video-card li {
-		transform: scale(2, 2);
+		transform: scale(1.7, 1.7);
 		margin: 65px 100px;
 	}
 	.video-card {
@@ -37,6 +37,9 @@ input[type='text'].form-control {
 		background-color: rgb(209, 125, 148);
     	transform: none;
     }
+}
+.video-box:hover {
+    transform: none;
 }
 </style>
 <script type="text/javascript">
@@ -71,8 +74,8 @@ function searchActressInfo() {
 </script>
 </head>
 <body>
+<br/>
 <div class="container">
-	<br/>
 	<form id="actressForm" role="form" class="form-horizontal" onsubmit="return false;">
 		<input type="hidden" name="NAME" value="${actress.name}"/>
 		<input type="hidden" name="FAVORITE" id="favorite" value="${actress.favorite}"/>
@@ -117,10 +120,10 @@ function searchActressInfo() {
 		</div>
 	</form>
 	
-	<h3>
+	<%-- <h3>
 		<span class="label label-plain">Studio <small class="badge badge-black">${fn:length(actress.studioList)}</small></span>
-	</h3>
-	<div class="form-group" style="padding-left:60px;">
+	</h3> --%>
+	<div class="form-group" style="padding-left:0px;">
 		<ul class="list-inline">
 			<c:forEach items="${actress.studioList}" var="studio">
 				<li>
@@ -131,17 +134,17 @@ function searchActressInfo() {
 			</c:forEach>
 		</ul>
 	</div>
-</div>
 
+	<h4>
+		<span class="label label-plain">Video <small class="badge badge-black">${fn:length(actress.videoList)}</small></span>
+	</h4>
+</div>
 <div class="container container-video-card">
-	<h3>
-		<span class="label label-plain">Video <span class="badge badge-black">${fn:length(actress.videoList)}</span></span>
-	</h3>
-	<div class="form-group text-center">
+	<div class="form-group text-center box" style="margin:0;">
 		<c:if test="${actress.name ne 'Amateur'}">
 			<ul class="list-inline">
 				<c:forEach items="${actress.videoList}" var="video">
-					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+					<li><%@ include file="/WEB-INF/views/video/videoBoxForActress.jspf" %></li>
 				</c:forEach>
 			</ul>
 		</c:if>

@@ -18,8 +18,8 @@
 			<em class="badge-black">${video.size}</em>
 		</c:if>
 		${mode eq 's' ? 'V' : 'Video'}
-		<c:if test="${mode eq 'l'}">
-			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.#GB"/></em>
+		<c:if test="${mode eq 'l' && video.existVideoFileList}">
+			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.# GB"/></em>
 		</c:if>
 	</span>
 <%  } else if (view.equalsIgnoreCase("cover")) { %>
@@ -44,24 +44,27 @@
 	<span class="${cssClass}" title="release date">${video.releaseDate}</span>
 <%  } else if (view.equalsIgnoreCase("actress")) { %>
 	<div style="max-height:${mode eq 'f' ? '70' : '50'}px; overflow:auto; padding-bottom:5px;">
-	<c:forEach items="${video.actressList}" var="actress">
-		${mode eq 'f' ? '<div style="margin-bottom: 5px; display:inline-block;">' : '' }
-		<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
-			<c:if test="${mode ne 'f'}">
-				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-				<c:if test="${mode eq 's'}">
-				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
-				</c:if>
-			</c:if>
+		<c:forEach items="${video.actressList}" var="actress">
 			<c:if test="${mode eq 'f'}">
-				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
-				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
-				<span title="age">${actress.age}</span> 
-				<span title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.name}')"><span class="glyphicon glyphicon-user"></span></span>
+				<div style="margin-bottom: 5px; display:inline-block;">
+					<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
+						<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+						<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
+					</span>	
+				</div>
 			</c:if>
-		</span>
-		${mode eq 'f' ? '</div>' : ''}
-	</c:forEach>
+			<c:if test="${mode eq 'l'}">
+				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
+					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+				</span>	
+			</c:if>
+			<c:if test="${mode eq 's'}">
+				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
+					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+					<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				</span>	
+			</c:if>
+		</c:forEach>
 	</div>
 <%  } else if (view.equalsIgnoreCase("opus")) { %>
 	<span class="${cssClass}" title="${video.fullname}" onclick="fnVideoDetail('${video.opus}')">${video.opus}</span>
@@ -73,7 +76,7 @@
 		</c:if>
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("length")) { %>
-	<span class="${cssClass}"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0GB"/></span>
+	<span class="${cssClass}"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0 GB"/></span>
 <%  } else if (view.equalsIgnoreCase("studio")) { %>
 	<span class="${cssClass}" title="${video.studio}" onclick="fnViewStudioDetail('${video.studio.name}')">${video.studio.name}</span>
 <%  } else if (view.equalsIgnoreCase("title")) { %>
@@ -82,7 +85,7 @@
 	<span class="${cssClass}" title="${video.scoreDesc}" id="score-${video.opus}">${video.score}</span>
 	<c:if test="${mode eq 'l'}">
 		<span class="${cssClass}" onclick="fnVideoReset('${video.opus}')" title="rank, play count reset">Reset</span>
-		<span class="${cssClass}" onclick="fnVideoWrong('${video.opus}')">Wrong</span>
+		<span class="${cssClass}" onclick="fnVideoWrong('${video.opus}')" title="video file remove">Wrong</span>
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("rank")) { %>
 	<c:if test="${mode ne 's'}">
