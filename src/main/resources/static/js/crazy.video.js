@@ -52,8 +52,8 @@ function Video(idx, data) {
 	this.label_score           = VideoUtils.wrapLabel('S ' + this.score);
 	this.label_rank            = VideoUtils.wrapLabel("R " + this.rank);
 	this.label_video           = VideoUtils.wrapLabel(
-									"Video", 
-									this.existVideoFileList ? formatFileSize(this.fileLength) : '', 
+									this.existVideoFileList ? 'V ' + formatFileSize(this.fileLength) : 'Video', 
+									'', 
 									this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "",          
 									this.existVideoFileList ? "exist" : "nonExist");
 	this.label_subtitles       = VideoUtils.wrapLabel(

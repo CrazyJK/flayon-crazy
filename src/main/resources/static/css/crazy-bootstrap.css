@@ -70,6 +70,11 @@ input[type='range'] {
     border: 0px dotted #111;
     text-shadow: 1px 1px 2px #4c4c4c;
 }
+.badge-plain {
+    background-color: rgba(255, 255, 255, .9);
+    color: #337ab7;
+}
+
 .input-group-xs > .form-control, .input-group-xs > .input-group-addon, .input-group-xs > .input-group-btn > .btn {
     height: 22px;
     padding: 1px 5px;

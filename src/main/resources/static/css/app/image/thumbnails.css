@@ -39,4 +39,7 @@ span.input-group-addon {
 }
 select#paths {
 	background: transparent;
+	font-family: D2Coding;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(102,175,233,.6);
 }

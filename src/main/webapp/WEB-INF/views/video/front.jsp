@@ -88,6 +88,9 @@ p > span.neon {
 		-3px  3px 3px 3px rgba(255, 255, 0, 0.25);
 	transition: top 0s, left 0s !important;
 }
+.aperture {
+    transition: box-shadow 1s ease-out 0s, transform 1s !important;
+}
 </style>
 <script type="text/javascript" src="${PATH}/js/flayon.effect.aperture.js"></script>
 <script type="text/javascript" src="${PATH}/js/flayon.effect.typed.js"></script>

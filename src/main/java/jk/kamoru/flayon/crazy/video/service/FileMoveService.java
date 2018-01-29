@@ -111,11 +111,11 @@ public class FileMoveService extends DirectoryWatchService {
 			MoveInfo moveInfo = infoMap.get(suffix);
 	
 			if (moveInfo != null) {
-				log.info("{}... {} to {}", TASKNAME, file.getAbsolutePath(), moveInfo.getDestPath());
 				FileUtils.moveFileToDirectory(file, moveInfo.getDestPath(), false);
+				log.info("{}... {} to {}", TASKNAME, file.getAbsolutePath(), moveInfo.getDestPath());
 			}
 		} catch (IOException | CrazyException e) {
-			log.error("File to move", e);
+			log.error("File move error - {}", e.getMessage());
 		}
 	}
 	

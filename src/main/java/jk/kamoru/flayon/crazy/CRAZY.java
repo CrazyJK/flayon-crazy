@@ -6,7 +6,7 @@ public interface CRAZY extends FLAYON {
 
 	public static final String SUFFIX_VIDEO 	 = "avi,mpg,mkv,wmv,mp4,mov,rmvb";
 
-	public static final String SUFFIX_IMAGE 	 = "jpg,jpeg,png,gif";
+	public static final String SUFFIX_IMAGE 	 = "jpg,jpeg,png,gif,jfif";
 	
 	public static final String SUFFIX_SUBTITLES  = "smi,srt,ass,smil";
 

@@ -27,7 +27,7 @@ input[type='text'].form-control {
     	width: 100%;
 	}
 	.container-video-card li {
-		transform: scale(1.7, 1.7);
+		transform: scale(2, 2);
 		margin: 65px 100px;
 	}
 	.video-card {
@@ -120,10 +120,11 @@ function searchActressInfo() {
 		</div>
 	</form>
 	
-	<%-- <h3>
-		<span class="label label-plain">Studio <small class="badge badge-black">${fn:length(actress.studioList)}</small></span>
-	</h3> --%>
-	<div class="form-group" style="padding-left:0px;">
+	<h4>
+		<span class="label label-plain" onclick="$('.studio-list').toggleClass('hide')">Studio</span><span class="badge badge-plain">${fn:length(actress.studioList)}</span>
+		<span class="label label-plain">Video</span><span class="badge badge-plain">${fn:length(actress.videoList)}</span>
+	</h4>
+	<div class="form-group hide studio-list" style="padding-left:0px;">
 		<ul class="list-inline">
 			<c:forEach items="${actress.studioList}" var="studio">
 				<li>
@@ -134,17 +135,13 @@ function searchActressInfo() {
 			</c:forEach>
 		</ul>
 	</div>
-
-	<h4>
-		<span class="label label-plain">Video <small class="badge badge-black">${fn:length(actress.videoList)}</small></span>
-	</h4>
 </div>
 <div class="container container-video-card">
 	<div class="form-group text-center box" style="margin:0;">
 		<c:if test="${actress.name ne 'Amateur'}">
 			<ul class="list-inline">
 				<c:forEach items="${actress.videoList}" var="video">
-					<li><%@ include file="/WEB-INF/views/video/videoBoxForActress.jspf" %></li>
+					<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 				</c:forEach>
 			</ul>
 		</c:if>
