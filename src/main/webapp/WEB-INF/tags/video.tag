@@ -19,7 +19,7 @@
 		</c:if>
 		${mode eq 's' ? 'V' : 'Video'}
 		<c:if test="${mode eq 'l' && video.existVideoFileList}">
-			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.# GB"/></em>
+			<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.#GB"/>
 		</c:if>
 	</span>
 <%  } else if (view.equalsIgnoreCase("cover")) { %>
@@ -56,12 +56,12 @@
 			<c:if test="${mode eq 'l'}">
 				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
 					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+					<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				</span>	
 			</c:if>
 			<c:if test="${mode eq 's'}">
 				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
 					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-					<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 				</span>	
 			</c:if>
 		</c:forEach>

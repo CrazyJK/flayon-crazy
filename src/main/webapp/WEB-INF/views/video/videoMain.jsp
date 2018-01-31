@@ -274,14 +274,21 @@ listViewType = '${videoSearch.listViewType}';
 								<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
 								<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
 								<dd><jk:video video="${video}" view="opus"      mode="l"/></dd>
-								<dd><jk:video video="${video}" view="actress"   mode="l"/></dd>
 								<dd><jk:video video="${video}" view="release"   mode="l"/></dd>
 								<dd><jk:video video="${video}" view="download"  mode="l"/></dd>
 								<dd><jk:video video="${video}" view="video"     mode="l"/></dd>
 								<dd><jk:video video="${video}" view="cover"     mode="l"/></dd>
 								<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 								<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
-								<dd><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></dd>
+								<dd><jk:video video="${video}" view="actress"   mode="f"/></dd>
+								<dd>
+									<span class="label label-plain" onclick="$('.tags-${video.opus}').toggleClass('hide');">
+										Tags<i class="caret"></i>
+									</span>
+								</dd>
+								<dd class="hide tags-${video.opus}">
+									<small><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></small>
+								</dd>
 							</dl>
 						</div>
 					</c:forEach>
