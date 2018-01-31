@@ -148,6 +148,10 @@
     writing-mode: vertical-rl; 
     padding: 10px 10px 10px 8px; 
     margin: 1px auto;
+    height: 518px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .mark {
 	font-weight: bold;

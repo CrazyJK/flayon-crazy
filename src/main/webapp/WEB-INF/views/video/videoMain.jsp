@@ -427,7 +427,7 @@ listViewType = '${videoSearch.listViewType}';
 								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
 									<jk:video video="${video}" view="title"/>
 								</h3>
-									<jk:video video="${video}" view="rank"      mode="l"/>
+								<div><jk:video video="${video}" view="rank"      mode="l"/></div>
 								<h4><jk:video video="${video}" view="studio"    mode="l"/>
 									<jk:video video="${video}" view="opus"      mode="l"/>
 									<jk:video video="${video}" view="release"   mode="l"/>
