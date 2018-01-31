@@ -95,14 +95,14 @@
 
 	$.fn.navEvent = function(e) {
 		if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') {
-			console.log("navEvent", e.target.tagName, "pass");
+			console.log("navEvent", e.target.tagName, "pass", e.target);
 			return;
 		}
 			
 		var delta  = mousewheel(e);
 		var which  = mouseClick(e);
 		var signal = delta || e.keyCode || which;
-		console.log(e.target.tagName, "event.type", e.type, "[mousewheel delta", delta, "] [keyup : keyCode", e.keyCode, "] [mousedown : which", which, "] = " + signal);
+		// console.log(e.target.tagName, "event.type", e.type, "[mousewheel delta", delta, "] [keyup : keyCode", e.keyCode, "] [mousedown : which", which, "] = " + signal);
 		switch(signal) {
 			case 1 : // mouse : wheel up
 			case 37: // key : left
@@ -126,9 +126,9 @@
 			case 13: // key : enter
 				break;
 		}
-		event.stopImmediatePropagation();
-		event.preventDefault();
-		event.stopPropagation();
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		e.stopPropagation();
 	}
 
 	$.slide = {
