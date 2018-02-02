@@ -17,25 +17,29 @@
 			<thead class="bg-primary">
 				<tr>
 					<th>Id</th>
+					<th>Role</th>
 					<th>Name</th>
 					<th>Password</th>
-					<th>Role</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:if test="${empty userList}">
-				<tr>
-					<td colspan="4">No data</td>
-				</tr>
-				</c:if>
-				<c:forEach items="${userList}" var="user" varStatus="userStat">
-				<tr>
-					<td>${user.id}</td>
-				    <td><a href="<c:url value="/user/${user.id}"/>">${user.name}</a></td>
-				    <td>${user.password}</td>
-				    <td>${user.role}</td>
-				</tr>
-				</c:forEach>
+				<c:choose>
+					<c:when test="${empty userList}">
+						<tr>
+							<td colspan="4" class="text-center">No data</td>
+						</tr>
+					</c:when>
+					<c:otherwise>
+						<c:forEach items="${userList}" var="user" varStatus="userStat">
+							<tr>
+								<td>${user.id}</td>
+							    <td>${user.role}</td>
+							    <td><a href="<c:url value="/user/${user.id}"/>">${user.name}</a></td>
+							    <td>${user.password}</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
 			</tbody>
 		</table>
 	</div>

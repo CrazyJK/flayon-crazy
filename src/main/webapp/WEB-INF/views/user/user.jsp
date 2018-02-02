@@ -7,26 +7,14 @@
 <meta charset="UTF-8"></meta>
 <title>User : ${user.name}</title>
 <script type="text/javascript">
-function fnDelete() {
-	var hiddenMethod = document.getElementById("hiddenMethod");
-	hiddenMethod.value = "DELETE";
-	fnSubmit();	
-}
-function fnSave() {
-	var hiddenMethod = document.getElementById("hiddenMethod");
-	hiddenMethod.value = "POST";
-	fnSubmit();	
-}
-function fnUpdate() {
-	var hiddenMethod = document.getElementById("hiddenMethod");
-	hiddenMethod.value = "POST";
-	fnSubmit();	
-}
-function fnSubmit() {
-	document.forms[0].submit();
-}
 $(document).ready(function() {
 	$("input[type=radio]").parent().addClass("radio-inline");
+	
+	$("button.btn").on("click", function() {
+		var method = $(this).attr("data-method");
+		$("#hiddenMethod").val(method);
+		document.forms[0].submit();
+	});
 });
 </script>
 </head>
@@ -51,7 +39,7 @@ $(document).ready(function() {
 		<div class="form-group">
 			<form:label class="control-label col-sm-2" path="password">Password</form:label>
       		<div class="col-sm-6">
-				<form:input type="password" path="password" placeholder="password" cssClass="form-control"/>
+				<form:input type="text" path="password" placeholder="password" cssClass="form-control"/>
 			</div>
       		<div class="col-sm-4">
 				<p class="form-control-static"><form:errors path="password" cssClass="text-danger" /></p>
@@ -71,12 +59,12 @@ $(document).ready(function() {
 				<a href="<c:url value="/user"/>" class="btn btn-sm btn-default">Users</a>
 			</div>
 			<div class="col-sm-10">
-				<c:if test="${empty user.id}">
-					<button onclick="fnSave()"   class="btn btn-sm btn-success">Save</button>
+				<c:if test="${user.id eq 0}">
+					<button data-method="POST"   class="btn btn-sm btn-success">Save</button>
 				</c:if>
-				<c:if test="${!empty user.id}">
-					<button onclick="fnUpdate()" class="btn btn-sm btn-success">Update</button>
-					<button onclick="fnDelete()" class="btn btn-sm btn-warning">Delete</button>
+				<c:if test="${user.id > 0}">
+					<button data-method="POST"   class="btn btn-sm btn-success">Update</button>
+					<button data-method="DELETE" class="btn btn-sm btn-warning">Delete</button>
 				</c:if>
 			</div>
 		</div>		

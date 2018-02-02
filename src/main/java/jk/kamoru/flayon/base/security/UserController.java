@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jk.kamoru.flayon.base.error.BaseException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class UserController {
 	private static final String ProfileView   = "user/profile";
 	private static final String Redirect_List = "redirect:/user";
 	
-	@Autowired private UserRepository userRepository;
+	@Autowired UserRepository userRepository;
 
 	@RequestMapping
     public String list(Model model) {
@@ -36,7 +37,7 @@ public class UserController {
 	public String postUser(@Valid User user, BindingResult result) {
 		log.debug("save user {}", user);
 		if (result.hasErrors()) {
-			log.debug("save user : valid error. {}", result);
+			log.warn("save user : valid error. {}", result);
 			return ListView;
 		}
 		userRepository.save(user);
@@ -47,7 +48,7 @@ public class UserController {
 	public User putUser(@Valid User user, BindingResult result) {
 		log.debug("save user {}", user);
 		if (result.hasErrors()) {
-			log.debug("save user : valid error. {}", result);
+			log.warn("save user : valid error. {}", result);
 			return null;
 		}
 		return userRepository.save(user);
@@ -63,12 +64,18 @@ public class UserController {
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public String getUserList(Model model, @PathVariable Long id) {
-		log.debug("call {}", id);
+		log.debug("getUserList {}", id);
 		if (id == 0) {
-			model.addAttribute(new User());
+			User user = new User();
+			user.setId(new Long(0));
+			model.addAttribute(user);
 		}
 		else {
-			model.addAttribute(userRepository.findOne(id));
+			User findOne = userRepository.findOne(id);
+			if (findOne == null) {
+				throw new BaseException("User not found");
+			}
+			model.addAttribute(findOne);
 		}
 		model.addAttribute("allRoles", User.Role.values());
 		return DetailView;
@@ -76,9 +83,9 @@ public class UserController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.POST)
 	public String editUser(@Valid User user, BindingResult result, @PathVariable Long id, Model model) {
-		log.debug("edit user {}", user);
+		log.info("edit user {}", user);
 		if (result.hasErrors()) {
-			log.debug("edit user : valid error. {}", result);
+			log.warn("edit user : valid error. {}", result);
 			model.addAttribute("allRoles", User.Role.values());
 			return DetailView;
 		}
@@ -105,23 +112,11 @@ public class UserController {
 	public String editProfile(@Valid User user, BindingResult result) {
 		log.debug("edit profile {}", user);
 		if (result.hasErrors()) {
-			log.debug("edit profile : valid error. {}", result);
+			log.warn("edit profile : valid error. {}", result);
 			return ProfileView;
 		}
 		userRepository.save(user);
 		return ProfileView;
-	}
-	
-	@RequestMapping("/add")
-	public String addUserList() {
-		log.debug("call add user");
-		User user = new User();
-		user.setName("kamoru" + Double.valueOf(Math.random() * 100).intValue());
-		user.setPassword(String.valueOf(Math.random() * 100));
-		
-		userRepository.save(user);
-		
-		return Redirect_List;
 	}
 	
 }
