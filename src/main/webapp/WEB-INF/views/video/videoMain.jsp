@@ -530,11 +530,11 @@ listViewType = '${videoSearch.listViewType}';
 		<c:otherwise>
 			<div class="panel-group">
 				<div class="panel panel-primary" style="background-color:rgba(255,255,255,.5);">
-					<div class="panel-heading">
-						More than 2 video files
+					<div class="panel-heading" onclick="$('.video-2-list').toggleClass('hide')">
+						More than 2 video files <span class="caret"></span>
 					</div>
 					<div class="panel-body">
-						<ol>
+						<ol class="video-2-list hide">
 							<c:forEach items="${videoList}" var="video">
 								<c:if test="${video.videoFileList.size() > 1 }">
 									<li>
@@ -555,16 +555,15 @@ listViewType = '${videoSearch.listViewType}';
 				</div>
 				<div class="panel panel-primary" style="background-color:rgba(255,255,255,.5);">
 					<div class="panel-heading">
-						More than 2 actress video list
+						No Cover
 					</div>
 					<div class="panel-body">
 						<ol>
 							<c:forEach items="${videoList}" var="video">
-								<c:if test="${video.actressList.size() > 1 }">
+								<c:if test="${!video.existCoverFile}">
 									<li>
 										<span class="glyphicon glyphicon-film text-red"></span>
 										<span class="label label-plain" onclick="fnVideoDetail('${video.opus}')">${video.opus}</span>
-										<jk:video view="actress" video="${video}"/>
 									</li>
 								</c:if>
 							</c:forEach>
