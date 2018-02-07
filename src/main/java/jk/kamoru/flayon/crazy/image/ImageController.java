@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +24,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.domain.Image.Type;
+import jk.kamoru.flayon.crazy.image.service.ImageService;
 import jk.kamoru.flayon.crazy.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Controller
 @RequestMapping("/image")
+@Slf4j
 public class ImageController extends CrazyController {
+
+	@Autowired ImageService imageService;
 
 	private long today = new Date().getTime();
 

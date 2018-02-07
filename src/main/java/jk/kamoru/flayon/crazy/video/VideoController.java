@@ -38,6 +38,7 @@ import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.TagService;
+import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 /**
  * Video controller
@@ -49,6 +50,7 @@ public class VideoController extends CrazyController {
 
 	static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 	
+	@Autowired VideoService videoService;
 	@Autowired VideoBatch videoBatch;
 	@Autowired TagService tagService;
 	@Autowired HistoryService historyService;
@@ -56,14 +58,14 @@ public class VideoController extends CrazyController {
 
 	private long today = new Date().getTime();
 	
-	@ModelAttribute("minRank") 			public int minRank() { return config.getMinRank(); }
-	@ModelAttribute("maxRank") 			public int maxRank() { return config.getMaxRank(); }
-	@ModelAttribute("playRatio")		public int playRatio() { return config.getPlayRatio(); }
-	@ModelAttribute("rankRatio")		public int rankRatio() { return config.getRankRatio(); }
-	@ModelAttribute("actressRatio")		public int actressRatio() { return config.getActressRatio(); }
-	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio() { return config.getSubtitlesRatio(); }
-	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo() { return config.getMaxEntireVideo(); }
-	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo() { return config.getUrlSearchVideo(); }
+	@ModelAttribute("minRank") 			public int minRank()             { return config.getMinRank(); }
+	@ModelAttribute("maxRank") 			public int maxRank()             { return config.getMaxRank(); }
+	@ModelAttribute("playRatio")		public int playRatio()           { return config.getPlayRatio(); }
+	@ModelAttribute("rankRatio")		public int rankRatio()           { return config.getRankRatio(); }
+	@ModelAttribute("actressRatio")		public int actressRatio()        { return config.getActressRatio(); }
+	@ModelAttribute("subtitlesRatio")	public int subtitlesRatio()      { return config.getSubtitlesRatio(); }
+	@ModelAttribute("maxEntireVideo")	public int maxEntireVideo()      { return config.getMaxEntireVideo(); }
+	@ModelAttribute("urlSearchVideo")	public String urlSearchVideo()   { return config.getUrlSearchVideo(); }
 	@ModelAttribute("urlSearchActress")	public String urlSearchActress() { return config.getUrlSearchActress(); }
 	@ModelAttribute("urlSearchTorrent")	public String urlSearchTorrent() { return config.getUrlSearchTorrent(); }
 	
