@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
+import jk.kamoru.flayon.crazy.util.RandomUtils;
 
 /**
  * Implementation of {@link ImageService}
@@ -33,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public Image getImageByRandom() {
-		return imageSource.get(getRandomImageNo());
+		return imageSource.get(RandomUtils.getInt(imageSource.size()));
 	}
 
 	@Override
@@ -88,10 +89,6 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public void deleteByPath(int pathIndex, int imageIndex) {
 		imageSource.delete(pathIndex, imageIndex);
-	}
-
-	private int getRandomImageNo() {
-		return (int)(Math.random() * imageSource.size());
 	}
 
 }
