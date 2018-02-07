@@ -129,21 +129,21 @@ public class RandomUtils {
 	}
 
 	// Test
-	public static void main(String[] args) {
-		for (int i=0; i< 100; i++) {
-			byte[] randomBytes = new byte[10];
-			nextBytes(randomBytes);
-			System.out.format("%-5s %s %s %-12s %-20s %s %-25s %s %n", 
-					RandomUtils.getBoolean(),
-					RandomUtils.getInt(0, 10),
-					RandomUtils.getLong(0, 10),
-					RandomUtils.getFloat(0.1f, 9.2f),
-					RandomUtils.getDouble(0.9, 9.2222),
-					nextInt(9),
-					nextGaussian(),
-					org.apache.commons.lang3.ArrayUtils.toString(randomBytes)
-			);
-		}
-	}
+//	public static void main(String[] args) {
+//		for (int i=0; i< 100; i++) {
+//			byte[] randomBytes = new byte[10];
+//			nextBytes(randomBytes);
+//			System.out.format("%-5s %s %s %-12s %-20s %s %-25s %s %n", 
+//					RandomUtils.getBoolean(),
+//					RandomUtils.getInt(0, 10),
+//					RandomUtils.getLong(0, 10),
+//					RandomUtils.getFloat(0.1f, 9.2f),
+//					RandomUtils.getDouble(0.9, 9.2222),
+//					nextInt(9),
+//					nextGaussian(),
+//					org.apache.commons.lang3.ArrayUtils.toString(randomBytes)
+//			);
+//		}
+//	}
 
 }
