@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.aop;
+package jk.kamoru.flayon.crazy;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
