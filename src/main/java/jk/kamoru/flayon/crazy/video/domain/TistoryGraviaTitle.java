@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.util.IOUtils;
 import lombok.Data;
 
 @Data

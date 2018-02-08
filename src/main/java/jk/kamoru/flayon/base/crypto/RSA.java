@@ -17,7 +17,7 @@ import javax.crypto.Cipher;
 
 import org.apache.commons.codec.binary.Base64;
 
-import jk.kamoru.flayon.base.error.BaseException;
+import jk.kamoru.flayon.web.BaseException;
 
 public class RSA implements Crypto {
 

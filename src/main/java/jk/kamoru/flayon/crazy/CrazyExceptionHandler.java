@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.error;
+package jk.kamoru.flayon.crazy;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import jk.kamoru.flayon.base.error.ExceptionHandlerAdapter;
+import jk.kamoru.flayon.base.ExceptionHandlerAdapter;
+import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.error.ImageException;
+import jk.kamoru.flayon.crazy.error.NotFoundException;
+import jk.kamoru.flayon.crazy.error.VideoException;
 
 @ControllerAdvice
 public class CrazyExceptionHandler extends ExceptionHandlerAdapter {

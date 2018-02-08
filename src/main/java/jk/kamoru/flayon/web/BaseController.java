@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base;
+package jk.kamoru.flayon.web;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.fields;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -56,13 +56,12 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.FLAYON;
-import jk.kamoru.flayon.base.access.AccessLog;
-import jk.kamoru.flayon.base.access.AccessLogRepository;
 import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
 import jk.kamoru.flayon.base.crypto.Seed;
-import jk.kamoru.flayon.base.error.BaseException;
+import jk.kamoru.flayon.web.access.AccessLog;
+import jk.kamoru.flayon.web.access.AccessLogRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

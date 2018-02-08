@@ -8,9 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jk.kamoru.flayon.base.util.RandomUtils;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.source.ImageSource;
-import jk.kamoru.flayon.util.RandomUtils;
 
 /**
  * Implementation of {@link ImageService}

@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import jk.kamoru.flayon.base.util.ZipUtils;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
@@ -29,7 +30,6 @@ import jk.kamoru.flayon.crazy.video.service.DirectoryService;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
-import jk.kamoru.flayon.util.ZipUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

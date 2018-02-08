@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.security;
+package jk.kamoru.flayon.web.security;
 
 import java.util.Arrays;
 

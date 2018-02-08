@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base;
+package jk.kamoru.flayon.web;
 
 import java.util.Locale;
 
@@ -16,8 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import jk.kamoru.flayon.base.access.AccessLogRepository;
-import jk.kamoru.flayon.base.access.AccessLogInterceptor;
+import jk.kamoru.flayon.web.access.AccessLogInterceptor;
+import jk.kamoru.flayon.web.access.AccessLogRepository;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {

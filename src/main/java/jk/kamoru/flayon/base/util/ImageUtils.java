@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.util;
+package jk.kamoru.flayon.base.util;
 
 import java.awt.Color;
 import java.awt.Font;

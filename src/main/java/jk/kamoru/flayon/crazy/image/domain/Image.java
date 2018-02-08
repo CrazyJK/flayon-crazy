@@ -12,11 +12,11 @@ import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 
+import jk.kamoru.flayon.base.util.IOUtils;
+import jk.kamoru.flayon.base.util.ImageUtils;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.ImageException;
 import jk.kamoru.flayon.crazy.image.IMAGE;
-import jk.kamoru.flayon.util.IOUtils;
-import jk.kamoru.flayon.util.ImageUtils;
 import lombok.Getter;
 
 /**

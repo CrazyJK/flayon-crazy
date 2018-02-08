@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.beans;
+package jk.kamoru.flayon.base;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

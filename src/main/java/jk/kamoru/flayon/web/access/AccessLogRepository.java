@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.access;
+package jk.kamoru.flayon.web.access;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

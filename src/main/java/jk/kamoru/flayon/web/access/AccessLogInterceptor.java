@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.access;
+package jk.kamoru.flayon.web.access;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -14,8 +14,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import jk.kamoru.flayon.base.security.FlayOnUser;
-import jk.kamoru.flayon.base.security.User;
+import jk.kamoru.flayon.web.security.FlayOnUser;
+import jk.kamoru.flayon.web.security.User;
 import lombok.extern.slf4j.Slf4j;
 
 /**

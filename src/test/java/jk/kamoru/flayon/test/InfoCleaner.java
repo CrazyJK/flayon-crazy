@@ -9,11 +9,11 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
-import jk.kamoru.flayon.util.IOUtils;
 
 public class InfoCleaner {
 

@@ -16,8 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.util.IOUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

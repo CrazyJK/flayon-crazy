@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.access;
+package jk.kamoru.flayon.web.access;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 
 import jk.kamoru.flayon.FLAYON;
-import jk.kamoru.flayon.base.security.User;
+import jk.kamoru.flayon.web.security.User;
 import lombok.Data;
 
 @Data

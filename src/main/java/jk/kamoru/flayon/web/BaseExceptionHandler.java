@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.error;
+package jk.kamoru.flayon.web;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import jk.kamoru.flayon.base.ExceptionHandlerAdapter;
 
 @ControllerAdvice
 public class BaseExceptionHandler extends ExceptionHandlerAdapter {

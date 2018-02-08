@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.security;
+package jk.kamoru.flayon.web.security;
 
 import javax.validation.Valid;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import jk.kamoru.flayon.base.error.BaseException;
+import jk.kamoru.flayon.web.BaseException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

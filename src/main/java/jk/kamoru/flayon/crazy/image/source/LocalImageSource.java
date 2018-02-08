@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import jk.kamoru.flayon.base.watch.AsyncExecutorService;
+import jk.kamoru.flayon.base.AsyncExecutorService;
 import jk.kamoru.flayon.base.watch.DirectoryWatcher;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.error.ImageNotFoundException;

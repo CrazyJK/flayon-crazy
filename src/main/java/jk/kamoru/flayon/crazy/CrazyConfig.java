@@ -12,7 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import jk.kamoru.flayon.base.beans.MethodExecutionBeanPostProcessor;
+import jk.kamoru.flayon.base.MethodExecutionBeanPostProcessor;
 import jk.kamoru.flayon.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.Getter;

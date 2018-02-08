@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import jk.kamoru.flayon.base.util.JsonUtils;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.domain.Image.Type;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
-import jk.kamoru.flayon.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
