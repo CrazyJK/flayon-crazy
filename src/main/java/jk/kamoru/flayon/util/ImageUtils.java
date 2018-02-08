@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.util;
+package jk.kamoru.flayon.util;
 
 import java.awt.Color;
 import java.awt.Font;
