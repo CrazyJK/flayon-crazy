@@ -12,7 +12,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -145,7 +144,7 @@ public class ZipUtils {
 	public static void zip(File src, File destDir, String charSetName, boolean includeSrc) throws IOException {
 		String fileName = src.getName();
 		if (src.isFile()) {
-			fileName = CrazyUtils.getNameExceptExtension(src);
+			fileName = IOUtils.getPrefix(src);
 		}
 		fileName += ".zip";
 		zip(src, destDir, fileName, charSetName, includeSrc);

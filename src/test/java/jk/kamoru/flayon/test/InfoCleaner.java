@@ -14,6 +14,7 @@ import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
+import jk.kamoru.flayon.util.IOUtils;
 
 public class InfoCleaner {
 
@@ -26,7 +27,7 @@ public class InfoCleaner {
 		
 		for (File file : listFiles) {
 			Map<String, String> data = CrazyUtils.readFileToMap(file);
-			String filename = CrazyUtils.getNameExceptExtension(file);
+			String filename = IOUtils.getPrefix(file);
 			String name = data.get("NAME");
 			String newname = data.get("NEWNAME");
 
@@ -84,7 +85,7 @@ public class InfoCleaner {
 			String name = CrazyUtils.capitalize(data.get("NAME"));
 			data.put("NAME", name);
 
-			String filename = CrazyUtils.capitalize(CrazyUtils.getNameExceptExtension(file));
+			String filename = CrazyUtils.capitalize(IOUtils.getPrefix(file));
 			File newFile = new File(file.getParentFile(), filename + "." + VIDEO.EXT_ACTRESS);
 			file.renameTo(newFile);
 			System.out.format("%20s => %20s%n", file.getName(), newFile.getName());
@@ -106,9 +107,9 @@ public class InfoCleaner {
 		int count = 0;
 		for (File file : listFiles) {
 			count++;
-			String filename = CrazyUtils.getNameExceptExtension(file);
+			String filename = IOUtils.getPrefix(file);
 			String replaceNBSP = VideoUtils.replaceNBSP(filename);
-			String extension = CrazyUtils.getExtension(file);
+			String extension = IOUtils.getSuffix(file);
 			TitleValidator validator = new TitleValidator(replaceNBSP);
 			if (exceptList.contains(extension)) {
 				continue;

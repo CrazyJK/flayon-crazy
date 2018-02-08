@@ -28,6 +28,7 @@ import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -214,7 +215,7 @@ public class Video {
 	 * @return 대표 이름
 	 */
 	private String getDelegateFilenameWithoutSuffix() {
-		return CrazyUtils.getNameExceptExtension(getDelegateFile());
+		return IOUtils.getPrefix(getDelegateFile());
 	}
 	
 	/**
@@ -1056,7 +1057,7 @@ public class Video {
 	 */
 	@JsonIgnore
 	public String getExt() {
-		return CrazyUtils.getExtension(getDelegateFile());
+		return IOUtils.getSuffix(getDelegateFile());
 	}
 
 	@Override
@@ -1107,7 +1108,7 @@ public class Video {
 	 */
 	public void moveOutside() {
 		if (this.isExistVideoFileList()) {
-			File root = CrazyUtils.getRootDirectory(this.getDelegateFile());
+			File root = IOUtils.getRoot(this.getDelegateFile());
 			for (File file : this.getVideoFileList()) {
 				try {
 					FileUtils.moveFileToDirectory(file, root, false);

@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,25 +26,14 @@ import java.util.Map.Entry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.UsesJava8;
 
-import jk.kamoru.flayon.FLAYON;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CrazyUtils {
-
-	/**
-	 * 파일의 확장자를 구한다.
-	 * @param file
-	 * @return
-	 */
-	public static String getExtension(File file) {
-		isTrue(file != null && file.isFile(), "It is not file! - " + file.getAbsolutePath());
-		return StringUtils.substringAfterLast(file.getName(), ".");
-	}
 
 	/**
 	 * 조건이 <code>true</code>인지 판별한다.
@@ -114,43 +102,18 @@ public class CrazyUtils {
 	}
 
 	/**
-	 * 파일명 바꾸기.<br>
-	 * 원 파일의 확장자를 구해 자동으로 붙여 준다
-	 * @param srcFile
-	 * @param newName   확장자 제외 이름만 
-	 * @throws 실패시 에러
-	 */
-	public static File renameFile(File srcFile, String newName) {
-			String suffix = getExtension(srcFile);
-			if (StringUtils.isNotEmpty(suffix))
-				newName = newName + "." + suffix;
-			log.debug("renameFile {} {} -> {}", suffix, srcFile.getAbsolutePath(), newName);
-			
-			File destFile = new File(srcFile.getParent(), newName);
-			if (srcFile.renameTo(destFile))
-				return destFile;
-			else
-				throw new CrazyException("file rename fail: " + srcFile.getAbsolutePath());
-	}
-
-	/**<pre>
 	 * 이름 바꾸기
-	 * 이미 파일이 있으면, hashcode를 붙여 다시 시도한다.
 	 * @param srcFile
 	 * @param newName 확정자 제외 이름
-	 * @return
+	 * @return 이미 파일이 있으면, hashcode를 붙여 다시 시도
 	 */
 	public static Path renameFile(Path srcFile, String newName) {
+		String suffix = IOUtils.getSuffix(srcFile.toFile());
 		try {
-			String suffix = getExtension(srcFile.toFile());
-			String targetName = newName + (StringUtils.isNotEmpty(suffix) ? "." + suffix : "");
-			log.debug("renameFile {} -> {}", srcFile, targetName);
-			
-			return Files.move(srcFile, srcFile.resolveSibling(targetName));
+			return Files.move(srcFile, srcFile.resolveSibling(newName + "." + suffix));
 		} catch (FileAlreadyExistsException e) {
 			return renameFile(srcFile, newName + "_" + srcFile.hashCode());
 		} catch (IOException e) {
-			log.error("rename fail", e);
 			throw new CrazyException("file rename fail", e);
 		}
 	}
@@ -164,33 +127,16 @@ public class CrazyUtils {
 		if (object == null) return "";
 		return StringUtils.trimToEmpty(object.toString());
 	}
-
+	
 	/**
-	 * 파일이름으로 쓸수 없는 문자 제거
-	 * @param name
+	 * trim한 문자 반환. 
+	 * @param str
+	 * @param def null이나 공백이면, default 문자 반환
 	 * @return
 	 */
-	public static String removeInvalidFilename(String name) {
-		name = StringUtils.remove(name, '\\');
-		name = StringUtils.remove(name, '/');
-		name = StringUtils.remove(name, ':');
-		name = StringUtils.remove(name, '*');
-		name = StringUtils.remove(name, '?');
-		name = StringUtils.remove(name, '"');
-		name = StringUtils.remove(name, '<');
-		name = StringUtils.remove(name, '>');
-		name = StringUtils.remove(name, '|');
-		return name;
-	}
-
-	/**
-	 * 확장자를 뺀 파일 이름
-	 * @param file
-	 * @return 확장자 없는 파일명
-	 */
-	public static String getNameExceptExtension(File file) {
-		isTrue(file.isFile(), "It is not file! - " + file.getAbsolutePath());
-		return StringUtils.substringBeforeLast(file.getName(), ".");
+	public static String trimToDefault(String str, String def) {
+		String trim = StringUtils.trimToNull(str);
+		return trim == null ? def : trim;
 	}
 
 	/**
@@ -200,15 +146,6 @@ public class CrazyUtils {
 	 */
 	public static String toStringComma(Object array) {
 		return StringUtils.replaceEach(ArrayUtils.toString(array), new String[] {"{", "}"}, new String[] {"", ""});
-	}
-
-	/**
-	 * root 구한다.
-	 * @param file
-	 * @return
-	 */
-	public static File getRootDirectory(File file) {
-		return file.toPath().getRoot().toFile();
 	}
 
 	/**
@@ -253,85 +190,6 @@ public class CrazyUtils {
 	}
 
 	/**
-	 * 같은 root인지 확인
-	 * @param path1
-	 * @param path2
-	 * @return
-	 */
-	public static boolean equalsRoot(String path1, String path2) {
-		Path root1 = Paths.get(path1).getRoot();
-		Path root2 = Paths.get(path2).getRoot();
-		return root1.equals(root2);
-	}
-
-	/**
-	 * 빈 폴더인지 확인
-	 * @param dir
-	 * @return
-	 */
-	public static boolean isEmptyDirectory(File dir) {
-		isTrue(dir != null && dir.isDirectory(), "It is not a directory. " + dir);
-		return FileUtils.listFiles(dir, null, false).isEmpty();
-	}
-
-	/**
-	 * 확장자에 맞는 파일을 찾는다
-	 * @param directories 찾을 디렉토리
-	 * @param extensions 파일 확장자. null이면 모든 파일
-	 * @param recursive 하위폴더 검색 여부
-	 * @return
-	 */
-	public static List<File> listFiles(String[] directories, String[] extensions, boolean recursive) {
-		List<File> dirFiles = new ArrayList<>();
-		for (String directory : directories)
-			dirFiles.add(new File(directory));
-		return listFiles(dirFiles, extensions, recursive);
-	}
-
-	/**
-	 * 확장자에 맞는 파일을 찾는다
-	 * @param dirFiles 찾을 폴더
-	 * @param extensions 파일 확장자. null이면 모든 파일
-	 * @param recursive 하위폴더 검색 여부
-	 * @return
-	 */
-	public static List<File> listFiles(List<File> dirFiles, String[] extensions, boolean recursive) {
-		List<File> list = new ArrayList<>();
-		for (File dir : dirFiles)
-			if (dir.isDirectory())
-				if (FLAYON.JAVA_VERSION.equals("1.8"))
-					list.addAll(listPath(dir.toPath(), extensions));
-				else
-					list.addAll(FileUtils.listFiles(dir, extensions, recursive));
-		return list;
-	}
-
-	@UsesJava8
-	private static List<File> listPath(Path start, String... suffixs) {
-		List<File> pathList = new ArrayList<>();
-		try {
-			boolean isSuffixEmpty = suffixs == null || suffixs.length == 0;
-			Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-
-				@Override
-				public FileVisitResult visitFile(Path fileEntry, BasicFileAttributes attrs) throws IOException {
-					if (attrs.isRegularFile()) {
-						File file = fileEntry.toFile();
-						if (isSuffixEmpty || StringUtils.endsWithAny(file.getName(), suffixs)) {
-							pathList.add(file);
-						}
-					}
-					return FileVisitResult.CONTINUE;
-				}
-				
-			});
-			return pathList;
-		} catch (IOException e) {
-			throw new CrazyException("walk file tree error", e);
-		}
-	}
-
-	/**
 	 * view에서 사용<br>
 	 * list의 video 파일 크기의 합을 구함
 	 * @param videoList
@@ -365,17 +223,6 @@ public class CrazyUtils {
 		else
 			itemCssClass += "1";
 		return itemCssClass;
-	}
-	
-	/**
-	 * trim한 문자 반환. 
-	 * @param str
-	 * @param def null이나 공백이면, default 문자 반환
-	 * @return
-	 */
-	public static String trimToDefault(String str, String def) {
-		String _str = StringUtils.trimToNull(str);
-		return _str == null ? def : _str;
 	}
 
 	public static URL makeURL(String string) {
@@ -424,6 +271,11 @@ public class CrazyUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * 전체 단어의 첫글자를 대문자로 바꾼다
+	 * @param str
+	 * @return ex. abc qwe => Abc Qwe
+	 */
 	public static String capitalize(String str) {
 		String result = "";
 		for (String s : StringUtils.split(str)) {
@@ -468,5 +320,9 @@ public class CrazyUtils {
 				throw new CrazyException("deleteEmptyFolder delete fail", e);
 			}
 		}
+	}
+
+	public static File renameFile(File file, String newName) {
+		return IOUtils.renameFile(file, newName, true);
 	}
 }

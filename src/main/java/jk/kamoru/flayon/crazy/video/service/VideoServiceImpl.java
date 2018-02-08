@@ -64,6 +64,7 @@ import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
 import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
 import jk.kamoru.flayon.util.CommandExecutor;
+import jk.kamoru.flayon.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -805,7 +806,7 @@ public class VideoServiceImpl implements VideoService {
 		
 		File destinationPath = null;
 		for (String extraPath : STAGE_PATHS) {
-			if (CrazyUtils.equalsRoot(path, extraPath)) {
+			if (IOUtils.equalsRoot(path, extraPath)) {
 				destinationPath = new File(extraPath);
 				break;
 			}
@@ -816,7 +817,7 @@ public class VideoServiceImpl implements VideoService {
 		Video video = videoDao.getVideo(opus);
 		int videoFileSize = video.getVideoFileList().size();
 		File candidatedVideofile = new File(path);
-		File videoFile = new File(destinationPath, String.format("%s%s.%s", video.getFullname(), videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", CrazyUtils.getExtension(candidatedVideofile)));
+		File videoFile = new File(destinationPath, String.format("%s%s.%s", video.getFullname(), videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", IOUtils.getSuffix(candidatedVideofile)));
 		try {
 			FileUtils.moveFile(candidatedVideofile, videoFile);
 			log.info("move to {}", videoFile.getAbsoluteFile());
@@ -1180,7 +1181,7 @@ public class VideoServiceImpl implements VideoService {
 				}
 				else { // found
 					foundCount++;
-					String title = CrazyUtils.getNameExceptExtension(file);
+					String title = IOUtils.getPrefix(file);
 					TitleValidator savedTitlePart = new TitleValidator(title);
 					savedTitlePart.setFiles(file);
 					videoDao.buildVideo(savedTitlePart);

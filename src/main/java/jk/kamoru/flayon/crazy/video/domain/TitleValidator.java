@@ -8,8 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.ActressUtils;
-import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
+import jk.kamoru.flayon.util.IOUtils;
 import lombok.Data;
 
 @Data
@@ -120,7 +120,7 @@ public class TitleValidator {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = VideoUtils.trimBlank(CrazyUtils.removeInvalidFilename(title));
+		this.title = VideoUtils.trimBlank(IOUtils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(this.title) || warningTitle(this.title)) {
 			this.invalid = true;

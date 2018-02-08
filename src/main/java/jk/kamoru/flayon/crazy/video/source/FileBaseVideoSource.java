@@ -24,13 +24,13 @@ import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
-import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.util.IOUtils;
 	
 
 /**
@@ -114,7 +114,7 @@ public class FileBaseVideoSource implements VideoSource {
 		
 		// find files
 		stopWatch.start("load : listFiles");
-		Collection<File> files = CrazyUtils.listFiles(paths, null, true);
+		Collection<File> files = IOUtils.listFiles(paths, null, true);
 		stopWatch.stop();
 
 //		videoMap.clear();
@@ -129,8 +129,8 @@ public class FileBaseVideoSource implements VideoSource {
 		stopWatch.start("load : make Video object in " + files.size() + " files");
 		for (File file : files) {
 			String filename = file.getName();
-			String     name = CrazyUtils.getNameExceptExtension(file);
-			String      ext = CrazyUtils.getExtension(file).toLowerCase();
+			String     name = IOUtils.getPrefix(file);
+			String      ext = IOUtils.getSuffix(file).toLowerCase();
 			try {
 				// Unnecessary file exclusion
 				if (VIDEO.OS_SYSTEM_FILENAMES.contains(filename) 
@@ -346,7 +346,7 @@ public class FileBaseVideoSource implements VideoSource {
 			videoMap.put(video.getOpus(), video);
 		}
 		for (File file : titlePart.getFiles()) {
-			String ext = CrazyUtils.getExtension(file).toLowerCase();
+			String ext = IOUtils.getSuffix(file).toLowerCase();
 			if (VIDEO.SUFFIX_VIDEO.contains(ext))
 				video.addVideoFile(file);
 			else if (VIDEO.SUFFIX_IMAGE.contains(ext))

@@ -15,8 +15,8 @@ import org.imgscalr.Scalr.Method;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.ImageException;
 import jk.kamoru.flayon.crazy.image.IMAGE;
-import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.ImageUtils;
+import jk.kamoru.flayon.util.IOUtils;
 import lombok.Getter;
 
 /**
@@ -121,7 +121,7 @@ public class Image implements Serializable {
 	private byte[] readBufferedImageToByteArray(BufferedImage bi) {
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			ImageIO.setUseCache(false);
-			ImageIO.write(bi, CrazyUtils.getExtension(file), outputStream);
+			ImageIO.write(bi, IOUtils.getSuffix(file), outputStream);
 			return outputStream.toByteArray();
 		} catch (IOException e) {
 			throw new CrazyException("read bufferedImage error", e);

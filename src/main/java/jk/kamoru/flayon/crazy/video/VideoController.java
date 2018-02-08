@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyController;
-import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.ImageUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
@@ -39,6 +38,7 @@ import jk.kamoru.flayon.crazy.video.domain.View;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.TagService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
+import jk.kamoru.flayon.util.IOUtils;
 
 /**
  * Video controller
@@ -229,7 +229,7 @@ public class VideoController extends CrazyController {
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), CrazyUtils.getExtension(imageFile), response, imageFile);
+		return httpEntity(videoService.getVideoCoverByteArray(opus), IOUtils.getSuffix(imageFile), response, imageFile);
 	}
 
 	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
@@ -238,7 +238,7 @@ public class VideoController extends CrazyController {
 		File imageFile = video.getCoverFile();
 		if(imageFile == null)
 			return null;
-		return httpEntity(ImageUtils.mergeTextToImage(video.getTitle(), imageFile), CrazyUtils.getExtension(imageFile), response, imageFile);
+		return httpEntity(ImageUtils.mergeTextToImage(video.getTitle(), imageFile), IOUtils.getSuffix(imageFile), response, imageFile);
 	}
 
 	@RequestMapping(value="/actress/{actressName}/cover", method=RequestMethod.GET)
@@ -247,7 +247,7 @@ public class VideoController extends CrazyController {
 		File imageFile = actress.getImage();
 		if(imageFile == null)
 			return null;
-		return httpEntity(FileUtils.readFileToByteArray(imageFile), CrazyUtils.getExtension(imageFile), response, imageFile);
+		return httpEntity(FileUtils.readFileToByteArray(imageFile), IOUtils.getSuffix(imageFile), response, imageFile);
 	}
 	
 	@RequestMapping("/randomVideoCover")
@@ -259,7 +259,7 @@ public class VideoController extends CrazyController {
 		File imageFile = videoService.getVideoCoverFile(opus);
 		if(imageFile == null)
 			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), CrazyUtils.getExtension(imageFile), response, imageFile);
+		return httpEntity(videoService.getVideoCoverByteArray(opus), IOUtils.getSuffix(imageFile), response, imageFile);
 	}
 	
 	/**
