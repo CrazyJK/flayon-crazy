@@ -176,6 +176,10 @@ public class VideoUtils {
 		return result * (reverse ? -1 : 1);
 	}
 
+	public static int compareToRelease(String release1, String release2) {
+		return CrazyUtils.compareTo(parseReleaseDate(release1), parseReleaseDate(release2));
+	}
+
 	public static SimpleDateFormat releaseDateFotmat = new SimpleDateFormat(VIDEO.VIDEO_DATE_PATTERN);
 	
 	public static Date parseReleaseDate(String source) {
@@ -186,10 +190,6 @@ public class VideoUtils {
 		}
 	}
 	
-	public static int compareToRelease(String release1, String release2) {
-		return CrazyUtils.compareTo(parseReleaseDate(release1), parseReleaseDate(release2));
-	}
-
 	public static List<Integer> getPlayRange(List<Video> videoList) {
 		List<Integer> range = new ArrayList<>();
 		range.add(new Integer(-1));
