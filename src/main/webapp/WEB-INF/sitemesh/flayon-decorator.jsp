@@ -64,6 +64,12 @@ var prevScrollTop = 0;
 		
 	});
 })(jQuery);
+
+function displayNotice(title, message, width) {
+	width = width || 300;
+    $("#notice > p").html(message);
+    $("#notice").attr("title", title).dialog({width: width});
+}
 </script>
 <sitemesh:write property="head" />
 </head>
@@ -81,6 +87,10 @@ var prevScrollTop = 0;
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
+
+<div id="notice" title="Error" style="display:none;">
+	<p></p>
+</div>
 
 </body>
 </html>

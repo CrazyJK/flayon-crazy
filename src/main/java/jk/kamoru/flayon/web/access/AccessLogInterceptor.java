@@ -14,7 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import jk.kamoru.flayon.web.security.FlayOnUser;
 import jk.kamoru.flayon.web.security.User;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,7 +74,7 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 		String handlerInfo = "";
 		String exceptionInfo = ex == null ? "" : ex.getMessage();
 		String modelAndViewInfo = "";
-		User   user = null;
+		User user = null;
 		int    status = response.getStatus();
 
 		// for handlerInfo
@@ -108,8 +107,7 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 		// user
 		SecurityContextImpl securityContext = (SecurityContextImpl) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 		if (securityContext != null) {
-			FlayOnUser flayOnUser = (FlayOnUser) securityContext.getAuthentication().getPrincipal();
-			user = flayOnUser.getUser();
+			user = (User) securityContext.getAuthentication().getPrincipal();
 		}
 		
 		AccessLog accessLog = new AccessLog(

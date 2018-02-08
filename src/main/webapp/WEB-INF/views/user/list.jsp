@@ -33,7 +33,7 @@
 						<c:forEach items="${userList}" var="user" varStatus="userStat">
 							<tr>
 								<td>${user.id}</td>
-							    <td>${user.role}</td>
+							    <td>${user.role.name}</td>
 							    <td><a href="<c:url value="/user/${user.id}"/>">${user.name}</a></td>
 							    <td>${user.password}</td>
 							</tr>
@@ -44,7 +44,7 @@
 		</table>
 	</div>
 	<div class="text-right">
-		<a href="${PATH}/user/0" class="btn btn-sm btn-info">New User</a>
+		<a href="<c:url value="/user/new"/>" class="btn btn-sm btn-info">New User</a>
 	</div>
 
 </div>

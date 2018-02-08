@@ -18,24 +18,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
 		log.debug("loadUserByUsername [{}]", username);
-		
-		User found = null;
-
 		List<User> foundUsers = userRepository.findByName(username);
 		if (foundUsers.size() == 0) {
+			log.warn("User name not found");
 			throw new UsernameNotFoundException("User name not found");
 		}
 		else if (foundUsers.size() == 1) {
-			found = foundUsers.get(0);
-			log.debug("found {}", found);
+			return foundUsers.get(0);
 		}
-		else if (foundUsers.size() > 1) {
+		else { // foundUsers.size() > 1
+			log.warn("User name is 2 over");
 			throw new UsernameNotFoundException("User name is 2 over");
 		}
-
-		return new FlayOnUser(found);
 	}
 
 }
