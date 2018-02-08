@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.base.config;
+package jk.kamoru.flayon.base;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
