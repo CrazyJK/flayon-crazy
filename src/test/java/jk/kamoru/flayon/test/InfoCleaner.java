@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.crazy.util.ActressUtils;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
-import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.util.IOUtils;
@@ -108,7 +107,7 @@ public class InfoCleaner {
 		for (File file : listFiles) {
 			count++;
 			String filename = IOUtils.getPrefix(file);
-			String replaceNBSP = VideoUtils.replaceNBSP(filename);
+			String replaceNBSP = CrazyUtils.replaceNBSP(filename);
 			String extension = IOUtils.getSuffix(file);
 			TitleValidator validator = new TitleValidator(replaceNBSP);
 			if (exceptList.contains(extension)) {

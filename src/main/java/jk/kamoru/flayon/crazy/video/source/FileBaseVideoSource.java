@@ -24,7 +24,7 @@ import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
 import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
-import jk.kamoru.flayon.crazy.util.VideoUtils;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
@@ -370,7 +370,7 @@ public class FileBaseVideoSource implements VideoSource {
 		video.setStudio(studio);
 
 		for (String actressName : StringUtils.split(titlePart.getActress(), ",")) {
-			actressName = VideoUtils.trimBlank(actressName);
+			actressName = CrazyUtils.trimBlank(actressName);
 			Actress actress = actressMap.get(actressName);
 			if (actress == null) {
 				actress = actressProvider.get();

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.error.CrazyException;
 import jk.kamoru.flayon.crazy.util.ActressUtils;
-import jk.kamoru.flayon.crazy.util.VideoUtils;
+import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.util.IOUtils;
 import lombok.Data;
 
@@ -93,7 +93,7 @@ public class TitleValidator {
 	 * @param studio the studio to set
 	 */
 	public void setStudio(String studio) {
-		this.studio = VideoUtils.trimBlank(studio);
+		this.studio = CrazyUtils.trimBlank(studio);
 		// valid check
 		if (invalidStudio(this.studio)) {
 			this.studio = "";
@@ -107,7 +107,7 @@ public class TitleValidator {
 	 * @param opus the opus to set
 	 */
 	public void setOpus(String opus) {
-		this.opus = VideoUtils.trimBlank(opus).toUpperCase();
+		this.opus = CrazyUtils.trimBlank(opus).toUpperCase();
 		// valid check
 		if (invalidOpus(this.opus)) {
 			this.invalid = true;
@@ -120,7 +120,7 @@ public class TitleValidator {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = VideoUtils.trimBlank(IOUtils.removeInvalidFilename(title));
+		this.title = CrazyUtils.trimBlank(IOUtils.removeInvalidFilename(title));
 		// valid check
 		if (invalidTitle(this.title) || warningTitle(this.title)) {
 			this.invalid = true;
@@ -151,7 +151,7 @@ public class TitleValidator {
 	 * @param releaseDate the releaseDate to set
 	 */
 	public void setReleaseDate(String releaseDate) {
-		this.releaseDate = VideoUtils.trimBlank(releaseDate);
+		this.releaseDate = CrazyUtils.trimBlank(releaseDate);
 		// valid check
 		if (invalidReleaseDate(this.releaseDate)) {
 			this.invalid = true;

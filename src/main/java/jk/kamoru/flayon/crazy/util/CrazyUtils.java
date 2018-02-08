@@ -325,4 +325,51 @@ public class CrazyUtils {
 	public static File renameFile(File file, String newName) {
 		return IOUtils.renameFile(file, newName, true);
 	}
+
+	/**
+	 * 공백 등등 지우기
+	 * replace regex로는 뭘 지우는지 모르겟다.
+	 * @param text
+	 * @return
+	 */
+	public static String trimBlank(String text) {
+		return trimWhitespace(text).replaceAll("(^\\p{Z}+|\\p{Z}+$)", "");
+	}
+
+	/**
+	 * Trim leading and trailing whitespace from the given {@code String}.
+	 * @param str the {@code String} to check
+	 * @return the trimmed {@code String}
+	 * @see java.lang.Character#isWhitespace
+	 */
+	public static String trimWhitespace(String str) {
+		if (str == null || str.trim().length() == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(str);
+		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0))) {
+			sb.deleteCharAt(0);
+		}
+		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(sb.length() - 1))) {
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 유니코드 u00A0 NBSP공백을 일반 공백u0020 으로 교체
+	 * @param str
+	 * @return
+	 */
+	public static String replaceNBSP(String str) {
+		StringBuilder sb = new StringBuilder(str);
+		for (int i=0; i<sb.length(); i++) {
+			if (160 == (int)sb.charAt(i)) {
+				sb.deleteCharAt(i);
+				sb.insert(i, (char)32);
+			}
+		}
+		return sb.toString();
+	}
+
 }
