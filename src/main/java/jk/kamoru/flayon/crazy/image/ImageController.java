@@ -25,7 +25,7 @@ import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 import jk.kamoru.flayon.crazy.image.domain.Image.Type;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
-import jk.kamoru.flayon.crazy.util.JsonUtils;
+import jk.kamoru.flayon.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller

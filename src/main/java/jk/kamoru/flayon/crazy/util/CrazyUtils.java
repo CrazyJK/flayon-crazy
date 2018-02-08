@@ -343,18 +343,6 @@ public class CrazyUtils {
 			sum += video.getLength();
 		return sum;
 	}
-	
-	static DecimalFormat decimalFormatter = new DecimalFormat("#,###.# GB");
-
-	/**
-	 * view에서 사용<br>
-	 * GB 사이즈로 표현
-	 * @param length
-	 * @return
-	 */
-	public static String toGBSize(long length) {
-		return decimalFormatter.format((double)length / FileUtils.ONE_GB);
-	}
 
 	/**
 	 * view에서 사용<br>

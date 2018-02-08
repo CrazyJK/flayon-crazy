@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.util;
+package jk.kamoru.flayon.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
