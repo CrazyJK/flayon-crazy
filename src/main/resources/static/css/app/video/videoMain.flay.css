@@ -8,7 +8,7 @@ dl.box-cover {
 	padding: 0;
 }
 dl.box-cover:hover .video-title_v {
-	opacity: 0;
+	opacity: 0.1;
 }
 
 .box-detail {
