@@ -12,6 +12,12 @@
 var instance = reqParam.i != 'false';
 var archive  = reqParam.a == 'true';
 
+var columnKeys = ["name", "company", "homepage", "videoCount", "actressCount", "score"];
+var columns = [];
+for (var i=0; i<columnKeys.length; i++) {
+	columns.push({title: capitalize(columnKeys[i]).replace("count", "")});
+}
+
 var convertDataForDataTable = function(json, columns, options) {
 
 	var opts = $.extend({}, {
@@ -42,15 +48,8 @@ $(document).ready(function() {
 	});
 
 	restCall(PATH + "/rest/studio" + "?i=" + instance + "&a=" + archive, {}, function(json) {
-		
 		$(".list-count").html(json.length);
 		
-		var columnKeys = ["name", "company", "homepage", "videoCount", "actressCount", "score"];
-		var columns = [];
-		for (var i=0; i<columnKeys.length; i++) {
-			columns.push({title: capitalize(columnKeys[i]).replace("count", "")});
-		}
-
 		var dataSet = convertDataForDataTable(json, columnKeys);
 		
 		var table = $("#list").DataTable({
