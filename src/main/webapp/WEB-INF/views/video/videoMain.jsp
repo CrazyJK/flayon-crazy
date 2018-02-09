@@ -449,6 +449,7 @@ listViewType = '${videoSearch.listViewType}';
 				</div>
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
+			<link rel="stylesheet" href="${PATH}/css/app/video/videoMain.flay.css"/>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">

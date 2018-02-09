@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.video-title_v {
+	transition: opacity 1s;	
+}
+
+.box-cover:hover .video-title_v {
+	opacity: 0;
+}
+
+.box-detail:hover {
+	background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.box-detail .label, .box-detail .input-group {
+	box-shadow: 0 3px 9px rgba(0,0,0,.3);
+}
