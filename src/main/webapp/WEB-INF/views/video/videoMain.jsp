@@ -426,8 +426,7 @@ listViewType = '${videoSearch.listViewType}';
 							<div class="box box-small box-detail">
 								<dl class="video-info">
 									<dt class="title nowrap">
-										<jk:video video="${video}" view="title"/>
-									</dt>
+										<jk:video video="${video}" view="title"/></dt>
 									<dd class="rank">
 										<jk:video video="${video}" view="rank"      mode="l"/></dd>
 									<dd class="info">
