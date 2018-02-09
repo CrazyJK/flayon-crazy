@@ -3,14 +3,43 @@
 .video-title_v {
 	transition: opacity 1s;	
 }
-
-.box-cover:hover .video-title_v {
+dl.box-cover {
+	height: 520px; 
+	padding: 0;
+}
+dl.box-cover:hover .video-title_v {
 	opacity: 0;
 }
 
+.box-detail {
+	margin-top: 15px;	
+}
 .box-detail:hover {
 	background-color: rgba(255, 255, 255, 0.5) !important;
 }
-.box-detail .label, .box-detail .input-group {
+.box-detail .label, 
+.box-detail .input-group {
 	box-shadow: 0 3px 9px rgba(0,0,0,.3);
+}
+
+.box-detail .title {
+	margin: 0 0 5px; 
+	height: 40px;
+	font-size: 24px;
+}
+.video-info .rank {
+}
+.video-info .info {
+	font-size: 18px;
+	margin: 0 0 2px; 
+}
+.video-info .action {
+	margin: 0 0 2px; 
+	font-size: 14px;
+}
+.video-info .actress {
+	font-size: 18px;
+}
+.video-info .tags {
+	margin-bottom: 0;
 }

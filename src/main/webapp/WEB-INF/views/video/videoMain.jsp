@@ -418,28 +418,34 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
-							<dl class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 520px; padding: 0;">
+							<dl class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');">
 								<dt class="nowrap" style="height: inherit;">
 									<span class="label video-title_v" title="${video.title}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 								</dt>
 							</dl>
-							<div class="box box-small box-detail" style="margin-top: 15px;">
-								<h3 class="nowrap" style="margin:0 0 5px; height:33px;">
-									<jk:video video="${video}" view="title"/>
-								</h3>
-								<div><jk:video video="${video}" view="rank"      mode="l"/></div>
-								<h4><jk:video video="${video}" view="studio"    mode="l"/>
-									<jk:video video="${video}" view="opus"      mode="l"/>
-									<jk:video video="${video}" view="release"   mode="l"/>
-									<jk:video video="${video}" view="download"  mode="l"/></h4>
-								<h5><jk:video video="${video}" view="score"     mode="l"/>
-									<jk:video video="${video}" view="video"     mode="l"/>
-									<jk:video video="${video}" view="cover"     mode="l"/>
-									<jk:video video="${video}" view="subtitles" mode="l"/>
-									<jk:video video="${video}" view="overview"  mode="l"/></h5>
-								<h4 style="margin-bottom:0;">
-									<jk:video video="${video}" view="actress"   mode="f"/></h4>
-							   <div><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></div>
+							<div class="box box-small box-detail">
+								<dl class="video-info">
+									<dt class="title nowrap">
+										<jk:video video="${video}" view="title"/>
+									</dt>
+									<dd class="rank">
+										<jk:video video="${video}" view="rank"      mode="l"/></dd>
+									<dd class="info">
+										<jk:video video="${video}" view="studio"    mode="l"/>
+										<jk:video video="${video}" view="opus"      mode="l"/>
+										<jk:video video="${video}" view="release"   mode="l"/>
+										<jk:video video="${video}" view="download"  mode="l"/></dd>
+									<dd class="action">
+										<jk:video video="${video}" view="score"     mode="l"/>
+										<jk:video video="${video}" view="video"     mode="l"/>
+										<jk:video video="${video}" view="cover"     mode="l"/>
+										<jk:video video="${video}" view="subtitles" mode="l"/>
+										<jk:video video="${video}" view="overview"  mode="l"/></dd>
+									<dd class="actress">
+										<jk:video video="${video}" view="actress"   mode="f"/></dd>
+								    <dd class="tags">
+								    	<jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></dd>
+								</dl>
 							</div>
 						</div>
 					</c:forEach>
