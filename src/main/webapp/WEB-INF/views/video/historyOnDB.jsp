@@ -22,6 +22,8 @@ table {
 }
 .desc {
 	max-width: 500px;
+}
+td {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
