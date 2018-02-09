@@ -157,9 +157,21 @@ var VideoList = (function() {
 			var   shortWidthClass = "shortWidth"; // table 뷰에서 가로폭이 좁을때 css에서 보이지 않게 한다
 			var widthTorrentClass = withTorrent ? "torrent" : "torrent hide";
 			parent.append(
-					$("<tr>", {"id": "check-" + video.opus, "data-idx": video.idx, "data-no": index}).on("mouseenter", function(event) {
+					$("<tr>", {
+						"id": "check-" + video.opus, 
+						"data-idx": video.idx, 
+						"data-no": index
+					}).on({
+						"mouseenter": function(event) {
 							currentVideoNo = $(this).attr("data-no");
 							fn.showCover();
+						},
+						"mouseup": function(e) {
+							if (e.which == 1)
+								$(this).addClass("clicked");
+							else if (e.which == 3)
+								$(this).removeClass("clicked");
+						}
 					}).append(
 							$("<td>").addClass("text-right").append(
 									$("<span>").addClass('label label-plain').html(index+1),
