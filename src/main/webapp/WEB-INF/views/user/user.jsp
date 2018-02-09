@@ -98,22 +98,21 @@ $(document).ready(function() {
 				<p class="form-control-static"><form:errors path="role" cssClass="text-danger"/></p>
 			</div>
 		</div>
+		<div class="form-group">        
+			<div class="col-sm-2 text-right">
+				<a href="<c:url value="/user/list"/>" class="btn btn-sm btn-default">Users</a>
+			</div>
+			<div class="col-sm-10">
+				<c:if test="${empty user.id}">
+					<button data-method="POST"   class="btn btn-sm btn-success">Save</button>
+				</c:if>
+				<c:if test="${!empty user.id}">
+					<button data-method="POST"   class="btn btn-sm btn-success">Update</button>
+					<button data-method="DELETE" class="btn btn-sm btn-warning">Delete</button>
+				</c:if>
+			</div>
+		</div>		
 	</form:form>
-
-	<div class="form-group">        
-		<div class="col-sm-2 text-right">
-			<a href="<c:url value="/user/list"/>" class="btn btn-sm btn-default">Users</a>
-		</div>
-		<div class="col-sm-10">
-			<c:if test="${empty user.id}">
-				<button data-method="POST"   class="btn btn-sm btn-success">Save</button>
-			</c:if>
-			<c:if test="${!empty user.id}">
-				<button data-method="POST"   class="btn btn-sm btn-success">Update</button>
-				<button data-method="DELETE" class="btn btn-sm btn-warning">Delete</button>
-			</c:if>
-		</div>
-	</div>		
 
 </div>
 
