@@ -75,9 +75,9 @@ $(document).ready(function() {
 	    	        		fnViewStudioDetail(data[0]);
 	    	        	})		
 	        	);
-	        	if (data[1] != "") {
-		        	$("td", row).eq(1).empty().append(
-		        			$("<a>", {href: data[1], target: "_blank"}).html(data[1])		
+	        	if (data[2] != "") {
+		        	$("td", row).eq(2).empty().append(
+		        			$("<a>", {href: data[2], target: "_blank"}).html(data[2])		
 		        	);
 	        	}
 	        }
@@ -108,7 +108,6 @@ $(document).ready(function() {
 		</label>
 		
 		<button class="btn btn-xs btn-default" id="viewBtn">View</button>
-
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
