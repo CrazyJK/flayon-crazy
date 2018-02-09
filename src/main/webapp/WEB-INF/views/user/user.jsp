@@ -65,7 +65,12 @@ $(document).ready(function() {
 	</div>
 
 	<form:form commandName="user" method="post" class="form-horizontal" role="form">
-		<form:input type="hidden" path="id"/>
+		<div class="form-group">
+			<form:label class="control-label col-sm-2" path="id">Id</form:label>
+      		<div class="col-sm-6">
+				<form:input type="text" path="id" placeholder="user id" cssClass="form-control" readonly="true"/>
+			</div>
+		</div>
 		<div class="form-group">
 			<form:label class="control-label col-sm-2" path="name">Name</form:label>
       		<div class="col-sm-6">
