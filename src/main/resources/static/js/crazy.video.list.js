@@ -173,7 +173,7 @@ var VideoList = (function() {
 								$(this).removeClass("clicked");
 						}
 					}).append(
-							$("<td>").addClass("text-right").append(
+							$("<td>").addClass("text-right " + shortWidthClass).append(
 									$("<span>").addClass('label label-plain').html(index+1),
 									$("<input>", {name: "opus", type: "hidden", value: video.opus})
 							),
@@ -192,7 +192,7 @@ var VideoList = (function() {
 											video.label_actress
 									)
 							),
-							$("<td>").addClass(shortWidthClass).append(video.label_release),
+							$("<td>").append(video.label_release),
 							$("<td>").addClass(shortWidthClass).append(video.label_modified),
 							$("<td>").append(video.label_video),
 							$("<td>").addClass(shortWidthClass).append(video.label_subtitles),
