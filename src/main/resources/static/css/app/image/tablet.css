@@ -22,7 +22,9 @@
 }
 .img-card-tile {
 	background-color: rgba(255, 255, 255, .5);
+	border: 1px solid rgba(221, 221, 221, .5);
 	opacity: .8;
+	padding: 2px;
 }
 .img-card-tile:hover {
 	opacity: 1;
