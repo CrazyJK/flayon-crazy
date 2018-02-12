@@ -43,7 +43,7 @@ $(function() {
 				<span class="close close-o0 delete-image">&times;</span>
 			</div>
 		</div>
-		<div id="imageDiv"></div>
+		<div id="imageDiv" class="text-center"></div>
 		<div id="thumbnailDiv">
 			<ul id="thumbnailUL" class="list-inline"></ul>
 		</div>

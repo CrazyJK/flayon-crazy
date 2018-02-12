@@ -68,11 +68,17 @@ var slide = (function() {
 
 					image.displayThumbnail();
 					image.resize();
-					
+/*					
 					$(this).css({
 						backgroundImage: "url('" + selectedItemUrl + "')"
 					}).show(showEffect, showOptions, showDuration);
-
+*/
+					$(this).empty().append(
+							$("<img>", {
+								src: selectedItemUrl,
+								class: 'img-rounded'
+							})
+					).show(showEffect, showOptions, showDuration);
 				});
 				
 				console.log("slide.image.view", currentIndex, selectedItemUrl, selectedItemTitle);
@@ -95,11 +101,14 @@ var slide = (function() {
 					var itemUrl = imageSource.value == 0 ? PATH + "/image/" + thumbNo : PATH + "/video/" + coverMap[thumbNo] + "/cover";
 
 					$("<li>").append(
-							$("<div>").addClass("img-thumbnail " + (thumbNo == currentIndex ? "active" : "")).css({
+							$("<div>", {
+								class: "img-thumbnail " + (thumbNo == currentIndex ? "active" : ""),
+								title: imageSource.value == 0 ? imageMap[thumbNo] : coverMap[thumbNo]
+							}).css({
 								backgroundImage: "url('" + itemUrl + "')"
-							}).data("imgNo", thumbNo).on("click", function() {
+							}).on("click", function() {
 								image.view($(this).data("imgNo"));
-							}).attr("title", imageSource.value == 0 ? imageMap[thumbNo] : coverMap[thumbNo])
+							}).data("imgNo", thumbNo)
 					).appendTo($("ul#thumbnailUL"));
 				}
 			},

@@ -14,6 +14,9 @@
 	background-repeat: no-repeat; 
 	background-position: center center;
 }
+#imageDiv > img {
+	height: 100%;
+}
 
 #thumbnailDiv {
 	position: fixed; 
@@ -34,6 +37,7 @@
 	background-size: cover; 
 	background-repeat: no-repeat; 
 	background-position: center center;
+	border: 0;
 }
 #thumbnailDiv > ul#thumbnailUL li > div.img-thumbnail:not(.active) {
 	cursor: pointer;
@@ -48,7 +52,9 @@
 	opacity: 1;
     border-color: #66afe9;
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);	
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    background: transparent;
+    filter: hue-rotate(90deg);
 }
 
 #currNo {
