@@ -28,7 +28,8 @@ body {
 	/* opacity: 0.6; */
 }
 .img-series-center {
-	box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.5);
+	box-shadow: 0 0 6px 3px rgba(255, 255, 255, 0.75) inset;
+	padding: 6px;
 }
 .img-series-right {
 	filter: grayscale(100%);
