@@ -99,7 +99,6 @@ var thumbnails = (function() {
 				$(".debug").html("render..." + currentIndex).show().hide("fade", {}, 2000);
 
 				var $thumbnailUL = $("ul#thumbnailUL");
-				var bgColor = getRandomColor(.1);
 				var start = currentIndex;
 				var end   = start + imageSizePerPage;
 				for (var i = start; i < end; i++) {
@@ -134,9 +133,7 @@ var thumbnails = (function() {
 								'rel': 'lightboxSet',
 								'data-index': i,
 								'class': 'img-thumbnail'
-							}).data("title", imgTitle).css({
-								backgroundColor: bgColor
-							}).hover(
+							}).data("title", imgTitle).hover(
 								function(event) {
 									if (onMagnify) $(this).addClass("box-hover");
 								}, function() {

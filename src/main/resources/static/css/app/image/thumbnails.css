@@ -11,11 +11,13 @@ body {
 }
 ul#thumbnailUL > li {
 	transition: all .5s;
+	margin: 2px;
 }
 ul#thumbnailUL > li > a.img-thumbnail {
 	margin: 2px;
 	background-color: rgba(255, 255, 255, .5);	
 	text-decoration: none;
+	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
 }
 ul#thumbnailUL > li > a > div {
 	background-repeat: no-repeat;
