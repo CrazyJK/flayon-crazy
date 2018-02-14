@@ -229,6 +229,10 @@ function fnAddHistory() {
 			$("<li>").html(title)	
 	);
 }
+function fnFindRandomOpus() {
+	var opus = getRandomInteger(1, 999);
+	fnSearchOpus(opus);
+}
 </script>
 </head>
 <body>
@@ -245,7 +249,11 @@ function fnAddHistory() {
 			<a class="btn btn-default" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
 			<a class="btn btn-default" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 		</div>
+
 		<button class="btn btn-xs btn-default" onclick="$('.findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
+
+		<button class="btn btn-xs btn-warning" onclick="fnFindRandomOpus();">Random Find</button>
+
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
 
