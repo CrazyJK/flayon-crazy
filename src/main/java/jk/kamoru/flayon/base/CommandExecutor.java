@@ -20,7 +20,7 @@ public class CommandExecutor {
 	 * @param arguments
 	 */
 	@Async
-	public void exec(String command, String[] arguments) {
+	public void exec(String command, String... arguments) {
 		log.info("exec {}, {}", command, arguments);
 		try {
 			String[] commands = ArrayUtils.addAll(new String[] {command}, arguments);
