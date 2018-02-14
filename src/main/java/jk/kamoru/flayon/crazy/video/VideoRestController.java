@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.rest;
+package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
 @RequestMapping("/rest/video")
-public class RestVideoController {
+public class VideoRestController {
 
 	@Autowired VideoService videoService;
 	@Autowired VideoBatch videoBatch;

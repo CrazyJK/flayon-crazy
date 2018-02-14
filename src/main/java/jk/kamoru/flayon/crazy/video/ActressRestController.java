@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.rest;
+package jk.kamoru.flayon.crazy.video;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
 @RequestMapping("/rest/actress")
-public class RestActressController {
+public class ActressRestController {
 
 	@Autowired VideoService videoService;
 

@@ -1,9 +1,9 @@
 package jk.kamoru.flayon.crazy.video.error;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.NotFoundException;
+import jk.kamoru.flayon.crazy.CrazyNotFoundException;
 
-public class ActressNotFoundException extends NotFoundException {
+public class ActressNotFoundException extends CrazyNotFoundException {
 
 	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 

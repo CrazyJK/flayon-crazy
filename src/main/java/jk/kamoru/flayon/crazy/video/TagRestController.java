@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.rest;
+package jk.kamoru.flayon.crazy.video;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
 @RequestMapping("/rest/tag")
-public class RestTagController {
+public class TagRestController {
 
 	@Autowired TagService tagService;
 	@Autowired VideoService videoService;

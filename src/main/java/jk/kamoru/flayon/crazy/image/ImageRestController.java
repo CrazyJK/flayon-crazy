@@ -16,7 +16,7 @@ import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
 @RequestMapping("/rest/image")
-public class RestImageController {
+public class ImageRestController {
 
 	@Autowired VideoService videoService;
 	@Autowired ImageService imageService;

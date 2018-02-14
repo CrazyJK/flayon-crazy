@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import jk.kamoru.flayon.crazy.NotFoundException;
+import jk.kamoru.flayon.crazy.CrazyNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +31,7 @@ public abstract class ExceptionHandlerAdapter {
 			response.setHeader("error.cause", exceptionCause.getMessage());		
 		
 		String logMessage = String.format(LOG_FORMAT, exceptionClass, exceptionMessage, viewName);
-		if (exception instanceof NotFoundException)
+		if (exception instanceof CrazyNotFoundException)
 			log.error(logMessage);
 		else
 			log.error(logMessage, exception);

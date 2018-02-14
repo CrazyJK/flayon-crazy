@@ -22,7 +22,7 @@ public class CrazyExceptionHandler extends ExceptionHandlerAdapter {
 		return modelAndView(exception, request, response, "error/crazy.error");
 	}
 	
-	@ExceptionHandler(value = NotFoundException.class)
+	@ExceptionHandler(value = CrazyNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView videoNotFoundException(CrazyException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, request, response, "error/crazy.notfound");
