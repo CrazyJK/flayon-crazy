@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service("arzonLookupService")
-public class ArzonLookupService extends WebfileLookupAdapter {
+public class ArzonCoverLookup extends WebfileLookupAdapter {
 
 	private static final String ARZON_HOST = "https://www.arzon.jp";
 	private static final String ARZON_SEARCH = ARZON_HOST + "/index.php?action=adult_customer_agecheck&agecheck=1&redirect=https%3A%2F%2Fwww.arzon.jp%2Fitemlist.html%3Ft%3D%26m%3Dall%26s%3D%26q%3D";
