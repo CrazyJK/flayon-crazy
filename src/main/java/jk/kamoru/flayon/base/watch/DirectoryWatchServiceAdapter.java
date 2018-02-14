@@ -12,7 +12,7 @@ import jk.kamoru.flayon.base.AsyncExecutorService;
  * {@link #deleted(Path)} 
  * @author kamoru
  */
-public abstract class DirectoryWatchService extends AsyncExecutorService {
+public abstract class DirectoryWatchServiceAdapter extends AsyncExecutorService {
 
 	protected abstract String getTaskName();
 	protected abstract String[] getPath();

@@ -47,6 +47,7 @@ import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.StudioUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.daemon.DirectoryService;
 import jk.kamoru.flayon.crazy.video.dao.TagDao;
 import jk.kamoru.flayon.crazy.video.dao.VideoDao;
 import jk.kamoru.flayon.crazy.video.domain.Action;
@@ -63,8 +64,9 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.error.VideoException;
 import jk.kamoru.flayon.crazy.video.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.video.service.lookup.FileLookupService;
 import jk.kamoru.flayon.crazy.video.service.noti.NotiQueue;
-import jk.kamoru.flayon.crazy.video.service.webfile.WebFileLookupService;
+import jk.kamoru.flayon.crazy.video.service.rss.TistoryRSSReader;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -84,8 +86,8 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired VideoDao videoDao;
 	@Autowired TagDao tagDao;
 	@Autowired HistoryService historyService;
-	@Autowired WebFileLookupService arzonLookupService;
-	@Autowired WebFileLookupService sukebeiNyaaLookupService;
+	@Autowired FileLookupService arzonLookupService;
+	@Autowired FileLookupService sukebeiNyaaLookupService;
 	@Autowired CommandExecutor commandExecutor;
 	@Autowired DirectoryService seedDirectoryService;
 

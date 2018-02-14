@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.service;
+package jk.kamoru.flayon.crazy.video.daemon;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jk.kamoru.flayon.base.watch.DirectoryWatchService;
+import jk.kamoru.flayon.base.watch.DirectoryWatchServiceAdapter;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SeedDirectoryService extends DirectoryWatchService implements DirectoryService {
+public class DirectoryServiceForSeed extends DirectoryWatchServiceAdapter implements DirectoryService {
 
 	private static final String TASKNAME = "Seed Directory Service";
 	

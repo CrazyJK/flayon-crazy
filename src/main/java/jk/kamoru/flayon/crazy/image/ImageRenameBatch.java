@@ -12,14 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jk.kamoru.flayon.base.watch.DirectoryWatchService;
+import jk.kamoru.flayon.base.watch.DirectoryWatchServiceAdapter;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ImageRenameBatch extends DirectoryWatchService {
+public class ImageRenameBatch extends DirectoryWatchServiceAdapter {
 
 	private static final String TASKNAME = "Rename Sora picture";
 	

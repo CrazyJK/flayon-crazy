@@ -2,9 +2,9 @@ package jk.kamoru.flayon.test;
 
 import java.nio.file.Path;
 
-import jk.kamoru.flayon.base.watch.DirectoryWatchService;
+import jk.kamoru.flayon.base.watch.DirectoryWatchServiceAdapter;
 
-public class DirectoryWatchServiceTest extends DirectoryWatchService {
+public class DirectoryWatchServiceTest extends DirectoryWatchServiceAdapter {
 
 	@Override
 	protected String getTaskName() {
@@ -29,7 +29,7 @@ public class DirectoryWatchServiceTest extends DirectoryWatchService {
 	}
 
 	public static void main(String[] args) {
-		DirectoryWatchService dw = new DirectoryWatchServiceTest();
+		DirectoryWatchServiceAdapter dw = new DirectoryWatchServiceTest();
 		dw.post();
 	}
 

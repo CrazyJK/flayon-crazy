@@ -1,16 +1,13 @@
-package jk.kamoru.flayon.crazy.video.service.webfile;
+package jk.kamoru.flayon.crazy.video.service.lookup;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,24 +30,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service("sukebeiNyaaLookupService")
 //@Deprecated
-public class SukebeiNyaaLookupService implements WebFileLookupService {
+public class SukebeiNyaaLookupService extends WebfileLookupAdapter {
 
 	private static final String SUKEBEI_URL = "http://sukebei.nyaa.se";
 	private static final String SUKEBEI_LIST_URL = SUKEBEI_URL + "/?page=search&cats=0_0&filter=0&term=";
 	private static final String GiB = "GiB";
 	private static final String MiB = "MiB";
-	
-//	public static void main(String[] args) throws IOException {
-//		new SukebeiNyaaLookupService().get("SCOP-121", "제목2", "/home/kamoru/workspace");
-//	}
 
 	@Override
 	public CompletableFuture<File> get(String opus, String title, String saveLocation) {
 		log.info("Look up {} torrent at {}", opus, SUKEBEI_URL);
 		
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		
-		try {
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			String url = SUKEBEI_LIST_URL + opus;
 			CloseableHttpResponse response = httpclient.execute(new HttpGet(url));
 			log.info("Searching... {} - {}", url, response.getStatusLine());
@@ -122,10 +113,6 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 		} catch (VideoException e) {
 			log.warn(e.getMessage());
 			return CompletableFuture.completedFuture(null);
-		} finally {
-		    try {
-				httpclient.close();
-			} catch (IOException _ignore) {}
 		}
 	}
 
@@ -142,19 +129,6 @@ public class SukebeiNyaaLookupService implements WebFileLookupService {
 			return (long) (Double.valueOf(text.replace(MiB, "").trim()) * 1l);
 		}
 		return 0;
-	}
-
-	/**
-	 * httpResponse convert to string
-	 * JAVA 8 over
-	 * @param response
-	 * @return
-	 * @throws UnsupportedOperationException
-	 * @throws IOException
-	 */
-	private String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		return reader.lines().collect(Collectors.joining("\n"));
 	}
 
 }

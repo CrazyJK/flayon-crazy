@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.service.webfile;
+package jk.kamoru.flayon.crazy.video.service.lookup;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Async;
  * @author kamoru
  *
  */
-public interface WebFileLookupService {
+public interface FileLookupService {
 
 	/**
 	 * 파일 찾아 다운로드 

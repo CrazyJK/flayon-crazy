@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.service;
+package jk.kamoru.flayon.crazy.video.daemon;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jk.kamoru.flayon.base.util.IOUtils;
-import jk.kamoru.flayon.base.watch.DirectoryWatchService;
+import jk.kamoru.flayon.base.watch.DirectoryWatchServiceAdapter;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyException;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class FileMoveService extends DirectoryWatchService {
+public class FileMoveService extends DirectoryWatchServiceAdapter {
 
 	private static final String TASKNAME = "File Move";
 	

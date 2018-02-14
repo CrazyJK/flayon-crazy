@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video.service;
+package jk.kamoru.flayon.crazy.video.daemon;
 
 import java.io.File;
 import java.util.List;
