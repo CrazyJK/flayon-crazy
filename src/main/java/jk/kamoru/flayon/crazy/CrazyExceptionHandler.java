@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jk.kamoru.flayon.base.ExceptionHandlerAdapter;
 import jk.kamoru.flayon.crazy.image.ImageException;
-import jk.kamoru.flayon.crazy.video.error.VideoException;
+import jk.kamoru.flayon.crazy.video.VideoException;
 
 @ControllerAdvice
 public class CrazyExceptionHandler extends ExceptionHandlerAdapter {

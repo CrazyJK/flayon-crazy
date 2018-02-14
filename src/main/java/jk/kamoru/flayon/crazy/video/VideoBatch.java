@@ -25,7 +25,6 @@ import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
-import jk.kamoru.flayon.crazy.video.error.VideoException;
 import jk.kamoru.flayon.crazy.video.service.DirectoryService;
 import jk.kamoru.flayon.crazy.video.service.HistoryService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
