@@ -13,10 +13,10 @@ import jk.kamoru.flayon.crazy.CrazyException.KIND;
 import jk.kamoru.flayon.crazy.image.ImageException;
 import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
-import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
-import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
-import jk.kamoru.flayon.crazy.video.VideoException;
-import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.video.error.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.video.error.StudioNotFoundException;
+import jk.kamoru.flayon.crazy.video.error.VideoException;
+import jk.kamoru.flayon.crazy.video.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 public abstract class CrazyController {
