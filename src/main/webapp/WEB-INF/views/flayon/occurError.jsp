@@ -98,8 +98,9 @@ function displayJson(title, content) {
 			<a class="btn btn-default" target="errorFrame" data-href="/UnknownPage"><input type="radio"/>404</a>
 			<a class="btn btn-default" target="errorFrame" data-href="?k=error"><input type="radio"/>error</a>
 			<a class="btn btn-default" target="errorFrame" data-href="?k=runtime"><input type="radio"/>runtime</a>
-			<a class="btn btn-default" target="errorFrame" data-href="?k=base1"><input type="radio"/>base1</a>
-			<a class="btn btn-default" target="errorFrame" data-href="?k=base2"><input type="radio"/>base2</a>
+			<a class="btn btn-default" target="errorFrame" data-href="?k=base"><input type="radio"/>base</a>
+			<a class="btn btn-default" target="errorFrame" data-href="?k=flay1"><input type="radio"/>flay1</a>
+			<a class="btn btn-default" target="errorFrame" data-href="?k=flay2"><input type="radio"/>flay2</a>
 			<a class="btn btn-default" target="errorFrame" data-href="${throwError}?k=Crazy"><input type="radio"/>crazy</a>
 			<a class="btn btn-default" target="errorFrame" data-href="${throwError}?k=Video"><input type="radio"/>video</a>
 			<a class="btn btn-default" target="errorFrame" data-href="${throwError}?k=Image"><input type="radio"/>image</a>

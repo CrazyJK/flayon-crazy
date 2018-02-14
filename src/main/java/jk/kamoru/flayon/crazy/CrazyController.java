@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jk.kamoru.flayon.crazy.error.ActressNotFoundException;
-import jk.kamoru.flayon.crazy.error.CrazyException;
-import jk.kamoru.flayon.crazy.error.CrazyException.KIND;
-import jk.kamoru.flayon.crazy.error.ImageException;
-import jk.kamoru.flayon.crazy.error.ImageNotFoundException;
-import jk.kamoru.flayon.crazy.error.StudioNotFoundException;
-import jk.kamoru.flayon.crazy.error.VideoException;
-import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.CrazyException.KIND;
+import jk.kamoru.flayon.crazy.image.ImageException;
+import jk.kamoru.flayon.crazy.image.ImageNotFoundException;
 import jk.kamoru.flayon.crazy.image.service.ImageService;
+import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
+import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 public abstract class CrazyController {

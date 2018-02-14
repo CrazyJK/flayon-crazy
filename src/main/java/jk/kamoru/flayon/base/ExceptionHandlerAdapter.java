@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import jk.kamoru.flayon.crazy.error.NotFoundException;
+import jk.kamoru.flayon.crazy.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

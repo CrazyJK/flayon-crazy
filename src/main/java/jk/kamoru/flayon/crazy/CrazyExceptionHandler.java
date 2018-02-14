@@ -10,10 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import jk.kamoru.flayon.base.ExceptionHandlerAdapter;
-import jk.kamoru.flayon.crazy.error.CrazyException;
-import jk.kamoru.flayon.crazy.error.ImageException;
-import jk.kamoru.flayon.crazy.error.NotFoundException;
-import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.image.ImageException;
+import jk.kamoru.flayon.crazy.video.VideoException;
 
 @ControllerAdvice
 public class CrazyExceptionHandler extends ExceptionHandlerAdapter {

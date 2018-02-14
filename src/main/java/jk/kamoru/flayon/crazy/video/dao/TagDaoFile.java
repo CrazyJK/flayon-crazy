@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 import lombok.extern.slf4j.Slf4j;

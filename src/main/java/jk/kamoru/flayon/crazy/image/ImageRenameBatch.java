@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import jk.kamoru.flayon.base.watch.DirectoryWatchService;
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.error.ImageException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 

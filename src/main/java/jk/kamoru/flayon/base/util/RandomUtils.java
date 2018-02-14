@@ -2,7 +2,7 @@ package jk.kamoru.flayon.base.util;
 
 import java.util.Random;
 
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 
 public class RandomUtils {
 

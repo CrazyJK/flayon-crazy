@@ -1,6 +1,7 @@
-package jk.kamoru.flayon.crazy.error;
+package jk.kamoru.flayon.crazy.image;
 
 import jk.kamoru.flayon.crazy.CRAZY;
+import jk.kamoru.flayon.crazy.NotFoundException;
 
 public class ImageNotFoundException extends NotFoundException {
 

@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.video.rest;
 
 import java.util.List;
 import java.util.Map;

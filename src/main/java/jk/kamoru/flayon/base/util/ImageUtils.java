@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

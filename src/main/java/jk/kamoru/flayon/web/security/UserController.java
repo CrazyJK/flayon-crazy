@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jk.kamoru.flayon.web.FlayException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -71,7 +70,7 @@ public class UserController {
 		log.debug("view {}", id);
 		User findOne = userRepository.getOne(id);
 		if (findOne == null) {
-			throw new FlayException("User not found");
+			throw new UserNotFoundException("User not found");
 		}
 		model.addAttribute(findOne);
 		return DetailView;

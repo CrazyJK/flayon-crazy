@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.UsesJava8;
 
 import jk.kamoru.flayon.FLAYON;
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 
 public class IOUtils {
 	

@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.video.batch;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,8 +22,9 @@ import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.base.util.ZipUtils;
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
+import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.VideoException;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.service.DirectoryService;

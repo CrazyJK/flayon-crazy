@@ -25,10 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.error.VideoException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.VideoException;
 import lombok.extern.slf4j.Slf4j;
 
 /**

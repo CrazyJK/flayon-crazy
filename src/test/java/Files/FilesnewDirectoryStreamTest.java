@@ -10,7 +10,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 
 public class FilesnewDirectoryStreamTest {
 

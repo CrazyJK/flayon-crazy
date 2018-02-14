@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.error.CrazyException;
-import jk.kamoru.flayon.crazy.error.VideoNotFoundException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.VIDEO;
+import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Action;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.Video;

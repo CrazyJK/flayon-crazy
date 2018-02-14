@@ -2,7 +2,7 @@ package jk.kamoru.flayon.crazy.video.dao;
 
 import java.util.List;
 
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.domain.VTag;
 
 public interface TagDao {

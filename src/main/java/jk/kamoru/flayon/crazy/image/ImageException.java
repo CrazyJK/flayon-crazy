@@ -1,6 +1,6 @@
-package jk.kamoru.flayon.crazy.error;
+package jk.kamoru.flayon.crazy.image;
 
-import jk.kamoru.flayon.crazy.image.IMAGE;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.image.domain.Image;
 
 public class ImageException extends CrazyException {

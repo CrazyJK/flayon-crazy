@@ -56,6 +56,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.FLAYON;
+import jk.kamoru.flayon.base.BaseException;
 import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
@@ -98,9 +99,11 @@ public class FlayController {
 			throw new Exception("test error");
 		else if (kind.equals("runtime"))
 			throw new RuntimeException("test runtime error");
-		else if (kind.equals("base1"))
+		else if (kind.equals("base"))
+			throw new BaseException("test base error");
+		else if (kind.equals("flay1"))
 			throw new FlayException("test falyon error");
-		else if (kind.equals("base2"))
+		else if (kind.equals("flay2"))
 			throw new FlayException("test falyon error", new Exception("test flayon cause"));
 		return "flayon/occurError";
 	}

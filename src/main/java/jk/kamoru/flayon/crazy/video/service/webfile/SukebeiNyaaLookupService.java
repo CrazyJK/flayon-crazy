@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
-import jk.kamoru.flayon.crazy.error.VideoException;
+import jk.kamoru.flayon.crazy.video.VideoException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

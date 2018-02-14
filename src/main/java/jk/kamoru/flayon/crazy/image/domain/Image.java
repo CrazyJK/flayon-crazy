@@ -14,9 +14,9 @@ import org.imgscalr.Scalr.Method;
 
 import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.base.util.ImageUtils;
-import jk.kamoru.flayon.crazy.error.CrazyException;
-import jk.kamoru.flayon.crazy.error.ImageException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.image.IMAGE;
+import jk.kamoru.flayon.crazy.image.ImageException;
 import lombok.Getter;
 
 /**

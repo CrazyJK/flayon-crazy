@@ -1,6 +1,4 @@
-package jk.kamoru.flayon.crazy.error;
-
-import jk.kamoru.flayon.crazy.CRAZY;
+package jk.kamoru.flayon.crazy;
 
 public class CrazyException extends RuntimeException {
 

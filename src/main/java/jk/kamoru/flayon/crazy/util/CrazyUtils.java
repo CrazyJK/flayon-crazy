@@ -28,7 +28,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import jk.kamoru.flayon.base.util.IOUtils;
-import jk.kamoru.flayon.crazy.error.CrazyException;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import lombok.extern.slf4j.Slf4j;
 
