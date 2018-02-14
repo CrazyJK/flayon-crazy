@@ -51,13 +51,7 @@ public abstract class WebfileLookupAdapter implements FileLookupService {
 
 	public abstract CompletableFuture<File> get(String keyword, String saveFilename, String saveLocation);
 
-	protected String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
-		return new BufferedReader(
-				new InputStreamReader(
-						response.getEntity().getContent())).lines().collect(Collectors.joining(VIDEO.LINE));
-	}
-
-	public CloseableHttpClient getTorHttpClient() {
+	protected CloseableHttpClient getTorHttpClient() {
 		HttpClientContext context = HttpClientContext.create();
 	    context.setAttribute(SOCKET_ADDRESS, TOR_SOCKET_ADDR);
 
@@ -70,4 +64,10 @@ public abstract class WebfileLookupAdapter implements FileLookupService {
 		return HttpClients.custom().setConnectionManager(cm).build();
 	}
 	
+	protected String readResponse(CloseableHttpResponse response) throws UnsupportedOperationException, IOException {
+		return new BufferedReader(
+				new InputStreamReader(
+						response.getEntity().getContent())).lines().collect(Collectors.joining(VIDEO.LINE));
+	}
+
 }
