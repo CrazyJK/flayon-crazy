@@ -28,7 +28,7 @@ import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.VIDEO;
-import jk.kamoru.flayon.crazy.video.VideoException;
+import jk.kamoru.flayon.crazy.video.error.VideoException;
 import lombok.extern.slf4j.Slf4j;
 
 /**

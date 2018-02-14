@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.video.error;
 
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyNotFoundException;

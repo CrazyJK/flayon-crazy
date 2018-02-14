@@ -12,14 +12,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.video.ActressNotFoundException;
-import jk.kamoru.flayon.crazy.video.StudioNotFoundException;
-import jk.kamoru.flayon.crazy.video.VideoException;
-import jk.kamoru.flayon.crazy.video.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
 import jk.kamoru.flayon.crazy.video.domain.Video;
+import jk.kamoru.flayon.crazy.video.error.ActressNotFoundException;
+import jk.kamoru.flayon.crazy.video.error.StudioNotFoundException;
+import jk.kamoru.flayon.crazy.video.error.VideoException;
+import jk.kamoru.flayon.crazy.video.error.VideoNotFoundException;
 import jk.kamoru.flayon.crazy.video.source.VideoSource;
 import lombok.extern.slf4j.Slf4j;
 

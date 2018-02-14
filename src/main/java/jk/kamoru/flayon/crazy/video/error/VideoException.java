@@ -1,6 +1,7 @@
-package jk.kamoru.flayon.crazy.video;
+package jk.kamoru.flayon.crazy.video.error;
 
 import jk.kamoru.flayon.crazy.CrazyException;
+import jk.kamoru.flayon.crazy.video.VIDEO;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 
 /**video에서 발생하는 에러
