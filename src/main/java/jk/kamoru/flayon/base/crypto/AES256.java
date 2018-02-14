@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import jk.kamoru.flayon.web.BaseException;
+import jk.kamoru.flayon.base.BaseException;
 
 public class AES256 implements Crypto {
 

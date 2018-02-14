@@ -1,4 +1,4 @@
-package jk.kamoru.flayon.web;
+package jk.kamoru.flayon.base;
 
 import jk.kamoru.flayon.FLAYON;
 

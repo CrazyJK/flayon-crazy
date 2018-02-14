@@ -12,11 +12,11 @@ import org.springframework.web.servlet.ModelAndView;
 import jk.kamoru.flayon.base.ExceptionHandlerAdapter;
 
 @ControllerAdvice
-public class BaseExceptionHandler extends ExceptionHandlerAdapter {
+public class FlayExceptionHandler extends ExceptionHandlerAdapter {
 
-	@ExceptionHandler(value = BaseException.class)
+	@ExceptionHandler(value = FlayException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ModelAndView baseException(BaseException exception, WebRequest request, HttpServletResponse response) {
+	public ModelAndView flayException(FlayException exception, WebRequest request, HttpServletResponse response) {
 		return modelAndView(exception, request, response, "error/base.error");
 	}
 

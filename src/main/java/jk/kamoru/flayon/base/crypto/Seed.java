@@ -4,10 +4,10 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
 
+import jk.kamoru.flayon.base.BaseException;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_CBC;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_CTR;
 import jk.kamoru.flayon.base.crypto.seed.KISA_SEED_ECB;
-import jk.kamoru.flayon.web.BaseException;
 
 public class Seed implements Crypto {
 

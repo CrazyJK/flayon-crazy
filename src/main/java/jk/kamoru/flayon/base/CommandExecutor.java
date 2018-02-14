@@ -7,7 +7,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import jk.kamoru.flayon.crazy.error.CrazyException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,7 +29,7 @@ public class CommandExecutor {
 			builder.start();
 		} catch (IOException e) {
 			log.error("exec error", e);
-			throw new CrazyException("exec error", e);
+			throw new BaseException("exec error", e);
 		}
 	}
 

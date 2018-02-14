@@ -68,7 +68,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/flayon")
-public class BaseController {
+public class FlayController {
 
 	@Value("${use.repository.accesslog}") boolean useAccesslogRepository;
 
@@ -99,9 +99,9 @@ public class BaseController {
 		else if (kind.equals("runtime"))
 			throw new RuntimeException("test runtime error");
 		else if (kind.equals("base1"))
-			throw new BaseException("test falyon error");
+			throw new FlayException("test falyon error");
 		else if (kind.equals("base2"))
-			throw new BaseException("test falyon error", new Exception("test flayon cause"));
+			throw new FlayException("test falyon error", new Exception("test flayon cause"));
 		return "flayon/occurError";
 	}
 
@@ -322,7 +322,7 @@ public class BaseController {
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			throw new BaseException("execute error", e);
+			throw new FlayException("execute error", e);
 		}
 	}
 	

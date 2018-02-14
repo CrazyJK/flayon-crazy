@@ -19,7 +19,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import jk.kamoru.flayon.web.BaseException;
+import jk.kamoru.flayon.base.BaseException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
