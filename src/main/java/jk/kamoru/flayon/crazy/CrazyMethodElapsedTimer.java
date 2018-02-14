@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-public class MethodElapsedTimer {
+public class CrazyMethodElapsedTimer {
 	
 	// pointcut Designators
 	static final String SERVICE    = "execution(* jk.kamoru.flayon..*.*Service*.*(..))";
