@@ -1,6 +1,8 @@
 package jk.kamoru.flayon.crazy.video.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class TagServiceImpl implements TagService {
 	public VTag getTag(Integer id) {
 		VTag vTag = tagDao.findById(id);
 		vTag.getVideoList().clear();
-		for (Video video : videoDao.getVideoList(true, false)) {
+		for (Video video : sortByReleaseReverse(videoDao.getVideoList(true, false))) {
 			if (video.getTags() == null)
 				continue;
 			if (video.getTags().contains(vTag)) {
@@ -84,4 +86,7 @@ public class TagServiceImpl implements TagService {
 		return deleted;
 	}
 
+	private List<Video> sortByReleaseReverse(List<Video> videoList) {
+		return videoList.stream().sorted((Comparator.comparing(Video::getReleaseDate).reversed())).collect(Collectors.toList());
+	}
 }
