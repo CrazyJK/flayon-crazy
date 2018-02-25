@@ -1,6 +1,7 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +72,24 @@ public class VTag {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "VTag [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
+	
+	@JsonIgnore
+	public List<String> getEntry() {
+		List<String> names = new ArrayList<>();
+		names.add(name);
+		String[] split = StringUtils.split(getDescription(), ",");
+		if (split != null && split.length > 0)
+			for (String str : split)
+				if (str != null)
+					if (str.trim().length() > 0)
+						names.add(str);
+		return names;
 	}
 
 }

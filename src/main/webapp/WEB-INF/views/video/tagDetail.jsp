@@ -68,6 +68,16 @@ function fnSaveTagInfo() {
 			</c:forEach>
 		</ul>
 	</div>
+	<h3>
+		<span class="label label-plain">Candidates <i class="badge badge-black">${fn:length(likeVideoList)}</i></span>
+	</h3>
+	<div class="box">
+		<ul class="list-inline text-center">
+			<c:forEach items="${likeVideoList}" var="video">
+				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+			</c:forEach>
+		</ul>
+	</div>
 </div>
 </body>
 </html>

@@ -89,4 +89,17 @@ public class TagServiceImpl implements TagService {
 	private List<Video> sortByReleaseReverse(List<Video> videoList) {
 		return videoList.stream().sorted((Comparator.comparing(Video::getReleaseDate).reversed())).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<Video> likeVideo(VTag tag) {
+		List<Video> videoList = tag.getVideoList();
+		
+		return videoDao.getVideoList(true, false).stream()
+				.filter(v -> {
+					return !videoList.contains(v);
+				})
+				.filter(v -> v.likeTag(tag))
+				.sorted((Comparator.comparing(Video::getReleaseDate).reversed()))
+				.collect(Collectors.toList());
+	}
 }

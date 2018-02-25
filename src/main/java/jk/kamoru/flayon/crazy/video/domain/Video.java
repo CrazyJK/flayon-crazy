@@ -1300,5 +1300,14 @@ public class Video {
 			return false;
 		return true;
 	}
+
+	public boolean likeTag(VTag tag) {
+		List<String> tagEntry = tag.getEntry();
+		for (String entry : tagEntry) {
+			if (getFullname().contains(entry))
+				return true;
+		}
+		return false;
+	}
 	
 }

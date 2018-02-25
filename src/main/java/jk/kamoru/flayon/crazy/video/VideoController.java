@@ -34,6 +34,7 @@ import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
+import jk.kamoru.flayon.crazy.video.domain.VTag;
 import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.domain.VideoSearch;
 import jk.kamoru.flayon.crazy.video.domain.View;
@@ -377,7 +378,10 @@ public class VideoController extends CrazyController {
 
 	@RequestMapping("/tag/{tagId}")
 	public String viewTag(Model model, @PathVariable Integer tagId) {
-		model.addAttribute("tag", tagService.getTag(tagId));
+		VTag tag = tagService.getTag(tagId);
+		model.addAttribute("tag", tag);
+		List<Video> likeVideoList = tagService.likeVideo(tag);
+		model.addAttribute("likeVideoList", likeVideoList);
 		return "video/tagDetail";
 	}
 
