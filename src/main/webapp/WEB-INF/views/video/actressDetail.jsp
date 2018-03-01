@@ -22,25 +22,6 @@ body {
 input[type='text'].form-control {
 	text-align: center;
 }
-@media (min-width: 1200px) {
-	.container-video-card {
-    	width: 100%;
-	}
-	.container-video-card li {
-		transform: scale(2, 2);
-		margin: 65px 100px;
-	}
-	.video-card {
-		background-color: rgb(171, 116, 91);
-    }
-	.video-card:hover {
-		background-color: rgb(209, 125, 148);
-    	transform: none;
-    }
-}
-.video-box:hover {
-    transform: none;
-}
 </style>
 <script type="text/javascript">
 bgContinue = ${empty actress.image};
