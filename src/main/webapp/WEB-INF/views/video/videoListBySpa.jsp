@@ -19,6 +19,14 @@
 			<span class="label label-warning videoCount" title="video count">0</span>
 			<span class="label label-primary candidate" title="candidate count">0</span>
 		</div>
+		<div style="display: inline-block;" id="checkbox-rank-group">
+	   		<span class="label label-default" id="check-rank0"  role="checkbox" data-role-value="true">0</span>
+	   		<span class="label label-default" id="check-rank1"  role="checkbox" data-role-value="false">1</span>
+	   		<span class="label label-default" id="check-rank2"  role="checkbox" data-role-value="false">2</span>
+	   		<span class="label label-default" id="check-rank3"  role="checkbox" data-role-value="false">3</span>
+	   		<span class="label label-default" id="check-rank4"  role="checkbox" data-role-value="false">4</span>
+	   		<span class="label label-default" id="check-rank5"  role="checkbox" data-role-value="false">5</span>
+		</div>
       	<div class="float-right">
 			<div class="btn-group btn-group-xs">
 		      	<button class="btn btn-info"    data-toggle="tab" data-target="#table">Table</button>

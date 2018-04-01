@@ -103,9 +103,13 @@ var VideoList = (function() {
 						}
 					}
 					return false;
+				}, containsRank = function(video) {
+					return $("#check-rank" + video.rank).data("checked");
 				};
+				
 				var fullname = video.fullname + video.videoDate + video.overviewText;
-				return fullname.toLowerCase().indexOf(query.toLowerCase()) > -1
+				return containsRank(video)
+					&& fullname.toLowerCase().indexOf(query.toLowerCase()) > -1
 					&& (isCheckedFavorite ?  video.favorite           : true)
 					&& (isCheckedNoVideo  ? !video.existVideoFileList : true)
 					&& (isCheckedTags     ?  containsTag(video)       : true);
@@ -218,7 +222,8 @@ var VideoList = (function() {
 		var parentOfVideoBox  = $("#box > ul");
 		var parentOfTableList = $("#table tbody");
 
-		var isFilter = query != '' || isCheckedFavorite || isCheckedNoVideo || isCheckedTags;
+//		var isFilter = query != '' || isCheckedFavorite || isCheckedNoVideo || isCheckedTags;
+		var isFilter = true;
 		//console.log("render isFilter", query, isCheckedFavorite, isCheckedNoVideo, isCheckedTags, " = " + isFilter);
 		
 		if (first == true) { // initialize if first rendering 
@@ -304,6 +309,11 @@ var VideoList = (function() {
 			render(true);
 		});
 
+		// for rank checkbox
+		$("[role='checkbox']", "#checkbox-rank-group").on("click", function() {
+			render(true);
+		});
+		
 		// re-request
 		$("#request").on('click', function() {
 			currentSort = {code: 'C', reverse: false};
