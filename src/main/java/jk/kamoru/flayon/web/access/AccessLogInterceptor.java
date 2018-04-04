@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.MDC;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AccessLogInterceptor implements HandlerInterceptor {
 
+	private static final String MDC_STARTTIME = "StartTime";
+	private static final String MDC_USERNAME  = "Username";
+	
 	private AccessLogRepository accessLogRepository;
 	private boolean useAccesslogRepository;
 
@@ -49,7 +53,11 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		request.setAttribute("startTime", new Long(System.currentTimeMillis()));
+		MDC.put(MDC_STARTTIME, new Long(System.currentTimeMillis()));
+		User user = getUser(request);
+		if (user != null) {
+			MDC.put(MDC_USERNAME, user.getName());
+		}
 		return true;
 	}
 
@@ -60,22 +68,23 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 		getAccesslog(request, response, handler, null, ex);
+		MDC.clear();
 	}
 
 	private void getAccesslog(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView, Exception ex) {
-		final long startTime = (Long)request.getAttribute("startTime");
+		final long startTime = Long.parseLong(MDC.get(MDC_STARTTIME).toString());
 
-		Date   logDate = new Date();
-		String remoteAddr = request.getRemoteAddr();
-		String reqMethod = request.getMethod();
-		String requestUri = request.getRequestURI();
+		Date   logDate     = new Date();
+		String remoteAddr  = request.getRemoteAddr();
+		String reqMethod   = request.getMethod();
+		String requestUri  = request.getRequestURI();
 		String contentType = trim(response.getContentType());
 		long   elapsedtime = System.currentTimeMillis() - startTime;
 		String handlerInfo = "";
 		String exceptionInfo = ex == null ? "" : ex.getMessage();
 		String modelAndViewInfo = "";
-		User user = null;
-		int    status = response.getStatus();
+		User   user        = getUser(request);
+		int    status      = response.getStatus();
 
 		// for handlerInfo
 		if (handler instanceof org.springframework.web.method.HandlerMethod) { // for Controller
@@ -104,12 +113,6 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 			modelAndViewInfo = String.format("view=%s model=%s", viewName, modelNames);
 		}
 		
-		// user
-		SecurityContextImpl securityContext = (SecurityContextImpl) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-		if (securityContext != null) {
-			user = (User) securityContext.getAuthentication().getPrincipal();
-		}
-		
 		AccessLog accessLog = new AccessLog(
 				logDate,
 				remoteAddr,
@@ -125,10 +128,17 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 		
 		if (useAccesslogRepository)
 			accessLogRepository.save(accessLog);
-		log.info(accessLog.toLogString());
 		
+		log.info(accessLog.toLogString());
 	}
 
+	private User getUser(HttpServletRequest request) {
+		SecurityContextImpl securityContext = (SecurityContextImpl) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+		if (securityContext != null)
+			return (User) securityContext.getAuthentication().getPrincipal();
+		return null;
+	}
+	
 	private String trim(String str) {
 		return str == null ? "" : StringUtils.trimWhitespace(str);
 	}
