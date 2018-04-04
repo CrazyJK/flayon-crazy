@@ -92,12 +92,12 @@
 		<div style="margin:0; display:inline-block;" class="form-inline">
 			<div class="input-group rank-group">
 				<input type="range" id="Rank-${video.opus}" name="rankPoints" class="form-control rank-range" data-opus="${video.opus}" min="${minRank}" max="${maxRank}" value="${video.rank}" onmouseup="fnRank('${video.opus}')" />
-				<span id="Rank-${video.opus}-label" class="input-group-addon rank-range-addon">${video.rank}</span>
+				<span id="Rank-${video.opus}-label" class="input-group-addon rank-range-addon rank-${video.rank}">${video.rank}</span>
 			</div>
 		</div>
 	</c:if>
 	<c:if test="${mode eq 's'}">
-		<span id="Rank-${video.opus}-label" class="${cssClass}" title="rank">${video.rank}</span>
+		<span id="Rank-${video.opus}-label" class="${cssClass} rank-${video.rank}" title="rank">${video.rank}</span>
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("label")) { %>
 	<span class="${cssClass}" title="${video.fullname} ${tooltip}" data-opus="${video.opus}" onclick="fnVideoDetail('${video.opus}')">${mode eq 'simple' ? 'O' : video.opus}</span>

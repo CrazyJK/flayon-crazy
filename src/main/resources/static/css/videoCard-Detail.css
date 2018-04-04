@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+body {
+    background-repeat: repeat;
+    background-position: center top;
+	background-size: initial;
+}
+#actressForm .form-control {
+	background-color: rgba(255,255,255,.75);
+}
+input[type='text'].form-control {
+	text-align: center;
+}
+#favoriteTEXT {
+	text-shadow: 0px 0px 5px #0c0c0c;
+	box-shadow: 0 0 4px 8px rgba(255, 255, 255, .5) inset;
+    border-radius: 50%;
+}
+
+.rank-5 {
+	background-color: red;
+	text-shadow: 0 0 4px red;
+    box-shadow: 0 0 4px red inset;
+    font-weight: 700;
+}
+.rank-4 {
+	background-color: rgba(256, 0, 0, .8);
+	text-shadow: 0 0 4px rgba(256, 0, 0, .8);
+    box-shadow:  0 0 4px rgba(256, 0, 0, .8) inset;
+    font-weight: 700;
+}
+.rank-3 {
+	background-color: rgba(256, 0, 0, .6);
+	text-shadow: 0 0 4px rgba(256, 0, 0, .6);
+    box-shadow:  0 0 4px rgba(256, 0, 0, .6) inset;
+    font-weight: 700;
+}
+.rank-2 {
+	background-color: rgba(256, 0, 0, .4);
+	text-shadow: 0 0 4px rgba(256, 0, 0, .4);
+    box-shadow:  0 0 4px rgba(256, 0, 0, .4) inset;
+    font-weight: 700;
+}
+.rank-1 {
+	background-color: rgba(256, 0, 0, .2);
+	text-shadow: 0 0 4px rgba(256, 0, 0, .2);
+    box-shadow:  0 0 4px rgba(256, 0, 0, .2) inset;
+    font-weight: 700;
+}
+
+@media (min-width: 1200px) {
+	.container-video-card {
+    	width: 100%;
+	}
+	.container-video-card li {
+		transform: scale(2, 2);
+		margin: 65px 100px;
+	}
+	.video-card {
+		background-color: rgb(93, 171, 91);
+    }
+	.video-card:hover {
+		background-color: rgb(209, 125, 148);
+    	transform: none;
+    }
+}
+.video-card.nonExist {
+	background-color: rgb(171, 116, 91);
+}

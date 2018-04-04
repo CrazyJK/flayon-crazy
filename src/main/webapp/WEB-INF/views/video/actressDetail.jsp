@@ -7,50 +7,31 @@
 <html>
 <head>
 <title>${actress.name}</title>
-<style type="text/css">
-#actressForm .form-control {
-	background-color: rgba(255,255,255,.75);
-}
-#favoriteTEXT {
-	text-shadow: 0px 0px 5px #0c0c0c;
-}
-body {
-    background-repeat: repeat;
-    background-position: center top;
-	background-size: initial;
-}
-input[type='text'].form-control {
-	text-align: center;
-}
-</style>
+<link rel="stylesheet" href="${PATH}/css/videoCard-Detail.css"/>
 <script type="text/javascript">
 bgContinue = ${empty actress.image};
 var archive = ${actress.archive};
+
 $(document).ready(function() {
 	!bgContinue && $("body").css({
 		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
 	});	
-	if (archive) {
-		$("#favoriteTEXT").hide();
-		$(".btn").hide();
-	}
+	archive && $("#favoriteTEXT, .btn").hide();
 });
+
 function saveActressInfo() {
-	restCall(PATH + '/rest/actress', {method: "PUT", data: $("form#actressForm").serialize(), title: "Save actress info"}, function() {
-//		if (opener) {
-//			if (opener.location.href.indexOf("video/actress") > -1) 
-//				opener.location.reload();
-//		}
+	restCall(PATH + '/rest/actress', {
+		method: "PUT", 
+		data: $("form#actressForm").serialize(), 
+		title: "Save actress info"
+	}, function() {
 		location.href = PATH + "/video/actress/" + $("#newName").val();
 	});
 }
 function searchActressInfo() {
-	var name = '${actress.name}';
+	var name = $("#newName").val();
 	var localName = $("#localName").val();
-	if (localName != '') {
-		name = localName;
-	}
-	popup('<c:url value="${urlSearchActress}"/>' + name, 'infoActress', 1400, 900);
+	popup('<c:url value="${urlSearchActress}"/>' + (localName != '' ? localName : name), 'infoActress', 1400, 900);
 }
 </script>
 </head>
