@@ -17,9 +17,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 
 import jk.kamoru.flayon.base.util.IOUtils;
+import jk.kamoru.flayon.base.util.StopWatch;
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
@@ -113,9 +113,9 @@ public class FileBaseVideoSource implements VideoSource {
 		List<String> wrongFileNames = new ArrayList<>();
 		
 		// find files
-		stopWatch.start("load : listFiles");
+		stopWatch.start();
 		Collection<File> files = IOUtils.listFiles(paths, null, true);
-		stopWatch.stop();
+		stopWatch.stop("load : listFiles " + files.size());
 
 //		videoMap.clear();
 //		studioMap.clear();
@@ -126,7 +126,7 @@ public class FileBaseVideoSource implements VideoSource {
 		Map<String, Actress> _actressMap = new HashMap<>();
 
 		// domain create & data source
-		stopWatch.start("load : make Video object in " + files.size() + " files");
+		stopWatch.start();
 		for (File file : files) {
 			String filename = file.getName();
 			String     name = IOUtils.getPrefix(file);
@@ -162,9 +162,9 @@ public class FileBaseVideoSource implements VideoSource {
 				logger.error("File loading error : " + filename, e);
 			}
 		}
-		stopWatch.stop();
+		stopWatch.stop("load : make Video object " + _videoMap.size());
 
-		stopWatch.start("load : save wrong filename");
+		stopWatch.start("load : wrong files " + wrongFileNames.size());
 		try {
 			if (wrongFileNames.size() > 0)
 				FileUtils.writeLines(new File(paths[0], VIDEO.WRONG_FILENAME), VIDEO.ENCODING, wrongFileNames.stream().sorted().collect(Collectors.toList()), false);

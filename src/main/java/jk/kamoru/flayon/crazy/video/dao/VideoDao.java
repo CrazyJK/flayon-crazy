@@ -3,8 +3,7 @@ package jk.kamoru.flayon.crazy.video.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.util.StopWatch;
-
+import jk.kamoru.flayon.base.util.StopWatch;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.Studio;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;

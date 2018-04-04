@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
+import jk.kamoru.flayon.base.util.StopWatch;
 import jk.kamoru.flayon.base.util.ZipUtils;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.util.CrazyUtils;
@@ -128,25 +128,26 @@ public class VideoBatch {
 	public synchronized void batchInstanceVideoSource() {
 		log.info("BATCH Instance VideoSource START");
 		StopWatch stopWatch = new StopWatch("Instance VideoSource Batch");
-
+		int affectedCount = 0;
+		
 		log.info(" - delete lower rank video [{}]", config.isDeleteLowerRankVideo());
 		if (config.isDeleteLowerRankVideo()) {
-			stopWatch.start("delete lower rank");
-			videoService.removeLowerRankVideo();
-			stopWatch.stop();
+			stopWatch.start();
+			affectedCount = videoService.removeLowerRankVideo();
+			stopWatch.stop("delete lower rank " + affectedCount);
 		}
 		
 		log.info(" - delete lower score video [{}]", config.isDeleteLowerScoreVideo());
 		if (config.isDeleteLowerScoreVideo()) {
-			stopWatch.start("delete lower score");
-			videoService.removeLowerScoreVideo();
-			stopWatch.stop();
+			stopWatch.start();
+			affectedCount = videoService.removeLowerScoreVideo();
+			stopWatch.stop("delete lower score " + affectedCount);
 		}
 		
 		log.info(" - delete garbage file");
-		stopWatch.start("delete garbage file");
-		videoService.deleteGarbageFile();
-		stopWatch.stop();
+		stopWatch.start();
+		affectedCount = videoService.deleteGarbageFile();
+		stopWatch.stop("delete garbage file " + affectedCount);
 		
 		log.info(" - arrange to same folder");
 		stopWatch.start("arrange to same folder");
@@ -155,9 +156,9 @@ public class VideoBatch {
 		
 		log.info(" - move watched video [{}]", config.isMoveWatchedVideo());
 		if (config.isMoveWatchedVideo()) {
-			stopWatch.start("move watched video");
-			videoService.moveWatchedVideo();
-			stopWatch.stop();
+			stopWatch.start();
+			affectedCount = videoService.moveWatchedVideo();
+			stopWatch.stop("move watched video " + affectedCount);
 		}
 
 		log.info(" - reload instance source");

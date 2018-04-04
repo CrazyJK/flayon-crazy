@@ -4,8 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.util.StopWatch;
-
+import jk.kamoru.flayon.base.util.StopWatch;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
@@ -212,7 +211,7 @@ public interface VideoService {
 	/**
 	 * move watched video
 	 */
-	void moveWatchedVideo();
+	int moveWatchedVideo();
 
 	/**
 	 * arrange video. move files of video to same directory  
@@ -290,17 +289,17 @@ public interface VideoService {
 	/**
 	 * remove lower rank video
 	 */
-	void removeLowerRankVideo();
+	int removeLowerRankVideo();
 
 	/**
 	 * remove lower socore video
 	 */
-	void removeLowerScoreVideo();
+	int removeLowerScoreVideo();
 
 	/**
 	 * delete garbage file
 	 */
-	void deleteGarbageFile();
+	int deleteGarbageFile();
 
 	/**
 	 * rename studio/opus/title/actress/released...

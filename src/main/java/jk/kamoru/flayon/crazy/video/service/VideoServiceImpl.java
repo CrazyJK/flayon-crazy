@@ -32,13 +32,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import com.turn.ttorrent.client.SharedTorrent;
 import com.turn.ttorrent.common.Torrent;
 
 import jk.kamoru.flayon.base.CommandExecutor;
 import jk.kamoru.flayon.base.util.IOUtils;
+import jk.kamoru.flayon.base.util.StopWatch;
 import jk.kamoru.flayon.crazy.CRAZY;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyException;
@@ -631,14 +631,17 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public void removeLowerRankVideo() {
+	public int removeLowerRankVideo() {
+		int count = 0;
 		for (Video video : videoDao.getVideoList(true, false)) {
 			if (video.getRank() < BASE_RANK) {
 				log.info("remove lower rank video {} : {} : {}", video.getOpus(), video.getRank(), video.getTitle());
 				saveHistory(video, Action.REMOVE);
 				videoDao.removeVideo(video.getOpus());
+				count++;
 			}
 		}
+		return count;
 	}
 	
 	/* (non-Javadoc)
@@ -651,13 +654,13 @@ public class VideoServiceImpl implements VideoService {
 	 * @see jk.kamoru.app.video.service.VideoService#removeLowerScoreVideo()
 	 */
 	@Override
-	public void removeLowerScoreVideo() {
+	public int removeLowerScoreVideo() {
 		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
-		long sumSizeOfTotalVideo  = 0l;
-		long sumSizeOfDeleteVideo = 0l;
-		int  countOfTotalVideo    = 0;
-		int  countOfDeleteVideo   = 0;
-		int  minAliveScore 		  = 0;
+		long sumSizeOfTotalVideo = 0l;
+		long sumSizeOfDeleted    = 0l;
+		int  countOfTotalVideo   = 0;
+		int  countOfDeleted      = 0;
+		int  minAliveScore 		 = 0;
 		
 		List<Video> list = getVideoListSortByScore();
 		
@@ -670,11 +673,11 @@ public class VideoServiceImpl implements VideoService {
 			countOfTotalVideo++;
 			
 			if (sumSizeOfTotalVideo > maximumSizeOfEntireVideo) {
-				sumSizeOfDeleteVideo += video.getLength();
-				countOfDeleteVideo++;
+				sumSizeOfDeleted += video.getLength();
+				countOfDeleted++;
 				
 				log.info("    {}/{}. Score[{}] - {} {}",
-						countOfDeleteVideo,
+						countOfDeleted,
 						countOfTotalVideo,
 						score, 
 						video.getFullname(),
@@ -686,9 +689,10 @@ public class VideoServiceImpl implements VideoService {
 				minAliveScore = score;
 			}
 		}
-		if (countOfDeleteVideo > 0)
-			log.info("    Total deleted {} video, {} GB", countOfDeleteVideo, sumSizeOfDeleteVideo / FileUtils.ONE_GB);
+		if (countOfDeleted > 0)
+			log.info("    Total deleted {} video, {} GB", countOfDeleted, sumSizeOfDeleted / FileUtils.ONE_GB);
 		log.info("    Current minimum score is {} ", minAliveScore);
+		return countOfDeleted;
 	}
 	
 	/**
@@ -705,25 +709,28 @@ public class VideoServiceImpl implements VideoService {
 	}
 	
 	@Override
-	public void deleteGarbageFile() {
+	public int deleteGarbageFile() {
+		int count = 0;
 		for (Video video : videoDao.getVideoList(true, true)) {
 			if (!video.isExistVideoFileList() 
 					&& !video.isExistCoverFile()
 					&& !video.isExistSubtitlesFileList()) {
 				log.info("    delete garbage file - {}", video);
 				videoDao.deleteVideo(video.getOpus());
+				count++;
 			}
 		}
+		return count;
 	}
 	
 	@Override
-	public void moveWatchedVideo() {
+	public int moveWatchedVideo() {
 		/// 폴더의 최대 크기
 		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
 		// 한번에 옮길 비디오 개수
 		int maximumCountOfMoveVideo = 15;
 		// 옮긴 비디오 개수
-		int countOfMoveVideo = 0;
+		int countOfMovedVideo = 0;
 		// Watched 폴더
 		File mainBaseFile = new File(STORAGE_PATH);
 		// Watched Root
@@ -767,12 +774,12 @@ public class VideoServiceImpl implements VideoService {
 				destDir.mkdir();
 
 			// 비디오를 옮긴다
-			countOfMoveVideo++;
+			countOfMovedVideo++;
 			log.info("    move from [{}] to [{}] - {}", video.getDelegatePathFile().getParent(), destDir.getPath(), video.getFullname());
 			videoDao.moveVideo(video.getOpus(), destDir.getAbsolutePath());
 			
 			// 다 옮겼으면 break
-			if (countOfMoveVideo == maximumCountOfMoveVideo) {
+			if (countOfMovedVideo == maximumCountOfMoveVideo) {
 				log.info("      Completed {} videos.", maximumCountOfMoveVideo);
 				break;
 			}
@@ -792,6 +799,7 @@ public class VideoServiceImpl implements VideoService {
 		usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		freeSpace = mainBaseFile.getFreeSpace();
 		log.info("    MOVE WATCHED VIDEO END :: Watched {} GB, free {} GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		return countOfMovedVideo;
 	}
 
 	@Override
