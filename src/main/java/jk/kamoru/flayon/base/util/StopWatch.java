@@ -5,15 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * org.springframework.util.StopWatch overriding<br>
+ * org.springframework.util.StopWatch override<br>
  * add {@link #stop(String)}
  * @author kamoru
+ * @see {@link org.springframework.util.StopWatch}
  */
 public class StopWatch {
 
 	private final String id;
-	private boolean keepTaskList = true;
-	private final List<TaskInfo> taskList = new LinkedList<TaskInfo>();
+	private final List<TaskInfo> taskList = new LinkedList<>();
 	private long startTimeMillis;
 	private boolean running;
 	private String currentTaskName;
@@ -21,6 +21,16 @@ public class StopWatch {
 	private int taskCount;
 	private long totalTimeMillis;
 
+	static NumberFormat nf = NumberFormat.getNumberInstance();
+	static NumberFormat pf = NumberFormat.getPercentInstance();
+
+	static {
+		nf.setMinimumIntegerDigits(5);
+		nf.setGroupingUsed(false);
+		pf.setMinimumIntegerDigits(3);
+		pf.setGroupingUsed(false);
+	}
+	
 	public StopWatch() {
 		this("");
 	}
@@ -32,16 +42,6 @@ public class StopWatch {
 	public String getId() {
 		return this.id;
 	}
-
-	/**
-	 * Determine whether the TaskInfo array is built over time. Set this to
-	 * "false" when using a StopWatch for millions of intervals, or the task
-	 * info structure will consume excessive memory. Default is "true".
-	 */
-	public void setKeepTaskList(boolean keepTaskList) {
-		this.keepTaskList = keepTaskList;
-	}
-
 
 	public void start() throws IllegalStateException {
 		start("");
@@ -68,9 +68,7 @@ public class StopWatch {
 		long lastTime = System.currentTimeMillis() - this.startTimeMillis;
 		this.totalTimeMillis += lastTime;
 		this.lastTaskInfo = new TaskInfo(this.currentTaskName, lastTime);
-		if (this.keepTaskList) {
-			this.taskList.add(lastTaskInfo);
-		}
+		this.taskList.add(lastTaskInfo);
 		++this.taskCount;
 		this.running = false;
 		this.currentTaskName = null;
@@ -117,38 +115,24 @@ public class StopWatch {
 		return this.taskCount;
 	}
 
-	public TaskInfo[] getTaskInfo() {
-		if (!this.keepTaskList) {
-			throw new UnsupportedOperationException("Task info is not being kept!");
-		}
-		return this.taskList.toArray(new TaskInfo[this.taskList.size()]);
+	public List<TaskInfo> getTaskInfo() {
+		return this.taskList;
 	}
 
 	public String shortSummary() {
-		return getId() + ": running time (millis) = " + getTotalTimeMillis();
+		return getId() + ": running time = " + getTotalTimeMillis() + " ms";
 	}
 
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder(shortSummary());
 		sb.append('\n');
-		if (!this.keepTaskList) {
-			sb.append("No task info kept");
-		}
-		else {
-			sb.append("-----------------------------------------\n");
-			sb.append("ms     %     Task name\n");
-			sb.append("-----------------------------------------\n");
-			NumberFormat nf = NumberFormat.getNumberInstance();
-			nf.setMinimumIntegerDigits(5);
-			nf.setGroupingUsed(false);
-			NumberFormat pf = NumberFormat.getPercentInstance();
-			pf.setMinimumIntegerDigits(3);
-			pf.setGroupingUsed(false);
-			for (TaskInfo task : getTaskInfo()) {
-				sb.append(nf.format(task.getTimeMillis())).append("  ");
-				sb.append(pf.format(task.getTimeSeconds() / getTotalTimeSeconds())).append("  ");
-				sb.append(task.getTaskName()).append("\n");
-			}
+		sb.append("---------------------------------------------------\n");
+		sb.append("ms     %     Task name\n");
+		sb.append("---------------------------------------------------\n");
+		for (TaskInfo task : getTaskInfo()) {
+			sb.append(nf.format(task.getTimeMillis())).append("  ");
+			sb.append(pf.format(task.getTimeSeconds() / getTotalTimeSeconds())).append("  ");
+			sb.append(task.getTaskName()).append("\n");
 		}
 		return sb.toString();
 	}
@@ -156,15 +140,12 @@ public class StopWatch {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(shortSummary());
-		if (this.keepTaskList) {
-			for (TaskInfo task : getTaskInfo()) {
-				sb.append("; [").append(task.getTaskName()).append("] took ").append(task.getTimeMillis());
-				long percent = Math.round((100.0 * task.getTimeSeconds()) / getTotalTimeSeconds());
-				sb.append(" = ").append(percent).append("%");
-			}
-		}
-		else {
-			sb.append("; no task info kept");
+		for (TaskInfo task : getTaskInfo()) {
+			long percent = Math.round((100.0 * task.getTimeSeconds()) / getTotalTimeSeconds());
+			sb.append("; ['")
+				.append(task.getTaskName()).append("' ")
+				.append(task.getTimeMillis()).append("ms, ")
+				.append(percent).append("%]");
 		}
 		return sb.toString();
 	}

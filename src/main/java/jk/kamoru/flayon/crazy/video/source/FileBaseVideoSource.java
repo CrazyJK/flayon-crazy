@@ -115,7 +115,7 @@ public class FileBaseVideoSource implements VideoSource {
 		// find files
 		stopWatch.start();
 		Collection<File> files = IOUtils.listFiles(paths, null, true);
-		stopWatch.stop("load : listFiles " + files.size());
+		stopWatch.stop("load : " + files.size() + " Files");
 
 //		videoMap.clear();
 //		studioMap.clear();
@@ -162,9 +162,9 @@ public class FileBaseVideoSource implements VideoSource {
 				logger.error("File loading error : " + filename, e);
 			}
 		}
-		stopWatch.stop("load : make Video object " + _videoMap.size());
+		stopWatch.stop("load : " + _videoMap.size() + " Video");
 
-		stopWatch.start("load : wrong files " + wrongFileNames.size());
+		stopWatch.start("load : " + wrongFileNames.size() + " wrong files");
 		try {
 			if (wrongFileNames.size() > 0)
 				FileUtils.writeLines(new File(paths[0], VIDEO.WRONG_FILENAME), VIDEO.ENCODING, wrongFileNames.stream().sorted().collect(Collectors.toList()), false);
