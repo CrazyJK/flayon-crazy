@@ -195,8 +195,8 @@ var	fnSetVideoBatchOption = function(type, dom) {
 			showLoading: false
 		}, function(result) {
 //			showSnackbar("Set option " + name + " to " + result, 1000);
-			$("#restCallResult").html("Set option " + name + " to " + result).show().fadeOut(3000);
-			$self.html("" + result);
+//			$("#restCallResult").html(name + " = " + result).show().fadeOut(3000);
+			$self.html("" + result).effect("highlight", {color: "#ff9999"}, 500);
 		});
 	},
 	fnStartVideoBatch = function(type, dom) {
