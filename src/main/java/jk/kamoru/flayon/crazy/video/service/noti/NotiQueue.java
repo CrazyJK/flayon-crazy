@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.ehcache.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class NotiQueue {
@@ -13,39 +15,33 @@ public class NotiQueue {
 	private static final long TIME_OFFSET = 5000l;
 	
 	private static List<Noti> notiList = new ArrayList<>();
-	private static Map<Long, Integer> lastNotiIndexByUseridMap = new HashMap<>();
+	private static Map<Long, AtomicInteger> indexMapByUserid = new ConcurrentHashMap<>();
 	
-	public static void pushNoti(String message) {
+	public static void push(String message) {
 		Noti noti = new Noti(System.currentTimeMillis(), message);
 		notiList.add(noti);
 		log.info("push Noti : {}th {}", notiList.size(), noti);
 	}
 	
-	public static String getMessage(Long userid) {
-		return getNoti(userid).getMessage();
-	}	
-	
-	public static Noti getNoti(Long userid) {
-		if (!lastNotiIndexByUseridMap.containsKey(userid)) {
-			lastNotiIndexByUseridMap.put(userid, -1); // init
-		}
-		String msg = "";
-		int nextNotiIndex = lastNotiIndexByUseridMap.get(userid) + 1;
-		if (notiList.size() > nextNotiIndex) {
-			Noti noti = notiList.get(nextNotiIndex);
-			lastNotiIndexByUseridMap.put(userid, nextNotiIndex);
-			
+	public static Noti pull(Long userid) {
+		indexMapByUserid.putIfAbsent(userid, new AtomicInteger(0));
+		AtomicInteger currNotiIndex = indexMapByUserid.get(userid);
+		
+		if (notiList.size() > currNotiIndex.get()) {
+			Noti noti = notiList.get(currNotiIndex.getAndIncrement());
+
 			// past 5s      > 53000                      - 51000 = 2000
-			if (TIME_OFFSET > System.currentTimeMillis() - noti.getTimeMillis()) {
-				msg = noti.getMessage();
-				log.info("get Noti : userid {}, {}th [{}]", userid, nextNotiIndex+1, msg);
+			if (TIME_OFFSET > System.currentTimeMillis() - noti.getTime()) { // in OFFSET time
+				log.info("pull Noti : userid {}, {}th [{}]", userid, currNotiIndex, noti.getMessage());
 				return noti;
 			}
-			else {
-				return getNoti(userid);
+			else { // past
+				return pull(userid);
 			}
 		}
-		return new Noti();
+		else { // have no Noti 
+			return new Noti();
+		}
 	}
 
 }

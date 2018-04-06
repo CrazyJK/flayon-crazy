@@ -306,7 +306,7 @@ public class VideoServiceImpl implements VideoService {
 		
 		commandExecutor.exec(command, arguments);
 		
-		NotiQueue.pushNoti(action.toString() + " " + video.getOpus());
+		NotiQueue.push(action.toString() + " " + video.getOpus());
 	}
 
 	/* (non-Javadoc)
@@ -1202,7 +1202,7 @@ public class VideoServiceImpl implements VideoService {
 		}
 		log.info("saveCover {} completed", foundCount);
 		
-		NotiQueue.pushNoti("saveCover " + foundCount);
+		NotiQueue.push("saveCover " + foundCount);
 	}
 
 	@Override

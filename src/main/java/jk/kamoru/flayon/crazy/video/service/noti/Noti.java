@@ -5,16 +5,15 @@ import lombok.Data;
 @Data
 public class Noti {
 
-	long timeMillis;
+	long time;
 	String message;
 	
 	public Noti() {
 		this(0, "");
 	}
 	
-	public Noti(long timeMillis, String message) {
-		super();
-		this.timeMillis = timeMillis;
+	public Noti(long time, String message) {
+		this.time = time;
 		this.message = message;
 	}
 

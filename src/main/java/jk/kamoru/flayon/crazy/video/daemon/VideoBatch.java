@@ -165,7 +165,7 @@ public class VideoBatch {
 		videoService.reload(stopWatch);
 
 		log.info("BATCH Instance VideoSource END\n\n{}", stopWatch.prettyPrint());
-		NotiQueue.pushNoti("Instance VideoBatch end");
+		NotiQueue.push("Instance VideoBatch end");
 	}
 
 	// cron every 2h 13m
@@ -180,7 +180,7 @@ public class VideoBatch {
 		videoService.reloadArchive();
 
 		log.info("BATCH Archive VideoSource END");
-		NotiQueue.pushNoti("Archive VideoBatch end");
+		NotiQueue.push("Archive VideoBatch end");
 	}
 	
 	// fixedRate per 13 min
@@ -188,7 +188,7 @@ public class VideoBatch {
 	public synchronized void deleteEmptyFolder() {
 		log.info("BATCH - delete empty folder");
 		CrazyUtils.deleteEmptyDirectory(config.getEmptyManagedPath());
-		NotiQueue.pushNoti("Delete empty folder end");
+		NotiQueue.push("Delete empty folder end");
 	}
 	
 //	@Scheduled(fixedDelay = 1000 * 60 * 60 * 24) // fixedDelay per day 
@@ -278,7 +278,7 @@ public class VideoBatch {
 
 		log.info("Backup END\n\n{}", stopWatch.prettyPrint());
 
-		NotiQueue.pushNoti("Backup completed");
+		NotiQueue.push("Backup completed");
 	}
 	
 	private void writeFileWithUTF8BOM(File file, Collection<String> lines) {

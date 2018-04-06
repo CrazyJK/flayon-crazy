@@ -51,7 +51,7 @@ public class LocalImageSource extends AsyncExecutorService implements ImageSourc
 		}
 		loadAfter();
 		log.info("{} images found", size());
-		NotiQueue.pushNoti("Image loading " + size());
+		NotiQueue.push("Image loading " + size());
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class CrazyRestController {
 
 	@RequestMapping("/ping")
 	public Noti ping(@AuthenticationPrincipal User flayUser) {
-		return NotiQueue.getNoti(flayUser.getId());
+		return NotiQueue.pull(flayUser.getId());
 	}
 	
 }
