@@ -90,6 +90,7 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired FileLookupService sukebeiNyaaLookupService;
 	@Autowired CommandExecutor commandExecutor;
 	@Autowired DirectoryService seedDirectoryService;
+	@Autowired NotiQueue notiQueue;
 
 	private String[] CANDIDATE_PATHS;
 	private String TORRENT_QUEUE_PATH;
@@ -306,7 +307,7 @@ public class VideoServiceImpl implements VideoService {
 		
 		commandExecutor.exec(command, arguments);
 		
-		NotiQueue.push(action.toString() + " " + video.getOpus());
+		notiQueue.push(action.toString() + " " + video.getOpus());
 	}
 
 	/* (non-Javadoc)
@@ -615,6 +616,7 @@ public class VideoServiceImpl implements VideoService {
 	public void reload(StopWatch stopWatch) {
 		log.debug("reload");
 		videoDao.reload(stopWatch, true, false);
+		notiQueue.push("reload");
 	}
 
 	@Override
@@ -1202,12 +1204,13 @@ public class VideoServiceImpl implements VideoService {
 		}
 		log.info("saveCover {} completed", foundCount);
 		
-		NotiQueue.push("saveCover " + foundCount);
+		notiQueue.push("saveCover " + foundCount);
 	}
 
 	@Override
 	public void reloadArchive() {
 		videoDao.reload(null, false, true);
+		notiQueue.push("reloadArchive");
 	}
 
 	@Override

@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LocalImageSource extends AsyncExecutorService implements ImageSource {
 
 	@Autowired CrazyConfig config;
+	@Autowired NotiQueue notiQueue;
 
 	private List<Image> imageList = new ArrayList<>();
 	private List<String> pathList = new ArrayList<>();
@@ -51,7 +52,7 @@ public class LocalImageSource extends AsyncExecutorService implements ImageSourc
 		}
 		loadAfter();
 		log.info("{} images found", size());
-		NotiQueue.push("Image loading " + size());
+		notiQueue.push("Image loading " + size());
 	}
 
 	@Override

@@ -1,19 +1,40 @@
 package jk.kamoru.flayon.crazy.video.service.noti;
 
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import lombok.Data;
 
+@Entity
 @Data
 public class Noti {
 
-	long time;
+	@Id 
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+	
+	@Column
+	@NotNull
+	Date date;
+	
+	@Column
+	@NotEmpty
 	String message;
 	
 	public Noti() {
-		this(0, "");
+		this(new Date(), "initial");
 	}
 	
-	public Noti(long time, String message) {
-		this.time = time;
+	public Noti(Date date, String message) {
+		this.date = date;
 		this.message = message;
 	}
 
