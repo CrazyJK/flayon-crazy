@@ -492,7 +492,8 @@ var	crazy = (function() {
 							console.log("ping noti :", noti.message);
 						}
 					}).fail(function(jqxhr, textStatus, error) {
-						console.log("ping : fail", textStatus + ", " + error);
+						if ('parsererror' !== textStatus)
+							console.log("ping : fail", textStatus + ", " + error);
 					}).always(function() {
 					});	
 				}, pingInterval);
