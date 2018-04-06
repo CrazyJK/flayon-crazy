@@ -45,7 +45,11 @@ $(document).ready(function() {
 	        	);
 			}
 		});
-		
+	}); 
+	restCall(PATH + '/rest/noti/list', {}, function(data) {
+		$("#notiTable").jsontotable(data, {
+			dateColumn: ['date']
+		});
 	}); 
 });
 </script>
@@ -60,9 +64,13 @@ $(document).ready(function() {
 		</label>
 	</div>
 	
-	<div id="content_div" class="box">
-		<table id="historyTable" class="table table-hover table-condensed">
-		</table>
+	<div id="content_div" class="box row">
+		<div class="col-lg-6">
+			<table id="historyTable" class="table table-hover table-condensed"></table>
+		</div>
+		<div class="col-lg-6">
+			<table id="notiTable" class="table table-hover table-condensed"></table>
+		</div>
 	</div>
 	  
 </div>
