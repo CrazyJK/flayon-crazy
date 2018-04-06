@@ -196,11 +196,15 @@ var	fnSetVideoBatchOption = function(type, dom) {
 		}, function(result) {
 //			showSnackbar("Set option " + name + " to " + result, 1000);
 //			$("#restCallResult").html(name + " = " + result).show().fadeOut(3000);
-			$self.html("" + result).effect("highlight", {color: "#ff9999"}, 500);
+			$self.html("" + result).effect("highlight", {color: "#ff9999"}, 500, function() {
+				$(this).blur();
+			});
 		});
 	},
 	fnStartVideoBatch = function(type, dom) {
-		restCall(PATH + '/rest/video/batch/start', {method: "PUT", data: {t: type}, title: $(dom).text()});
+		restCall(PATH + '/rest/video/batch/start', {method: "PUT", data: {t: type}, title: $(dom).text()}, function() {
+			$(dom).blur();
+		});
 	};
 
 var BOOTSTRAP_COL_LG_6 = 1200,
