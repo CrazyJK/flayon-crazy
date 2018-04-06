@@ -33,7 +33,7 @@ td {
 <script type="text/javascript">
 $(document).ready(function() {
 	restCall(PATH + '/rest/video/historyOnDB', {}, function(data) {
-		$(".list-count").html(data.length);
+		$(".history-count").html(data.length);
 		$("#historyTable").jsontotable(data, {
 			dateColumn: ['date'], 
 			hideColumn: ['video'],
@@ -47,6 +47,7 @@ $(document).ready(function() {
 		});
 	}); 
 	restCall(PATH + '/rest/noti/list', {}, function(data) {
+		$(".noti-count").html(data.length);
 		$("#notiTable").jsontotable(data, {
 			dateColumn: ['date']
 		});
@@ -60,15 +61,16 @@ $(document).ready(function() {
 	<div id="header_div" class="box form-inline">
 		<label class="title">
 			Today History
-			<span class="badge list-count">0</span>
 		</label>
 	</div>
 	
 	<div id="content_div" class="box row">
 		<div class="col-lg-6">
+			<h5 class="title">Video History <span class="history-count">0</span></h5>
 			<table id="historyTable" class="table table-hover table-condensed"></table>
 		</div>
 		<div class="col-lg-6">
+			<h5 class="title">Noti List <span class="noti-count">0</span></h5>
 			<table id="notiTable" class="table table-hover table-condensed"></table>
 		</div>
 	</div>
