@@ -65,11 +65,11 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="content_div" class="box row">
-		<div class="col-lg-6">
+		<div class="col-lg-9">
 			<h5 class="title">Video History <span class="history-count">0</span></h5>
 			<table id="historyTable" class="table table-hover table-condensed"></table>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-3">
 			<h5 class="title">Noti List <span class="noti-count">0</span></h5>
 			<table id="notiTable" class="table table-hover table-condensed"></table>
 		</div>
