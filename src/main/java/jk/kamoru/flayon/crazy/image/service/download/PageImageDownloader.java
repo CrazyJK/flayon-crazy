@@ -2,6 +2,7 @@ package jk.kamoru.flayon.crazy.image.service.download;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -9,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,103 +39,27 @@ public class PageImageDownloader {
 
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
-	/** web page URL */
-	private String pageUrl;
-	/** local destination folder */
-	private String downloadDir;
-	/** title prefix */
-	private String titlePrefix;
-	/** CSS Query for image title */
-	private String titleCssQuery;
-	/** web page no. ex) bbs */
-	private int pageNo;
+	static NumberFormat nf = NumberFormat.getNumberInstance();
 
-	/** minimun image size. bytes */
-	private long minimumSize;
-	
-	private boolean proxy;
-	private String proxyHostName;
-	private String proxyHostValue;
-	private String proxyPortName;
-	private int proxyPortValue;
-	
-	/**
-	 * constructor<br>
-	 * if need to proxy setting, add {@link #setProxyInfo(boolean, String, String, String, int)}
-	 * @param pageUrl web page URL
-	 * @param downloadDir local destination folder
-	 */
-	public PageImageDownloader(String pageUrl, String downloadDir) {
-		this(pageUrl, downloadDir, 0, null, null);
+	static {
+		nf.setMinimumIntegerDigits(4);
+		nf.setGroupingUsed(false);
 	}
-	
-	/**
-	 * constructor<br>
-	 * if need to proxy setting, add {@link #setProxyInfo(boolean, String, String, String, int)}
-	 * @param pageUrl web page URL
-	 * @param downloadDir local destination folder
-	 * @param pageNo web page no. ex) bbs
-	 */
-	public PageImageDownloader(String pageUrl, String downloadDir, int pageNo) {
-		this(pageUrl, downloadDir, pageNo, null, null);
-	}
-	
-	/**
-	 * constructor<br>
-	 * if need to proxy setting, add {@link #setProxyInfo(boolean, String, String, String, int)}
-	 * @param pageUrl web page URL
-	 * @param downloadDir local destination folder
-	 * @param pageNo web page no. ex) bbs
-	 * @param titlePrefix image title prefix
-	 */
-	public PageImageDownloader(String pageUrl, String downloadDir, int pageNo, String titlePrefix) {
-		this(pageUrl, downloadDir, pageNo, titlePrefix, null);
-	}
-	
-	/**
-	 * constructor<br>
-	 * if need to proxy setting, add {@link #setProxyInfo(boolean, String, String, String, int)}
-	 * @param pageUrl web page URL
-	 * @param downloadDir local destination folder
-	 * @param pageNo web page no. ex) bbs
-	 * @param titlePrefix image title prefix
-	 * @param titleCssQuery CSS Query for image title 
-	 */
-	public PageImageDownloader(String pageUrl, String downloadDir, int pageNo, String titlePrefix, String titleCssQuery) {
-		super();
-		this.pageUrl = pageUrl;
-		this.downloadDir = downloadDir;
-		this.pageNo = pageNo;
-		this.titlePrefix = titlePrefix;
+
+	String imagePageUrl;
+	String localBaseDir;
+	String folderName;
+	String titlePrefix;
+	String titleCssQuery;
+	long minimumSize;
+
+	public PageImageDownloader(String pageUrl, String downloadDir, String folderName, String titlePrefix, String titleCssQuery, int minimumKbSize) {
+		this.imagePageUrl  = pageUrl;
+		this.localBaseDir  = downloadDir;
+		this.folderName    = folderName;
+		this.titlePrefix   = titlePrefix;
 		this.titleCssQuery = titleCssQuery;
-	}
-	
-	/**
-	 * minimun image size. bytes
-	 * @param minimumSize
-	 */
-	public void setMinimumImageSize(long minimumSize) {
-		this.minimumSize = minimumSize;
-	}
-	
-	/**
-	 * proxy config<br>
-	 * names<br>
-	 *   - http(s).proxyHost, http(s).proxyPort<br> 
-	 *   - socksProxyHost, socksProxyPort<br> 
-	 * ref. http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html<br>
-	 * @param proxy if proxy use, true
-	 * @param proxyHostName 
-	 * @param proxyHostValue
-	 * @param proxyPortName
-	 * @param proxyPortValue
-	 */
-	public void setProxyInfo(boolean proxy, String proxyHostName, String proxyHostValue, String proxyPortName, int proxyPortValue) {
-		this.proxy = proxy;
-		this.proxyHostName = proxyHostName;
-		this.proxyHostValue = proxyHostValue;
-		this.proxyPortName = proxyPortName;
-		this.proxyPortValue = proxyPortValue;
+		this.minimumSize   = minimumKbSize * FileUtils.ONE_KB;
 	}
 
 	/**
@@ -157,84 +83,73 @@ public class PageImageDownloader {
 	 * @return Download result
 	 */
 	public DownloadResult download() {
+		logger.info("Start download - [{}]", imagePageUrl);
 		
-		logger.info("Start download - [{}]", pageUrl);
-		
-		try {
-			// set proxy
-			if (proxy) {
-				logger.debug("setting proxy");
-				System.setProperty(proxyHostName, proxyHostValue);
-				System.setProperty(proxyPortName, String.valueOf(proxyPortValue));
-			}
-			
+		try {			
 			// connect and get image page by jsoup HTML parser
-			Document document;
-			try {
-				document = Jsoup.connect(pageUrl).timeout(60*1000).userAgent(USER_AGENT).get();
-			} 
-			catch (IOException e) {
-				throw new DownloadException(pageUrl, "could not connect", e);
-			}
-			
-			if (document == null) 
-				throw new DownloadException(pageUrl, "document is null");
+			Document document = getDocument(imagePageUrl);
 
 			// get page title
-			String titleByDocument = document.title();
+			String titleByDoc = document.title();
 			String titleByCSS = titleCssQuery != null ? document.select(titleCssQuery).first().text() : null;
-			String title = String.format("%s%s%s", 
-					StringUtils.isEmpty(titlePrefix) ? "" : titlePrefix + "-", 
-					pageNo == 0 ? "" : pageNo + "-",
-					StringUtils.isEmpty(titleByCSS) ? titleByDocument : titleByCSS);
+			String title = (StringUtils.isBlank(titlePrefix) ? "" : titlePrefix + "-") + (StringUtils.isBlank(titleByCSS) ? titleByDoc : titleByCSS);
 			
 			if (StringUtils.isEmpty(title))
-				throw new DownloadException(pageUrl, "title is empty");
+				throw new DownloadException(imagePageUrl, "title is empty");
 			
 			// find img tag
 			Elements imgTags = document.getElementsByTag("img");
 			if (imgTags.size() == 0)
-				throw new DownloadException(pageUrl, "no image exist");
+				throw new DownloadException(imagePageUrl, "no image exist");
 		
-			// download
-			List<ImageDownloader> tasks = new ArrayList<ImageDownloader>();
+			File path = new File(localBaseDir, folderName);
+			if (!path.isDirectory()) {
+				path.mkdirs();
+				logger.info("{} mkdirs", path);
+			}
+
+			// prepare download
+			List<ImageDownloader> tasks = new ArrayList<>();
 			int count = 0;
 			for (Element imgTag : imgTags) {
 				String imgSrc = imgTag.attr("src");
-				if (!StringUtils.isEmpty(imgSrc)) {
-					tasks.add(new ImageDownloader(
-							imgSrc, downloadDir, String.format("%s-%s", title, ++count), minimumSize));
-				}
+				if (StringUtils.isEmpty(imgSrc)) 
+					continue;
+				tasks.add(new ImageDownloader(imgSrc, path.getPath(), title + "-" + nf.format(++count), minimumSize));
 			}
+
+			// execute download
 			int nThreads = imgTags.size() / 10;
 			ExecutorService downloadService = Executors.newFixedThreadPool(nThreads);
 			logger.debug("using {} thread pool", nThreads);
 			List<Future<File>> files = downloadService.invokeAll(tasks);
 			downloadService.shutdown();
 
-			List<File> images = new ArrayList<File>();
+			List<File> images = new ArrayList<>();
 			for (Future<File> fileFuture : files) {
 				File file = fileFuture.get();
 				if (file != null)
 					images.add(file);
 			}
 			logger.info("{} image will be downloaded", images.size());
-			return new DownloadResult(pageUrl, true, images.size()).setImages(images);
+			return new DownloadResult(imagePageUrl, true, images.size()).setImages(images);
 		}
 		catch (DownloadException e) {
 			logger.error("Download error", e);
-			return new DownloadResult(pageUrl, false, 0, e.getMessage());
+			return new DownloadResult(imagePageUrl, false, 0, e.getMessage());
 		}
 		catch (Exception e) {
 			logger.error("Error", e);
-			return new DownloadResult(pageUrl, false, 0, e.getMessage());
+			return new DownloadResult(imagePageUrl, false, 0, e.getMessage());
 		}
-		finally {
-			// release proxy
-			if (proxy) {
-				System.clearProperty(proxyHostName);
-				System.clearProperty(proxyPortName);
-			}
+	}
+	
+	private Document getDocument(String url) {
+		try {
+			return Jsoup.connect(url).timeout(60*1000).userAgent(USER_AGENT).get();
+		} 
+		catch (IOException e) {
+			throw new DownloadException(url, "could not connect", e);
 		}
 	}
 	

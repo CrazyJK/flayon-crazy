@@ -237,6 +237,13 @@ function fnFindRandomOpus() {
 	var opus = getRandomInteger(1, 999);
 	fnSearchOpus(opus);
 }
+function fnDownloadPageImage() {
+	restCall(PATH + '/rest/image/pageImageDownload', {
+		data: $("#downloadPageImageForm").serialize()
+	}, function(result) {
+		alert(result);
+	});	
+}
 </script>
 </head>
 <body>
@@ -257,6 +264,8 @@ function fnFindRandomOpus() {
 		<button class="btn btn-xs btn-default" onclick="$('.findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
 
 		<button class="btn btn-xs btn-warning" onclick="fnFindRandomOpus();">Random Find</button>
+
+		<button class="btn btn-xs btn-info" onclick="$('#pageImageDownloader').toggle(0, resizeDivHeight);">Page Image Downloader <span class="caret"></span></button>
 
 		<span id="url"       class="label label-info"></span>
 		<span id="searchURL" class="label label-primary"></span>
@@ -307,6 +316,21 @@ function fnFindRandomOpus() {
 			<div class="btn-group btn-group-xs">
 				<button class="btn btn-default" onclick="fnStartVideoBatch('D', this)">Delete Empty Folder</button>
 			</div>
+		</div>
+		
+		<div id="pageImageDownloader" style="display:none; padding-top:5px;">
+			<hr style="margin: 3px 0;"/>
+			<form id="downloadPageImageForm" class="input-title" onsubmit="return false;">
+				<input class="form-control input-sm" name="pageUrl"       style="width: 45% !important;" placeholder="Image page URL"/>
+				<input class="form-control input-sm" name="downloadDir"   style="width: 45% !important;" placeholder="Download local path"/>
+				<br>
+				<input class="form-control input-sm" name="folderPrefix"  style="width: 150px !important;" placeholder="Folder prefix"/>
+				<span class="label label-desc"> - </span>
+				<input class="form-control input-sm" name="foldersuffix"  style="width: 100px !important;" placeholder="Folder suffix"/>
+				<span class="label label-desc"> / </span>
+				<input class="form-control input-sm" name="titleCssQuery" style="width: 150px !important;" placeholder="Title css selector"/>
+				<button class="btn btn-xs btn-default" onclick="fnDownloadPageImage(); $(this).blur();">Download image</button>
+			</form>
 		</div>
 	</div>
 
