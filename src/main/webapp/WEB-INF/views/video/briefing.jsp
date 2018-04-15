@@ -23,9 +23,6 @@ $(document).ready(function() {
 	$('[data-viewType="s"]').click();
 	$('[href="#${tab}"]').click();
 });
-function fsOpen(folder) {
-	restCall(PATH + '/flayon/openFolder', {method: "PUT", data: {folder: folder}, title: 'Open folder ' + folder});
-}
 </script>
 </head>
 <body>

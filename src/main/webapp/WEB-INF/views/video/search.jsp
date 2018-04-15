@@ -46,6 +46,11 @@ input#fullname.input-sm {
     padding-left: 30px;
 	color: #337ab7;
 }
+.ui-dialog-danger {
+    border: 1px solid #ddd;
+    background: rgb(173, 103, 103);
+    color: #fdfdfd;
+}
 </style>
 <script type="text/javascript">
 bgContinue = false;
@@ -184,6 +189,9 @@ $(document).ready(function() {
 		$(".output-title > input").val(fullname);
 	});
 
+	
+	$("#downloadDir").val(getLocalStorageItem("DOWNLOAD_LOCAL_PATH", ""));
+
 });
 
 var	fnSetVideoBatchOption = function(type, dom) {
@@ -239,9 +247,28 @@ function fnFindRandomOpus() {
 }
 function fnDownloadPageImage() {
 	restCall(PATH + '/rest/image/pageImageDownload', {
-		data: $("#downloadPageImageForm").serialize()
+		data: $("#downloadPageImageForm").serialize(),
+		title: 'Download images'
 	}, function(result) {
-		alert(result);
+	    $("#notice > p").empty().append(
+				$("<ul>").addClass('list-unstyled').append(
+						$("<li>").addClass("text-info").html(result.images.length + " images"),		
+						$("<li>").addClass("text-primary btn-link pointer").append(
+								$("<span>").on("click", function() {
+									fsOpen(result.localPath);
+								}).html(result.localPath)
+						)
+				)
+	    );
+		$("#notice").dialog({
+			classes: {
+			    "ui-dialog": (result.result ? "ui-widget-shadow" : "ui-dialog-danger")
+			},
+			width: 500,
+			height: 200,
+			title: result.message,
+		});
+		setLocalStorageItem("DOWNLOAD_LOCAL_PATH", $("#downloadDir").val());
 	});	
 }
 </script>
@@ -322,14 +349,16 @@ function fnDownloadPageImage() {
 			<hr style="margin: 3px 0;"/>
 			<form id="downloadPageImageForm" class="input-title" onsubmit="return false;">
 				<input class="form-control input-sm" name="pageUrl"       style="width: 45% !important;" placeholder="Image page URL"/>
-				<input class="form-control input-sm" name="downloadDir"   style="width: 45% !important;" placeholder="Download local path"/>
+				<input class="form-control input-sm" name="downloadDir"   style="width: 45% !important;" placeholder="Download local path" id="downloadDir"/>
 				<br>
-				<input class="form-control input-sm" name="folderPrefix"  style="width: 150px !important;" placeholder="Folder prefix"/>
-				<span class="label label-desc"> - </span>
-				<input class="form-control input-sm" name="foldersuffix"  style="width: 100px !important;" placeholder="Folder suffix"/>
+				<input class="form-control input-sm" name="folderName"    style="width: 200px !important;" placeholder="Folder name"/>
 				<span class="label label-desc"> / </span>
-				<input class="form-control input-sm" name="titleCssQuery" style="width: 150px !important;" placeholder="Title css selector"/>
+				<input class="form-control input-sm" name="titlePrefix"   style="width: 200px !important;" placeholder="Title prefix"/>
+				<span class="label label-desc"> or </span>
+				<input class="form-control input-sm" name="titleCssQuery" style="width: 200px !important;" placeholder="Title css selector"/>
+				<input class="form-control input-sm number" name="minimumKbSize" style="width: 50px !important;" placeholder="KB" value="30"/>
 				<button class="btn btn-xs btn-default" onclick="fnDownloadPageImage(); $(this).blur();">Download image</button>
+				<span class="label label-desc download-result"></span>
 			</form>
 		</div>
 	</div>

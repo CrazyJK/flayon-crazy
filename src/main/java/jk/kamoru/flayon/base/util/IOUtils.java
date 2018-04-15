@@ -23,6 +23,16 @@ public class IOUtils {
 	
 	static DecimalFormat decimalFormatter = new DecimalFormat("#,###.#");
 
+	static final String ILLEGAL_EXP = "[:\\\\/%*?:|\"<>]";
+
+	public static String getValidFileName(String fileName, String replaceStr) {
+		if (fileName == null || fileName.trim().length() == 0)
+			return String.valueOf(System.currentTimeMillis());
+		if (replaceStr == null || replaceStr.trim().length() == 0)
+			replaceStr = "";
+		return fileName.replaceAll(ILLEGAL_EXP, replaceStr);
+	}
+	
 	/**
 	 * 파일 크기를 보기 좋은 형식으로
 	 * @param file

@@ -19,6 +19,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jk.kamoru.flayon.base.util.IOUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Web page image downloader
  * <pre>Usage
@@ -91,9 +95,9 @@ public class PageImageDownloader {
 
 			// get page title
 			String titleByDoc = document.title();
-			String titleByCSS = titleCssQuery != null ? document.select(titleCssQuery).first().text() : null;
+			String titleByCSS = StringUtils.isBlank(titleCssQuery) ? null : document.select(titleCssQuery).first().text();
 			String title = (StringUtils.isBlank(titlePrefix) ? "" : titlePrefix + "-") + (StringUtils.isBlank(titleByCSS) ? titleByDoc : titleByCSS);
-			
+			title = IOUtils.getValidFileName(title, "");
 			if (StringUtils.isEmpty(title))
 				throw new DownloadException(imagePageUrl, "title is empty");
 			
@@ -102,6 +106,11 @@ public class PageImageDownloader {
 			if (imgTags.size() == 0)
 				throw new DownloadException(imagePageUrl, "no image exist");
 		
+			if (StringUtils.isBlank(localBaseDir))
+				localBaseDir = FileUtils.getTempDirectoryPath(); 
+			if (StringUtils.isBlank(folderName))
+				folderName = String.valueOf(System.currentTimeMillis()); 
+
 			File path = new File(localBaseDir, folderName);
 			if (!path.isDirectory()) {
 				path.mkdirs();
@@ -132,15 +141,15 @@ public class PageImageDownloader {
 					images.add(file);
 			}
 			logger.info("{} image will be downloaded", images.size());
-			return new DownloadResult(imagePageUrl, true, images.size()).setImages(images);
+			return new DownloadResult(imagePageUrl, path.getCanonicalPath(), "Success", true, images);
 		}
 		catch (DownloadException e) {
 			logger.error("Download error", e);
-			return new DownloadResult(imagePageUrl, false, 0, e.getMessage());
+			return new DownloadResult(imagePageUrl, "", e.getMessage(), false, null);
 		}
 		catch (Exception e) {
 			logger.error("Error", e);
-			return new DownloadResult(imagePageUrl, false, 0, e.getMessage());
+			return new DownloadResult(imagePageUrl, "", e.getMessage(), false, null);
 		}
 	}
 	
@@ -158,56 +167,15 @@ public class PageImageDownloader {
 	 * @author kamoru
 	 *
 	 */
+	@Data
+	@AllArgsConstructor
 	public class DownloadResult {
 		
-		public String pageUrl;
-		public Boolean result;
-		public Integer count;
-		public String message = "";
-		public List<File> images;
-		
-		/**
-		 * constructor
-		 * @param pageUrl image page url
-		 * @param result download result
-		 * @param count file size of downloaded
-		 */
-		public DownloadResult(String pageUrl, Boolean result, Integer count) {
-			this.pageUrl = pageUrl;
-			this.result = result;
-			this.count = count;
-		}
-		
-		/**
-		 * constructor
-		 * @param pageUrl image page url
-		 * @param result download result
-		 * @param count file size of downloaded
-		 * @param message if <code>result == false</code>, error message
-		 */
-		public DownloadResult(String pageUrl, Boolean result, Integer count, String message) {
-			this(pageUrl, result, count);
-			this.message = message;
-		}
-
-		/**
-		 * @return downloaded file list
-		 */
-		public List<File> getImages() {
-			return images;
-		}
-
-		public DownloadResult setImages(List<File> images) {
-			this.images = images;
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return String
-					.format("DownloadResult [pageUrl=%s, result=%s, count=%s, message=%s, images=%s]",
-							pageUrl, result, count, message, images == null ? "NaN" : images.size());
-		}
+		String pageUrl;
+		String localPath; 
+		String message = "";
+		Boolean result;
+		List<File> images;
 
 	}
 

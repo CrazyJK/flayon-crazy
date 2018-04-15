@@ -294,6 +294,9 @@ var	resizeDivHeight = function() {
 	displayNotice = function(title, desc) {
 	    $("#notice > p").html(desc);
 	    $("#notice").attr("title", title).dialog();
+	},
+	fsOpen = function(folder) {
+		restCall(PATH + '/flayon/openFolder', {method: "PUT", data: {folder: folder}, title: 'Open folder ' + folder});
 	};
 
 var	crazy = (function() {
