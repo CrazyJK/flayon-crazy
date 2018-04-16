@@ -114,7 +114,9 @@ public class PageImageDownloader {
 			Elements imgTags = document.getElementsByTag("img");
 			if (imgTags.size() == 0)
 				throw new DownloadException(imagePageUrl, "no image exist");
-		
+			else 
+				logger.info("found imgTags size {}", imgTags.size());
+			
 			if (StringUtils.isBlank(localBaseDir))
 				localBaseDir = FileUtils.getTempDirectoryPath(); 
 			
@@ -124,7 +126,7 @@ public class PageImageDownloader {
 			File path = new File(localBaseDir, folderName);
 			if (!path.isDirectory()) {
 				path.mkdirs();
-				logger.info("{} mkdirs", path);
+				logger.info("mkdirs {}", path);
 			}
 
 			// prepare download
@@ -138,9 +140,9 @@ public class PageImageDownloader {
 			}
 
 			// execute download
-			int nThreads = imgTags.size() / 10;
+			int nThreads = tasks.size() < 10 ? 1 : tasks.size() / 10;			
+			logger.info("using {} threads", nThreads);
 			ExecutorService downloadService = Executors.newFixedThreadPool(nThreads);
-			logger.debug("using {} thread pool", nThreads);
 			List<Future<File>> files = downloadService.invokeAll(tasks);
 			downloadService.shutdown();
 
@@ -150,7 +152,7 @@ public class PageImageDownloader {
 				if (file != null)
 					images.add(file);
 			}
-			logger.info("{} image will be downloaded", images.size());
+			logger.info("{} images downloaded", images.size());
 			return new DownloadResult(imagePageUrl, path.getCanonicalPath(), "Success", true, images);
 		}
 		catch (DownloadException e) {
