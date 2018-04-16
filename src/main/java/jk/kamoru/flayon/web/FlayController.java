@@ -314,10 +314,18 @@ public class FlayController {
 	@RequestMapping(value="/openFolder", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void openFolder(@RequestParam(value="folder") String folder) {
-		if (StringUtils.containsIgnoreCase(System.getProperty("os.name"), "Windows")) {
+		String osName = System.getProperty("os.name");
+		log.info("open folder={} os.name={}", folder, osName);
+		if (StringUtils.containsIgnoreCase(osName, "Windows")) {
 			folder = StringUtils.replace(folder, "/", System.getProperty("file.separator"));
-			log.info("open folder={}", folder);
 			exec(new String[]{"explorer", folder});
+		}
+		else if (StringUtils.containsIgnoreCase(osName, "Linux")) {
+			folder = StringUtils.replace(folder, "/", System.getProperty("file.separator"));
+			exec(new String[]{"nemo", folder});
+		}
+		else {
+			throw new FlayException("no specified OS");
 		}
 	}
 
