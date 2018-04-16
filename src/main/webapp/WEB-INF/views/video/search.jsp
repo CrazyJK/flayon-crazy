@@ -29,7 +29,8 @@ mark {
 .findMode {
 	display: none;
 }
-.findMode input {
+.findMode input,
+#downloadPageImageForm input {
 	font-family: D2Coding;
 	border: 1px solid #cacaca;
 }
@@ -286,8 +287,6 @@ function fnDownloadPageImage() {
 
 		<button class="btn btn-xs btn-default" onclick="$('.findMode').toggle(0, resizeDivHeight);">Find mode <span class="caret"></span></button>
 
-		<button class="btn btn-xs btn-warning" onclick="fnFindRandomOpus();">Random Find</button>
-
 		<button class="btn btn-xs btn-info" onclick="$('#pageImageDownloader').toggle(0, resizeDivHeight);">Page Image Downloader <span class="caret"></span></button>
 
 		<span id="url"       class="label label-info"></span>
@@ -308,6 +307,7 @@ function fnDownloadPageImage() {
 				<input class="form-control input-sm" id="release" style="width:  80px !important;" placeholder="Release"/>
 				<button class="btn btn-xs btn-default" onclick="fnSaveCover()">Save cover</button>
 				<button class="btn btn-xs btn-default" onclick="fnAddHistory()">Add history</button>
+				<button class="btn btn-xs btn-warning" onclick="fnFindRandomOpus();">Random Find</button>
 			</div>
 			<div class="output-title">
 				<input class="form-control input-sm" id="fullname" placeholder="Full name"/>
@@ -343,18 +343,14 @@ function fnDownloadPageImage() {
 		
 		<div id="pageImageDownloader" style="display:none; padding-top:5px;">
 			<hr style="margin: 3px 0;"/>
-			<form id="downloadPageImageForm" class="input-title" onsubmit="return false;">
-				<input class="form-control input-sm" name="pageUrl"       style="width: 45% !important;" placeholder="Image page URL"/>
-				<input class="form-control input-sm" name="downloadDir"   style="width: 45% !important;" placeholder="Download local path" id="downloadDir"/>
-				<br>
-				<input class="form-control input-sm" name="folderName"    style="width: 200px !important;" placeholder="Folder name"/>
-				<span class="label label-desc"> / </span>
-				<input class="form-control input-sm" name="titlePrefix"   style="width: 200px !important;" placeholder="Title prefix"/>
-				<span class="label label-desc"> or </span>
+			<form id="downloadPageImageForm" onsubmit="return false;">
+				<input class="form-control input-sm" name="pageUrl"       style="width:  100% !important;" placeholder="Image page URL"/><br>
+				<input class="form-control input-sm" name="downloadDir"   style="width:  100% !important;" placeholder="Download local path" id="downloadDir"/><br>
+				<input class="form-control input-sm" name="folderName"    style="width: 200px !important;" placeholder="Folder name"/><span class="label label-desc"> / </span>
+				<input class="form-control input-sm" name="titlePrefix"   style="width: 200px !important;" placeholder="Title prefix"/><span class="label label-desc"> or </span>
 				<input class="form-control input-sm" name="titleCssQuery" style="width: 200px !important;" placeholder="Title css selector"/>
-				<input class="form-control input-sm number" name="minimumKbSize" style="width: 50px !important;" placeholder="KB" value="30"/>
-				<button class="btn btn-xs btn-default" onclick="fnDownloadPageImage();">Download image</button>
-				<span class="label label-desc download-result"></span>
+				<input class="form-control input-sm" name="minimumKbSize" style="width:  50px !important;" placeholder="KB" value="30" type="number"/><span class="label label-desc"> kB </span>
+				<button class="btn btn-xs btn-info" onclick="fnDownloadPageImage();">Download</button>
 			</form>
 		</div>
 	</div>

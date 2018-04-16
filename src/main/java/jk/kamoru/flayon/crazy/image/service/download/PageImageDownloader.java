@@ -26,8 +26,8 @@ import lombok.Data;
 /**
  * Web page image downloader
  * <pre>Usage
- *  PageImageDownloader pageDownloader = new PageImageDownloader("page url string", "dest string");
- *  pageDownloader.setMinimumDownloadSize(50 * FileUtils.ONE_KB);
+ *  PageImageDownloader pageDownloader = new PageImageDownloader(...);
+ *  
  *  DownloadResult result = pageDownloader.download();
  * or
  *  ExecutorService service = Executors.newFixedThreadPool(1);
@@ -93,14 +93,23 @@ public class PageImageDownloader {
 			// connect and get image page by jsoup HTML parser
 			Document document = getDocument(imagePageUrl);
 
-			// get page title
-			String titleByDoc = document.title();
-			String titleByCSS = StringUtils.isBlank(titleCssQuery) ? null : document.select(titleCssQuery).first().text();
-			String title = (StringUtils.isBlank(titlePrefix) ? "" : titlePrefix + "-") + (StringUtils.isBlank(titleByCSS) ? titleByDoc : titleByCSS);
+			// decide title
+			String title = "";
+			if (StringUtils.isBlank(titlePrefix)) {
+				if (StringUtils.isBlank(titleCssQuery)) {
+					title = document.title();
+				}
+				else {
+					title = document.select(titleCssQuery).first().text();
+				}
+			}
+			else {
+				title = titlePrefix;
+			}
 			title = IOUtils.getValidFileName(title, "");
-			if (StringUtils.isEmpty(title))
-				throw new DownloadException(imagePageUrl, "title is empty");
-			
+			if (StringUtils.isBlank(title))
+				throw new DownloadException(imagePageUrl, "title is blank");
+
 			// find img tag
 			Elements imgTags = document.getElementsByTag("img");
 			if (imgTags.size() == 0)
@@ -108,6 +117,7 @@ public class PageImageDownloader {
 		
 			if (StringUtils.isBlank(localBaseDir))
 				localBaseDir = FileUtils.getTempDirectoryPath(); 
+			
 			if (StringUtils.isBlank(folderName))
 				folderName = String.valueOf(System.currentTimeMillis()); 
 
@@ -167,16 +177,14 @@ public class PageImageDownloader {
 	 * @author kamoru
 	 *
 	 */
-	@Data
 	@AllArgsConstructor
+	@Data
 	public class DownloadResult {
-		
 		String pageUrl;
 		String localPath; 
 		String message = "";
 		Boolean result;
 		List<File> images;
-
 	}
 
 }
