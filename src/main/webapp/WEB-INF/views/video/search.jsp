@@ -350,7 +350,7 @@ function fnDownloadPageImage() {
 				<input class="form-control input-sm" name="titlePrefix"   style="width: 200px !important;" placeholder="Title prefix"/><span class="label label-desc"> or </span>
 				<input class="form-control input-sm" name="titleCssQuery" style="width: 200px !important;" placeholder="Title css selector"/>
 				<input class="form-control input-sm" name="minimumKbSize" style="width:  50px !important;" placeholder="KB" value="30" type="number"/><span class="label label-desc"> kB </span>
-				<button class="btn btn-xs btn-info" onclick="fnDownloadPageImage();">Download</button>
+				<button type="button" class="btn btn-xs btn-info" onclick="fnDownloadPageImage();">Download</button>
 			</form>
 		</div>
 	</div>
