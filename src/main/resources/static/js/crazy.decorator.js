@@ -405,6 +405,10 @@ var	crazy = (function() {
 							}
 						}
 					});
+				}, buttonBlur = function() {
+					$("button").on("click", function() {
+						$(this).blur()
+					});
 				};
 				
 			return {
@@ -418,6 +422,7 @@ var	crazy = (function() {
 					checkbox_role();
 					themeSwitch();
 					blind();
+					buttonBlur();
 				}
 			};
 		}()),

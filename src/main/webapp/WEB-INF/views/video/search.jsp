@@ -204,15 +204,11 @@ var	fnSetVideoBatchOption = function(type, dom) {
 		}, function(result) {
 //			showSnackbar("Set option " + name + " to " + result, 1000);
 //			$("#restCallResult").html(name + " = " + result).show().fadeOut(3000);
-			$self.html("" + result).effect("highlight", {color: "#ff9999"}, 500, function() {
-				$(this).blur();
-			});
+			$self.html("" + result).effect("highlight", {color: "#ff9999"}, 500);
 		});
 	},
 	fnStartVideoBatch = function(type, dom) {
-		restCall(PATH + '/rest/video/batch/start', {method: "PUT", data: {t: type}, title: $(dom).text()}, function() {
-			$(dom).blur();
-		});
+		restCall(PATH + '/rest/video/batch/start', {method: "PUT", data: {t: type}, title: $(dom).text()});
 	};
 
 var BOOTSTRAP_COL_LG_6 = 1200,
@@ -357,7 +353,7 @@ function fnDownloadPageImage() {
 				<span class="label label-desc"> or </span>
 				<input class="form-control input-sm" name="titleCssQuery" style="width: 200px !important;" placeholder="Title css selector"/>
 				<input class="form-control input-sm number" name="minimumKbSize" style="width: 50px !important;" placeholder="KB" value="30"/>
-				<button class="btn btn-xs btn-default" onclick="fnDownloadPageImage(); $(this).blur();">Download image</button>
+				<button class="btn btn-xs btn-default" onclick="fnDownloadPageImage();">Download image</button>
 				<span class="label label-desc download-result"></span>
 			</form>
 		</div>
