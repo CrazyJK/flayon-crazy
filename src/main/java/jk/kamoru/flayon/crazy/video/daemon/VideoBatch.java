@@ -51,7 +51,6 @@ public class VideoBatch {
 	
 	@Autowired   VideoService   videoService;
 	@Autowired HistoryService historyService;
-	@Autowired DirectoryService emptyDirectoryService;
 
 	public Boolean setBatchOption(Option option, boolean setValue) {
 		try {
