@@ -21,7 +21,7 @@ import jk.kamoru.flayon.crazy.util.CrazyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@Service("seedDirectoryService")
 public class DirectoryServiceForSeed extends DirectoryWatchServiceAdapter implements DirectoryService {
 
 	private static final String TASKNAME = "Seed Directory Service";
