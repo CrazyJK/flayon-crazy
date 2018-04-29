@@ -375,7 +375,7 @@ function fnDownloadPageImage() {
 				
 				<h4 class="title">Torrent archives <span class="badge torrent-count"></span></h4>
 				<ol id="torrentList" class="list-unstyled"></ol>
-				
+
 				<div class="findMode">
 					<h4 class="title">Save history</h4>
 					<ol class="save-history"></ol>

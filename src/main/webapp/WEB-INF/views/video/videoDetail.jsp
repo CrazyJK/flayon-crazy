@@ -49,6 +49,11 @@ body {
 bgContinue = false;
 $(document).ready(function() {
 	$('[data-toggle="popover"]').popover(); 
+	
+	$(".label-etcfile").on("click", function() {
+		var file = $(this).attr("data-file");
+		restCall(PATH + '/rest/video/file/out', {method: "PUT", data: {"file": file}, title: "move subtitle to root"});
+	});
 });
 function renameVideoName() {
 	restCall(PATH + '/rest/video/${video.opus}/rename', {
@@ -93,7 +98,7 @@ function resizeSecondDiv() {
 				<p><span class="label label-success" onclick="opener.fnCoverView('${video.opus}')">${video.coverFilePath} <fmt:formatNumber value="${video.coverFile.length()}" type="NUMBER"/></span></p>
 				<p><span class="label label-warning" title="${video.title}" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="${video.info}">${video.infoFilePath} <fmt:formatNumber value="${video.infoFile.length()}" type="NUMBER"/></span></p>
 				<c:forEach items="${video.etcFileList}" var="file">
-				<p><span class="label label-primary">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
+				<p><span class="label label-primary label-etcfile pointer" data-file="${file}" title="move to root">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
 				</c:forEach>
 				<form id="renameForm" class="form-horizontal">
 					<div class="form-group">

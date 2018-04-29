@@ -30,6 +30,7 @@ function Video(idx, data) {
 //	this.infoFile          = data.infoFile;
 	this.etcFileList       = data.etcFileList;       // array
 	this.videoCandidates   = data.videoCandidates;   // array
+	this.subtitleCandidates= data.subtitleCandidates;   // array
 	this.torrents          = data.torrents;          // array
 	this.fileAll           = data.fileAll;           // array
 
@@ -39,6 +40,7 @@ function Video(idx, data) {
 	this.existInfoFile          = data.existInfoFile;
 	this.existEtcFileList       = data.etcFileList.length > 0;
 	this.existCandidates        = data.videoCandidates.length > 0;
+	this.existSubtitleCandidates = data.subtitleCandidates.length > 0;
 	this.existTorrents          = data.torrents.length > 0;
 	this.existOverview          = data.overviewText != '';
 	
@@ -82,7 +84,28 @@ function Video(idx, data) {
 						var $self = $(this);
 						var opus = $self.attr("opus");
 						var candidate = $self.data("path");
-						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", data: {path: candidate}, showLoading: false}, function() {
+						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", data: {path: candidate, type: 'v'}, showLoading: false}, function() {
+							showSnackbar("accept file " + opus);
+							$self.off().hide();
+						});
+						$("#check-" + opus).addClass("found");
+					})
+			);
+		});
+		return elements;
+	};
+	this.label_subtitleCandidates = function() {
+		var elements = [];
+		$.each(data.subtitleCandidates, function(index, candidate) {
+			index > 0 && elements.push("&nbsp;");
+			elements.push(
+					$("<span>", {
+						opus: data.opus, title: candidate, "class": "nowrap btn btn-xs btn-warning"
+					}).css({maxWidth: 200, color: "#fff"}).html(VideoUtils.getFilename(candidate)).data("path", candidate).on("click", function() {
+						var $self = $(this);
+						var opus = $self.attr("opus");
+						var candidate = $self.data("path");
+						restCall(PATH + "/rest/video/" + opus + "/confirmCandidate", {method: "PUT", data: {path: candidate, type: 's'}, showLoading: false}, function() {
 							showSnackbar("accept file " + opus);
 							$self.off().hide();
 						});

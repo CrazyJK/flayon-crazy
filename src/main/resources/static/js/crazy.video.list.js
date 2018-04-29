@@ -68,6 +68,8 @@ var VideoList = (function() {
 					case 'C':
 						var result = compareTo(video1.existCandidates, video2.existCandidates, sort.reverse);
 						if (result == 0)
+							result = compareTo(video1.existSubtitleCandidates, video2.existSubtitleCandidates, sort.reverse);
+						if (result == 0)
 							result = compareTo(video1.favorite, video2.favorite, sort.reverse);
 						if (result == 0)
 							result = compareTo(video1.existTorrents, video2.existTorrents, sort.reverse);
@@ -207,6 +209,8 @@ var VideoList = (function() {
 										.append(video.label_seedFindBtn)
 										.append("&nbsp;")
 										.append(video.label_videoCandidates)
+										.append("&nbsp;")
+										.append(video.label_subtitleCandidates)
 										.append("&nbsp;")
 										.append(video.label_torrentSeed)
 							)

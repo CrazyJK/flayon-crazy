@@ -318,7 +318,7 @@ var calculatedDivHeight = 0,
 	fnSearchTorrent = function() {
 		var query = arguments.length == 0 ? $("#query").val() : arguments[0];
 		showDebug("searchURL", urlSearchTorrent + query);
-		popup(urlSearchTorrent + query, 'torrentSearch', 900, 950);
+		popup(urlSearchTorrent + query + '+FHD+torrent', 'torrentSearch', 900, 950);
 	},
 	showDebug = function(debugDomId, msg) {
 		console.log('showDebug', debugDomId, msg);

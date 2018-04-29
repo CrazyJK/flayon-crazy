@@ -222,7 +222,7 @@ public interface VideoService {
 	 * @param opus
 	 * @param path current video file
 	 */
-	void confirmCandidate(String opus, String path);
+	void confirmCandidate(String opus, String path, char type);
 
 	/**
 	 * reset rank and playcount

@@ -206,8 +206,4 @@ public class IOUtils {
 		return name;
 	}
 
-	// XXX delete
-	public static void main(String[] args) {
-		
-	}
 }

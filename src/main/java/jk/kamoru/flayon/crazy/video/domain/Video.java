@@ -52,6 +52,7 @@ public class Video {
 	private File infoFile; // json file
 	private List<File> etcFileList;
 	private List<File> videoCandidates;
+	private List<File> subtitleCandidates;
 	private List<File> torrents;
 
 	// info
@@ -74,6 +75,7 @@ public class Video {
 		subtitlesFileList 	= new ArrayList<>();
 		etcFileList 		= new ArrayList<>();
 		videoCandidates		= new ArrayList<>();
+		subtitleCandidates	= new ArrayList<>();
 		torrents			= new ArrayList<>();
 		
 		actressList = new ArrayList<>();
@@ -980,6 +982,22 @@ public class Video {
 	 */
 	public void resetVideoCandidates() {
 		this.videoCandidates.clear();
+	}
+	
+	public void resetSubtitleCandidates() {
+		this.subtitleCandidates.clear();
+	}
+
+	public List<File> getSubtitleCandidates() {
+		return subtitleCandidates;
+	}
+
+	public void setSubtitleCandidates(List<File> subtitleCandidates) {
+		this.subtitleCandidates = subtitleCandidates;
+	}
+
+	public void addSubtitleCandidates(File subtitleCandidate) {
+		this.subtitleCandidates.add(subtitleCandidate);
 	}
 
 	public void renameFile(String newName) {

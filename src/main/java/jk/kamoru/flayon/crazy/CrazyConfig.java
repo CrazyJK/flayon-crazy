@@ -39,6 +39,7 @@ public class CrazyConfig {
     @Value("${path.sora.pictures}")         String[] soraPicturesPaths;
     @Value("${path.image.storage}")         String[]        imagePaths;
     @Value("${path.backup}")                String         backupPath;
+    @Value("${path.subtitles}")             String      subtitlesPath;
     @Value("${app.video-player}")           String   player;
     @Value("${app.subtitles-editor}")       String   editor;
 	@Value("${path.video.storage},${path.video.stage},${path.video.cover}") String[] instancePaths;

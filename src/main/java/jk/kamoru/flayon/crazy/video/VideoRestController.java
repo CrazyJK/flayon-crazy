@@ -1,11 +1,13 @@
 package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jk.kamoru.flayon.base.util.IOUtils;
+import jk.kamoru.flayon.crazy.CrazyConfig;
+import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.daemon.VideoBatch;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
@@ -33,17 +38,18 @@ public class VideoRestController {
 	@Autowired VideoService videoService;
 	@Autowired VideoBatch videoBatch;
 	@Autowired HistoryService historyService;
-	
+	@Autowired CrazyConfig config;
+
 	@RequestMapping(method=RequestMethod.GET)
 	public List<Video> videoList(
 			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") boolean archive,
 			@RequestParam(value="o", required=false, defaultValue="M") Sort sort,
 			@RequestParam(value="r", required=false, defaultValue="true") boolean reverse,
-			@RequestParam(value="t", required=false, defaultValue="false") Boolean withTorrentInfo,
+			@RequestParam(value="t", required=false, defaultValue="false") Boolean withCandidate,
 			@RequestParam(value="p", required=false, defaultValue="1") Integer page,
 			@RequestParam(value="s", required=false, defaultValue="10") Integer size) {
-		return paging(videoService.getVideoList(true, false, sort, reverse, withTorrentInfo), page, size);
+		return paging(videoService.getVideoList(true, false, sort, reverse, withCandidate), page, size);
 	}
 
 	<T> List<T> paging(List<T> list, int page, int size) {
@@ -111,8 +117,8 @@ public class VideoRestController {
 
 	@RequestMapping(value="/{opus}/confirmCandidate", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmCandidate(@PathVariable String opus, @RequestParam("path") String path) {
-		videoService.confirmCandidate(opus, path);
+	public void confirmCandidate(@PathVariable String opus, @RequestParam("path") String path, @RequestParam("type") char type) {
+		videoService.confirmCandidate(opus, path, type);
 	}
 
 	@RequestMapping(value="/{opus}/saveCover", method=RequestMethod.POST)
@@ -142,10 +148,10 @@ public class VideoRestController {
 	@RequestMapping("/search/{query}")
 	public Map<String, List<Map<String, String>>> searchJson(@PathVariable String query) {
 		Map<String, List<Map<String, String>>> data = new HashMap<>();
-		data.put("videoResult",   videoService.findVideoList(query));
-		data.put("historyResult", videoService.findHistory(query));
-		data.put("torrentResult", videoService.findTorrent(query));
-		data.put("studioResult",  videoService.findStudio(query));
+		data.put("videoResult",    videoService.findVideoList(query));
+		data.put("historyResult",  videoService.findHistory(query));
+		data.put("torrentResult",  videoService.findTorrent(query));
+		data.put("studioResult",   videoService.findStudio(query));
 		return data;
 	}
 	
@@ -209,4 +215,13 @@ public class VideoRestController {
 		return historyService.getAll();
 	}
 
+	@RequestMapping(value="/file/out", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void outFile(@RequestParam("file") File file) {
+		try {
+			FileUtils.moveFileToDirectory(file, IOUtils.getRoot(file), false);
+		} catch (IOException e) {
+			throw new CrazyException("Fail to move", e);
+		}
+	}
 }

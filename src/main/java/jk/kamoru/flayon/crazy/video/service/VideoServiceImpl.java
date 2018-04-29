@@ -108,6 +108,7 @@ public class VideoServiceImpl implements VideoService {
 	private String NO_PARSE_OPUS_PREFIX;
 	private String urlRSS;
 	private String TORRENT_SEED_PATH;
+	private String SUBTITLE_PATH;
 	
 	@PostConstruct
 	public void postConstruct() {
@@ -127,24 +128,29 @@ public class VideoServiceImpl implements VideoService {
 		urlRSS 				= config.getUrlRSS();
 		TORRENT_QUEUE_PATH  = config.getTorrentQueuePath();
 		TORRENT_SEED_PATH 	= config.getTorrentSeedPath();
+		SUBTITLE_PATH       = config.getSubtitlesPath();
 	}
 	
-	private void fillTorrentInfo(List<Video> list) {
+	/**
+	 * torrent, videoFile, subtitleFile
+	 * @param list
+	 */
+	private void fillCadidateFile(List<Video> list) {
 		List<Video> allInstanceList = list.stream().filter(v -> !v.isArchive()).collect(Collectors.toList());
 		List<Video> nonExistVideoList = allInstanceList.stream().filter(v -> !v.isExistVideoFileList()).collect(Collectors.toList());
-		log.info("fillTorrentInfo - non exist video file = {}", nonExistVideoList.size());
+		log.info("fillCadidateFile - non exist video file = {}", nonExistVideoList.size());
 		
 		// CANDIDATE_PATHS에서 mp4, avi 등 찾기
 		List<File> foundFiles = new ArrayList<>();
 		for (String candidatePath : CANDIDATE_PATHS) {
 			File candidateDirectory = new File(candidatePath);
 			if (!candidateDirectory.exists() || !candidateDirectory.isDirectory()) {
-				log.warn("fillTorrentInfo - candidate path {} is not valid", candidatePath);
+				log.warn("fillCadidateFile - candidate path {} is not valid", candidatePath);
 				continue;
 			}
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			Collection<File> found = FileUtils.listFiles(candidateDirectory, extensions, true);
-			log.info("fillTorrentInfo - Scan candidate : {}, {} found", candidateDirectory, found.size());
+			log.info("fillCadidateFile - Scan candidate : {}, {} found", candidateDirectory, found.size());
 			foundFiles.addAll(found);
 		}
 		
@@ -157,16 +163,40 @@ public class VideoServiceImpl implements VideoService {
 					if (StringUtils.containsIgnoreCase(file.getName(), key)) {
 						if (!video.getVideoCandidates().contains(file)) {
 							video.addVideoCandidates(file);
-							log.info("fillTorrentInfo - Add candidate [{}] : {}", opus, file);
+							log.info("fillCadidateFile - Add file candidate [{}] : {}", opus, file);
 						}
 					}
 				}
 			}
 		}
 		
+		// Candidate Subtitle 
+		File subtilteFile = new File(SUBTITLE_PATH);
+		if (subtilteFile.isDirectory()) {
+			Collection<File> foundSubtitles = FileUtils.listFiles(subtilteFile, null, true);
+			List<Video> nonExistSubtitleList = allInstanceList.stream().filter(v -> !v.isExistSubtitlesFileList()).collect(Collectors.toList());
+			for (Video video : nonExistSubtitleList) {
+				video.resetSubtitleCandidates();
+				String opus = video.getOpus().toLowerCase();
+				for (String key : Arrays.asList(opus, StringUtils.remove(opus, "-"))) {
+					for (File file : foundSubtitles) {
+						if (StringUtils.containsIgnoreCase(file.getName(), key)) {
+							if (!video.getSubtitleCandidates().contains(file)) {
+								video.addSubtitleCandidates(file);
+								log.debug("fillCadidateFile - Add subtitle candidate [{}] : {}", opus, file);
+							}
+						}
+					}
+				}
+			}
+		}
+		else {
+			log.warn("fillCadidateFile - subtitle path {} is not valid", SUBTITLE_PATH);
+		}
+		
 		// find torrent
 		Collection<File> foundTorrent = FileUtils.listFiles(new File(TORRENT_QUEUE_PATH), new String[]{CRAZY.SUFFIX_TORRENT.toUpperCase(), CRAZY.SUFFIX_TORRENT.toLowerCase()}, true);
-		log.info("fillTorrentInfo - Scan torrents : {}, {} found", TORRENT_QUEUE_PATH, foundTorrent.size());
+		log.info("fillCadidateFile - Scan torrents : {}, {} found", TORRENT_QUEUE_PATH, foundTorrent.size());
 		
 		// matching torrent file
 		for (Video video : nonExistVideoList) {
@@ -176,7 +206,7 @@ public class VideoServiceImpl implements VideoService {
 			for (File file : foundTorrent) {
 				if (StringUtils.containsIgnoreCase(file.getName(), opus)) {
 					video.addTorrents(file);
-					log.info("fillTorrentInfo - Add torrent [{}] : {}", opus, file);
+					log.info("fillCadidateFile - Add torrent [{}] : {}", opus, file);
 				}
 			}
 		}
@@ -198,14 +228,14 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withTorrent) {
+	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withCandidate) {
 		List<Video> list = new ArrayList<>();
 		if (instance)
 			list.addAll(videoDao.getVideoList(instance, false));
 		if (archive)
 			list.addAll(videoDao.getVideoList(false, archive).stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
-		if (withTorrent)
-			fillTorrentInfo(list);
+		if (withCandidate)
+			fillCadidateFile(list);
 		return sortVideo(list, sort, reverse);
 	}
 	
@@ -813,8 +843,8 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public void confirmCandidate(String opus, String path) {
-		log.debug("confirmCandidate : {} - {}", opus, path);
+	public void confirmCandidate(String opus, String path, char type) {
+		log.debug("confirmCandidate [{}] : {} - {}", type, opus, path);
 		
 		File destinationPath = null;
 		for (String extraPath : STAGE_PATHS) {
@@ -827,17 +857,39 @@ public class VideoServiceImpl implements VideoService {
 			throw new VideoException("Not found proper destination path for candidate file");
 		
 		Video video = videoDao.getVideo(opus);
-		int videoFileSize = video.getVideoFileList().size();
-		File candidatedVideofile = new File(path);
-		File videoFile = new File(destinationPath, String.format("%s%s.%s", video.getFullname(), videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", IOUtils.getSuffix(candidatedVideofile)));
+		File candidatedFile = new File(path);
+		
+		int fileSize = 0;
+		switch (type) {
+		case 'v':
+			fileSize = video.getVideoFileList().size();
+			break;
+		case 's':
+			fileSize = video.getSubtitlesFileList().size();
+			break;
+		default:
+			throw new CrazyException("unknown type " + type);
+		}
+		
+		File destFile = new File(destinationPath, String.format("%s%s.%s", video.getFullname(), fileSize > 0 ? String.valueOf(++fileSize) : "", IOUtils.getSuffix(candidatedFile)));
 		try {
-			FileUtils.moveFile(candidatedVideofile, videoFile);
-			log.info("move to {}", videoFile.getAbsoluteFile());
+			FileUtils.moveFile(candidatedFile, destFile);
+			log.info("move to {}", destFile.getAbsoluteFile());
 		}
 		catch (IOException e) {
 			throw new VideoException(video, "candidate file moving error", e);
 		}
-		video.addVideoFile(videoFile);
+		
+		switch (type) {
+		case 'v':
+			video.addVideoFile(destFile);
+			break;
+		case 's':
+			video.addSubtitlesFile(destFile);
+			break;
+		default:
+			throw new CrazyException("unknown type " + type);
+		}
 	}
 
 	@Override
