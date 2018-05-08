@@ -3,11 +3,13 @@ package jk.kamoru.flayon.crazy.video.dao;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,90 +27,81 @@ import jk.kamoru.flayon.crazy.video.domain.Video;
 import jk.kamoru.flayon.crazy.video.error.VideoNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author kamoru
+ *
+ */
 @Component
 @Slf4j
 public class HistoryDaoFile implements HistoryDao {
 
-	@Autowired VideoDao videoDao;
+	private static boolean isHistoryLoaded = false;
+	
 	@Autowired CrazyConfig config;
+	@Autowired VideoDao videoDao;
 
 	/** history file */
 	private File historyFile;
+	
 	/** history list */
-	private List<History> historyList;
-	
-	private static boolean isHistoryLoaded = false;
+	private List<History> historyList = new ArrayList<>();
 
-/*	히스토리 파일이 없으면 안되므로, 생성하지 않는다
-	@PostConstruct
-	public void init() {
-		if (!getHistoryFile().exists())
-			try {
-				getHistoryFile().createNewFile();
-				log.warn("history file created {}", getHistoryFile().getAbsolutePath());
-			} catch (IOException e) {
-				log.error("history cannot create", e);
-			}
-	}
-*/
-	
+	/**
+	 * return video history File<br>
+	 * storagePath + {@link VIDEO#HISTORY_LOG_FILENAME}
+	 * @return historyFile
+	 */
 	private File getHistoryFile() {
-		if(historyFile == null)
+		if (historyFile == null) {
 			historyFile = new File(config.getStoragePath(), VIDEO.HISTORY_LOG_FILENAME);
+		}
 		return historyFile;
 	}
 
 	private synchronized void loadHistory() throws IOException, ParseException {
-		historyList = new ArrayList<>();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN);
 		StopWatch stopWatch = new StopWatch("Load history");
-
-		stopWatch.start("read line");
+		
+		stopWatch.start();
 		List<String> lines = FileUtils.readLines(getHistoryFile(), VIDEO.ENCODING);
-		stopWatch.stop();
+		stopWatch.stop("read file. line " + lines.size());
 
-		stopWatch.start("parse history " + lines.size() + " lines");
+		stopWatch.start();
+		historyList.clear();
 		for (String line : lines) {
-			if (line.trim().length() > 0) {
-				String[] split = StringUtils.split(line, ",", 4);
-				History history = new History();
-				if (split.length > 0)
-					history.setDate(simpleDateFormat.parse(split[0].trim()));
-				if (split.length > 1)
-					history.setOpus(split[1].trim());
-				if (split.length > 2)
-					history.setAction(Action.valueOf(split[2].toUpperCase().trim()));
-				if (split.length > 3)
-					history.setDesc(trimDesc(split[3]));
-				try {
-					history.setVideo(videoDao.getVideo(split[1].trim()));
-				}
-				catch (VideoNotFoundException ignore) {}
-				historyList.add(history);
+			if (line.trim().length() == 0) {
+				continue;
 			}
+			
+			String[] split = StringUtils.split(line, ",", 4);
+			History history = new History();
+			if (split.length > 0)
+				history.setDate(VIDEO.DateTimeFormat.parse(split[0].trim()));
+			if (split.length > 1)
+				history.setOpus(split[1].toUpperCase().trim());
+			if (split.length > 2)
+				history.setAction(Action.valueOf(split[2].toUpperCase().trim()));
+			if (split.length > 3)
+				history.setDesc(StringUtils.substringBetween(split[3], "[", "]"));
+			try {
+				history.setVideo(videoDao.getVideo(split[1].trim()));
+			} catch (VideoNotFoundException ignore) {}
+			historyList.add(history);
 		}
-		stopWatch.stop();
+		stopWatch.stop("parsed " + historyList.size());
 		
 		stopWatch.start("list reverse");
 		Collections.reverse(historyList);
 		stopWatch.stop();
 		
+		isHistoryLoaded = true;
 		log.info("Load history\n\n{}", stopWatch.prettyPrint());
-	}
-	
-	private String trimDesc(String desc) {
-		if (desc == null) 
-			return "";
-		int startIdx = StringUtils.indexOf(desc, "[");
-		int lastIdx  = StringUtils.lastIndexOf(desc, "]");
-		return StringUtils.substring(desc, startIdx, lastIdx + 1);
 	}
 
 	private List<History> historyList() {
 		if (!isHistoryLoaded)
 			try {
 				loadHistory();
-				isHistoryLoaded = true;
 			} catch (Exception e) {
 				throw new CrazyException("history load error", e);
 			}
@@ -132,64 +125,34 @@ public class HistoryDaoFile implements HistoryDao {
 
 	@Override
 	public List<History> find(String query) {
-		List<History> found = new ArrayList<History>();
-		for (History history : historyList()) {
-			if (StringUtils.containsIgnoreCase(history.getDesc(), query))
-				found.add(history);
-		}
-		return found;
+		return filter(history -> StringUtils.containsIgnoreCase(history.getDesc(), query));
 	}
 
 	@Override
-	public List<History> findByOpus(String opus) {
-		List<History> found = new ArrayList<History>();
-		for (History history : historyList()) {
-			if (StringUtils.equalsIgnoreCase(history.getOpus(), opus))
-				found.add(history);
-		}
-		return found;
+	public List<History> find(Date date) {
+		return filter(history -> DateUtils.isSameDay(history.getDate(), date));
 	}
 
 	@Override
-	public List<History> findByDate(Date date) {
-		List<History> found = new ArrayList<History>();
-		for (History history : historyList()) {
-			if (DateUtils.isSameDay(history.getDate(), date))
-				found.add(history);
-		}
-		return found;
+	public List<History> find(Action action) {
+		return filter(history -> history.getAction() == action);
 	}
 
 	@Override
-	public List<History> findByAction(Action action) {
-		List<History> found = new ArrayList<History>();
-		for (History history : historyList()) {
-			if (history.getAction() == action)
-				found.add(history);
-		}
-		return found;
+	public List<History> find(Video video) {
+		return filter(history -> history.getVideo() != null && history.getVideo().getOpus().equals(video.getOpus()));
 	}
 
 	@Override
-	public List<History> findByVideo(Video video) {
-		List<History> found = new ArrayList<History>();
-		for (History history : historyList()) {
-			if (history.getVideo() != null && history.getVideo().getOpus().equals(video.getOpus()))
-				found.add(history);
-		}
-		return found;
-	}
-
-	@Override
-	public List<History> findByVideo(List<Video> videoList) {
+	public List<History> find(Collection<Video> videoList) {
 		List<History> found = new ArrayList<History>();
 		for (Video video : videoList)
-			for (History history : historyList()) {
-				if (history.getVideo().getOpus().equals(video.getOpus()))
-					found.add(history);
-			}
+			found.addAll(filter(history -> history.getVideo().getOpus().equals(video.getOpus())));
 		return found;
 	}
 
+	private List<History> filter(Predicate<? super History> predicate) {
+		return historyList().stream().filter(predicate).collect(Collectors.toList());
+	}
 
 }

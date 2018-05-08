@@ -1,5 +1,7 @@
 package jk.kamoru.flayon.crazy;
 
+import java.text.SimpleDateFormat;
+
 import jk.kamoru.flayon.FLAYON;
 
 public interface CRAZY extends FLAYON {
@@ -21,8 +23,10 @@ public interface CRAZY extends FLAYON {
 	public static final long WEBCACHETIME_SEC    = 86400 * 7l;
 	public static final long WEBCACHETIME_MILI   = WEBCACHETIME_SEC * 1000l;
 
-	public static final String      DATE_PATTERN = "yyyy-MM-dd";
-	public static final String      TIME_PATTERN = "HH:mm:ss";
-	public static final String DATE_TIME_PATTERN = DATE_PATTERN + " " + TIME_PATTERN;
+	public static final String PATTERN_DATE      = "yyyy-MM-dd";
+	public static final String PATTERN_TIME      = "HH:mm:ss";
+	public static final String PATTERN_DATE_TIME = PATTERN_DATE + " " + PATTERN_TIME;
+
+	public static final SimpleDateFormat DateTimeFormat = new SimpleDateFormat(PATTERN_DATE_TIME);
 
 }

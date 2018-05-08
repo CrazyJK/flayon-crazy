@@ -2,7 +2,6 @@ package jk.kamoru.flayon.crazy.util;
 
 import java.io.File;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,11 +133,9 @@ public class VideoUtils {
 		return CrazyUtils.compareTo(parseReleaseDate(release1), parseReleaseDate(release2));
 	}
 
-	public static SimpleDateFormat releaseDateFotmat = new SimpleDateFormat(VIDEO.VIDEO_DATE_PATTERN);
-	
 	public static Date parseReleaseDate(String source) {
 		try {
-			return releaseDateFotmat.parse(source);
+			return VIDEO.ReleaseDateFotmat.parse(source);
 		} catch (ParseException e) {
 			return null;
 		}

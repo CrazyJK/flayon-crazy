@@ -410,7 +410,7 @@ public class Video {
 	 * @return date of video
 	 */
 	public String getVideoDate() {
-		return DateFormatUtils.format(this.getDelegateFile().lastModified(), VIDEO.DATE_PATTERN);
+		return DateFormatUtils.format(this.getDelegateFile().lastModified(), VIDEO.PATTERN_DATE);
 	}
 
 	/**

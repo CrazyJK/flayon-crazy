@@ -2,7 +2,6 @@ package jk.kamoru.flayon.crazy.video.domain;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -60,7 +59,7 @@ public class History implements Serializable {
 		}
 		this.desc = desc;
 		return MessageFormat.format("{0}, {1}, {2}, \"{3}\"{4}",
-				new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).format(date), 
+				VIDEO.DateTimeFormat.format(date), 
 				video.getOpus(), 
 				action, 
 				desc, 

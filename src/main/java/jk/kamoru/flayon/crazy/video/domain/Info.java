@@ -1,6 +1,5 @@
 package jk.kamoru.flayon.crazy.video.domain;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Info {
-	
-	public static final SimpleDateFormat format = new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN);
 	
 	String opus;
 	Integer playCount;
@@ -38,7 +35,7 @@ public class Info {
 	public String toString() {
 		return String.format("Info [opus=%s, playCount=%s, rank=%s, lastAccess=%s, overview=%s, tags=%s]", 
 				opus, playCount, rank, 
-				lastAccess == null ?  "" : format.format(lastAccess), 
+				lastAccess == null ?  "" : VIDEO.DateTimeFormat.format(lastAccess), 
 				overview, 
 				CrazyUtils.listToSimpleString(tags.stream()
 						.map(VTag::getName).collect(Collectors.toList())));

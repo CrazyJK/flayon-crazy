@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -353,11 +352,11 @@ public class VideoServiceImpl implements VideoService {
 		if (StringUtils.equals("ALL", query)) 
 			list = historyService.getDeduplicatedList();
 		else 
-			list = historyService.findByQuery(query);
+			list = historyService.find(query);
 		
 		for (History history : list) {
 			Map<String, String> map = new HashMap<>();
-			map.put("date", new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).format(history.getDate()));
+			map.put("date", VIDEO.DateTimeFormat.format(history.getDate()));
 			map.put("opus", history.getOpus());
 			map.put("act",  history.getAction().toString());
 			map.put("desc", history.getVideo() == null ? history.getDesc() : history.getVideo().getFullname());
@@ -479,7 +478,7 @@ public class VideoServiceImpl implements VideoService {
 	public Video getVideo(String opus) {
 		Video video = videoDao.getVideo(opus);
 		if (video == null) {
-			List<History> findByOpus = historyService.findByOpus(opus);
+			List<History> findByOpus = historyService.find(opus);
 			if (findByOpus.size() > 0) {
 				TitleValidator titlePart = new TitleValidator(findByOpus.get(0).getDesc());
 				video = new Video();
