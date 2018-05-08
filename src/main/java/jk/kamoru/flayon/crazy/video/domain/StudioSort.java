@@ -5,24 +5,10 @@ package jk.kamoru.flayon.crazy.video.domain;
  */
 public enum StudioSort {
 
-	/**
-	 * studio name
-	 */
-	NAME, 
-	/**
-	 * studio homepage
-	 */
-	HOMEPAGE, 
-	/**
-	 * studio company
-	 */
-	COMPANY, 
-	/**
-	 * video size of a studio
-	 */
-	VIDEO,
-	/**
-	 * sum of video scoring in studio
-	 */
-	SCORE;
+	/** studio name */				NAME, 
+	/** studio homepage */			HOMEPAGE, 
+	/** studio company */			COMPANY, 
+	/** video size of a studio */	VIDEO,
+	/** sum of score in studio */	SCORE;
+
 }

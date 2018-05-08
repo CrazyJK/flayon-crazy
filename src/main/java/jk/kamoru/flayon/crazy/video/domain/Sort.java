@@ -5,28 +5,17 @@ package jk.kamoru.flayon.crazy.video.domain;
  */
 public enum Sort {
 
-	/** studio sort */
-	S("Studio"), 
-	/** opus sort */
-	O("Opus"), 
-	/** title sort */
-	T("Title"), 
-	/** actress name sort */
-	A("Actress"), 
-	/** Release date */
-	D("Release"),
-	/** file modified date sort */
-	M("Modified"), 
-	/** play count sort */
-	P("PlayCount"), 
-	/** rank sort */
-	R("Rank"), 
-	/** video length sort */
-	L("Length"), 
-	/** score sort */
-	SC("Score"),
-	/** videoCandidates */
-	VC("Candidates");
+	/** studio sort */			Studio("Studio"), 
+	/** opus sort */			Opus("Opus"), 
+	/** title sort */			Title("Title"), 
+	/** actress name sort */	Actress("Actress"), 
+	/** Release date */			Release("Release"),
+	/** file modified sort */	Modified("Modified"), 
+	/** play count sort */		PlayCount("PlayCount"), 
+	/** rank sort */			Rank("Rank"), 
+	/** video length sort */	Length("Length"), 
+	/** score sort */			Score("Score"),
+	/** videoCandidates */		Candidates("Candidates");
 	
 	private String sortString;
 	
@@ -34,11 +23,12 @@ public enum Sort {
 		this.sortString = sort;
 	}
 	
-	public String toString() {
-		return sortString;
-	}
-
 	public String getDesc() {
 		return sortString;
 	}
+
+	public String toString() {
+		return getDesc();
+	}
+
 }

@@ -80,37 +80,37 @@ public class VideoUtils {
 	public static int compareVideo(Video v1, Video v2, Sort sort, boolean reverse) {
 		int result = 0;
 		switch(sort) {
-		case S:
+		case Studio:
 			result = CrazyUtils.compareTo(v1.getStudio().getName(), v2.getStudio().getName());
 			break;
-		case O:
+		case Opus:
 			result = CrazyUtils.compareTo(v1.getOpus(), v2.getOpus());
 			break;
-		case T:
+		case Title:
 			result = CrazyUtils.compareTo(v1.getTitle(), v2.getTitle());
 			break;
-		case A:
+		case Actress:
 			result = CrazyUtils.compareTo(v1.getActressName(), v2.getActressName());
 			break;
-		case D:
+		case Release:
 			result = compareToRelease(v1.getReleaseDate(), v2.getReleaseDate());
 			break;
-		case M:
+		case Modified:
 			result = CrazyUtils.compareTo(v1.getDelegateFile().lastModified(), v2.getDelegateFile().lastModified());
 			break;
-		case P:
+		case PlayCount:
 			result = CrazyUtils.compareTo(v1.getPlayCount().intValue(), v2.getPlayCount().intValue());
 			break;
-		case R:
+		case Rank:
 			result = CrazyUtils.compareTo(v1.getRank(), v2.getRank());
 			break;
-		case L:
+		case Length:
 			result = CrazyUtils.compareTo(v1.getLength(), v2.getLength());
 			break;
-		case SC:
+		case Score:
 			result = CrazyUtils.compareTo(v1.getScore(), v2.getScore());
 			break;
-		case VC:
+		case Candidates:
 			if (v1.getVideoCandidates().size() > 0) {
 				if (v2.getVideoCandidates().size() == 0) {
 					result = -1;

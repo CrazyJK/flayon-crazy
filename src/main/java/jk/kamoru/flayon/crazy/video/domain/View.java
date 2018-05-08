@@ -5,41 +5,30 @@ package jk.kamoru.flayon.crazy.video.domain;
  */
 public enum View {
 	
-	/** card type */
-	C("Card"), 
-	/** box type */
-	B("Box"), 
-	/** ihover type */
-	IH("ihover"), 
-	/** table type */
-	T("Table"), 
-	/** slide type */
-	S("Slide"), 
-	/** large type */
-	L("Large"), 
-	/** video type */
-	V("Video"),
-	/** Flay */
-	F("Flay"),
-	/** Aperture */
-	A("Aperture"),
-	/** jk */
-	K("jk"),
-	/** Test */
-	Test("Test");
-	
+	/** card type */	Card("Card"), 
+	/** box type */		Box("Box"), 
+	/** ihover type */	Ihover("ihover"), 
+	/** table type */	Table("Table"), 
+	/** slide type */	Slide("Slide"), 
+	/** large type */	Large("Large"), 
+	/** video type */	Video("Video"),
+	/** Flay */			Flay("Flay"),
+	/** Aperture */		Aperture("Aperture"),
+	/** jk */			JK("jk"),
+	/** Test */			Test("Test");
+
 	private String desc;
 	
 	View(String desc) {
 		this.desc = desc;
 	}
 	
-	public String toString() {
+	public String getDesc() {
 		return desc;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String toString() {
+		return getDesc();
 	}
 
 }

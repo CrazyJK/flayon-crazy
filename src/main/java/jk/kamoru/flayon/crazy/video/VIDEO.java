@@ -3,11 +3,8 @@ package jk.kamoru.flayon.crazy.video;
 import java.text.SimpleDateFormat;
 
 import jk.kamoru.flayon.crazy.CRAZY;
-import jk.kamoru.flayon.crazy.video.domain.Sort;
 
 public interface VIDEO extends CRAZY {
-	
-	public static final Sort DEFAULT_SORTMETHOD = Sort.T;
 
 	public static final String EXT_ACTRESS = "actress";
 	public static final String EXT_STUDIO  = "studio";

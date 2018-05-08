@@ -1335,7 +1335,7 @@ public class VideoServiceImpl implements VideoService {
 			}
 		}
 		if (videoList.size() > 0) {
-			Video video = sortVideo(videoList, Sort.M, true).get(0);
+			Video video = sortVideo(videoList, Sort.Modified, true).get(0);
 			if (video != null) {
 				Map<String, String> map = new HashMap<>();
 				map.put("studio", video.getStudio().getName());

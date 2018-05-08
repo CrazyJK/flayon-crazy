@@ -4,38 +4,14 @@ package jk.kamoru.flayon.crazy.video.domain;
  * @author kamoru
  */
 public enum Action {
-	/**
-	 * play video
-	 */
-	PLAY("Play"), 
-	/**
-	 * save overview
-	 */
-	OVERVIEW("Overview"), 
-	/**
-	 * view cover
-	 */
-	COVER("Cover"), 
-	/**
-	 * edit subtitles
-	 */
-	SUBTITLES("Subtitles"), 
-	/**
-	 * remove video
-	 */
-	REMOVE("Remove"),
-	/**
-	 * delete video
-	 */
-	DELETE("Delete"),
-	/**
-	 * mark rank
-	 */
-	RANK("Rank");
+	/** play video */		PLAY("Play"), 
+	/** save overview */	OVERVIEW("Overview"), 
+	/** view cover */		COVER("Cover"), 
+	/** edit subtitles */	SUBTITLES("Subtitles"), 
+	/** remove video */		REMOVE("Remove"),
+	/** delete video*/		DELETE("Delete"),
+	/** mark rank*/			RANK("Rank");
 
-	/**
-	 * action description
-	 */
 	private String actionString;
 	
 	Action(String action) {

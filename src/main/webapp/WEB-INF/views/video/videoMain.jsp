@@ -120,14 +120,14 @@ listViewType = '${videoSearch.listViewType}';
 
 	<div id="contentContainer" style="overflow-x: hidden;">
 	<c:choose>
-		<c:when test="${videoSearch.listViewType eq 'C'}">
+		<c:when test="${videoSearch.listViewType eq 'Card'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
 				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'B'}">
+		<c:when test="${videoSearch.listViewType eq 'Box'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li>
@@ -154,7 +154,7 @@ listViewType = '${videoSearch.listViewType}';
 			});
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'IH'}">
+		<c:when test="${videoSearch.listViewType eq 'Ihover'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li style="margin:5px;">
@@ -187,7 +187,7 @@ listViewType = '${videoSearch.listViewType}';
 			});
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'T'}">
+		<c:when test="${videoSearch.listViewType eq 'Table'}">
 			<div class="wrapper">
 				<table id="list" class="table table-condensed table-hover table-bordered">
 					<thead>
@@ -263,7 +263,7 @@ listViewType = '${videoSearch.listViewType}';
 			}
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'S'}">
+		<c:when test="${videoSearch.listViewType eq 'Slide'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video">
@@ -302,7 +302,7 @@ listViewType = '${videoSearch.listViewType}';
 			totalVideoSize > 0 && $("#slides").slideview();
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'V'}">
+		<c:when test="${videoSearch.listViewType eq 'Video'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
 				<c:forEach items="${videoList}" var="video">
@@ -347,7 +347,7 @@ listViewType = '${videoSearch.listViewType}';
 
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'L'}">
+		<c:when test="${videoSearch.listViewType eq 'Large'}">
 			<div id="video-slide-wrapper">
 				<table style="width: 100%; max-width: 100%;">
 					<tbody style="vertical-align: top;">
@@ -413,7 +413,7 @@ listViewType = '${videoSearch.listViewType}';
 				$("#slides").largeview();
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'F'}">
+		<c:when test="${videoSearch.listViewType eq 'Flay'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
@@ -466,7 +466,7 @@ listViewType = '${videoSearch.listViewType}';
 			}
 			</script>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'A'}">
+		<c:when test="${videoSearch.listViewType eq 'Aperture'}">
 			<ul class="list-inline text-center">
 				<c:forEach items="${videoList}" var="video">
 				<li style="padding: 10px;">
@@ -491,7 +491,7 @@ listViewType = '${videoSearch.listViewType}';
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:when test="${videoSearch.listViewType eq 'K'}">
+		<c:when test="${videoSearch.listViewType eq 'JK'}">
 			<link rel="stylesheet" href="${PATH}/css/videoMain.jk.css"/>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.jk.js"></script>
 			<div class="jk-video-wrapper" style="visibility:hidden;" data-lazy-class="w3-animate-opacity, 300">
