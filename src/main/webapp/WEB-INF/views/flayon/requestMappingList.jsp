@@ -21,6 +21,10 @@ td, td a {
 }
 .beanMethod::before {
 }
+
+th:hover {
+	color: red;
+}
 </style>
 <link rel="stylesheet" href="<c:url value="/webjars/datatables/1.10.12/media/css/dataTables.bootstrap.min.css"/>"/>
 <script type="text/javascript" src="<c:url value="/webjars/datatables/1.10.12/media/js/jquery.dataTables.min.js"/>"></script>
