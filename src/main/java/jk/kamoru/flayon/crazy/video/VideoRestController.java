@@ -44,7 +44,7 @@ public class VideoRestController {
 	public List<Video> videoList(
 			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") boolean archive,
-			@RequestParam(value="o", required=false, defaultValue="M") Sort sort,
+			@RequestParam(value="o", required=false, defaultValue="Modified") Sort sort,
 			@RequestParam(value="r", required=false, defaultValue="true") boolean reverse,
 			@RequestParam(value="t", required=false, defaultValue="false") Boolean withCandidate,
 			@RequestParam(value="p", required=false, defaultValue="1") Integer page,
