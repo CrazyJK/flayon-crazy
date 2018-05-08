@@ -101,6 +101,7 @@ var displayNameCheckResult = function(list) {
     );
     var height = $("#content_div").height() - 100;
     $("#notice").attr("title", "Name check result : " + list.length).css({overflowX: "hidden"}).dialog({height: height, width: 600});
+    $(".ui-dialog-title").html("Name check result : " + list.length);
 };
 
 var resizeSecondDiv = function() {
