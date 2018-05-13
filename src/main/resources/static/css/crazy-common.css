@@ -103,6 +103,14 @@ label.title > .badge, h4.title > .badge {
 .pointer {
 	cursor: pointer;
 }
+.link {
+	cursor: pointer;
+	text-shadow: 1px 1px 1px #404435;
+	text-decoration: none;
+}
+.link:hover, .link:focus {
+	text-shadow: 1px 1px 1px orange;
+}
 
 #query, #search, .search {
 	background-color: rgba(255, 255, 255, 0.5);

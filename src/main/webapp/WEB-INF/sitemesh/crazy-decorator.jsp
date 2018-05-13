@@ -66,6 +66,7 @@ $(document).ready(function() {
 			<li><a href="${PATH}/video/list_spa"><s:message code="video.video"           /></a></li>
 			<li><a href="${PATH}/video/actress"	><s:message code="video.actress"         /></a></li>
 			<li><a href="${PATH}/video/studio"	><s:message code="video.studio"          /></a></li>
+			<li><a href="${PATH}/video/tag"	    ><s:message code="video.tags"            /></a></li>
 			<li class="dropdown">
     			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="video.image"/><span class="caret"></span></a>
     			<ul class="dropdown-menu">

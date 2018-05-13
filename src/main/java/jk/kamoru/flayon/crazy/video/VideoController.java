@@ -376,8 +376,13 @@ public class VideoController extends CrazyController {
 		return "video/graviainterview";
 	}
 
+	@RequestMapping("/tag")
+	public String tagList() {
+		return "video/tagList";
+	}
+
 	@RequestMapping("/tag/{tagId}")
-	public String viewTag(Model model, @PathVariable Integer tagId) {
+	public String tagDetail(Model model, @PathVariable Integer tagId) {
 		VTag tag = tagService.getTag(tagId);
 		model.addAttribute("tag", tag);
 		List<Video> likeVideoList = tagService.likeVideo(tag);

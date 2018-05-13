@@ -46,9 +46,6 @@ $(document).ready(function() {
 		<a role="button" class="btn btn-primary" data-toggle="tab" href="#score"     ><input type="radio"/><s:message code="video.video-by-score"/></a>
 		<a role="button" class="btn btn-primary" data-toggle="tab" href="#length"    ><input type="radio"/><s:message code="video.video-by-length"/></a>
 		<a role="button" class="btn btn-primary" data-toggle="tab" href="#extension" ><input type="radio"/><s:message code="video.video-by-extension"/></a>
-		<a role="button" class="btn btn-primary" data-toggle="tab" href="#studio"    ><input type="radio"/><s:message code="video.studio" /> ${studioList.size()}</a>
-		<a role="button" class="btn btn-primary" data-toggle="tab" href="#actress"   ><input type="radio"/><s:message code="video.actress"/> ${actressList.size()}</a>
-		<a role="button" class="btn btn-primary" data-toggle="tab" href="#tags"      ><input type="radio"/><s:message code="video.tags"   /> ${tagList.size()}</a>
 	</div>
 
 	<div class="float-right">
@@ -320,51 +317,6 @@ $(document).ready(function() {
 			</table>
 		</section>
 
-		<section id="studio" class="tab-pane fade">
-			<ul class="cloud">
-				<c:forEach var="studio" items="${studioList}">
-					<li><jk:studio studio="${studio}" view="span"/></li>
-				</c:forEach>
-			</ul>
-		</section>
-
-		<section id="actress" class="tab-pane fade">
-			<ul class="cloud">
-				<c:forEach items="${actressList}" var="actress">
-					<li><jk:actress actress="${actress}" view="span"/></li>
-				</c:forEach>
-			</ul>
-		</section>
-
-		<section id="tags" class="tab-pane fade">
-			<ul class="cloud" id="taglist">
-				<c:forEach items="${tagList}" var="tag">
-					<li><jk:tags tag="${tag}" view="span"/></li>
-				</c:forEach>
-			</ul>
-			<form role="form" class="form-inline" style="margin-top:10px;" onsubmit="appendNewTag(this); return false;">
-				<input id="newTagName" name="name" placeholder="name" class="form-control" required="required"/>
-				<input id="newTagDesc" name="description" placeholder="Description" class="form-control"/>
-				<button class="btn btn-primary" type="submit">Regist</button>
-			</form>
-			<script type="text/javascript">
-			function appendNewTag(frm) {
-				var tagname = $("#newTagName").val();
-				var tagDesc = $("#newTagDesc").val();
-				restCall(PATH + "/rest/tag", {method: "POST", data: $(frm).serialize(), title: "add tag -> " + tagname}, function() {
-					$("#taglist").append(
-							$("<li>").append(
-									$("<div>", {"class": "box box-small"}).css({backgroundColor: "#000", color: "#eee"}).append(
-											$("<span>", {"class": "item text-bold"}).html(tagname), 
-											$("<span>").html("&nbsp;" + tagDesc)
-									)		
-							)
-					);
-				});
-				return false;
-			}
-			</script>
-		</section>
 	</div>
 </div>
 

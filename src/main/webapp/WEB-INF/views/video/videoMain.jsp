@@ -105,6 +105,7 @@ listViewType = '${videoSearch.listViewType}';
 			</c:forEach>
 		</ul>
 		<ul id="tagDiv" class="box list-inline" style="display:${videoSearch.viewTagDiv ? '' : 'none'}">
+			<li><a onclick="popup('/video/tag', 'tags', 900, 600)" class="btn btn-xs btn-default">Tags</a></li>
 			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(tagList)}</span></li>
 			<c:forEach items="${tagList}" var="tag" varStatus="tagStat">
 			<li>

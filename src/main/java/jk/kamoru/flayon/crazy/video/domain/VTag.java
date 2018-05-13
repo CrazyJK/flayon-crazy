@@ -45,6 +45,10 @@ public class VTag {
 			throw new CrazyException("Fail to valid. id or name is blank " + this);
 	}
 
+	public int getCount() {
+		return videoList.size();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

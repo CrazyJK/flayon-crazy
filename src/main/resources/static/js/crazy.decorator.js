@@ -455,6 +455,9 @@ var	crazy = (function() {
 				});
 				!found && $("nav#deco_nav").hide();
 				
+				if (opener)
+					$("nav#deco_nav").hide();
+				
 				if (locationPathname.startsWith(PATH + '/image')) {
 					console.log("current " + locationPathname + " background, theme menu hide");
 					$("#backMenu, #themeMenu").parent().hide();

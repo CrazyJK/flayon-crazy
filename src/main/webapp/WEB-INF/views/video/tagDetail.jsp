@@ -26,14 +26,34 @@
 </style>
 <script type="text/javascript">
 //bgContinue = false;
+var tagId = "${tag.id}";
+var tagName = "${tag.name}";
+
 function fnSaveTagInfo() {
 	restCall(PATH + '/rest/tag', {method: "PUT", data: $("form#tagForm").serialize(), title: "Save tag"}, function() {
 		if (opener) {
-			if (opener.location.href.indexOf("video/briefing") > -1) {
-				opener.location.href = opener.location.origin + opener.location.pathname + "?tab=tags";
+			if (opener.location.href.indexOf("video/tag") > -1) {
+				opener.location.reload(); 
 			}
 		}
 	});
+}
+
+function fnDeleteTag() {
+	if (confirm('Confirm to delete This tag')) {
+		restCall(PATH + "/rest/tag?id=" + tagId, {method: "DELETE", title: tagName + " tag delete"}, function(result) {
+			if (result) {
+				if (opener) {
+					if (opener.location.href.indexOf("video/tag") > -1) {
+						opener.location.reload(); 
+					}
+				}
+				window.close();
+			} else {
+				alert("Failed to delete");
+			}
+		});
+	}
 }
 </script>
 </head>
@@ -44,14 +64,17 @@ function fnSaveTagInfo() {
 		<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
 		<input type="hidden" name="id" value="${tag.id}"/>
 		<div class="form-group">
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<input class="form-control" type="text" name="name" value="${tag.name}" placeholder="Tag name"/>
 			</div>
 			<div class="col-sm-7">
 				<input class="form-control" type="text" name="description" value="${tag.description}" placeholder="Description"/>
 			</div>
 			<div class="col-sm-1">
-				<span class="btn btn-default" onclick="fnSaveTagInfo()">Save</span>
+				<span class="btn btn-success" onclick="fnSaveTagInfo()">Save</span>
+			</div>
+			<div class="col-sm-1">
+				<span class="btn btn-danger" onclick="fnDeleteTag()">Del</span>
 			</div>
 		</div>
 	</form>

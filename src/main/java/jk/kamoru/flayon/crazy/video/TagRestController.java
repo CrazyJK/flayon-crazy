@@ -28,11 +28,16 @@ public class TagRestController {
 		return tagService.getTag(tagId);
 	}
 
+	@RequestMapping("/list")
+	public List<VTag> tagListWithVideo() {
+		return tagService.getTagListWithVideo();
+	}
+
 	@RequestMapping(method=RequestMethod.GET)
 	public List<VTag> tagList() {
 		return tagService.getTagList();
 	}
-
+	
 	@RequestMapping(method=RequestMethod.PUT)
 	public VTag updateTag(@ModelAttribute VTag tag) {
 		return tagService.updateTag(tag);
