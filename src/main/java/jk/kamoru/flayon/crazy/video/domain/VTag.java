@@ -16,6 +16,7 @@ public class VTag {
 	Integer id;
 	String name;
 	String description;
+	int count;
 	
 	@JsonIgnore
 	List<Video> videoList;
