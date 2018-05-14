@@ -5,7 +5,13 @@
 <html>
 <head>
 <title><s:message code="video.tags"/></title>
+<style type="text/css">
+dd {
+	font-size: 80%;
+}
+</style>
 <script type="text/javascript">
+bgContinue = opener ? false : true;
 $(document).ready(function() {
 	var $ul = $("#list");
 	var appendTagInfo = function(tag) {
@@ -13,7 +19,7 @@ $(document).ready(function() {
 				$("<li>").append(
 						$("<dl>", {"class": "box box-small"}).append(
 								$("<dt>").append(
-										$("<a>").data('tagId', tag.id).addClass("link").html(tag.name).on("click", function() {
+										$("<a>").data('tagId', tag.id).addClass("link link-black").html(tag.name).on("click", function() {
 											var tagId = $(this).data('tagId');
 											popup('/video/tag/' + tagId, 'tag-' + tagId, 800, 600);
 										}),
@@ -32,6 +38,7 @@ $(document).ready(function() {
 		$.each(list, function(idx, tag) {
 			appendTagInfo(tag);
 		});
+		resizeWindow();
 	});
 	
 	$("#newTagBtn").on("click", function() {
@@ -44,6 +51,16 @@ $(document).ready(function() {
 		});
 	});
 });
+
+function resizeWindow() {
+	if (opener) {
+		var windowWidth  = $(window).width() + 16;
+		var headerHeight = $("#header_div").outerHeight();
+		var listHeight   = $("#list").outerHeight();
+		window.resizeTo(windowWidth, headerHeight + listHeight + 140);
+		console.log("resizeSecondDiv", windowWidth, headerHeight, listHeight);
+	}
+}
 </script>
 </head>
 <body>

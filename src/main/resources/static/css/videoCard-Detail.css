@@ -22,30 +22,35 @@ input[type='text'].form-control {
 	text-shadow: 0 0 4px red;
     box-shadow: 0 0 4px red inset;
     font-weight: 700;
+    color: #fff;
 }
 .rank-4 {
 	background-color: rgba(256, 0, 0, .8);
 	text-shadow: 0 0 4px rgba(256, 0, 0, .8);
     box-shadow:  0 0 4px rgba(256, 0, 0, .8) inset;
     font-weight: 700;
+    color: #fff;
 }
 .rank-3 {
 	background-color: rgba(256, 0, 0, .6);
 	text-shadow: 0 0 4px rgba(256, 0, 0, .6);
     box-shadow:  0 0 4px rgba(256, 0, 0, .6) inset;
     font-weight: 700;
+    color: #fff;
 }
 .rank-2 {
 	background-color: rgba(256, 0, 0, .4);
 	text-shadow: 0 0 4px rgba(256, 0, 0, .4);
     box-shadow:  0 0 4px rgba(256, 0, 0, .4) inset;
     font-weight: 700;
+    color: #fff;
 }
 .rank-1 {
 	background-color: rgba(256, 0, 0, .2);
 	text-shadow: 0 0 4px rgba(256, 0, 0, .2);
     box-shadow:  0 0 4px rgba(256, 0, 0, .2) inset;
     font-weight: 700;
+    color: #fff;
 }
 
 @media (min-width: 1200px) {
@@ -56,14 +61,17 @@ input[type='text'].form-control {
 		transform: scale(2, 2);
 		margin: 65px 100px;
 	}
-	.video-card {
-		background-color: rgb(93, 171, 91);
+	.video-card.exist {
+		background-color: rgb(171, 116, 91);
+    }
+	.video-card.nonExist {
+		background-color: rgb(202, 216, 167);
     }
 	.video-card:hover {
-		background-color: rgb(209, 125, 148);
+		box-shadow: 0 3px 9px rgba(0,0,0,.75);
     	transform: none;
     }
 }
 .video-card.nonExist {
-	background-color: rgb(171, 116, 91);
+	background-color: rgb(202, 216, 167);
 }
