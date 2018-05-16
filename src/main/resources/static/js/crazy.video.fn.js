@@ -54,7 +54,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnPlay = function(selectedOpus) {
 		restCall(PATH + '/rest/video/' + selectedOpus + '/exec/play', {method: "PUT", showLoading: false}, function() {
-			if (!['S', 'L', 'V', 'F', 'K'].includes(listViewType)) {
+			if (!['Slide', 'Large', 'Video', 'Flay', 'JK'].includes(listViewType)) {
 				fnVideoDetail(selectedOpus);
 			}
 		});
@@ -88,7 +88,7 @@ var calculatedDivHeight = 0,
 			alert("다 봤슴당");
 			return;
 		}
-		var selectedNumber = getRandomInteger(0, opusArray.length);
+		var selectedNumber = getRandomInteger(0, opusArray.length-1);
 		var selectedOpus = opusArray[selectedNumber];
 		opusArray.splice(selectedNumber, 1);
 		fnFocusVideo(selectedOpus);
@@ -100,18 +100,18 @@ var calculatedDivHeight = 0,
 	 */
 	fnFocusVideo = function(opus) {
 		//console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
-		if (listViewType == 'L') {
+		if (listViewType == 'Large') {
 			$.large.focusVideo(opus);
 		}
-		else if (listViewType == 'S' || listViewType == 'V' || listViewType == 'F') {
+		else if (listViewType == 'Slide' || listViewType == 'Video' || listViewType == 'Flay') {
 			$.slide.focusVideo(opus);
 		}
-		else if (listViewType == 'C' || listViewType == 'B' || listViewType == 'IH') {
+		else if (listViewType == 'Card' || listViewType == 'Box' || listViewType == 'Ihover') {
 			$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
 				$(this).addClass("video-focus");
 			});
 		}
-		else if (listViewType == 'K') {
+		else if (listViewType == 'JK') {
 			location.href = "#opus-" + opus;
 		}
 		else {
