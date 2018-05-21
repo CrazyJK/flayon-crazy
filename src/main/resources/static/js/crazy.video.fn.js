@@ -311,7 +311,18 @@ var calculatedDivHeight = 0,
 		popup(urlSearchVideo + query, 'videoSearch', 1200, 950);
 	},
 	fnSearchActress = function() {
-		var query = arguments.length == 0 ? $("#query").val() : arguments[0];
+		var $query   = $("#query");
+		var $actress = $("#actress");
+		var query = "";
+		if (arguments.length === 0) {
+			if ($actress.length > 0 && $actress.val().length > 0) {
+				query = $actress.val();
+			} else if ($query.length > 0 &&  $query.val().length > 0) {
+				query = $query.val();
+			}
+		} else {
+			query = arguments[0];
+		}
 		showDebug("searchURL", urlSearchActress + query);
 		popup(urlSearchActress + query, 'actressSearch', 900, 950);
 	},
