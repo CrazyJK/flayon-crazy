@@ -102,7 +102,7 @@ public class VideoServiceImpl implements VideoService {
 	private int BASE_RANK;
 	private long MAX_ENTIRE_VIDEO;
 	private String[] STAGE_PATHS;
-	private String COVER_PATH;
+	private String[] COVER_PATHS;
 	private String[] REPLACE_OPUS_INFO;
 	private String NO_PARSE_OPUS_PREFIX;
 	private String urlRSS;
@@ -121,7 +121,7 @@ public class VideoServiceImpl implements VideoService {
 		MAX_ENTIRE_VIDEO 	= config.getMaxEntireVideo();
 		BASE_RANK 			= config.getBaseRank();
 		STAGE_PATHS 		= config.getStagePaths();
-		COVER_PATH 			= config.getCoverPath();
+		COVER_PATHS 		= config.getCoverPaths();
 		REPLACE_OPUS_INFO 	= config.getReplaceOpusInfo();
 		NO_PARSE_OPUS_PREFIX = config.getNoParseOpusPrefix();
 		urlRSS 				= config.getUrlRSS();
@@ -1005,7 +1005,7 @@ public class VideoServiceImpl implements VideoService {
 				int total = titlePartList.size();
 				for (TitleValidator titlePart : titlePartList) {
 					log.info("Save Cover {}/{}", ++count, total);
-					CompletableFuture<File> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), COVER_PATH);
+					CompletableFuture<File> result = arzonLookupService.get(titlePart.getOpus(), titlePart.toString(), COVER_PATHS[0]);
 					try {
 						File file = result.get(); 
 						if (file == null) { // not found
@@ -1161,12 +1161,12 @@ public class VideoServiceImpl implements VideoService {
 	
 	@Override
 	public void saveCover(String opus, String title) {
-		log.info("saveCover {}, {}, {}", opus, title, COVER_PATH);
+		log.info("saveCover {}, {}, {}", opus, title, COVER_PATHS);
 		TitleValidator titlePart = new TitleValidator(title);
 		if (titlePart.isInvalid()) {
 			throw new CrazyException("title is invalid");
 		}
-		CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
+		CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATHS[0]);
 		try {
 			File file = result.get(); 
 			if (file == null) {
@@ -1205,7 +1205,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	@Async
 	public void saveCover(List<String> titles) {
-		log.info("saveCover at {} size={}", COVER_PATH, titles.size());
+		log.info("saveCover at {} size={}", COVER_PATHS, titles.size());
 
 		Map<String, CompletableFuture<File>> resultMap = new ConcurrentHashMap<>();
 		for (String title : titles) {
@@ -1229,7 +1229,7 @@ public class VideoServiceImpl implements VideoService {
 				continue;
 			}
 			// start async lookup
-			CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATH);
+			CompletableFuture<File> result = arzonLookupService.get(opus, title, COVER_PATHS[0]);
 			resultMap.put(opus, result);
 		}
 

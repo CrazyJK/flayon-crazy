@@ -31,7 +31,7 @@ public class CrazyConfig {
     @Value("${path.video.storage}")         String        storagePath;
     @Value("${path.video.candidate}")       String[]    candidatePaths;
     @Value("${path.video.stage}")           String[]        stagePaths;
-    @Value("${path.video.cover}")           String          coverPath;
+    @Value("${path.video.cover}")           String[]        coverPaths;
     @Value("${path.video.queue}")           String          queuePath;
     @Value("${path.torrent.queue}")         String   torrentQueuePath;
     @Value("${path.torrent.seed}")          String    torrentSeedPath;
