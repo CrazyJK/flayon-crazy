@@ -8,6 +8,7 @@ body {
 }
 [onclick], [ng-click] {
 	cursor: pointer;
+	transition: all .3s;	
 }
 nav#deco_nav {
 	position: fixed;

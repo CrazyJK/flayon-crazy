@@ -137,7 +137,7 @@ var calculatedDivHeight = 0,
 	 * @param opus
 	 */
 	fnEditOverview = function(opus, event) {
-		console.log("Overview Popup : " + opus);
+		console.log("Overview Popup : " + opus, event);
 	    popup(PATH + "/video/" + opus + "/overview", "overview-"+opus, 400, 300, 'Mouse', DEFAULT_SPECS, event);
 	},
 	/**

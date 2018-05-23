@@ -55,15 +55,21 @@ function Video(idx, data) {
 	this.label_rank            = VideoUtils.wrapLabel("R " + this.rank);
 	this.label_video           = VideoUtils.wrapLabel(
 									this.existVideoFileList ? 'V ' + formatFileSize(this.fileLength) : 'Video', 
-									'', 
-									this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "",          
+									this.existVideoFileList ? 'Play' : 'Search Torrent', 
+									this.existVideoFileList ? "fnPlay('" + this.opus + "')" : "fnSearchTorrent('" + this.opus + "')",          
 									this.existVideoFileList ? "exist" : "nonExist");
 	this.label_subtitles       = VideoUtils.wrapLabel(
 									"Sub",   
-									'', 
+									this.existSubtitlesFileList ? 'Edit Subtitles' : '',
 									this.existSubtitlesFileList ? "fnEditSubtitles('" + this.opus + "')" : "", 
 									this.existSubtitlesFileList ? "exist" : "nonExist");
-	this.label_overview		   = VideoUtils.wrapLabel(this.overviewText, '', '', '', {color: 'rgba(250,0,230,.5)'});
+	this.label_overview		   = VideoUtils.wrapLabel(
+									this.overviewText, 
+									'Edit Overview', 
+									"fnEditOverview('" + this.opus + "', event)",
+									'', 
+									{color: 'rgba(250,0,230,.5)'},
+									{id: 'overview-' + this.opus});
 	this.label_favorite        = this.favorite ? VideoUtils.wrapLabel("Fav", "", "", "label-success") : "";
 	this.label_actress         = function() {
 		var elements = [];
@@ -150,6 +156,8 @@ var VideoUtils = {
 			return file.substring(lastIndex + 1, file.length);
 		},
 		wrapLabel: function(html, title, onclick, extClass, extCss, extAttr) {
+			if (html === '')
+				return "";
 			var $span = $("<span>").addClass("label label-plain").html(html);
 			title    &&    title != '' && $span.attr("title", title);
 			onclick  &&  onclick != '' && $span.attr("onclick", onclick);

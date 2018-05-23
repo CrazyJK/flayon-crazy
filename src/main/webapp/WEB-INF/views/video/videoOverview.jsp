@@ -15,22 +15,25 @@ var opus = '${video.opus}';
 function overviewSave() {
 	var overview = $(".overview").val();
 	restCall(PATH + '/rest/video/' + opus + '/overview', {
-		method: "PUT", data: {overview: overview}, title: "Save overview"
+		method: "PUT", 
+		data: {overview: overview}, 
+		title: "Save overview"
 	}, function() {
 		$("#overview-" + opus, opener.document).attr("title", overview).html(overview);
+		self.close();
 	});
 }
 function resizeSecondDiv() {
-	$(".overview").outerHeight($(window).outerHeight() - $(".btn").outerHeight() - 60);
+	$(".overview").outerHeight($(window).outerHeight() - $(".btn").outerHeight() - 50);
 }
 </script>
 </head>
 <body>
-<div class="container-fluid" role="main">
-	<div class="box">
-		<textarea class="overview" name="overview">${video.overviewText}</textarea>
-		<button class="btn btn-success btn-block" onclick="overviewSave()">Overview save</button>
+	<div class="container-fluid" role="main">
+		<div class="box">
+			<textarea class="overview" name="overview">${video.overviewText}</textarea>
+			<button class="btn btn-success btn-block" onclick="overviewSave()">Overview save</button>
+		</div>
 	</div>
-</div>
 </body>
 </html>

@@ -10,7 +10,9 @@
 		};
 
 		var opts = $.extend({}, $.fn.slideview.defaults, options);
-
+		
+		$("#slides").css({width: opts.width});
+		
 		$(this).slidesjs({
 			start: currentVideoIndex,
 	        width: opts.width,
@@ -132,7 +134,7 @@
 	}
 
 	$.slide = {
-			focusVideo: function(opus) { // random play로 선태된 슿라이드 보이기  
+			focusVideo: function(opus) { // random play로 선태된 슬라이드 보이기 
 				var idx = parseInt($("#opus-" + opus).attr("slidesjs-index")) + 1;
 				$slidesjs.goto(idx);
 			}

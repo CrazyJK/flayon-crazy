@@ -267,40 +267,41 @@ listViewType = '${videoSearch.listViewType}';
 		<c:when test="${videoSearch.listViewType eq 'Slide'}">
 			<div id="video-slide-wrapper">
 				<div id="slides">
-					<c:forEach items="${videoList}" var="video">
-						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
-							<dl style="background-image:url('${PATH}/video/${video.opus}/cover');">
-								<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
-								<dd><jk:video video="${video}" view="rank"      mode="l"/></dd>
-								<dd><jk:video video="${video}" view="score"     mode="l"/></dd>
-								<dd><jk:video video="${video}" view="studio"    mode="l"/></dd>
-								<dd><jk:video video="${video}" view="opus"      mode="l"/></dd>
-								<dd><jk:video video="${video}" view="release"   mode="l"/></dd>
-								<dd><jk:video video="${video}" view="download"  mode="l"/></dd>
-								<dd><jk:video video="${video}" view="video"     mode="l"/></dd>
-								<dd><jk:video video="${video}" view="cover"     mode="l"/></dd>
-								<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
-								<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
-								<dd><jk:video video="${video}" view="actress"   mode="f"/></dd>
-								<dd>
-									<span class="label label-plain" onclick="$('.tags-${video.opus}').toggleClass('hide');">
-										Tags<i class="caret"></i>
-									</span>
-								</dd>
-								<dd class="hide tags-${video.opus}">
-									<small><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></small>
-								</dd>
+					<c:forEach items="${videoList}" var="video" varStatus="status">
+					<div id="opus-${video.opus}" data-index="${status.index}" class="slidesjs-slide" style="display:none;">
+						<div class="box box-small box-detail">
+							<dl class="video-info">
+								<dt class="title nowrap"><jk:video video="${video}" view="title"/></dt>
+								<dd class="rank"><jk:video video="${video}" view="rank"     mode="l"/></dd>
+								<dd class="info"><jk:video video="${video}" view="score"    mode="l"/></dd>
+								<dd class="info"><jk:video video="${video}" view="studio"   mode="l"/></dd>
+								<dd class="info"><jk:video video="${video}" view="opus"     mode="l"/></dd>
+								<dd class="info"><jk:video video="${video}" view="release"  mode="l"/></dd>
+								<dd class="info"><jk:video video="${video}" view="download" mode="l"/></dd>
+								<dd class="action"><jk:video video="${video}" view="video"     mode="l"/></dd>
+								<dd class="action"><jk:video video="${video}" view="cover"     mode="l"/></dd>
+								<dd class="action"><jk:video video="${video}" view="subtitles" mode="l"/></dd>
+								<dd class="action"><jk:video video="${video}" view="overview"  mode="l"/></dd>
+								<dd class="actress"><jk:video video="${video}" view="actress"  mode="l"/></dd>
+							    <dd class="tags"><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 							</dl>
 						</div>
+						<div class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');" onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')"></div>
+					</div>
 					</c:forEach>
 				</div>
 				<div style="position:fixed; right:20px; bottom:15px;"><a class="slidesjs-navigation slidesjs-random" href="#">Random View</a></div>
 			</div>
 			<link rel="stylesheet" href="${PATH}/css/video-slides.css"/>
+			<link rel="stylesheet" href="${PATH}/css/videoMainSlide.css"/>
 			<script type="text/javascript" src="${PATH}/js/jquery.slides.min.js"></script>
 			<script type="text/javascript" src="${PATH}/js/crazy.video.main.slide.js"></script>
 			<script type="text/javascript">
-			totalVideoSize > 0 && $("#slides").slideview();
+			totalVideoSize > 0 && $("#slides").slideview({width:1010, height: 698});
+			function resizeSecondDiv() {
+				var slidesjsContainerCss = {height: calculatedDivHeight - $(".slidesjs-pagination").outerHeight() - 30};
+				$("#slides > .slidesjs-container").css(slidesjsContainerCss);
+			}
 			</script>
 		</c:when>
 		<c:when test="${videoSearch.listViewType eq 'Video'}">

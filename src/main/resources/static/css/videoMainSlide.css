@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+div#searchDiv {
+	font-size: 18px;
+}
+
+div.box-cover {
+	width: 1000px;
+	height: 688px;
+	background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+dl.video-info {
+	font-size: 18px;
+}
+dl.video-info > dt, dl.video-info > dd {
+	margin-bottom: 10px;
+}
+dl.video-info > dt.title {
+	font-size: 40px;
+}
+dl.video-info > dd.rank {
+	font-size: 32px;
+}
+dl.video-info > dd.info {
+	font-size: 32px;
+}
+dl.video-info > dd.action {
+	font-size: 36px;
+}
+dl.video-info > dd.actress {
+	font-size: 34px;
+}
+dl.video-info > dd.actress > div {
+	max-height: 100px !important;	
+}
+dl.video-info > dd.tags {
+	font-size: 26px;
+}
+
+.rank-range {
+	width: 200px !important;
+	height: 23px;
+}
+.input-group-addon.rank-range-addon {
+	font: 20px bold;
+}
+
+.slidesjs-navigation, .slidesjs-pagination {
+	font-size: 18px;
+}

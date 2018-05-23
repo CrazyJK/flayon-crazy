@@ -12,8 +12,10 @@
 <c:set var="cssClass" value="${empty css ? 'label label-plain' : css}"/>
 <c:set var="ONE_GB" value="${1024*1024*1024}"/>
 <%  if (view.equalsIgnoreCase("video")) { %>
-	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played" style="margin-right:3px;" 
-		onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')">
+	<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" 
+		 	style="margin-right:3px;"
+			title="${video.playCount} played. ${video.existVideoFileList ? 'Play' : 'Search Torrent'}" 
+			onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')">
 		<c:if test="${video.size > 1}">
 			<em class="badge-black">${video.size}</em>
 		</c:if>
@@ -54,9 +56,16 @@
 				</div>
 			</c:if>
 			<c:if test="${mode eq 'l'}">
-				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
-					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-					<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span style="margin-right:3px; display: block;"> 
+					<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+					<span class="${cssClass}" title="Name" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span> 
+					<span class="${cssClass}" title="Local" >${actress.localName}</span> 
+					<span class="${cssClass}" title="Birth" >${actress.birth}</span> 
+					<span class="${cssClass}" title="Age"   >${actress.age}</span> 
+					<span class="${cssClass}" title="Body"  >${actress.bodySize}</span> 
+					<span class="${cssClass}" title="Height">${actress.height}</span> 
+					<span class="${cssClass}" title="Debut" >${actress.debut}</span> 
+					<span class="${cssClass}" title="Video" >${fn:length(actress.videoList)}v</span>
 				</span>	
 			</c:if>
 			<c:if test="${mode eq 's'}">

@@ -44,13 +44,14 @@
 <%
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
-	<span class="label label-plain" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<span class="label label-plain ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
 	<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}
 		<c:if test="${!empty actress.localName}">(${actress.localName})</c:if></span>
 	<span class="label label-plain" title="Birth" >${actress.birth}</span> 
 	<span class="label label-plain" title="Age"   >${actress.age}</span> 
 	<span class="label label-plain" title="Body"  >${actress.bodySize}</span> 
 	<span class="label label-plain" title="Height">${actress.height}</span> 
+	<span class="label label-plain" title="Debut" >${actress.debut}</span> 
 	<span class="label label-plain" title="Video" >V ${fn:length(actress.videoList)}</span>
 	<span class="label label-plain" title="<s:message code="video.find-info.actress"/>" onclick="fnSearchActress('${actress.name}')"><span class="glyphicon glyphicon-user"></span></span>
 <%
