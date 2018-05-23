@@ -271,8 +271,7 @@ listViewType = '${videoSearch.listViewType}';
 					<div id="opus-${video.opus}" data-index="${status.index}" class="slidesjs-slide" style="display:none;">
 						<div class="box box-small box-detail">
 							<dl class="video-info">
-								<dt class="title nowrap"><jk:video video="${video}" view="title"/></dt>
-								<dd class="rank"><jk:video video="${video}" view="rank"     mode="l"/></dd>
+							    <dd class="tags"><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
 								<dd class="info"><jk:video video="${video}" view="score"    mode="l"/></dd>
 								<dd class="info"><jk:video video="${video}" view="studio"   mode="l"/></dd>
 								<dd class="info"><jk:video video="${video}" view="opus"     mode="l"/></dd>
@@ -283,7 +282,8 @@ listViewType = '${videoSearch.listViewType}';
 								<dd class="action"><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 								<dd class="action"><jk:video video="${video}" view="overview"  mode="l"/></dd>
 								<dd class="actress"><jk:video video="${video}" view="actress"  mode="l"/></dd>
-							    <dd class="tags"><jk:video video="${video}" view="tags" mode="l" tagList="${tagList}"/></dd>
+								<dd class="rank"><jk:video video="${video}" view="rank"     mode="l"/></dd>
+								<dt class="title nowrap"><jk:video video="${video}" view="title"/></dt>
 							</dl>
 						</div>
 						<div class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');" onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')"></div>

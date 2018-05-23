@@ -33,10 +33,10 @@ dl.video-info > dd.info {
 	font-size: 32px;
 }
 dl.video-info > dd.action {
-	font-size: 36px;
+	font-size: 34px;
 }
 dl.video-info > dd.actress {
-	font-size: 34px;
+	font-size: 30px;
 }
 dl.video-info > dd.actress > div {
 	max-height: 100px !important;	
