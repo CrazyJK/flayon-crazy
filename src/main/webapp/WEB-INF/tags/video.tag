@@ -45,36 +45,32 @@
 <%  } else if (view.equalsIgnoreCase("release")) { %>
 	<span class="${cssClass}" title="release date">${video.releaseDate}</span>
 <%  } else if (view.equalsIgnoreCase("actress")) { %>
-	<div style="max-height:${mode eq 'f' ? '70' : '50'}px; overflow:auto; padding-bottom:5px;">
-		<c:forEach items="${video.actressList}" var="actress">
-			<c:if test="${mode eq 'f'}">
-				<div style="margin-bottom: 5px; display:inline-block;">
-					<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
-						<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
-						<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
-					</span>	
-				</div>
-			</c:if>
-			<c:if test="${mode eq 'l'}">
-				<span style="margin-right:3px; display: block;"> 
-					<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
-					<span class="${cssClass}" title="Name" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span> 
-					<span class="${cssClass}" title="Local" >${actress.localName}</span> 
-					<span class="${cssClass}" title="Birth" >${actress.birth}</span> 
-					<span class="${cssClass}" title="Age"   >${actress.age}</span> 
-					<span class="${cssClass}" title="Body"  >${actress.bodySize}</span> 
-					<span class="${cssClass}" title="Height">${actress.height}</span> 
-					<span class="${cssClass}" title="Debut" >${actress.debut}</span> 
-					<span class="${cssClass}" title="Video" >${fn:length(actress.videoList)}v</span>
-				</span>	
-			</c:if>
-			<c:if test="${mode eq 's'}">
-				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin-right:3px;"> 
-					<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-				</span>	
-			</c:if>
-		</c:forEach>
-	</div>
+	<c:forEach items="${video.actressList}" var="actress">
+		<c:if test="${mode eq 'f'}">
+			<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin:0 2px;"> 
+				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
+			</span>	
+		</c:if>
+		<c:if test="${mode eq 'l'}">
+			<span style="margin:0 2px; display: block;"> 
+				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span class="${cssClass}" title="Name" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span> 
+				<span class="${cssClass}" title="Local" >${actress.localName}</span> 
+				<span class="${cssClass}" title="Birth" >${actress.birth}</span> 
+				<span class="${cssClass}" title="Age"   >${actress.age}</span> 
+				<span class="${cssClass}" title="Body"  >${actress.bodySize}</span> 
+				<span class="${cssClass}" title="Height">${actress.height}</span> 
+				<span class="${cssClass}" title="Debut" >${actress.debut}</span> 
+				<span class="${cssClass}" title="Video" >${fn:length(actress.videoList)}v</span>
+			</span>	
+		</c:if>
+		<c:if test="${mode eq 's'}">
+			<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin:0 2px;">
+				<span title="${actress}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+			</span>	
+		</c:if>
+	</c:forEach>
 <%  } else if (view.equalsIgnoreCase("opus")) { %>
 	<span class="${cssClass}" title="${video.fullname}" onclick="fnVideoDetail('${video.opus}')">${video.opus}</span>
 	<c:if test="${mode eq 'l'}">

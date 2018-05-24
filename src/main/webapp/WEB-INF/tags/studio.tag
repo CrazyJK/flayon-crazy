@@ -24,22 +24,21 @@
 	else
 		itemCssClass += "1";
 
-	if (view.equalsIgnoreCase("label")) {
+	if (view.equalsIgnoreCase("checkbox")) {
 %>
-<label 
-	class="item <%=itemCssClass %>" 
-	title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">
-	<form:checkbox path="selectedStudio" id="selectedStudio${count}" value="${studio.name}" cssClass="sr-only"/>
-	<span class="label label-default item" style="padding: 5px; margin: 5px;"
-		 id="checkbox-selectedStudio${count}">${studio.name} <i>${fn:length(studio.videoList)}</i></span>
-</label>
+	<label class="item <%=itemCssClass %>" title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">
+		<form:checkbox path="selectedStudio" id="selectedStudio${count}" value="${studio.name}" cssClass="sr-only"/>
+		<span class="label label-default item" style="padding: 5px; margin: 5px;" id="checkbox-selectedStudio${count}">
+			${studio.name} <i>${fn:length(studio.videoList)}</i>
+		</span>
+	</label>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>
-<div style="background-color:#fff;" class="box box-small">
-	<span class="item <%=itemCssClass %>" onclick="fnViewStudioDetail('${studio.name}')" title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">${studio.name}</span> 
-	<small>${fn:length(studio.videoList)}</small>
-</div>		
+	<div style="background-color:#fff;" class="box box-small">
+		<span class="item <%=itemCssClass %>" onclick="fnViewStudioDetail('${studio.name}')" title="${studio.homepage} ${studio.company} Actress:${fn:length(studio.actressList)}">${studio.name}</span> 
+		<small>${fn:length(studio.videoList)}</small>
+	</div>		
 <%
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
@@ -50,7 +49,7 @@
 <%
 	} else {
 %>
-${view} is undefined
+	${view} is undefined
 <%
 	}
 %>

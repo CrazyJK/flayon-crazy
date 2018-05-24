@@ -54,7 +54,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnPlay = function(selectedOpus) {
 		restCall(PATH + '/rest/video/' + selectedOpus + '/exec/play', {method: "PUT", showLoading: false}, function() {
-			if (!['Slide', 'Large', 'Video', 'Flay', 'JK'].includes(listViewType)) {
+			if (!['Vertical', 'Large', 'Video', 'Flay', 'JK'].includes(listViewType)) {
 				fnVideoDetail(selectedOpus);
 			}
 		});
@@ -100,18 +100,18 @@ var calculatedDivHeight = 0,
 	 */
 	fnFocusVideo = function(opus) {
 		//console.log("fnFocusVideo", opus, "listViewType = ", listViewType);
-		if (listViewType == 'Large') {
+		if (['Large'].includes(listViewType)) {
 			$.large.focusVideo(opus);
 		}
-		else if (listViewType == 'Slide' || listViewType == 'Video' || listViewType == 'Flay') {
+		else if (['Vertical', 'Video', 'Flay'].includes(listViewType)) {
 			$.slide.focusVideo(opus);
 		}
-		else if (listViewType == 'Card' || listViewType == 'Box' || listViewType == 'Ihover') {
+		else if (['Card', 'Box', 'Ihover'].includes(listViewType)) {
 			$("#opus-" + opus).animate({opacity: 0.5}, 1000, function(){
 				$(this).addClass("video-focus");
 			});
 		}
-		else if (listViewType == 'JK') {
+		else if (['JK'].includes(listViewType)) {
 			location.href = "#opus-" + opus;
 		}
 		else {

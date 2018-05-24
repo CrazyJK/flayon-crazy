@@ -6,7 +6,11 @@ body {
 }
 
 div#searchDiv {
-	font-size: 18px;
+	font-size: 20px;
+}
+
+.btn-randomplay {
+	display: none;
 }
 
 div.box-cover {
@@ -19,6 +23,7 @@ div.box-cover {
 
 dl.video-info {
 	font-size: 18px;
+	margin: 10px;
 }
 dl.video-info > dt, dl.video-info > dd {
 	margin-bottom: 10px;
@@ -37,9 +42,7 @@ dl.video-info > dd.action {
 }
 dl.video-info > dd.actress {
 	font-size: 30px;
-}
-dl.video-info > dd.actress > div {
-	max-height: 100px !important;	
+	max-height: 150px;
 }
 dl.video-info > dd.tags {
 	font-size: 26px;
