@@ -200,10 +200,27 @@ var calculatedDivHeight = 0,
 	 * @param name
 	 */
 	fnFavorite = function(dom, name) {
-		var $self = $(dom), val = $self.text() == '★';
+		var $self = $(dom), val = $self.hasClass('glyphicon-star');
 		restCall(PATH + "/rest/actress/" + name + "/favorite/" + !val, {method: "PUT", showLoading: false}, function(result) {
 			console.log("fnFavorite", result, dom.innerHTML);
-			$self.html(result ? '★' : '☆').attr({title: "Favorite " + result});
+			var $parent = $self.parent();
+			var isParentLabel = $parent.hasClass('label');
+			if (result) {
+				$self.switchClass('glyphicon-star-empty', 'glyphicon-star');
+				if (isParentLabel) {
+					$parent.addClass("favorite");
+				} else {
+					$self.addClass("favorite");
+				}
+			} else {
+				$self.switchClass('glyphicon-star', 'glyphicon-star-empty');
+				if (isParentLabel) {
+					$parent.removeClass("favorite");
+				} else {
+					$self.removeClass("favorite");
+				}
+			}
+			$self.attr({title: "Favorite " + result});
 			$("#favorite").val(result);
 		});
 	},

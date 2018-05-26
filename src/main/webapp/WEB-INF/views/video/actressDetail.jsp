@@ -43,7 +43,7 @@ function searchActressInfo() {
 		<input type="hidden" name="FAVORITE" id="favorite" value="${actress.favorite}"/>
 		<div class="form-group">
 			<div class="col-sm-2 text-right">
-				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="text-danger lead">${actress.favorite ? '★' : '☆'}</span>
+				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'} text-danger lead"></span>
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" type="text" name="NEWNAME" value="${actress.name}" id="newName"/>
@@ -52,7 +52,7 @@ function searchActressInfo() {
 				<input class="form-control" type="text" name="LOCALNAME" value="${actress.localName}" placeholder="local name" id="localName"/>
 			</div>
 			<div class="col-sm-1">
-				<img src="<c:url value="/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>" onclick="searchActressInfo()"/>
+				<button class="btn btn-default btn-circle" onclick="searchActressInfo()"><span class="glyphicon glyphicon-search"></span></button>
 			</div>
 			<div class="col-sm-1">
 				<span class="label label-primary">Score ${actress.score}</span>

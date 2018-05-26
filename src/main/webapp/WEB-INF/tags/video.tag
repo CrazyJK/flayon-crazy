@@ -47,14 +47,15 @@
 <%  } else if (view.equalsIgnoreCase("actress")) { %>
 	<c:forEach items="${video.actressList}" var="actress">
 		<c:if test="${mode eq 'f'}">
-			<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" style="margin:0 2px;"> 
-				<span title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+			<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}">
+<%-- 				 ${actress.favorite ? 'favorite' : ''}" style="margin:0 2px;"> --%> 
+				<span class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')"></span>
 				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
 			</span>	
 		</c:if>
 		<c:if test="${mode eq 'l'}">
 			<span style="margin:0 2px; display: block;"> 
-				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+				<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}"><span class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')"></span></span>
 				<span class="${cssClass}" title="Name" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span> 
 				<span class="${cssClass}" title="Local" >${actress.localName}</span> 
 				<span class="${cssClass}" title="Birth" >${actress.birth}</span> 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Actress comparison</title>
+<style type="text/css">
+iframe {
+    display: inline-block;
+    width: 50%;
+    height: -webkit-fill-available;
+    border: 0;
+    margin: 0;
+    background-color: aliceblue;
+    float: left;
+}
+</style>
+</head>
+<body>
+<iframe id="actress1Frame" src=""></iframe>
+<iframe id="actress2Frame" src=""></iframe>
+
+<script type="text/javascript">
+var url = new URL(location);
+document.getElementById("actress1Frame").src = "/video/actress/" + url.searchParams.get("actress1");
+document.getElementById("actress2Frame").src = "/video/actress/" + url.searchParams.get("actress2");
+</script>
+</body>
+</html>

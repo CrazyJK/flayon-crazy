@@ -84,10 +84,14 @@ input[type='range'] {
 .label {
 	transition: all 0.3s;
 }
-.label.label-plain[onclick]:hover, span[onclick]:hover {
+.label.label-plain[onclick]:hover, span[onclick]:not(.glyphicon):hover {
 	color: #111;
 	text-shadow: 1px 1px 2px #4c4c4c;
 	box-shadow: 0 3px 9px rgba(0,0,0,.3);
+}
+.glyphicon[onclick]:hover {
+	color: #111;
+	text-shadow: 1px 1px 2px #4c4c4c;
 }
 .label.label-default[onclick]:hover {
 	color: yellow;
@@ -103,6 +107,9 @@ input[type='range'] {
 }
 .btn-link:focus, .btn-link:hover, a:active, a:hover {
     text-decoration: none;
+}
+.btn-circle {
+	border-radius: 50%;
 }
 
 .display-middle {

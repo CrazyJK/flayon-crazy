@@ -89,10 +89,14 @@ var displayNameCheckResult = function(list) {
 		   			(function () {
 			    		var tbody = $("<tbody>");
 		    			$.each(list, function(idx, record) {
-		    				$("<tr>", {"class": sameLocalName(record.actress1, record.actress2)}).append(
+		    				$("<tr>", {"class": sameLocalName(record.actress1, record.actress2)}).data("record", record).append(
 			       					$("<td>", {"class": "text-right"}).append(renderActressName(record.actress1, true)),
 			       					$("<td>").append(renderActressName(record.actress2)),
-			       					$("<td>").html(scoreToFixed(record.score))
+			       					$("<td>").html(scoreToFixed(record.score)).on("click", function() {
+			       						var record = $(this).parent().data("record");
+			       						popup('/html/actress/compare.html?actress1=' + record.actress1.name + '&actress2=' + record.actress2.name, 'actressComparison', 1700, 800);
+			       						$(this).addClass("selected");
+			       					}).addClass("pointer")
 		    				).appendTo(tbody);
 		    			});
 		    			return tbody;

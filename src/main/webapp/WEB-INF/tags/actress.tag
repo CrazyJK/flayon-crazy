@@ -44,7 +44,7 @@
 <%
 	} else if (view.equalsIgnoreCase("detail")) {
 %>
-	<span class="label label-plain ${actress.favorite ? 'favorite' : ''}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<span class="label label-plain ${actress.favorite ? 'favorite' : ''}"><span class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')"></span></span>
 	<span class="label label-plain" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
 	<span class="label label-plain" title="Local" >${actress.localName}</span> 
 	<span class="label label-plain" title="Birth" >${actress.birth}</span> 
