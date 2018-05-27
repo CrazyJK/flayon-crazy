@@ -37,6 +37,14 @@ if (!isDebug) {
 $(document).ready(function() {
     crazy.ready('${PATH}', '${bgImageCount}', '${urlSearchVideo}', '${urlSearchActress}', '${urlSearchTorrent}');
 });
+
+function goMain() {
+	var searchParams = '';
+	if ($(window).outerHeight() > 1700) {
+		searchParams = '?listViewType=Vertical';
+	}
+	location.href = '${PATH}/video/main' + searchParams;
+}
 </script>
 <sitemesh:write property="head">HEAD element area</sitemesh:write>
 </head>
@@ -61,7 +69,7 @@ $(document).ready(function() {
 			<li><a class="noti"></a></li>
 			<li><a href="${PATH}/video"        	><s:message code="video.front"           /></a></li>
 			<li><a id="backMenu" 				><s:message code="video.background.title"/></a></li>
-			<li><a href="${PATH}/video/main"    ><s:message code="video.main"            /></a></li>
+			<li><a id="main" onclick="goMain()" ><s:message code="video.main"            /></a></li>
 			<li><a id="searchMenu" 	    		><s:message code="video.search"          /></a></li>
 			<li><a href="${PATH}/video/list_spa"><s:message code="video.video"           /></a></li>
 			<li><a href="${PATH}/video/actress"	><s:message code="video.actress"         /></a></li>

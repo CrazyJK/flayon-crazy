@@ -453,6 +453,13 @@ var	crazy = (function() {
 						found = true;
 					}
 				});
+				
+				if (locationPathname.startsWith(PATH + '/video/main')) {
+					$("#main").parent().addClass("active");
+					found = true;
+				}
+				
+				// main
 				!found && $("nav#deco_nav").hide();
 				
 				if (opener)

@@ -33,10 +33,10 @@
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("subtitles")) { %>
 	<c:if test="${video.existSubtitlesFileList}">
-		<span class="${cssClass} exist" onclick="fnEditSubtitles('${video.opus}')">${mode eq 's' ? 's' : 'smi'}</span>
+		<span class="${cssClass} exist" onclick="fnEditSubtitles('${video.opus}')">${mode eq 's' ? 'S' : 'Subtitles'}</span>
 	</c:if>
 	<c:if test="${!video.existSubtitlesFileList}">
-		<span class="${cssClass} nonExist">${mode eq 's' ? 's' : 'smi'}</span>
+		<span class="${cssClass} nonExist">${mode eq 's' ? 'S' : 'Subtitles'}</span>
 	</c:if>	
 <%  } else if (view.equalsIgnoreCase("overview")) { %>
 	<span class="${cssClass}" title="${video.overviewText}" id="overview-${video.opus}" style="${video.existOverview ? 'color:red' : ''}" onclick="fnEditOverview('${video.opus}', event)">${mode eq 's' ? 'O' : (video.existOverview ? video.overviewText : 'Overview')}</span>
@@ -48,7 +48,6 @@
 	<c:forEach items="${video.actressList}" var="actress">
 		<c:if test="${mode eq 'f'}">
 			<span class="${cssClass} ${actress.favorite ? 'favorite' : ''}">
-<%-- 				 ${actress.favorite ? 'favorite' : ''}" style="margin:0 2px;"> --%> 
 				<span class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'}" title="Favorite ${actress.favorite}" onclick="fnFavorite(this, '${actress.name}')"></span>
 				<span onclick="fnViewActressDetail('${actress.name}')">${actress}</span>
 			</span>	

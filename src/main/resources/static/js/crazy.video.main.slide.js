@@ -68,7 +68,8 @@
 	    	else
 	    		$(this).hide();
 	    });
-		$(".slidesjs-slide[slidesjs-index='" + index + "'] > div").randomBG(0.5);
+	    if (listViewType !== 'Vertical')
+	    	$(".slidesjs-slide[slidesjs-index='" + index + "'] > div").randomBG(0.5);
 		setLocalStorageItem(THUMBNAMILS_COVER_INDEX, index);
 		
 		var slideNo = index + 1;

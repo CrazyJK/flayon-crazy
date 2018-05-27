@@ -17,8 +17,12 @@ div.box-cover {
 	width: 1000px;
 	height: 688px;
 	background-position: center center;
-    background-size: cover;
     background-repeat: no-repeat;
+	background-color: transparent;
+    background-size: cover;
+    margin: 0 5px;
+    border-radius: 4px;
+	box-shadow: 0 0px 8px rgba(0,0,0,.75) inset;
 }
 
 dl.video-info {
@@ -45,7 +49,7 @@ dl.video-info > dd.actress {
 	max-height: 150px;
 }
 dl.video-info > dd.tags {
-	font-size: 26px;
+	font-size: 20px;
 }
 
 .rank-range {

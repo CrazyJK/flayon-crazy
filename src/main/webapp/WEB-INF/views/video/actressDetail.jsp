@@ -43,7 +43,7 @@ function searchActressInfo() {
 		<input type="hidden" name="FAVORITE" id="favorite" value="${actress.favorite}"/>
 		<div class="form-group">
 			<div class="col-sm-2 text-right">
-				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="glyphicon glyphicon-star${actress.favorite ? '' : '-empty'} text-danger lead"></span>
+				<span id="favoriteTEXT" onclick="fnFavorite(this, '${actress.name}')" class="glyphicon glyphicon-star${actress.favorite ? ' favorite' : '-empty'} text-danger lead"></span>
 			</div>
 			<div class="col-sm-4">
 				<input class="form-control" type="text" name="NEWNAME" value="${actress.name}" id="newName"/>

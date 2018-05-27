@@ -269,8 +269,9 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 					<div id="opus-${video.opus}" data-index="${status.index}" class="slidesjs-slide" style="display:none;">
-						<div class="box box-small box-detail">
+						<div class="box-detail"><!-- box box-small -->
 							<dl class="video-info">
+							    <dd class="tags"   ><jk:video video="${video}" view="tags"      mode="l" tagList="${tagList}"/></dd>
 								<dd class="info"   ><jk:video video="${video}" view="score"     mode="l"/></dd>
 								<dd class="info"   ><jk:video video="${video}" view="studio"    mode="l"/></dd>
 								<dd class="info"   ><jk:video video="${video}" view="opus"      mode="l"/></dd>
@@ -280,16 +281,15 @@ listViewType = '${videoSearch.listViewType}';
 								<dd class="action" ><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 								<dd class="info"   ><jk:video video="${video}" view="download"  mode="l"/></dd>
 								<dd class="action" ><jk:video video="${video}" view="overview"  mode="l"/></dd>
-								<dd class="actress"><jk:video video="${video}" view="actress"   mode="l"/></dd>
 								<dd class="rank"   ><jk:video video="${video}" view="rank"      mode="l"/></dd>
 								<dt class="title nowrap"><jk:video video="${video}" view="title"/></dt>
 							</dl>
 						</div>
-						<div class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');" 
+						<div class="box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');" 
 								onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')"></div>
-						<div class="box box-small box-detail">
-							<dl class="video-info video-info-tags">
-							    <dd class="tags"><jk:video video="${video}" view="tags"     mode="l" tagList="${tagList}"/></dd>
+						<div class="box-tags">
+							<dl class="video-info">
+								<dd class="actress"><jk:video video="${video}" view="actress"   mode="l"/></dd>
 							</dl>
 						</div>
 					</div>

@@ -36,7 +36,7 @@ nav#deco_nav > ul.nav-pills > li > a {
 	text-decoration: none;
 	border-radius: 0 0 4px 4px;
 }
-nav#deco_nav > ul.nav-pills > li > a[id] {
+nav#deco_nav > ul.nav-pills > li > a[id]:not(#main) {
 	color: #d02f6b;
 	cursor: pointer;
 }
@@ -81,7 +81,6 @@ div#content_div {
 	overflow:auto; 
 	background-position:center center; 
 	background-size:contain;
-	margin-bottom: 0;
 }
 div#header_div, div#content_div, dl.box.box-small, div.box.box-small {
 	transition: background .5s, box-shadow .5s .5s, border .5s 1s;
