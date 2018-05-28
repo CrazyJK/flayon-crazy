@@ -129,8 +129,12 @@ var calculatedDivHeight = 0,
 	 * @param opus
 	 */
 	fnCoverView = function(opus) {
-		console.log("Cover image view : " + opus);
-		popupImage(PATH + "/video/" + opus + "/cover");
+		var url = PATH + "/video/" + opus + "/cover";
+		var img = new Image();
+		img.onload = function() {
+			popup(url, opus + 'cover', this.naturalWidth, this.naturalHeight, 'Center');
+		};
+		img.src = url;
 	},
 	/**
 	 * popup overview editer

@@ -52,7 +52,7 @@ $(document).ready(function() {
 	
 	$(".label-etcfile").on("click", function() {
 		var file = $(this).attr("data-file");
-		restCall(PATH + '/rest/video/file/out', {method: "PUT", data: {"file": file}, title: "move subtitle to root"});
+		restCall(PATH + '/rest/file/out', {method: "PUT", data: {"file": file}, title: "move subtitle to root"});
 	});
 });
 function renameVideoName() {

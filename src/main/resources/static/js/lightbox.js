@@ -472,7 +472,7 @@
 	    	} else {
 	    		$caption.html(this.album[this.currentImageIndex].title);
 	    	}
-	    	$caption.fadeIn('fast').find('a').on('click', function(event) {
+	    	$caption.fadeIn('fast').find('a').data('imgNo', this.currentImageIndex).on('click', function(event) {
 	    		if ($(this).attr('target') !== undefined) {
 	    			popupImage($(this).attr('href'), $(this).attr('target'));
 	    		} else {

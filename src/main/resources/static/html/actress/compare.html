@@ -2,8 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Actress comparison</title>
 <style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+}
 iframe {
     display: inline-block;
     width: 50%;
@@ -16,13 +21,13 @@ iframe {
 </style>
 </head>
 <body>
-<iframe id="actress1Frame" src=""></iframe>
-<iframe id="actress2Frame" src=""></iframe>
+	<iframe id="actress1Frame" src=""></iframe>
+	<iframe id="actress2Frame" src=""></iframe>
 
-<script type="text/javascript">
-var url = new URL(location);
-document.getElementById("actress1Frame").src = "/video/actress/" + url.searchParams.get("actress1");
-document.getElementById("actress2Frame").src = "/video/actress/" + url.searchParams.get("actress2");
-</script>
+	<script type="text/javascript">
+	var url = new URL(location);
+	document.getElementById("actress1Frame").setAttribute('src', "/video/actress/" + url.searchParams.get("actress1"));
+	document.getElementById("actress2Frame").setAttribute('src', "/video/actress/" + url.searchParams.get("actress2"));
+	</script>
 </body>
 </html>

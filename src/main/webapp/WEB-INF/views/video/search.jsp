@@ -252,7 +252,7 @@ function fnDownloadPageImage() {
 						$("<li>").addClass("text-info").html(result.images.length + " images"),		
 						$("<li>").addClass("text-primary btn-link pointer").append(
 								$("<span>").on("click", function() {
-									fsOpen(result.localPath);
+									openFolder(result.localPath);
 								}).html(result.localPath)
 						)
 				)

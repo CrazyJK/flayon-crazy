@@ -65,10 +65,12 @@ var canvasApp = (function() {
 					$("#cv").attr("height", $(window).height() - $("#img-nav").outerHeight() - margin * 3);
 				},
 				popup: function() {
-					if (imageSource.value == 0)
-						popupImage(image.canvas.url());
-					else
+					if (imageSource.value == 0) {
+//						popupImage(image.canvas.url());
+						popupImageByNo(imageIndex);
+					} else {
 						fnVideoDetail(coverNameMap[coverIndex]);
+					}
 				},
 				url: function() {
 					return imageSource.value == 0 ? PATH + "/image/" + imageIndex : PATH + "/video/" + coverNameMap[coverIndex] + "/cover";

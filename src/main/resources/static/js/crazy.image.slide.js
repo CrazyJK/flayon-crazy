@@ -125,7 +125,8 @@ var slide = (function() {
 			},
 			popup: function() {
 				if (imageSource.value == 0) { // image
-					popupImage(selectedItemUrl);
+//					popupImage(selectedItemUrl);
+					popupImageByNo(currentIndex);
 				}
 				else {
 					fnVideoDetail(coverMap[currentIndex]);

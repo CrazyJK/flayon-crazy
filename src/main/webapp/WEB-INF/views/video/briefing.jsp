@@ -71,7 +71,7 @@ $(document).ready(function() {
 					<c:choose>
 						<c:when test="${path.key ne 'Total'}">
 					<tr>
-						<td><a href="javascript:fsOpen('${fn:replace(path.key, '\\', '/')}')" title="open this folder">${path.key}</a></td>
+						<td><a href="javascript:openFolder('${fn:replace(path.key, '\\', '/')}')" title="open this folder">${path.key}</a></td>
 						<td class="text-right"><span class="videoCount"><fmt:formatNumber value="${path.value[0]}" type="NUMBER"/></span></td>
 						<td class="text-right"><span class="videoSize"><fmt:formatNumber value="${path.value[1] / ONE_GB}" pattern="#,##0 GB"/></span></td>
 					</tr>

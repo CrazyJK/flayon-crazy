@@ -86,7 +86,8 @@ var apertureApp = (function() {
 				},
 				popup: function fnFullyImageView() {
 					if (imageSource.value == 0) { // image
-						popupImage(selectedItemUrl);
+//						popupImage(selectedItemUrl);
+						popupImageByNo(currentIndex);
 					}
 					else {
 						fnVideoDetail(coverMap[currentIndex]);

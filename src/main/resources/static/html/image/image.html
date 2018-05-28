@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Image view</title>
+<style type="text/css">
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: #000;
+}
+img {
+	display: block;
+	margin: auto;
+}
+.img-responsive {
+	max-width: 100%;
+	max-height: 100%;
+}
+#info {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding: 2px;
+	text-align: right;
+	background-color: rgba(0, 0, 0, .5);
+	border-top-left-radius: 4px;
+	display: none;	
+}
+#info > span {
+	margin: 2px;
+	display: inline-block;
+	font-size: 14px;
+	color: #eee;
+	text-shadow: 1px 1px 2px #111;
+	transition: all .3s;
+}
+#info > span#path {
+    cursor: pointer;
+}
+#info > span#path:hover {
+    color: OrangeRed;
+    text-shadow: 1px 1px 2px #2d2d2d;
+}
+#info > span#moveOut {
+	float: right;
+	padding: 0 2px;
+    cursor: pointer;
+}
+#info > span#moveOut:hover {
+    color: #f00;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #4c4c4c;
+}
+#info > span#iname {
+	color: yellow;
+}
+#info > span#length, 
+#info > span#lastModified {
+	font-size: 80%;
+}
+</style>
+<script type="text/javascript">
+var url = new URL(location);
+var src  = url.searchParams.get("src");
+var no   = url.searchParams.get("no");
+var PATH = url.searchParams.get("p");
+if (PATH == null) PATH = '';
+
+var app = (function() {
+	var url = new URL(location);
+	var util = {
+			getParam: function(paramName, defaultValue) {
+				var val = url.searchParams.get(paramName);
+				return val == null ? (defaultValue ? defaultValue : null) : val;
+			},
+			ajax: function(method, url, params, callback) {
+	        	var xhr = new XMLHttpRequest();
+	        	xhr.open(method, url);
+	        	xhr.setRequestHeader('Content-Type', 'application/json');
+	        	xhr.onload = function() {
+	        	    if (xhr.status === 200 || xhr.status === 204) {
+	        	    	if (callback)
+	        		    	callback(xhr.responseText);
+	        	    } else {
+	        	        alert('Request failed.  Returned status of ' + xhr.status);
+	        	    }
+	        	};
+	        	xhr.send(params);
+	        },
+	        getElement: function(selector) {
+	        	if (selector.startsWith("#"))
+		        	return document.getElementById(selector.substring(1));
+	        }
+	};
+	var viewImage = function() {
+		var image = document.getElementById("image");
+		var src = util.getParam("src");
+		var no  = util.getParam("no");
+		if (src) {
+			image.setAttribute('src', src);		
+		} else if (no) {
+			image.setAttribute('src', PATH + '/image/' + no);
+		} else {
+			alert("No image");
+		}
+		image.addEventListener("click", function() { 
+			this.classList.toggle('img-responsive');
+		});
+	};
+	var viewImageInfo = function() {
+		var no  = util.getParam("no");
+		if (no == null) {
+			return;
+		}
+		
+        var info         = util.getElement("#info"); 
+        var moveOut      = util.getElement("#moveOut");
+        var path         = util.getElement("#path"); 
+        var iname        = util.getElement("#iname"); 
+        var length       = util.getElement("#length"); 
+        var lastModified = util.getElement("#lastModified");
+
+        util.ajax('GET', '/rest/image/info/' + no, '', function(responseText) {
+	    	var imgInfo = JSON.parse(responseText);
+    		var KB = 1024, MB = KB * KB, GB = MB * KB, TB = GB * KB;
+	    	var formatFileSize = function(length) {
+	    		if (length < KB)	    return length + " bytes";
+	    		else if (length < MB)	return (length / KB).toFixed(0) + " kB";
+	    		else if (length < GB)	return (length / MB).toFixed(1) + " MB";
+	    		else	    			return length;
+	    	};
+	        
+	    	        document.title = imgInfo.name;
+	                path.innerHTML = imgInfo.path;
+	               iname.innerHTML = imgInfo.name;
+	              length.innerHTML = formatFileSize(imgInfo.length);
+	        lastModified.innerHTML = new Date(imgInfo.lastModified).toLocaleDateString();
+	            info.style.display = 'block';
+
+	        // open folder
+	        path.addEventListener("click", function() {
+	        	util.ajax('PUT', PATH + '/flayon/openFolder?folder=' + imgInfo.path);
+	        });
+	        
+	        // move out
+	        moveOut.addEventListener("click", function() {
+	        	if (confirm('move this file to Root Directory?'))
+		        	util.ajax('PUT', PATH + '/rest/file/out?file=' + imgInfo.path + '/' + imgInfo.name);
+	        });
+        });
+	};
+	
+	return {
+		start: function() {
+			viewImage();
+			viewImageInfo();
+		}
+	}
+}());
+
+window.onload = function() {
+	app.start();
+};
+
+/*
+window.onload = function() {
+	var image = document.getElementById("image");
+
+	// toggle class
+	image.addEventListener("click", function() { 
+		this.classList.toggle('img-responsive');
+	});
+	
+	if (src) {
+		image.setAttribute('src', src);		
+	} 
+	else if (no) {
+		image.setAttribute('src', PATH + '/image/' + no);
+		
+        var info         = document.getElementById("info"); 
+        var moveOut      = document.getElementById("moveOut");
+        var path         = document.getElementById("path"); 
+        var iname        = document.getElementById("iname"); 
+        var length       = document.getElementById("length"); 
+        var lastModified = document.getElementById("lastModified");
+        var ajax = function(method, url, params, callback) {
+        	var xhr = new XMLHttpRequest();
+        	xhr.open(method, url);
+        	xhr.setRequestHeader('Content-Type', 'application/json');
+        	xhr.onload = function() {
+        	    if (xhr.status === 200 || xhr.status === 204) {
+        	    	if (callback)
+        		    	callback(xhr.responseText);
+        	    } else {
+        	        alert('Request failed.  Returned status of ' + xhr.status);
+        	    }
+        	};
+        	xhr.send(params);
+        };
+
+        ajax('GET', '/rest/image/info/' + no, '', function(responseText) {
+	    	var imgInfo = JSON.parse(responseText);
+    		var KB = 1024, MB = KB * KB, GB = MB * KB, TB = GB * KB;
+	    	var formatFileSize = function(length) {
+	    		if (length < KB)	    return length + " bytes";
+	    		else if (length < MB)	return (length / KB).toFixed(0) + " kB";
+	    		else if (length < GB)	return (length / MB).toFixed(1) + " MB";
+	    		else	    			return length;
+	    	};
+	        
+	    	        document.title = imgInfo.name;
+	                path.innerHTML = imgInfo.path;
+	               iname.innerHTML = imgInfo.name;
+	              length.innerHTML = formatFileSize(imgInfo.length);
+	        lastModified.innerHTML = new Date(imgInfo.lastModified).toLocaleDateString();
+	            info.style.display = 'block';
+
+	        // open folder
+	        path.addEventListener("click", function() {
+	        	ajax('PUT', PATH + '/flayon/openFolder?folder=' + imgInfo.path);
+	        });
+	        
+	        // move out
+	        moveOut.addEventListener("click", function() {
+	        	if (confirm('move this file to Root Directory?'))
+		        	ajax('PUT', PATH + '/rest/file/out?file=' + imgInfo.path + '/' + imgInfo.name);
+	        });
+        });
+	}
+};
+*/
+</script>
+</head>
+<body>
+
+	<img id="image" class="img-responsive"/>
+	<div id="info">
+		<span id="moveOut">&times;</span>
+		<span id="path"></span>
+		<span id="iname"></span>
+		<span id="length"></span>
+		<span id="lastModified"></span>
+	</div>
+
+</body>
+</html>

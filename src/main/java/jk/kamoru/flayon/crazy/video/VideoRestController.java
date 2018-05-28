@@ -1,13 +1,11 @@
 package jk.kamoru.flayon.crazy.video;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jk.kamoru.flayon.base.util.IOUtils;
 import jk.kamoru.flayon.crazy.CrazyConfig;
-import jk.kamoru.flayon.crazy.CrazyException;
 import jk.kamoru.flayon.crazy.video.daemon.VideoBatch;
 import jk.kamoru.flayon.crazy.video.domain.History;
 import jk.kamoru.flayon.crazy.video.domain.HistoryData;
@@ -215,13 +211,4 @@ public class VideoRestController {
 		return historyService.getAll();
 	}
 
-	@RequestMapping(value="/file/out", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void outFile(@RequestParam("file") File file) {
-		try {
-			FileUtils.moveFileToDirectory(file, IOUtils.getRoot(file), false);
-		} catch (IOException e) {
-			throw new CrazyException("Fail to move", e);
-		}
-	}
 }

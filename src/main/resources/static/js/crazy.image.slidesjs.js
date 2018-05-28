@@ -106,7 +106,8 @@ bgContinue = false;
 			},
 			popup: function(e) {
 				if (imageSource.value == 0) { // image
-					popupImage(PATH + "/image/" + currentIndex);
+//					popupImage(PATH + "/image/" + currentIndex);
+					popupImageByNo(currentIndex);
 				}
 				else {
 					fnVideoDetail(coverMap[currentIndex]);

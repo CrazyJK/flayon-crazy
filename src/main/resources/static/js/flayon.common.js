@@ -32,36 +32,39 @@ var agent = navigator.userAgent.toLowerCase(),
 	popup = function(url, name, width, height, positionMethod, specs, event) {
 		//console.log("[popup] Call popup : ", url, name, width, height, positionMethod, specs, event);
 		var windowScreenWidth  = window.screen.width,
-			windowScreenHeight = window.screen.height,
-			left, top, position;
+			windowScreenHeight = window.screen.height;
+		var	left, top;
+		
 		name = name.replace(/-/gi, '');
 		width = width || windowScreenWidth / 2;
 		height = height || windowScreenHeight / 2;
-		try {
-			positionMethod && positionMethod === 'Mouse' 
-				? (position = {left: event.screenX, top: event.screenY})
-				: (position = {left: (windowScreenWidth  - width) / 2, top: (windowScreenHeight - height) / 2});
-		} catch(e) {
-			console.log("[popup] warn event.screen", e);
+		if (positionMethod && positionMethod === 'Mouse') {
+			left = event.screenX; 
+			top  = event.screenY;
+		} else {
+			left = (windowScreenWidth  - width) / 2; 
+			top  = (windowScreenHeight - height) / 2;
 		}
-		specs = "width=" + width + ",height=" + height + ",top=" + position.top + ",left=" + position.left + "," + (specs || DEFAULT_SPECS);
+		specs = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + "," + (specs || DEFAULT_SPECS);
 	
-		try {
-			var popupWindow = window.open(url, name, specs);
-			//console.log("[popup] open param", url, name, specs, popupWindow);
+		var popupWindow = window.open(url, name, specs);
+		if (popupWindow) {
 			popupWindow.focus();
-		} catch (e) {
-			console.log("[popup] error", e);
-			window.open(url, name, specs);
 		}
 	},
 	popupImage = function(url, name, event) {
-		//console.log("[popupImage]", url, name, event);
 		var img = new Image();
 		img.onload = function() {
-			popup(url, name || url, this.naturalWidth + 20, this.naturalHeight + 20, 'Center');
+			popup(PATH + '/html/image/image.html?src=' + url, name || url, this.naturalWidth, this.naturalHeight, 'Center');
 		};
 		img.src = url;
+	},
+	popupImageByNo = function(no, name) {
+		var img = new Image();
+		img.onload = function() {
+			popup(PATH + '/html/image/image.html?p=' + PATH + '&no=' + no, name || 'image' + no, this.naturalWidth, this.naturalHeight, 'Center');
+		};
+		img.src = PATH + '/image/' + no;
 	},
 	/**
 	 * @return 1 : wheel up, -1 : wheel down, 0 : undetermined
@@ -220,7 +223,7 @@ var agent = navigator.userAgent.toLowerCase(),
 	TB = GB * KB,
 	toFixed = function(num, x) {
 		return num.toFixed(x);
-	}
+	},
 	formatFileSize = function(length) {
 		if (typeof length === 'string')
 			length = parseInt(length);

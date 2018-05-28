@@ -54,7 +54,7 @@ input[type='text'].form-control {
     color: #fff;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1080px) {
 	.container-video-card {
     	width: 100%;
 	}

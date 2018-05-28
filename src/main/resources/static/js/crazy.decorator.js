@@ -244,7 +244,7 @@ var	resizeDivHeight = function() {
 	 * popup view background image
 	 */
 	popupBGImage = function() {
-		popupImage(currBGImageUrl, "bg-image");
+		popupImageByNo(currBGImageNo, "bg-image" + currBGImageNo);
 	},
 	restCall = function(url, args, callback) {
 		
@@ -295,7 +295,7 @@ var	resizeDivHeight = function() {
 	    $("#notice > p").html(desc);
 	    $("#notice").attr("title", title).dialog();
 	},
-	fsOpen = function(folder) {
+	openFolder = function(folder) {
 		restCall(PATH + '/flayon/openFolder', {method: "PUT", data: {folder: folder}, title: 'Open folder ' + folder});
 	};
 
