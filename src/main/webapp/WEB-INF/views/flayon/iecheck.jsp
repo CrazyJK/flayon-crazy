@@ -7,6 +7,7 @@
 <script type="text/javascript">
 var browser;
 var MSIE    = 'MSIE';
+var EDGE    = 'Edge';
 var CHROME  = 'Chrome';
 var FIREFOX = 'Firefox';
 var SAFARI  = 'Safari';
@@ -14,6 +15,8 @@ var SAFARI  = 'Safari';
 var agent = navigator.userAgent.toLowerCase();
 if (/trident/.test(agent) || /msie/.test(agent))
 	browser = MSIE;
+else if (/edge/.test(agent))
+	browser = EDGE;
 else if (/chrome/.test(agent))
 	browser = CHROME;
 else if (/firefox/.test(agent))

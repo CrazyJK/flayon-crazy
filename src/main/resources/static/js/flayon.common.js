@@ -1,12 +1,14 @@
 var agent = navigator.userAgent.toLowerCase(),
 	MSIE    = 'MSIE',
+	EDGE    = 'Edge',
 	CHROME  = 'Chrome',
 	FIREFOX = 'Firefox',
 	SAFARI  = 'Safari',
 	browser = /trident/.test(agent) || /msie/.test(agent) ? MSIE :
-		/chrome/.test(agent) ? CHROME :
-			/firefox/.test(agent) ? FIREFOX :
-				/safari/.test(agent) ? SAFARI :'Unknown',
+		/edge/.test(agent) ? EDGE : 
+			/chrome/.test(agent) ? CHROME :
+				/firefox/.test(agent) ? FIREFOX :
+					/safari/.test(agent) ? SAFARI :'Unknown',
 	WINDOWS = 'Windows',
 	LINUX   = 'Linux',
 	MAC     = 'Macintosh',
