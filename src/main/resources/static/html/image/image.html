@@ -14,7 +14,7 @@ img {
 	display: block;
 	margin: auto;
 }
-.img-responsive {
+img.img-responsive {
 	max-width: 100%;
 	max-height: 100%;
 }
@@ -62,175 +62,134 @@ img {
 }
 </style>
 <script type="text/javascript">
-var url = new URL(location);
-var src  = url.searchParams.get("src");
-var no   = url.searchParams.get("no");
-var PATH = url.searchParams.get("p");
-if (PATH == null) PATH = '';
+window.onload = function() {
+	app();
+};
 
 var app = (function() {
+	var GET = 'GET', PUT = 'PUT', POST = 'POST';
 	var url = new URL(location);
 	var util = {
 			getParam: function(paramName, defaultValue) {
 				var val = url.searchParams.get(paramName);
-				return val == null ? (defaultValue ? defaultValue : null) : val;
+				return val != null ? val : typeof defaultValue === 'string' ? defaultValue : null;
 			},
 			ajax: function(method, url, params, callback) {
-	        	var xhr = new XMLHttpRequest();
-	        	xhr.open(method, url);
-	        	xhr.setRequestHeader('Content-Type', 'application/json');
-	        	xhr.onload = function() {
-	        	    if (xhr.status === 200 || xhr.status === 204) {
+	        	var req = new XMLHttpRequest();
+	        	req.open(method, url, true);
+	        	req.setRequestHeader('Accept', 'application/json');
+	        	req.setRequestHeader('Cache-Control', 'no-cache');
+	        	req.setRequestHeader('Content-Type', [POST, PUT].includes(method) ? 'application/x-www-form-urlencoded' : '');
+	        	req.onload = function(event) {
+	        		// console.log('ajax:onload', method, url, req.status, event.loaded + 'B');
+	        		switch(req.status) {
+	        		case 200:
+	        		case 204:
 	        	    	if (callback)
-	        		    	callback(xhr.responseText);
-	        	    } else {
-	        	        alert('Request failed.  Returned status of ' + xhr.status);
-	        	    }
+	        		    	callback(req.responseText);
+	        	    	break;
+	        		case 400:
+	        		case 405:
+	        			if (req.getResponseHeader("error") === 'true') {
+	        				alert(req.status + ' ' + req.getResponseHeader("error.message") + " : " + req.getResponseHeader("error.cause"));
+	        			} else {
+		        			alert('response ' + req.status + "\n" + req.responseText);
+	        			}
+	        	    	break;
+	        	    default:
+	        	    	alert('Request failed.  Returned status of ' + req.status);
+	        		}
 	        	};
-	        	xhr.send(params);
+	        	req.send(params);
 	        },
-	        getElement: function(selector) {
-	        	if (selector.startsWith("#"))
-		        	return document.getElementById(selector.substring(1));
-	        }
+	        fillContent: function(selector, html, attributes, events) {
+	        	Array.from(document.querySelectorAll(selector)).forEach(dom => { 
+					// innerHTML
+		        	if (html != null) 
+		        		dom.innerHTML = html;
+		        	// attribute
+		        	if (attributes)
+		        		if (attributes instanceof Array)
+		        			Array.from(attributes).forEach(attribute => {
+				        		dom.setAttribute(attribute.K, attribute.V);
+				        	});
+		        		else
+		        			dom.setAttribute(attributes.K, attributes.V);
+		        	// event
+		        	if (events)
+		        		if (events instanceof Array)
+		        			Array.from(events).forEach(event => {
+		        				dom.addEventListener(event.type, event.listener);
+		        			});
+		        		else
+		        			dom.addEventListener(events.type, events.listener);
+				});
+	        },
+	        formatFileSize: function(length) {
+	    		var KB = 1024, MB = KB * KB, GB = MB * KB;
+	    		if (length < KB)	    return length + " bytes";
+	    		else if (length < MB)	return (length / KB).toFixed(0) + " kB";
+	    		else if (length < GB)	return (length / MB).toFixed(1) + " MB";
+	    		else	    			return length;
+	    	},
+	    	formatDate: function(milliseconds) {
+	    		return new Date(milliseconds).toLocaleDateString();
+	    	}
 	};
-	var viewImage = function() {
-		var image = document.getElementById("image");
-		var src = util.getParam("src");
-		var no  = util.getParam("no");
-		if (src) {
-			image.setAttribute('src', src);		
-		} else if (no) {
-			image.setAttribute('src', PATH + '/image/' + no);
-		} else {
-			alert("No image");
-		}
-		image.addEventListener("click", function() { 
-			this.classList.toggle('img-responsive');
-		});
-	};
-	var viewImageInfo = function() {
-		var no  = util.getParam("no");
+
+	return function() {
+		// parameter
+		var PATH = util.getParam("p", "");
+		var src  = util.getParam("src");
+		var no   = util.getParam("no");
+		var imgSrc = no ? PATH + '/image/' + no : src;
+		
+		// set image src, listener
+		util.fillContent("#image", null, [{K: 'src', V: imgSrc}], [{
+			type: "click", listener: function() { 
+				this.classList.toggle('img-responsive');
+			}
+		}]);
+
 		if (no == null) {
 			return;
 		}
-		
-        var info         = util.getElement("#info"); 
-        var moveOut      = util.getElement("#moveOut");
-        var path         = util.getElement("#path"); 
-        var iname        = util.getElement("#iname"); 
-        var length       = util.getElement("#length"); 
-        var lastModified = util.getElement("#lastModified");
 
-        util.ajax('GET', '/rest/image/info/' + no, '', function(responseText) {
-	    	var imgInfo = JSON.parse(responseText);
-    		var KB = 1024, MB = KB * KB, GB = MB * KB, TB = GB * KB;
-	    	var formatFileSize = function(length) {
-	    		if (length < KB)	    return length + " bytes";
-	    		else if (length < MB)	return (length / KB).toFixed(0) + " kB";
-	    		else if (length < GB)	return (length / MB).toFixed(1) + " MB";
-	    		else	    			return length;
-	    	};
-	        
-	    	        document.title = imgInfo.name;
-	                path.innerHTML = imgInfo.path;
-	               iname.innerHTML = imgInfo.name;
-	              length.innerHTML = formatFileSize(imgInfo.length);
-	        lastModified.innerHTML = new Date(imgInfo.lastModified).toLocaleDateString();
-	            info.style.display = 'block';
-
-	        // open folder
-	        path.addEventListener("click", function() {
-	        	util.ajax('PUT', PATH + '/flayon/openFolder?folder=' + imgInfo.path);
+		// set image infomation
+        util.ajax(GET, PATH + '/rest/image/info/' + no, null, function(responseText) {
+	    	var imageInfo = JSON.parse(responseText);
+			// #moveOut
+			util.fillContent("#moveOut", null, {K: 'title', V: 'move out'}, {
+				type: "click", listener: function() {
+		        	if (confirm('move this file to Root Directory?'))
+			        	util.ajax(PUT, PATH + '/rest/file/out', 'file=' + imageInfo.path + '/' + imageInfo.name);
+		        }
+			});
+	        // #path: open folder
+	        util.fillContent("#path", imageInfo.path, {K: 'title', V: 'Open folder'}, {
+	        	type: "click", listener: function() {
+		        	util.ajax(PUT, PATH + '/flayon/openFolder', 'folder=' + imageInfo.path);
+		        }
 	        });
-	        
-	        // move out
-	        moveOut.addEventListener("click", function() {
-	        	if (confirm('move this file to Root Directory?'))
-		        	util.ajax('PUT', PATH + '/rest/file/out?file=' + imgInfo.path + '/' + imgInfo.name);
-	        });
+			// #iname
+			util.fillContent("#iname", imageInfo.name);
+			// #length
+			util.fillContent("#length", util.formatFileSize(imageInfo.length));
+			// #lastModified
+			util.fillContent("#lastModified", util.formatDate(imageInfo.lastModified));
+			// image size
+   			var img = new Image();
+   			img.onload = function() {
+   				util.fillContent("#size", this.naturalWidth + ' x ' + this.naturalHeight);
+   				// title set
+   	   	        document.title = imageInfo.name + " " + this.naturalWidth + ' x ' + this.naturalHeight;
+   				// info display
+   				document.getElementById("info").style.display = 'block';
+   			};
+   			img.src = imgSrc;
         });
 	};
-	
-	return {
-		start: function() {
-			viewImage();
-			viewImageInfo();
-		}
-	}
 }());
-
-window.onload = function() {
-	app.start();
-};
-
-/*
-window.onload = function() {
-	var image = document.getElementById("image");
-
-	// toggle class
-	image.addEventListener("click", function() { 
-		this.classList.toggle('img-responsive');
-	});
-	
-	if (src) {
-		image.setAttribute('src', src);		
-	} 
-	else if (no) {
-		image.setAttribute('src', PATH + '/image/' + no);
-		
-        var info         = document.getElementById("info"); 
-        var moveOut      = document.getElementById("moveOut");
-        var path         = document.getElementById("path"); 
-        var iname        = document.getElementById("iname"); 
-        var length       = document.getElementById("length"); 
-        var lastModified = document.getElementById("lastModified");
-        var ajax = function(method, url, params, callback) {
-        	var xhr = new XMLHttpRequest();
-        	xhr.open(method, url);
-        	xhr.setRequestHeader('Content-Type', 'application/json');
-        	xhr.onload = function() {
-        	    if (xhr.status === 200 || xhr.status === 204) {
-        	    	if (callback)
-        		    	callback(xhr.responseText);
-        	    } else {
-        	        alert('Request failed.  Returned status of ' + xhr.status);
-        	    }
-        	};
-        	xhr.send(params);
-        };
-
-        ajax('GET', '/rest/image/info/' + no, '', function(responseText) {
-	    	var imgInfo = JSON.parse(responseText);
-    		var KB = 1024, MB = KB * KB, GB = MB * KB, TB = GB * KB;
-	    	var formatFileSize = function(length) {
-	    		if (length < KB)	    return length + " bytes";
-	    		else if (length < MB)	return (length / KB).toFixed(0) + " kB";
-	    		else if (length < GB)	return (length / MB).toFixed(1) + " MB";
-	    		else	    			return length;
-	    	};
-	        
-	    	        document.title = imgInfo.name;
-	                path.innerHTML = imgInfo.path;
-	               iname.innerHTML = imgInfo.name;
-	              length.innerHTML = formatFileSize(imgInfo.length);
-	        lastModified.innerHTML = new Date(imgInfo.lastModified).toLocaleDateString();
-	            info.style.display = 'block';
-
-	        // open folder
-	        path.addEventListener("click", function() {
-	        	ajax('PUT', PATH + '/flayon/openFolder?folder=' + imgInfo.path);
-	        });
-	        
-	        // move out
-	        moveOut.addEventListener("click", function() {
-	        	if (confirm('move this file to Root Directory?'))
-		        	ajax('PUT', PATH + '/rest/file/out?file=' + imgInfo.path + '/' + imgInfo.name);
-	        });
-        });
-	}
-};
-*/
 </script>
 </head>
 <body>
@@ -240,6 +199,7 @@ window.onload = function() {
 		<span id="moveOut">&times;</span>
 		<span id="path"></span>
 		<span id="iname"></span>
+		<span id="size"></span>
 		<span id="length"></span>
 		<span id="lastModified"></span>
 	</div>
