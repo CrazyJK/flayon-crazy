@@ -4,23 +4,23 @@ var agent = navigator.userAgent.toLowerCase(),
 	CHROME  = 'Chrome',
 	FIREFOX = 'Firefox',
 	SAFARI  = 'Safari',
-	browser = /trident/.test(agent) || /msie/.test(agent) ? MSIE :
-		/edge/.test(agent) ? EDGE : 
-			/chrome/.test(agent) ? CHROME :
-				/firefox/.test(agent) ? FIREFOX :
-					/safari/.test(agent) ? SAFARI :'Unknown',
+	browser = /trident/i.test(agent) || /msie/i.test(agent) ? MSIE :
+		/edge/i.test(agent) ? EDGE : 
+			/chrome/i.test(agent) ? CHROME :
+				/firefox/i.test(agent) ? FIREFOX :
+					/safari/i.test(agent) ? SAFARI :'Unknown',
 	WINDOWS = 'Windows',
 	LINUX   = 'Linux',
 	MAC     = 'Macintosh',
 	IPHONE  = 'iPhone',
 	IPAD    = 'iPad',
 	ANDROID = 'Android',
-	system = /Windows/.test(agent) ? WINDOWS :
-		/linux/.test(agent) ? LINUX :
-			/macintosh/.test(agent) ? MAC :
-				/iphone/.test(agent) ? IPHONE :
-					/ipad/.test(agent) ? IPAD :
-						/android/.test(agent) ? ANDROID : 'Unknown',
+	system = /Windows/i.test(agent) ? WINDOWS :
+		/linux/i.test(agent) ? LINUX :
+			/macintosh/i.test(agent) ? MAC :
+				/iphone/i.test(agent) ? IPHONE :
+					/ipad/i.test(agent) ? IPAD :
+						/android/i.test(agent) ? ANDROID : 'Unknown',
 	DEFAULT_SPECS = "toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1",
 	/**
 	 * 팝업창을 띄운다. 
@@ -36,7 +36,7 @@ var agent = navigator.userAgent.toLowerCase(),
 		var windowScreenWidth  = window.screen.width,
 			windowScreenHeight = window.screen.height;
 		var	left, top;
-		
+
 		name = name.replace(/-/gi, '');
 		width = width || windowScreenWidth / 2;
 		height = height || windowScreenHeight / 2;
@@ -47,12 +47,13 @@ var agent = navigator.userAgent.toLowerCase(),
 			left = (windowScreenWidth  - width) / 2; 
 			top  = (windowScreenHeight - height) / 2;
 		}
-		specs = "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + "," + (specs || DEFAULT_SPECS);
+		specs = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top + "," + (specs || DEFAULT_SPECS);
 	
 		var popupWindow = window.open(url, name, specs);
 		if (popupWindow) {
 			popupWindow.focus();
 		}
+		//console.log('popup', width, height, left, top);
 	},
 	popupImage = function(url, name, event) {
 		var img = new Image();

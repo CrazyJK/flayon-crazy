@@ -289,8 +289,8 @@ function fnDownloadPageImage() {
 
 		<button class="btn btn-xs btn-info" onclick="$('#pageImageDownloader').toggle(0, resizeDivHeight);">Page Image Downloader <span class="caret"></span></button>
 
-		<span id="url"       class="label label-info"></span>
-		<span id="searchURL" class="label label-primary"></span>
+		<span id="url"       class="label label-info hide"></span>
+		<span id="searchURL" class="label label-primary hide"></span>
 
 		<span class="close" style="margin-left:10px;" onclick="parent.viewInnerSearchPage()">&times;</span>
 

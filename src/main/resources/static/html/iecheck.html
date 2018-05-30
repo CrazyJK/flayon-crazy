@@ -14,13 +14,13 @@ var FIREFOX = 'Firefox';
 var SAFARI  = 'Safari';
 
 var agent = navigator.userAgent.toLowerCase();
-if (/trident/.test(agent) || /msie/.test(agent))
+if (/trident/i.test(agent) || /msie/i.test(agent))
 	browser = MSIE;
-else if (/chrome/.test(agent))
+else if (/chrome/i.test(agent))
 	browser = CHROME;
-else if (/firefox/.test(agent))
+else if (/firefox/i.test(agent))
 	browser = FIREFOX;
-else if (/safari/.test(agent))
+else if (/safari/i.test(agent))
 	browser = SAFARI;
 else 
 	browser = 'Unknown';
@@ -33,19 +33,17 @@ var IPHONE  = 'iPhone';
 var IPAD    = 'iPad';
 var ANDROID = 'Android';
 
-if (/Windows/.test(agent))
+if (/windows/i.test(agent))
 	system = WINDOWS;
-else if (/windows/.test(agent))
-	system = WINDOWS;
-else if (/linux/.test(agent))
+else if (/linux/i.test(agent))
 	system = LINUX;
-else if (/macintosh/.test(agent))
+else if (/macintosh/i.test(agent))
 	system = MAC;
-else if (/iphone/.test(agent))
+else if (/iphone/i.test(agent))
 	system = IPHONE;
-else if (/ipad/.test(agent))
+else if (/ipad/i.test(agent))
 	system = IPAD;
-else if (/android/.test(agent))
+else if (/android/i.test(agent))
 	system = ANDROID;
 else
 	system = 'Unknown';

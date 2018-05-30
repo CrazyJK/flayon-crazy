@@ -183,7 +183,7 @@ var app = (function() {
 				IPHONE  = 'iPhone',
 				IPAD    = 'iPad',
 				ANDROID = 'Android',
-				system = /Windows/.test(agent) ? WINDOWS :
+				system = /windows/i.test(agent) ? WINDOWS :
 					/linux/.test(agent) ? LINUX :
 						/macintosh/.test(agent) ? MAC :
 							/iphone/.test(agent) ? IPHONE :
@@ -212,7 +212,7 @@ var app = (function() {
 		    			margin.height = 45;
 		    		}
 	    		}
-	    		// console.log(system, browser, margin);
+	    		console.log(system, browser, margin, agent);
 	    		return margin;
 	    	}
 	};
