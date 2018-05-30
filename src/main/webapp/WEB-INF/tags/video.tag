@@ -93,7 +93,7 @@
 		<span class="${cssClass}" onclick="fnVideoWrong('${video.opus}')" title="video file remove">Wrong</span>
 	</c:if>
 <%  } else if (view.equalsIgnoreCase("rank")) { %>
-	<c:if test="${mode ne 's'}">
+	<c:if test="${mode eq 'l'}">
 		<div style="margin:0; display:inline-block;" class="form-inline">
 			<div class="input-group rank-group">
 				<input type="range" id="Rank-${video.opus}" name="rankPoints" class="form-control rank-range" data-opus="${video.opus}" min="${minRank}" max="${maxRank}" value="${video.rank}" onmouseup="fnRank('${video.opus}')" />
