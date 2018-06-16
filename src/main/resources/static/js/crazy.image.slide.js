@@ -76,7 +76,7 @@ var slide = (function() {
 					$(this).empty().append(
 							$("<img>", {
 								src: selectedItemUrl,
-								class: 'img-rounded'
+								class: 'img-rounded centered'
 							})
 					).show(showEffect, showOptions, showDuration);
 				});

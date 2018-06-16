@@ -15,7 +15,8 @@
 	background-position: center center;
 }
 #imageDiv > img {
-	height: 100%;
+	height: initial;
+    width: 100%;
 }
 
 #thumbnailDiv {
