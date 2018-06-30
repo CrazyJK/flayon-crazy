@@ -31,8 +31,10 @@ public interface FLAYON {
 	/** encoding */
 	public static final String ENCODING = "UTF-8";
 
-	/** line.separator */
+	/** line.separator \r\n */
 	public static final String LINE = System.getProperty("line.separator");
+	
+	public static final String PATH = System.getProperty("file.separator");
 
 	/** runtime java version */
 	public static final String JAVA_VERSION = System.getProperty("java.specification.version", "");

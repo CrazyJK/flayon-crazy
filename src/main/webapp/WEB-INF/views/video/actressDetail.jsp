@@ -8,15 +8,29 @@
 <head>
 <title>${actress.name}</title>
 <link rel="stylesheet" href="${PATH}/css/videoCard-Detail.css"/>
+<style type="text/css">
+input[type=file] {
+    background-color: rgba(47, 187, 140, 0.5);
+    border-color: rgba(47, 187, 140, 1);
+    color: #fff;
+}
+</style>
 <script type="text/javascript">
 bgContinue = ${empty actress.image};
 var archive = ${actress.archive};
+var bgUrl = '${PATH}/video/actress/${actress.name}/cover';
 
 $(document).ready(function() {
 	!bgContinue && $("body").css({
-		background: "url('${PATH}/video/actress/${actress.name}/cover') center top repeat fixed #fff"
+		background: "url('" + bgUrl + "') center top repeat fixed #fff"
 	});	
 	archive && $("#favoriteTEXT, .btn").hide();
+
+	// catch input file event
+	$("#imageFile").on("change", function(e) {
+		e.preventDefault();
+		savePicture();
+	});
 });
 
 function saveActressInfo() {
@@ -32,6 +46,32 @@ function searchActressInfo() {
 	var name = $("#newName").val();
 	var localName = $("#localName").val();
 	popup('<c:url value="${urlSearchActress}"/>' + (localName != '' ? localName : name), 'infoActress', 1400, 900);
+}
+function savePicture() {
+	var formData =  new FormData($("#pictureUploadForm")[0]);
+	$.ajax({
+		type: "POST",
+		enctype: "multipart/form-data",
+		url: "/rest/actress/${actress.name}/picture",
+		data: formData,
+		processData: false,
+		contentType: false,
+		cache: false,
+		timeout: 600000,
+		success: function(data) {
+			console.log('success to save uploaded file', data);
+			bgContinue = false;
+			$("body").css({
+				background: "url('" + bgUrl + "?_t=" + new Date().getTime() + "') center top repeat fixed #fff"
+			});
+		},
+		error: function(e) {
+			displayNotice('Fail to Save uploaded', e.responseText);
+		}
+	});
+}
+function searchActressPicture() {
+	popup('https://www.google.co.kr/search?tbm=isch&q=${actress.name}', 'searchActressPicture', 900, 600);
 }
 </script>
 </head>
@@ -81,6 +121,18 @@ function searchActressInfo() {
 			</div>
 		</div>
 	</form>
+	
+	<div class="row">
+		<div class="col-sm-9">
+			<form id="pictureUploadForm" method="POST" enctype="multipart/form-data">
+				<input type="file" name="image" id="imageFile" class="form-control"/>
+			</form>
+		</div>
+		<div class="col-sm-3">
+			<button class="btn btn-default btn-block" onclick="searchActressPicture()">Search picture</button>
+		</div>
+	</div>
+	
 	
 	<h4>
 		<span class="label label-plain" onclick="$('.studio-list').toggleClass('hide')">Studio</span><span class="badge badge-plain">${fn:length(actress.studioList)}</span>

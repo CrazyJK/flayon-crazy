@@ -6,15 +6,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jk.kamoru.flayon.crazy.util.NameDistanceChecker;
 import jk.kamoru.flayon.crazy.util.NameDistanceChecker.CheckResult;
 import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.TitleValidator;
+import jk.kamoru.flayon.crazy.video.service.ActressPictureService;
 import jk.kamoru.flayon.crazy.video.service.VideoService;
 
 @RestController
@@ -22,6 +25,7 @@ import jk.kamoru.flayon.crazy.video.service.VideoService;
 public class ActressRestController {
 
 	@Autowired VideoService videoService;
+	@Autowired ActressPictureService actressPictureService;
 
 	@RequestMapping(method=RequestMethod.GET)
 	public List<Actress> list(
@@ -53,4 +57,10 @@ public class ActressRestController {
 		return NameDistanceChecker.check(videoService.getActressList(instance, archive).stream()
 				.filter(a -> !a.getName().equals(TitleValidator.AMATEUR)).collect(Collectors.toList()), limit);
 	}
+	
+	@PostMapping("{name}/picture")
+	public void handleFileUpload(@PathVariable String name, @RequestParam("image") MultipartFile multipartFile) {
+		actressPictureService.store(multipartFile, name);
+    }
+	
 }
