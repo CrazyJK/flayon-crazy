@@ -34,10 +34,18 @@ mark {
 	font-family: D2Coding;
 	border: 1px solid #cacaca;
 }
+div.output-title {
+	padding: 3px 0;
+}
 input#fullname.input-sm {
 	color: #337ab7;
 	width: 100% !important;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16) inset, 0 0 0 1px rgba(0,0,0,0.08) inset;
+	height: 22px;
+}
+input#rowname.input-sm {
+	color: #337ab7;
+	width: 100% !important;
 	height: 22px;
 }
 .save-history {
@@ -187,9 +195,32 @@ $(document).ready(function() {
 			}
 			fullname += '[' + value + ']';
 		});
-		$(".output-title > input").val(fullname);
+		$(".output-title > input#fullname").val(fullname);
 	});
 
+	// rowname parsing
+	$("#rowname").on("keyup", function(e) {
+		if (e.keyCode != 13)
+			return;
+		
+		var opus, title, name;
+		var rowname = $(this).val();
+		
+		var braceIndex = rowname.indexOf("]");
+		var minusIndex = rowname.lastIndexOf("-");
+		opus  = rowname.substring(0, braceIndex).trim();
+		title = rowname.substring(braceIndex + 1, minusIndex).trim();
+		name  = rowname.substring(minusIndex + 1).trim();
+		
+		$("#opus").val(opus).trigger("keyup");
+		//$("#title").val(title);
+		//$("#actress").val(name);
+		fnSearchOpus();
+		fnTranslate(title);
+		fnSearchActress(name);
+		
+		console.log(opus, braceIndex, title, minusIndex, name);
+	});
 	
 	$("#downloadDir").val(getLocalStorageItem("DOWNLOAD_LOCAL_PATH", ""));
 
@@ -311,6 +342,9 @@ function fnDownloadPageImage() {
 			</div>
 			<div class="output-title">
 				<input class="form-control input-sm" id="fullname" placeholder="Full name"/>
+			</div>
+			<div>
+				<input class="form-control input-sm" id="rowname" placeholder="Row name"/>
 			</div>
 		</div>
 

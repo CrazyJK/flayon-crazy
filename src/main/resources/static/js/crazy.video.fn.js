@@ -352,6 +352,10 @@ var calculatedDivHeight = 0,
 		showDebug("searchURL", urlSearchTorrent + query);
 		popup(urlSearchTorrent + query + '+FHD+torrent', 'torrentSearch', 900, 950);
 	},
+	fnTranslate = function(message) {
+		var translateURL = "https://translate.google.co.kr/?hl=ko&tab=wT#ja/ko/" + message;
+		popup(translateURL, 'translate', 1000, 500);
+	}
 	showDebug = function(debugDomId, msg) {
 		console.log('showDebug', debugDomId, msg);
 		var resultId = "copyResult";
