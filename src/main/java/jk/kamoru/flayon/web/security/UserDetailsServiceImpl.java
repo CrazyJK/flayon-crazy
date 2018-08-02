@@ -14,20 +14,20 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired private UserRepository userRepository;
-	
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.debug("loadUserByUsername [{}]", username);
 		List<User> foundUsers = userRepository.findByName(username);
+		log.debug("loadUserByUsername [{}] {} found", username, foundUsers.size());
+		
 		if (foundUsers.size() == 0) {
 			log.warn("User name not found");
 			throw new UsernameNotFoundException("User name not found");
-		}
-		else if (foundUsers.size() == 1) {
+		} else if (foundUsers.size() == 1) {
 			return foundUsers.get(0);
-		}
-		else { // foundUsers.size() > 1
+		} else { // size > 1
 			log.warn("User name is 2 over");
 			throw new UsernameNotFoundException("User name is 2 over");
 		}
