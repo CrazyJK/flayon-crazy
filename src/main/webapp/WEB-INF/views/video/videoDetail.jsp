@@ -87,7 +87,8 @@ function resizeSecondDiv() {
 		<dd><jk:video video="${video}" view="subtitles" mode="l"/></dd>
 		<dd><jk:video video="${video}" view="overview"  mode="l"/></dd>
 		<dd><span class="label label-plain ${empty video.etcInfo ? 'hide' : ''}">ETC info : ${video.etcInfo}</span></dd>
-		<dd><span class="label label-plain" onclick="$(this).next().toggleClass('hide')">Files <em id="filesize-${video.opus}"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
+		<dd><span class="label label-plain" onclick="$(this).next().next().toggleClass('hide')">Files <em id="filesize-${video.opus}"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0# GB"/></em></span>
+			<span class="label label-plain" onclick="openFolder('${fn:replace(video.delegatePath, '\\', '/')}')"><i class="glyphicon glyphicon-folder-open"></i></span>
 			<div class="box fileinfoDiv hide">
 				<c:forEach items="${video.videoFileList}" var="file">
 				<p class="video-file-p-${video.opus}"><span class="label label-info" onclick="opener.fnPlay('${video.opus}')">${file} <fmt:formatNumber value="${file.length()}" type="NUMBER"/></span></p>
