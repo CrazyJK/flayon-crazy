@@ -31,12 +31,28 @@ public interface FLAYON {
 	/** encoding */
 	public static final String ENCODING = "UTF-8";
 
+	/** current OS */
+	public static final OS CURRENT_OS = OS.getCurrentOS();
+	
 	/** line.separator \r\n */
 	public static final String LINE = System.getProperty("line.separator");
-	
+
+	/** file.separator */
 	public static final String PATH = System.getProperty("file.separator");
 
 	/** runtime java version */
 	public static final String JAVA_VERSION = System.getProperty("java.specification.version", "");
+
+	
+	static enum OS {
+		WINDOWS, LINUX, MAC, UNKNOWN;
+
+		static OS getCurrentOS() {
+			final String OSName = System.getProperty("os.name");
+			return OSName.equalsIgnoreCase(WINDOWS.name()) ? WINDOWS
+					: OSName.equalsIgnoreCase(LINUX.name()) ? LINUX
+							: OSName.equalsIgnoreCase(MAC.name()) ? MAC : UNKNOWN;
+		}
+	}
 
 }

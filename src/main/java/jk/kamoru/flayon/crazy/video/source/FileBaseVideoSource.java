@@ -133,7 +133,7 @@ public class FileBaseVideoSource implements VideoSource {
 			String      ext = IOUtils.getSuffix(file).toLowerCase();
 			try {
 				// Unnecessary file exclusion
-				if (VIDEO.OS_SYSTEM_FILENAMES.contains(filename) 
+				if (VIDEO.OS_SYSTEM_FILENAMEs.contains(filename) 
 						|| (VIDEO.SUFFIX_IMAGE.contains(ext) && file.getParentFile().getName().equals("_info"))
 						|| VIDEO.EXT_ACTRESS.equals(ext) 
 						|| VIDEO.EXT_STUDIO.equals(ext) 

@@ -8,7 +8,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -57,6 +56,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jk.kamoru.flayon.FLAYON;
 import jk.kamoru.flayon.base.BaseException;
+import jk.kamoru.flayon.base.CommandExecutor;
 import jk.kamoru.flayon.base.crypto.AES256;
 import jk.kamoru.flayon.base.crypto.RSA;
 import jk.kamoru.flayon.base.crypto.SHA;
@@ -76,6 +76,7 @@ public class FlayController {
 	@Autowired ApplicationContext context;
 	@Autowired AccessLogRepository accessLogRepository;
 	@Autowired Environment environment;
+	@Autowired CommandExecutor commandExecutor;
 
 	@RequestMapping("/requestMappingList")
 	public String requestMapping(Model model) {
@@ -303,40 +304,26 @@ public class FlayController {
 		}
 	}
 	
-	@RequestMapping("/exec")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void execCommand(@RequestParam(value="cmd") String cmd, 
-			@RequestParam(value="args", required=false, defaultValue="") final String args) {
-		log.info("cmd={}, args={}", cmd, args);
-		exec(new String[]{cmd, args});
-	}
-	
 	@RequestMapping(value="/openFolder", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void openFolder(@RequestParam(value="folder") String folder) {
-		String osName = System.getProperty("os.name");
-		log.info("open folder={} os.name={}", folder, osName);
-		if (StringUtils.containsIgnoreCase(osName, "Windows")) {
-			folder = StringUtils.replace(folder, "/", System.getProperty("file.separator"));
-			exec(new String[]{"explorer", folder});
-		}
-		else if (StringUtils.containsIgnoreCase(osName, "Linux")) {
-			folder = StringUtils.replace(folder, "/", System.getProperty("file.separator"));
-			exec(new String[]{"nemo", folder});
-		}
-		else {
+		folder = StringUtils.replace(folder, "/", FLAYON.PATH);
+		log.info("open folder={} current_os={}", folder, FLAYON.CURRENT_OS);
+
+		switch (FLAYON.CURRENT_OS) {
+		case WINDOWS:
+			commandExecutor.exec("explorer", folder);
+			break;
+		case LINUX:
+			commandExecutor.exec("nemo", folder);
+			break;
+		case MAC:
+			throw new FlayException("Not supported OS");
+		default:
 			throw new FlayException("no specified OS");
 		}
 	}
 
-	private void exec(String[] command) {
-		try {
-			Runtime.getRuntime().exec(command);
-		} catch (IOException e) {
-			throw new FlayException("execute error", e);
-		}
-	}
-	
 	static Map<String, Map<String, String>> cryptoMethods = new HashMap<>();
 	static {
 		

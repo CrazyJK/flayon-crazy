@@ -9,9 +9,8 @@ public interface VIDEO extends CRAZY {
 	public static final String EXT_ACTRESS = "actress";
 	public static final String EXT_STUDIO  = "studio";
 	public static final String EXT_INFO    = "info";
-	public static final String EXT_WEBP    = "webp";
 	
-	public static final String       OS_SYSTEM_FILENAMES = ".DS_Store desktop.ini";
+	public static final String       OS_SYSTEM_FILENAMEs = ".DS_Store desktop.ini";
 	public static final String     HISTORY_LOG_FILENAME  = "history.log";
 	public static final String        TAG_DATA_FILENAME  = "tag.data";
 	public static final String           WRONG_FILENAME  = "wrongFilenames.txt";
