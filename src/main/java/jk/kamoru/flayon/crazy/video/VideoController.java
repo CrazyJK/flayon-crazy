@@ -1,6 +1,5 @@
 package jk.kamoru.flayon.crazy.video;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,21 +71,13 @@ public class VideoController extends CrazyController {
 	public String videoMain(Model model, @ModelAttribute VideoSearch videoSearch) {
 		List<Video> videoList =  videoService.searchVideo(videoSearch);
 		
-		model.addAttribute("views", 		View.values());
-		model.addAttribute("sorts", 		Sort.values());
-		model.addAttribute("rankRange", 	videoService.getRankRange());
-		model.addAttribute("playRange", 	VideoUtils.getPlayRange(videoList));
-		model.addAttribute("videoList", 	videoList);
-		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringIfVideofile(videoList));
-		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList());
-			model.addAttribute("studioList", 	videoService.getStudioList());
-		}
-		else {
-			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
-			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
-		}
-		model.addAttribute("tagList", tagService.getTagListWithVideo());
+		model.addAttribute("views", 	View.values());
+		model.addAttribute("sorts", 	Sort.values());
+		model.addAttribute("rankRange", videoService.getRankRange());
+		model.addAttribute("playRange", VideoUtils.getPlayRange(videoList));
+		model.addAttribute("videoList", videoList);
+		model.addAttribute("opusArray", VideoUtils.getOpusArrayStyleStringIfVideofile(videoList));
+		model.addAttribute("tagList", 	tagService.getTagListWithVideo());
 
 		return "video/videoMain";
 	}
@@ -238,18 +229,10 @@ public class VideoController extends CrazyController {
 	public String videoArchive(Model model, @ModelAttribute VideoSearch videoSearch) {
 		List<Video> videoList =  videoService.searchVideoInArchive(videoSearch);
 
-		model.addAttribute("views", 		View.values());
-		model.addAttribute("sorts", 		Sort.values());
-		model.addAttribute("videoList", 	videoList);
-		if (videoSearch.isWholeActressStudioView()) {
-			model.addAttribute("actressList", 	videoService.getActressList(false, true));
-			model.addAttribute("studioList", 	videoService.getStudioList(false, true));
-		}
-		else {
-			model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
-			model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
-		}
-		model.addAttribute("tagList", tagService.getTagListWithVideo());
+		model.addAttribute("views", 	View.values());
+		model.addAttribute("sorts", 	Sort.values());
+		model.addAttribute("videoList", videoList);
+		model.addAttribute("tagList", 	tagService.getTagListWithVideo());
 		
 		return "video/videoArchive";
 	}

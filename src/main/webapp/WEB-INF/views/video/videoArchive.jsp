@@ -64,54 +64,7 @@ function fnViewBGImage() {
 			<span class="label" id="checkbox-sortReverse1">R</span>
 		</label>
 		<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method" style="width:80px;"/>
-		<!-- wholeActressStudioView -->
-		<label title="<s:message code="video.wholeActressStudioView"/>">
-			<form:checkbox path="wholeActressStudioView" cssClass="sr-only"/>
-			<span class="label" id="checkbox-wholeActressStudioView1">A</span>
-		</label>
-		<!-- viewStudioPanel -->
-		<label title="<s:message code="video.viewStudioPanel"/>">
-			<form:checkbox path="viewStudioDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewStudioDiv1" onclick="fnStudioDivToggle()">S</span>
-		</label>
-		<!-- viewActressDiv -->
-		<label title="<s:message code="video.viewActressPanel"/>">
-			<form:checkbox path="viewActressDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>	
-		</label>
-		<!-- viewTagDiv -->
-		<label title="<s:message code="video.viewTagPanel"/>">
-			<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
-		</label>
 		<button class="btn btn-xs btn-default" onclick="fnViewBGImage();" title="<s:message code="video.bgimage.title"/>"><s:message code="video.bgimage"/></button>
-
-
-
-		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(studioList)}</span></li>
-			<c:forEach items="${studioList}" var="studio" varStatus="studioStat">
-			<li>
-				<jk:studio studio="${studio}" view="label" count="${studioStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
-		<ul id="actressDiv" class="box list-inline" style="display:${videoSearch.viewActressDiv ? '' : 'none'}">
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(actressList)}</span></li>
-			<c:forEach items="${actressList}" var="actress" varStatus="actressStat">
-			<li>
-				<jk:actress actress="${actress}" view="label" count="${actressStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
-		<ul id="tagDiv" class="box list-inline" style="display:${videoSearch.viewTagDiv ? '' : 'none'}">
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(tagList)}</span></li>
-			<c:forEach items="${tagList}" var="tag" varStatus="tagStat">
-			<li>
-				<jk:tags tag="${tag}" view="label" count="${tagStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
 	</div>
 	</form:form>
 </div>
