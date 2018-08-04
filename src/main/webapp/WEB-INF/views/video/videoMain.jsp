@@ -133,7 +133,7 @@ listViewType = '${videoSearch.listViewType}';
 				<c:forEach items="${videoList}" var="video" varStatus="status">
 				<li>
 					<div id="opus-${video.opus}" class="video-box">
-						<dl style="background-image:url('${PATH}/video/${video.opus}/cover');">
+						<dl style="background-image:url('${PATH}/cover/video/${video.opus}');">
 							<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 							<dd><jk:video video="${video}" view="studio"    mode="s"/></dd>
 							<dd><jk:video video="${video}" view="opus"      mode="s"/></dd>
@@ -161,7 +161,7 @@ listViewType = '${videoSearch.listViewType}';
 				<li style="margin:5px;">
 					<div id="opus-${video.opus}" class="ih-item square colored top_to_bottom" style="width:400px; height:269px;">
 						<div>
-		        			<div class="img"><img class="lazy" src="${PATH}/video/${video.opus}/cover" style="height:253px;"></div>
+		        			<div class="img"><img class="lazy" src="${PATH}/cover/video/${video.opus}" style="height:253px;"></div>
 	    	    			<div class="info">
 	            				<h3 class="nowrap"><jk:video video="${video}" view="title" mode="s"/></h3>
 	            				<div>
@@ -285,7 +285,7 @@ listViewType = '${videoSearch.listViewType}';
 								<dt class="title nowrap"><jk:video video="${video}" view="title"/></dt>
 							</dl>
 						</div>
-						<div class="box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');" 
+						<div class="box-cover" style="background-image:url('${PATH}/cover/video/${video.opus}');" 
 								onclick="${video.existVideoFileList ? 'fnPlay' : 'fnSearchTorrent'}('${video.opus}')"></div>
 						<div class="box-tags">
 							<dl class="video-info">
@@ -314,7 +314,7 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 				<c:forEach items="${videoList}" var="video">
 					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">    
-						<video poster="${PATH}/video/${video.opus}/cover" src="<c:url value="${video.videoURL}" />"
+						<video poster="${PATH}/cover/video/${video.opus}" src="<c:url value="${video.videoURL}" />"
 							preload="none" width="800" height="540" controls="controls" class="video-js vjs-default-skin" data-setup="{}"
 							><%-- <source src="<c:url value="${video.videoURL}" />" type="video/mp4" ></source> --%>
 						</video>
@@ -366,7 +366,7 @@ listViewType = '${videoSearch.listViewType}';
 							<div id="slides" style="display: block;">
 							<c:forEach items="${videoList}" var="video" varStatus="status">
 								<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none;" class="slidesjs-slide">             
-									<dl class="box box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover'); height: 530px; margin: 6px;">
+									<dl class="box box-cover" style="background-image:url('${PATH}/cover/video/${video.opus}'); height: 530px; margin: 6px;">
 										<dt class="nowrap" style="height:510px;">
 											<span class="label label-plain video-title" title="${video.title}" onclick="fnVideoDetail('${video.opus}')" 
 												style="writing-mode:vertical-rl; padding:10px 10px; margin:5px auto; text-shadow: 0px 0px 5px #0c0c0c; color: #fff; font-weight: 700; background: rgba(51, 122, 183, .5)">${video.title}</span>
@@ -425,7 +425,7 @@ listViewType = '${videoSearch.listViewType}';
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video" varStatus="status">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;" data-index="${status.index}">
-							<dl class="box box-small box-cover" style="background-image:url('${PATH}/video/${video.opus}/cover');">
+							<dl class="box box-small box-cover" style="background-image:url('${PATH}/cover/video/${video.opus}');">
 								<dt class="nowrap" style="height: inherit;">
 									<jk:video video="${video}" view="title" css="label video-title_v"/>
 								</dt>
@@ -484,7 +484,7 @@ listViewType = '${videoSearch.listViewType}';
 				$("#aperture_${video.opus}")
 					.attr("onclick", "fnVideoDetail('${video.opus}')")
 					.aperture({
-						src:"${PATH}/video/${video.opus}/cover",
+						src:"${PATH}/cover/video/${video.opus}",
 						baseColor: getRandomColor(0.5),
 						outerMargin: "0 auto",
 						width: "200px",
@@ -505,7 +505,7 @@ listViewType = '${videoSearch.listViewType}';
 				<c:forEach items="${videoList}" var="video">
 					<div class="jk-video" id="opus-${video.opus}">
 						<div class="jk-video-inner">
-							<div class="jk-video-cover lazy-load" data-src="${PATH}/video/${video.opus}/cover">
+							<div class="jk-video-cover lazy-load" data-src="${PATH}/cover/video/${video.opus}">
 								<h3 class="jk-video-title">
 									<jk:video video="${video}" view="title" css="label"/>
 								</h3>

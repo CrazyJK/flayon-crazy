@@ -197,6 +197,7 @@ public class Video {
 	 * video 대표 파일
 	 * @return 대표 파일
 	 */
+	@JsonIgnore
 	public File getDelegateFile() {
 		if (this.isExistVideoFileList()) 
 			return this.getVideoFileList().get(0);

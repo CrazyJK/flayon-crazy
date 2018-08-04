@@ -38,7 +38,7 @@ public class MethodExecutionBeanPostProcessor implements BeanPostProcessor {
 	 * set bean properties. {key = beanName, value = methodName}
 	 * @param beans
 	 */
-	public void setBeans(Map<String, String> beans) {
+	public MethodExecutionBeanPostProcessor(Map<String, String> beans) {
 		Assert.notNull(beans, "'beans' must not be null");
 		this.beans = beans;
 		this.count = new AtomicInteger(0);

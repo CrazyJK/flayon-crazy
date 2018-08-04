@@ -22,7 +22,7 @@ function Video(idx, data) {
 	this.score        = data.score;
 //	this.scoreDesc    = data.scoreDesc;
 	this.fileLength   = data.length; 
-	this.coverURL     = PATH + "/video/" + data.opus + "/cover";
+	this.coverURL     = PATH + "/cover/video/" + data.opus;
 	// files
 //	this.videoFileList     = data.videoFileList;     // array
 //	this.subtitlesFileList = data.subtitlesFileList; // array
@@ -144,7 +144,7 @@ function Video(idx, data) {
 			var opus = $(this).data("opus");
 			$("#check-" + opus).addClass("found");
 			fnSearchTorrent(opus);
-//			popup(PATH + '/video/' + opus + '/cover/title', 'SearchTorrentCover', 800, 600);
+//			popup(PATH + '/cover/video/' + opus + '/title', 'SearchTorrentCover', 800, 600);
 		});
 	};
 }

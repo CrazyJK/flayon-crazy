@@ -44,7 +44,7 @@ var slide = (function() {
 					setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
 				}
 				else {
-					selectedItemUrl = PATH + "/video/" + coverMap[currentIndex] + "/cover";
+					selectedItemUrl = PATH + "/cover/video/" + coverMap[currentIndex];
 					selectedItemTitle = coverMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 				}
@@ -98,7 +98,7 @@ var slide = (function() {
 						thumbNo = itemCount + thumbNo;
 					if (thumbNo >= itemCount)
 						thumbNo = thumbNo - itemCount;
-					var itemUrl = imageSource.value == 0 ? PATH + "/image/" + thumbNo : PATH + "/video/" + coverMap[thumbNo] + "/cover";
+					var itemUrl = imageSource.value == 0 ? PATH + "/image/" + thumbNo : PATH + "/cover/video/" + coverMap[thumbNo];
 
 					$("<li>").append(
 							$("<div>", {

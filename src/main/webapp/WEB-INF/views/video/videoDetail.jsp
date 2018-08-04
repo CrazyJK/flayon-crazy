@@ -24,7 +24,7 @@ dt, dd {
 .dl-detail {
 	overflow: auto; 
 	margin: 0;
- 	background-image: url('${PATH}/video/${video.opus}/cover');
+ 	background-image: url('${PATH}/cover/video/${video.opus}');
 	background-position: center top;
 	background-attachment: fixed;
 	background-repeat: no-repeat;

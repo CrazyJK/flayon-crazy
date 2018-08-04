@@ -18,7 +18,7 @@ input[type=file] {
 <script type="text/javascript">
 bgContinue = ${empty actress.image};
 var archive = ${actress.archive};
-var bgUrl = '${PATH}/video/actress/${actress.name}/cover';
+var bgUrl = '${PATH}/cover/actress/${actress.name}';
 
 $(document).ready(function() {
 	!bgContinue && $("body").css({

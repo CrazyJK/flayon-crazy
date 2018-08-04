@@ -1,21 +1,12 @@
 package jk.kamoru.flayon.crazy.video;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,13 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jk.kamoru.flayon.base.util.IOUtils;
-import jk.kamoru.flayon.base.util.ImageUtils;
 import jk.kamoru.flayon.crazy.CrazyConfig;
 import jk.kamoru.flayon.crazy.CrazyController;
 import jk.kamoru.flayon.crazy.util.VideoUtils;
 import jk.kamoru.flayon.crazy.video.daemon.VideoBatch;
-import jk.kamoru.flayon.crazy.video.domain.Actress;
 import jk.kamoru.flayon.crazy.video.domain.ActressSort;
 import jk.kamoru.flayon.crazy.video.domain.Sort;
 import jk.kamoru.flayon.crazy.video.domain.StudioSort;
@@ -58,8 +46,6 @@ public class VideoController extends CrazyController {
 	@Autowired HistoryService historyService;
 	@Autowired CrazyConfig config;
 
-	private long today = new Date().getTime();
-	
 	@ModelAttribute("minRank") 			public int minRank()             { return config.getMinRank(); }
 	@ModelAttribute("maxRank") 			public int maxRank()             { return config.getMaxRank(); }
 	@ModelAttribute("playRatio")		public int playRatio()           { return config.getPlayRatio(); }
@@ -217,83 +203,6 @@ public class VideoController extends CrazyController {
 	public String studioDetail(Model model, @PathVariable String studio) {
 		model.addAttribute(videoService.getStudio(studio));
 		return "video/studioDetail";
-	}
-
-	/**
-	 * send video cover image<br>
-	 * send redirect '/no/cover' if image not found
-	 * @param opus
-	 * @return image entity
-	 * @throws IOException
-	 */
-	@RequestMapping(value="/{opus}/cover", method=RequestMethod.GET)
-	public HttpEntity<byte[]> videoCover(@PathVariable String opus, HttpServletResponse response) throws IOException {
-		File imageFile = videoService.getVideoCoverFile(opus);
-		if(imageFile == null)
-			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), IOUtils.getSuffix(imageFile), response, imageFile);
-	}
-
-	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
-	public HttpEntity<byte[]> videoCoverWithTitle(@PathVariable String opus, HttpServletResponse response) throws IOException {
-		Video video = videoService.getVideo(opus);
-		File imageFile = video.getCoverFile();
-		if(imageFile == null)
-			return null;
-		return httpEntity(ImageUtils.mergeTextToImage(video.getTitle(), imageFile), IOUtils.getSuffix(imageFile), response, imageFile);
-	}
-
-	@RequestMapping(value="/actress/{actressName}/cover", method=RequestMethod.GET)
-	public HttpEntity<byte[]> actressImage(@PathVariable String actressName, HttpServletResponse response) throws IOException {
-		Actress actress = videoService.getActress(actressName);
-		File imageFile = actress.getImage();
-		if(imageFile == null)
-			return null;
-		return httpEntity(FileUtils.readFileToByteArray(imageFile), IOUtils.getSuffix(imageFile), response, imageFile);
-	}
-	
-	@RequestMapping("/randomVideoCover")
-	public HttpEntity<byte[]> randomVideoCover(HttpServletResponse response) throws IOException {
-		List<Video> videoList = videoService.getVideoList();
-		Random random = new Random();
-		int index = random.nextInt(videoList.size());
-		String opus = videoList.get(index).getOpus();
-		File imageFile = videoService.getVideoCoverFile(opus);
-		if(imageFile == null)
-			return null;
-		return httpEntity(videoService.getVideoCoverByteArray(opus), IOUtils.getSuffix(imageFile), response, imageFile);
-	}
-	
-	/**
-	 * returns image entity<br>
-	 * cache time {@link VIDEO#WEBCACHETIME_SEC}, {@link VIDEO#WEBCACHETIME_MILI}
-	 * @param imageBytes
-	 * @param suffix
-	 * @param response
-	 * @param imageFile
-	 * @return image entity
-	 */
-	private HttpEntity<byte[]> httpEntity(byte[] imageBytes, String suffix, HttpServletResponse response, File imageFile) {
-		if (imageBytes == null)
-			return null;
-
-		MediaType mediaType = MediaType.parseMediaType("image/" + suffix);
-		
-		response.setHeader("Cache-Control", "public, max-age=" + VIDEO.WEBCACHETIME_SEC);
-		response.setHeader("Pragma", "public");
-		response.setDateHeader("Expires", today + VIDEO.WEBCACHETIME_MILI);
-		response.setDateHeader("Last-Modified", imageFile.lastModified());
-		response.setContentType(mediaType.getType());
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentLength(imageBytes.length);
-		headers.setContentType(mediaType);
-//		headers.setCacheControl("max-age=" + VIDEO.WEBCACHETIME_SEC);
-//		headers.setDate(		today + VIDEO.WEBCACHETIME_MILI);
-//		headers.setExpires(		today + VIDEO.WEBCACHETIME_MILI);
-//		headers.setLastModified(today - VIDEO.WEBCACHETIME_MILI);
-		
-		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
 
 	/**

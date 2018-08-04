@@ -132,7 +132,7 @@ function fnViewBGImage() {
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 			<li>
 				<div id="opus-${video.opus}" class="video-box">
-					<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+					<dl style="background-image:url('<c:url value="/cover/video/${video.opus}" />');">
 						<dt class="nowrap"><jk:video video="${video}" view="title" mode="s"/></dt>
 						<dd><jk:video video="${video}" view="studio" mode="s"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="s"/></dd>
@@ -178,7 +178,7 @@ function fnViewBGImage() {
 			<div id="slides">
 				<c:forEach items="${videoList}" var="video">
 					<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
-						<dl style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+						<dl style="background-image:url('<c:url value="/cover/video/${video.opus}" />');">
 							<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
 							<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 							<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
@@ -205,7 +205,7 @@ function fnViewBGImage() {
 			<div id="slides" style="display: block;">
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 				<div id="opus-${video.opus}" tabindex="${status.count}" style="display:none; height: 550px;" class="slidesjs-slide">             
-					<dl class="video-slide-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
+					<dl class="video-slide-bg" style="background-image:url('<c:url value="/cover/video/${video.opus}" />');">
 						<dt class="nowrap"><jk:video video="${video}" view="title" mode="l"/></dt>
 						<dd><jk:video video="${video}" view="studio" mode="l"/></dd>
 						<dd><jk:video video="${video}" view="opus" mode="l"/></dd>
@@ -233,7 +233,7 @@ function fnViewBGImage() {
 				<div id="slides">
 					<c:forEach items="${videoList}" var="video">
 						<div id="opus-${video.opus}" class="slidesjs-slide" style="display:none;">
-							<dl class="box box-small" style="background-image:url('<c:url value="/video/${video.opus}/cover" />'); height: 520px;">
+							<dl class="box box-small" style="background-image:url('<c:url value="/cover/video/${video.opus}" />'); height: 520px;">
 								<dt style="margin-top: 479px;" class="nowrap">
 									<jk:video video="${video}" view="title" mode="l"/>
 								</dt>

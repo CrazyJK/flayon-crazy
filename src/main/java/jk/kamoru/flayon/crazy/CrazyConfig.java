@@ -79,9 +79,7 @@ public class CrazyConfig {
 	public BeanPostProcessor methodExecutionBeanPostProcessor() {
 		Map<String, String> beans = new HashMap<>();
 		beans.put("instanceVideoSource", "reload");
-		MethodExecutionBeanPostProcessor processor = new MethodExecutionBeanPostProcessor();
-		processor.setBeans(beans);
-		return processor;
+		return new MethodExecutionBeanPostProcessor(beans);
 	}
 
 	public boolean setMoveWatchedVideo(boolean moveWatchedVideo) {

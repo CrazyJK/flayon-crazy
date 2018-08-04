@@ -91,7 +91,7 @@ bgContinue = false;
 			view: function rePagination(index) {
 				currentIndex = index;
 			    
-			    var slideSrc =   imageSource.value == 0 ? PATH + "/image/" + currentIndex : PATH + "/video/" + coverMap[currentIndex] + "/cover";
+			    var slideSrc =   imageSource.value == 0 ? PATH + "/image/" + currentIndex : PATH + "/cover/video/" + coverMap[currentIndex];
 			    var slideTitle = imageSource.value == 0 ? imageMap[currentIndex] : coverMap[currentIndex];
 			    
 				$("div[slidesjs-index='" + currentIndex + "']").css({"background-image": "url(" + slideSrc + ")"});

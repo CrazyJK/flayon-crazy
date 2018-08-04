@@ -9,7 +9,7 @@
 <title>Archive [${video.opus}] ${video.title}</title>
 <style type="text/css">
 body {
-	background-image: url('${PATH}/video/${video.opus}/cover');
+	background-image: url('${PATH}/cover/video/${video.opus}');
 	background-size: 100%;
 	background-position: left top;
 }

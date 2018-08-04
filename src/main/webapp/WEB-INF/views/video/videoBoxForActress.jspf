@@ -3,7 +3,7 @@
 <%@ taglib prefix="jk" tagdir="/WEB-INF/tags"%>
 
 <div id="opus-${video.opus}" class="video-box">
-	<dl style="background-image:url('${PATH}/video/${video.opus}/cover');">
+	<dl style="background-image:url('${PATH}/cover/video/${video.opus}');">
 		<dt class="nowrap">
 			<jk:video video="${video}" view="title"     mode="s"/></dt>
 		<dd><jk:video video="${video}" view="studio"    mode="s"/></dd>

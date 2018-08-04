@@ -11,7 +11,7 @@
 			</th>
 		</tr>
 		<tr valign="top" style="height:95px">
-			<td class="video-card-bg" style="width:75px; background-image:url('${PATH}/video/${video.opus}/cover')">
+			<td class="video-card-bg" style="width:75px; background-image:url('${PATH}/cover/video/${video.opus}')">
 				&nbsp;
 			</td>
 			<td>

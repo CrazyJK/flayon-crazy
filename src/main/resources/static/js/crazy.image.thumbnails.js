@@ -108,7 +108,7 @@ var thumbnails = (function() {
 					var imgName = "";
 					if (mode === 'cover') {
 						imgName = coverMap[i];
-						imgSrc = PATH + "/video/" + imgName + "/cover";
+						imgSrc = PATH + "/cover/video/" + imgName;
 						imgTitle = '<a onclick="fnVideoDetail(\'' + imgName + '\')" href="#">' + imgName + '</a>';
 					}
 					else {

@@ -73,7 +73,7 @@ var canvasApp = (function() {
 					}
 				},
 				url: function() {
-					return imageSource.value == 0 ? PATH + "/image/" + imageIndex : PATH + "/video/" + coverNameMap[coverIndex] + "/cover";
+					return imageSource.value == 0 ? PATH + "/image/" + imageIndex : PATH + "/cover/video/" + coverNameMap[coverIndex];
 				},
 				event: function(e) {
 					if (e.which == 1) {

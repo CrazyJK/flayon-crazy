@@ -44,7 +44,7 @@ var apertureApp = (function() {
 						setLocalStorageItem(THUMBNAMILS_IMAGE_INDEX, currentIndex);
 					}
 					else {
-						selectedItemUrl = PATH + "/video/" + coverMap[currentIndex] + "/cover";
+						selectedItemUrl = PATH + "/cover/video/" + coverMap[currentIndex];
 						selectedItemTitle = coverMap[currentIndex];
 						setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 					}

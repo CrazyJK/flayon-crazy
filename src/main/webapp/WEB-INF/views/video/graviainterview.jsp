@@ -233,7 +233,7 @@ function renderContent(idx) {
 			checkCount++;
 		}
 		
-		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? PATH + "/video/" + title.opus + "/cover" : title.imgSrc)};
+		var onClick = {"onclick": "fnFindVideo('" + title.opus + "'); " + (title.exist ? "fnVideoDetail('" + title.opus + "');" : ""), "data-src": (title.exist ? PATH + "/cover/video/" + title.opus : title.imgSrc)};
 				
 		$("<div>").addClass("cover-wrapper" + stateClass).append(
 				$("<img>").addClass("img-thumbnail cover-image").attr({src: title.imgSrc}).attr(onClick)

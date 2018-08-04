@@ -205,7 +205,7 @@ function renderRequestURIChart() {
 
 	$.getJSON("${PATH}/flayon/accesslog/groupby/requestURI.json" ,function(data) {
 		
-		var EXCLUDE_URI = ["/login", "/image/random", "/video/randomVideoCover"];
+		var EXCLUDE_URI = ["/login", "/image/random", "/video/randomVideoCover", "/cover/video/random"];
 		var chartData = new Array();
 		for (var i=0; i<data.length; i++) {
 			

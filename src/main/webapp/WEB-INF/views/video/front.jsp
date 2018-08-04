@@ -140,7 +140,7 @@ var frontApp = (function() {
 				var opusIndex = getRandomInteger(0, opusList.length-1);
 				$("#front").hide("fade", {}, 2000, function() {
 					$(this).attr({
-						src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/video/" + opusList[opusIndex] + "/cover")
+						src: (bool ? "${PATH}/image/random?_t=" + new Date().getTime()  : "${PATH}/cover/video/" + opusList[opusIndex])
 					}).data("opus", (bool ? "" : opusList[opusIndex])).show("fade", {}, 1000, function() {
 						$(this).css({
 							borderRadius: getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "% " + getRandomInteger(10, 30) + "%",

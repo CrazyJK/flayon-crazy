@@ -89,7 +89,7 @@ var tablet = (function() {
 					}
 					imageTypeClass = "img-cover";
 					currentIndex = coverIndexMap.splice(coverIndex, 1)[0];
-					selectedItemUrl = PATH + "/video/" + coverNameMap[currentIndex] + "/cover";
+					selectedItemUrl = PATH + "/cover/video/" + coverNameMap[currentIndex];
 					selectedItemTitle = coverNameMap[currentIndex];
 					setLocalStorageItem(THUMBNAMILS_COVER_INDEX, currentIndex);
 				}
