@@ -71,6 +71,7 @@ function goMain() {
 			<li><a id="backMenu" 				><s:message code="video.background.title"/></a></li>
 			<li><a id="main" onclick="goMain()" ><s:message code="video.main"            /></a></li>
 			<li><a id="searchMenu" 	    		><s:message code="video.search"          /></a></li>
+			<li><a href="${PATH}/video/vertical">Vertical</a></li>
 			<li><a href="${PATH}/video/list_spa"><s:message code="video.video"           /></a></li>
 			<li><a href="${PATH}/video/actress"	><s:message code="video.actress"         /></a></li>
 			<li><a href="${PATH}/video/studio"	><s:message code="video.studio"          /></a></li>

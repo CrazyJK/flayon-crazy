@@ -21,6 +21,9 @@ function overviewSave() {
 	}, function() {
 		$("#overview-" + opus, opener.document).attr("title", overview).html(overview);
 		self.close();
+		try {
+			opener.overviewCallback(opus, overview);
+		} catch(e) {}
 	});
 }
 function resizeSecondDiv() {

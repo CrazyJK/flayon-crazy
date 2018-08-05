@@ -97,6 +97,15 @@ input[type='range'] {
 	color: yellow;
 	text-shadow: 1px 1px 2px #4c4c4c;
 }
+.label-radio {
+	border-radius: 16px;
+    background-color: #777;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.label-radio.on {
+	background-color: #5cb85c;
+}
 .cloud {
 	list-style: none;
 	padding: 0;

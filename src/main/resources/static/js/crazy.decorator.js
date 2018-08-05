@@ -385,7 +385,16 @@ var	crazy = (function() {
 					}).on("click", function() {
 						var checked = $(this).data("checked");
 						$(this).toggleClass("label-success", !checked).data("checked", !checked);
-						console.log("checkbox_role click : ", "#" + $(this).attr("id"), !checked);
+						// console.log("checkbox_role click : ", "#" + $(this).attr("id"), !checked);
+					});
+				},
+				radio_role = function() {
+					$("[role='radio']").each(function() {
+						$(this).attr("data-role-value", $(this).children(".on").html());
+						$(this).children().on("click", function() {
+							$(this).parent().children(".on").removeClass("on");
+							$(this).addClass("on").parent().attr("data-role-value", $(this).html()).trigger("checked");
+						});
 					});
 				},
 				themeSwitch = function() {
@@ -420,6 +429,7 @@ var	crazy = (function() {
 					checkbox();
 					radioBtn();
 					checkbox_role();
+					radio_role();
 					themeSwitch();
 					blind();
 					buttonBlur();
