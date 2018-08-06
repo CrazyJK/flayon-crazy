@@ -295,82 +295,116 @@ function addVideoEvent() {
 }
 
 function showVideo(isForward) {
-	if (isFirstLoad) {
-		$(".cover-box.current").css({backgroundImage: 'url(' + PATH + "/cover/video/" + currentVideo.opus + ')'}).show("fade", {});
-		isFirstLoad = false;
-	} else {
-		// previous Cover
-		$(".cover-box.previous").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-			var prevCoverURL = (0 < currentIndex) ? "/cover/video/" + videoList[currentIndex-1].opus : '/image/random?_t=' + new Date().getTime();
-			$(this).css({backgroundImage: 'url(' + PATH + prevCoverURL + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
+	function showInfo() {
+		// studio
+		$(".info-studio").html(currentVideo.studio.name);
+		// opus
+		$(".info-opus").html(currentVideo.opus);
+		// title
+		$(".info-title").html(currentVideo.title);
+		// actress & event
+		var actressArray = [];
+		$.each(currentVideo.actressList, function(index, actress) {
+			actressArray.push(
+					$("<div>").append(
+							// favorite
+							actress.name != 'Amateur' &&
+							$("<span>", {'class': 'label label-plain info-actress-favorite'}).addClass(actress.favorite ? 'favorite' : '').append(
+									$("<span>", {'class': 'glyphicon glyphicon-favorite glyphicon-star' + (actress.favorite ? '' : '-empty')}).data("name", actress.name).on("click", function() {
+										fnFavorite(this, $(this).data('name'))
+									})
+							),
+							// actress
+							$("<span>", {'class': 'label label-plain info-actress'}).data("name", actress.name).append(
+									actress.name
+							).on("click", function() {
+								actress.name != 'Amateur' && fnViewActressDetail($(this).data('name'));
+							}),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.localName),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.birth),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.age),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.bodySize),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.height),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html('v' + actress.videoCount)
+					)
+			);
 		});
-		// current Cover
-		$(".cover-box.current").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-			$(this).css({backgroundImage: 'url(' + PATH + "/cover/video/" + currentVideo.opus + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
-		});
-		// next Cover
-		$(".cover-box.next").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-			var nextCoverURL = (currentIndex < videoList.length-1) ? "/cover/video/" + videoList[currentIndex+1].opus : '/image/random?_t=' + new Date().getTime();
-			$(this).css({backgroundImage: 'url(' + PATH + nextCoverURL + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
+		$(".info-wrapper-actress").empty().append(actressArray);
+		// release
+		$(".info-release").html(currentVideo.releaseDate);
+		// modified
+		$(".info-modified").html(currentVideo.videoDate);
+		// video file
+		$(".info-video").html(currentVideo.existVideoFileList ? 'V ' + formatFileSize(currentVideo.length) : 'Video')
+				.swapClass("nonExist", "exist", currentVideo.existVideoFileList);
+		// subtitles
+		$(".info-subtitles").html("Subtitles").swapClass("nonExist", "exist", currentVideo.existSubtitlesFileList);
+		// overview
+		$(".info-overview-input").val(currentVideo.overviewText).addClass("hide");
+		$(".info-overview").html(currentVideo.overviewText == '' ? 'Overview' : currentVideo.overviewText)
+				.swapClass("nonExist", "exist", currentVideo.overviewText != '').show();
+		// rank
+		$("#ranker").val(currentVideo.rank);
+		// rank decorate
+		decorateRank(currentVideo.rank);
+		// tag
+		$(".on", ".tag-list").removeClass("on");
+		$.each(currentVideo.tags, function(i, tag) {
+			$("#tag-" + tag.id).addClass('on');
 		});
 	}
-
-	// studio
-	$(".info-studio").html(currentVideo.studio.name);
-	// opus
-	$(".info-opus").html(currentVideo.opus);
-	// title
-	$(".info-title").html(currentVideo.title);
-	// actress & event
-	var actressArray = [];
-	$.each(currentVideo.actressList, function(index, actress) {
-		actressArray.push(
-				$("<div>").append(
-						// favorite
-						actress.name != 'Amateur' &&
-						$("<span>", {'class': 'label label-plain info-actress-favorite'}).addClass(actress.favorite ? 'favorite' : '').append(
-								$("<span>", {'class': 'glyphicon glyphicon-favorite glyphicon-star' + (actress.favorite ? '' : '-empty')}).data("name", actress.name).on("click", function() {
-									fnFavorite(this, $(this).data('name'))
-								})
-						),
-						// actress
-						$("<span>", {'class': 'label label-plain info-actress'}).data("name", actress.name).append(
-								actress.name
-						).on("click", function() {
-							actress.name != 'Amateur' && fnViewActressDetail($(this).data('name'));
-						}),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.localName),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.birth),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.age),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.bodySize),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.height),
-						$("<span>", {'class': 'label label-plain info-actress-extra'}).html('v' + actress.videoCount)
-				)
-		);
-	});
-	$(".info-wrapper-actress").empty().append(actressArray);
-	// release
-	$(".info-release").html(currentVideo.releaseDate);
-	// modified
-	$(".info-modified").html(currentVideo.videoDate);
-	// video file
-	$(".info-video").html(currentVideo.existVideoFileList ? 'V ' + formatFileSize(currentVideo.length) : 'Video')
-			.swapClass("nonExist", "exist", currentVideo.existVideoFileList);
-	// subtitles
-	$(".info-subtitles").html("Subtitles").swapClass("nonExist", "exist", currentVideo.existSubtitlesFileList);
-	// overview
-	$(".info-overview-input").val(currentVideo.overviewText).addClass("hide");
-	$(".info-overview").html(currentVideo.overviewText == '' ? 'Overview' : currentVideo.overviewText)
-			.swapClass("nonExist", "exist", currentVideo.overviewText != '').show();
-	// rank
-	$("#ranker").val(currentVideo.rank);
-	// rank decorate
-	decorateRank(currentVideo.rank);
-	// tag
-	$(".on", ".tag-list").removeClass("on");
-	$.each(currentVideo.tags, function(i, tag) {
-		$("#tag-" + tag.id).addClass('on');
-	});
+	
+	// Cover animate
+	var prevCoverURL = PATH, currCoverURL = PATH, nextCoverURL = PATH;
+	prevCoverURL += (0 < currentIndex) ? "/cover/video/" + videoList[currentIndex-1].opus : '/image/random?_t=' + new Date().getTime();
+	currCoverURL += "/cover/video/" + currentVideo.opus;
+	nextCoverURL += (currentIndex < videoList.length-1) ? "/cover/video/" + videoList[currentIndex+1].opus : '/image/random?_t=' + new Date().getTime();
+	if (isFirstLoad) {
+		$(".cover-box.previous").css({backgroundImage: 'url(' + prevCoverURL + ')'}).show('fade');
+		$(".cover-box.current").css({backgroundImage: 'url(' + currCoverURL + ')'}).show("fade");
+		$(".cover-box.next").css({backgroundImage: 'url(' + nextCoverURL + ')'}).show('fade');
+		isFirstLoad = false;
+		showInfo();
+	} else {
+		var effect = 'slide';
+		var step1Duration = 300, step2Duration = 500, step3Duration = 300;
+		var showOption = {direction: isForward ? 'right' : 'left'}, hideOption = {direction: !isForward ? 'right' : 'left'};
+		var is3View = $(".cover-wrapper-inner.previous").css("display") != 'none';
+		if (is3View) {
+			if (isForward) {
+				// step 0
+				$(".cover-box.previous").hide();
+				// step 1
+				$(".cover-box.previous").css({backgroundImage: 'url(' + prevCoverURL + ')'}).show(effect, showOption, step1Duration);
+				$(".cover-box.current").hide(effect, hideOption, step1Duration, function() {
+					// step 2
+					showInfo();
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration);
+					$(".cover-box.next").hide(effect, hideOption, step2Duration, function() {
+						// step 3
+						$(this).css({backgroundImage: 'url(' + nextCoverURL + ')'}).show(effect, showOption, step3Duration);
+					});
+				});
+			} else {
+				$(".cover-box.next").hide();
+				$(".cover-box.next").css({backgroundImage: 'url(' + nextCoverURL + ')'}).show(effect, showOption, step1Duration);
+				$(".cover-box.current").hide(effect, hideOption, step1Duration, function() {
+					showInfo();
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration);
+					$(".cover-box.previous").hide(effect, hideOption, step2Duration, function() {
+						$(this).css({backgroundImage: 'url(' + prevCoverURL + ')'}).show(effect, showOption, step3Duration);
+					});
+				});
+			}
+		} else {
+			$(".cover-box.previous").css({backgroundImage: 'url(' + prevCoverURL + ')'}).show();
+			$(".cover-box.current").hide(effect, hideOption, step3Duration, function() {
+				showInfo();
+				$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show('fade', {}, step3Duration);
+			});
+			$(".cover-box.next").css({backgroundImage: 'url(' + nextCoverURL + ')'}).show();
+		}
+	}
 }
 
 function decorateRank(rank) {
