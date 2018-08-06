@@ -6,6 +6,7 @@ var allList = [];
 var videoList = [];
 var currentVideo = null;
 var currentIndex = -1;
+var isFirstLoad = true;
 
 $(document).ready(function() {
 	prepare();
@@ -294,20 +295,26 @@ function addVideoEvent() {
 }
 
 function showVideo(isForward) {
-	// previous Cover
-	$(".img-cover-prev").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-		var prevCoverURL = (0 < currentIndex) ? PATH + "/cover/video/" + videoList[currentIndex-1].opus : PATH + '/image/random?_t=' + new Date().getTime();
-		$(this).attr("src", prevCoverURL).show("slide", {direction: isForward ? 'right' : 'left'});
-	});
-	// current Cover
-	$(".img-cover").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-		$(this).attr("src", PATH + "/cover/video/" + currentVideo.opus).show("slide", {direction: isForward ? 'right' : 'left'});
-	});
-	// next Cover
-	$(".img-cover-next").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
-		var nextCoverURL = (currentIndex < videoList.length-1) ? PATH + "/cover/video/" + videoList[currentIndex+1].opus : PATH + '/image/random?_t=' + new Date().getTime();
-		$(this).attr("src", nextCoverURL).show("slide", {direction: isForward ? 'right' : 'left'});
-	});
+	if (isFirstLoad) {
+		$(".cover-box.current").css({backgroundImage: 'url(' + PATH + "/cover/video/" + currentVideo.opus + ')'}).show("fade", {});
+		isFirstLoad = false;
+	} else {
+		// previous Cover
+		$(".cover-box.previous").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+			var prevCoverURL = (0 < currentIndex) ? "/cover/video/" + videoList[currentIndex-1].opus : '/image/random?_t=' + new Date().getTime();
+			$(this).css({backgroundImage: 'url(' + PATH + prevCoverURL + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
+		});
+		// current Cover
+		$(".cover-box.current").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+			$(this).css({backgroundImage: 'url(' + PATH + "/cover/video/" + currentVideo.opus + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
+		});
+		// next Cover
+		$(".cover-box.next").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+			var nextCoverURL = (currentIndex < videoList.length-1) ? "/cover/video/" + videoList[currentIndex+1].opus : '/image/random?_t=' + new Date().getTime();
+			$(this).css({backgroundImage: 'url(' + PATH + nextCoverURL + ')'}).show("slide", {direction: isForward ? 'right' : 'left'});
+		});
+	}
+
 	// studio
 	$(".info-studio").html(currentVideo.studio.name);
 	// opus

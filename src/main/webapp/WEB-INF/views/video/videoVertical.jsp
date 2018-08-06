@@ -67,14 +67,14 @@
 				</dl>
 			</div>
 			<div class="cover-wrapper">
-				<div class="cover-wrapper-inner prev">
-					<img class="img-rounded img-cover-prev"/>
+				<div class="cover-wrapper-inner previous">
+					<div class="cover-box previous"></div>
 				</div>
 				<div class="cover-wrapper-inner current">
-					<img class="img-rounded img-cover"/>
+					<div class="cover-box current"></div>
 				</div>
 				<div class="cover-wrapper-inner next">
-					<img class="img-rounded img-cover-next"/>
+					<div class="cover-box next"></div>
 				</div>
 			</div>
 			<div class="info-wrapper">
