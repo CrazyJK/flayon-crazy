@@ -159,6 +159,8 @@ public interface VideoService {
 
 	List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withTorrent);
 
+	List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withCandidate, boolean existVideo);
+
 	/**
 	 * get rank range
 	 * @return rank list

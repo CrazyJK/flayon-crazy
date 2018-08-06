@@ -2,123 +2,103 @@
  * Video Vertical View Javascript
  */
 var listViewType = 'Vertical';
-var allList;
-var videoList;
-var video;
-var currentIndex;
-var direction;
-var JQUERY_UI_EFFECTs = ["blind", "bounce", "clip", "drop", "explode", "fade", "fold", "puff", "pulsate", "scale", "shake", "size", "slide"];
+var allList = [];
+var videoList = [];
+var currentVideo = null;
+var currentIndex = -1;
 
 $(document).ready(function() {
 	prepare();
 	
-	restCall(PATH + '/rest/video', {data: {p: 0}, title: "request video"}, function(list) {
-		allList = list;
-		grepList();
-	});
-
+	loadVideo();
 });
 
+function loadVideo() {
+	// load video list
+	restCall(PATH + '/rest/video', {data: {p: 0}, title: "Load video"}, function(list) {
+		allList = list;
+		collectList();
+	});
+}
+
 function prepare() {
-	// tag setting
-	restCall(PATH + "/rest/tag", {showLoading: false}, function(list) {
-		var $div = $(".tag-list");
-		$.each(list, function(i, tag) {
-			$div.append(
-					$("<div>").append(
-							$("<span>", {'class': 'label label-default label-tag', title: tag.description, id: 'tag-' + tag.id}).html(tag.name).on("click", function() {
-								var $this = $(this);
-								var isOn = $this.hasClass("label-plain") === false;
-								restCall(PATH + "/rest/video/" + video.opus + "/tag?id=" + tag.id, {method: "PUT"}, function() {
-									$this.swapClass("label-default", "label-plain", isOn);
-								});
-							})
-					).css({display: 'inline-block'})
-			);
-		});
+	// tag list
+	setTags();
+	// reload
+	$("#reload").on("click", function() {
+		loadVideo();
 	});
-	// new tag save
-	$(".btn-tag-save").on("click", function() {
-		var newTagName = $("#newTag-name").val();
-		var newTagDesc = $("#newTag-desc").val();
-		if (newTagName != '') {
-			restCall(PATH + "/rest/tag", {method: "POST", data: {opus: video.opus, name: newTagName, description: newTagDesc}, showLoading: false}, function(tag) {
-				video.tags.push(tag);
-				$(".tag-list").append(
-						$("<div>").append(
-								$("<span>", {'class': 'label label-default label-plain label-tag', title: tag.description, id: 'tag-' + tag.id}).html(tag.name)
-						).css({display: 'inline-block'})
-				);
-				$("#newTag-name").val('');
-				$("#newTag-desc").val('');
-				$('.tag-form-wrapper').slideToggle();
-			});
-		}
-	});
-	// list condition check
-	$("[role='checkbox']").on("click", grepList);
+	// query
 	$("#query").on("keyup", function(e) {
 		if (e.keyCode == 13) {
-			grepList();
+			collectList();
 		}
 	});
+	// rank condition
+	$("[role='checkbox']").on("click", collectList);
 	// sort condition
-	$("#radio-sort").on("checked", function() {
-		grepList();
-	});
+	$("#radio-sort").on("checked", collectList);
 	// video label event
 	addVideoEvent();
 	// navigation event
 	navigation.event();
 }
 
-function grepList() {
+function setTags() {
+	function makeTag(tag) {
+		return $("<div>", {'class': 'inline-block'}).append(
+				$("<span>", {'class': 'label label-tag', title: tag.description, id: 'tag-' + tag.id}).html(tag.name).on("click", function() {
+					var $this = $(this);
+					var isOn = $this.hasClass("on");
+					restCall(PATH + "/rest/video/" + currentVideo.opus + "/tag?id=" + tag.id, {method: "PUT"}, function() {
+						$this.toggleClass("on", !isOn);
+					});
+				})
+		);
+	}
+	// tag list setting
+	restCall(PATH + "/rest/tag", {showLoading: false}, function(list) {
+		var $div = $(".tag-list");
+		$.each(list, function(i, tag) {
+			$div.append(makeTag(tag));
+		});
+	});
+	// new tag btn
+	$(".label-tag-new").on("click", function() {
+		$('.tag-form-wrapper').slideToggle();
+		$('#newTag-name').focus();
+	});
+	// new tag save
+	$(".btn-tag-save").on("click", function() {
+		var newTagName = $("#newTag-name").val(), newTagDesc = $("#newTag-desc").val();
+		if (newTagName != '') {
+			restCall(PATH + "/rest/tag", {method: "POST", data: {opus: currentVideo.opus, name: newTagName, description: newTagDesc}, showLoading: false}, function(tag) {
+				currentVideo.tags.push(tag);
+				$(".tag-list").append(makeTag(tag));
+				$("#tag-" + tag.id).addClass("on");
+				$("#newTag-name, #newTag-desc").val('');
+				$('.tag-form-wrapper').slideToggle();
+			});
+		}
+	});
+}
+
+function collectList() {
+	loading(true, 'Collect list');
+	$(".video-wrapper").hide();
+	
 	var query = $("#query").val();
-	var fav = $("#favorite").data("checked");
-	var vid = $("#video").data("checked");
-	var sub = $("#subtitles").data("checked");
+	var fav   = $("#favorite").data("checked");
+	var vid   = $("#video").data("checked");
+	var sub   = $("#subtitles").data("checked");
 	var rank0 = $("#check-rank0").data("checked") ? '0' : '';
 	var rank1 = $("#check-rank1").data("checked") ? '1' : '';
 	var rank2 = $("#check-rank2").data("checked") ? '2' : '';
 	var rank3 = $("#check-rank3").data("checked") ? '3' : '';
 	var rank4 = $("#check-rank4").data("checked") ? '4' : '';
 	var rank5 = $("#check-rank5").data("checked") ? '5' : '';
-	
-	videoList = [];
-	for (var i=0; i<allList.length; i++) {
-		var video = allList[i];
-
-		if (query != '') {
-			var fullname = video.studio.name + video.opus + video.title + video.actressName + video.releaseDate;
-			if (fullname.indexOf(query) < 0) {
-				continue;
-			}
-		}
-		if (fav) {
-			if (!video.favorite) {
-				continue;
-			}
-		}
-		if (vid) {
-			if (!video.existVideoFileList) {
-				continue;
-			}
-		}
-		if (sub) {
-			if (!video.existVideoFileList || !video.existSubtitlesFileList) {
-				continue;
-			}
-		}
-		
-		var rank = rank0 + rank1 + rank2 + rank3 + rank4 + rank5;
-		if (rank.indexOf(video.rank) < 0) {
-			continue;
-		} 
-		
-		videoList.push(video);
-	}
-	
-	function compareTo(data1, data2) {
+	var sort  = $("#radio-sort").attr("data-role-value");
+	var compareTo = function(data1, data2) {
 		var result = 0;
 		if (typeof data1 === 'number') {
 			result = data1 - data2;
@@ -128,12 +108,51 @@ function grepList() {
 			result = data1 > data2 ? 1 : -1;
 		}
 		return result;
+	};
+	videoList = [];
+
+	// filtering
+	for (var i=0; i<allList.length; i++) {
+		var video = allList[i];
+
+		if (vid && sub) { // 비디오와 자막 모두 있는
+			if (!video.existVideoFileList || !video.existSubtitlesFileList) 
+				continue;
+		} else if (vid && !sub) { // 비디오가 있으면
+			if (!video.existVideoFileList)
+				continue;
+		} else if (!vid && sub) { // 비디오 없는 자막
+			if (video.existVideoFileList || !video.existSubtitlesFileList)
+				continue;
+		} else { // 비디오와 자막 모두 없는
+			if (video.existVideoFileList || video.existSubtitlesFileList) // 비디오가 있고
+				continue;
+		}
+		
+		var rank = rank0 + rank1 + rank2 + rank3 + rank4 + rank5;
+		if (rank.indexOf(video.rank) < 0) {
+			continue;
+		} 
+		
+		if (fav) {
+			if (!video.favorite) {
+				continue;
+			}
+		}
+		
+		if (query != '') {
+			var fullname = video.studio.name + video.opus + video.title + video.actressName + video.releaseDate + video.overviewText;
+			if (fullname.indexOf(query) < 0) {
+				continue;
+			}
+		}
+		
+		videoList.push(video);
 	}
 	
-	// sort
-	var checkedValue = $("#radio-sort").attr("data-role-value");
+	// sorting
 	videoList.sort(function(video1, video2) {
-		switch(checkedValue) {
+		switch(sort) {
 		case 'S':
 			return compareTo(video1.studio.name, video2.studio.name); 
 		case 'O':
@@ -149,34 +168,14 @@ function grepList() {
 		}
 	});
 	
-	navigation.random();
+	if (videoList.length > 0) {
+		navigation.random();
+		$(".video-wrapper").show();
+	}
+	loading(false);
 }
 
 var navigation = {
-		previous: function() {
-			if (currentIndex > 0) {
-				--currentIndex;
-				direction = 'left';
-				render();
-			}
-		},
-		next: function () {
-			if (currentIndex < videoList.length-1) {
-				++currentIndex;
-				direction = 'right';
-				render();
-			}
-		},
-		random: function() {
-			var prevIndex = currentIndex;
-			currentIndex = getRandomInteger(0, videoList.length-1);
-			direction = prevIndex - currentIndex > 0 ? 'left' : 'right';
-			render();
-		},
-		go: function(idx) {
-			currentIndex = idx;
-			render();
-		},
 		event: function() {
 			$("#content_div").navEvent(function(signal) {
 				switch(signal) {
@@ -195,20 +194,39 @@ var navigation = {
 				}
 			});
 		},
+		previous: function() {
+			navigation.go(currentIndex - 1);
+		},
+		next: function () {
+			navigation.go(currentIndex + 1);
+		},
+		random: function() {
+			navigation.go(getRandomInteger(0, videoList.length-1));
+		},
+		go: function(idx) {
+			if (idx < 0 || idx > videoList.length - 1) {
+				console.log('navigation.go wrong index', idx);
+				return;
+			}
+			var prevIndex = currentIndex;
+			currentIndex = idx;
+			if (prevIndex === currentIndex) {
+				return;
+			}
+			currentVideo = videoList[currentIndex];
+			
+			showVideo(currentIndex > prevIndex);
+			navigation.paging();
+		},
 		paging: function() {
-			var page = function(idx) {
-				var pageLi = $("<li>").append(
+			var addPaginationBtn = function(idx) {
+				$("<li>", {
+					'class': (idx === 0 ? 'first ' : '') + (idx === videoList.length - 1 ? 'last ' : '') + (idx === currentIndex ? 'active' : '')
+				}).append(
 						$("<a>").html(idx+1).on("click", function() {
 							navigation.go(idx);
 						})
-				);
-				if (idx === currentIndex)
-					pageLi.addClass("active");
-				if (idx === 0)
-					pageLi.addClass("first");
-				else if (idx === videoList.length - 1)
-					pageLi.addClass("last");
-				$(".pagination").append(pageLi);
+				).appendTo($(".pagination"));
 			};
 			
 			$(".pagination").empty();
@@ -217,14 +235,14 @@ var navigation = {
 			var end = currentIndex + 5;
 			end = end > videoList.length ? videoList.length : end;
 			
-			if (start > 0) {
-				page(0);
+			if (start > 0) { // first navi
+				addPaginationBtn(0);
 			}
 			for (var i = start; i < end; i++) {
-				page(i);
+				addPaginationBtn(i);
 			}
-			if (end < videoList.length) {
-				page(videoList.length - 1);
+			if (end < videoList.length) { // last navi
+				addPaginationBtn(videoList.length - 1);
 			}
 		}
 };
@@ -232,32 +250,31 @@ var navigation = {
 function addVideoEvent() {
 	// studio
 	$(".info-studio").on("click", function() {
-		fnViewStudioDetail(video.studio.name);
+		fnViewStudioDetail(currentVideo.studio.name);
 	});
 	// title
 	$(".info-title").on("click", function() {
-		fnVideoDetail(video.opus);
+		fnVideoDetail(currentVideo.opus);
 	});
 	// video file
 	$(".info-video").on("click", function() {
-		video.existVideoFileList ? fnPlay(video.opus) : fnSearchTorrent(video.opus);
+		currentVideo.existVideoFileList ? fnPlay(currentVideo.opus) : fnSearchTorrent(currentVideo.opus);
 	});
 	// subtitles
 	$(".info-subtitles").on("click", function() {
-		video.existSubtitlesFileList ? fnEditSubtitles(video.opus) : '';
+		currentVideo.existSubtitlesFileList ? fnEditSubtitles(currentVideo.opus) : '';
 	});
 	// overview
 	$(".info-overview").on("click", function() {
 		$(this).hide();
-		$(".info-overview-input").removeClass("hide").val($(this).html());
+		$(".info-overview-input").removeClass("hide");
 	});
 	// overview input
 	$(".info-overview-input").on("keyup", function(e) {
 		if (e.keyCode === 13) {
 			var $this = $(this);
-			var opus = video.opus;
 			var text = $this.val();
-			restCall(PATH + '/rest/video/' + opus + '/overview', {
+			restCall(PATH + '/rest/video/' + currentVideo.opus + '/overview', {
 				method: "PUT", 
 				data: {overview: text}, 
 				showLoading: false
@@ -270,83 +287,86 @@ function addVideoEvent() {
 	// rank
 	$("#ranker").on("mouseup", function() {
 		var rank = $(this).val();
-		restCall(PATH + "/rest/video/" + video.opus + "/rank/" + rank, {method: "PUT", showLoading: false}, function() {
-			setRankColor(rank);
+		restCall(PATH + "/rest/video/" + currentVideo.opus + "/rank/" + rank, {method: "PUT", showLoading: false}, function() {
+			decorateRank(rank);
 		});
 	});
 }
 
-function render() {
-	video = videoList[currentIndex];
-	if (video) {
-		showVideo();
-		navigation.paging();
-	} else {
-		$(".video-wrapper").hide();
-	}
-}
-
-function showVideo() {
-	// cover
-	$(".img-cover").hide("fade", {}, 300, function() {
-		$(this).attr("src", PATH + "/cover/video/" + video.opus).show("slide", {direction: direction});
+function showVideo(isForward) {
+	// previous Cover
+	$(".img-cover-prev").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+		var prevCoverURL = (0 < currentIndex) ? PATH + "/cover/video/" + videoList[currentIndex-1].opus : PATH + '/image/random?_t=' + new Date().getTime();
+		$(this).attr("src", prevCoverURL).show("slide", {direction: isForward ? 'right' : 'left'});
 	});
-	
+	// current Cover
+	$(".img-cover").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+		$(this).attr("src", PATH + "/cover/video/" + currentVideo.opus).show("slide", {direction: isForward ? 'right' : 'left'});
+	});
+	// next Cover
+	$(".img-cover-next").hide("slide", {direction: !isForward ? 'right' : 'left'}, 300, function() {
+		var nextCoverURL = (currentIndex < videoList.length-1) ? PATH + "/cover/video/" + videoList[currentIndex+1].opus : PATH + '/image/random?_t=' + new Date().getTime();
+		$(this).attr("src", nextCoverURL).show("slide", {direction: isForward ? 'right' : 'left'});
+	});
 	// studio
-	$(".info-studio").html(video.studio.name);
+	$(".info-studio").html(currentVideo.studio.name);
 	// opus
-	$(".info-opus").html(video.opus);
+	$(".info-opus").html(currentVideo.opus);
 	// title
-	$(".info-title").html(video.title);
+	$(".info-title").html(currentVideo.title);
 	// actress & event
 	var actressArray = [];
-	$.each(video.actressList, function(index, actress) {
+	$.each(currentVideo.actressList, function(index, actress) {
 		actressArray.push(
 				$("<div>").append(
-						$("<span>", {'class': 'label label-plain'}).addClass(actress.favorite ? 'favorite' : '').append(
+						// favorite
+						actress.name != 'Amateur' &&
+						$("<span>", {'class': 'label label-plain info-actress-favorite'}).addClass(actress.favorite ? 'favorite' : '').append(
 								$("<span>", {'class': 'glyphicon glyphicon-favorite glyphicon-star' + (actress.favorite ? '' : '-empty')}).data("name", actress.name).on("click", function() {
 									fnFavorite(this, $(this).data('name'))
 								})
 						),
+						// actress
 						$("<span>", {'class': 'label label-plain info-actress'}).data("name", actress.name).append(
 								actress.name
-								+ ' ' + actress.localName
-								+ ' ' + actress.birth
-								+ ' ' + actress.age
-								+ ' ' + actress.bodySize
-								+ ' ' + actress.height
-								+ ' v' + actress.videoCount
 						).on("click", function() {
-							fnViewActressDetail($(this).data('name'));
-						})
-				).css({display: 'inline-block'})
+							actress.name != 'Amateur' && fnViewActressDetail($(this).data('name'));
+						}),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.localName),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.birth),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.age),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.bodySize),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.height),
+						$("<span>", {'class': 'label label-plain info-actress-extra'}).html('v' + actress.videoCount)
+				)
 		);
 	});
 	$(".info-wrapper-actress").empty().append(actressArray);
 	// release
-	$(".info-release").html(video.releaseDate);
+	$(".info-release").html(currentVideo.releaseDate);
 	// modified
-	$(".info-modified").html(video.videoDate);
+	$(".info-modified").html(currentVideo.videoDate);
 	// video file
-	$(".info-video").html(video.existVideoFileList ? 'V ' + formatFileSize(video.length) : 'Video')
-			.addClass(video.existVideoFileList ? "exist" : "nonExist");
+	$(".info-video").html(currentVideo.existVideoFileList ? 'V ' + formatFileSize(currentVideo.length) : 'Video')
+			.swapClass("nonExist", "exist", currentVideo.existVideoFileList);
 	// subtitles
-	$(".info-subtitles").html("Subtitles").swapClass("nonExist", "exist", video.existSubtitlesFileList);
+	$(".info-subtitles").html("Subtitles").swapClass("nonExist", "exist", currentVideo.existSubtitlesFileList);
 	// overview
-	$(".info-overview").html(video.overviewText == '' ? 'Overview' : video.overviewText);
+	$(".info-overview-input").val(currentVideo.overviewText).addClass("hide");
+	$(".info-overview").html(currentVideo.overviewText == '' ? 'Overview' : currentVideo.overviewText)
+			.swapClass("nonExist", "exist", currentVideo.overviewText != '').show();
 	// rank
-	$("#ranker").val(video.rank);
-	// rank label
-	$("#ranker-label").html(video.rank);
-	setRankColor(video.rank);
+	$("#ranker").val(currentVideo.rank);
+	// rank decorate
+	decorateRank(currentVideo.rank);
 	// tag
-	$(".label-tag").removeClass("label-plain").addClass("label-default");
-	$.each(video.tags, function(i, tag) {
-		$("#tag-" + tag.id).addClass('label-plain');
+	$(".on", ".tag-list").removeClass("on");
+	$.each(currentVideo.tags, function(i, tag) {
+		$("#tag-" + tag.id).addClass('on');
 	});
 }
 
-function setRankColor(rank) {
+function decorateRank(rank) {
 	var color = '';
 	if (rank < 0) {
 		color = 'rgba(0, 0, 255, 0.5)';
@@ -356,4 +376,5 @@ function setRankColor(rank) {
 		color = 'rgba(255, 0, 0, ' + rank*1.5/10 + ')';
 	}
 	$(".rank-group").css({backgroundColor: color});
+	$(".rank-range-addon").html(rank);
 }

@@ -388,12 +388,27 @@ var	crazy = (function() {
 						// console.log("checkbox_role click : ", "#" + $(this).attr("id"), !checked);
 					});
 				},
+				/**
+				 * custom radio
+				 */
 				radio_role = function() {
 					$("[role='radio']").each(function() {
 						$(this).attr("data-role-value", $(this).children(".on").html());
 						$(this).children().on("click", function() {
-							$(this).parent().children(".on").removeClass("on");
-							$(this).addClass("on").parent().attr("data-role-value", $(this).html()).trigger("checked");
+							var $this   = $(this);
+							var $parent = $this.parent();
+							var previousValue = $parent.attr("data-role-value");
+							var checkedValue  = $this.html();
+							// previous uncheck
+							$parent.children(".on").removeClass("on");
+							// check
+							$this.addClass("on");
+							// set value
+							$parent.attr("data-role-value", checkedValue);
+							// trigger different choice
+							if (previousValue != checkedValue) {
+								$parent.trigger("checked");
+							}
 						});
 					});
 				},

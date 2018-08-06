@@ -228,9 +228,21 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withCandidate) {
+		return getVideoList(instance, archive, sort, reverse, withCandidate, false);
+	}
+	
+	@Override
+	public List<Video> getVideoList(boolean instance, boolean archive, Sort sort, boolean reverse, boolean withCandidate, boolean existVideo) {
+		log.info("instance {}, archive {}, sort {}, reverse {}, withCandi {}, existVideo {}", instance, archive, sort, reverse, withCandidate, existVideo);
 		List<Video> list = new ArrayList<>();
-		if (instance)
-			list.addAll(videoDao.getVideoList(instance, false));
+		if (instance) {
+			if (existVideo)
+				list.addAll(videoDao.getVideoList(instance, false).stream().filter(v -> {
+					return v.isExistVideoFileList();
+				}).collect(Collectors.toList()));
+			else
+				list.addAll(videoDao.getVideoList(instance, false));
+		}
 		if (archive)
 			list.addAll(videoDao.getVideoList(false, archive).stream().filter(v -> !list.contains(v)).collect(Collectors.toList()));
 		if (withCandidate)

@@ -40,12 +40,13 @@ public class VideoRestController {
 	public List<Video> videoList(
 			@RequestParam(value="i", required=false, defaultValue="true") boolean instance,
 			@RequestParam(value="a", required=false, defaultValue="false") boolean archive,
-			@RequestParam(value="o", required=false, defaultValue="Modified") Sort sort,
+			@RequestParam(value="o", required=false) Sort sort,
 			@RequestParam(value="r", required=false, defaultValue="true") boolean reverse,
 			@RequestParam(value="t", required=false, defaultValue="false") Boolean withCandidate,
+			@RequestParam(value="v", required=false, defaultValue="false") Boolean existVideo,
 			@RequestParam(value="p", required=false, defaultValue="1") Integer page,
 			@RequestParam(value="s", required=false, defaultValue="10") Integer size) {
-		return paging(videoService.getVideoList(true, false, sort, reverse, withCandidate), page, size);
+		return paging(videoService.getVideoList(instance, archive, sort, reverse, withCandidate, existVideo), page, size);
 	}
 
 	<T> List<T> paging(List<T> list, int page, int size) {
