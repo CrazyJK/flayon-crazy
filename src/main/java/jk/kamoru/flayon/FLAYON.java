@@ -18,6 +18,8 @@
 
 package jk.kamoru.flayon;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Flayon common constant
  * 
@@ -49,9 +51,9 @@ public interface FLAYON {
 
 		static OS getCurrentOS() {
 			final String OSName = System.getProperty("os.name");
-			return OSName.equalsIgnoreCase(WINDOWS.name()) ? WINDOWS
-					: OSName.equalsIgnoreCase(LINUX.name()) ? LINUX
-							: OSName.equalsIgnoreCase(MAC.name()) ? MAC : UNKNOWN;
+			return StringUtils.containsIgnoreCase(OSName, WINDOWS.name()) ? WINDOWS
+					: StringUtils.containsIgnoreCase(OSName, LINUX.name()) ? LINUX
+							: StringUtils.containsIgnoreCase(OSName, MAC.name()) ? MAC : UNKNOWN;
 		}
 	}
 
