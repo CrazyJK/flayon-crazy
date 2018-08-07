@@ -18,7 +18,7 @@
 			<input type="search" id="query" class="form-control search" placeholder="Search..."/>
 		</div>
 		<div class="separator"></div>
-		<div class="inline-block">
+		<div class="inline-block" id="checkbox-filter-group">
 	   		<span class="label label-checkbox label-default" id="favorite"   role="checkbox" data-role-value="false" title="favorite actress">Fav</span>
 			<div class="separator"></div>
 	   		<span class="label label-checkbox label-default" id="video"      role="checkbox" data-role-value="true"  title="exist video">V</span>
@@ -35,12 +35,20 @@
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block" id="radio-sort" role="radio" data-role-value="M">
-	   		<span class="label label-radio" title="Studio">S</span>
-	   		<span class="label label-radio" title="Opus">O</span>
-	   		<span class="label label-radio" title="Title">T</span>
-	   		<span class="label label-radio" title="Actress">A</span>
-	   		<span class="label label-radio" title="Release">D</span>
+	   		<span class="label label-radio"    title="Studio"  >S</span>
+	   		<span class="label label-radio"    title="Opus"    >O</span>
+	   		<span class="label label-radio"    title="Title"   >T</span>
+	   		<span class="label label-radio"    title="Actress" >A</span>
+	   		<span class="label label-radio"    title="Release" >D</span>
 	   		<span class="label label-radio on" title="Modified">M</span>
+		</div>
+		<div class="separator"></div>
+		<div class="inline-block">
+	   		<span class="label label-checkbox label-default" id="autoSlide" role="checkbox" data-role-value="false" title="auto Slide">R</span>
+			<div class="inline-block" id="radio-autoSlideMode" role="radio" data-role-value="R">
+		   		<span class="label label-radio"    title="slide Forward">F</span>
+		   		<span class="label label-radio on" title="slide Random" >R</span>
+		   	</div>
 		</div>
 	</div>
 	
@@ -106,7 +114,7 @@
 					</ul>
 				</div>
 			</div>
-		</div>
+		</di>
 	</div>
 </div>
 </body>

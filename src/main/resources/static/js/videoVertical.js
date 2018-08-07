@@ -7,6 +7,7 @@ var videoList = [];
 var currentVideo = null;
 var currentIndex = -1;
 var isFirstLoad = true;
+var slideTimer;
 
 $(document).ready(function() {
 	prepare();
@@ -31,18 +32,27 @@ function prepare() {
 	});
 	// query
 	$("#query").on("keyup", function(e) {
+		e.stopPropagation();
 		if (e.keyCode == 13) {
 			collectList();
 		}
 	});
-	// rank condition
-	$("[role='checkbox']").on("click", collectList);
+	// filter & rank condition
+	$("#checkbox-filter-group > [role='checkbox'], #checkbox-rank-group > [role='checkbox']").on("click", collectList);
 	// sort condition
 	$("#radio-sort").on("checked", collectList);
 	// video label event
 	addVideoEvent();
 	// navigation event
 	navigation.event();
+	// auto slide
+	$("#autoSlide").on("click", function() {
+		if ($(this).data("checked")) {
+			navigation.slide.on();
+		} else {
+			navigation.slide.off();
+		}
+	});
 }
 
 function setTags() {
@@ -181,16 +191,22 @@ var navigation = {
 			$("#content_div").navEvent(function(signal) {
 				switch(signal) {
 				case 1: // mousewheel: up
+				case 37: // key : left
 					navigation.previous();
 					break;
 				case -1: // mousewheel: down
+				case 39: // key : right
 					navigation.next();
 					break;
 				case 32: // key: space
 					navigation.random();
 					break;
-				case 1002:
+				case 1002: // mousedown  : middle click
 					navigation.random();
+					$(".info-video").trigger("click"); // video play
+					break;
+				case 1001: // mousedown  : left click. auto slide off
+					$("#autoSlide").data("checked") && $("#autoSlide").trigger("click");
 					break;
 				}
 			});
@@ -216,7 +232,8 @@ var navigation = {
 			}
 			currentVideo = videoList[currentIndex];
 			
-			showVideo(currentIndex > prevIndex);
+			// direction = 1: next, -1: previous, over: random
+			showVideo(currentIndex - prevIndex);
 			navigation.paging();
 		},
 		paging: function() {
@@ -244,6 +261,25 @@ var navigation = {
 			}
 			if (end < videoList.length) { // last navi
 				addPaginationBtn(videoList.length - 1);
+			}
+		},
+		slide: {
+			on: function() {
+				var run = function() {
+					var mode  = $("#radio-autoSlideMode").attr("data-role-value");
+					if (mode === 'R') {
+						navigation.random();
+					} else {
+						navigation.next();
+					}
+				};
+				run();
+				slideTimer = setInterval(() => {
+					run();
+				}, 5000);
+			},
+			off: function() {
+				clearInterval(slideTimer);
 			}
 		}
 };
@@ -294,7 +330,7 @@ function addVideoEvent() {
 	});
 }
 
-function showVideo(isForward) {
+function showVideo(direction) {
 	function showInfo() {
 		// studio
 		$(".info-studio").html(currentVideo.studio.name);
@@ -366,43 +402,64 @@ function showVideo(isForward) {
 		isFirstLoad = false;
 		showInfo();
 	} else {
+		// direction = 1: next, -1: previous, over: random
 		var effect = 'slide';
 		var step1Duration = 300, step2Duration = 500, step3Duration = 300;
-		var showOption = {direction: isForward ? 'right' : 'left'}, hideOption = {direction: !isForward ? 'right' : 'left'};
+		var showOption = {direction: direction === 1 ? 'right' : 'left'}, hideOption = {direction: direction === -1 ? 'right' : 'left'};
 		var is3View = $(".cover-wrapper-inner.previous").css("display") != 'none';
 		if (is3View) {
-			if (isForward) {
+			if (direction === 1) {
 				// step 0
 				$(".cover-box.previous").hide();
 				// step 1
 				$(".cover-box.previous").css({backgroundImage: 'url(' + prevCoverURL + ')'}).show(effect, showOption, step1Duration);
 				$(".cover-box.current").hide(effect, hideOption, step1Duration, function() {
 					// step 2
-					showInfo();
-					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration);
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration, function() {
+						showInfo();
+					});
 					$(".cover-box.next").hide(effect, hideOption, step2Duration, function() {
 						// step 3
 						$(this).css({backgroundImage: 'url(' + nextCoverURL + ')'}).show(effect, showOption, step3Duration);
 					});
 				});
-			} else {
+			} else if (direction === -1) {
 				$(".cover-box.next").hide();
 				$(".cover-box.next").css({backgroundImage: 'url(' + nextCoverURL + ')'}).show(effect, showOption, step1Duration);
 				$(".cover-box.current").hide(effect, hideOption, step1Duration, function() {
-					showInfo();
-					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration);
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show(effect, showOption, step2Duration, function() {
+						showInfo();
+					});
 					$(".cover-box.previous").hide(effect, hideOption, step2Duration, function() {
 						$(this).css({backgroundImage: 'url(' + prevCoverURL + ')'}).show(effect, showOption, step3Duration);
 					});
 				});
+			} else {
+				$(".cover-box.previous").hide('fade', {}, step3Duration, function() {
+					$(this).css({backgroundImage: 'url(' + prevCoverURL + ')'}).show('fade', {}, step2Duration);
+				});
+				$(".cover-box.current").hide('fade', {}, step3Duration, function() {
+					showInfo();
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show('fade', {}, step2Duration);
+				});
+				$(".cover-box.next").hide('fade', {}, step3Duration, function() {
+					$(this).css({backgroundImage: 'url(' + nextCoverURL + ')'}).show('fade', {}, step2Duration);
+				});
 			}
 		} else {
 			$(".cover-box.previous").css({backgroundImage: 'url(' + prevCoverURL + ')'}).show();
-			$(".cover-box.current").hide(effect, hideOption, step3Duration, function() {
-				showInfo();
-				$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show('fade', {}, step3Duration);
-			});
 			$(".cover-box.next").css({backgroundImage: 'url(' + nextCoverURL + ')'}).show();
+			if (direction === 1 || direction === -1) {
+				$(".cover-box.current").hide(effect, hideOption, step3Duration, function() {
+					showInfo();
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show('fade', {}, step3Duration);
+				});
+			} else {
+				$(".cover-box.current").hide('fade', {}, step3Duration, function() {
+					showInfo();
+					$(this).css({backgroundImage: 'url(' + currCoverURL + ')'}).show('fade', {}, step3Duration);
+				});
+			}
 		}
 	}
 }
