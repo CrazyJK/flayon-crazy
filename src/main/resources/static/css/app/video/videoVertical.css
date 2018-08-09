@@ -4,8 +4,8 @@ dl {
 	margin: 0;
 }
 /* label */
-.label {
-    box-shadow: 0 3px 9px rgba(0,0,0,.3);
+.label, .rank-group, .pagination {
+	box-shadow: 0 3px 9px rgba(0,0,0,.3);
 }
 .label-checkbox:hover, .label-radio:hover {
 	box-shadow: 0 3px 9px rgba(0,0,0,.6);
@@ -21,6 +21,9 @@ dl {
 .separator {
 	display: inline-block;
 	width: 10px;
+}
+input.search {
+	width: 150px !important;
 }
 
 #content_div {
@@ -186,7 +189,6 @@ dl {
 		font-size: 14px;
 		height: 22px;
 		padding: 2px 5px;
-		width: 150px !important;
 	}
 	.info-wrapper dl {
     	margin: auto;

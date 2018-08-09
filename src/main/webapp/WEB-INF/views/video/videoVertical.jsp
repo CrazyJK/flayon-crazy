@@ -21,12 +21,12 @@
 		<div class="inline-block" id="checkbox-filter-group">
 	   		<span class="label label-checkbox label-default" id="favorite"   role="checkbox" data-role-value="false" title="favorite actress">Fav</span>
 			<div class="separator"></div>
-	   		<span class="label label-checkbox label-default" id="video"      role="checkbox" data-role-value="true"  title="exist video">V</span>
-	   		<span class="label label-checkbox label-default" id="subtitles"  role="checkbox" data-role-value="false" title="exist also subtitles">S</span>
+	   		<span class="label label-checkbox label-default" id="video"      role="checkbox" data-role-value="true"  title="exist video"     >V</span>
+	   		<span class="label label-checkbox label-default" id="subtitles"  role="checkbox" data-role-value="false" title="also subtitles"  >S</span>
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block" id="checkbox-rank-group">
-	   		<span class="label label-checkbox label-default" id="check-rank0"  role="checkbox" data-role-value="true">0</span>
+	   		<span class="label label-checkbox label-default" id="check-rank0"  role="checkbox" data-role-value="true" >0</span>
 	   		<span class="label label-checkbox label-default" id="check-rank1"  role="checkbox" data-role-value="false">1</span>
 	   		<span class="label label-checkbox label-default" id="check-rank2"  role="checkbox" data-role-value="false">2</span>
 	   		<span class="label label-checkbox label-default" id="check-rank3"  role="checkbox" data-role-value="false">3</span>
@@ -44,7 +44,7 @@
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block">
-	   		<span class="label label-checkbox label-default" id="autoSlide" role="checkbox" data-role-value="false" title="auto Slide">R</span>
+	   		<span class="label label-checkbox label-default" id="autoSlide" role="checkbox" data-role-value="false" title="auto Slide">S</span>
 			<div class="inline-block" id="radio-autoSlideMode" role="radio" data-role-value="R">
 		   		<span class="label label-radio"    title="slide Forward">F</span>
 		   		<span class="label label-radio on" title="slide Random" >R</span>
@@ -56,13 +56,13 @@
 		<div class="video-wrapper text-center">
 			<div class="info-wrapper">
 				<dl>
-					<dd><span class="label label-plain info-studio"></span></dd>
-					<dd><span class="label label-plain info-opus"></span></dd>
-					<dd><span class="label label-plain info-release"></span></dd>
-					<dd><span class="label label-plain info-modified"></span></dd>
-					<dd><span class="label label-plain info-video"></span></dd>
+					<dd><span class="label label-plain info-studio"   ></span></dd>
+					<dd><span class="label label-plain info-opus"     ></span></dd>
+					<dd><span class="label label-plain info-release"  ></span></dd>
+					<dd><span class="label label-plain info-modified" ></span></dd>
+					<dd><span class="label label-plain info-video"    ></span></dd>
 					<dd><span class="label label-plain info-subtitles"></span></dd>
-					<dd><span class="label label-plain info-overview"></span>
+					<dd><span class="label label-plain info-overview" ></span>
 						<input class="info-overview-input hide" placeholder="Overview"/></dd>
 					<dd><div class="rank-wrapper form-inline">
 							<div class="input-group rank-group">
@@ -114,7 +114,7 @@
 					</ul>
 				</div>
 			</div>
-		</di>
+		</div>
 	</div>
 </div>
 </body>

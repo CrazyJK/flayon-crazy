@@ -70,14 +70,14 @@ function goMain() {
 			<li><a href="${PATH}/video"        	><s:message code="video.front"           /></a></li>
 			<li><a id="backMenu" 				><s:message code="video.background.title"/></a></li>
 			<li><a id="main" onclick="goMain()" ><s:message code="video.main"            /></a></li>
-			<li><a id="searchMenu" 	    		><s:message code="video.search"          /></a></li>
 			<li><a href="${PATH}/video/vertical">Vertical</a></li>
+			<li><a id="searchMenu" 	    		><s:message code="video.search"          /></a></li>
 			<li><a href="${PATH}/video/list_spa"><s:message code="video.video"           /></a></li>
 			<li><a href="${PATH}/video/actress"	><s:message code="video.actress"         /></a></li>
 			<li><a href="${PATH}/video/studio"	><s:message code="video.studio"          /></a></li>
 			<li><a href="${PATH}/video/tag"	    ><s:message code="video.tags"            /></a></li>
 			<li class="dropdown">
-    			<a class="dropdown-toggle" data-toggle="dropdown"><s:message code="video.image"/><span class="caret"></span></a>
+    			<a class="dropdown-toggle" data-toggle="dropdown">Picture<span class="caret"></span></a>
     			<ul class="dropdown-menu">
 					<li><a href="${PATH}/image"			  ><s:message code="video.image"     /></a></li>
 					<li><a href="${PATH}/image/aperture"  ><s:message code="video.aperture"  /></a></li>
