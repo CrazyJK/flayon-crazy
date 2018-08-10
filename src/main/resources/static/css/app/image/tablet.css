@@ -5,12 +5,10 @@
 }
 
 .container-tablet.throw > #imageDiv {
-	background: radial-gradient(ellipse farthest-side at bottom right, rgba(51, 122, 183, .5), rgba(255, 255, 255, 0)) no-repeat right bottom;
-	background-size: calc(100% / 6);
+	background: radial-gradient(ellipse farthest-side at bottom right, rgba(51, 122, 183, .5), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) no-repeat right bottom;
 }
 .container-tablet.throw.bg-black > #imageDiv {
-	background: radial-gradient(ellipse farthest-side at bottom right, rgba(255, 0, 0, .5), rgba(255, 255, 255, 0)) no-repeat right bottom;
-	background-size: calc(100% / 6);
+	background: radial-gradient(ellipse farthest-side at bottom right, rgba(255, 0, 0, .5), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) no-repeat right bottom;
 }
 
 .img-card {
@@ -40,4 +38,8 @@
 
 .rotate0 {
 	transform: rotateZ(0deg) !important;
+}
+
+#imageDiv > img {
+     width: initial;
 }
