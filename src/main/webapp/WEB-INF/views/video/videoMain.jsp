@@ -21,103 +21,79 @@ listViewType = '${videoSearch.listViewType}';
 <body>
 <div class="container-fluid" role="main">
 
-<div id="header_div" class="box">
-	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
-	<div id="searchDiv" class="text-center">
-		<!-- Search : Text -->
-		<%-- <form:label path="searchText"><span title="<s:message code="video.search"/>">S</span></form:label> --%>
-		<form:input path="searchText" cssClass="form-control input-sm search" placeHolder="Search" style="width:120px;"/>
-		<!-- Search : Additional condition. video, subtitles, cover -->
-		<label title="<s:message code="video.existVideo"/>">
-			<form:checkbox path="existVideo" cssClass="sr-only"/>
-			<span class="label" id="checkbox-existVideo1">V</span>
-		</label>
-		<label title="<s:message code="video.existSubtitles"/>">
-			<form:checkbox path="existSubtitles" cssClass="sr-only"/>
-			<span class="label" id="checkbox-existSubtitles1">VS</span>			
-		</label>
-		<label title="<s:message code="video.existCover"/>">
-			<form:checkbox path="existCover" cssClass="sr-only"/>
-			<span class="label" id="checkbox-existCover1">C</span>			
-		</label>
-		<label title="<s:message code="video.favorite"/>">
-			<form:checkbox path="favorite" cssClass="sr-only"/>
-			<span class="label" id="checkbox-favorite1">F</span>			
-		</label>
-		<!-- Search : rank -->
-		<c:forEach items="${rankRange}" var="rank" varStatus="rankStat">
-			<label title="<s:message code="video.rank"/> ${rank}">
-				<form:checkbox path="rankRange" value="${rank}" cssClass="sr-only"/>
-				<span class="label" id="checkbox-rankRange${rankStat.count}">${rank}</span>
+	<div id="header_div" class="box">
+		<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
+		<div id="searchDiv" class="text-center">
+			<!-- Search : Text -->
+			<form:input path="searchText" cssClass="form-control input-sm search" placeHolder="Search" style="width:120px;"/>
+			&nbsp;
+			<!-- Search : Additional condition. video, subtitles, cover -->
+			<label title="<s:message code="video.existVideo"/>">
+				<form:checkbox path="existVideo" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="existVideo1">V</span>
 			</label>
-		</c:forEach>
-		<!-- Search : play count -->
-		<form:select path="playCount" items="${playRange}" cssClass="form-control input-sm" title="Play Count"/>
-		<!-- Search submit -->			
-		<button class="btn btn-xs btn-default" onclick="fnSearch()">
-			<s:message code="video.search"/> <span class="badge">${fn:length(videoList)}</span>
-		</button>
-		<!-- view type -->
-		<form:select path="listViewType" items="${views}" cssClass="form-control input-sm" title="View type"/>
-		<!-- sort -->
-		<label title="<s:message code="video.reverseSort"/>">
-			<form:checkbox path="sortReverse" cssClass="sr-only"/>
-			<span class="label" id="checkbox-sortReverse1">R</span>
-		</label>
-		<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method" style="width:80px;"/>
-		<!-- wholeActressStudioView -->
-		<label title="<s:message code="video.wholeActressStudioView"/>">
-			<form:checkbox path="wholeActressStudioView" cssClass="sr-only"/>
-			<span class="label" id="checkbox-wholeActressStudioView1">A</span>
-		</label>
-		<!-- viewStudioPanel -->
-		<label title="<s:message code="video.viewStudioPanel"/>">
-			<form:checkbox path="viewStudioDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewStudioDiv1" onclick="fnStudioDivToggle()">S</span>
-		</label>
-		<!-- viewActressDiv -->
-		<label title="<s:message code="video.viewActressPanel"/>">
-			<form:checkbox path="viewActressDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewActressDiv1" onclick="fnActressDivToggle()">A</span>	
-		</label>
-		<!-- viewTagDiv -->
-		<label title="<s:message code="video.viewTagPanel"/>">
-			<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
-			<span class="label" id="checkbox-viewTagDiv1" onclick="fnTagDivToggle()">T</span>
-		</label>
-		<!-- Play -->
-		<a class="btn btn-xs btn-primary btn-randomplay float-right" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></a>
+			<label title="<s:message code="video.existSubtitles"/>">
+				<form:checkbox path="existSubtitles" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="existSubtitles1">VS</span>
+			</label>
+			<label title="<s:message code="video.existCover"/>">
+				<form:checkbox path="existCover" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="existCover1">C</span>
+			</label>
+			<label title="<s:message code="video.favorite"/>">
+				<form:checkbox path="favorite" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="favorite1">F</span>
+			</label>
+			&nbsp;
+			<!-- Search : rank -->
+			<c:forEach items="${rankRange}" var="rank" varStatus="rankStat">
+				<label title="<s:message code="video.rank"/> ${rank}">
+					<form:checkbox path="rankRange" value="${rank}" cssClass="sr-only"/>
+					<span class="label label-checkbox" for="rankRange${rankStat.count}">${rank}</span>
+				</label>
+			</c:forEach>
+			&nbsp;
+			<!-- Search : play count -->
+			<form:select path="playCount" items="${playRange}" cssClass="form-control input-sm" title="Play Count"/>
+			&nbsp;
+			<!-- Search submit -->			
+			<button class="btn btn-xs btn-default" onclick="fnSearch()">
+				<s:message code="video.search"/> <span class="badge">${fn:length(videoList)}</span>
+			</button>
+			&nbsp;
+			<!-- view type -->
+			<form:select path="listViewType" items="${views}" cssClass="form-control input-sm" title="View type"/>
+			&nbsp;
+			<!-- sort -->
+			<label title="<s:message code="video.reverseSort"/>">
+				<form:checkbox path="sortReverse" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="sortReverse1">R</span>
+			</label>
+			<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method" style="width:80px;"/>
+			&nbsp;&nbsp;
+			<!-- viewTagDiv -->
+			<label title="<s:message code="video.viewTagPanel"/>">
+				<form:checkbox path="viewTagDiv" cssClass="sr-only"/>
+				<span class="label label-checkbox" for="viewTagDiv1" onclick="fnTagDivToggle()">Tag</span>
+			</label>
+			&nbsp;
+			<!-- Play -->
+			<a class="btn btn-xs btn-primary btn-randomplay" onclick="fnRandomPlay()" title="<s:message code="video.random-play.title"/>"><s:message code="video.random-play"/></a>
 
-		<ul id="studioDiv" class="box list-inline" style="display:${videoSearch.viewStudioDiv ? '' : 'none'}">
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(studioList)}</span></li>
-			<c:forEach items="${studioList}" var="studio" varStatus="studioStat">
-			<li>
-				<jk:studio studio="${studio}" view="checkbox" count="${studioStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
-		<ul id="actressDiv" class="box list-inline" style="display:${videoSearch.viewActressDiv ? '' : 'none'}">
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(actressList)}</span></li>
-			<c:forEach items="${actressList}" var="actress" varStatus="actressStat">
-			<li>
-				<jk:actress actress="${actress}" view="checkbox" count="${actressStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
-		<ul id="tagDiv" class="box list-inline" style="display:${videoSearch.viewTagDiv ? '' : 'none'}">
-			<li><a onclick="popup('/video/tag', 'tags', 900, 700)" class="btn btn-xs btn-default">Tags</a></li>
-			<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(tagList)}</span></li>
-			<c:forEach items="${tagList}" var="tag" varStatus="tagStat">
-			<li>
-				<jk:tags tag="${tag}" view="checkbox" count="${tagStat.count}"/>
-			</li>
-			</c:forEach>
-		</ul>
+			<ul id="tagDiv" class="box list-inline" style="display:${videoSearch.viewTagDiv ? '' : 'none'}">
+				<li><a onclick="popup('/video/tag', 'tags', 900, 700)" class="btn btn-xs btn-default">Tags</a></li>
+				<li onclick="fnUnchecked(this)"><span class="badge">${fn:length(tagList)}</span></li>
+				<c:forEach items="${tagList}" var="tag" varStatus="tagStat">
+				<li>
+					<jk:tags tag="${tag}" view="checkbox" count="${tagStat.count}"/>
+				</li>
+				</c:forEach>
+			</ul>
+		</div>
+		</form:form>
 	</div>
-	</form:form>
-</div>
 
-<div id="content_div" class="box">
+	<div id="content_div" class="box">
 
 	<div id="contentContainer" style="overflow-x: hidden;">
 	<c:choose>
@@ -588,7 +564,7 @@ listViewType = '${videoSearch.listViewType}';
 	</c:choose>
 	</div>
 
-</div>
+	</div>
 
 </div>
 </body>

@@ -1173,8 +1173,6 @@ public class Video {
 				matchQuery(search.getSearchText()),
 				matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover()),
 				matchFavorite(search.isFavorite()),
-				matchStudioList(search.getSelectedStudio()),
-				matchActressList(search.getSelectedActress()),
 				matchRank(search.getRankRange()),
 				matchPlay(search.getPlayCount()),
 				matchTag(search.getSelectedTag()));
@@ -1182,8 +1180,6 @@ public class Video {
 		if (matchQuery(search.getSearchText())
 			&& matchExist(search.isExistVideo(), search.isExistSubtitles(), search.isExistCover())
 			&& matchFavorite(search.isFavorite())
-			&& matchStudioList(search.getSelectedStudio())
-			&& matchActressList(search.getSelectedActress())
 			&& matchRank(search.getRankRange())
 			&& matchPlay(search.getPlayCount())
 			&& matchTag(search.getSelectedTag())
@@ -1195,8 +1191,6 @@ public class Video {
 
 	public boolean matchArchive(VideoSearch search) {
 		if (matchQuery(search.getSearchText()) 
-			&& matchStudioList(search.getSelectedStudio())
-			&& matchActressList(search.getSelectedActress())
 			&& matchTag(search.getSelectedTag())
 			) {
 			return true;
@@ -1232,6 +1226,7 @@ public class Video {
 		return rankRange.contains(rank);
 	}
 
+	@SuppressWarnings("unused")
 	private boolean matchActressList(List<String> selectedActress) {
 		return selectedActress == null || selectedActress.size() == 0 ? true : selectedActress.stream().anyMatch(s -> equalsActress(s));
 	}
@@ -1240,6 +1235,7 @@ public class Video {
 		return actressList.stream().anyMatch(a -> a.equalsName(actressName));
 	}
 
+	@SuppressWarnings("unused")
 	private boolean matchStudioList(List<String> selectedStudio) {
 		return selectedStudio == null || selectedStudio.size() == 0 ? true : selectedStudio.contains(studio.getName());
 	}

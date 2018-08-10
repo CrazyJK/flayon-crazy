@@ -38,15 +38,15 @@ function prepare() {
 		}
 	});
 	// filter & rank condition
-	$("#checkbox-filter-group > [role='checkbox'], #checkbox-rank-group > [role='checkbox']").on("click", collectList);
+	$("#checkbox-filter-group > [role='checkbox'], #checkbox-rank-group > [role='checkbox']").on("change", collectList);
 	// sort condition
-	$("#radio-sort").on("checked", collectList);
+	$("#radio-sort").on("change", collectList);
 	// video label event
 	addVideoEvent();
 	// navigation event
 	navigation.event();
 	// auto slide
-	$("#autoSlide").on("click", function() {
+	$("#autoSlide").on("change", function() {
 		if ($(this).data("checked")) {
 			navigation.slide.on();
 		} else {
@@ -99,16 +99,16 @@ function collectList() {
 	$(".video-wrapper").hide();
 	
 	var query = $("#query").val();
-	var fav   = $("#favorite").data("checked");
-	var vid   = $("#video").data("checked");
-	var sub   = $("#subtitles").data("checked");
+	var fav   = $("#favorite"   ).data("checked");
+	var vid   = $("#video"      ).data("checked");
+	var sub   = $("#subtitles"  ).data("checked");
 	var rank0 = $("#check-rank0").data("checked") ? '0' : '';
 	var rank1 = $("#check-rank1").data("checked") ? '1' : '';
 	var rank2 = $("#check-rank2").data("checked") ? '2' : '';
 	var rank3 = $("#check-rank3").data("checked") ? '3' : '';
 	var rank4 = $("#check-rank4").data("checked") ? '4' : '';
 	var rank5 = $("#check-rank5").data("checked") ? '5' : '';
-	var sort  = $("#radio-sort").attr("data-role-value");
+	var sort  = $("#radio-sort" ).data("value");
 	var compareTo = function(data1, data2) {
 		var result = 0;
 		if (typeof data1 === 'number') {
@@ -266,7 +266,7 @@ var navigation = {
 		slide: {
 			on: function() {
 				var run = function() {
-					var mode  = $("#radio-autoSlideMode").attr("data-role-value");
+					var mode  = $("#radio-autoSlideMode").data("value");
 					if (mode === 'R') {
 						navigation.random();
 					} else {

@@ -314,7 +314,7 @@ var VideoList = (function() {
 		});
 
 		// for rank checkbox
-		$("[role='checkbox']", "#checkbox-rank-group").on("click", function() {
+		$("[role='checkbox']", "#checkbox-rank-group").on("change", function() {
 			render(true);
 		});
 		

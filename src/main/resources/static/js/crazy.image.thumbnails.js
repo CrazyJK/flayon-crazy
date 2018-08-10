@@ -20,7 +20,7 @@ var thumbnails = (function() {
 				$("input:radio[name='mode']").on('change', fn.toggleMode);
 				$("#paths").on("change", fn.toggleMode);
 				$("#img-width, #img-height").on("change", fn.resizeImage);
-				$("#magnify").on("click", function() {
+				$("#magnify").on("change", function() {
 					onMagnify = $(this).data("checked");
 					setLocalStorageItem(THUMBNAMILS_BTN_MAGNIFY, onMagnify);
 				});
@@ -34,7 +34,7 @@ var thumbnails = (function() {
 				onMagnify = getLocalStorageItemBoolean(THUMBNAMILS_BTN_MAGNIFY, false);
 				
 				$("input:radio[name='mode'][value='" + mode + "']").attr("checked", true).parent().addClass("active");
-				onMagnify && $("#magnify").click();
+				onMagnify && $("#magnify").trigger("change");
 				fn.setLightBoxOption();
 			},
 			start: function() {

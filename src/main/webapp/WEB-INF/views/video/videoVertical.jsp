@@ -19,34 +19,34 @@
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block" id="checkbox-filter-group">
-	   		<span class="label label-checkbox label-default" id="favorite"   role="checkbox" data-role-value="false" title="favorite actress">Fav</span>
+	   		<span role="checkbox" class="label label-checkbox" id="favorite" title="favorite actress">Fav</span>
 			<div class="separator"></div>
-	   		<span class="label label-checkbox label-default" id="video"      role="checkbox" data-role-value="true"  title="exist video"     >V</span>
-	   		<span class="label label-checkbox label-default" id="subtitles"  role="checkbox" data-role-value="false" title="also subtitles"  >S</span>
+	   		<span role="checkbox" class="label label-checkbox on" id="video" title="exist video">V</span>
+	   		<span role="checkbox" class="label label-checkbox" id="subtitles" title="also subtitles">S</span>
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block" id="checkbox-rank-group">
-	   		<span class="label label-checkbox label-default" id="check-rank0"  role="checkbox" data-role-value="true" >0</span>
-	   		<span class="label label-checkbox label-default" id="check-rank1"  role="checkbox" data-role-value="false">1</span>
-	   		<span class="label label-checkbox label-default" id="check-rank2"  role="checkbox" data-role-value="false">2</span>
-	   		<span class="label label-checkbox label-default" id="check-rank3"  role="checkbox" data-role-value="false">3</span>
-	   		<span class="label label-checkbox label-default" id="check-rank4"  role="checkbox" data-role-value="false">4</span>
-	   		<span class="label label-checkbox label-default" id="check-rank5"  role="checkbox" data-role-value="false">5</span>
+	   		<span role="checkbox" class="label label-checkbox on" id="check-rank0">0</span>
+	   		<span role="checkbox" class="label label-checkbox" id="check-rank1">1</span>
+	   		<span role="checkbox" class="label label-checkbox" id="check-rank2">2</span>
+	   		<span role="checkbox" class="label label-checkbox" id="check-rank3">3</span>
+	   		<span role="checkbox" class="label label-checkbox" id="check-rank4">4</span>
+	   		<span role="checkbox" class="label label-checkbox" id="check-rank5">5</span>
 		</div>
 		<div class="separator"></div>
-		<div class="inline-block" id="radio-sort" role="radio" data-role-value="M">
-	   		<span class="label label-radio"    title="Studio"  >S</span>
-	   		<span class="label label-radio"    title="Opus"    >O</span>
-	   		<span class="label label-radio"    title="Title"   >T</span>
-	   		<span class="label label-radio"    title="Actress" >A</span>
-	   		<span class="label label-radio"    title="Release" >D</span>
+		<div class="inline-block" id="radio-sort" role="radio">
+	   		<span class="label label-radio" title="Studio">S</span>
+	   		<span class="label label-radio" title="Opus">O</span>
+	   		<span class="label label-radio" title="Title">T</span>
+	   		<span class="label label-radio" title="Actress">A</span>
+	   		<span class="label label-radio" title="Release">D</span>
 	   		<span class="label label-radio on" title="Modified">M</span>
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block">
-	   		<span class="label label-checkbox label-default" id="autoSlide" role="checkbox" data-role-value="false" title="auto Slide">S</span>
-			<div class="inline-block" id="radio-autoSlideMode" role="radio" data-role-value="R">
-		   		<span class="label label-radio"    title="slide Forward">F</span>
+	   		<span role="checkbox" class="label label-checkbox" id="autoSlide" title="auto Slide">S</span>
+			<div class="inline-block" id="radio-autoSlideMode" role="radio">
+		   		<span class="label label-radio" title="slide Forward">F</span>
 		   		<span class="label label-radio on" title="slide Random" >R</span>
 		   	</div>
 		</div>

@@ -99,11 +99,13 @@ input[type='range'] {
 }
 .label-radio {
 	border-radius: 16px;
+}
+.label-radio, .label-checkbox {
     background-color: #777;
     cursor: pointer;
     transition: all 0.3s;
 }
-.label-radio.on {
+.label-radio.on, .label-checkbox.on {
 	background-color: #5cb85c;
 }
 .cloud {

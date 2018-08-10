@@ -262,7 +262,7 @@ var calculatedDivHeight = 0,
 	 */
 	fnUnchecked = function(obj) {
 		$(obj).parent().children().children().children("input[type=checkbox]:checked").each(function() {
-			$("#checkbox-" + $(this).attr("id")).click();
+			$(this).click();
 		});
 	},
 	/**

@@ -3,6 +3,7 @@ package jk.kamoru.flayon.crazy.video;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,6 +234,9 @@ public class VideoController extends CrazyController {
 	
 	@RequestMapping("/archive")
 	public String videoArchive(Model model, @ModelAttribute VideoSearch videoSearch) {
+		if (StringUtils.isBlank(videoSearch.getSearchText())) {
+			videoSearch.setSearchText("Need to query");
+		}
 		List<Video> videoList =  videoService.searchVideoInArchive(videoSearch);
 
 		model.addAttribute("views", 	View.values());

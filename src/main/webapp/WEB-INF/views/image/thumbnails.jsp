@@ -42,7 +42,7 @@ $(function() {
 		
 		<span class="label label-primary total-count"   title="Total"></span>
 		<span class="label label-primary current-index" title="Index"></span>
-   		<span class="label label-default" id="magnify"  role="checkbox" data-role-value="false" title="active magnify">Magnify</span>
+   		<span class="label label-checkbox" id="magnify"  role="checkbox" title="active magnify">Magnify</span>
 		<span class="label label-warning debug"></span>
 	</div>
 	

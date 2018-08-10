@@ -340,19 +340,17 @@ var	crazy = (function() {
 				},
 				checkbox = function() {
 					//console.log("crazy_listener : implement checkbox element");
-					$('span[id^="checkbox"]')
-						.css("cursor", "pointer")
-						.on("click", function() {
-							var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
-							console.log("checkbox click", "#" + $(this).attr("id"), !isChecked);
-							$(this).swapClass("label-success", "label-default", isChecked);
-							$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
-						})
-						.each(function() {
-							var isChecked = $("#" + $(this).attr("id").split("-")[1]).is(":checked");
-							$(this).swapClass("label-success", "label-default", !isChecked);
-							$($(this).attr("data-toggle")).toggle(!isChecked).swapClass("hide", "", !isChecked);
+					$("input[type='checkbox']").each(function() {
+						var $this = $(this);
+						var isChecked = $this.is(":checked");
+						var labelId = $this.attr("id");
+						$("[for='" + labelId + "']").toggleClass("on", isChecked);
+						$this.on("change", function() {
+							var isChecked = $(this).is(":checked");
+							var labelId   = $(this).attr("id");
+							$("[for='" + labelId + "']").toggleClass("on", isChecked);
 						});
+					});
 				},
 				radioBtn = function() {
 					//console.log("crazy_listener : implement radio element");
@@ -375,17 +373,15 @@ var	crazy = (function() {
 				},
 				/* Add listener
 				 * custom checkbox
-				 * ex) <span class="label label-default" role="checkbox" data-role-value="false">Favorite</span> 
+				 * ex) <span role="checkbox" class="label label-checkbox" id="check-rank4">4</span>
 				 * */
 				checkbox_role = function() {
-					//console.log("crazy_listener : implement role=checkbox");
 					$("[role='checkbox']").each(function() {
-						var checked = $(this).attr("data-role-value") === 'true';
-						$(this).addClass('pointer').toggleClass("label-success", checked).data("checked", checked);
+						var checked = $(this).hasClass("on");
+						$(this).data("checked", checked);
 					}).on("click", function() {
 						var checked = $(this).data("checked");
-						$(this).toggleClass("label-success", !checked).data("checked", !checked);
-						// console.log("checkbox_role click : ", "#" + $(this).attr("id"), !checked);
+						$(this).toggleClass("on", !checked).data("checked", !checked).trigger("change");
 					});
 				},
 				/**
@@ -393,21 +389,21 @@ var	crazy = (function() {
 				 */
 				radio_role = function() {
 					$("[role='radio']").each(function() {
-						$(this).attr("data-role-value", $(this).children(".on").html());
+						$(this).data("value", $(this).children(".on").html());
 						$(this).children().on("click", function() {
 							var $this   = $(this);
 							var $parent = $this.parent();
-							var previousValue = $parent.attr("data-role-value");
+							var previousValue = $parent.data("value");
 							var checkedValue  = $this.html();
-							// previous uncheck
-							$parent.children(".on").removeClass("on");
-							// check
-							$this.addClass("on");
-							// set value
-							$parent.attr("data-role-value", checkedValue);
-							// trigger different choice
 							if (previousValue != checkedValue) {
-								$parent.trigger("checked");
+								// previous uncheck
+								$parent.children(".on").removeClass("on");
+								// check
+								$this.addClass("on");
+								// set value
+								$parent.data("value", checkedValue);
+								// trigger different choice
+								$parent.trigger("change");
 							}
 						});
 					});

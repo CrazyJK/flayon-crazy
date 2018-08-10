@@ -23,13 +23,13 @@ public class VideoSearch implements Serializable {
 	/** 검색조건 : favorite 비디오 */		boolean favorite = false;
 	/** 검색조건 : 랭킹 범위 */				List<Integer> rankRange = Arrays.asList(0);
 	/** 검색조건 : 플레이 횟수 */			Integer playCount = -1;
-	/** 검색조건 : 선택된 스튜디오 */ 		List<String> selectedStudio;
-	/** 검색조건 : 선택된 배우 */			List<String> selectedActress;
 	/** 검색조건 : 선택된 Tag */ 			List<String> selectedTag;
 	
 	/** List view type */					View listViewType = View.Flay;
 	
 	/** 정렬 방법 */						Sort sortMethod = Sort.Modified;
 	/** 정렬 역정렬 여부 */					boolean sortReverse = false;
+
+	/** Tag 화면 볼지 여부 */				boolean viewTagDiv = false;
 
 }
