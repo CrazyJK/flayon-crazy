@@ -61,15 +61,25 @@
 
 		return this.each(function() {
 			var self = $(this);
-			self.off().on("mousewheel DOMMouseScroll mouseup", function(e) {
-				detectEvent(e, callback);
+			self.off();
+			self.data("active", true);
+			$(window).data("active", true);
+			self.on("mousewheel DOMMouseScroll mouseup", function(e) {
+				$(this).data("active") && detectEvent(e, callback);
 			});
 			browser === FIREFOX && self.on("contextmenu", function(e) {
-				detectEvent(e, callback);
+				$(this).data("active") && detectEvent(e, callback);
 			});
 			$(window).on("keyup", function(e) {
-				detectEvent(e, callback);
+				$(this).data("active") && detectEvent(e, callback);
 			});
+		});
+	};
+	
+	$.fn.navActive = function(active) {
+		return this.each(function() {
+			$(this).data("active", active);
+			$(window).data("active", active);
 		});
 	};
 	

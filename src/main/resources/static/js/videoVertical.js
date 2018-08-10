@@ -211,6 +211,12 @@ var navigation = {
 				}
 			});
 		},
+		on: function() {
+			$("#content_div").navActive(true);
+		},
+		off: function() {
+			$("#content_div").navActive(false);
+		},
 		previous: function() {
 			navigation.go(currentIndex - 1);
 		},
@@ -388,8 +394,10 @@ function showVideo(direction) {
 		$.each(currentVideo.tags, function(i, tag) {
 			$("#tag-" + tag.id).addClass('on');
 		});
+		navigation.on();
 	}
 	
+	navigation.off();
 	// Cover animate
 	var prevCoverURL = PATH, currCoverURL = PATH, nextCoverURL = PATH;
 	prevCoverURL += (0 < currentIndex) ? "/cover/video/" + videoList[currentIndex-1].opus : '/image/random?_t=' + new Date().getTime();
