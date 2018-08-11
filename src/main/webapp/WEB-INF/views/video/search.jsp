@@ -207,17 +207,22 @@ $(document).ready(function() {
 		var rowname = $(this).val();
 		
 		var braceIndex = rowname.indexOf("]");
-		var minusIndex = rowname.lastIndexOf("-");
+		var secondPart = rowname.substring(braceIndex + 1);
+		var minusIndex = secondPart.lastIndexOf("-");
 		opus  = rowname.substring(0, braceIndex).trim();
-		title = rowname.substring(braceIndex + 1, minusIndex).trim();
-		name  = rowname.substring(minusIndex + 1).trim();
+		if (minusIndex > 0) {
+			title = secondPart.substring(0, minusIndex).trim();
+			name  = secondPart.substring(minusIndex + 1).trim();
+			
+		} else {
+			title = secondPart
+			name  = "";			
+		}
 		
 		$("#opus").val(opus).trigger("keyup");
-		//$("#title").val(title);
-		//$("#actress").val(name);
 		fnSearchOpus();
 		fnTranslate(title);
-		fnSearchActress(name);
+		name != '' && fnSearchActress(name);
 		
 		console.log(opus, braceIndex, title, minusIndex, name);
 	});
