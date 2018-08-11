@@ -22,7 +22,7 @@ var bgUrl = '${PATH}/cover/actress/${actress.name}';
 
 $(document).ready(function() {
 	!bgContinue && $("body").css({
-		background: "url('" + bgUrl + "') center top repeat fixed #fff"
+		background: "url('" + bgUrl + "') center top / contain repeat fixed #fff"
 	});	
 	archive && $("#favoriteTEXT, .btn").hide();
 
@@ -136,7 +136,7 @@ function searchActressPicture() {
 	
 	<h4>
 		<span class="label label-plain" onclick="$('.studio-list').toggleClass('hide')">Studio</span><span class="badge badge-plain">${fn:length(actress.studioList)}</span>
-		<span class="label label-plain">Video</span><span class="badge badge-plain">${fn:length(actress.videoList)}</span>
+		<span class="label label-plain" onclick="$('.container-video-card').toggle()">Video</span><span class="badge badge-plain">${fn:length(actress.videoList)}</span>
 	</h4>
 	<div class="form-group hide studio-list" style="padding-left:0px;">
 		<ul class="list-inline">
@@ -151,7 +151,7 @@ function searchActressPicture() {
 	</div>
 </div>
 <div class="container container-video-card">
-	<div class="form-group text-center box" style="margin:0;">
+	<div class="form-group text-center" style="margin:0;">
 		<c:if test="${actress.name ne 'Amateur'}">
 			<ul class="list-inline">
 				<c:forEach items="${actress.videoList}" var="video">
