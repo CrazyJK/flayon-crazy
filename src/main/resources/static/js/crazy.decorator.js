@@ -133,7 +133,9 @@ var	resizeDivHeight = function() {
 		if (bgContinue) {
 		    $(".container-fluid, .container").animate({
 		        "opacity": bgToggle++ % 2
-		    }, 1000);
+		    }, 1000, function() {
+				$("body").toggleClass("picture", bgToggle % 2);
+		    });
 		    $("#bgActionGroup").css({"padding-top": windowHeight - 60}).toggle({
 		        duration: 1000
 		    });

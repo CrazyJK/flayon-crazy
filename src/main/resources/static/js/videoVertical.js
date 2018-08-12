@@ -8,6 +8,8 @@ var currentVideo = null;
 var currentIndex = -1;
 var isFirstLoad = true;
 var slideTimer;
+var keyInput = "";
+var keyLastInputTime = new Date().getTime();
 
 $(document).ready(function() {
 	prepare();
@@ -186,9 +188,15 @@ function collectList() {
 	loading(false);
 }
 
+function notice(msg) {
+	$("<span>", {class: 'label label-plain'}).html(msg).appendTo($(".notice-bar")).fadeOut(5000, function() {
+		$(this).remove();
+	});
+}
+
 var navigation = {
 		event: function() {
-			$("#content_div").navEvent(function(signal) {
+			$("#content_div").navEvent(function(signal, e) {
 				switch(signal) {
 				case 1: // mousewheel: up
 				case 37: // key : left
@@ -208,6 +216,35 @@ var navigation = {
 				case 1001: // mousedown  : left click. auto slide off
 					$("#autoSlide").data("checked") && $("#autoSlide").trigger("click");
 					break;
+				case 36: // key: home
+					navigation.go(0);
+					break;
+				case 35: // key: end
+					navigation.go(videoList.length -1);
+					break;
+				case 33: // key: pageUp
+					navigation.go(currentIndex - 9);
+					break;
+				case 34: // key: pageDown 	
+					navigation.go(currentIndex + 9);
+					break;
+				}
+				var currentTime = new Date().getTime();
+				if (currentTime - keyLastInputTime > 5000) { // 5s over, key reset
+					keyInput = "";
+				}
+				keyLastInputTime = currentTime;
+				// navigation.go of input number
+				if (signal === 13 && keyInput != '') { // enter
+					var idx = parseInt(keyInput) - 1;
+					keyInput = "";
+					navigation.go(idx);
+				} else if (/^\d+$/.test(e.key)) { // key is number
+					keyInput += e.key;
+					notice(keyInput);
+				} else if (signal === 8) { // backspace
+					keyInput = keyInput.slice(0, -1);
+					notice(keyInput);
 				}
 			});
 		},
@@ -310,10 +347,11 @@ function addVideoEvent() {
 	// overview
 	$(".info-overview").on("click", function() {
 		$(this).hide();
-		$(".info-overview-input").removeClass("hide");
+		$(".info-overview-input").removeClass("hide").focus();
 	});
 	// overview input
 	$(".info-overview-input").on("keyup", function(e) {
+		e.stopPropagation();
 		if (e.keyCode === 13) {
 			var $this = $(this);
 			var text = $this.val();
@@ -365,6 +403,7 @@ function showVideo(direction) {
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.localName),
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.birth),
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.age),
+							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.debut),
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.bodySize),
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html(actress.height),
 							$("<span>", {'class': 'label label-plain info-actress-extra'}).html('v' + actress.videoCount)

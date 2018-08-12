@@ -6,6 +6,17 @@ body {
 	background-repeat: repeat;
 	transition: background 1s ease;
 }
+body.picture {
+	background-color: #000;
+	background-size: auto;
+	background-repeat: no-repeat;
+}
+body.picture > nav#deco_nav {
+	opacity: 0;
+}
+body.picture > nav#deco_nav:hover {
+	opacity: 1;
+}
 [onclick], [ng-click] {
 	cursor: pointer;
 	transition: all .3s;	
@@ -187,6 +198,10 @@ li.dropdown > a.dropdown-toggle, ul.dropdown-menu > li > a {
 	padding: 10px; 
 	margin: 0 auto;
 	text-align: center;
+	opacity: 0;
+}
+#bgActionGroup:hover {
+	opacity: 1;
 }
 #bgActionGroup > span[id] {
 	cursor: pointer;

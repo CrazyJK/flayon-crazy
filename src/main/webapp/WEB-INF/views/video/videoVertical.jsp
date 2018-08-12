@@ -104,6 +104,9 @@
 				</div>
 			</div>
 			<div class="position-bottom">
+				<div class="notice-bar">
+					<span class="label label-plain"></span>
+				</div>
 				<div class="navigation-wrapper">
 					<ul class="pagination">
 	  					<li><a href="#">1</a></li>

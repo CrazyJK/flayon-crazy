@@ -181,6 +181,10 @@ input.search {
     padding: 0 20px;
 }
 
+.notice-bar {
+	font-size: 24px;	
+}
+
 @media (max-height: 1500px) {
 	#header_div {
 		font-size: 18px;

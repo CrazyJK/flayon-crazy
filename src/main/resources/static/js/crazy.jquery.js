@@ -55,7 +55,7 @@
 					(e.type === 'keyup') ? e.keyCode :
 						(e.type === 'mouseup' || e.type === 'mousedown') ? e.which + 1000 :
 							(e.type === 'contextmenu') ? 1003 : 0
-			);
+			, e);
 			stopEvent(e);
 		};
 
