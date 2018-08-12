@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageUtils {
 
 	public static byte[] mergeTextToImage(String text, File image) {
-		return mergeTextToImage(image, text, "나눔고딕코딩", 32);
+		return mergeTextToImage(image, text, "D2Coding", 32);
 	}
 
 	public static byte[] mergeTextToImage(File image, String text, String fontname, int fontsize) {

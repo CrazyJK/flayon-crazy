@@ -28,7 +28,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -502,17 +501,6 @@ public class VideoServiceImpl implements VideoService {
 				throw new VideoNotFoundException(opus);
 		}
 		return video;
-	}
-
-	@Override
-	@Cacheable(value="flayon-cover-cache", key="#opus")
-	public byte[] getVideoCoverByteArray(String opus) {
-		return videoDao.getVideo(opus).getCoverByteArray();
-	}
-
-	@Override
-	public File getVideoCoverFile(String opus) {
-		return videoDao.getVideo(opus).getCoverFile();
 	}
 
 	@Override

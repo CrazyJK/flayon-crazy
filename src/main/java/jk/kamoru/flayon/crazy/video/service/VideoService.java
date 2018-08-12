@@ -82,20 +82,6 @@ public interface VideoService {
 	Video getVideo(String opus);
 
 	/**
-	 * get video cover byte array
-	 * @param opus
-	 * @return cover byte array
-	 */
-	byte[] getVideoCoverByteArray(String opus);
-
-	/**
-	 * get video cover file
-	 * @param opus
-	 * @return cover file
-	 */
-	File getVideoCoverFile(String opus);
-
-	/**
 	 * get video by search bean
 	 * @param videoSearch
 	 * @return video list
