@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class CoverServiceImpl implements CoverService {
 	@Autowired VideoDao videoDao;
 
 	@Override
-	@Cacheable(value="flayon-cover-cache", key="#opus")
+//	@Cacheable(value="flayon-cover-cache", key="#opus")
 	public CoverHttpEntity<byte[]> getVideoCover(HttpServletResponse response, String opus) {
 		File file = videoDao.getVideo(opus).getCoverFile();
 		byte[] bytes = readFileToByteArray(file);
