@@ -20,10 +20,17 @@ dl {
 }
 .separator {
 	display: inline-block;
-	width: 10px;
+	width: 2px;
 }
 input.search {
 	width: 150px !important;
+}
+.tag-choice {
+	display: none;
+	padding: 8px;
+}
+.tag-choice > div {
+	margin: 2px;
 }
 
 #content_div {

@@ -13,7 +13,6 @@ var keyLastInputTime = new Date().getTime();
 
 $(document).ready(function() {
 	prepare();
-	
 	loadVideo();
 });
 
@@ -55,6 +54,11 @@ function prepare() {
 			navigation.slide.off();
 		}
 	});
+	// toggle tags
+	$("#toggle-tags").on('change', function() {
+		$("#tags").toggle();
+		resizeDivHeight();
+	});
 }
 
 function setTags() {
@@ -69,11 +73,24 @@ function setTags() {
 				})
 		);
 	}
+	function makeTag4Choice(tag) {
+		return $("<div>", {'class': 'inline-block'}).append(
+				$("<span>", {'class': 'label label-tag', title: tag.description, 'data-tag-id': tag.id}).html(tag.name).on("click", function() {
+					if ($("#tags").find(".label-tag.on").length == 0) {
+						$("#deselectTag").switchClass('btn-link', 'btn-warning');
+					}
+					$(this).toggleClass("on");
+					collectList();
+				})
+		);
+	}
 	// tag list setting
 	restCall(PATH + "/rest/tag", {showLoading: false}, function(list) {
 		var $div = $(".tag-list");
+		var $tags = $("#tags");
 		$.each(list, function(i, tag) {
 			$div.append(makeTag(tag));
+			$tags.append(makeTag4Choice(tag));
 		});
 	});
 	// new tag btn
@@ -88,15 +105,40 @@ function setTags() {
 			restCall(PATH + "/rest/tag", {method: "POST", data: {opus: currentVideo.opus, name: newTagName, description: newTagDesc}, showLoading: false}, function(tag) {
 				currentVideo.tags.push(tag);
 				$(".tag-list").append(makeTag(tag));
+				$("#tags").append(makeTag4Choice(tag));
 				$("#tag-" + tag.id).addClass("on");
 				$("#newTag-name, #newTag-desc").val('');
 				$('.tag-form-wrapper').slideToggle();
 			});
 		}
 	});
+	// deselectTag
+	$("#deselectTag").on("click", function() {
+		var count = 0;
+		$("#tags").find(".label-tag.on").each(function(idx, tagLabel) {
+			$(tagLabel).toggleClass("on");
+			count++;
+		});
+		$(this).switchClass('btn-warning', 'btn-link');
+		if (count > 0) {
+			collectList();
+		}
+	});
 }
 
 function collectList() {
+	var compareTo = function(data1, data2) {
+		var result = 0;
+		if (typeof data1 === 'number') {
+			result = data1 - data2;
+		} else if (typeof data1 === 'string') {
+			result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
+		} else {
+			result = data1 > data2 ? 1 : -1;
+		}
+		return result;
+	};
+	
 	loading(true, 'Collect list');
 	$(".video-wrapper").hide();
 	
@@ -111,19 +153,12 @@ function collectList() {
 	var rank4 = $("#check-rank4").data("checked") ? '4' : '';
 	var rank5 = $("#check-rank5").data("checked") ? '5' : '';
 	var sort  = $("#radio-sort" ).data("value");
-	var compareTo = function(data1, data2) {
-		var result = 0;
-		if (typeof data1 === 'number') {
-			result = data1 - data2;
-		} else if (typeof data1 === 'string') {
-			result = data1.toLowerCase() > data2.toLowerCase() ? 1 : -1;
-		} else {
-			result = data1 > data2 ? 1 : -1;
-		}
-		return result;
-	};
+	var selectedTags  = [];
+	$("#tags").find(".label-tag.on").each(function(idx, tagLabel) {
+		selectedTags.push(parseInt($(tagLabel).attr("data-tag-id")));
+	});
+	
 	videoList = [];
-
 	// filtering
 	for (var i=0; i<allList.length; i++) {
 		var video = allList[i];
@@ -156,6 +191,18 @@ function collectList() {
 		if (query != '') {
 			var fullname = video.studio.name + video.opus + video.title + video.actressName + video.releaseDate + video.overviewText;
 			if (fullname.indexOf(query) < 0) {
+				continue;
+			}
+		}
+		
+		if (selectedTags.length > 0) {
+			var found = false;
+			for (var x in video.tags) {
+				if (selectedTags.includes(video.tags[x].id)) {
+					found = found || true;
+				}
+			}
+			if (!found) {
 				continue;
 			}
 		}

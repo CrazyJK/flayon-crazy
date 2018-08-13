@@ -44,11 +44,20 @@
 		</div>
 		<div class="separator"></div>
 		<div class="inline-block">
+	   		<span role="checkbox" class="label label-checkbox" id="toggle-tags" data-target="#tags">T</span>
+		</div>
+		<div class="separator"></div>
+		<div class="inline-block">
 	   		<span role="checkbox" class="label label-checkbox" id="autoSlide" title="auto Slide">S</span>
 			<div class="inline-block" id="radio-autoSlideMode" role="radio">
 		   		<span class="label label-radio" title="slide Forward">F</span>
 		   		<span class="label label-radio on" title="slide Random" >R</span>
 		   	</div>
+		</div>
+		<div id="tags" class="tag-choice">
+			<div class="inline-block">
+				<button type="button" class="btn btn-link btn-sm" id="deselectTag" title="deselect All"><span class="glyphicon glyphicon-check"></span></button>
+			</div>
 		</div>
 	</div>
 	
@@ -71,7 +80,7 @@
 							</div>
 						</div>
 					</dd>
-					<dt><span class="label label-plain info-title"></span></dt>
+					<dt class="nowrap"><span class="label label-plain info-title"></span></dt>
 				</dl>
 			</div>
 			<div class="cover-wrapper">
