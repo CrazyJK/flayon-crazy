@@ -7,6 +7,11 @@
 <head>
 <title>Tag : ${tag.id} : ${tag.name}</title>
 <link rel="stylesheet" href="${PATH}/css/videoCard-Detail.css"/>
+<style type="text/css">
+.input-check-tag {
+	
+}
+</style>
 <script type="text/javascript">
 //bgContinue = false;
 var tagId = "${tag.id}";
@@ -76,13 +81,31 @@ function fnDeleteTag() {
 	</div>
 	<h3>
 		<span class="label label-plain">Candidates <i class="badge badge-black">${fn:length(likeVideoList)}</i></span>
+		<button class="btn btn-info btn-sm" onclick="fnCheckAll()">Check All</button>
 	</h3>
 	<div class="box">
-		<ul class="list-inline text-center">
+		<ul class="list-inline text-center candidates-list">
 			<c:forEach items="${likeVideoList}" var="video">
-				<li><%@ include file="/WEB-INF/views/video/videoCard.jspf" %></li>
+				<li data-opus="${video.opus}">
+					<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+				</li>
 			</c:forEach>
 		</ul>
+		<script type="text/javascript">
+		$("li", ".candidates-list").each(function() {
+			var opus = $(this).attr("data-opus");
+			$(this).find(".video-title").parent().prepend(
+					$("<input>", {type: 'checkbox', 'class': 'input-check-tag'}).on("change", function() {
+						restCall(PATH + "/rest/video/" + opus + "/tag?id=${tag.id}", {method: "PUT"});
+					})
+			);
+		});
+		function fnCheckAll() {
+			$(".input-check-tag").each(function() {
+				$(this).click();
+			});
+		}
+		</script>
 	</div>
 </div>
 </body>

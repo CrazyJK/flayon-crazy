@@ -10,6 +10,7 @@ var isFirstLoad = true;
 var slideTimer;
 var keyInput = "";
 var keyLastInputTime = new Date().getTime();
+var collecting = false;
 
 $(document).ready(function() {
 	prepare();
@@ -20,7 +21,18 @@ function loadVideo() {
 	// load video list
 	restCall(PATH + '/rest/video', {data: {p: 0}, title: "Load video"}, function(list) {
 		allList = list;
-		collectList();
+
+		// file total count
+		for (var x in allList) {
+			var video = allList[x];
+			for (var y in video.tags) {
+				var tag = video.tags[y];
+				var tagData = $(".label-tag[data-tag-id='" + tag.id + "']", "#tags").data("tag");
+				tagData.totalCount++;
+			}
+		}
+		
+		$(document).trigger("collect");
 	});
 }
 
@@ -35,7 +47,7 @@ function prepare() {
 	$("#query").on("keyup", function(e) {
 		e.stopPropagation();
 		if (e.keyCode == 13) {
-			collectList();
+			$(document).trigger("collect");
 		}
 	});
 	// filter & rank condition
@@ -59,6 +71,10 @@ function prepare() {
 		$("#tags").toggle();
 		resizeDivHeight();
 	});
+	// collect
+	$(document).on("collect", function() {
+		!collecting && collectList();
+	});
 }
 
 function setTags() {
@@ -74,14 +90,23 @@ function setTags() {
 		);
 	}
 	function makeTag4Choice(tag) {
+		tag.totalCount = 0;
 		return $("<div>", {'class': 'inline-block'}).append(
 				$("<span>", {'class': 'label label-tag', title: tag.description, 'data-tag-id': tag.id}).html(tag.name).on("click", function() {
-					if ($("#tags").find(".label-tag.on").length == 0) {
-						$("#deselectTag").switchClass('btn-link', 'btn-warning');
+					if ($("#popupTag").data("checked")) {
+						var tagId = $(this).data("tag").id;
+						popup(PATH + '/video/tag/' + tagId, 'tag-' + tagId, 800, 600);
+					} else {
+						if ($("#tags").find(".label-tag.on").length == 0) {
+							$("#deselectTag").switchClass('btn-link', 'btn-warning');
+						}
+						$(this).toggleClass("on");
+						if ($("#tags").find(".label-tag.on").length == 0) {
+							$("#deselectTag").switchClass('btn-warning', 'btn-link');
+						}
+						$(document).trigger("collect");
 					}
-					$(this).toggleClass("on");
-					collectList();
-				})
+				}).data("tag", tag)
 		);
 	}
 	// tag list setting
@@ -121,7 +146,7 @@ function setTags() {
 		});
 		$(this).switchClass('btn-warning', 'btn-link');
 		if (count > 0) {
-			collectList();
+			$(document).trigger("collect");
 		}
 	});
 }
@@ -139,6 +164,7 @@ function collectList() {
 		return result;
 	};
 	
+	collecting = true;
 	loading(true, 'Collect list');
 	$(".video-wrapper").hide();
 	
@@ -228,10 +254,33 @@ function collectList() {
 		}
 	});
 	
+	// fill tag count info
+	$(".label-tag", "#tags").each(function(index, tagLabel) {
+		var tagData = $(tagLabel).data("tag");
+		tagData.count = 0;
+		$(tagLabel).removeClass("nonExist");
+	});
+	for (var x in videoList) {
+		var video = videoList[x];
+		for (var y in video.tags) {
+			var tag = video.tags[y];
+			var tagData = $(".label-tag[data-tag-id='" + tag.id + "']", "#tags").data("tag");
+			tagData.count++;
+		}
+	}
+	$(".label-tag", "#tags").each(function(index, tagLabel) {
+		var tagData = $(tagLabel).data("tag");
+		$(tagLabel).html(tagData.name + " " + tagData.count + "/" + tagData.totalCount);
+		if (tagData.count == 0) {
+			$(tagLabel).addClass("nonExist");
+		}
+	});
+	
 	if (videoList.length > 0) {
 		navigation.random();
 		$(".video-wrapper").show();
 	}
+	collecting = false;
 	loading(false);
 }
 

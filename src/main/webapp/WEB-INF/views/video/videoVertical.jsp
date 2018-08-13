@@ -56,6 +56,7 @@
 		</div>
 		<div id="tags" class="tag-choice">
 			<div class="inline-block">
+				<span role="checkbox" class="label label-checkbox" id="popupTag" title="popup tag info">Pop</span>
 				<button type="button" class="btn btn-link btn-sm" id="deselectTag" title="deselect All"><span class="glyphicon glyphicon-check"></span></button>
 			</div>
 		</div>
