@@ -19,6 +19,7 @@ dd {
 	position: fixed;
 	bottom: 20px;
 	margin: 0;
+	background-color: #fff;
 }
 #tagDetailDiv > iframe {
 	width: 100%;
@@ -87,7 +88,7 @@ $(document).ready(function() {
 				popup(PATH + '/video/tag/' + tag.id, 'tag-id-' + tag.id, 800, 600);
 			} else {
 				$("#tagDetailDiv").removeClass("hide");
-				$("#tagDetailDiv > iframe").attr("src", PATH + '/video/tag/' + tag.id);
+				$("#tagDetailDiv > iframe").attr("src", PATH + '/video/tag/' + tag.id + '?position=frame');
 			}
 			$("dl", "#list").removeClass("active");
 			$("#tag-id-" + tag.id).addClass("active");
