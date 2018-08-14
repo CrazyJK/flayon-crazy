@@ -54,7 +54,7 @@
 		   		<span class="label label-radio on" title="slide Random" >R</span>
 		   	</div>
 		</div>
-		<div id="tags" class="tag-choice">
+		<div id="tagChoice" class="tag-list">
 			<div class="inline-block">
 				<span role="checkbox" class="label label-checkbox" id="popupTag" title="popup tag info">Pop</span>
 				<button type="button" class="btn btn-link btn-sm" id="deselectTag" title="deselect All"><span class="glyphicon glyphicon-check"></span></button>
@@ -101,7 +101,7 @@
 				</dl>
 			</div>
 			<div class="tag-wrapper">
-				<div class="tag-list"></div>
+				<div id="videoTags" class="tag-list"></div>
 				<div class="tag-new">
 					<span class="label label-info label-tag-new">NEW</span>
 					<div class="tag-form-wrapper">

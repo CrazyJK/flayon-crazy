@@ -25,11 +25,11 @@ dl {
 input.search {
 	width: 150px !important;
 }
-.tag-choice {
+#tagChoice {
 	display: none;
 	padding: 8px;
 }
-.tag-choice > div {
+#tagChoice > div {
 	margin: 2px;
 }
 
