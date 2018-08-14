@@ -128,11 +128,6 @@ function attachEventListener() {
 		}
 	});
 
-	// reload
-	$("#reload").on("click", function() {
-		loadVideo();
-	});
-
 	// query
 	$("#query").on("keyup", function(e) {
 		e.stopPropagation();

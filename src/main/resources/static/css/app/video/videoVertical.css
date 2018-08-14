@@ -43,7 +43,7 @@ input.search {
 
 /* cover */
 .cover-wrapper {
-	margin: 20px auto;
+	margin: 10px auto;
 }
 .cover-wrapper-inner {
 	display: inline-block;
@@ -73,6 +73,7 @@ input.search {
 }
 .info-wrapper dl dt {
 	font-size: 36px;
+	padding-bottom: 10px;
 }
 .info-wrapper dl dd {
 	font-size: 28px;

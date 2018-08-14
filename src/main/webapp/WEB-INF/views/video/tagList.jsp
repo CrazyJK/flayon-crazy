@@ -6,11 +6,21 @@
 <head>
 <title><s:message code="video.tags"/></title>
 <style type="text/css">
+#content_div {
+	background-color: rgba(255, 255, 255, .75) !important;
+}
 dl.active {
 	background-color: yellow;
 }
 dd {
 	font-size: 80%;
+}
+dt > a.link-black {
+	transition: all .3s;
+}
+dt > a.link-black:hover {
+	color: #111;
+	text-shadow: 1px 1px 2px #4c4c4c;
 }
 .btn-close {
     color: #a94442
@@ -48,7 +58,7 @@ $(document).ready(function() {
 								$("<dd>").append(
 										tag.description
 								)		
-						).css({fontSize: parseInt(14 + tag.count / 2)})
+						).css({fontSize: parseInt(14 + tag.count / 3)}).randomBG(.1)
 				)
 		);
 	};
@@ -148,7 +158,7 @@ function resizeSecondDiv() {
 	</div>
 	
 	<div id="content_div" class="box" style="overflow-x: hidden;">
-		<ul id="list" class="list-inline"></ul>
+		<ul id="list" class="list-inline text-center"></ul>
 		<div id="tagDetailDiv" class="box hide">
 			<button class="btn btn-link btn-xs btn-close float-right"><span class="glyphicon glyphicon-remove"></span></button>
 			<iframe></iframe>

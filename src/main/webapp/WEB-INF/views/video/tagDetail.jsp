@@ -94,6 +94,7 @@ function fnCheckAll() {
 <div class="container container-video-card">
 	<h3>
 		<span class="label label-plain">Video <i class="badge badge-black">${fn:length(tag.videoList)}</i></span>
+		<span class="label label-plain float-right">Candidates <i class="badge badge-black">${fn:length(likeVideoList)}</i></span>
 	</h3>
 	<div class="box">
 		<ul class="list-inline text-center">

@@ -10,10 +10,6 @@
 <body>
 <div class="container-fluid container-vertical">
 	<div id="header_div" class="box form-inline text-center">
-		<div class="inline-block float-right">
-			<button type="button" class="btn btn-link btn-sm" id="reload"><span class="glyphicon glyphicon-refresh"></span></button>
-		</div>
-		<div class="separator"></div>
 		<div class="inline-block">
 			<input type="search" id="query" class="form-control search" placeholder="Search..."/>
 		</div>
