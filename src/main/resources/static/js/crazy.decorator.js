@@ -254,6 +254,7 @@ var	resizeDivHeight = function() {
 				method: "GET",
 				data: {},
 				mimeType: "application/json",
+				async: true,
 				title: "Request",
 				showLoading: true,
 				beforeSend: function(xhr) {
