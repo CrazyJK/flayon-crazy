@@ -15,13 +15,13 @@ public class UserDataLoader {
 		
 		User admin = new User();
 		admin.setName("admin");
-		admin.setPassword("6969");
+		admin.setPassword("{noop}6969");
 		admin.setRole(Role.ADMIN);
 		userRepository.save(admin);
 
 		User kamoru = new User();
 		kamoru.setName("kamoru");
-		kamoru.setPassword("crazyjk");
+		kamoru.setPassword("{noop}crazyjk");
 		kamoru.setRole(Role.USER);
 		userRepository.save(kamoru);
 	}
