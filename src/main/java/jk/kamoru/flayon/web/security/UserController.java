@@ -80,7 +80,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable Long id) {
 		log.info("deleteById {}", id);
-		userRepository.delete(id);
+		userRepository.deleteById(id);
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
