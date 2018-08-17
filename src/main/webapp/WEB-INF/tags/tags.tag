@@ -26,12 +26,12 @@
 
 	if (view.equalsIgnoreCase("checkbox")) {
 %>
-	<label class="item <%=itemCssClass%>" title="${tag.description}">
+	<span class="item <%=itemCssClass%>" title="${tag.description}">
 		<form:checkbox path="selectedTag" id="selectedTag${count}" value="${tag.id}" cssClass="sr-only"/>
-		<span class="label label-checkbox" style="padding: 5px; margin: 5px;" for="selectedTag${count}">
+		<label class="label label-checkbox" style="padding: 5px; margin: 5px;" for="selectedTag${count}">
 			${tag.name} <i>${tag.videoList.size()}</i>
-		</span>
-	</label>
+		</label>
+	</span>
 <%
 	} else if (view.equalsIgnoreCase("span")) {
 %>

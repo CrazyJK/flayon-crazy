@@ -15,7 +15,7 @@
 		<h1>User Profile ...</h1>
 	</div>
 	
-	<form:form commandName="user" method="post" class="form-horizontal" role="form">
+	<form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
 		<form:input path="id"   type="hidden"/>
 		<form:input path="name" type="hidden"/>
 		<form:input path="role" type="hidden"/>

@@ -64,7 +64,7 @@ $(document).ready(function() {
 		<h1>${empty user.id ? 'New User' : 'User Info'} ...</h1>
 	</div>
 
-	<form:form commandName="user" method="post" class="form-horizontal" role="form">
+	<form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
 		<div class="form-group">
 			<form:label class="control-label col-sm-2" path="id">Id</form:label>
       		<div class="col-sm-6">

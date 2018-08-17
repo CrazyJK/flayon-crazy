@@ -21,7 +21,7 @@ var currBGImageUrl;
 <div class="container-fluid" role="main">
 
 <div id="header_div" class="box">
-	<form:form method="POST" commandName="videoSearch" role="form" class="form-inline" onsubmit="return false;">
+	<form:form method="POST" modelAttribute="videoSearch" role="form" class="form-inline" onsubmit="return false;">
 		<div id="searchDiv" class="text-center">
 			<!-- Search : Text -->
 			<form:input path="searchText" cssClass="form-control input-sm" placeHolder="Search" style="width:120px;"/>
@@ -35,10 +35,10 @@ var currBGImageUrl;
 			<form:select path="listViewType" items="${views}" cssClass="form-control input-sm" title="View type"/> 
 	
 			<!-- sort -->
-			<label title="<s:message code="video.reverseSort"/>">
+			<span title="<s:message code="video.reverseSort"/>">
 				<form:checkbox path="sortReverse" cssClass="sr-only"/>
-				<span class="label label-checkbox" for="sortReverse1">R</span>
-			</label>
+				<label class="label label-checkbox" for="sortReverse1">R</label>
+			</span>
 			<form:select path="sortMethod" items="${sorts}" itemLabel="desc" cssClass="form-control input-sm" title="Sort method" style="width:80px;"/>
 		</div>
 	</form:form>
