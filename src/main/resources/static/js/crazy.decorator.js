@@ -525,7 +525,7 @@ var	crazy = (function() {
 				setInterval(function() {
 					$.getJSON({
 						method: 'GET',
-						url: PATH + '/rest/ping.json',
+						url: PATH + '/rest/ping',
 						data: {},
 						cache: false
 					}).done(function(noti) {

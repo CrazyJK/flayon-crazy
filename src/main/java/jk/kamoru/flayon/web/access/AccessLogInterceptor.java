@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import jk.kamoru.flayon.web.security.User;
 import lombok.extern.slf4j.Slf4j;
@@ -91,18 +90,20 @@ public class AccessLogInterceptor implements HandlerInterceptor {
 			HandlerMethod method = (HandlerMethod) handler;
 			handlerInfo = String.format("%s.%s", method.getBean().getClass().getSimpleName(), method.getMethod().getName());
 		} 
-		else if (handler instanceof ResourceHttpRequestHandler) { // for static resources. No additional information
+		else if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) { // for static resources. No additional information
 			// do nothing
 		}
 		else { // another handler
 			handlerInfo = String.format("%s", handler);
 		}
 
-		boolean exclude = contentType.startsWith("image") 
-				|| requestUri.contains("ping.json") 
+		if (contentType.startsWith("image")
 				|| handlerInfo.startsWith("ImageController.image")
-				|| handlerInfo.startsWith("RestImageController.getImageInfoByPath");
-		if (exclude) {
+				|| handlerInfo.startsWith("RestImageController.getImageInfoByPath")
+				|| requestUri.contains("ping")
+				|| requestUri.startsWith("/js")
+				|| requestUri.startsWith("/css")
+				|| requestUri.startsWith("/webjars")) {
 			return;
 		}
 		
