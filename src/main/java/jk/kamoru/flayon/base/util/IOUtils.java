@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.UsesJava8;
 
 import jk.kamoru.flayon.FLAYON;
 import jk.kamoru.flayon.crazy.CrazyException;
@@ -163,7 +162,6 @@ public class IOUtils {
 		return list;
 	}
 
-	@UsesJava8
 	private static List<File> listPath(Path start, String... suffixs) {
 		List<File> pathList = new ArrayList<>();
 		try {

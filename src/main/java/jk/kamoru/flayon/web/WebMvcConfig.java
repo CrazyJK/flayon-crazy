@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -20,7 +20,7 @@ import jk.kamoru.flayon.web.access.AccessLogInterceptor;
 import jk.kamoru.flayon.web.access.AccessLogRepository;
 
 @Configuration
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Autowired AccessLogRepository accessLogRepository;
 	@Value("${use.repository.accesslog}") boolean useAccesslogRepository;
@@ -105,8 +105,8 @@ import org.springframework.web.servlet.view.xml.MappingJackson2XmlView;
 	
 	@Profile("jsp")
 	@Bean
-	public FilterRegistrationBean siteMeshFilter() {
-		FilterRegistrationBean filter = new FilterRegistrationBean();
+	public FilterRegistrationBean<ConfigurableSiteMeshFilter> siteMeshFilter() {
+		FilterRegistrationBean<ConfigurableSiteMeshFilter> filter = new FilterRegistrationBean<>();
 		filter.setFilter(new ConfigurableSiteMeshFilter());
 		filter.addInitParameter(ConfigurableSiteMeshFilter.CONFIG_FILE_PARAM, "/WEB-INF/sitemesh/sitemesh3.xml");
 		return filter;
